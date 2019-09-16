@@ -12,36 +12,28 @@ class WeForzaApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         accentColor: Colors.blueAccent
       ),
-      home: MyHomePage(),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("PLACEHOLDER TITLE"),
+        title: Text("WeForza"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MaterialButton(
-              child: Text("My Button"),
-              onPressed: null
-            ),
-          ],
-        ),
+        //TODO: add homepage widget children
       ),
     );
   }

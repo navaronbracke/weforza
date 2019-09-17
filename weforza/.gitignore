@@ -73,3 +73,8 @@
 
 #We need i18n.dart file for the generated class 'S'
 !**/lib/generated/i18n.dart
+
+#Generated file
+**/ios/Flutter/flutter_export_environment.sh
+
+

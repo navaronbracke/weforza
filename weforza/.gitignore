@@ -70,3 +70,6 @@
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+#We need i18n.dart file for the generated class 'S'
+!**/lib/generated/i18n.dart

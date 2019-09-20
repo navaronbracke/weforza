@@ -19,9 +19,6 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    // TODO: implement buildAndroidWidget
-
-    //Placeholder
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
@@ -30,7 +27,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MaterialButton(
+            RaisedButton(
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
               onPressed: (){
@@ -40,7 +37,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
             Flexible(
               child: FractionallySizedBox(heightFactor: 0.1),
             ),
-            MaterialButton(
+            RaisedButton(
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
               onPressed: (){
@@ -55,9 +52,6 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
-
-    //Placeholder
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(appTitle),

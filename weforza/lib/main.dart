@@ -24,7 +24,11 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       localizationsDelegates: [S.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),
-      home: HomePage(appTitle: _appTitle),
+      initialRoute: "/",
+      routes: {
+        '/': (context) => HomePage(appTitle: _appTitle),
+        //Other routes here
+      },
     );
   }
 
@@ -35,7 +39,11 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       localizationsDelegates: [S.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.iosTheme(),
-      home: HomePage(appTitle: _appTitle),
+      initialRoute: "/",
+      routes: {
+        '/': (context) => HomePage(appTitle: _appTitle),
+        //Other routes here
+      },
     );
   }
 }

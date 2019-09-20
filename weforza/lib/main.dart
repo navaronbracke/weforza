@@ -23,9 +23,8 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       title: _appTitle,//Calling S.of(context).string_name won't work here.
       localizationsDelegates: [S.delegate],
       supportedLocales: S.delegate.supportedLocales,
-      //We could define a ThemeData object in a different Dart file for easy customization
       theme: ApplicationTheme.androidTheme(),
-      home: HomePage(),
+      home: HomePage(appTitle: _appTitle),
     );
   }
 
@@ -36,7 +35,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       localizationsDelegates: [S.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.iosTheme(),
-      home: HomePage(),
+      home: HomePage(appTitle: _appTitle),
     );
   }
 }

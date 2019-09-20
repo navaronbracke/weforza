@@ -5,6 +5,12 @@ import '../generated/i18n.dart';
 
 ///This [Widget] represents the app landing page.
 class HomePage extends StatelessWidget implements PlatformAwareWidget {
+  ///Constructor
+  ///
+  ///Uses [appTitle] as title in the AppBar and middle in the navigation bar.
+  HomePage({this.appTitle});
+
+  final String appTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +24,32 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
     //Placeholder
     return Scaffold(
       appBar: AppBar(
-        title: Text("Android HomePageWidget"),
+        title: Text(appTitle),
       ),
-      body: Center(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            MaterialButton(
+              color: Theme.of(context).primaryColor,
+              child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
+              onPressed: (){
+                //Navigate to the events screen with the navigator
+              },
+            ),
+            Flexible(
+              child: FractionallySizedBox(heightFactor: 0.1),
+            ),
+            MaterialButton(
+              color: Theme.of(context).primaryColor,
+              child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
+              onPressed: (){
+                //Navigate to the persons screen with the navigator
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -31,9 +60,32 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
     //Placeholder
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text("IOS Homepage Widget"),
+        middle: Text(appTitle),
       ),
-      child: Container(),
+      child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CupertinoButton(
+                color: Theme.of(context).primaryColor,
+                child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
+                onPressed: (){
+                  //Navigate to the events screen with the navigator
+                },
+              ),
+              Flexible(
+                child: FractionallySizedBox(heightFactor: 0.1),
+              ),
+              CupertinoButton(
+                color: Theme.of(context).primaryColor,
+                child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
+                onPressed: (){
+                  //Navigate to the persons screen with the navigator
+                },
+              )
+            ],
+          ),
+      ),
     );
   }
 

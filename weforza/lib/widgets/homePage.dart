@@ -66,22 +66,22 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CupertinoButton(
-                color: Theme.of(context).primaryColor,
+              CupertinoButton.filled(
                 child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
                   //Navigate to the events screen with the navigator
                 },
+                pressedOpacity: 0.7,
               ),
               Flexible(
                 child: FractionallySizedBox(heightFactor: 0.1),
               ),
-              CupertinoButton(
-                color: Theme.of(context).primaryColor,
+              CupertinoButton.filled(
                 child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
                   //Navigate to the persons screen with the navigator
                 },
+                pressedOpacity: 0.7,
               )
             ],
           ),

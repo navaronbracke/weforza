@@ -1,27 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
-import '../generated/i18n.dart';
+import 'package:weforza/generated/i18n.dart';
 
 ///This [Widget] represents the app landing page.
 class HomePage extends StatelessWidget implements PlatformAwareWidget {
   ///Constructor
   ///
   ///Uses [appTitle] as title in the AppBar and middle in the navigation bar.
-  HomePage({this.appTitle});
+  HomePage(this._appTitle);
 
-  final String appTitle;
+  final String _appTitle;
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
-  }
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appTitle),
+        title: Text(_appTitle),
       ),
       body: Center(
         child: Column(
@@ -54,7 +52,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(appTitle),
+        middle: Text(_appTitle),
       ),
       child: Center(
           child: Column(

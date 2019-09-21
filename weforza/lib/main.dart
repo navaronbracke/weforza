@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
-import 'generated/i18n.dart';
-import 'widgets/homePage.dart';
+import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/widgets/homePage.dart';
 
 void main() => runApp(WeForzaApp());
 
@@ -13,9 +13,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
   final String _appTitle = 'WeForza';
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
-  }
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -26,7 +24,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       theme: ApplicationTheme.androidTheme(),
       initialRoute: "/",
       routes: {
-        '/': (context) => HomePage(appTitle: _appTitle),
+        '/': (context) => HomePage(_appTitle),
         //Other routes here
       },
     );
@@ -41,7 +39,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       theme: ApplicationTheme.iosTheme(),
       initialRoute: "/",
       routes: {
-        '/': (context) => HomePage(appTitle: _appTitle),
+        '/': (context) => HomePage(_appTitle),
         //Other routes here
       },
     );

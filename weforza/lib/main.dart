@@ -12,6 +12,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
 
   final String _appTitle = 'WeForza';
 
+  //TODO setup DI here
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
@@ -24,8 +25,8 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       theme: ApplicationTheme.androidTheme(),
       initialRoute: "/",
       routes: {
-        '/': (context) => HomePage(_appTitle),
-        //Other routes here
+        '/': (context) => HomePage(),
+        //TODO Other routes here
       },
     );
   }
@@ -39,8 +40,8 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       theme: ApplicationTheme.iosTheme(),
       initialRoute: "/",
       routes: {
-        '/': (context) => HomePage(_appTitle),
-        //Other routes here
+        '/': (context) => HomePage(),
+        //TODO Other routes here
       },
     );
   }

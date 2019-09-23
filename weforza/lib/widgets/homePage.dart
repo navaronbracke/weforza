@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/widgets/personListPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 import 'package:weforza/generated/i18n.dart';
 
@@ -33,7 +34,10 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
               onPressed: (){
-                //TODO Navigate to the persons screen with the navigator
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PersonListPage()),
+                );
               },
             ),
           ],
@@ -65,7 +69,10 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               CupertinoButton.filled(
                 child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
-                  //TODO Navigate to the persons screen with the navigator
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PersonListPage()),
+                  );
                 },
                 pressedOpacity: 0.7,
               )

@@ -36,6 +36,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  dependencies:
+    dependency: transitive
+    description:
+      name: dependencies
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
+  dependencies_flutter:
+    dependency: "direct main"
+    description:
+      name: dependencies_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.6"
+  disposables:
+    dependency: transitive
+    description:
+      name: disposables
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   flutter:
     dependency: "direct main"
     description: flutter

@@ -22,6 +22,8 @@ class S implements WidgetsLocalizations {
   TextDirection get textDirection => TextDirection.ltr;
 
   String get AppName => "WeForza";
+  String get EventCatalog => "Event Catalog";
+  String get PersonCatalog => "People Catalog";
 }
 
 class $en extends S {
@@ -34,6 +36,10 @@ class $nl extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  @override
+  String get EventCatalog => "Evenementen Catalogus";
+  @override
+  String get PersonCatalog => "Personen Catalogus";
   @override
   String get AppName => "WeForza";
 }

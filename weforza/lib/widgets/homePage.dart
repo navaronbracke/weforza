@@ -5,12 +5,6 @@ import 'package:weforza/generated/i18n.dart';
 
 ///This [Widget] represents the app landing page.
 class HomePage extends StatelessWidget implements PlatformAwareWidget {
-  ///Constructor
-  ///
-  ///Uses [appTitle] as title in the AppBar and middle in the navigation bar.
-  HomePage(this._appTitle);
-
-  final String _appTitle;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -19,7 +13,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_appTitle),
+        title: Text(S.of(context).AppName),
       ),
       body: Center(
         child: Column(
@@ -29,7 +23,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
               onPressed: (){
-                //Navigate to the events screen with the navigator
+                //TODO Navigate to the events screen with the navigator
               },
             ),
             Flexible(
@@ -39,7 +33,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
               onPressed: (){
-                //Navigate to the persons screen with the navigator
+                //TODO Navigate to the persons screen with the navigator
               },
             ),
           ],
@@ -52,7 +46,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(_appTitle),
+        middle: Text(S.of(context).AppName),
       ),
       child: Center(
           child: Column(
@@ -61,7 +55,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               CupertinoButton.filled(
                 child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
-                  //Navigate to the events screen with the navigator
+                  //TODO Navigate to the events screen with the navigator
                 },
                 pressedOpacity: 0.7,
               ),
@@ -71,7 +65,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               CupertinoButton.filled(
                 child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
-                  //Navigate to the persons screen with the navigator
+                  //TODO Navigate to the persons screen with the navigator
                 },
                 pressedOpacity: 0.7,
               )

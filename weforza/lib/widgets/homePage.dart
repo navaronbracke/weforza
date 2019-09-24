@@ -10,6 +10,11 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
+  ///Layout
+  ///
+  /// - AppBar (app title)
+  /// - Button (go to events)
+  /// - Button (go to people)
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -20,6 +25,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            //Go to events button
             RaisedButton(
               color: Theme.of(context).primaryColor,
               child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
@@ -30,9 +36,10 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
             Flexible(
               child: FractionallySizedBox(heightFactor: 0.1),
             ),
+            //Go to people button
             RaisedButton(
               color: Theme.of(context).primaryColor,
-              child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
+              child: Text(S.of(context).PersonCatalogTitle,style: TextStyle(color: Colors.white)),
               onPressed: (){
                 Navigator.push(
                   context,
@@ -46,6 +53,12 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
     );
   }
 
+  //TODO: decide if we use buttons OR bottom tabs
+  ///Layout
+  ///
+  /// - NavigationBar (app title)
+  /// - Button (go to events)
+  /// - Button (go to people)
   @override
   Widget buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
@@ -56,6 +69,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              //Go to events button
               CupertinoButton.filled(
                 child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
                 onPressed: (){
@@ -66,8 +80,9 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               Flexible(
                 child: FractionallySizedBox(heightFactor: 0.1),
               ),
+              //Go to people button
               CupertinoButton.filled(
-                child: Text(S.of(context).PersonCatalog,style: TextStyle(color: Colors.white)),
+                child: Text(S.of(context).PersonCatalogTitle,style: TextStyle(color: Colors.white)),
                 onPressed: (){
                   Navigator.push(
                     context,

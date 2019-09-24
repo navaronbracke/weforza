@@ -13,21 +13,9 @@ class PersonListBloc extends Bloc {
   ///The repository that will manipulate the list of people.
   final IPersonRepository _personRepository;
 
-  ///The [StreamController] that manages the input [Sink]/output [Stream].
-  final StreamController<List<Person>> _streamController = StreamController();
-
-  ///The data [Stream] that can be observed for values.
-  Stream<List<Person>> get stream => _streamController.stream;
-
   ///Fetch the known people.
-  ///This passes any value or error to [stream].
-  getKnownPeople() async => _streamController.add(await _personRepository.getKnownPeople());
-
-  //TODO manipulate people
-
+  Future<List<Person>> getKnownPeople() async => _personRepository.getKnownPeople();
 
   @override
-  void dispose() {
-    _streamController.close();
-  }
+  void dispose() {}
 }

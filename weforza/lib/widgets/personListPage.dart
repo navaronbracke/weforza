@@ -60,10 +60,11 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
         middle: Text(S.of(context).PersonCatalogTitle),
         trailing: GestureDetector(
           child: Icon(
-            CupertinoIcons.person_add
+            Icons.person_add
           ),
           onTap: (){
             //TODO go to add person screen
+            debugPrint("add person tapped");
           },
         ),
       ),
@@ -166,8 +167,8 @@ class _PersonListPageListTile extends StatelessWidget
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return ListTile(
-      title: Row(
+    return SafeArea(
+      child: Row(
         children: <Widget>[
           //First/Last name
           Expanded(
@@ -176,11 +177,11 @@ class _PersonListPageListTile extends StatelessWidget
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(_person.getFirstName(),style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),overflow: TextOverflow.ellipsis),
+                    Text(_person.getFirstName(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),overflow: TextOverflow.ellipsis),
                     SizedBox(height: 4),
-                    Text(_person.getLastName(),style: TextStyle(fontSize: 12)),
+                    Text(_person.getLastName(),style: TextStyle(fontSize: 14)),
                     SizedBox(height: 10),
-                    Text(S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),style: TextStyle(fontSize: 12),overflow: TextOverflow.ellipsis),
+                    Text(S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),style: TextStyle(fontSize: 14),overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ],
@@ -190,11 +191,11 @@ class _PersonListPageListTile extends StatelessWidget
             width: 40,
             child: GestureDetector(
               child: Icon(
-                CupertinoIcons.search,
-                color: Theme.of(context).primaryColor
+                Icons.search,
+                color: ApplicationTheme.iosPrimaryColor,
               ),
               onTap: (){
-                //TODO go to person details
+                //TODO 
               },
             ),
           ),

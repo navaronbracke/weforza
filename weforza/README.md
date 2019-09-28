@@ -19,4 +19,15 @@ To run an IOS Simulator,
  - run `open -a Simulator` in a terminal, to open the IOS simulator
  - in the flutter project directory, run `flutter run` from the terminal, to run the app
 
+## Integration tests
+
+To run a test,
+ - start an Android emulator/IOS Simulator
+ - run `flutter drive --target=test_driver/app.dart` and specify the test file with `--driver=path_to_test_file`
+   from the project root directory.
+ Examples:
+
+ `flutter drive --target=test_driver/app.dart` (assumes the driver is `test_driver/app_test.dart`)
+ `flutter drive --target=test_driver/app.dart --driver=test_driver/my_second_test.dart`
+
 

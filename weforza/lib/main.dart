@@ -1,34 +1,24 @@
-import 'package:dependencies_flutter/dependencies_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/widgets/homePage.dart';
+import 'package:weforza/widgets/pages/homePage.dart';
 
-///Run the app. We pass a [ProductionInjector] here.
-///For testing we can pass a [TestInjector].
-void main() => runApp(WeForzaApp(ProductionInjector()));
+// Set up a Production injector and run the app.
+void main(){
+  InjectionContainer.initProductionInjector();
+  runApp(WeForzaApp());
+}
 
 ///This class represents the application.
 class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
-  WeForzaApp(this.injector);
-
-  ///The [DependencyInjector] that will resolve dependencies.
-  final DependencyInjector injector;
 
   final String _appTitle = 'WeForza';
 
   @override
-  Widget build(BuildContext context)
-  {
-    //Setup Injection and use this widget's platform adaptive tree as child.
-    return InjectorWidget.bind(
-        bindFunc: (binder) => injector.setup(binder),
-        child: PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this)
-    );
-  }
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

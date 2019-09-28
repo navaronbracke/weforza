@@ -1,20 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/personListPage.dart';
+import 'package:weforza/widgets/pages/personList/personListPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 import 'package:weforza/generated/i18n.dart';
 
 ///This [Widget] represents the app landing page.
+///
+///It allows navigation to [PersonListPage] and Events.
 class HomePage extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
-  ///Layout
-  ///
-  /// - AppBar (app title)
-  /// - Button (go to events)
-  /// - Button (go to people)
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(

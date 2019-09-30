@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
@@ -24,14 +25,13 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
   Widget buildAndroidWidget(BuildContext context) {
     return MaterialApp(
       title: _appName,
-      localizationsDelegates: [S.delegate],
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),
-      initialRoute: "/",
-      routes: {
-        '/': (context) => HomePage(),
-        //TODO Other routes here
-      },
+      home: HomePage(),
     );
   }
 
@@ -41,14 +41,12 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
       title: _appName,
       localizationsDelegates: [
         S.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.iosTheme(),
-      initialRoute: "/",
-      routes: {
-        '/': (context) => HomePage(),
-        //TODO Other routes here
-      },
+      home: HomePage(),
     );
   }
 }

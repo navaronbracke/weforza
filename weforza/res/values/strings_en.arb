@@ -1,11 +1,16 @@
 {
   "AppName": "WeForza",
-  "PersonCatalogTitle": "People Catalog",
+
+  "HomePageEventButtonLabel": "Events",
+  "HomePagePeopleButtonLabel": "People",
+
+  "PersonCatalogTitle": "People",
   "PersonCatalogLoadingFailed": "Could not fetch the known people.",
   "PersonCatalogLoadingInProgress": "Loading known people...",
   "PersonCatalogNoItems": "Nothing to show here.",
   "PersonCatalogAddPersonInstruction": "Add people by using the menu above.",
   "PersonCatalogPhoneFormat": "Tel: $phone",
-  "EventCatalog": "Event Catalog"
+
+  "EventCatalogTitle": "Events"
 
 }

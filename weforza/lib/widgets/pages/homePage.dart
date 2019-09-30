@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
             //Go to events button
             RaisedButton(
               color: Theme.of(context).primaryColor,
-              child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
+              child: Text(S.of(context).HomePageEventButtonLabel,style: TextStyle(color: Colors.white)),
               onPressed: (){
                 //TODO Navigate to the events screen with the navigator
               },
@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
             //Go to people button
             RaisedButton(
               color: Theme.of(context).primaryColor,
-              child: Text(S.of(context).PersonCatalogTitle,style: TextStyle(color: Colors.white)),
+              child: Text(S.of(context).HomePagePeopleButtonLabel,style: TextStyle(color: Colors.white)),
               onPressed: (){
                 Navigator.push(
                   context,
@@ -68,7 +68,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
             children: <Widget>[
               //Go to events button
               CupertinoButton.filled(
-                child: Text(S.of(context).EventCatalog,style: TextStyle(color: Colors.white)),
+                child: Text(S.of(context).HomePageEventButtonLabel,style: TextStyle(color: Colors.white)),
                 onPressed: (){
                   //TODO Navigate to the events screen with the navigator
                 },
@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
               ),
               //Go to people button
               CupertinoButton.filled(
-                child: Text(S.of(context).PersonCatalogTitle,style: TextStyle(color: Colors.white)),
+                child: Text(S.of(context).HomePagePeopleButtonLabel,style: TextStyle(color: Colors.white)),
                 onPressed: (){
                   Navigator.push(
                     context,

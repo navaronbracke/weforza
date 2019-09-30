@@ -22,12 +22,14 @@ class S implements WidgetsLocalizations {
   TextDirection get textDirection => TextDirection.ltr;
 
   String get AppName => "WeForza";
-  String get EventCatalog => "Event Catalog";
+  String get EventCatalogTitle => "Events";
+  String get HomePageEventButtonLabel => "Events";
+  String get HomePagePeopleButtonLabel => "People";
   String get PersonCatalogAddPersonInstruction => "Add people by using the menu above.";
   String get PersonCatalogLoadingFailed => "Could not fetch the known people.";
   String get PersonCatalogLoadingInProgress => "Loading known people...";
   String get PersonCatalogNoItems => "Nothing to show here.";
-  String get PersonCatalogTitle => "People Catalog";
+  String get PersonCatalogTitle => "People";
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
 }
 
@@ -44,13 +46,17 @@ class $nl extends S {
   @override
   String get PersonCatalogNoItems => "Er is niks om te tonen.";
   @override
-  String get EventCatalog => "Evenementen Catalogus";
-  @override
   String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
   @override
   String get PersonCatalogLoadingInProgress => "Bekende personen ophalen...";
   @override
-  String get PersonCatalogTitle => "Personen Catalogus";
+  String get EventCatalogTitle => "Evenementen";
+  @override
+  String get HomePagePeopleButtonLabel => "Personen";
+  @override
+  String get HomePageEventButtonLabel => "Evenementen";
+  @override
+  String get PersonCatalogTitle => "Personen";
   @override
   String get PersonCatalogAddPersonInstruction => "Voeg mensen toe via het menu hierboven.";
   @override

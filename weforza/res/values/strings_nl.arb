@@ -1,10 +1,15 @@
 {
   "AppName": "WeForza",
-  "PersonCatalogTitle": "Personen Catalogus",
+
+  "HomePageEventButtonLabel": "Evenementen",
+  "HomePagePeopleButtonLabel": "Personen",
+
+  "PersonCatalogTitle": "Personen",
   "PersonCatalogLoadingFailed": "Kon de gekende personen niet ophalen.",
   "PersonCatalogLoadingInProgress": "Bekende personen ophalen...",
   "PersonCatalogNoItems": "Er is niks om te tonen.",
   "PersonCatalogAddPersonInstruction": "Voeg mensen toe via het menu hierboven.",
-  "EventCatalog": "Evenementen Catalogus",
-  "PersonCatalogPhoneFormat": "Tel: $phone"
+  "PersonCatalogPhoneFormat": "Tel: $phone",
+
+  "EventCatalogTitle": "Evenementen"
 }

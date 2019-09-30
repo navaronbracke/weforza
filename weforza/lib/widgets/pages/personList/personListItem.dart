@@ -8,8 +8,10 @@ import 'package:weforza/widgets/pages/personDetails/personDetailsPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
 ///This class represents a list item of [PersonListPage].
-class PersonListPageListItem extends StatelessWidget implements PlatformAwareWidget {
-  PersonListPageListItem(this._person,this._selectBloc) : assert(_person != null && _selectBloc != null);
+class PersonListPageListItem extends StatelessWidget
+    implements PlatformAwareWidget {
+  PersonListPageListItem(this._person, this._selectBloc)
+      : assert(_person != null && _selectBloc != null);
 
   ///The person for this item.
   final Person _person;
@@ -17,7 +19,7 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
   ///The BLoC that handles the selection.
   final PersonSelectBloc _selectBloc;
 
-  _navigateToPersonDetails (BuildContext context){
+  _navigateToPersonDetails(BuildContext context) {
     _selectBloc.person = _person;
     Navigator.push(
       context,
@@ -26,7 +28,8 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+  Widget build(BuildContext context) =>
+      PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -39,11 +42,17 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(_person.getFirstName(),style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),overflow: TextOverflow.ellipsis),
+                    Text(_person.getFirstName(),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                        overflow: TextOverflow.ellipsis),
                     SizedBox(height: 4),
-                    Text(_person.getLastName(),style: TextStyle(fontSize: 12)),
+                    Text(_person.getLastName(), style: TextStyle(fontSize: 12)),
                     SizedBox(height: 10),
-                    Text(S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),style: TextStyle(fontSize: 12),overflow: TextOverflow.ellipsis),
+                    Text(
+                        S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+                        style: TextStyle(fontSize: 12),
+                        overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ],
@@ -65,36 +74,46 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
   @override
   Widget buildIosWidget(BuildContext context) {
     return SafeArea(
-      child: Row(
-        children: <Widget>[
-          //First/Last name
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(_person.getFirstName(),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w400),overflow: TextOverflow.ellipsis),
-                    SizedBox(height: 4),
-                    Text(_person.getLastName(),style: TextStyle(fontSize: 14)),
-                    SizedBox(height: 10),
-                    Text(S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),style: TextStyle(fontSize: 14),overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 40,
-            child: GestureDetector(
-              child: Icon(
-                Icons.contacts,
-                color: ApplicationTheme.iosPrimaryColor,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+        child: Row(
+          children: <Widget>[
+            //First/Last name
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(_person.getFirstName(),
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w400),
+                          overflow: TextOverflow.ellipsis),
+                      SizedBox(height: 4),
+                      Text(_person.getLastName(),
+                          style: TextStyle(fontSize: 14)),
+                      SizedBox(height: 10),
+                      Text(
+                          S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+                          style: TextStyle(fontSize: 14),
+                          overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
+                ],
               ),
-              onTap: () => _navigateToPersonDetails(context),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 40,
+              child: GestureDetector(
+                child: Icon(
+                  Icons.contacts,
+                  color: ApplicationTheme.iosPrimaryColor,
+                ),
+                onTap: () => _navigateToPersonDetails(context),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -13,14 +13,17 @@ import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
 ///This [Widget] will display all known people.
 class PersonListPage extends StatefulWidget {
-
   @override
-  _PersonListPageState createState() => _PersonListPageState(InjectionContainer.get<PersonListBloc>(),InjectionContainer.get<PersonSelectBloc>());
+  _PersonListPageState createState() => _PersonListPageState(
+      InjectionContainer.get<PersonListBloc>(),
+      InjectionContainer.get<PersonSelectBloc>());
 }
 
 ///This is the [State] class for [PersonListPage].
-class _PersonListPageState extends State<PersonListPage> implements PlatformAwareWidget {
-  _PersonListPageState(this._listBloc,this._selectBloc): assert(_listBloc != null && _selectBloc != null);
+class _PersonListPageState extends State<PersonListPage>
+    implements PlatformAwareWidget {
+  _PersonListPageState(this._listBloc, this._selectBloc)
+      : assert(_listBloc != null && _selectBloc != null);
 
   ///The BLoC that handles the list.
   final PersonListBloc _listBloc;
@@ -61,11 +64,10 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
         ],
       ),
       body: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty(),_selectBloc),
+          PersonListPageError(), PersonListPageEmpty(), _selectBloc),
     );
   }
 
-  //TODO import/export buttons
   ///Layout
   ///
   /// - NavigationBar (title + add person action)
@@ -76,17 +78,34 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).PersonCatalogTitle),
-        trailing: GestureDetector(
-          child: Icon(
-            Icons.person_add
-          ),
-          onTap: (){
-            //TODO go to add person screen
-          },
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            GestureDetector(
+              child: Icon(Icons.person_add),
+              onTap: (){
+                //TODO: goto add person
+              },
+            ),
+            SizedBox(width: 10),
+            GestureDetector(
+              child: Icon(Icons.file_download),
+              onTap: (){
+                //TODO goto import file
+              },
+            ),
+            SizedBox(width: 10),
+            GestureDetector(
+              child: Icon(Icons.file_upload),
+              onTap: (){
+                //TODO goto export file
+              },
+            ),
+          ],
         ),
       ),
       child: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty(),_selectBloc),
+          PersonListPageError(), PersonListPageEmpty(), _selectBloc),
     );
   }
 
@@ -107,8 +126,8 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
   ///Displays [error] when [future] completed with an error.
   ///Displays [empty] when [future] completed, but there is nothing to show.
   ///Displays a list of [_PersonListPageListTile] when there is data.
-  FutureBuilder _listBuilder(
-      Future<List<Person>> future, Widget loading, Widget error, Widget empty, PersonSelectBloc bloc) {
+  FutureBuilder _listBuilder(Future<List<Person>> future, Widget loading,
+      Widget error, Widget empty, PersonSelectBloc bloc) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -117,7 +136,12 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
             return error;
           } else {
             List<Person> data = snapshot.data as List<Person>;
-            return data.isEmpty ? empty : ListView.builder(itemCount: data.length, itemBuilder: (context, index) => PersonListPageListItem(data[index],bloc));
+            return data.isEmpty
+                ? empty
+                : ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) =>
+                        PersonListPageListItem(data[index], bloc));
           }
         } else {
           return loading;
@@ -126,5 +150,3 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
     );
   }
 }
-
-

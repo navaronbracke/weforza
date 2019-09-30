@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/personListBloc.dart';
+import 'package:weforza/blocs/personSelectBloc.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/person.dart';
@@ -14,18 +15,19 @@ import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 class PersonListPage extends StatefulWidget {
 
   @override
-  _PersonListPageState createState() => _PersonListPageState(InjectionContainer.get<PersonListBloc>());
+  _PersonListPageState createState() => _PersonListPageState(InjectionContainer.get<PersonListBloc>(),InjectionContainer.get<PersonSelectBloc>());
 }
 
 ///This is the [State] class for [PersonListPage].
 class _PersonListPageState extends State<PersonListPage> implements PlatformAwareWidget {
-  _PersonListPageState(this._bloc): assert(_bloc != null);
+  _PersonListPageState(this._listBloc,this._selectBloc): assert(_listBloc != null && _selectBloc != null);
 
-  ///The BLoC for this widget.
-  final PersonListBloc _bloc;
+  ///The BLoC that handles the list.
+  final PersonListBloc _listBloc;
 
+  ///The BLoC that handles the selection.
+  final PersonSelectBloc _selectBloc;
 
-  //TODO import/export actions
   ///Layout
   ///
   /// - AppBar (title + add person action)
@@ -58,11 +60,12 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
           ),
         ],
       ),
-      body: _listBuilder(_bloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty()),
+      body: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
+          PersonListPageError(), PersonListPageEmpty(),_selectBloc),
     );
   }
 
+  //TODO import/export buttons
   ///Layout
   ///
   /// - NavigationBar (title + add person action)
@@ -82,8 +85,8 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
           },
         ),
       ),
-      child: _listBuilder(_bloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty()),
+      child: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
+          PersonListPageError(), PersonListPageEmpty(),_selectBloc),
     );
   }
 
@@ -94,7 +97,7 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
 
   @override
   void dispose() {
-    _bloc.dispose();
+    _listBloc.dispose();
     super.dispose();
   }
 
@@ -102,10 +105,10 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
   ///
   ///Displays [loading] when [future] is still busy.
   ///Displays [error] when [future] completed with an error.
-  ///Displays [empty] when [future] completed, but there is nothing to show
+  ///Displays [empty] when [future] completed, but there is nothing to show.
   ///Displays a list of [_PersonListPageListTile] when there is data.
   FutureBuilder _listBuilder(
-      Future<List<Person>> future, Widget loading, Widget error, Widget empty) {
+      Future<List<Person>> future, Widget loading, Widget error, Widget empty, PersonSelectBloc bloc) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -114,7 +117,7 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
             return error;
           } else {
             List<Person> data = snapshot.data as List<Person>;
-            return data.isEmpty ? empty : ListView.builder(itemCount: data.length, itemBuilder: (context, index) => PersonListPageListItem(data[index]));
+            return data.isEmpty ? empty : ListView.builder(itemCount: data.length, itemBuilder: (context, index) => PersonListPageListItem(data[index],bloc));
           }
         } else {
           return loading;

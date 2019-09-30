@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/personSelectBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/person.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/pages/personDetails/personDetailsPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
 ///This class represents a list item of [PersonListPage].
 class PersonListPageListItem extends StatelessWidget implements PlatformAwareWidget {
-  PersonListPageListItem(this._person);
+  PersonListPageListItem(this._person,this._selectBloc) : assert(_person != null && _selectBloc != null);
 
+  ///The person for this item.
   final Person _person;
+
+  ///The BLoC that handles the selection.
+  final PersonSelectBloc _selectBloc;
+
+  _navigateToPersonDetails (BuildContext context){
+    _selectBloc.person = _person;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PersonDetailsPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -40,9 +54,7 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
             child: IconButton(
               icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
               splashColor: ApplicationTheme.goToPersonDetailSplashColor,
-              onPressed: (){
-                //TODO: navigate to person details
-              },
+              onPressed: () => _navigateToPersonDetails(context),
             ),
           ),
         ],
@@ -79,9 +91,7 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
                 Icons.contacts,
                 color: ApplicationTheme.iosPrimaryColor,
               ),
-              onTap: (){
-                //TODO
-              },
+              onTap: () => _navigateToPersonDetails(context),
             ),
           ),
         ],

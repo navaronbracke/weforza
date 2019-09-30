@@ -11,6 +11,8 @@
   "PersonCatalogAddPersonInstruction": "Add people by using the menu above.",
   "PersonCatalogPhoneFormat": "Tel: $phone",
 
+  "PersonDetailsTitle": "Details",
+
   "EventCatalogTitle": "Events"
 
 }

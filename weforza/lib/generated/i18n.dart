@@ -30,6 +30,7 @@ class S implements WidgetsLocalizations {
   String get PersonCatalogLoadingInProgress => "Loading known people...";
   String get PersonCatalogNoItems => "Nothing to show here.";
   String get PersonCatalogTitle => "People";
+  String get PersonDetailsTitle => "Details";
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
 }
 
@@ -49,6 +50,8 @@ class $nl extends S {
   String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
   @override
   String get PersonCatalogLoadingInProgress => "Bekende personen ophalen...";
+  @override
+  String get PersonDetailsTitle => "Details";
   @override
   String get EventCatalogTitle => "Evenementen";
   @override

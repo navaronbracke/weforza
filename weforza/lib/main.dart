@@ -15,7 +15,7 @@ void main(){
 ///This class represents the application.
 class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
 
-  final String _appTitle = 'WeForza';
+  final String _appName = "WeForza";
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -23,7 +23,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return MaterialApp(
-      title: _appTitle,//Calling S.of(context).string_name won't work here.
+      title: _appName,
       localizationsDelegates: [S.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),
@@ -38,8 +38,10 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildIosWidget(BuildContext context) {
     return CupertinoApp(
-      title: _appTitle,
-      localizationsDelegates: [S.delegate],
+      title: _appName,
+      localizationsDelegates: [
+        S.delegate,
+      ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.iosTheme(),
       initialRoute: "/",

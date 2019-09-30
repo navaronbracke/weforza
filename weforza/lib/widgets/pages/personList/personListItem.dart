@@ -38,7 +38,7 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
           SizedBox(
             width: 40,
             child: IconButton(
-              icon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
               splashColor: ApplicationTheme.goToPersonDetailSplashColor,
               onPressed: (){
                 //TODO: navigate to person details
@@ -76,7 +76,7 @@ class PersonListPageListItem extends StatelessWidget implements PlatformAwareWid
             width: 40,
             child: GestureDetector(
               child: Icon(
-                Icons.search,
+                Icons.contacts,
                 color: ApplicationTheme.iosPrimaryColor,
               ),
               onTap: (){

@@ -43,6 +43,19 @@ class _PersonListPageState extends State<PersonListPage> implements PlatformAwar
               //TODO: go to add person screen
             },
           ),
+          //Import button
+          IconButton(
+            icon: Icon(Icons.file_download, color: Colors.white),
+            onPressed: () {
+              //TODO: go to import file screen
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.file_upload, color: Colors.white),
+            onPressed: () {
+              //TODO: go to export file screen
+            },
+          ),
         ],
       ),
       body: _listBuilder(_bloc.getKnownPeople(), PersonListPageLoading(),

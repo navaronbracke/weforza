@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:weforza/model/person.dart';
 
 ///This interface defines a contract for manipulating known people.
@@ -29,8 +31,29 @@ class PersonRepository implements IPersonRepository {
   @override
   Future<List<Person>> getKnownPeople() async {
     // TODO: implement getKnownPeople
-
     //Placeholder until I get the database up.
-    return List.generate(15, (index) => Person("Firstname $index","Lastname $index"));
+    return List.of([Person("Rudy","Bracke","0499566980"),Person("Navaron","Bracke","0491294014")]);
+  }
+}
+
+///This class is a test version of [IPersonRepository].
+class TestPersonRepository implements IPersonRepository {
+  TestPersonRepository();
+
+  final List<Person> _list = List<Person>();
+
+  @override
+  Future<void> addPerson(Person person) async {
+    _list.add(person);
+  }
+
+  @override
+  Future<void> deletePerson(Person person) async {
+    _list.remove(person);
+  }
+
+  @override
+  Future<List<Person>> getKnownPeople() async {
+    return List.of([Person("Rudy","Bracke","0499566980"),Person("Navaron","Bracke","0491294014")]);
   }
 }

@@ -21,9 +21,18 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get AddPersonTitle => "New Person";
   String get AppName => "WeForza";
-  String get EventCatalog => "Event Catalog";
-  String get PersonCatalog => "People Catalog";
+  String get EventCatalogTitle => "Events";
+  String get HomePageEventButtonLabel => "Events";
+  String get HomePagePeopleButtonLabel => "People";
+  String get PersonCatalogAddPersonInstruction => "Add people by using the menu above.";
+  String get PersonCatalogLoadingFailed => "Could not fetch the known people.";
+  String get PersonCatalogLoadingInProgress => "Loading known people...";
+  String get PersonCatalogNoItems => "Nothing to show here.";
+  String get PersonCatalogTitle => "People";
+  String get PersonDetailsTitle => "Details";
+  String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
 }
 
 class $en extends S {
@@ -37,11 +46,29 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get EventCatalog => "Evenementen Catalogus";
+  String get PersonCatalogNoItems => "Er is niks om te tonen.";
   @override
-  String get PersonCatalog => "Personen Catalogus";
+  String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
+  @override
+  String get PersonCatalogLoadingInProgress => "Bekende personen ophalen...";
+  @override
+  String get PersonDetailsTitle => "Details";
+  @override
+  String get EventCatalogTitle => "Evenementen";
+  @override
+  String get HomePagePeopleButtonLabel => "Personen";
+  @override
+  String get HomePageEventButtonLabel => "Evenementen";
+  @override
+  String get AddPersonTitle => "Nieuwe Persoon";
+  @override
+  String get PersonCatalogTitle => "Personen";
+  @override
+  String get PersonCatalogAddPersonInstruction => "Voeg mensen toe via het menu hierboven.";
   @override
   String get AppName => "WeForza";
+  @override
+  String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

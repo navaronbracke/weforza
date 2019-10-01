@@ -1,29 +1,36 @@
-import 'package:dependencies/dependencies.dart';
-import 'package:weforza/injection/blocModule.dart';
-import 'package:weforza/injection/repositoryModule.dart';
+import 'package:flutter_simple_dependency_injection/injector.dart';
+import 'package:weforza/blocs/personListBloc.dart';
+import 'package:weforza/blocs/personSelectBloc.dart';
+import 'package:weforza/repository/personRepository.dart';
 
-///This class defines a contract for a custom dependency injector.
-abstract class DependencyInjector {
-  ///Setup the given [Binder].
-  void setup(Binder binder);
-}
+///This class will provide dependencies.
+class InjectionContainer {
+  static Injector _injector;
 
-///This [DependencyInjector] sets up production scope injection.
-class ProductionInjector implements DependencyInjector {
-  @override
-  void setup(Binder binder) {
-    binder.install(RepositoryModule());
-    binder.install(BlocModule());
-    //more modules
+  ///Initialize an [Injector] for production
+  static void initProductionInjector(){
+    _injector = Injector.getInjector();
+    //repositories
+    _injector.map<IPersonRepository>((i) => PersonRepository(),isSingleton: true);
+    //blocs
+    _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
+    _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
+    //other
   }
 
-}
+  ///Initialize an [Injector] for testing
+  static void initTestInjector(){
+    _injector = Injector.getInjector();
+    //repositories
+    _injector.map<IPersonRepository>((i) => PersonRepository(),isSingleton: true);
+    //blocs
+    _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
+    _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
+  }
 
-///This [DependencyInjector] sets up testing scope injection.
-class TestInjector implements DependencyInjector {
-  @override
-  void setup(Binder binder) {
-    // TODO: implement setup
-    //Need test versions of the required modules
+  //Get a dependency.
+  static T get<T>(){
+    assert(_injector != null);
+    return _injector.get<T>();
   }
 }

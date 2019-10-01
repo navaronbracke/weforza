@@ -4,29 +4,41 @@ import 'package:flutter/material.dart';
 ///This class provides the application [ThemeData]
 abstract class ApplicationTheme {
 
-  static final Color _androidPrimaryColor = Color.fromARGB(255, 38, 38, 38);
-  static final Color _androidAccentColor = Color.fromARGB(255, 94, 16, 16);
-  static final Color _raisedButtonInkSplashColor = Color.fromARGB(255, 60,60,60);
+  ///Android
 
-  static final Color _iosPrimaryColor = Color.fromARGB(255, 38, 38, 38);
-  static final Color _iosAccentColor = Color.fromARGB(255, 94, 16, 16);
+  ///Android Theme Primary color
+  static final Color androidPrimaryColor = Color.fromARGB(255, 38, 38, 38);
+  ///Android Theme Accent color
+  static final Color androidAccentColor = Color.fromARGB(255, 94, 16, 16);
+  ///Android Material Splash Colors
+  ///Splash color derived from [_androidPrimaryColor]
+  static final Color androidPrimaryDerivedSplashColor = Color.fromARGB(255, 60,60,60);
+  ///Splash color for the go to person details [IconButton].
+  static final Color goToPersonDetailSplashColor = Color.fromARGB(255, 173, 173, 173);
+
+
+  ///IOS
+
+  ///Cupertino Theme Primary color
+  static final Color iosPrimaryColor = Color.fromARGB(255, 38, 38, 38);
+  ///Cupertino Theme Accent color
+  static final Color iosAccentColor = Color.fromARGB(255, 94, 16, 16);
+
+
 
   ///Provide the Android theme
   static ThemeData androidTheme(){
      return ThemeData(
-       primaryColor: _androidPrimaryColor,
-       accentColor: _androidAccentColor,
-       splashColor: _raisedButtonInkSplashColor
+       primaryColor: androidPrimaryColor,
+       accentColor: androidAccentColor,
+       splashColor: androidPrimaryDerivedSplashColor
      );
   }
 
   ///Provide the IOS theme
   static CupertinoThemeData iosTheme(){
-    //Not really sure how Cupertino will look.
-    //We could decide to omit the constructor args, to apply a default theme.
     return CupertinoThemeData(
-      primaryColor: _iosPrimaryColor,
-      primaryContrastingColor: _iosAccentColor
+      primaryColor: iosPrimaryColor
     );
   }
 }

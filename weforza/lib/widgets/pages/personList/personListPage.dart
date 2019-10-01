@@ -5,6 +5,7 @@ import 'package:weforza/blocs/personSelectBloc.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/person.dart';
+import 'package:weforza/widgets/pages/addPerson/addPersonPage.dart';
 import 'package:weforza/widgets/pages/personList/personListEmpty.dart';
 import 'package:weforza/widgets/pages/personList/personListError.dart';
 import 'package:weforza/widgets/pages/personList/personListItem.dart';
@@ -31,6 +32,13 @@ class _PersonListPageState extends State<PersonListPage>
   ///The BLoC that handles the selection.
   final PersonSelectBloc _selectBloc;
 
+  _navigateToAddPerson(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddPersonPage()),
+    );
+  }
+
   ///Layout
   ///
   /// - AppBar (title + add person action)
@@ -44,9 +52,7 @@ class _PersonListPageState extends State<PersonListPage>
           //Add person button
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () {
-              //TODO: go to add person screen
-            },
+            onPressed: () => _navigateToAddPerson(context),
           ),
           //Import button
           IconButton(
@@ -83,9 +89,7 @@ class _PersonListPageState extends State<PersonListPage>
           children: <Widget>[
             GestureDetector(
               child: Icon(Icons.person_add),
-              onTap: (){
-                //TODO: goto add person
-              },
+              onTap: ()=> _navigateToAddPerson(context),
             ),
             SizedBox(width: 10),
             GestureDetector(
@@ -139,9 +143,9 @@ class _PersonListPageState extends State<PersonListPage>
             return data.isEmpty
                 ? empty
                 : ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) =>
-                        PersonListPageListItem(data[index], bloc));
+                itemCount: data.length,
+                itemBuilder: (context, index) =>
+                    PersonListPageListItem(data[index], bloc));
           }
         } else {
           return loading;

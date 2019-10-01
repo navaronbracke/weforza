@@ -21,6 +21,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get AddPersonTitle => "New Person";
   String get AppName => "WeForza";
   String get EventCatalogTitle => "Events";
   String get HomePageEventButtonLabel => "Events";
@@ -58,6 +59,8 @@ class $nl extends S {
   String get HomePagePeopleButtonLabel => "Personen";
   @override
   String get HomePageEventButtonLabel => "Evenementen";
+  @override
+  String get AddPersonTitle => "Nieuwe Persoon";
   @override
   String get PersonCatalogTitle => "Personen";
   @override

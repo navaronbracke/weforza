@@ -32,6 +32,7 @@ class _PersonListPageState extends State<PersonListPage>
   ///The BLoC that handles the selection.
   final PersonSelectBloc _selectBloc;
 
+  ///Navigate to [AddPersonPage].
   _navigateToAddPerson(BuildContext context) {
     Navigator.push(
       context,
@@ -41,7 +42,7 @@ class _PersonListPageState extends State<PersonListPage>
 
   ///Layout
   ///
-  /// - AppBar (title + add person action)
+  /// - AppBar (title + add person/import/export action)
   /// - List || Empty || Loading || Error
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -76,7 +77,7 @@ class _PersonListPageState extends State<PersonListPage>
 
   ///Layout
   ///
-  /// - NavigationBar (title + add person action)
+  /// - NavigationBar (title + add person/import/export action)
   /// - List || Empty || Loading || Error
   @override
   Widget buildIosWidget(BuildContext context) {
@@ -108,8 +109,10 @@ class _PersonListPageState extends State<PersonListPage>
           ],
         ),
       ),
-      child: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty(), _selectBloc),
+      child: SafeArea(
+        child: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
+            PersonListPageError(), PersonListPageEmpty(), _selectBloc),
+      ),
     );
   }
 

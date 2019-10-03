@@ -31,89 +31,78 @@ class PersonListPageListItem extends StatelessWidget
   Widget build(BuildContext context) =>
       PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
+  ///Layout
+  ///
+  ///First name, last name and phone are on the left.
+  ///A details button is on the right.
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return ListTile(
-      title: Row(
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(_person.getFirstName(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w400),
-                        overflow: TextOverflow.ellipsis),
-                    SizedBox(height: 4),
-                    Text(_person.getLastName(), style: TextStyle(fontSize: 12)),
-                    SizedBox(height: 10),
-                    Text(
-                        S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
-                        style: TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 40,
-            child: IconButton(
-              icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
-              splashColor: ApplicationTheme.goToPersonDetailSplashColor,
-              onPressed: () => _navigateToPersonDetails(context),
-            ),
-          ),
+          Text(_person.getFirstName(),style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w400),
+              overflow: TextOverflow.ellipsis),
+          SizedBox(height: 5),
+          Text(_person.getLastName(), style: TextStyle(fontSize: 12)),
+          SizedBox(height: 5),
+          Text(
+              S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+              style: TextStyle(fontSize: 12),
+              overflow: TextOverflow.ellipsis),
         ],
       ),
+      trailing: SizedBox(
+          width: 40,
+          child: IconButton(
+            icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
+            splashColor: ApplicationTheme.goToPersonDetailSplashColor,
+            onPressed: () => _navigateToPersonDetails(context),
+          ),
+        ),
     );
   }
 
+  ///Layout
+  ///
+  ///First name, last name and phone are on the left.
+  ///A details button is on the right.
   @override
   Widget buildIosWidget(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-        child: Row(
-          children: <Widget>[
-            //First/Last name
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(_person.getFirstName(),
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w400),
-                          overflow: TextOverflow.ellipsis),
-                      SizedBox(height: 4),
-                      Text(_person.getLastName(),
-                          style: TextStyle(fontSize: 14)),
-                      SizedBox(height: 10),
-                      Text(
-                          S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
-                          style: TextStyle(fontSize: 14),
-                          overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
-                ],
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+      child: Row(
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(_person.getFirstName(),
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w400),
+                  overflow: TextOverflow.ellipsis),
+              SizedBox(height: 4),
+              Text(_person.getLastName(),
+                  style: TextStyle(fontSize: 14)),
+              SizedBox(height: 10),
+              Text(
+                  S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+                  style: TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis),
+            ],
+          ),
+          Spacer(flex: 3),
+          SizedBox(
+            width: 40,
+            child: GestureDetector(
+              child: Icon(
+                Icons.contacts,
+                color: ApplicationTheme.iosPrimaryColor,
               ),
+              onTap: () => _navigateToPersonDetails(context),
             ),
-            SizedBox(
-              width: 40,
-              child: GestureDetector(
-                child: Icon(
-                  Icons.contacts,
-                  color: ApplicationTheme.iosPrimaryColor,
-                ),
-                onTap: () => _navigateToPersonDetails(context),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -21,6 +21,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get AddPersonSubmit => "Add Person";
   String get AddPersonTitle => "New Person";
   String get AppName => "WeForza";
   String get EventCatalogTitle => "Events";
@@ -32,7 +33,13 @@ class S implements WidgetsLocalizations {
   String get PersonCatalogNoItems => "Nothing to show here.";
   String get PersonCatalogTitle => "People";
   String get PersonDetailsTitle => "Details";
+  String get PersonFirstNameLabel => "First Name";
+  String get PersonLastNameLabel => "Last Name";
+  String get PersonTelephoneLabel => "Telephone";
+  String FirstNameMinLength(String minLength) => "First Name should be minimum $minLength letters";
+  String LastNameMinLength(String minLength) => "Last Name should be minimum $minLength letters";
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
+  String ValueIsRequired(String value) => "$value is required";
 }
 
 class $en extends S {
@@ -48,11 +55,25 @@ class $nl extends S {
   @override
   String get PersonCatalogNoItems => "Er is niks om te tonen.";
   @override
-  String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
+  String get AddPersonSubmit => "Persoon Toevoegen";
   @override
   String get PersonCatalogLoadingInProgress => "Bekende personen ophalen...";
   @override
   String get PersonDetailsTitle => "Details";
+  @override
+  String get PersonFirstNameLabel => "Voornaam";
+  @override
+  String get AddPersonTitle => "Nieuwe Persoon";
+  @override
+  String get PersonCatalogTitle => "Personen";
+  @override
+  String get AppName => "WeForza";
+  @override
+  String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
+  @override
+  String get PersonLastNameLabel => "Familienaam";
+  @override
+  String get PersonTelephoneLabel => "Telefoon";
   @override
   String get EventCatalogTitle => "Evenementen";
   @override
@@ -60,15 +81,15 @@ class $nl extends S {
   @override
   String get HomePageEventButtonLabel => "Evenementen";
   @override
-  String get AddPersonTitle => "Nieuwe Persoon";
-  @override
-  String get PersonCatalogTitle => "Personen";
-  @override
   String get PersonCatalogAddPersonInstruction => "Voeg mensen toe via het menu hierboven.";
   @override
-  String get AppName => "WeForza";
+  String FirstNameMinLength(String minLength) => "Voornaam is minimum $minLength letters";
   @override
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
+  @override
+  String ValueIsRequired(String value) => "$value is verplicht";
+  @override
+  String LastNameMinLength(String minLength) => "Familienaam is minimum $minLength letters";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

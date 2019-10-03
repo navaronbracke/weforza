@@ -1,4 +1,5 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
+import 'package:weforza/blocs/addPersonBloc.dart';
 import 'package:weforza/blocs/personListBloc.dart';
 import 'package:weforza/blocs/personSelectBloc.dart';
 import 'package:weforza/repository/personRepository.dart';
@@ -15,6 +16,7 @@ class InjectionContainer {
     //blocs
     _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
     _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
+    _injector.map<AddPersonBloc>((i) => AddPersonBloc(i.get<IPersonRepository>()));
     //other
   }
 
@@ -26,9 +28,11 @@ class InjectionContainer {
     //blocs
     _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
     _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
+    _injector.map<AddPersonBloc>((i) => AddPersonBloc(i.get<IPersonRepository>()));
   }
 
-  //Get a dependency.
+  ///Get a dependency of type [T].
+  ///[_injector] shouldn't be null.
   static T get<T>(){
     assert(_injector != null);
     return _injector.get<T>();

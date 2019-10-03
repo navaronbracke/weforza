@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-///This class provides the application [ThemeData]
+///This class provides the application [ThemeData].
 abstract class ApplicationTheme {
 
   ///Android
@@ -11,7 +11,7 @@ abstract class ApplicationTheme {
   ///Android Theme Accent color
   static final Color androidAccentColor = Color.fromARGB(255, 94, 16, 16);
   ///Android Material Splash Colors
-  ///Splash color derived from [_androidPrimaryColor]
+  ///Splash color derived from [_androidPrimaryColor].
   static final Color androidPrimaryDerivedSplashColor = Color.fromARGB(255, 60,60,60);
   ///Splash color for the go to person details [IconButton].
   static final Color goToPersonDetailSplashColor = Color.fromARGB(255, 173, 173, 173);
@@ -26,7 +26,7 @@ abstract class ApplicationTheme {
 
 
 
-  ///Provide the Android theme
+  ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
        primaryColor: androidPrimaryColor,
@@ -35,7 +35,7 @@ abstract class ApplicationTheme {
      );
   }
 
-  ///Provide the IOS theme
+  ///Provide the IOS theme.
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
       primaryColor: iosPrimaryColor

@@ -6,7 +6,7 @@ import 'package:weforza/repository/personRepository.dart';
 
 import 'bloc.dart';
 
-///This class represents a Bloc for the PersonListPage Widget.
+///This class represents a Bloc for PersonListPage.
 class PersonListBloc extends Bloc {
   PersonListBloc(this._personRepository);
 

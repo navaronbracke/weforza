@@ -8,14 +8,17 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/person.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
+///This class represents the detail page for a [Person].
 class PersonDetailsPage extends StatefulWidget {
   @override
   _PersonDetailsPageState createState() => _PersonDetailsPageState(InjectionContainer.get<PersonSelectBloc>().person);
 }
 
+///This is the [State] class for [PersonDetailsPage].
 class _PersonDetailsPageState extends State<PersonDetailsPage> implements PlatformAwareWidget {
   _PersonDetailsPageState(this._person);
 
+  ///The person for the rendered content.
   final Person _person;
 
   @override

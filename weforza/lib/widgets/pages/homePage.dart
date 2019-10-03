@@ -12,6 +12,9 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
+  ///Layout
+  ///
+  ///Navigation buttons for the events and people list in the middle.
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -50,7 +53,6 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
     );
   }
 
-  //TODO: decide if we use buttons OR bottom tabs
   ///Layout
   ///
   /// - NavigationBar (app title)

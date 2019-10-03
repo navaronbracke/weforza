@@ -14,7 +14,15 @@
   "PersonDetailsTitle": "Details",
 
   "AddPersonTitle": "New Person",
+  "AddPersonSubmit": "Add Person",
+  "PersonFirstNameLabel": "First Name",
+  "PersonLastNameLabel": "Last Name",
+  "PersonTelephoneLabel": "Telephone",
+  "FirstNameMinLength": "First Name should be minimum $minLength letters",
+  "LastNameMinLength": "Last Name should be minimum $minLength letters",
 
-  "EventCatalogTitle": "Events"
+  "EventCatalogTitle": "Events",
+
+  "ValueIsRequired": "$value is required"
 
 }

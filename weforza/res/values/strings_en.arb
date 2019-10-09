@@ -11,17 +11,25 @@
   "PersonCatalogAddPersonInstruction": "Add people by using the menu above.",
   "PersonCatalogPhoneFormat": "Tel: $phone",
 
+  "EventCatalogTitle": "Events",
+
   "PersonDetailsTitle": "Details",
 
   "AddPersonTitle": "New Person",
-  "AddPersonSubmit": "Add Person",
+  "AddPersonSubmit": "Create New Person",
+
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
   "PersonTelephoneLabel": "Telephone",
-  "FirstNameMinLength": "First Name should be minimum $minLength letters",
-  "LastNameMinLength": "Last Name should be minimum $minLength letters",
 
-  "EventCatalogTitle": "Events",
+  "FirstNameMaxLength": "First Name can't be longer than $maxLength characters",
+  "LastNameMaxLength": "Last Name can't be longer than $maxLength characters",
+  "FirstNameIllegalCharacters": "First Name can only contain letters, spaces or ' -",
+  "LastNameIllegalCharacters": "Last Name can only contain letters, spaces or ' -",
+  "PhoneIllegalCharacters": "A phone number can only contain digits",
+  "PhoneMinLength": "A phone number is minimum $minLength digits long",
+  "PhoneMaxLength": "A phone number is maximum $maxLength digits long",
+
 
   "ValueIsRequired": "$value is required"
 

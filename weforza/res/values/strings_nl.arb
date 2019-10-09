@@ -11,17 +11,26 @@
   "PersonCatalogAddPersonInstruction": "Voeg mensen toe via het menu hierboven.",
   "PersonCatalogPhoneFormat": "Tel: $phone",
 
+  "EventCatalogTitle": "Evenementen",
+
   "PersonDetailsTitle": "Details",
 
   "AddPersonTitle": "Nieuwe Persoon",
   "AddPersonSubmit": "Persoon Toevoegen",
+
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
   "PersonTelephoneLabel": "Telefoon",
-  "FirstNameMinLength": "Voornaam is minimum $minLength letters",
-  "LastNameMinLength": "Familienaam is minimum $minLength letters",
 
-  "EventCatalogTitle": "Evenementen",
+  "FirstNameMaxLength": "Voornaam kan niet langer zijn dan $maxLength letters",
+  "LastNameMaxLength": "Familienaam kan niet langer zijn dan $maxLength letters",
+  "FirstNameIllegalCharacters": "Voornaam mag enkel letters, spaties of ' - bevatten",
+  "LastNameIllegalCharacters": "Familienaam mag enkel letters,spaties of ' - bevatten",
+  "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
+  "PhoneMinLength": "Een telefoonnummer is minimum $minLength cijfers lang",
+  "PhoneMaxLength": "Een telefoonnummer is maximum $maxLength cijfers lang",
+
+
 
   "ValueIsRequired": "$value is verplicht"
 }

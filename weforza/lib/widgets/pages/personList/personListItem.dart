@@ -20,7 +20,7 @@ class PersonListPageListItem extends StatelessWidget
   final PersonSelectBloc _selectBloc;
 
   _navigateToPersonDetails(BuildContext context) {
-    _selectBloc.person = _person;
+    _selectBloc.selectedPerson = _person;
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => PersonDetailsPage()),
@@ -41,14 +41,14 @@ class PersonListPageListItem extends StatelessWidget
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(_person.getFirstName(),style: TextStyle(
+          Text(_person.firstname,style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w400),
               overflow: TextOverflow.ellipsis),
           SizedBox(height: 5),
-          Text(_person.getLastName(), style: TextStyle(fontSize: 12)),
+          Text(_person.lastname, style: TextStyle(fontSize: 12)),
           SizedBox(height: 5),
           Text(
-              S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+              S.of(context).PersonCatalogPhoneFormat(_person.phone),
               style: TextStyle(fontSize: 12),
               overflow: TextOverflow.ellipsis),
         ],
@@ -77,16 +77,16 @@ class PersonListPageListItem extends StatelessWidget
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(_person.getFirstName(),
+              Text(_person.firstname,
                   style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.w400),
                   overflow: TextOverflow.ellipsis),
               SizedBox(height: 4),
-              Text(_person.getLastName(),
+              Text(_person.lastname,
                   style: TextStyle(fontSize: 14)),
               SizedBox(height: 10),
               Text(
-                  S.of(context).PersonCatalogPhoneFormat(_person.getPhone()),
+                  S.of(context).PersonCatalogPhoneFormat(_person.phone),
                   style: TextStyle(fontSize: 14),
                   overflow: TextOverflow.ellipsis),
             ],

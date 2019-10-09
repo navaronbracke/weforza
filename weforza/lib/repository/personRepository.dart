@@ -32,7 +32,7 @@ class PersonRepository implements IPersonRepository {
   Future<List<Person>> getKnownPeople() async {
     // TODO: implement getKnownPeople
     //Placeholder until I get the database up.
-    return List.of([Person("Rudy","Bracke","0499566980"),Person("Navaron","Bracke","0491294014")]);
+    return Future.value(List.of([Person(firstname: "Rudy",lastname: "Bracke",phone: "0000000000"),Person(firstname: "Navaron",lastname: "Bracke",phone: "0000000000")]));
   }
 }
 
@@ -54,6 +54,6 @@ class TestPersonRepository implements IPersonRepository {
 
   @override
   Future<List<Person>> getKnownPeople() async {
-    return List.of([Person("Rudy","Bracke","0499566980"),Person("Navaron","Bracke","0491294014")]);
+    return Future.value(List.of([Person(firstname: "Rudy",lastname: "Bracke",phone: "0000000000"),Person(firstname: "Navaron",lastname: "Bracke",phone: "0000000000")]));
   }
 }

@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addPersonBloc.dart';
 import 'package:weforza/generated/i18n.dart';
@@ -32,12 +33,13 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
   String _firstNameRequiredMessage;
   String _lastNameRequiredMessage;
   String _phoneRequiredMessage;
-  String _firstNameMinLengthMessage;
-  String _lastNameMinLengthMessage;
-
-  ///Minimum input lengths.
-  final int _firstNameMinLength = 2;
-  final int _lastNameMinLength = 2;
+  String _firstNameMaxLengthMessage;
+  String _firstNameIllegalCharactersMessage;
+  String _lastNameMaxLengthMessage;
+  String _lastNameIllegalCharactersMessage;
+  String _phoneIllegalCharactersMessage;
+  String _phoneMinLengthMessage;
+  String _phoneMaxLengthMessage;
 
 
   ///Initialize localized strings for the form.
@@ -46,12 +48,21 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
     final S translator = S.of(context);
     _firstNameLabel = translator.PersonFirstNameLabel;
     _lastNameLabel = translator.PersonLastNameLabel;
+    _phoneLabel = translator.PersonTelephoneLabel;
+
     _firstNameRequiredMessage = translator.ValueIsRequired(_firstNameLabel);
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
-    _firstNameMinLengthMessage = translator.FirstNameMinLength("$_firstNameMinLength");
-    _lastNameMinLengthMessage = translator.FirstNameMinLength("$_lastNameMinLength");
-    _phoneLabel = translator.PersonTelephoneLabel;
     _phoneRequiredMessage = translator.ValueIsRequired(_phoneLabel);
+
+    _firstNameMaxLengthMessage = translator.FirstNameMaxLength("${_bloc.firstNameMaxLength}");
+    _firstNameIllegalCharactersMessage = translator.FirstNameIllegalCharacters;
+
+    _lastNameMaxLengthMessage = translator.LastNameMaxLength("${_bloc.lastNameMaxLength}");
+    _lastNameIllegalCharactersMessage = translator.LastNameIllegalCharacters;
+
+    _phoneIllegalCharactersMessage = translator.PhoneIllegalCharacters;
+    _phoneMinLengthMessage = translator.PhoneMinLength("${_bloc.phoneMinLength}");
+    _phoneMaxLengthMessage = translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
   }
 
   @override
@@ -86,7 +97,7 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
                   controller: _bloc.firstNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateFirstName(value, _firstNameRequiredMessage, _firstNameMinLengthMessage),
+                  validator: (value) => _bloc.validateFirstName(value,_firstNameRequiredMessage,_firstNameMaxLengthMessage,_firstNameIllegalCharactersMessage),
                   autovalidate: _bloc.autoValidateFirstName,
                   onChanged: (value)=> setState(() => _bloc.autoValidateFirstName = true),
                 ),
@@ -99,7 +110,7 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
                   controller: _bloc.lastNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateLastName(value, _lastNameRequiredMessage, _lastNameMinLengthMessage),
+                  validator: (value) => _bloc.validateLastName(value, _lastNameRequiredMessage, _lastNameMaxLengthMessage,_lastNameIllegalCharactersMessage),
                   autovalidate: _bloc.autoValidateLastName,
                   onChanged: (value)=> setState(() => _bloc.autoValidateLastName = true),
                 ),
@@ -112,9 +123,10 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
                   controller: _bloc.phoneController,
                   autocorrect: false,
                   keyboardType: TextInputType.phone,
-                  validator: (value) => _bloc.validatePhone(value, _phoneRequiredMessage),
+                  validator: (value) => _bloc.validatePhone(value,_phoneRequiredMessage,_phoneIllegalCharactersMessage,_phoneMinLengthMessage,_phoneMaxLengthMessage),
                   autovalidate: _bloc.autoValidatePhone,
                   onChanged: (value)=> setState(() => _bloc.autoValidatePhone = true),
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                 ),
                 SizedBox(height: 5),
                 Container(

@@ -1,28 +1,25 @@
 
+import 'package:flutter/foundation.dart';
+
 ///This class represents a 'Known Person.'
 ///
 ///Such a person has a first name, last name and a phone number.
 class Person {
-  ///A [RegExp] for a person's first or last name.
+  ///Regex for a person's first or last name.
   ///
-  ///Names start with an uppercase letter.
-  ///Names are at least 2 characters long.
-  ///Names can contain (A-Za-zéè) after the first letter.
-  static final RegExp personNameRegex = RegExp(r"^([A-Z][a-zéè])([a-zA-Zéè -]{0,})$");
+  ///The Regex is language independent.
+  ///Allows hyphen,apostrophe and spaces.
+  ///Between 1 and 50 characters(inclusive).
+  static final RegExp personNameRegex = RegExp(r"^([\p{Letter}\s]|['-]){1,50}$",unicode: true);
 
-  static final RegExp personPhone = RegExp(r"^[0-9]$");
+  ///Regex for a person's phone number.
+  ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
+  static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  ///The max length for a phone number according to the E.164 standard.
-  static final int phoneNumberMaxLength = 15;
-
-  Person(this._firstname,this._lastname,this._phone);
+  Person({@required firstname,@required lastname,@required phone});
 
   //Note that [_phone] is a String, integers can't do leading zeroes.
-  String _phone;
-  String _firstname;
-  String _lastname;
-
-  String getFirstName() => _firstname;
-  String getLastName() => _lastname;
-  String getPhone() => _phone;
+  String phone;
+  String firstname;
+  String lastname;
 }

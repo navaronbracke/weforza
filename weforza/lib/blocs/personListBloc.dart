@@ -14,7 +14,7 @@ class PersonListBloc extends Bloc {
   final IPersonRepository _personRepository;
 
   ///Fetch the known people.
-  Future<List<Person>> getKnownPeople() async => _personRepository.getKnownPeople();
+  Future<List<Person>> getKnownPeople() => _personRepository.getKnownPeople();
 
   @override
   void dispose() {}

@@ -21,12 +21,14 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get AddPersonSubmit => "Add Person";
+  String get AddPersonSubmit => "Create New Person";
   String get AddPersonTitle => "New Person";
   String get AppName => "WeForza";
   String get EventCatalogTitle => "Events";
+  String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' . -";
   String get HomePageEventButtonLabel => "Events";
   String get HomePagePeopleButtonLabel => "People";
+  String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' . -";
   String get PersonCatalogAddPersonInstruction => "Add people by using the menu above.";
   String get PersonCatalogLoadingFailed => "Could not fetch the known people.";
   String get PersonCatalogLoadingInProgress => "Loading known people...";
@@ -36,9 +38,12 @@ class S implements WidgetsLocalizations {
   String get PersonFirstNameLabel => "First Name";
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
-  String FirstNameMinLength(String minLength) => "First Name should be minimum $minLength letters";
-  String LastNameMinLength(String minLength) => "Last Name should be minimum $minLength letters";
+  String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
+  String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
+  String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
+  String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
   String ValueIsRequired(String value) => "$value is required";
 }
 
@@ -61,6 +66,8 @@ class $nl extends S {
   @override
   String get PersonDetailsTitle => "Details";
   @override
+  String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
+  @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
   String get AddPersonTitle => "Nieuwe Persoon";
@@ -69,11 +76,15 @@ class $nl extends S {
   @override
   String get AppName => "WeForza";
   @override
+  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' . - bevatten";
+  @override
   String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
   @override
   String get PersonLastNameLabel => "Familienaam";
   @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' . - bevatten";
   @override
   String get EventCatalogTitle => "Evenementen";
   @override
@@ -83,13 +94,17 @@ class $nl extends S {
   @override
   String get PersonCatalogAddPersonInstruction => "Voeg mensen toe via het menu hierboven.";
   @override
-  String FirstNameMinLength(String minLength) => "Voornaam is minimum $minLength letters";
+  String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  @override
+  String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override
   String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
   @override
   String ValueIsRequired(String value) => "$value is verplicht";
   @override
-  String LastNameMinLength(String minLength) => "Familienaam is minimum $minLength letters";
+  String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
+  @override
+  String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

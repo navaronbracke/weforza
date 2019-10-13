@@ -16,7 +16,7 @@ class Person {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  Person({@required firstname,@required lastname,@required phone});
+  Person(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
 
   //Note that [_phone] is a String, integers can't do leading zeroes.
   String phone;

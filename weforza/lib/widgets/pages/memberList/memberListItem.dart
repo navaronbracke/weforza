@@ -6,9 +6,10 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
+import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
-///This class represents a list item for [MemberList].
+///This class represents a list item for [MemberListPage].
 class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
   MemberListItem(this._member, this._selectBloc)
       : assert(_member != null && _selectBloc != null);

@@ -13,17 +13,17 @@ import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
 ///This [Widget] will display a list of members.
-class MemberList extends StatefulWidget {
+class MemberListPage extends StatefulWidget {
   @override
-  _MemberListState createState() => _MemberListState(
+  _MemberListPageState createState() => _MemberListPageState(
       InjectionContainer.get<MemberListBloc>(),
       InjectionContainer.get<MemberSelectBloc>());
 }
 
-///This is the [State] class for [MemberList].
-class _MemberListState extends State<MemberList>
+///This is the [State] class for [MemberListPage].
+class _MemberListPageState extends State<MemberListPage>
     implements PlatformAwareWidget {
-  _MemberListState(this._listBloc, this._selectBloc)
+  _MemberListPageState(this._listBloc, this._selectBloc)
       : assert(_listBloc != null && _selectBloc != null);
 
   ///The BLoC that handles the list.

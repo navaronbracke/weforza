@@ -3,6 +3,7 @@ import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/blocs/memberSelectBloc.dart';
+import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 ///This class will provide dependencies.
@@ -20,6 +21,7 @@ class InjectionContainer {
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
     _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
     _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember));
+    _injector.map<RideListBloc>((i) => RideListBloc());
     //other
   }
 
@@ -32,6 +34,7 @@ class InjectionContainer {
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
     _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
+    _injector.map<RideListBloc>((i) => RideListBloc());
   }
 
   ///Get a dependency of type [T].

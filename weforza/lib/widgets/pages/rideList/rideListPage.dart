@@ -2,24 +2,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/personDetailsBloc.dart';
+import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/person.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
-///This class represents the detail page for a [Person].
-class PersonDetailsPage extends StatefulWidget {
+///This [Widget] shows the list of Rides.
+class RideListPage extends StatefulWidget {
   @override
-  _PersonDetailsPageState createState() => _PersonDetailsPageState(InjectionContainer.get<PersonDetailsBloc>());
+  State<RideListPage> createState() => _RideListPageState(InjectionContainer.get<RideListBloc>());
 }
 
-///This is the [State] class for [PersonDetailsPage].
-class _PersonDetailsPageState extends State<PersonDetailsPage> implements PlatformAwareWidget {
-  _PersonDetailsPageState(this._bloc);
+///This class is the [State] for [RideListPage].
+class _RideListPageState extends State<RideListPage> implements PlatformAwareWidget {
+  _RideListPageState(this._bloc): assert(_bloc != null);
 
-  ///The person for the rendered content.
-  final PersonDetailsBloc _bloc;
+  ///The BLoC for this [Widget].
+  final RideListBloc _bloc;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -29,9 +28,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> implements Platfo
     // TODO: implement buildAndroidWidget
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).PersonDetailsTitle),
+        title: Text(S.of(context).RideListTitle),
       ),
-      body: Container(),
+      body: Center(),
     );
   }
 
@@ -40,12 +39,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> implements Platfo
     // TODO: implement buildIosWidget
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).PersonDetailsTitle),
+        middle: Text(S.of(context).RideListTitle),
+        transitionBetweenRoutes: false,
       ),
-      child: Container(),
+      child: Center(),
     );
   }
-
-
 
 }

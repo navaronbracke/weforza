@@ -1,15 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/pages/memberList/memberList.dart';
+import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 import 'package:weforza/generated/i18n.dart';
 
 ///This [Widget] represents the app landing page.
-///It allows navigating between [RideListPage] and [MemberList].
-class HomePage extends StatelessWidget implements PlatformAwareWidget {
+///It allows navigating between [RideListPage] and [MemberListPage].
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
-  //TODO add rides list
-  final List<Widget> _tabs = List.of([MemberList()]);
+///This is the [State] class for [HomePage].
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin implements PlatformAwareWidget {
+
+  ///The tabs for this page.
+  final List<Widget> _tabs = List.of([RideListPage(),MemberListPage()]);
+  ///The tab controller for android.
+  TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(vsync: this,length: _tabs.length,initialIndex: 0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -17,14 +38,10 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).AppName),
-      ),
-      body: TabBarView(children: _tabs),
+      body: TabBarView(children: _tabs,controller: _tabController),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index){
-          //TODO navigate
-
+          _tabController.animateTo(index);
         },
         items: [
           BottomNavigationBarItem(
@@ -42,17 +59,22 @@ class HomePage extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildIosWidget(BuildContext context) {
-
-    //TODO use cupertino tab scaffold
-
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AppName),
-      ),
-      child: Center(
-
+    return CupertinoTabScaffold(
+      tabBuilder: (context,index){
+        return _tabs[index];
+      },
+      tabBar: CupertinoTabBar(
+        items: [
+          BottomNavigationBarItem(
+            title: Text(S.of(context).HomePageRidesTab),
+            icon: Icon(Icons.directions_bike),
+          ),
+          BottomNavigationBarItem(
+            title: Text(S.of(context).HomePageMembersTab),
+            icon: Icon(Icons.people),
+          ),
+        ],
       ),
     );
   }
-
 }

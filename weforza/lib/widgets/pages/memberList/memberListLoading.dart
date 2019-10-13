@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/loadingIndicator.dart';
+import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 
-///This class represents a loading [Widget] for [MemberList].
+///This class represents a loading [Widget] for [MemberListPage].
 class MemberListLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

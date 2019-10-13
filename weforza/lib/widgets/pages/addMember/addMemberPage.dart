@@ -76,7 +76,6 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
   ///A form for the person's first/last name and telephone number.
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    // TODO: implement buildAndroidWidget
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddMemberTitle),

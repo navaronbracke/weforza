@@ -3,26 +3,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/addPersonBloc.dart';
+import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
-///This [Widget] represents the form for adding a person.
-class AddPersonPage extends StatefulWidget {
+///This [Widget] represents the form for adding a member.
+class AddMemberPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddPersonPageState(InjectionContainer.get<AddPersonBloc>());
+  State<StatefulWidget> createState() => _AddMemberPageState(InjectionContainer.get<AddMemberBloc>());
 
 }
 
-///This is the [State] class for [AddPersonPage].
-class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareWidget {
-  _AddPersonPageState(this._bloc);
+///This is the [State] class for [AddMemberPage].
+class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareWidget {
+  _AddMemberPageState(this._bloc);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
   ///The BLoC in charge of the form.
-  final AddPersonBloc _bloc;
+  final AddMemberBloc _bloc;
 
   ///The input labels.
   String _firstNameLabel;
@@ -74,13 +74,12 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
   ///Layout
   ///
   ///A form for the person's first/last name and telephone number.
-  ///A section for showing a list of devices + a button for scanning.
   @override
   Widget buildAndroidWidget(BuildContext context) {
     // TODO: implement buildAndroidWidget
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).AddPersonTitle),
+        title: Text(S.of(context).AddMemberTitle),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -134,7 +133,7 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
                     alignment: Alignment.center,
                     child: RaisedButton(
                       color: Theme.of(context).primaryColor,
-                      child: Text(S.of(context).AddPersonSubmit,style: TextStyle(color: Colors.white)),
+                      child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if(_formKey.currentState.validate())
                         {
@@ -161,7 +160,7 @@ class _AddPersonPageState extends State<AddPersonPage> implements PlatformAwareW
     // TODO: implement buildIosWidget
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddPersonTitle),
+        middle: Text(S.of(context).AddMemberTitle),
       ),
       child: Container(),
     );

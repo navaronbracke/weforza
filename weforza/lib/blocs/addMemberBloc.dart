@@ -1,17 +1,17 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/model/person.dart';
-import 'package:weforza/repository/personRepository.dart';
+import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/memberRepository.dart';
 
-///This is the [Bloc] for AddPersonPage.
-class AddPersonBloc extends Bloc {
+///This is the [Bloc] for AddMemberPage.
+class AddMemberBloc extends Bloc {
   ///Standard issue constructor.
-  ///Takes an [IPersonRepository].
-  AddPersonBloc(this._repository): assert(_repository != null);
+  ///Takes an [IMemberRepository].
+  AddMemberBloc(this._repository): assert(_repository != null);
 
-  ///The [IPersonRepository] that handles the submit.
-  final IPersonRepository _repository;
+  ///The [IMemberRepository] that handles the submit.
+  final IMemberRepository _repository;
 
   ///The form text controllers.
   final TextEditingController firstNameController = TextEditingController();
@@ -53,7 +53,7 @@ class AddPersonBloc extends Bloc {
     else if(firstNameMaxLength < value.length){
       _firstNameError = maxLengthMessage;
     }
-    else if(Person.personNameRegex.hasMatch(value)){
+    else if(Member.personNameRegex.hasMatch(value)){
       _firstName = value;
       _firstNameError = null;
     }
@@ -76,7 +76,7 @@ class AddPersonBloc extends Bloc {
     else if(lastNameMaxLength < value.length){
       _lastNameError = maxLengthMessage;
     }
-    else if(Person.personNameRegex.hasMatch(value)){
+    else if(Member.personNameRegex.hasMatch(value)){
       _lastName = value;
       _lastNameError = null;
     }
@@ -102,7 +102,7 @@ class AddPersonBloc extends Bloc {
     }else if(phoneMaxLength < value.length){
       _phoneError = maxLengthMessage;
     }
-    else if(Person.phoneNumberRegex.hasMatch(value)){
+    else if(Member.phoneNumberRegex.hasMatch(value)){
       _phone = value;
       _phoneError = null;
     }

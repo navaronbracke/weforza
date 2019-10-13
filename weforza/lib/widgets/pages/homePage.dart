@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: TabBarView(children: _tabs,controller: _tabController),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index){
-          _tabController.animateTo(index);
+          _tabController.index = index;
         },
         items: [
           BottomNavigationBarItem(
@@ -66,11 +66,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       tabBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
-            title: Text(S.of(context).HomePageRidesTab),
             icon: Icon(Icons.directions_bike),
           ),
           BottomNavigationBarItem(
-            title: Text(S.of(context).HomePageMembersTab),
             icon: Icon(Icons.people),
           ),
         ],

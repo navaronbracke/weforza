@@ -160,6 +160,7 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).AddMemberTitle),
+        transitionBetweenRoutes: false,
       ),
       child: Container(),
     );

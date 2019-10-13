@@ -20,14 +20,6 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
   ///The BLoC that handles the selection.
   final MemberSelectBloc _selectBloc;
 
-  _navigateToMemberDetails(BuildContext context) {
-    _selectBloc.selectedMember = _member;
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MemberDetailsPage()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) =>
       PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -59,7 +51,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           child: IconButton(
             icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
             splashColor: ApplicationTheme.goToMemberDetailSplashColor,
-            onPressed: () => _navigateToMemberDetails(context),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())),
           ),
         ),
     );
@@ -101,7 +93,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
                 Icons.contacts,
                 color: CupertinoTheme.of(context).primaryColor,
               ),
-              onTap: () => _navigateToMemberDetails(context),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())),
             ),
           ),
         ],

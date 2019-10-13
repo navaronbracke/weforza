@@ -32,14 +32,6 @@ class _MemberListPageState extends State<MemberListPage>
   ///The BLoC that handles the selection.
   final MemberSelectBloc _selectBloc;
 
-  ///Navigate to [AddMemberPage].
-  _navigateToAddMember(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => AddMemberPage()),
-    );
-  }
-
   ///Layout
   ///
   /// - AppBar (title + add person/import/export action)
@@ -53,7 +45,7 @@ class _MemberListPageState extends State<MemberListPage>
           //Add person button
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => _navigateToAddMember(context),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
           ),
           //Import button
           IconButton(
@@ -84,13 +76,14 @@ class _MemberListPageState extends State<MemberListPage>
     //Add person + list
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
         middle: Text(S.of(context).MemberListTitle),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
               child: Icon(Icons.person_add),
-              onTap: ()=> _navigateToAddMember(context),
+              onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
             ),
             SizedBox(width: 10),
             GestureDetector(

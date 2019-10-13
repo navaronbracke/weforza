@@ -1,9 +1,10 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:weforza/blocs/addPersonBloc.dart';
-import 'package:weforza/blocs/personDetailsBloc.dart';
-import 'package:weforza/blocs/personListBloc.dart';
-import 'package:weforza/blocs/personSelectBloc.dart';
-import 'package:weforza/repository/personRepository.dart';
+import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/blocs/memberDetailsBloc.dart';
+import 'package:weforza/blocs/memberListBloc.dart';
+import 'package:weforza/blocs/memberSelectBloc.dart';
+import 'package:weforza/blocs/rideListBloc.dart';
+import 'package:weforza/repository/memberRepository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {
@@ -14,12 +15,13 @@ class InjectionContainer {
   static void initProductionInjector(){
     _injector = Injector.getInjector();
     //repositories
-    _injector.map<IPersonRepository>((i) => PersonRepository(),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => MemberRepository(),isSingleton: true);
     //blocs
-    _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
-    _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
-    _injector.map<AddPersonBloc>((i) => AddPersonBloc(i.get<IPersonRepository>()));
-    _injector.map<PersonDetailsBloc>((i) => PersonDetailsBloc(i.get<PersonSelectBloc>().selectedPerson));
+    _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
+    _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
+    _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
+    _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember));
+    _injector.map<RideListBloc>((i) => RideListBloc());
     //other
   }
 
@@ -27,11 +29,12 @@ class InjectionContainer {
   static void initTestInjector(){
     _injector = Injector.getInjector();
     //repositories
-    _injector.map<IPersonRepository>((i) => PersonRepository(),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => MemberRepository(),isSingleton: true);
     //blocs
-    _injector.map<PersonListBloc>((i) => PersonListBloc(i.get<IPersonRepository>()));
-    _injector.map<PersonSelectBloc>((i) => PersonSelectBloc(),isSingleton: true);
-    _injector.map<AddPersonBloc>((i) => AddPersonBloc(i.get<IPersonRepository>()));
+    _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
+    _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
+    _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
+    _injector.map<RideListBloc>((i) => RideListBloc());
   }
 
   ///Get a dependency of type [T].

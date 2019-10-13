@@ -1,22 +1,23 @@
 {
   "AppName": "WeForza",
 
-  "HomePageEventButtonLabel": "Events",
-  "HomePagePeopleButtonLabel": "People",
+  "MemberPhoneFormat": "Tel: $phone",
 
-  "PersonCatalogTitle": "People",
-  "PersonCatalogLoadingFailed": "Could not fetch the known people.",
-  "PersonCatalogLoadingInProgress": "Loading known people...",
-  "PersonCatalogNoItems": "Nothing to show here.",
-  "PersonCatalogAddPersonInstruction": "Add people by using the menu above.",
-  "PersonCatalogPhoneFormat": "Tel: $phone",
+  "HomePageRidesTab": "Rides",
+  "HomePageMembersTab": "Members",
 
-  "EventCatalogTitle": "Events",
+  "MemberListTitle": "Members",
+  "MemberListLoadingFailed": "Could not fetch members.",
+  "MemberListLoadingInProgress": "Loading members...",
+  "MemberListNoItems": "There are no members to display.",
+  "MemberListAddMemberInstruction": "Add members by using the menu above.",
 
-  "PersonDetailsTitle": "Details",
+  "RideListTitle": "Rides",
 
-  "AddPersonTitle": "New Person",
-  "AddPersonSubmit": "Create New Person",
+  "MemberDetailsTitle": "Details",
+
+  "AddMemberTitle": "New Member",
+  "AddMemberSubmit": "Create New Member",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

@@ -21,27 +21,27 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get AddPersonSubmit => "Create New Person";
-  String get AddPersonTitle => "New Person";
+  String get AddMemberSubmit => "Create New Member";
+  String get AddMemberTitle => "New Member";
   String get AppName => "WeForza";
-  String get EventCatalogTitle => "Events";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
-  String get HomePageEventButtonLabel => "Events";
-  String get HomePagePeopleButtonLabel => "People";
+  String get HomePageMembersTab => "Members";
+  String get HomePageRidesTab => "Rides";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
-  String get PersonCatalogAddPersonInstruction => "Add people by using the menu above.";
-  String get PersonCatalogLoadingFailed => "Could not fetch the known people.";
-  String get PersonCatalogLoadingInProgress => "Loading known people...";
-  String get PersonCatalogNoItems => "Nothing to show here.";
-  String get PersonCatalogTitle => "People";
-  String get PersonDetailsTitle => "Details";
+  String get MemberDetailsTitle => "Details";
+  String get MemberListAddMemberInstruction => "Add members by using the menu above.";
+  String get MemberListLoadingFailed => "Could not fetch members.";
+  String get MemberListLoadingInProgress => "Loading members...";
+  String get MemberListNoItems => "There are no members to display.";
+  String get MemberListTitle => "Members";
   String get PersonFirstNameLabel => "First Name";
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideListTitle => "Rides";
   String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
-  String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
+  String MemberPhoneFormat(String phone) => "Tel: $phone";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
   String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
   String ValueIsRequired(String value) => "$value is required";
@@ -58,47 +58,47 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get PersonCatalogNoItems => "Er is niks om te tonen.";
-  @override
-  String get AddPersonSubmit => "Persoon Toevoegen";
-  @override
-  String get PersonCatalogLoadingInProgress => "Bekende personen ophalen...";
-  @override
-  String get PersonDetailsTitle => "Details";
+  String get RideListTitle => "Ritten";
   @override
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
   @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
-  String get AddPersonTitle => "Nieuwe Persoon";
-  @override
-  String get PersonCatalogTitle => "Personen";
-  @override
   String get AppName => "WeForza";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override
-  String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
+  String get HomePageRidesTab => "Ritten";
+  @override
+  String get MemberListLoadingInProgress => "Leden aan het ophalen...";
+  @override
+  String get AddMemberTitle => "Nieuw lid";
+  @override
+  String get MemberDetailsTitle => "Details";
   @override
   String get PersonLastNameLabel => "Familienaam";
+  @override
+  String get MemberListTitle => "Leden";
+  @override
+  String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
   String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override
-  String get EventCatalogTitle => "Evenementen";
+  String get HomePageMembersTab => "Leden";
   @override
-  String get HomePagePeopleButtonLabel => "Personen";
+  String get MemberListLoadingFailed => "Kon geen leden ophalen.";
   @override
-  String get HomePageEventButtonLabel => "Evenementen";
+  String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven.";
   @override
-  String get PersonCatalogAddPersonInstruction => "Voeg mensen toe via het menu hierboven.";
+  String get MemberListNoItems => "Er zijn geen leden om te tonen.";
   @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
   @override
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override
-  String PersonCatalogPhoneFormat(String phone) => "Tel: $phone";
+  String MemberPhoneFormat(String phone) => "Tel: $phone";
   @override
   String ValueIsRequired(String value) => "$value is verplicht";
   @override

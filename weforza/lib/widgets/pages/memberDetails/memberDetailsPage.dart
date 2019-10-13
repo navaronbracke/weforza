@@ -2,24 +2,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/personDetailsBloc.dart';
+import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/person.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
-///This class represents the detail page for a [Person].
-class PersonDetailsPage extends StatefulWidget {
+///This class represents the detail page for a [Member].
+class MemberDetailsPage extends StatefulWidget {
   @override
-  _PersonDetailsPageState createState() => _PersonDetailsPageState(InjectionContainer.get<PersonDetailsBloc>());
+  _MemberDetailsPageState createState() => _MemberDetailsPageState(InjectionContainer.get<MemberDetailsBloc>());
 }
 
-///This is the [State] class for [PersonDetailsPage].
-class _PersonDetailsPageState extends State<PersonDetailsPage> implements PlatformAwareWidget {
-  _PersonDetailsPageState(this._bloc);
+///This is the [State] class for [MemberDetailsPage].
+class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget {
+  _MemberDetailsPageState(this._bloc);
 
-  ///The person for the rendered content.
-  final PersonDetailsBloc _bloc;
+  ///The BLoC in charge of the content.
+  final MemberDetailsBloc _bloc;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
@@ -29,7 +29,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> implements Platfo
     // TODO: implement buildAndroidWidget
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).PersonDetailsTitle),
+        title: Text(S.of(context).MemberDetailsTitle),
       ),
       body: Container(),
     );
@@ -40,7 +40,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> implements Platfo
     // TODO: implement buildIosWidget
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).PersonDetailsTitle),
+        middle: Text(S.of(context).MemberDetailsTitle),
       ),
       child: Container(),
     );

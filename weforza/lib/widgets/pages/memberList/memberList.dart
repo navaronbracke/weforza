@@ -1,42 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/personListBloc.dart';
-import 'package:weforza/blocs/personSelectBloc.dart';
+import 'package:weforza/blocs/memberListBloc.dart';
+import 'package:weforza/blocs/memberSelectBloc.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/model/person.dart';
-import 'package:weforza/widgets/pages/addPerson/addPersonPage.dart';
-import 'package:weforza/widgets/pages/personList/personListEmpty.dart';
-import 'package:weforza/widgets/pages/personList/personListError.dart';
-import 'package:weforza/widgets/pages/personList/personListItem.dart';
-import 'package:weforza/widgets/pages/personList/personListLoading.dart';
+import 'package:weforza/model/member.dart';
+import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
+import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
+import 'package:weforza/widgets/pages/memberList/memberListError.dart';
+import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
+import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
 import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 
-///This [Widget] will display all known people.
-class PersonListPage extends StatefulWidget {
+///This [Widget] will display a list of members.
+class MemberList extends StatefulWidget {
   @override
-  _PersonListPageState createState() => _PersonListPageState(
-      InjectionContainer.get<PersonListBloc>(),
-      InjectionContainer.get<PersonSelectBloc>());
+  _MemberListState createState() => _MemberListState(
+      InjectionContainer.get<MemberListBloc>(),
+      InjectionContainer.get<MemberSelectBloc>());
 }
 
-///This is the [State] class for [PersonListPage].
-class _PersonListPageState extends State<PersonListPage>
+///This is the [State] class for [MemberList].
+class _MemberListState extends State<MemberList>
     implements PlatformAwareWidget {
-  _PersonListPageState(this._listBloc, this._selectBloc)
+  _MemberListState(this._listBloc, this._selectBloc)
       : assert(_listBloc != null && _selectBloc != null);
 
   ///The BLoC that handles the list.
-  final PersonListBloc _listBloc;
+  final MemberListBloc _listBloc;
 
   ///The BLoC that handles the selection.
-  final PersonSelectBloc _selectBloc;
+  final MemberSelectBloc _selectBloc;
 
-  ///Navigate to [AddPersonPage].
-  _navigateToAddPerson(BuildContext context) {
+  ///Navigate to [AddMemberPage].
+  _navigateToAddMember(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddPersonPage()),
+      MaterialPageRoute(builder: (context) => AddMemberPage()),
     );
   }
 
@@ -48,12 +48,12 @@ class _PersonListPageState extends State<PersonListPage>
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).PersonCatalogTitle),
+        title: Text(S.of(context).MemberListTitle),
         actions: <Widget>[
           //Add person button
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => _navigateToAddPerson(context),
+            onPressed: () => _navigateToAddMember(context),
           ),
           //Import button
           IconButton(
@@ -70,8 +70,8 @@ class _PersonListPageState extends State<PersonListPage>
           ),
         ],
       ),
-      body: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
-          PersonListPageError(), PersonListPageEmpty(), _selectBloc),
+      body: _listBuilder(_listBloc.getKnownPeople(), MemberListLoading(),
+          MemberListError(), MemberListEmpty(), _selectBloc),
     );
   }
 
@@ -84,13 +84,13 @@ class _PersonListPageState extends State<PersonListPage>
     //Add person + list
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).PersonCatalogTitle),
+        middle: Text(S.of(context).MemberListTitle),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
               child: Icon(Icons.person_add),
-              onTap: ()=> _navigateToAddPerson(context),
+              onTap: ()=> _navigateToAddMember(context),
             ),
             SizedBox(width: 10),
             GestureDetector(
@@ -110,8 +110,8 @@ class _PersonListPageState extends State<PersonListPage>
         ),
       ),
       child: SafeArea(
-        child: _listBuilder(_listBloc.getKnownPeople(), PersonListPageLoading(),
-            PersonListPageError(), PersonListPageEmpty(), _selectBloc),
+        child: _listBuilder(_listBloc.getKnownPeople(), MemberListLoading(),
+            MemberListError(), MemberListEmpty(), _selectBloc),
       ),
     );
   }
@@ -132,9 +132,9 @@ class _PersonListPageState extends State<PersonListPage>
   ///Displays [loading] when [future] is still busy.
   ///Displays [error] when [future] completed with an error.
   ///Displays [empty] when [future] completed, but there is nothing to show.
-  ///Displays a list of [_PersonListPageListTile] when there is data.
-  FutureBuilder _listBuilder(Future<List<Person>> future, Widget loading,
-      Widget error, Widget empty, PersonSelectBloc bloc) {
+  ///Displays a list of [MemberListItem] when there is data.
+  FutureBuilder _listBuilder(Future<List<Member>> future, Widget loading,
+      Widget error, Widget empty, MemberSelectBloc bloc) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -142,13 +142,13 @@ class _PersonListPageState extends State<PersonListPage>
           if (snapshot.hasError) {
             return error;
           } else {
-            List<Person> data = snapshot.data as List<Person>;
+            List<Member> data = snapshot.data as List<Member>;
             return data.isEmpty
                 ? empty
                 : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    PersonListPageListItem(data[index], bloc));
+                    MemberListItem(data[index], bloc));
           }
         } else {
           return loading;

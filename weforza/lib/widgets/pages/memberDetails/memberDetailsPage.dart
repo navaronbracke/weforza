@@ -41,6 +41,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).MemberDetailsTitle),
+        transitionBetweenRoutes: false,
       ),
       child: Container(),
     );

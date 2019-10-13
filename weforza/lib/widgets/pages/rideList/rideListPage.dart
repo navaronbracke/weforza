@@ -40,6 +40,7 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).RideListTitle),
+        transitionBetweenRoutes: false,
       ),
       child: Center(),
     );

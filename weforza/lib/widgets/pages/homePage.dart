@@ -17,12 +17,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   ///The tabs for this page.
   final List<Widget> _tabs = List.of([RideListPage(),MemberListPage()]);
+  ///The selected index.
+  int _selectedIndex = 0;
   ///The tab controller for android.
   TabController _tabController;
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this,length: _tabs.length,initialIndex: 0);
+    _tabController = TabController(vsync: this,length: _tabs.length,initialIndex: _selectedIndex);
     super.initState();
   }
 
@@ -40,8 +42,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Scaffold(
       body: TabBarView(children: _tabs,controller: _tabController),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
         onTap: (index){
-          _tabController.index = index;
+          setState(() {
+            _selectedIndex = index;
+          });
+          _tabController.index = _selectedIndex;
         },
         items: [
           BottomNavigationBarItem(

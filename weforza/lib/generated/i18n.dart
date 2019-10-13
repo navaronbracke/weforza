@@ -25,10 +25,10 @@ class S implements WidgetsLocalizations {
   String get AddPersonTitle => "New Person";
   String get AppName => "WeForza";
   String get EventCatalogTitle => "Events";
-  String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' . -";
+  String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get HomePageEventButtonLabel => "Events";
   String get HomePagePeopleButtonLabel => "People";
-  String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' . -";
+  String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get PersonCatalogAddPersonInstruction => "Add people by using the menu above.";
   String get PersonCatalogLoadingFailed => "Could not fetch the known people.";
   String get PersonCatalogLoadingInProgress => "Loading known people...";
@@ -76,7 +76,7 @@ class $nl extends S {
   @override
   String get AppName => "WeForza";
   @override
-  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' . - bevatten";
+  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override
   String get PersonCatalogLoadingFailed => "Kon de gekende personen niet ophalen.";
   @override
@@ -84,7 +84,7 @@ class $nl extends S {
   @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
-  String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' . - bevatten";
+  String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override
   String get EventCatalogTitle => "Evenementen";
   @override

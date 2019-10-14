@@ -33,7 +33,18 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
-    return null;
+    return GestureDetector(
+      onTap: (){
+        //TODO
+      },
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Center(
+              child: Text("${_ride.getFormattedDate(context)}")
+          ),
+        ),
+      ),
+    );
   }
 }

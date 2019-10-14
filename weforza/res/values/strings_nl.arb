@@ -1,18 +1,34 @@
 {
   "AppName": "WeForza",
 
+  "MondayPrefix": "Ma",
+  "TuesdayPrefix": "Di",
+  "WednesdayPrefix": "Wo",
+  "ThursdayPrefix": "Do",
+  "FridayPrefix": "Vr",
+  "SaturdayPrefix": "Za",
+  "SundayPrefix": "Zo",
+  "UnknownDate": "Onbekende Datum",
+
   "MemberPhoneFormat": "Tel: $phone",
 
   "HomePageRidesTab": "Ritten",
   "HomePageMembersTab": "Leden",
 
   "MemberListTitle": "Leden",
-  "MemberListLoadingFailed": "Kon geen leden ophalen.",
+  "MemberListLoadingFailed": "Kon geen leden ophalen",
   "MemberListLoadingInProgress": "Leden aan het ophalen...",
-  "MemberListNoItems": "Er zijn geen leden om te tonen.",
-  "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven.",
+  "MemberListNoItems": "Er zijn geen leden om te tonen",
+  "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
-  "RideListTitle": "Ritten",
+  "RideListRidesHeader": "Ritten",
+  "RideListAttendeesHeader": "Aanwezigen",
+  "RideListNoRides": "Er zijn geen ritten",
+  "RideListNoMembers": "Er zijn geen leden",
+  "RideListAddRideInstruction": "Voeg een rit toe met de +",
+  "RideListAddMemberInstruction": "Voeg leden toe in het leden menu",
+  "RideListLoadingRidesFailed": "Kon de ritten niet ophalen",
+  "RideListLoadingMembersFailed": "Kon de leden niet ophalen",
 
   "MemberDetailsTitle": "Details",
 

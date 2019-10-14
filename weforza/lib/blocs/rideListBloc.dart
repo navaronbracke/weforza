@@ -12,6 +12,12 @@ class RideListBloc extends Bloc {
   final IRideRepository _rideRepository;
   final IMemberRepository _memberRepository;
 
+  ///Show only the attending people.
+  bool showAttendingOnly = false;
+
+  ///The amount of people that are attending a [Ride].
+  String attendingCount = "";
+
   ///Get all rides.
   Future<List<Ride>> getAllRides() => _rideRepository.getAllRides();
   ///Get all members.

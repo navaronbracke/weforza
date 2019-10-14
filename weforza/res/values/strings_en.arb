@@ -29,6 +29,7 @@
   "RideListAddMemberInstruction": "Add members in the members menu",
   "RideListLoadingRidesFailed": "Could not load the rides",
   "RideListLoadingMembersFailed": "Could not load the members",
+  "RideListFilterShowAttendingOnly": "Only attending people",
 
   "MemberDetailsTitle": "Details",
 

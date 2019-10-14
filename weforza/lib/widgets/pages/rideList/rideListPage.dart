@@ -30,48 +30,194 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    // TODO: implement buildAndroidWidget
+    return OrientationBuilder(
+      builder: (context,orientation){
+        if(orientation == Orientation.portrait){
+          return _buildAndroidPortraitLayout(context);
+        }else{
+          return _buildAndroidLandscapeLayout(context);
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildIosWidget(BuildContext context) {
+    return OrientationBuilder(
+      builder: (context,orientation){
+        if(orientation == Orientation.portrait){
+          return _buildIOSPortraitLayout(context);
+        }else{
+          return _buildIOSLandscapeLayout(context);
+        }
+      },
+    );
+  }
+
+  ///This method builds the portrait layout for Android.
+  Widget _buildAndroidPortraitLayout(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: <Widget>[
-            Text(S.of(context).RideListRidesHeader),
             Expanded(
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.add),
-                  iconSize: 30,
-                  onPressed: (){
-                    //TODO Add ride for today
-                    //TODO disable if already added
-                  },
-                ),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    color: Colors.white,
+                    onPressed: (){
+                      //TODO Add ride for today
+                      //TODO disable if already added
+                    },
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.bluetooth_searching),
+                    onPressed: (){
+                      //TODO scanning
+                    },
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.file_download),
+                    onPressed: (){
+                      //TODO import rides
+                    },
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.file_upload),
+                    onPressed: (){
+                      //TODO export rides
+                    },
+                  ),
+                ],
               ),
             ),
-            Text(S.of(context).RideListAttendeesHeader),
+            Text(_bloc.attendingCount),
           ],
         ),
       ),
-      body: Row(
+      body: Column(
         children: <Widget>[
-          Flexible(
-            child: _rideListBuilder(_bloc.getAllRides(), PlatformAwareLoadingIndicator(), _RideListRidesError(), _RideListRidesEmpty())
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Center(),//This is a filler widget
+              ),
+              Row(
+                children: <Widget>[
+                  Text(S.of(context).RideListFilterShowAttendingOnly,style: TextStyle(fontSize: 14)),
+                  Switch(
+                    activeTrackColor: Theme.of(context).accentColor,
+                    activeColor: Colors.white,
+                    value: _bloc.showAttendingOnly,
+                    onChanged: (value){
+                      //TODO change filter and update list
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
-          Flexible(
-            child: _attendeesListBuilder(_bloc.getAllMembers(), PlatformAwareLoadingIndicator(), _RideListMembersError(), _RideListMembersEmpty()),
+          Expanded(
+            child: _buildPageBody(),
           ),
         ],
       ),
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
-    return CupertinoPageScaffold(
-      child: Center(),
+  ///This method builds the landscape layout for Android.
+  Widget _buildAndroidLandscapeLayout(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title:  Row(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: (){
+                    //TODO Add ride for today
+                    //TODO disable if already added
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.bluetooth_searching),
+                  onPressed: (){
+                    //TODO scanning
+                  },
+                ),
+                SizedBox(width: 20),
+                IconButton(
+                  icon: Icon(Icons.file_download),
+                  onPressed: (){
+                    //TODO import rides
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.file_upload),
+                  onPressed: (){
+                    //TODO export rides
+                  },
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Text(_bloc.attendingCount),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Text(S.of(context).RideListFilterShowAttendingOnly,style: TextStyle(fontSize: 14)),
+                SizedBox(width: 5),
+                Switch(
+                  activeTrackColor: Theme.of(context).accentColor,
+                  activeColor: Colors.white,
+                  value: _bloc.showAttendingOnly,
+                  onChanged: (value){
+                    //TODO change filter and update list
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+        body: _buildPageBody(),
     );
   }
+
+  ///This method builds the portrait layout for IOS.
+  Widget _buildIOSPortraitLayout(BuildContext context){
+    //TODO
+  }
+
+  ///This method builds the landscape layout for IOS.
+  Widget _buildIOSLandscapeLayout(BuildContext context){
+    //TODO
+  }
+
+  ///Build the main body of this page.
+  Widget _buildPageBody(){
+    return Row(
+      children: <Widget>[
+        Flexible(
+            flex: 2,
+            child: _rideListBuilder(_bloc.getAllRides(), PlatformAwareLoadingIndicator(), _RideListRidesError(), _RideListRidesEmpty())
+        ),
+        Flexible(
+          flex: 3,
+          child: _attendeesListBuilder(_bloc.getAllMembers(), PlatformAwareLoadingIndicator(), _RideListMembersError(), _RideListMembersEmpty()),
+        ),
+      ],
+    );
+  }
+
+
 
   ///This method returns a [FutureBuilder] for creating the content of the 'Rides' content area.
   ///

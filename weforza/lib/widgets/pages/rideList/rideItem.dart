@@ -15,8 +15,19 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     //TODO background color states
-    return ListTile(
-      title: Text("${_ride.getFormattedDate(context)}"),
+    return Card(
+      color: Color.fromARGB(255, 220, 220, 220),
+      child: InkWell(
+        onTap: (){
+          //TODO
+        },
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Center(
+              child: Text("${_ride.getFormattedDate(context)}")
+          ),
+        ),
+      ),
     );
   }
 

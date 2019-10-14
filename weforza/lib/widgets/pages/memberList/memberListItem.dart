@@ -50,7 +50,6 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           width: 40,
           child: IconButton(
             icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
-            splashColor: ApplicationTheme.goToMemberDetailSplashColor,
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())),
           ),
         ),

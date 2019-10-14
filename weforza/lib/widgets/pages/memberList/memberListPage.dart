@@ -136,7 +136,7 @@ class _MemberListPageState extends State<MemberListPage>
             return error;
           } else {
             List<Member> data = snapshot.data as List<Member>;
-            return data.isEmpty
+            return (data == null || data.isEmpty)
                 ? empty
                 : ListView.builder(
                 itemCount: data.length,

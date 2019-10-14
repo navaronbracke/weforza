@@ -16,8 +16,13 @@ class Member {
 
   Member(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
 
-  //Note that [_phone] is a String, integers can't do leading zeroes.
+  ///A member's phone number.
+  ///Note that [_phone] is a String, integers can't do leading zeroes.
   String phone;
+  ///A member's first name.
   String firstname;
+  ///A member's last name.
   String lastname;
+  ///A member's number of times he/she was present.
+  int wasPresentCount;
 }

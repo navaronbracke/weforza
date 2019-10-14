@@ -1,18 +1,34 @@
 {
   "AppName": "WeForza",
 
+  "MondayPrefix": "Mon",
+  "TuesdayPrefix": "Tue",
+  "WednesdayPrefix": "Wed",
+  "ThursdayPrefix": "Thu",
+  "FridayPrefix": "Fri",
+  "SaturdayPrefix": "Sat",
+  "SundayPrefix": "Sun",
+  "UnknownDate": "Unknown Date",
+
   "MemberPhoneFormat": "Tel: $phone",
 
   "HomePageRidesTab": "Rides",
   "HomePageMembersTab": "Members",
 
   "MemberListTitle": "Members",
-  "MemberListLoadingFailed": "Could not fetch members.",
+  "MemberListLoadingFailed": "Could not fetch members",
   "MemberListLoadingInProgress": "Loading members...",
-  "MemberListNoItems": "There are no members to display.",
-  "MemberListAddMemberInstruction": "Add members by using the menu above.",
+  "MemberListNoItems": "There are no members to display",
+  "MemberListAddMemberInstruction": "Add members by using the menu above",
 
-  "RideListTitle": "Rides",
+  "RideListRidesHeader": "Rides",
+  "RideListAttendeesHeader": "Attendees",
+  "RideListNoRides": "There are no rides",
+  "RideListNoMembers": "There are no members",
+  "RideListAddRideInstruction": "Add a ride with the + icon",
+  "RideListAddMemberInstruction": "Add members in the members menu",
+  "RideListLoadingRidesFailed": "Could not load the rides",
+  "RideListLoadingMembersFailed": "Could not load the members",
 
   "MemberDetailsTitle": "Details",
 

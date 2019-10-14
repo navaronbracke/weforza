@@ -16,17 +16,40 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return ListTile(
-      onTap: (){
-        //TODO: add/remove from selected ride if possible
-      },
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(_member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
-          SizedBox(height: 5),
-          Text(_member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
-        ],
+    return Card(
+      color: Color.fromARGB(255, 220, 220, 220),
+      child: InkWell(
+        onTap: (){
+          //TODO: add/remove person from selected ride
+          //TODO change background
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    //TODO replace wih image
+                    color: Theme.of(context).accentColor
+                ),
+              ),
+              SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(_member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                  SizedBox(height: 5),
+                  Text(_member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

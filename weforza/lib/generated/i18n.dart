@@ -43,6 +43,7 @@ class S implements WidgetsLocalizations {
   String get RideListAddMemberInstruction => "Add members in the members menu";
   String get RideListAddRideInstruction => "Add a ride with the + icon";
   String get RideListAttendeesHeader => "Attendees";
+  String get RideListFilterShowAttendingOnly => "Only attending people";
   String get RideListLoadingMembersFailed => "Could not load the members";
   String get RideListLoadingRidesFailed => "Could not load the rides";
   String get RideListNoMembers => "There are no members";
@@ -110,6 +111,8 @@ class $nl extends S {
   String get RideListNoMembers => "Er zijn geen leden";
   @override
   String get SundayPrefix => "Zo";
+  @override
+  String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
   @override
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
   @override

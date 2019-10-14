@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/memberSelectBloc.dart';
-import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
@@ -39,18 +38,16 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           SizedBox(height: 5),
           Text(_member.lastname, style: ApplicationTheme.memberListItemLastNameTextStyle,
               overflow: TextOverflow.ellipsis),
-          SizedBox(height: 5),
-          Text(
-              S.of(context).MemberPhoneFormat(_member.phone),
-              style: ApplicationTheme.memberListItemLastNameTextStyle,
-              overflow: TextOverflow.ellipsis),
         ],
       ),
       trailing: SizedBox(
           width: 40,
           child: IconButton(
             icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())),
+            onPressed: () => {
+              _selectBloc.selectedMember = _member,
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()))
+            },
           ),
         ),
     );
@@ -77,11 +74,6 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
                 Text(_member.lastname,
                     style: ApplicationTheme.memberListItemLastNameTextStyle,
                     overflow: TextOverflow.ellipsis),
-                SizedBox(height: 10),
-                Text(
-                    S.of(context).MemberPhoneFormat(_member.phone),
-                    style: ApplicationTheme.memberListItemLastNameTextStyle,
-                    overflow: TextOverflow.ellipsis),
               ],
             ),
           ),
@@ -92,7 +84,10 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
                 Icons.contacts,
                 color: CupertinoTheme.of(context).primaryColor,
               ),
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())),
+              onTap: () => {
+                _selectBloc.selectedMember = _member,
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()))
+              },
             ),
           ),
         ],

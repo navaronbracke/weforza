@@ -6,14 +6,16 @@ import 'package:weforza/model/member.dart';
 class MemberSelectBloc extends Bloc {
 
   ///The selected member for navigating.
-  Member selectedMember;
+  Member _selectedMember;
 
-  ///Setter for [selectedMember].
+  ///Setter for [_selectedMember].
   ///[selected] shouldn't be null.
-  set selectPerson(Member selected){
+  set selectedMember(Member selected){
     assert(selected != null);
-    selectedMember = selected;
+    _selectedMember = selected;
   }
+
+  Member get selectedMember => _selectedMember;
 
   @override
   void dispose(){}

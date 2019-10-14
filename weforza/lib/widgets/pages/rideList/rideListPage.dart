@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -15,26 +14,29 @@ import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
   @override
-  State<RideListPage> createState() => _RideListPageState(InjectionContainer.get<RideListBloc>());
+  State<RideListPage> createState() =>
+      _RideListPageState(InjectionContainer.get<RideListBloc>());
 }
 
 ///This class is the [State] for [RideListPage].
-class _RideListPageState extends State<RideListPage> implements PlatformAwareWidget {
-  _RideListPageState(this._bloc): assert(_bloc != null);
+class _RideListPageState extends State<RideListPage>
+    implements PlatformAwareWidget {
+  _RideListPageState(this._bloc) : assert(_bloc != null);
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+  Widget build(BuildContext context) =>
+      PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return OrientationBuilder(
-      builder: (context,orientation){
-        if(orientation == Orientation.portrait){
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
           return _buildAndroidPortraitLayout(context);
-        }else{
+        } else {
           return _buildAndroidLandscapeLayout(context);
         }
       },
@@ -44,10 +46,10 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
   @override
   Widget buildIosWidget(BuildContext context) {
     return OrientationBuilder(
-      builder: (context,orientation){
-        if(orientation == Orientation.portrait){
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
           return _buildIOSPortraitLayout(context);
-        }else{
+        } else {
           return _buildIOSLandscapeLayout(context);
         }
       },
@@ -55,7 +57,7 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
   }
 
   ///This method builds the portrait layout for Android.
-  Widget _buildAndroidPortraitLayout(BuildContext context){
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -66,7 +68,7 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
                   IconButton(
                     icon: Icon(Icons.add),
                     color: Colors.white,
-                    onPressed: (){
+                    onPressed: () {
                       //TODO Add ride for today
                       //TODO disable if already added
                     },
@@ -74,21 +76,21 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
                   IconButton(
                     color: Colors.white,
                     icon: Icon(Icons.bluetooth_searching),
-                    onPressed: (){
+                    onPressed: () {
                       //TODO scanning
                     },
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: Icon(Icons.file_download),
-                    onPressed: (){
+                    onPressed: () {
                       //TODO import rides
                     },
                   ),
                   IconButton(
                     color: Colors.white,
                     icon: Icon(Icons.file_upload),
-                    onPressed: (){
+                    onPressed: () {
                       //TODO export rides
                     },
                   ),
@@ -104,16 +106,17 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
           Row(
             children: <Widget>[
               Expanded(
-                child: Center(),//This is a filler widget
+                child: Center(), //This is a filler widget
               ),
               Row(
                 children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,style: TextStyle(fontSize: 14)),
+                  Text(S.of(context).RideListFilterShowAttendingOnly,
+                      style: TextStyle(fontSize: 14)),
                   Switch(
                     activeTrackColor: Theme.of(context).accentColor,
                     activeColor: Colors.white,
                     value: _bloc.showAttendingOnly,
-                    onChanged: (value){
+                    onChanged: (value) {
                       //TODO change filter and update list
                     },
                   ),
@@ -130,36 +133,36 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
   }
 
   ///This method builds the landscape layout for Android.
-  Widget _buildAndroidLandscapeLayout(BuildContext context){
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Row(
+        title: Row(
           children: <Widget>[
             Row(
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: (){
+                  onPressed: () {
                     //TODO Add ride for today
                     //TODO disable if already added
                   },
                 ),
                 IconButton(
                   icon: Icon(Icons.bluetooth_searching),
-                  onPressed: (){
+                  onPressed: () {
                     //TODO scanning
                   },
                 ),
                 SizedBox(width: 20),
                 IconButton(
                   icon: Icon(Icons.file_download),
-                  onPressed: (){
+                  onPressed: () {
                     //TODO import rides
                   },
                 ),
                 IconButton(
                   icon: Icon(Icons.file_upload),
-                  onPressed: (){
+                  onPressed: () {
                     //TODO export rides
                   },
                 ),
@@ -172,13 +175,14 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
             ),
             Row(
               children: <Widget>[
-                Text(S.of(context).RideListFilterShowAttendingOnly,style: TextStyle(fontSize: 14)),
+                Text(S.of(context).RideListFilterShowAttendingOnly,
+                    style: TextStyle(fontSize: 14)),
                 SizedBox(width: 5),
                 Switch(
                   activeTrackColor: Theme.of(context).accentColor,
                   activeColor: Colors.white,
                   value: _bloc.showAttendingOnly,
-                  onChanged: (value){
+                  onChanged: (value) {
                     //TODO change filter and update list
                   },
                 ),
@@ -187,61 +191,194 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
           ],
         ),
       ),
-        body: _buildPageBody(),
+      body: _buildPageBody(),
     );
   }
 
   ///This method builds the portrait layout for IOS.
-  Widget _buildIOSPortraitLayout(BuildContext context){
-    //TODO
+  Widget _buildIOSPortraitLayout(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        trailing: Text(_bloc.attendingCount),
+        middle: Row(
+          children: <Widget>[
+            GestureDetector(
+              child: Icon(Icons.add),
+              onTap: () {
+                //TODO add ride for today if not added yet
+              },
+            ),
+            SizedBox(width: 20),
+            GestureDetector(
+              child: Icon(Icons.bluetooth_searching),
+              onTap: () {
+                //TODO scanning
+              },
+            ),
+            SizedBox(width: 20),
+            GestureDetector(
+              child: Icon(Icons.file_download),
+              onTap: () {
+                //TODO import
+              },
+            ),
+            SizedBox(width: 20),
+            GestureDetector(
+              child: Icon(Icons.file_upload),
+              onTap: () {
+                //TODO export
+              },
+            ),
+          ],
+        ),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(),//Filler Widget
+                  ),
+                  Text(S.of(context).RideListFilterShowAttendingOnly,
+                      style: TextStyle(fontSize: 14)),
+                  CupertinoSwitch(
+                    activeColor:
+                        CupertinoTheme.of(context).primaryContrastingColor,
+                    value: _bloc.showAttendingOnly,
+                    onChanged: (value) {
+                      //TODO change filter and update list
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _buildPageBody(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   ///This method builds the landscape layout for IOS.
-  Widget _buildIOSLandscapeLayout(BuildContext context){
-    //TODO
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Row(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(Icons.add),
+                  onTap: () {
+                    //TODO add ride for today if not added yet
+                  },
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                  child: Icon(Icons.bluetooth_searching),
+                  onTap: () {
+                    //TODO scanning
+                  },
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                  child: Icon(Icons.file_download),
+                  onTap: () {
+                    //TODO import
+                  },
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                  child: Icon(Icons.file_upload),
+                  onTap: () {
+                    //TODO export
+                  },
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Text(_bloc.attendingCount),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Row(
+                children: <Widget>[
+                  Text(S.of(context).RideListFilterShowAttendingOnly,
+                      style: TextStyle(fontSize: 14)),
+                  CupertinoSwitch(
+                    activeColor:
+                        CupertinoTheme.of(context).primaryContrastingColor,
+                    value: _bloc.showAttendingOnly,
+                    onChanged: (value) {
+                      //TODO change filter and update list
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      child: SafeArea(
+        child: _buildPageBody(),
+      ),
+    );
   }
 
   ///Build the main body of this page.
-  Widget _buildPageBody(){
+  Widget _buildPageBody() {
     return Row(
       children: <Widget>[
         Flexible(
             flex: 2,
-            child: _rideListBuilder(_bloc.getAllRides(), PlatformAwareLoadingIndicator(), _RideListRidesError(), _RideListRidesEmpty())
-        ),
+            child: _rideListBuilder(
+                _bloc.getAllRides(),
+                PlatformAwareLoadingIndicator(),
+                _RideListRidesError(),
+                _RideListRidesEmpty())),
         Flexible(
           flex: 3,
-          child: _attendeesListBuilder(_bloc.getAllMembers(), PlatformAwareLoadingIndicator(), _RideListMembersError(), _RideListMembersEmpty()),
+          child: _attendeesListBuilder(
+              _bloc.getAllMembers(),
+              PlatformAwareLoadingIndicator(),
+              _RideListMembersError(),
+              _RideListMembersEmpty()),
         ),
       ],
     );
   }
-
-
 
   ///This method returns a [FutureBuilder] for creating the content of the 'Rides' content area.
   ///
   ///Returns [loading] when [future] hasn't completed yet.
   ///Returns [error] when [future] completed with an error.
   ///Returns [empty] when [future] returned an empty list.
-  FutureBuilder _rideListBuilder(Future<List<Ride>> future,Widget loading,
-      Widget error, Widget empty){
+  FutureBuilder _rideListBuilder(
+      Future<List<Ride>> future, Widget loading, Widget error, Widget empty) {
     return FutureBuilder(
       future: future,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return error;
-          }else{
+          } else {
             List<Ride> data = snapshot.data as List<Ride>;
             return (data == null || data.isEmpty)
                 ? empty
                 : ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) =>
-                    RideItem(data[index]));
+                    itemCount: data.length,
+                    itemBuilder: (context, index) => RideItem(data[index]));
           }
-        }else{
+        } else {
           return loading;
         }
       },
@@ -253,24 +390,23 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
   ///Returns [loading] when [future] hasn't completed yet.
   ///Returns [error] when [future] completed with an error.
   ///Returns [empty] when [future] returned an empty list.
-  FutureBuilder _attendeesListBuilder(Future<List<Member>> future,Widget loading,
-      Widget error, Widget empty){
+  FutureBuilder _attendeesListBuilder(
+      Future<List<Member>> future, Widget loading, Widget error, Widget empty) {
     return FutureBuilder(
       future: future,
-      builder: (context, snapshot){
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return error;
-          }else{
+          } else {
             List<Member> data = snapshot.data as List<Member>;
             return (data == null || data.isEmpty)
                 ? empty
                 : ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) =>
-                    MemberItem(data[index]));
+                    itemCount: data.length,
+                    itemBuilder: (context, index) => MemberItem(data[index]));
           }
-        }else{
+        } else {
           return loading;
         }
       },
@@ -333,4 +469,3 @@ class _RideListMembersError extends StatelessWidget {
     );
   }
 }
-

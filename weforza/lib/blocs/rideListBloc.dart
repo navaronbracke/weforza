@@ -16,7 +16,7 @@ class RideListBloc extends Bloc {
   bool showAttendingOnly = false;
 
   ///The amount of people that are attending a [Ride].
-  String attendingCount = "";
+  String attendingCount = "---";
 
   ///Get all rides.
   Future<List<Ride>> getAllRides() => _rideRepository.getAllRides();

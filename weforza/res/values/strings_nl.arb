@@ -29,6 +29,7 @@
   "RideListAddMemberInstruction": "Voeg leden toe in het leden menu",
   "RideListLoadingRidesFailed": "Kon de ritten niet ophalen",
   "RideListLoadingMembersFailed": "Kon de leden niet ophalen",
+  "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
 
   "MemberDetailsTitle": "Details",
 

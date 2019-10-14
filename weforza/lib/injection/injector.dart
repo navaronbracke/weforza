@@ -5,6 +5,7 @@ import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/blocs/memberSelectBloc.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {
@@ -16,12 +17,13 @@ class InjectionContainer {
     _injector = Injector.getInjector();
     //repositories
     _injector.map<IMemberRepository>((i) => MemberRepository(),isSingleton: true);
+    _injector.map<IRideRepository>((i) => RideRepository(),isSingleton: true);
     //blocs
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
     _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
     _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember));
-    _injector.map<RideListBloc>((i) => RideListBloc());
+    _injector.map<RideListBloc>((i) => RideListBloc(i.get<IMemberRepository>(),i.get<IRideRepository>()));
     //other
   }
 
@@ -29,12 +31,13 @@ class InjectionContainer {
   static void initTestInjector(){
     _injector = Injector.getInjector();
     //repositories
-    _injector.map<IMemberRepository>((i) => MemberRepository(),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => TestMemberRepository(),isSingleton: true);
+    _injector.map<IRideRepository>((i) => TestRideRepository(),isSingleton: true);
     //blocs
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
     _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
-    _injector.map<RideListBloc>((i) => RideListBloc());
+    _injector.map<RideListBloc>((i) => RideListBloc(i.get<IMemberRepository>(),i.get<IRideRepository>()));
   }
 
   ///Get a dependency of type [T].

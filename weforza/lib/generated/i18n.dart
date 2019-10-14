@@ -25,20 +25,35 @@ class S implements WidgetsLocalizations {
   String get AddMemberTitle => "New Member";
   String get AppName => "WeForza";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
+  String get FridayPrefix => "Fri";
   String get HomePageMembersTab => "Members";
   String get HomePageRidesTab => "Rides";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberDetailsTitle => "Details";
-  String get MemberListAddMemberInstruction => "Add members by using the menu above.";
-  String get MemberListLoadingFailed => "Could not fetch members.";
+  String get MemberListAddMemberInstruction => "Add members by using the menu above";
+  String get MemberListLoadingFailed => "Could not fetch members";
   String get MemberListLoadingInProgress => "Loading members...";
-  String get MemberListNoItems => "There are no members to display.";
+  String get MemberListNoItems => "There are no members to display";
   String get MemberListTitle => "Members";
+  String get MondayPrefix => "Mon";
   String get PersonFirstNameLabel => "First Name";
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
-  String get RideListTitle => "Rides";
+  String get RideListAddMemberInstruction => "Add members in the members menu";
+  String get RideListAddRideInstruction => "Add a ride with the + icon";
+  String get RideListAttendeesHeader => "Attendees";
+  String get RideListLoadingMembersFailed => "Could not load the members";
+  String get RideListLoadingRidesFailed => "Could not load the rides";
+  String get RideListNoMembers => "There are no members";
+  String get RideListNoRides => "There are no rides";
+  String get RideListRidesHeader => "Rides";
+  String get SaturdayPrefix => "Sat";
+  String get SundayPrefix => "Sun";
+  String get ThursdayPrefix => "Thu";
+  String get TuesdayPrefix => "Tue";
+  String get UnknownDate => "Unknown Date";
+  String get WednesdayPrefix => "Wed";
   String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
   String MemberPhoneFormat(String phone) => "Tel: $phone";
@@ -58,53 +73,83 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get RideListTitle => "Ritten";
+  String get RideListAddMemberInstruction => "Voeg leden toe in het leden menu";
   @override
-  String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
+  String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
   @override
-  String get PersonFirstNameLabel => "Voornaam";
+  String get RideListRidesHeader => "Ritten";
+  @override
+  String get WednesdayPrefix => "Wo";
   @override
   String get AppName => "WeForza";
-  @override
-  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override
   String get HomePageRidesTab => "Ritten";
   @override
   String get MemberListLoadingInProgress => "Leden aan het ophalen...";
   @override
-  String get AddMemberTitle => "Nieuw lid";
+  String get FridayPrefix => "Vr";
   @override
   String get MemberDetailsTitle => "Details";
   @override
-  String get PersonLastNameLabel => "Familienaam";
+  String get SaturdayPrefix => "Za";
+  @override
+  String get UnknownDate => "Onbekende Datum";
+  @override
+  String get RideListAttendeesHeader => "Aanwezigen";
   @override
   String get MemberListTitle => "Leden";
   @override
-  String get AddMemberSubmit => "Voeg nieuw lid toe";
-  @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get RideListNoRides => "Er zijn geen ritten";
+  @override
+  String get MondayPrefix => "Ma";
+  @override
+  String get TuesdayPrefix => "Di";
+  @override
+  String get RideListNoMembers => "Er zijn geen leden";
+  @override
+  String get SundayPrefix => "Zo";
+  @override
+  String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
+  @override
+  String get PersonFirstNameLabel => "Voornaam";
+  @override
+  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
+  @override
+  String get AddMemberTitle => "Nieuw lid";
+  @override
+  String get ThursdayPrefix => "Do";
+  @override
+  String get RideListAddRideInstruction => "Voeg een rit toe met de +";
+  @override
+  String get PersonLastNameLabel => "Familienaam";
+  @override
+  String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override
+  String get RideListLoadingMembersFailed => "Kon de leden niet ophalen";
+  @override
   String get HomePageMembersTab => "Leden";
   @override
-  String get MemberListLoadingFailed => "Kon geen leden ophalen.";
+  String get MemberListLoadingFailed => "Kon geen leden ophalen";
   @override
-  String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven.";
+  String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven";
   @override
-  String get MemberListNoItems => "Er zijn geen leden om te tonen.";
-  @override
-  String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
-  @override
-  String MemberPhoneFormat(String phone) => "Tel: $phone";
   @override
   String ValueIsRequired(String value) => "$value is verplicht";
   @override
   String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
   @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
+  @override
+  String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  @override
+  String MemberPhoneFormat(String phone) => "Tel: $phone";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

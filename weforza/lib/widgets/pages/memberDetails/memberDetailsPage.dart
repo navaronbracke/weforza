@@ -6,6 +6,7 @@ import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents the detail page for a [Member].
@@ -62,8 +63,75 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
-    // TODO: implement buildAndroidLandscapeLayout
-    return null;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).MemberDetailsTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: (){
+              //TODO: go to edit screen
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: (){
+              _showDeleteMemberDialog();
+            },
+          ),
+        ],
+      ),
+      body: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        //TODO replace wih image
+                        color: Theme.of(context).accentColor
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -87,30 +155,39 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Row(
               children: <Widget>[
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      //TODO replace wih image
-                      color: Theme.of(context).accentColor
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        //TODO replace wih image
+                        color: Theme.of(context).accentColor
+                    ),
                   ),
                 ),
-                Text(_bloc.firstName),
-                Text(_bloc.lastName),
-                Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
-                SizedBox(height: 20),
-                Text(S.of(context).MemberDetailsWasPresentCountLabel(_bloc.wasPresentCount.toString())),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    SizedBox(height: 10),
+                    Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                    SizedBox(height: 10),
+                    Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                  ],
+                ),
               ],
             ),
           ),
-          Flexible(
+          Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -128,25 +205,149 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
-    // TODO: implement buildIOSLandscapeLayout
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).MemberDetailsTitle),
+        trailing: Row(
+          children: <Widget>[
+            GestureDetector(
+              child: Icon(Icons.edit),
+              onTap: (){
+                //TODO goto edit
+              },
+            ),
+            GestureDetector(
+              child: Icon(Icons.delete),
+              onTap: (){
+                _showDeleteMemberDialog();
+              },
+            ),
+          ],
+        ),
         transitionBetweenRoutes: false,
       ),
-      child: Container(),
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        //TODO replace wih image
+                        color: Theme.of(context).accentColor
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
-    // TODO: implement buildIOSPortraitLayout
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).MemberDetailsTitle),
+        trailing: Row(
+          children: <Widget>[
+            GestureDetector(
+              child: Icon(Icons.edit),
+              onTap: (){
+                //TODO goto edit
+              },
+            ),
+            GestureDetector(
+              child: Icon(Icons.delete),
+              onTap: (){
+                _showDeleteMemberDialog();
+              },
+            ),
+          ],
+        ),
         transitionBetweenRoutes: false,
       ),
-      child: Container(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        //TODO replace wih image
+                        color: Theme.of(context).accentColor
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    SizedBox(height: 10),
+                    Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                    SizedBox(height: 10),
+                    Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                Expanded(
+                  child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

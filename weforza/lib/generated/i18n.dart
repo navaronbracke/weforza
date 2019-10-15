@@ -64,8 +64,8 @@ class S implements WidgetsLocalizations {
   String get WednesdayPrefix => "Wed";
   String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
-  String MemberDetailsPhoneFormat(String phone) => "Telephone $phone";
-  String MemberDetailsWasPresentCountLabel(String count) => "Number of times present during rides   $count";
+  String MemberDetailsPhoneFormat(String phone) => "Telephone: $phone";
+  String MemberDetailsWasPresentCountLabel(String count) => "Times present: $count";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
   String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
   String ValueIsRequired(String value) => "$value is required";
@@ -170,11 +170,11 @@ class $nl extends S {
   @override
   String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
   @override
-  String MemberDetailsPhoneFormat(String phone) => "Telefoon $phone";
+  String MemberDetailsPhoneFormat(String phone) => "Telefoon: $phone";
   @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
   @override
-  String MemberDetailsWasPresentCountLabel(String count) => "Aantal keren aanwezig tijdens ritten   $count";
+  String MemberDetailsWasPresentCountLabel(String count) => "Aanwezigheden: $count";
   @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
 }

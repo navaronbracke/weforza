@@ -24,7 +24,7 @@ class Member {
   ///A member's last name.
   String lastname;
   ///A member's number of times he/she was present.
-  int wasPresentCount;
+  int wasPresentCount = 0;
   ///The list of devices of this person.
   ///We can only retrieve device name reliably with bluetooth, hence the String.
   List<String> devices;

@@ -30,8 +30,8 @@
   "RideListFilterShowAttendingOnly": "Only attending people",
 
   "MemberDetailsTitle": "Details",
-  "MemberDetailsPhoneFormat": "Telephone $phone",
-  "MemberDetailsWasPresentCountLabel": "Number of times present during rides   $count",
+  "MemberDetailsPhoneFormat": "Telephone: $phone",
+  "MemberDetailsWasPresentCountLabel": "Times present: $count",
   "MemberDetailsNoDevices": "This member has no devices yet.",
   "MemberDetailsAddDevicesInstruction": "Add devices by editing this member.",
 

@@ -58,9 +58,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     }
   }
 
-  ///Show a dialog that asks the user if the member should be deleted.
-  void _showDeleteMemberDialog()=> showDialog(context: context, builder: (context)=> _DeleteMemberDialog());
-
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
@@ -76,7 +73,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              _showDeleteMemberDialog();
+              showDialog(context: context, builder: (context)=> _DeleteMemberDialog());
             },
           ),
         ],
@@ -149,7 +146,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              _showDeleteMemberDialog();
+              showDialog(context: context, builder: (context)=> _DeleteMemberDialog());
             },
           ),
         ],
@@ -209,6 +206,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).MemberDetailsTitle),
         trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
               child: Icon(Icons.edit),
@@ -216,65 +214,68 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 //TODO goto edit
               },
             ),
+            SizedBox(width: 30),
             GestureDetector(
               child: Icon(Icons.delete),
               onTap: (){
-                _showDeleteMemberDialog();
+                showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
               },
             ),
           ],
         ),
         transitionBetweenRoutes: false,
       ),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        //TODO replace wih image
-                        color: Theme.of(context).accentColor
+      child: SafeArea(
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          //TODO replace wih image
+                          color: CupertinoTheme.of(context).primaryContrastingColor
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                      SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
-                      SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                  Expanded(
-                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                        Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        SizedBox(height: 10),
+                        Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                        SizedBox(height: 10),
+                        Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                    Expanded(
+                      child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -285,6 +286,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).MemberDetailsTitle),
         trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
               child: Icon(Icons.edit),
@@ -292,61 +294,64 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 //TODO goto edit
               },
             ),
+            SizedBox(width: 10),
             GestureDetector(
               child: Icon(Icons.delete),
               onTap: (){
-                _showDeleteMemberDialog();
+                showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
               },
             ),
           ],
         ),
         transitionBetweenRoutes: false,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        //TODO replace wih image
-                        color: Theme.of(context).accentColor
+      child: SafeArea(
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          //TODO replace wih image
+                          color: CupertinoTheme.of(context).primaryContrastingColor
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                    SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
-                    SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
-                  ],
-                ),
-              ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                      SizedBox(height: 10),
+                      Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                Expanded(
-                  child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+                  Expanded(
+                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -403,16 +408,16 @@ class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget
       title: Text(S.of(context).MemberDeleteDialogTitle),
       content: Text(S.of(context).MemberDeleteDialogDescription),
       actions: <Widget>[
-        FlatButton(
+        CupertinoButton(
           child: Text(S.of(context).MemberDeleteDialogCancel),
           onPressed: (){
             Navigator.pop(context);
           },
         ),
-        FlatButton(
+        CupertinoButton(
           child: Text(S.of(context).MemberDeleteDialogConfirm,style: TextStyle(color: Colors.red)),
           onPressed: (){
-            //TODO delete with bloc and dismiss
+            //TODO delete with bloc and dismiss 
           },
         ),
       ],

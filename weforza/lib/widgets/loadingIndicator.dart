@@ -1,12 +1,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget is a platform aware loading indicator set to indeterminate.
 class PlatformAwareLoadingIndicator extends StatelessWidget implements PlatformAwareWidget {
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) => CircularProgressIndicator(value: null);

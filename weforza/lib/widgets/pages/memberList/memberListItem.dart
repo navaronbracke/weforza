@@ -6,7 +6,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a list item for [MemberListPage].
 class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
@@ -21,7 +21,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) =>
-      PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+      PlatformAwareWidgetBuilder.build(context, this);
 
   ///Layout
   ///

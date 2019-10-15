@@ -10,8 +10,6 @@
   "SundayPrefix": "Zo",
   "UnknownDate": "Onbekende Datum",
 
-  "MemberPhoneFormat": "Tel: $phone",
-
   "HomePageRidesTab": "Ritten",
   "HomePageMembersTab": "Leden",
 
@@ -32,6 +30,15 @@
   "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
 
   "MemberDetailsTitle": "Details",
+  "MemberDetailsPhoneFormat": "Telefoon $phone",
+  "MemberDetailsWasPresentCountLabel": "Aantal keren aanwezig tijdens ritten   $count",
+  "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen.",
+  "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken.",
+
+  "MemberDeleteDialogTitle": "Verwijder Lid",
+  "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen? Het lid wordt permanent verwijderd.",
+  "MemberDeleteDialogCancel": "Annuleren",
+  "MemberDeleteDialogConfirm": "Verwijder Lid",
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
@@ -39,6 +46,7 @@
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
   "PersonTelephoneLabel": "Telefoon",
+  "PersonDevicesLabel": "Toestellen",
 
   "FirstNameMaxLength": "Voornaam kan niet langer zijn dan $maxLength letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan $maxLength letters",

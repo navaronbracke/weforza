@@ -14,7 +14,7 @@ class Member {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  Member(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
+  Member(this.firstname,this.lastname,this.phone,this.devices): assert(firstname != null && lastname != null && phone != null);
 
   ///A member's phone number.
   ///Note that [_phone] is a String, integers can't do leading zeroes.
@@ -25,4 +25,7 @@ class Member {
   String lastname;
   ///A member's number of times he/she was present.
   int wasPresentCount;
+  ///The list of devices of this person.
+  ///We can only retrieve device name reliably with bluetooth, hence the String.
+  List<String> devices;
 }

@@ -9,7 +9,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/loadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class RideListPage extends StatefulWidget {
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage>
-    implements PlatformAwareWidget {
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
   _RideListPageState(this._bloc) : assert(_bloc != null);
 
   ///The BLoC for this [Widget].
@@ -28,36 +28,27 @@ class _RideListPageState extends State<RideListPage>
 
   @override
   Widget build(BuildContext context) =>
-      PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+      PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        if (orientation == Orientation.portrait) {
-          return _buildAndroidPortraitLayout(context);
-        } else {
-          return _buildAndroidLandscapeLayout(context);
-        }
-      },
+    return OrientationAwareWidgetBuilder.build(context,
+        buildAndroidPortraitLayout(context),
+        buildAndroidLandscapeLayout(context)
     );
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        if (orientation == Orientation.portrait) {
-          return _buildIOSPortraitLayout(context);
-        } else {
-          return _buildIOSLandscapeLayout(context);
-        }
-      },
+    return OrientationAwareWidgetBuilder.build(context,
+        buildIOSPortraitLayout(context),
+        buildIOSLandscapeLayout(context)
     );
   }
 
   ///This method builds the portrait layout for Android.
-  Widget _buildAndroidPortraitLayout(BuildContext context) {
+  @override
+  Widget buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -133,7 +124,8 @@ class _RideListPageState extends State<RideListPage>
   }
 
   ///This method builds the landscape layout for Android.
-  Widget _buildAndroidLandscapeLayout(BuildContext context) {
+  @override
+  Widget buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -196,7 +188,8 @@ class _RideListPageState extends State<RideListPage>
   }
 
   ///This method builds the portrait layout for IOS.
-  Widget _buildIOSPortraitLayout(BuildContext context) {
+  @override
+  Widget buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -266,7 +259,8 @@ class _RideListPageState extends State<RideListPage>
   }
 
   ///This method builds the landscape layout for IOS.
-  Widget _buildIOSLandscapeLayout(BuildContext context) {
+  @override
+  Widget buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

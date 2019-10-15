@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a [Ride] within the 'Rides' content panel of [RideListPage].
 class RideItem extends StatelessWidget implements PlatformAwareWidget {
@@ -10,7 +10,7 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
   final Ride _ride;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

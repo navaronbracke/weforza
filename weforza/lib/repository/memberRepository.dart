@@ -32,7 +32,7 @@ class MemberRepository implements IMemberRepository {
   Future<List<Member>> getAllMembers() async {
     // TODO: implement
     //Placeholder until I get the database up.
-    return Future.value(List.of([Member("Rudy","Bracke","0000000000"),Member("Navaron","Bracke","0000000000")]));
+    return Future.value(List.of([Member("Rudy","Bracke","0000000000",List<String>()),Member("Navaron","Bracke","0000000000",List<String>())]));
   }
 }
 
@@ -54,6 +54,6 @@ class TestMemberRepository implements IMemberRepository {
 
   @override
   Future<List<Member>> getAllMembers() async {
-    return Future.value(List.of([Member("Rudy","Bracke","0000000000"),Member("Navaron","Bracke","0000000000")]));
+    return Future.value(List.of([Member("Rudy","Bracke","0000000000",List<String>()),Member("Navaron","Bracke","0000000000",List<String>())]));
   }
 }

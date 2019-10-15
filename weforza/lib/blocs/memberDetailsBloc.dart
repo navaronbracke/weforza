@@ -9,6 +9,12 @@ class MemberDetailsBloc extends Bloc {
   ///The [Member] that should be displayed.
   final Member _member;
 
+  String get firstName => _member.firstname;
+  String get lastName => _member.lastname;
+  String get phone => _member.phone;
+  int get wasPresentCount => _member.wasPresentCount;
+  List<String> get devices => List.unmodifiable(_member.devices);
+
   @override
   void dispose() {}
 

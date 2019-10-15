@@ -10,7 +10,7 @@ import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] will display a list of members.
 class MemberListPage extends StatefulWidget {
@@ -111,7 +111,7 @@ class _MemberListPageState extends State<MemberListPage>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+    return PlatformAwareWidgetBuilder.build(context, this);
   }
 
   @override

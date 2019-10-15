@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/platformAwareWidgetBuilder.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
 
@@ -19,7 +19,7 @@ class WeForzaApp extends StatelessWidget implements PlatformAwareWidget {
   final String _appName = "WeForza";
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.buildPlatformAwareWidget(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

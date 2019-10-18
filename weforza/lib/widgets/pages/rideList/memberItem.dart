@@ -18,7 +18,7 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
-      color: Color.fromARGB(255, 220, 220, 220),
+      elevation: 4.0,
       child: InkWell(
         onTap: (){
           //TODO: add/remove person from selected ride

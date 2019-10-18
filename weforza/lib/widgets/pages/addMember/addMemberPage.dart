@@ -205,6 +205,186 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
   }
 
   @override
+  Widget buildIOSLandscapeLayout(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(S.of(context).AddMemberTitle),
+        transitionBetweenRoutes: false,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Form(
+              //TODO validation
+              key: _formKey,
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10,30),
+                      child: Column(
+                        children: <Widget>[
+                          CupertinoTextField(
+                            controller: _bloc.firstNameController,
+                            placeholder: _firstNameLabel,
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox(height: 5),
+                          CupertinoTextField(
+                            controller: _bloc.lastNameController,
+                            placeholder: _lastNameLabel,
+                            autocorrect: false,
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox(height: 5),
+                          CupertinoTextField(
+                            controller: _bloc.phoneController,
+                            autocorrect: false,
+                            keyboardType: TextInputType.phone,
+                            placeholder: _phoneLabel,
+                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(_pictureLabel,style: TextStyle(fontSize: 16)),
+                          GestureDetector(
+                            child: Container(
+                              decoration: ShapeDecoration(
+                                  shape: CircleBorder(),
+                                  color: CupertinoTheme.of(context).primaryContrastingColor
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
+                              ),
+                            ),
+                            onTap: (){
+                              //TODO
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: CupertinoButton.filled(
+                  child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
+                  onPressed: () async {
+                    if(_formKey.currentState.validate())
+                    {
+                      //TODO save person with bloc
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget buildIOSPortraitLayout(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(S.of(context).AddMemberTitle),
+        transitionBetweenRoutes: false,
+      ),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              //TODO validation
+              children: <Widget>[
+                CupertinoTextField(
+                  controller: _bloc.firstNameController,
+                  placeholder: _firstNameLabel,
+                  autocorrect: false,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(height: 5),
+                CupertinoTextField(
+                  controller: _bloc.lastNameController,
+                  placeholder: _lastNameLabel,
+                  autocorrect: false,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(height: 5),
+                CupertinoTextField(
+                  controller: _bloc.phoneController,
+                  autocorrect: false,
+                  keyboardType: TextInputType.phone,
+                  placeholder: _phoneLabel,
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(_pictureLabel,style: TextStyle(fontSize: 16)),
+                        GestureDetector(
+                          child: Container(
+                            decoration: ShapeDecoration(
+                                shape: CircleBorder(),
+                                color: CupertinoTheme.of(context).primaryContrastingColor
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
+                            ),
+                          ),
+                          onTap: (){
+                            //TODO
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: CupertinoButton.filled(
+                      child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        if(_formKey.currentState.validate())
+                        {
+                          //TODO save person with bloc
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -298,30 +478,6 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
-    // TODO: implement buildIosWidget
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddMemberTitle),
-        transitionBetweenRoutes: false,
-      ),
-      child: Container(),
-    );
-  }
-
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
-    // TODO: implement buildIosWidget
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddMemberTitle),
-        transitionBetweenRoutes: false,
-      ),
-      child: Container(),
     );
   }
 

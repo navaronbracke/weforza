@@ -44,11 +44,14 @@ class AddMemberBloc extends Bloc {
   ///Returns [isRequiredMessage] when  empty or null.
   ///Returns [maxLengthMessage] when too long.
   ///Returns [illegalCharacterMessage] if any illegal character is present.
+  ///Returns [isBlankMessage] if the value is whitespace.
   ///Returns null when valid.
-  String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage) {
+  String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value == null || value.isEmpty)
     {
       _firstNameError = isRequiredMessage;
+    }else if(value.trim().isEmpty){
+      _firstNameError = isBlankMessage;
     }
     else if(firstNameMaxLength < value.length){
       _firstNameError = maxLengthMessage;
@@ -67,11 +70,14 @@ class AddMemberBloc extends Bloc {
   ///Returns [isRequiredMessage] when  empty or null.
   ///Returns [maxLengthMessage] when too long.
   ///Returns [illegalCharacterMessage] if any illegal character is present.
+  ///Returns [isBlankMessage] if the value is whitespace.
   ///Returns null when valid.
-  String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage) {
+  String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value == null || value.isEmpty)
     {
       _lastNameError = isRequiredMessage;
+    }else if(value.trim().isEmpty){
+      _lastNameError = isBlankMessage;
     }
     else if(lastNameMaxLength < value.length){
       _lastNameError = maxLengthMessage;

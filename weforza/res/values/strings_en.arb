@@ -42,6 +42,7 @@
 
   "AddMemberTitle": "New Member",
   "AddMemberSubmit": "Create New Member",
+  "AddMemberPictureLabel": "Picture",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
@@ -50,6 +51,8 @@
 
   "FirstNameMaxLength": "First Name can't be longer than $maxLength characters",
   "LastNameMaxLength": "Last Name can't be longer than $maxLength characters",
+  "FirstNameBlank" : "First Name can't be just whitespace",
+  "LastNameBlank" : "Last Name can't be just whitespace",
   "FirstNameIllegalCharacters": "First Name can only contain letters, spaces or ' -",
   "LastNameIllegalCharacters": "Last Name can only contain letters, spaces or ' -",
   "PhoneIllegalCharacters": "A phone number can only contain digits",

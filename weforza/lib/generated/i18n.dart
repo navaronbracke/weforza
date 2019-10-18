@@ -21,16 +21,19 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AppName => "WeForza";
+  String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
   String get HomePageMembersTab => "Members";
   String get HomePageRidesTab => "Rides";
+  String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberDeleteDialogCancel => "Cancel";
-  String get MemberDeleteDialogConfirm => "Delete Member";
+  String get MemberDeleteDialogConfirm => "Delete";
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member? The member will be permanently deleted.";
   String get MemberDeleteDialogTitle => "Delete Member";
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member.";
@@ -82,35 +85,17 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get RideListAddMemberInstruction => "Voeg leden toe in het leden menu";
-  @override
-  String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
-  @override
-  String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen.";
-  @override
   String get RideListRidesHeader => "Ritten";
   @override
-  String get WednesdayPrefix => "Wo";
-  @override
-  String get AppName => "WeForza";
-  @override
   String get HomePageRidesTab => "Ritten";
-  @override
-  String get MemberListLoadingInProgress => "Leden aan het ophalen...";
   @override
   String get FridayPrefix => "Vr";
   @override
   String get MemberDetailsTitle => "Details";
   @override
-  String get SaturdayPrefix => "Za";
-  @override
   String get UnknownDate => "Onbekende Datum";
   @override
   String get RideListAttendeesHeader => "Aanwezigen";
-  @override
-  String get MemberListTitle => "Leden";
-  @override
-  String get PersonTelephoneLabel => "Telefoon";
   @override
   String get RideListNoRides => "Er zijn geen ritten";
   @override
@@ -118,13 +103,9 @@ class $nl extends S {
   @override
   String get MondayPrefix => "Ma";
   @override
-  String get MemberDeleteDialogConfirm => "Verwijder Lid";
-  @override
-  String get PersonDevicesLabel => "Toestellen";
+  String get MemberDeleteDialogConfirm => "Verwijderen";
   @override
   String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken.";
-  @override
-  String get TuesdayPrefix => "Di";
   @override
   String get RideListNoMembers => "Er zijn geen leden";
   @override
@@ -132,17 +113,11 @@ class $nl extends S {
   @override
   String get SundayPrefix => "Zo";
   @override
-  String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
-  @override
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
   @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
-  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
-  @override
   String get AddMemberTitle => "Nieuw lid";
-  @override
-  String get ThursdayPrefix => "Do";
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe met de +";
   @override
@@ -150,19 +125,53 @@ class $nl extends S {
   @override
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
-  String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
-  @override
   String get RideListLoadingMembersFailed => "Kon de leden niet ophalen";
+  @override
+  String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
+  @override
+  String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven";
+  @override
+  String get MemberListNoItems => "Er zijn geen leden om te tonen";
+  @override
+  String get RideListAddMemberInstruction => "Voeg leden toe in het leden menu";
+  @override
+  String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
+  @override
+  String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen.";
+  @override
+  String get WednesdayPrefix => "Wo";
+  @override
+  String get AppName => "WeForza";
+  @override
+  String get MemberListLoadingInProgress => "Leden aan het ophalen...";
+  @override
+  String get SaturdayPrefix => "Za";
+  @override
+  String get MemberListTitle => "Leden";
+  @override
+  String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get PersonDevicesLabel => "Toestellen";
+  @override
+  String get TuesdayPrefix => "Di";
+  @override
+  String get AddMemberPictureLabel => "Foto";
+  @override
+  String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
+  @override
+  String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
+  @override
+  String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
+  @override
+  String get ThursdayPrefix => "Do";
+  @override
+  String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override
   String get HomePageMembersTab => "Leden";
   @override
   String get MemberListLoadingFailed => "Kon geen leden ophalen";
   @override
-  String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven";
-  @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
-  @override
-  String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override
@@ -174,9 +183,9 @@ class $nl extends S {
   @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
   @override
-  String MemberDetailsWasPresentCountLabel(String count) => "Aanwezigheden: $count";
-  @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  @override
+  String MemberDetailsWasPresentCountLabel(String count) => "Aanwezigheden: $count";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

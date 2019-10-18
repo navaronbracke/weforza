@@ -42,6 +42,7 @@
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
+  "AddMemberPictureLabel": "Foto",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
@@ -50,6 +51,8 @@
 
   "FirstNameMaxLength": "Voornaam kan niet langer zijn dan $maxLength letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan $maxLength letters",
+  "FirstNameBlank" : "Voornaam mag niet enkel witruimte zijn",
+  "LastNameBlank" : "Familienaam mag niet enkel witruimte zijn",
   "FirstNameIllegalCharacters": "Voornaam mag enkel letters, spaties of ' - bevatten",
   "LastNameIllegalCharacters": "Familienaam mag enkel letters,spaties of ' - bevatten",
   "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",

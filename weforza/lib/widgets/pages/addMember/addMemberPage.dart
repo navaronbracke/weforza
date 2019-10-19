@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,23 +5,25 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-
-//TODO PLATFORM + ORIENTATION -> impl interface
+import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
 ///This [Widget] represents the form for adding a member.
 class AddMemberPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _AddMemberPageState(InjectionContainer.get<AddMemberBloc>());
-
+  State<StatefulWidget> createState() =>
+      _AddMemberPageState(InjectionContainer.get<AddMemberBloc>());
 }
 
 ///This is the [State] class for [AddMemberPage].
-class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget {
+class _AddMemberPageState extends State<AddMemberPage>
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
   _AddMemberPageState(this._bloc);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
+
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
 
@@ -46,10 +47,9 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
   String _phoneMinLengthMessage;
   String _phoneMaxLengthMessage;
 
-
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
-  void _initStrings(BuildContext context){
+  void _initStrings(BuildContext context) {
     final S translator = S.of(context);
     _firstNameLabel = translator.PersonFirstNameLabel;
     _lastNameLabel = translator.PersonLastNameLabel;
@@ -60,39 +60,41 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
     _phoneRequiredMessage = translator.ValueIsRequired(_phoneLabel);
 
-    _firstNameMaxLengthMessage = translator.FirstNameMaxLength("${_bloc.firstNameMaxLength}");
+    _firstNameMaxLengthMessage =
+        translator.FirstNameMaxLength("${_bloc.firstNameMaxLength}");
     _firstNameIllegalCharactersMessage = translator.FirstNameIllegalCharacters;
     _firstNameBlankMessage = translator.FirstNameBlank;
 
-    _lastNameMaxLengthMessage = translator.LastNameMaxLength("${_bloc.lastNameMaxLength}");
+    _lastNameMaxLengthMessage =
+        translator.LastNameMaxLength("${_bloc.lastNameMaxLength}");
     _lastNameIllegalCharactersMessage = translator.LastNameIllegalCharacters;
     _lastNameBlankMessage = translator.LastNameBlank;
 
     _phoneIllegalCharactersMessage = translator.PhoneIllegalCharacters;
-    _phoneMinLengthMessage = translator.PhoneMinLength("${_bloc.phoneMinLength}");
-    _phoneMaxLengthMessage = translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
+    _phoneMinLengthMessage =
+        translator.PhoneMinLength("${_bloc.phoneMinLength}");
+    _phoneMaxLengthMessage =
+        translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     _initStrings(context);
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
+    return OrientationAwareWidgetBuilder.build(
+        context,
         buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context)
-    );
+        buildAndroidLandscapeLayout(context));
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
     return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context),
-        buildIOSLandscapeLayout(context)
-    );
+        buildIOSPortraitLayout(context), buildIOSLandscapeLayout(context));
   }
 
   @override
@@ -111,7 +113,7 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                   Flexible(
                     flex: 2,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10,30),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
                       child: Column(
                         children: <Widget>[
                           TextFormField(
@@ -122,9 +124,15 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                             controller: _bloc.firstNameController,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
-                            validator: (value) => _bloc.validateFirstName(value,_firstNameRequiredMessage,_firstNameMaxLengthMessage,_firstNameIllegalCharactersMessage,_firstNameBlankMessage),
+                            validator: (value) => _bloc.validateFirstName(
+                                value,
+                                _firstNameRequiredMessage,
+                                _firstNameMaxLengthMessage,
+                                _firstNameIllegalCharactersMessage,
+                                _firstNameBlankMessage),
                             autovalidate: _bloc.autoValidateFirstName,
-                            onChanged: (value)=> setState(() => _bloc.autoValidateFirstName = true),
+                            onChanged: (value) => setState(
+                                () => _bloc.autoValidateFirstName = true),
                           ),
                           SizedBox(height: 5),
                           TextFormField(
@@ -135,9 +143,15 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                             controller: _bloc.lastNameController,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
-                            validator: (value) => _bloc.validateLastName(value, _lastNameRequiredMessage, _lastNameMaxLengthMessage,_lastNameIllegalCharactersMessage,_lastNameBlankMessage),
+                            validator: (value) => _bloc.validateLastName(
+                                value,
+                                _lastNameRequiredMessage,
+                                _lastNameMaxLengthMessage,
+                                _lastNameIllegalCharactersMessage,
+                                _lastNameBlankMessage),
                             autovalidate: _bloc.autoValidateLastName,
-                            onChanged: (value)=> setState(() => _bloc.autoValidateLastName = true),
+                            onChanged: (value) => setState(
+                                () => _bloc.autoValidateLastName = true),
                           ),
                           SizedBox(height: 5),
                           TextFormField(
@@ -148,10 +162,18 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                             controller: _bloc.phoneController,
                             autocorrect: false,
                             keyboardType: TextInputType.phone,
-                            validator: (value) => _bloc.validatePhone(value,_phoneRequiredMessage,_phoneIllegalCharactersMessage,_phoneMinLengthMessage,_phoneMaxLengthMessage),
+                            validator: (value) => _bloc.validatePhone(
+                                value,
+                                _phoneRequiredMessage,
+                                _phoneIllegalCharactersMessage,
+                                _phoneMinLengthMessage,
+                                _phoneMaxLengthMessage),
                             autovalidate: _bloc.autoValidatePhone,
-                            onChanged: (value)=> setState(() => _bloc.autoValidatePhone = true),
-                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                            onChanged: (value) =>
+                                setState(() => _bloc.autoValidatePhone = true),
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter.digitsOnly
+                            ],
                           ),
                         ],
                       ),
@@ -164,12 +186,13 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(_pictureLabel,style: TextStyle(fontSize: 16)),
+                          Text(_pictureLabel, style: TextStyle(fontSize: 16)),
                           RawMaterialButton(
-                            onPressed: (){
+                            onPressed: () {
                               //TODO select image from gallery
                             },
-                            child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
+                            child: Icon(Icons.camera_alt,
+                                color: Colors.white, size: 50),
                             shape: CircleBorder(),
                             splashColor: Theme.of(context).primaryColor,
                             elevation: 2.0,
@@ -188,10 +211,10 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                 alignment: Alignment.center,
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
+                  child: Text(S.of(context).AddMemberSubmit,
+                      style: TextStyle(color: Colors.white)),
                   onPressed: () async {
-                    if(_formKey.currentState.validate())
-                    {
+                    if (_formKey.currentState.validate()) {
                       //TODO save person with bloc
                     }
                   },
@@ -211,90 +234,140 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
         middle: Text(S.of(context).AddMemberTitle),
         transitionBetweenRoutes: false,
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Form(
-              //TODO validation
-              key: _formKey,
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10,30),
-                      child: Column(
-                        children: <Widget>[
-                          CupertinoTextField(
-                            controller: _bloc.firstNameController,
-                            placeholder: _firstNameLabel,
-                            autocorrect: false,
-                            keyboardType: TextInputType.text,
-                          ),
-                          SizedBox(height: 5),
-                          CupertinoTextField(
-                            controller: _bloc.lastNameController,
-                            placeholder: _lastNameLabel,
-                            autocorrect: false,
-                            keyboardType: TextInputType.text,
-                          ),
-                          SizedBox(height: 5),
-                          CupertinoTextField(
-                            controller: _bloc.phoneController,
-                            autocorrect: false,
-                            keyboardType: TextInputType.phone,
-                            placeholder: _phoneLabel,
-                            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Text(_pictureLabel,style: TextStyle(fontSize: 16)),
-                          GestureDetector(
-                            child: Container(
-                              decoration: ShapeDecoration(
-                                  shape: CircleBorder(),
-                                  color: CupertinoTheme.of(context).primaryContrastingColor
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _formKey,
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              CupertinoTextField(
+                                controller: _bloc.firstNameController,
+                                placeholder: _firstNameLabel,
+                                autocorrect: false,
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _bloc.validateFirstName(
+                                        value,
+                                        _firstNameRequiredMessage,
+                                        _firstNameMaxLengthMessage,
+                                        _firstNameIllegalCharactersMessage,
+                                        _firstNameBlankMessage);
+                                  });
+                                },
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
+                              Text(
+                                  CupertinoFormErrorFormatter.formatErrorMessage(
+                                      _bloc.firstNameError),
+                                  style: ApplicationTheme.iosFormErrorStyle),
+                              SizedBox(height: 5),
+                              CupertinoTextField(
+                                controller: _bloc.lastNameController,
+                                placeholder: _lastNameLabel,
+                                autocorrect: false,
+                                keyboardType: TextInputType.text,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _bloc.validateLastName(
+                                        value,
+                                        _lastNameRequiredMessage,
+                                        _lastNameMaxLengthMessage,
+                                        _lastNameIllegalCharactersMessage,
+                                        _lastNameBlankMessage);
+                                  });
+                                },
                               ),
-                            ),
-                            onTap: (){
-                              //TODO
-                            },
+                              Text(
+                                  CupertinoFormErrorFormatter.formatErrorMessage(
+                                      _bloc.lastNameError),
+                                  style: ApplicationTheme.iosFormErrorStyle),
+                              SizedBox(height: 5),
+                              CupertinoTextField(
+                                controller: _bloc.phoneController,
+                                autocorrect: false,
+                                keyboardType: TextInputType.phone,
+                                placeholder: _phoneLabel,
+                                inputFormatters: [
+                                  WhitelistingTextInputFormatter.digitsOnly
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _bloc.validatePhone(
+                                        value,
+                                        _phoneRequiredMessage,
+                                        _phoneIllegalCharactersMessage,
+                                        _phoneMinLengthMessage,
+                                        _phoneMaxLengthMessage);
+                                  });
+                                },
+                              ),
+                              Text(
+                                  CupertinoFormErrorFormatter.formatErrorMessage(
+                                      _bloc.phoneError),
+                                  style: ApplicationTheme.iosFormErrorStyle),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Flexible(
+                        flex: 1,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(_pictureLabel, style: TextStyle(fontSize: 16)),
+                              GestureDetector(
+                                child: Container(
+                                  decoration: ShapeDecoration(
+                                      shape: CircleBorder(),
+                                      color: CupertinoTheme.of(context)
+                                          .primaryContrastingColor),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: Icon(Icons.camera_alt,
+                                        color: Colors.white, size: 50),
+                                  ),
+                                ),
+                                onTap: () {
+                                  //TODO
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Container(
-              child: Align(
-                alignment: Alignment.center,
-                child: CupertinoButton.filled(
-                  child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    if(_formKey.currentState.validate())
-                    {
-                      //TODO save person with bloc
-                    }
-                  },
                 ),
               ),
-            ),
-          ],
+              Container(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: CupertinoButton.filled(
+                    child: Text(S.of(context).AddMemberSubmit,
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        //TODO save person with bloc
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -307,76 +380,123 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
         middle: Text(S.of(context).AddMemberTitle),
         transitionBetweenRoutes: false,
       ),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: EdgeInsets.all(5),
-            child: Column(
-              //TODO validation
-              children: <Widget>[
-                CupertinoTextField(
-                  controller: _bloc.firstNameController,
-                  placeholder: _firstNameLabel,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                ),
-                SizedBox(height: 5),
-                CupertinoTextField(
-                  controller: _bloc.lastNameController,
-                  placeholder: _lastNameLabel,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                ),
-                SizedBox(height: 5),
-                CupertinoTextField(
-                  controller: _bloc.phoneController,
-                  autocorrect: false,
-                  keyboardType: TextInputType.phone,
-                  placeholder: _phoneLabel,
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(_pictureLabel,style: TextStyle(fontSize: 16)),
-                        GestureDetector(
-                          child: Container(
-                            decoration: ShapeDecoration(
-                                shape: CircleBorder(),
-                                color: CupertinoTheme.of(context).primaryContrastingColor
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CupertinoTextField(
+                    controller: _bloc.firstNameController,
+                    placeholder: _firstNameLabel,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      setState(() {
+                        _bloc.validateFirstName(
+                            value,
+                            _firstNameRequiredMessage,
+                            _firstNameMaxLengthMessage,
+                            _firstNameIllegalCharactersMessage,
+                            _firstNameBlankMessage);
+                      });
+                    },
+                  ),
+                  Text(
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.firstNameError),
+                      style: ApplicationTheme.iosFormErrorStyle),
+                  SizedBox(height: 5),
+                  CupertinoTextField(
+                    controller: _bloc.lastNameController,
+                    placeholder: _lastNameLabel,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      setState(() {
+                        _bloc.validateLastName(
+                            value,
+                            _lastNameRequiredMessage,
+                            _lastNameMaxLengthMessage,
+                            _lastNameIllegalCharactersMessage,
+                            _lastNameBlankMessage);
+                      });
+                    },
+                  ),
+                  Text(
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.lastNameError),
+                      style: ApplicationTheme.iosFormErrorStyle),
+                  SizedBox(height: 5),
+                  CupertinoTextField(
+                    controller: _bloc.phoneController,
+                    autocorrect: false,
+                    keyboardType: TextInputType.phone,
+                    placeholder: _phoneLabel,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _bloc.validatePhone(
+                            value,
+                            _phoneRequiredMessage,
+                            _phoneIllegalCharactersMessage,
+                            _phoneMinLengthMessage,
+                            _phoneMaxLengthMessage);
+                      });
+                    },
+                  ),
+                  Text(
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.phoneError),
+                      style: ApplicationTheme.iosFormErrorStyle),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Text(_pictureLabel, style: TextStyle(fontSize: 16)),
+                          GestureDetector(
+                            child: Container(
+                              decoration: ShapeDecoration(
+                                  shape: CircleBorder(),
+                                  color: CupertinoTheme.of(context)
+                                      .primaryContrastingColor),
+                              child: Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Icon(Icons.camera_alt,
+                                    color: Colors.white, size: 50),
+                              ),
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(15),
-                              child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
-                            ),
+                            onTap: () {
+                              //TODO
+                            },
                           ),
-                          onTap: (){
-                            //TODO
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: CupertinoButton.filled(
-                      child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if(_formKey.currentState.validate())
-                        {
-                          //TODO save person with bloc
-                        }
-                      },
+                  Container(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: CupertinoButton.filled(
+                        child: Text(S.of(context).AddMemberSubmit,
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            //TODO save person with bloc
+                          }
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -405,9 +525,15 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                   controller: _bloc.firstNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateFirstName(value,_firstNameRequiredMessage,_firstNameMaxLengthMessage,_firstNameIllegalCharactersMessage,_firstNameBlankMessage),
+                  validator: (value) => _bloc.validateFirstName(
+                      value,
+                      _firstNameRequiredMessage,
+                      _firstNameMaxLengthMessage,
+                      _firstNameIllegalCharactersMessage,
+                      _firstNameBlankMessage),
                   autovalidate: _bloc.autoValidateFirstName,
-                  onChanged: (value)=> setState(() => _bloc.autoValidateFirstName = true),
+                  onChanged: (value) =>
+                      setState(() => _bloc.autoValidateFirstName = true),
                 ),
                 SizedBox(height: 5),
                 TextFormField(
@@ -418,9 +544,15 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                   controller: _bloc.lastNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateLastName(value, _lastNameRequiredMessage, _lastNameMaxLengthMessage,_lastNameIllegalCharactersMessage,_lastNameBlankMessage),
+                  validator: (value) => _bloc.validateLastName(
+                      value,
+                      _lastNameRequiredMessage,
+                      _lastNameMaxLengthMessage,
+                      _lastNameIllegalCharactersMessage,
+                      _lastNameBlankMessage),
                   autovalidate: _bloc.autoValidateLastName,
-                  onChanged: (value)=> setState(() => _bloc.autoValidateLastName = true),
+                  onChanged: (value) =>
+                      setState(() => _bloc.autoValidateLastName = true),
                 ),
                 SizedBox(height: 5),
                 TextFormField(
@@ -431,9 +563,15 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                   controller: _bloc.phoneController,
                   autocorrect: false,
                   keyboardType: TextInputType.phone,
-                  validator: (value) => _bloc.validatePhone(value,_phoneRequiredMessage,_phoneIllegalCharactersMessage,_phoneMinLengthMessage,_phoneMaxLengthMessage),
+                  validator: (value) => _bloc.validatePhone(
+                      value,
+                      _phoneRequiredMessage,
+                      _phoneIllegalCharactersMessage,
+                      _phoneMinLengthMessage,
+                      _phoneMaxLengthMessage),
                   autovalidate: _bloc.autoValidatePhone,
-                  onChanged: (value)=> setState(() => _bloc.autoValidatePhone = true),
+                  onChanged: (value) =>
+                      setState(() => _bloc.autoValidatePhone = true),
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                 ),
                 Padding(
@@ -442,12 +580,13 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(_pictureLabel,style: TextStyle(fontSize: 16)),
+                        Text(_pictureLabel, style: TextStyle(fontSize: 16)),
                         RawMaterialButton(
-                          onPressed: (){
+                          onPressed: () {
                             //TODO select image from gallery
                           },
-                          child: Icon(Icons.camera_alt,color: Colors.white,size: 50),
+                          child: Icon(Icons.camera_alt,
+                              color: Colors.white, size: 50),
                           shape: CircleBorder(),
                           elevation: 2.0,
                           splashColor: Theme.of(context).primaryColor,
@@ -463,10 +602,10 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
                     alignment: Alignment.center,
                     child: RaisedButton(
                       color: Theme.of(context).primaryColor,
-                      child: Text(S.of(context).AddMemberSubmit,style: TextStyle(color: Colors.white)),
+                      child: Text(S.of(context).AddMemberSubmit,
+                          style: TextStyle(color: Colors.white)),
                       onPressed: () async {
-                        if(_formKey.currentState.validate())
-                        {
+                        if (_formKey.currentState.validate()) {
                           //TODO save person with bloc
                         }
                       },
@@ -486,6 +625,4 @@ class _AddMemberPageState extends State<AddMemberPage> implements PlatformAwareW
     _bloc.dispose();
     super.dispose();
   }
-
-
 }

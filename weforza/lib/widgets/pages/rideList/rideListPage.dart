@@ -9,6 +9,10 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/loadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
+import 'package:weforza/widgets/pages/rideList/rideListMembersEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListMembersError.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRidesEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRidesError.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
@@ -337,15 +341,15 @@ class _RideListPageState extends State<RideListPage>
             child: _rideListBuilder(
                 _bloc.getAllRides(),
                 PlatformAwareLoadingIndicator(),
-                _RideListRidesError(),
-                _RideListRidesEmpty())),
+                RideListRidesError(),
+                RideListRidesEmpty())),
         Flexible(
           flex: 3,
           child: _attendeesListBuilder(
               _bloc.getAllMembers(),
               PlatformAwareLoadingIndicator(),
-              _RideListMembersError(),
-              _RideListMembersEmpty()),
+              RideListMembersError(),
+              RideListMembersEmpty()),
         ),
       ],
     );
@@ -404,62 +408,6 @@ class _RideListPageState extends State<RideListPage>
           return loading;
         }
       },
-    );
-  }
-}
-
-///This class represents an empty list [Widget] for the 'Rides' section of [RideListPage].
-class _RideListRidesEmpty extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).RideListNoRides),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListAddRideInstruction),
-        ],
-      ),
-    );
-  }
-}
-
-///This class represents an empty list [Widget] for the 'Members' section of [RideListPage].
-class _RideListMembersEmpty extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).RideListNoMembers),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListAddMemberInstruction),
-        ],
-      ),
-    );
-  }
-}
-
-///This class represents an error [Widget] for the 'Rides' section of [RideListPage].
-class _RideListRidesError extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(S.of(context).RideListLoadingRidesFailed),
-    );
-  }
-}
-
-///This class represents an error [Widget] for the 'Members' section of [RideListPage].
-class _RideListMembersError extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(S.of(context).RideListLoadingMembersFailed),
     );
   }
 }

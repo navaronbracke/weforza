@@ -24,10 +24,9 @@ class AddMemberBloc extends Bloc {
   String _phone;
 
   ///The actual errors.
-  String _firstNameError;
-  String _lastNameError;
-  String _phoneError;
-
+  String firstNameError;
+  String lastNameError;
+  String phoneError;
 
   final int firstNameMaxLength = 50;
   final int lastNameMaxLength = 50;
@@ -41,81 +40,72 @@ class AddMemberBloc extends Bloc {
   bool autoValidatePhone = false;
 
   ///Validate [value] according to the first name rule.
-  ///Returns [isRequiredMessage] when  empty or null.
-  ///Returns [maxLengthMessage] when too long.
-  ///Returns [illegalCharacterMessage] if any illegal character is present.
-  ///Returns [isBlankMessage] if the value is whitespace.
-  ///Returns null when valid.
+  ///Returns null if valid or an error message otherwise.
+  ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value == null || value.isEmpty)
     {
-      _firstNameError = isRequiredMessage;
+      firstNameError = isRequiredMessage;
     }else if(value.trim().isEmpty){
-      _firstNameError = isBlankMessage;
+      firstNameError = isBlankMessage;
     }
     else if(firstNameMaxLength < value.length){
-      _firstNameError = maxLengthMessage;
+      firstNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
       _firstName = value;
-      _firstNameError = null;
+      firstNameError = null;
     }
     else{
-      _firstNameError = illegalCharacterMessage;
+      firstNameError = illegalCharacterMessage;
     }
-    return _firstNameError;
+    return firstNameError;
   }
 
   ///Validate [value] according to the last name rule.
-  ///Returns [isRequiredMessage] when  empty or null.
-  ///Returns [maxLengthMessage] when too long.
-  ///Returns [illegalCharacterMessage] if any illegal character is present.
-  ///Returns [isBlankMessage] if the value is whitespace.
-  ///Returns null when valid.
+  ///Returns null if valid or an error message otherwise.
+  ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value == null || value.isEmpty)
     {
-      _lastNameError = isRequiredMessage;
+      lastNameError = isRequiredMessage;
     }else if(value.trim().isEmpty){
-      _lastNameError = isBlankMessage;
+      lastNameError = isBlankMessage;
     }
     else if(lastNameMaxLength < value.length){
-      _lastNameError = maxLengthMessage;
+      lastNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
       _lastName = value;
-      _lastNameError = null;
+      lastNameError = null;
     }
     else{
-      _lastNameError = illegalCharacterMessage;
+      lastNameError = illegalCharacterMessage;
     }
-    return _lastNameError;
+    return lastNameError;
   }
 
   ///Validate [value] according to the phone rule.
-  ///Returns [isRequiredMessage] when empty or null.
-  ///Returns [illegalCharacterMessage] when the value isn't solely digits.
-  ///Returns [minLengthMessage] when the value is too short.
-  ///Returns [maxLengthMessage] when the value is too long.
-  ///Returns null when valid.
+  ///Returns null if valid or an error message otherwise.
+  ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
     if(value == null || value.isEmpty)
     {
-      _phoneError = isRequiredMessage;
+      phoneError = isRequiredMessage;
     }
     else if(value.length < phoneMinLength){
-      _phoneError = minLengthMessage;
+      phoneError = minLengthMessage;
     }else if(phoneMaxLength < value.length){
-      _phoneError = maxLengthMessage;
+      phoneError = maxLengthMessage;
     }
     else if(Member.phoneNumberRegex.hasMatch(value)){
       _phone = value;
-      _phoneError = null;
+      phoneError = null;
     }
     else{
-      _phoneError = illegalCharacterMessage;
+      phoneError = illegalCharacterMessage;
     }
-    return _phoneError;
+    return phoneError;
   }
 
   @override

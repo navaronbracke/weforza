@@ -6,6 +6,7 @@ import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/profileImagePicker.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
@@ -187,18 +188,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          RawMaterialButton(
-                            onPressed: () {
-                              //TODO select image from gallery
-                            },
-                            child: Icon(Icons.camera_alt,
-                                color: Colors.white, size: 50),
-                            shape: CircleBorder(),
-                            splashColor: Theme.of(context).primaryColor,
-                            elevation: 2.0,
-                            fillColor: Theme.of(context).accentColor,
-                            padding: const EdgeInsets.all(15.0),
-                          ),
+                          ProfileImagePicker((){_bloc.onSelectImage();},Theme.of(context).accentColor,Theme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -328,22 +318,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              GestureDetector(
-                                child: Container(
-                                  decoration: ShapeDecoration(
-                                      shape: CircleBorder(),
-                                      color: CupertinoTheme.of(context)
-                                          .primaryContrastingColor),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Icon(Icons.camera_alt,
-                                        color: Colors.white, size: 50),
-                                  ),
-                                ),
-                                onTap: () {
-                                  //TODO
-                                },
-                              ),
+                              ProfileImagePicker((){_bloc.onSelectImage();},CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                             ],
                           ),
                         ),
@@ -461,22 +436,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          GestureDetector(
-                            child: Container(
-                              decoration: ShapeDecoration(
-                                  shape: CircleBorder(),
-                                  color: CupertinoTheme.of(context)
-                                      .primaryContrastingColor),
-                              child: Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Icon(Icons.camera_alt,
-                                    color: Colors.white, size: 50),
-                              ),
-                            ),
-                            onTap: () {
-                              //TODO
-                            },
-                          ),
+                          ProfileImagePicker((){_bloc.onSelectImage();},CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -581,18 +541,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        RawMaterialButton(
-                          onPressed: () {
-                            //TODO select image from gallery
-                          },
-                          child: Icon(Icons.camera_alt,
-                              color: Colors.white, size: 50),
-                          shape: CircleBorder(),
-                          elevation: 2.0,
-                          splashColor: Theme.of(context).primaryColor,
-                          fillColor: Theme.of(context).accentColor,
-                          padding: const EdgeInsets.all(15.0),
-                        ),
+                        ProfileImagePicker((){_bloc.onSelectImage();},Theme.of(context).accentColor,Theme.of(context).primaryColor),
                       ],
                     ),
                   ),

@@ -6,7 +6,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/widgets/loadingIndicator.dart';
+import 'package:weforza/widgets/platform/loadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideListMembersEmpty.dart';

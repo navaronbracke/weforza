@@ -30,6 +30,9 @@ dependencies:
   # This package allows the use of Dependency Injection.
   flutter_simple_dependency_injection: ^1.0.1
 
+  # This package allows the use of selecting images.
+  image_picker: ^0.6.1+8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

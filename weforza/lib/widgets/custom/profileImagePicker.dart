@@ -1,15 +1,18 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/iProfileImagePicker.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
 class ProfileImagePicker extends StatefulWidget {
-  ProfileImagePicker(this.onPressed,this.idleColor,this.onPressedColor) : assert(onPressed != null && idleColor != null && onPressedColor != null);
+  ProfileImagePicker(this.onPressedHandler,this.idleColor,this.onPressedColor) : assert(onPressedHandler != null && idleColor != null && onPressedColor != null);
 
   ///A [VoidCallback] for when this [Widget] is tapped.
-  final VoidCallback onPressed;
+  final IProfileImagePicker onPressedHandler;
   ///The background color when the [Widget] is idle.
   final Color idleColor;//accent/primary constrasting
   ///The background color when the [Widget] is being pressed.
@@ -27,6 +30,9 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
   ///Only used on IOS, since Material uses InkWell.
   Color _currentColor;
 
+  ///The current selected image.
+  File _image;
+
   @override
   void initState() {
     _currentColor = widget.idleColor;
@@ -38,46 +44,75 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return RawMaterialButton(
+    return (_image == null) ? RawMaterialButton(
+      child: Icon(Icons.camera_alt, color: Colors.white, size: 50),
       onPressed: () {
-        widget.onPressed();
+        widget.onPressedHandler.pickProfileImage();
+        setState((){
+          _image = widget.onPressedHandler.getImage();
+        });
       },
-      child: Icon(Icons.camera_alt,
-          color: Colors.white, size: 50),
       shape: CircleBorder(),
       splashColor: widget.onPressedColor,
       elevation: 2.0,
       fillColor: widget.idleColor,
       padding: const EdgeInsets.all(15.0),
+    ):
+    GestureDetector(
+      child: ClipOval(
+        child: Image.file(_image,width: 65,height: 65,fit: BoxFit.cover),
+      ),
+      onTap: (){
+        widget.onPressedHandler.pickProfileImage();
+        setState((){
+          _image = widget.onPressedHandler.getImage();
+        });
+      }
     );
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return GestureDetector(
+    return (_image == null) ? GestureDetector(
       child: Container(
         decoration: ShapeDecoration(
             shape: CircleBorder(),
             color: _currentColor),
         child: Padding(
           padding: EdgeInsets.all(15),
-          child: Icon(Icons.camera_alt,
-              color: Colors.white, size: 50),
+          child: Icon(Icons.camera_alt, color: Colors.white, size: 50),
         ),
       ),
       onTap: () {
-        widget.onPressed();
+        setState(() {
+          widget.onPressedHandler.pickProfileImage();
+        });
       },
       onTapUp: (tapUpDetails){
-        setState(() {
-          _currentColor = widget.idleColor;
-        });
+        //Only trigger a redraw if there is no image.
+        if(_image == null){
+          setState(() {
+            _currentColor = widget.idleColor;
+          });
+        }
       },
       onTapDown: (tapUpDetails){
-        setState(() {
-          _currentColor = widget.onPressedColor;
-        });
+        //Only trigger a redraw if there is no image.
+        if(_image == null){
+          setState(() {
+            _currentColor = widget.onPressedColor;
+          });
+        }
       },
+    ): GestureDetector(
+        child: ClipOval(
+          child: Image.file(widget.onPressedHandler.getImage(),width: 65,height: 65,fit: BoxFit.cover),
+        ),
+        onTap: (){
+          widget.onPressedHandler.pickProfileImage();
+          //trigger set state for a redraw of the UI.
+          setState((){});
+        }
     );
   }
 

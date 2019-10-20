@@ -188,7 +188,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){_bloc.onSelectImage();},Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                          ProfileImagePicker((){
+                            //TODO on select image
+                          },Theme.of(context).accentColor,Theme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -318,7 +320,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              ProfileImagePicker((){_bloc.onSelectImage();},CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                              ProfileImagePicker((){
+                                //TODO on select image
+                              },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                             ],
                           ),
                         ),
@@ -437,7 +441,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){_bloc.onSelectImage();},CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                          ProfileImagePicker((){
+                            //TODO on select image
+                          },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -543,7 +549,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        ProfileImagePicker((){_bloc.onSelectImage();},Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                        ProfileImagePicker((){
+                          //TODO on select image
+                        },Theme.of(context).accentColor,Theme.of(context).primaryColor),
                       ],
                     ),
                   ),

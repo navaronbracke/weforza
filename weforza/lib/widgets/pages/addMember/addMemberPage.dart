@@ -331,6 +331,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                 child: Align(
                   alignment: Alignment.center,
                   child: CupertinoButton.filled(
+                    pressedOpacity: 0.5,
                     child: Text(S.of(context).AddMemberSubmit,
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
@@ -445,6 +446,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                     child: Align(
                       alignment: Alignment.center,
                       child: CupertinoButton.filled(
+                        pressedOpacity: 0.5,
                         child: Text(S.of(context).AddMemberSubmit,
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {

@@ -6,6 +6,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a list item for [MemberListPage].
@@ -79,16 +80,10 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           ),
           SizedBox(
             width: 40,
-            child: GestureDetector(
-              child: Icon(
-                Icons.contacts,
-                color: CupertinoTheme.of(context).primaryColor,
-              ),
-              onTap: () => {
-                _selectBloc.selectedMember = _member,
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()))
-              },
-            ),
+            child: CupertinoIconButton(Icons.contacts,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              _selectBloc.selectedMember = _member;
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()));
+            }),
           ),
         ],
       ),

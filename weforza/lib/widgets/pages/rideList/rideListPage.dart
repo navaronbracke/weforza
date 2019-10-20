@@ -6,7 +6,8 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/widgets/platform/loadingIndicator.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideListMembersEmpty.dart';
@@ -200,33 +201,21 @@ class _RideListPageState extends State<RideListPage>
         trailing: Text(_bloc.attendingCount),
         middle: Row(
           children: <Widget>[
-            GestureDetector(
-              child: Icon(Icons.add),
-              onTap: () {
-                //TODO add ride for today if not added yet
-              },
-            ),
+            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto add ride screen
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.bluetooth_searching),
-              onTap: () {
-                //TODO scanning
-              },
-            ),
+            CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO scanning
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.file_download),
-              onTap: () {
-                //TODO import
-              },
-            ),
+            CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO import
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.file_upload),
-              onTap: () {
-                //TODO export
-              },
-            ),
+            CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO export
+            }),
           ],
         ),
       ),
@@ -272,33 +261,21 @@ class _RideListPageState extends State<RideListPage>
           children: <Widget>[
             Row(
               children: <Widget>[
-                GestureDetector(
-                  child: Icon(Icons.add),
-                  onTap: () {
-                    //TODO add ride for today if not added yet
-                  },
-                ),
+                CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO goto add ride screen
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.bluetooth_searching),
-                  onTap: () {
-                    //TODO scanning
-                  },
-                ),
+                CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO scanning
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.file_download),
-                  onTap: () {
-                    //TODO import
-                  },
-                ),
+                CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO import
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.file_upload),
-                  onTap: () {
-                    //TODO export
-                  },
-                ),
+                CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO export
+                }),
               ],
             ),
             Expanded(

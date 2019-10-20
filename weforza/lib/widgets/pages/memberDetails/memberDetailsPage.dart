@@ -7,6 +7,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents the detail page for a [Member].
@@ -67,7 +68,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              //TODO: go to edit screen
+              //TODO goto edit
             },
           ),
           IconButton(
@@ -140,8 +141,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              //TODO: go to edit screen
-            },
+              //TODO goto edit
+            }
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -208,19 +209,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            GestureDetector(
-              child: Icon(Icons.edit),
-              onTap: (){
-                //TODO goto edit
-              },
-            ),
+            CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto edit
+            }),
             SizedBox(width: 30),
-            GestureDetector(
-              child: Icon(Icons.delete),
-              onTap: (){
-                showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
-              },
-            ),
+            CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
+            }),
           ],
         ),
         transitionBetweenRoutes: false,
@@ -288,19 +283,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            GestureDetector(
-              child: Icon(Icons.edit),
-              onTap: (){
-                //TODO goto edit
-              },
-            ),
-            SizedBox(width: 10),
-            GestureDetector(
-              child: Icon(Icons.delete),
-              onTap: (){
-                showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
-              },
-            ),
+            CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto edit
+            }),
+            SizedBox(width: 30),
+            CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
+            }),
           ],
         ),
         transitionBetweenRoutes: false,

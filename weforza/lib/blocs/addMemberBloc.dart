@@ -108,11 +108,6 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-  ///This function handles image selection
-  void onSelectImage(){
-    //TODO
-  }
-
 
   @override
   void dispose() {

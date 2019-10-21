@@ -1,15 +1,11 @@
 
-import 'dart:io';
-
 import 'package:flutter/widgets.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/blocs/iProfileImagePicker.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 ///This is the [Bloc] for AddMemberPage.
-class AddMemberBloc extends Bloc implements IProfileImagePicker {
+class AddMemberBloc extends Bloc {
   ///Standard issue constructor.
   ///Takes an [IMemberRepository].
   AddMemberBloc(this._repository): assert(_repository != null);
@@ -26,9 +22,6 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   String _firstName;
   String _lastName;
   String _phone;
-
-  ///A selected profile image
-  File _profileImage;
 
   ///The actual errors.
   String firstNameError;
@@ -114,14 +107,6 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     }
     return phoneError;
   }
-
-  @override
-  Future<void> pickProfileImage() async {
-    _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);
-  }
-
-  @override
-  File getImage() => _profileImage;
 
   @override
   void dispose() {

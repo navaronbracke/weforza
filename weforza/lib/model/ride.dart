@@ -1,15 +1,19 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/model/member.dart';
 
 ///This class represents a Ride.
 class Ride {
-
   Ride(this.date,this.attendees) : assert(date != null && attendees != null);
+
+  ///An id for in the database.
+  int id;
 
   ///The Date of the Ride.
   final DateTime date;
+
+  ///The attendees of the Ride.
+  final List<Attendee> attendees;
 
   String getFormattedDate(BuildContext context){
     String prefix;
@@ -31,7 +35,33 @@ class Ride {
     return prefix == null ? S.of(context).UnknownDate : "$prefix ${date.day}-${date.month}-${date.year}";
   }
 
+  Map<String,dynamic> toMap(){
+    return {
+      "date": {
+        "year": date.year,
+        "month": date.month,
+        "day": date.day,
+      },
+      "attendees": attendees.map((member) => {
+        "firstname": member.firstname,
+        "lastname": member.lastname,
+        "phone": member.phone,
+      })
+    };
+  }
 
-  ///The attendees of the Ride.
-  final List<Member> attendees;
+  static Ride fromMap(Map<String,dynamic> map){
+    List<Attendee> list = List();
+    map.forEach((key,value){
+      list.add(Attendee(value["firstname"], value["lastname"], value["phone"]));
+    });
+    return Ride(DateTime(map["year"],map["month"],map["day"]),list);
+  }
+}
+
+class Attendee {
+  Attendee(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
+  final String firstname;
+  final String lastname;
+  final String phone;
 }

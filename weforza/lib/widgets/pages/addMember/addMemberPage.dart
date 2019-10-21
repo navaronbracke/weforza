@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/blocs/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -19,11 +23,13 @@ class AddMemberPage extends StatefulWidget {
 
 ///This is the [State] class for [AddMemberPage].
 class _AddMemberPageState extends State<AddMemberPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
   _AddMemberPageState(this._bloc);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
+
+  File _profileImage;
 
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
@@ -188,9 +194,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){
-                            //TODO on select image
-                          },Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                          ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -320,9 +324,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              ProfileImagePicker((){
-                                //TODO on select image
-                              },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                              ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                             ],
                           ),
                         ),
@@ -441,9 +443,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){
-                            //TODO on select image
-                          },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                          ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -549,9 +549,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        ProfileImagePicker((){
-                          //TODO on select image
-                        },Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                        ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
                       ],
                     ),
                   ),
@@ -583,5 +581,14 @@ class _AddMemberPageState extends State<AddMemberPage>
   void dispose() {
     _bloc.dispose();
     super.dispose();
+  }
+
+  @override
+  File getImage() => _profileImage;
+
+  @override
+  Future<void> pickProfileImage() async {
+    _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {});
   }
 }

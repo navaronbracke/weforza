@@ -1,4 +1,3 @@
-
 ///This class represents a 'Member.'
 ///
 ///A member has a first name, last name and a phone number.
@@ -14,18 +13,53 @@ class Member {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  Member(this.firstname,this.lastname,this.phone,this.devices): assert(firstname != null && lastname != null && phone != null);
+  Member(this.firstname,this.lastname,this.phone,this.devices,[this.wasPresentCount = 0,this.profileImageFileName]): assert(firstname != null && lastname != null && phone != null);
+
+  ///An id for in the database.
+  int id;
+
+  ///A member's first name.
+  String firstname;
+
+  ///A member's last name.
+  String lastname;
 
   ///A member's phone number.
   ///Note that [_phone] is a String, integers can't do leading zeroes.
   String phone;
-  ///A member's first name.
-  String firstname;
-  ///A member's last name.
-  String lastname;
+
+  String profileImageFileName;
+
   ///A member's number of times he/she was present.
-  int wasPresentCount = 0;
+  int wasPresentCount;
   ///The list of devices of this person.
   ///We can only retrieve device name reliably with bluetooth, hence the String.
   List<String> devices;
+
+
+  Map<String,dynamic> toMap(){
+    return {
+      "firstname": firstname,
+      "lastname": lastname,
+      "phone": phone,
+      "wasPresentCount": wasPresentCount,
+      "devices": devices,
+      "profile": profileImageFileName
+    };
+  }
+
+  static Member fromMap(Map<String,dynamic> map) {
+    return Member(
+      map["firstname"],
+      map["lastname"],
+      map["phone"],
+      List.from(map["devices"]),
+      map["wasPresentCount"],
+      map["profileImageFileName"]
+    );
+  }
+
+
+
+
 }

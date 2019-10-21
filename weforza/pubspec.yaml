@@ -14,7 +14,7 @@ description: The WeForza Flutter App
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.5.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -30,6 +30,14 @@ dependencies:
   # This package allows the use of Dependency Injection.
   flutter_simple_dependency_injection: ^1.0.1
 
+  #The following dependencies enable local persistence
+  sembast: ^2.1.0
+
+  # For OS-specific directory paths
+  path_provider: ^1.3.1
+
+  path: ^1.6.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,7 +46,6 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   test: any
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

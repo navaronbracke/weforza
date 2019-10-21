@@ -43,6 +43,7 @@
   "AddMemberTitle": "New Member",
   "AddMemberSubmit": "Create New Member",
   "AddMemberPictureLabel": "Picture",
+  "AddMemberAlreadyExists": "This member already exists",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

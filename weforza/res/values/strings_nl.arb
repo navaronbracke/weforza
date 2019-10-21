@@ -43,6 +43,7 @@
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
   "AddMemberPictureLabel": "Foto",
+  "AddMemberAlreadyExists": "Dit lid bestaat al",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

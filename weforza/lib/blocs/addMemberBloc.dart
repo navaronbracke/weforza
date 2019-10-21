@@ -108,6 +108,13 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
+  Future<bool> checkIfExists() {
+    return _repository.checkIfExists(_firstName, _lastName, _phone);
+  }
+  
+  Future addMember(String imageFileName) async {
+    await _repository.addMember(Member(_firstName,_lastName,_phone,List(),0,imageFileName));
+  }
 
   @override
   void dispose() {

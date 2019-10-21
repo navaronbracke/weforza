@@ -17,11 +17,11 @@ class InjectionContainer {
   static void initProductionInjector(){
     _injector = Injector.getInjector();
     //database
-    _injector.map<IDatabaseProvider>((i) => DatabaseProvider(),isSingleton: true);
-
+    _injector.map<MemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    _injector.map<RideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
     //repositories
-    _injector.map<IMemberRepository>((i) => MemberRepository(i.get<IDatabaseProvider>()),isSingleton: true);
-    _injector.map<IRideRepository>((i) => RideRepository(),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => MemberRepository(i.get<MemberDao>()),isSingleton: true);
+    _injector.map<IRideRepository>((i) => RideRepository(i.get<RideDao>()),isSingleton: true);
     //blocs
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
@@ -34,10 +34,9 @@ class InjectionContainer {
   ///Initialize an [Injector] for testing.
   static void initTestInjector(){
     _injector = Injector.getInjector();
-    //database
-    _injector.map<IDatabaseProvider>((i) => TestDatabaseProvider(),isSingleton: true);
+
     //repositories
-    _injector.map<IMemberRepository>((i) => TestMemberRepository(i.get<IDatabaseProvider>()),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => TestMemberRepository(),isSingleton: true);
     _injector.map<IRideRepository>((i) => TestRideRepository(),isSingleton: true);
     //blocs
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));

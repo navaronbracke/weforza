@@ -9,10 +9,12 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
 
 // Set up a Production injector and run the app.
-void main(){
-  InjectionContainer.initProductionInjector();
+void main() async {
   //Initialize the database before running the app.
-  InjectionContainer.get<IDatabaseProvider>().initializeDatabase();
+  await DatabaseProvider.initializeDatabase();
+  //Only now we can setup the injector, since the database is up.
+  //The injector provides the Dao's with the newly created database.
+  InjectionContainer.initProductionInjector();
   runApp(WeForzaApp());
 }
 
@@ -60,7 +62,7 @@ class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget 
 
   @override
   void dispose() {
-    InjectionContainer.get<IDatabaseProvider>().dispose();
+    DatabaseProvider.dispose();
     super.dispose();
   }
 }

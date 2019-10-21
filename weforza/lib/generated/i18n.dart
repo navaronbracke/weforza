@@ -21,6 +21,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  String get AddMemberAlreadyExists => "This member already exists";
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
@@ -100,6 +101,8 @@ class $nl extends S {
   String get RideListNoRides => "Er zijn geen ritten";
   @override
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen? Het lid wordt permanent verwijderd.";
+  @override
+  String get AddMemberAlreadyExists => "Dit lid bestaat al";
   @override
   String get MondayPrefix => "Ma";
   @override

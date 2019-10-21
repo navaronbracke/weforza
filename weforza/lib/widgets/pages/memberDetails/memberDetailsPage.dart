@@ -18,7 +18,7 @@ class MemberDetailsPage extends StatefulWidget {
 
 ///This is the [State] class for [MemberDetailsPage].
 class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
-  _MemberDetailsPageState(this._bloc);
+  _MemberDetailsPageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC in charge of the content.
   final MemberDetailsBloc _bloc;

@@ -1,8 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/blocs/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -19,11 +24,15 @@ class AddMemberPage extends StatefulWidget {
 
 ///This is the [State] class for [AddMemberPage].
 class _AddMemberPageState extends State<AddMemberPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
-  _AddMemberPageState(this._bloc);
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
+  _AddMemberPageState(this._bloc): assert(_bloc != null);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
+
+  File _profileImage;
+
+  bool _alreadyExists = false;
 
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
@@ -47,6 +56,7 @@ class _AddMemberPageState extends State<AddMemberPage>
   String _phoneIllegalCharactersMessage;
   String _phoneMinLengthMessage;
   String _phoneMaxLengthMessage;
+  String _alreadyExistsMessage;
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -76,6 +86,7 @@ class _AddMemberPageState extends State<AddMemberPage>
         translator.PhoneMinLength("${_bloc.phoneMinLength}");
     _phoneMaxLengthMessage =
         translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
+    _alreadyExistsMessage = translator.AddMemberAlreadyExists;
   }
 
   @override
@@ -188,9 +199,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){
-                            //TODO on select image
-                          },Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                          ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -201,15 +210,28 @@ class _AddMemberPageState extends State<AddMemberPage>
             Container(
               child: Align(
                 alignment: Alignment.center,
-                child: RaisedButton(
-                  color: Theme.of(context).primaryColor,
-                  child: Text(S.of(context).AddMemberSubmit,
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    if (_formKey.currentState.validate()) {
-                      //TODO save person with bloc
-                    }
-                  },
+                child: Column(
+                  children: <Widget>[
+                    Visibility(visible: _alreadyExists,child: Text(_alreadyExistsMessage)),
+                    SizedBox(height: 10),
+                    RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      child: Text(S.of(context).AddMemberSubmit,
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          _alreadyExists = await _bloc.checkIfExists();
+                          setState(() {});
+                          if(!_alreadyExists){
+                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                              //Go back to member list page
+                              Navigator.pop(context);
+                            });
+                          }
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -320,9 +342,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              ProfileImagePicker((){
-                                //TODO on select image
-                              },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                              ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                             ],
                           ),
                         ),
@@ -340,7 +360,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        //TODO save person with bloc
+                        _alreadyExists = await _bloc.checkIfExists();
+                        setState(() {});
+                        if(!_alreadyExists){
+                          _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                            //Go back to member list page
+                            Navigator.pop(context);
+                          });
+                        }
                       }
                     },
                   ),
@@ -441,9 +468,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker((){
-                            //TODO on select image
-                          },CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                          ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
                         ],
                       ),
                     ),
@@ -457,7 +482,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
-                            //TODO save person with bloc
+                            _alreadyExists = await _bloc.checkIfExists();
+                            setState(() {});
+                            if(!_alreadyExists){
+                              _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                                //Go back to member list page
+                                Navigator.pop(context);
+                              });
+                            }
                           }
                         },
                       ),
@@ -549,9 +581,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        ProfileImagePicker((){
-                          //TODO on select image
-                        },Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                        ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
                       ],
                     ),
                   ),
@@ -565,7 +595,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                           style: TextStyle(color: Colors.white)),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
-                          //TODO save person with bloc
+                          _alreadyExists = await _bloc.checkIfExists();
+                          setState(() {});
+                          if(!_alreadyExists){
+                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                              //Go back to member list page
+                              Navigator.pop(context);
+                            });
+                          }
                         }
                       },
                     ),
@@ -583,5 +620,14 @@ class _AddMemberPageState extends State<AddMemberPage>
   void dispose() {
     _bloc.dispose();
     super.dispose();
+  }
+
+  @override
+  File getImage() => _profileImage;
+
+  @override
+  Future<void> pickProfileImage() async {
+    _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {});
   }
 }

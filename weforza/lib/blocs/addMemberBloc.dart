@@ -108,7 +108,6 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-
   @override
   void dispose() {
     firstNameController.dispose();

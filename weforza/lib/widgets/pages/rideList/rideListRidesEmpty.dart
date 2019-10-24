@@ -7,14 +7,18 @@ class RideListRidesEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).RideListNoRides),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListAddRideInstruction),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(S.of(context).RideListNoRides),
+            SizedBox(height: 10),
+            Text(S.of(context).RideListAddRideInstruction),
+            Text(S.of(context).RideListAddRideInstructionPlus),
+          ],
+        ),
       ),
     );
   }

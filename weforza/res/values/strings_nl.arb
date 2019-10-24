@@ -23,8 +23,10 @@
   "RideListAttendeesHeader": "Aanwezigen",
   "RideListNoRides": "Er zijn geen ritten",
   "RideListNoMembers": "Er zijn geen leden",
-  "RideListAddRideInstruction": "Voeg een rit toe met de +",
-  "RideListAddMemberInstruction": "Voeg leden toe in het leden menu",
+  "RideListAddRideInstructionPlus": "met de +",
+  "RideListAddRideInstruction": "Voeg een rit toe",
+  "RideListAddMemberInstruction": "Voeg leden toe",
+  "RideListAddMemberInstructionUseMenu": "in het leden menu",
   "RideListLoadingRidesFailed": "Kon de ritten niet ophalen",
   "RideListLoadingMembersFailed": "Kon de leden niet ophalen",
   "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
@@ -36,7 +38,7 @@
   "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken.",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
-  "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen? Het lid wordt permanent verwijderd.",
+  "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
   "MemberDeleteDialogCancel": "Annuleren",
   "MemberDeleteDialogConfirm": "Verwijderen",
 

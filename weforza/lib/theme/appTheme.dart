@@ -10,10 +10,11 @@ abstract class ApplicationTheme {
 
   ///Cupertino Theme colors.
   static final Color _iosPrimaryColor = Colors.blue;
-  static final Color _iosAccentColor = Colors.blueAccent;
+  static final Color _iosAccentColor = Colors.blue.shade300;
 
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
+  static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

@@ -10,6 +10,7 @@ import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] will display a list of members.
@@ -50,14 +51,14 @@ class _MemberListPageState extends State<MemberListPage>
           //Import button
           IconButton(
             icon: Icon(Icons.file_download, color: Colors.white),
-            onPressed: () {
-              //TODO: go to import file screen
+            onPressed: (){
+              //TODO goto import
             },
           ),
           IconButton(
             icon: Icon(Icons.file_upload, color: Colors.white),
-            onPressed: () {
-              //TODO: go to export file screen
+            onPressed: (){
+              //TODO goto export
             },
           ),
         ],
@@ -81,24 +82,17 @@ class _MemberListPageState extends State<MemberListPage>
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            GestureDetector(
-              child: Icon(Icons.person_add),
-              onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
-            ),
+            CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()));
+            }),
             SizedBox(width: 10),
-            GestureDetector(
-              child: Icon(Icons.file_download),
-              onTap: (){
-                //TODO goto import file
-              },
-            ),
+            CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto import file
+            }),
             SizedBox(width: 10),
-            GestureDetector(
-              child: Icon(Icons.file_upload),
-              onTap: (){
-                //TODO goto export file
-              },
-            ),
+            CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto export file
+            }),
           ],
         ),
       ),

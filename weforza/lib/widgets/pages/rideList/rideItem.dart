@@ -16,7 +16,7 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
   Widget buildAndroidWidget(BuildContext context) {
     //TODO background color states
     return Card(
-      color: Color.fromARGB(255, 220, 220, 220),
+      elevation: 4.0,
       child: InkWell(
         onTap: (){
           //TODO

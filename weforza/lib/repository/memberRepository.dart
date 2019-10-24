@@ -31,18 +31,13 @@ class MemberRepository implements IMemberRepository {
   Future<List<Member>> getAllMembers() => _dao.getMembers();
 
   @override
-  Future deleteMember(int id) async {
-    // TODO: implement deletePerson
-  }
+  Future deleteMember(int id) async => _dao.deleteMember(id);
 
   @override
   Future<bool> checkIfExists(String firstname,String lastname, String phone)async => _dao.checkIfExists(firstname, lastname, phone);
 
   @override
-  Future editMember(Member member) {
-    // TODO: implement editMember
-    return null;
-  }
+  Future editMember(Member member) => _dao.editMember(member);
 }
 
 ///This class is a test version of [IMemberRepository].

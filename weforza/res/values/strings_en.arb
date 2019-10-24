@@ -23,8 +23,10 @@
   "RideListAttendeesHeader": "Attendees",
   "RideListNoRides": "There are no rides",
   "RideListNoMembers": "There are no members",
-  "RideListAddRideInstruction": "Add a ride with the + icon",
-  "RideListAddMemberInstruction": "Add members in the members menu",
+  "RideListAddRideInstruction": "Add a ride",
+  "RideListAddRideInstructionPlus": "with the +",
+  "RideListAddMemberInstruction": "Add members",
+  "RideListAddMemberInstructionUseMenu": "in the members menu",
   "RideListLoadingRidesFailed": "Could not load the rides",
   "RideListLoadingMembersFailed": "Could not load the members",
   "RideListFilterShowAttendingOnly": "Only attending people",
@@ -36,7 +38,7 @@
   "MemberDetailsAddDevicesInstruction": "Add devices by editing this member.",
 
   "MemberDeleteDialogTitle": "Delete Member",
-  "MemberDeleteDialogDescription": "Are you sure that you want to delete this member? The member will be permanently deleted.",
+  "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",
   "MemberDeleteDialogCancel": "Cancel",
   "MemberDeleteDialogConfirm": "Delete",
 
@@ -60,7 +62,5 @@
   "PhoneMinLength": "A phone number is minimum $minLength digits long",
   "PhoneMaxLength": "A phone number is maximum $maxLength digits long",
 
-
   "ValueIsRequired": "$value is required"
-
 }

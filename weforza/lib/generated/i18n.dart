@@ -35,7 +35,7 @@ class S implements WidgetsLocalizations {
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberDeleteDialogCancel => "Cancel";
   String get MemberDeleteDialogConfirm => "Delete";
-  String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member? The member will be permanently deleted.";
+  String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogTitle => "Delete Member";
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member.";
   String get MemberDetailsNoDevices => "This member has no devices yet.";
@@ -51,8 +51,10 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
-  String get RideListAddMemberInstruction => "Add members in the members menu";
-  String get RideListAddRideInstruction => "Add a ride with the + icon";
+  String get RideListAddMemberInstruction => "Add members";
+  String get RideListAddMemberInstructionUseMenu => "in the members menu";
+  String get RideListAddRideInstruction => "Add a ride";
+  String get RideListAddRideInstructionPlus => "with the +";
   String get RideListAttendeesHeader => "Attendees";
   String get RideListFilterShowAttendingOnly => "Only attending people";
   String get RideListLoadingMembersFailed => "Could not load the members";
@@ -86,6 +88,8 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
+  String get RideListAddMemberInstructionUseMenu => "in het leden menu";
+  @override
   String get RideListRidesHeader => "Ritten";
   @override
   String get HomePageRidesTab => "Ritten";
@@ -100,7 +104,7 @@ class $nl extends S {
   @override
   String get RideListNoRides => "Er zijn geen ritten";
   @override
-  String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen? Het lid wordt permanent verwijderd.";
+  String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
   @override
@@ -122,7 +126,7 @@ class $nl extends S {
   @override
   String get AddMemberTitle => "Nieuw lid";
   @override
-  String get RideListAddRideInstruction => "Voeg een rit toe met de +";
+  String get RideListAddRideInstruction => "Voeg een rit toe";
   @override
   String get PersonLastNameLabel => "Familienaam";
   @override
@@ -136,7 +140,7 @@ class $nl extends S {
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
-  String get RideListAddMemberInstruction => "Voeg leden toe in het leden menu";
+  String get RideListAddMemberInstruction => "Voeg leden toe";
   @override
   String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
   @override
@@ -159,6 +163,8 @@ class $nl extends S {
   String get TuesdayPrefix => "Di";
   @override
   String get AddMemberPictureLabel => "Foto";
+  @override
+  String get RideListAddRideInstructionPlus => "met de +";
   @override
   String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
   @override

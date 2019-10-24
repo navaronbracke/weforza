@@ -21,32 +21,19 @@ class RideRepository implements IRideRepository {
   final RideDao _dao;
 
   @override
-  Future addRide(Ride ride) async {
-    await _dao.addRide(ride);
-  }
+  Future addRide(Ride ride) => _dao.addRide(ride);
 
   @override
-  Future<bool> checkIfExists(DateTime date) {
-    // TODO: implement checkIfExists
-    return null;
-  }
+  Future<bool> checkIfExists(DateTime date) => _dao.checkIfExists(date);
 
   @override
-  Future deleteRide(int id) {
-    // TODO: implement deleteRide
-    return null;
-  }
+  Future deleteRide(int id) => _dao.deleteRide(id);
 
   @override
-  Future editRide(Ride ride) {
-    // TODO: implement editRide
-    return null;
-  }
+  Future editRide(Ride ride) => _dao.editRide(ride);
 
   @override
-  Future<List<Ride>> getAllRides() {
-    return _dao.getRides();
-  }
+  Future<List<Ride>> getAllRides() => _dao.getRides();
 
 }
 

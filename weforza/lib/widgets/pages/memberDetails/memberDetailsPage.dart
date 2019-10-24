@@ -2,10 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/deleteMemberBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -74,7 +76,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              showDialog(context: context, builder: (context)=> _DeleteMemberDialog());
+              showDialog(context: context, builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+              .then((value){
+                //Member was deleted, go back to list
+                if(value){
+                  Navigator.pop(context);
+                }
+              });
             },
           ),
         ],
@@ -92,7 +100,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                     width: 100,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        //TODO replace wih image
+                        //TODO replace wih image, use future builder, we need to check in async
                         color: Theme.of(context).accentColor
                     ),
                   ),
@@ -147,7 +155,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              showDialog(context: context, builder: (context)=> _DeleteMemberDialog());
+              showDialog(context: context, builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+                  .then((value){
+                    //Member was deleted, go back to list
+                    if(value){
+                      Navigator.pop(context);
+                    }
+                  });
             },
           ),
         ],
@@ -214,7 +228,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             }),
             SizedBox(width: 30),
             CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
+              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+                  .then((value){
+                //Member was deleted, go back to list
+                if(value){
+                  Navigator.pop(context);
+                }
+              });
             }),
           ],
         ),
@@ -288,7 +308,12 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             }),
             SizedBox(width: 30),
             CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog());
+              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))              .then((value){
+                //Member was deleted, go back to list
+                if(value){
+                  Navigator.pop(context);
+                }
+              });
             }),
           ],
         ),
@@ -365,6 +390,9 @@ class _MemberDetailsDevicesEmpty extends StatelessWidget {
 
 ///This [Widget] is the dialog for deleting a member in [MemberDetailsPage].
 class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget {
+  _DeleteMemberDialog(this._bloc);
+
+  final DeleteMemberBloc _bloc;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -378,13 +406,14 @@ class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget
         FlatButton(
           child: Text(S.of(context).MemberDeleteDialogCancel),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.pop(context,false);
           },
         ),
         FlatButton(
           child: Text(S.of(context).MemberDeleteDialogConfirm,style: TextStyle(color: Colors.red)),
-          onPressed: (){
-            //TODO delete with bloc and dismiss
+          onPressed: () async {
+            await _bloc.deleteMember();
+            Navigator.pop(context,true);
           },
         ),
       ],
@@ -400,13 +429,14 @@ class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget
         CupertinoButton(
           child: Text(S.of(context).MemberDeleteDialogCancel),
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.pop(context,false);
           },
         ),
         CupertinoButton(
           child: Text(S.of(context).MemberDeleteDialogConfirm,style: TextStyle(color: Colors.red)),
-          onPressed: (){
-            //TODO delete with bloc and dismiss 
+          onPressed: () async {
+            await _bloc.deleteMember();
+            Navigator.pop(context,true);
           },
         ),
       ],

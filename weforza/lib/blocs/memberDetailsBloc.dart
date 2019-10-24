@@ -14,6 +14,7 @@ class MemberDetailsBloc extends Bloc {
   String get phone => _member.phone;
   int get wasPresentCount => _member.wasPresentCount;
   List<String> get devices => List.unmodifiable(_member.devices);
+  int get id => _member.id;
 
   @override
   void dispose() {}

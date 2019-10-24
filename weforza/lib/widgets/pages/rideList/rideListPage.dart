@@ -6,9 +6,14 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/widgets/loadingIndicator.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
+import 'package:weforza/widgets/pages/rideList/rideListMembersEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListMembersError.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRidesEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRidesError.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
@@ -196,33 +201,21 @@ class _RideListPageState extends State<RideListPage>
         trailing: Text(_bloc.attendingCount),
         middle: Row(
           children: <Widget>[
-            GestureDetector(
-              child: Icon(Icons.add),
-              onTap: () {
-                //TODO add ride for today if not added yet
-              },
-            ),
+            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO goto add ride screen
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.bluetooth_searching),
-              onTap: () {
-                //TODO scanning
-              },
-            ),
+            CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO scanning
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.file_download),
-              onTap: () {
-                //TODO import
-              },
-            ),
+            CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO import
+            }),
             SizedBox(width: 20),
-            GestureDetector(
-              child: Icon(Icons.file_upload),
-              onTap: () {
-                //TODO export
-              },
-            ),
+            CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+              //TODO export
+            }),
           ],
         ),
       ),
@@ -268,33 +261,21 @@ class _RideListPageState extends State<RideListPage>
           children: <Widget>[
             Row(
               children: <Widget>[
-                GestureDetector(
-                  child: Icon(Icons.add),
-                  onTap: () {
-                    //TODO add ride for today if not added yet
-                  },
-                ),
+                CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO goto add ride screen
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.bluetooth_searching),
-                  onTap: () {
-                    //TODO scanning
-                  },
-                ),
+                CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO scanning
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.file_download),
-                  onTap: () {
-                    //TODO import
-                  },
-                ),
+                CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO import
+                }),
                 SizedBox(width: 20),
-                GestureDetector(
-                  child: Icon(Icons.file_upload),
-                  onTap: () {
-                    //TODO export
-                  },
-                ),
+                CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO export
+                }),
               ],
             ),
             Expanded(
@@ -337,15 +318,15 @@ class _RideListPageState extends State<RideListPage>
             child: _rideListBuilder(
                 _bloc.getAllRides(),
                 PlatformAwareLoadingIndicator(),
-                _RideListRidesError(),
-                _RideListRidesEmpty())),
+                RideListRidesError(),
+                RideListRidesEmpty())),
         Flexible(
           flex: 3,
           child: _attendeesListBuilder(
               _bloc.getAllMembers(),
               PlatformAwareLoadingIndicator(),
-              _RideListMembersError(),
-              _RideListMembersEmpty()),
+              RideListMembersError(),
+              RideListMembersEmpty()),
         ),
       ],
     );
@@ -404,62 +385,6 @@ class _RideListPageState extends State<RideListPage>
           return loading;
         }
       },
-    );
-  }
-}
-
-///This class represents an empty list [Widget] for the 'Rides' section of [RideListPage].
-class _RideListRidesEmpty extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).RideListNoRides),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListAddRideInstruction),
-        ],
-      ),
-    );
-  }
-}
-
-///This class represents an empty list [Widget] for the 'Members' section of [RideListPage].
-class _RideListMembersEmpty extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).RideListNoMembers),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListAddMemberInstruction),
-        ],
-      ),
-    );
-  }
-}
-
-///This class represents an error [Widget] for the 'Rides' section of [RideListPage].
-class _RideListRidesError extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(S.of(context).RideListLoadingRidesFailed),
-    );
-  }
-}
-
-///This class represents an error [Widget] for the 'Members' section of [RideListPage].
-class _RideListMembersError extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(S.of(context).RideListLoadingMembersFailed),
     );
   }
 }

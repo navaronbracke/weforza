@@ -4,6 +4,7 @@ import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/blocs/memberSelectBloc.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
+import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
@@ -15,9 +16,12 @@ class InjectionContainer {
   ///Initialize an [Injector] for production.
   static void initProductionInjector(){
     _injector = Injector.getInjector();
+    //database
+    _injector.map<MemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    _injector.map<RideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
     //repositories
-    _injector.map<IMemberRepository>((i) => MemberRepository(),isSingleton: true);
-    _injector.map<IRideRepository>((i) => RideRepository(),isSingleton: true);
+    _injector.map<IMemberRepository>((i) => MemberRepository(i.get<MemberDao>()),isSingleton: true);
+    _injector.map<IRideRepository>((i) => RideRepository(i.get<RideDao>()),isSingleton: true);
     //blocs
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
@@ -30,6 +34,7 @@ class InjectionContainer {
   ///Initialize an [Injector] for testing.
   static void initTestInjector(){
     _injector = Injector.getInjector();
+
     //repositories
     _injector.map<IMemberRepository>((i) => TestMemberRepository(),isSingleton: true);
     _injector.map<IRideRepository>((i) => TestRideRepository(),isSingleton: true);

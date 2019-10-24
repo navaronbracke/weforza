@@ -8,7 +8,7 @@ import 'bloc.dart';
 
 ///This class represents a Bloc for MemberListPage.
 class MemberListBloc extends Bloc {
-  MemberListBloc(this._memberRepository);
+  MemberListBloc(this._memberRepository):assert(_memberRepository != null);
 
   ///The repository that will manipulate the list of members.
   final IMemberRepository _memberRepository;

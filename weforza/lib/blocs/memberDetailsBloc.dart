@@ -4,7 +4,7 @@ import 'package:weforza/model/member.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {
-  MemberDetailsBloc(this._member);
+  MemberDetailsBloc(this._member): assert(_member != null);
 
   ///The [Member] that should be displayed.
   final Member _member;

@@ -12,10 +12,11 @@ class DeleteMemberBloc extends Bloc {
   ///The id of the to be deleted Member.
   final int _memberId;
 
+  ///Dispose of this object.
   @override
   void dispose() {}
 
-  ///Delete a member with the given id.
+  ///Delete a member with the given id [_memberId].
   Future deleteMember() async {
     await _repository.deleteMember(_memberId);
   }

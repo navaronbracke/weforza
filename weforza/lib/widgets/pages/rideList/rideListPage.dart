@@ -51,7 +51,6 @@ class _RideListPageState extends State<RideListPage>
     );
   }
 
-  ///This method builds the portrait layout for Android.
   @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
@@ -65,8 +64,7 @@ class _RideListPageState extends State<RideListPage>
                     icon: Icon(Icons.add),
                     color: Colors.white,
                     onPressed: () {
-                      //TODO Add ride for today
-                      //TODO disable if already added
+                      //TODO Add ride
                     },
                   ),
                   IconButton(
@@ -128,7 +126,6 @@ class _RideListPageState extends State<RideListPage>
     );
   }
 
-  ///This method builds the landscape layout for Android.
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
@@ -192,7 +189,7 @@ class _RideListPageState extends State<RideListPage>
     );
   }
 
-  ///This method builds the portrait layout for IOS.
+
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
@@ -251,7 +248,6 @@ class _RideListPageState extends State<RideListPage>
     );
   }
 
-  ///This method builds the landscape layout for IOS.
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(

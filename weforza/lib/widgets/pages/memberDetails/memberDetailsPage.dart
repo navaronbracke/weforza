@@ -392,6 +392,7 @@ class _MemberDetailsDevicesEmpty extends StatelessWidget {
 class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget {
   _DeleteMemberDialog(this._bloc);
 
+  ///The Bloc that handles a submit.
   final DeleteMemberBloc _bloc;
 
   @override

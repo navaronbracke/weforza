@@ -18,29 +18,7 @@ void main(){
     });
 
     group("HomePage", (){
-
-      test("Layout", () async{
-
-        //Find the title
-        await driver.waitFor(find.text('WeForza'));
-
-        //Find button 1 and 2
-        await driver.waitFor(find.text('Event Catalog'));
-        await driver.waitFor(find.text('People Catalog'));
-      });
-
-      test("Navigate to PersonList", () async {
-        //Find button
-        await driver.waitFor(find.text('People Catalog'));
-        //Tap
-        await driver.tap(find.text('People Catalog'));
-        //wait for list page with title
-        await driver.waitFor(find.text('People Catalog'));
-      });
-
-      //navigate to events
+      //TODO write tests for HomePage
     });
-
-
   });
 }

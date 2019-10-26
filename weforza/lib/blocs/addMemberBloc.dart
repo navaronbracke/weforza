@@ -28,6 +28,7 @@ class AddMemberBloc extends Bloc {
   String lastNameError;
   String phoneError;
 
+  ///Length ranges for input.
   final int firstNameMaxLength = 50;
   final int lastNameMaxLength = 50;
   final int phoneMaxLength = 15;
@@ -108,14 +109,17 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
+  ///Check if a member with the current values already exists.
   Future<bool> checkIfExists() {
     return _repository.checkIfExists(_firstName, _lastName, _phone);
   }
-  
+
+  ///Add a new member. [imageFileName] is provided as the name of the selected profile image.
   Future addMember(String imageFileName) async {
     await _repository.addMember(Member(_firstName,_lastName,_phone,List(),0,imageFileName));
   }
 
+  ///Dispose of this object.
   @override
   void dispose() {
     firstNameController.dispose();

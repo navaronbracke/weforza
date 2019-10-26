@@ -22,20 +22,26 @@ abstract class IMemberRepository {
 class MemberRepository implements IMemberRepository {
   MemberRepository(this._dao): assert(_dao != null);
 
+  ///The internal DAO instance.
   final MemberDao _dao;
 
+  ///See [IMemberRepository].
   @override
   Future addMember(Member member) => _dao.addMember(member);
 
+  ///See [IMemberRepository].
   @override
   Future<List<Member>> getAllMembers() => _dao.getMembers();
 
+  ///See [IMemberRepository].
   @override
   Future deleteMember(int id) async => _dao.deleteMember(id);
 
+  ///See [IMemberRepository].
   @override
   Future<bool> checkIfExists(String firstname,String lastname, String phone)async => _dao.checkIfExists(firstname, lastname, phone);
 
+  ///See [IMemberRepository].
   @override
   Future editMember(Member member) => _dao.editMember(member);
 }

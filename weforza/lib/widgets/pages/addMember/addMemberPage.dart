@@ -30,8 +30,10 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
+  ///An image that should be used as profile image.
   File _profileImage;
 
+  ///A flag that indicates if a [Member], with the current values, already exists.
   bool _alreadyExists = false;
 
   ///The BLoC in charge of the form.
@@ -616,15 +618,18 @@ class _AddMemberPageState extends State<AddMemberPage>
     );
   }
 
+  ///Dispose of this object.
   @override
   void dispose() {
     _bloc.dispose();
     super.dispose();
   }
 
+  ///See [IProfileImagePicker].
   @override
   File getImage() => _profileImage;
 
+  ///See [IProfileImagePicker].
   @override
   Future<void> pickProfileImage() async {
     _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);

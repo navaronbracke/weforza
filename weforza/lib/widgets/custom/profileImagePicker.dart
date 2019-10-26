@@ -15,10 +15,12 @@ class ProfileImagePicker extends StatefulWidget {
   ///A [VoidCallback] for when this [Widget] is tapped.
   final IProfileImagePicker onPressedHandler;
   ///The background color when the [Widget] is idle.
-  final Color idleColor;//accent/primary constrasting
+  final Color idleColor;
   ///The background color when the [Widget] is being pressed.
-  final Color onPressedColor;//primary
-
+  final Color onPressedColor;
+  ///The selected image. When a new image is selected, the parent rebuilds.
+  ///Thus, since this [Widget] resides lower in the tree, it gets replaced by a new one.
+  ///Hence this property is final.
   final File image;
 
 

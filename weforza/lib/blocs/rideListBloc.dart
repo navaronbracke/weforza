@@ -9,7 +9,9 @@ import 'package:weforza/repository/rideRepository.dart';
 class RideListBloc extends Bloc {
   RideListBloc(this._memberRepository,this._rideRepository): assert(_rideRepository != null && _memberRepository != null);
 
+  ///The [IRideRepository] that will manage the Rides section of RideListPage.
   final IRideRepository _rideRepository;
+  ///The [IMemberRepository] that will manage the Members section of RideListPage.
   final IMemberRepository _memberRepository;
 
   ///Show only the attending people.
@@ -23,7 +25,7 @@ class RideListBloc extends Bloc {
   ///Get all members.
   Future<List<Member>> getAllMembers() => _memberRepository.getAllMembers();
 
-
+  ///Dispose of this object.
   @override
   void dispose() {}
 

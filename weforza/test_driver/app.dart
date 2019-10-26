@@ -11,7 +11,6 @@ void main() {
   //Don't forget to set up the injector.
   InjectionContainer.initTestInjector();
 
-  // Call the `main()` function of the app, or call `runApp` with
-  // any widget you are interested in testing.
+  //Start the app.
   runApp(app.WeForzaApp());
 }

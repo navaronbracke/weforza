@@ -110,48 +110,15 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         transitionBetweenRoutes: false,
         middle: Text(S.of(context).AddRideTitle),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-              child: AddRideCalendar()
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
-                CupertinoButton.filled(
-                    pressedOpacity: 0.5,
-                    child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: (){
-                  //TODO save selection with bloc after checking valid dates + is there a selection
-                }),
-              ],
+      child: SafeArea(
+          child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+                child: AddRideCalendar()
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Text(S.of(context).AddRideTitle),
-      ),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: AddRideCalendar(),
-            ),
-          ),
-          Flexible(
-            child: Center(
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -165,8 +132,46 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget buildIOSPortraitLayout(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Text(S.of(context).AddRideTitle),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: AddRideCalendar(),
+              ),
+            ),
+            Flexible(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
+                    SizedBox(height: 10),
+                    CupertinoButton.filled(
+                        pressedOpacity: 0.5,
+                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: (){
+                      //TODO save selection with bloc after checking valid dates + is there a selection
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

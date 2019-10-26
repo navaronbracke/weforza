@@ -1,5 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
@@ -32,25 +34,43 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
-    // TODO: implement buildAndroidLandscapeLayout
-    return null;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).AddRideTitle),
+      ),
+      body: Container(),
+    );
   }
 
   @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
-    // TODO: implement buildAndroidPortraitLayout
-    return null;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).AddRideTitle),
+      ),
+      body: Container(),
+    );
   }
 
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
-    // TODO: implement buildIOSLandscapeLayout
-    return null;
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Text(S.of(context).AddRideTitle),
+      ),
+      child: Container(),
+    );
   }
 
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
-    // TODO: implement buildIOSPortraitLayout
-    return null;
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Text(S.of(context).AddRideTitle),
+      ),
+      child: Container(),
+    );
   }
 }

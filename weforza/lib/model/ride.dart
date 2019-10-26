@@ -15,6 +15,7 @@ class Ride {
   ///The attendees of the Ride.
   final List<Attendee> attendees;
 
+  ///Get [date], but formatted with a day prefix.
   String getFormattedDate(BuildContext context){
     String prefix;
     switch(date.weekday){
@@ -35,6 +36,7 @@ class Ride {
     return prefix == null ? S.of(context).UnknownDate : "$prefix ${date.day}-${date.month}-${date.year}";
   }
 
+  ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
       "date": {
@@ -50,6 +52,7 @@ class Ride {
     };
   }
 
+  ///Create a Ride from a Map.
   static Ride fromMap(Map<String,dynamic> map){
     List<Attendee> list = List();
     map.forEach((key,value){
@@ -59,9 +62,13 @@ class Ride {
   }
 }
 
+///This class represents an Attendee for a Ride.
 class Attendee {
   Attendee(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
+  ///The attendee's first name.
   final String firstname;
+  ///The attendee's last name.
   final String lastname;
+  ///The attendee's phone.
   final String phone;
 }

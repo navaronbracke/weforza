@@ -28,6 +28,7 @@ class Member {
   ///Note that [_phone] is a String, integers can't do leading zeroes.
   String phone;
 
+  ///The name of the image file that was chosen as profile image.
   String profileImageFileName;
 
   ///A member's number of times he/she was present.
@@ -36,7 +37,7 @@ class Member {
   ///We can only retrieve device name reliably with bluetooth, hence the String.
   List<String> devices;
 
-
+  ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
       "firstname": firstname,
@@ -48,6 +49,7 @@ class Member {
     };
   }
 
+  ///Create a Member from a Map.
   static Member fromMap(Map<String,dynamic> map) {
     return Member(
       map["firstname"],
@@ -58,8 +60,4 @@ class Member {
       map["profileImageFileName"]
     );
   }
-
-
-
-
 }

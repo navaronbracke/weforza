@@ -6,6 +6,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
@@ -64,10 +65,7 @@ class _RideListPageState extends State<RideListPage>
                   IconButton(
                     icon: Icon(Icons.add),
                     color: Colors.white,
-                    onPressed: () {
-                      //TODO Add ride for today
-                      //TODO disable if already added
-                    },
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
                   ),
                   IconButton(
                     color: Colors.white,
@@ -139,10 +137,7 @@ class _RideListPageState extends State<RideListPage>
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () {
-                    //TODO Add ride for today
-                    //TODO disable if already added
-                  },
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
                 ),
                 IconButton(
                   icon: Icon(Icons.bluetooth_searching),
@@ -201,9 +196,8 @@ class _RideListPageState extends State<RideListPage>
         trailing: Text(_bloc.attendingCount),
         middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO goto add ride screen
-            }),
+            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+              () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
             SizedBox(width: 20),
             CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               //TODO scanning
@@ -261,9 +255,8 @@ class _RideListPageState extends State<RideListPage>
           children: <Widget>[
             Row(
               children: <Widget>[
-                CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO goto add ride screen
-                }),
+                CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
                 SizedBox(width: 20),
                 CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO scanning

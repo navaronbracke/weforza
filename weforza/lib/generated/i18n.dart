@@ -26,6 +26,7 @@ class S implements WidgetsLocalizations {
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideInvalidDateSelection => "One or more selected dates are already in use";
+  String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
   String get AppName => "WeForza";
   String get FirstNameBlank => "First Name can't be just whitespace";
@@ -129,6 +130,8 @@ class $nl extends S {
   String get AddMemberTitle => "Nieuw lid";
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe";
+  @override
+  String get AddRideSubmit => "Selectie Toevoegen";
   @override
   String get PersonLastNameLabel => "Familienaam";
   @override

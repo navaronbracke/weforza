@@ -10,11 +10,9 @@ import 'package:weforza/widgets/pages/homePage.dart';
 
 // Set up a Production injector and run the app.
 void main() async {
-  //Initialize the database before running the app.
-  await DatabaseProvider.initializeDatabase();
-  //Only now we can setup the injector, since the database is up.
-  //The injector provides the Dao's with the newly created database.
-  InjectionContainer.initProductionInjector();
+  //Await the injection setup.
+  //We initialize a production database, hence its async here.
+  await InjectionContainer.initProductionInjector();
   runApp(WeForzaApp());
 }
 

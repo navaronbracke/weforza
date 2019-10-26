@@ -8,8 +8,10 @@ import 'package:path/path.dart';
 
 ///This class provides a Sembast Database.
 class DatabaseProvider {
+  ///The internal database instance.
   static Database _database;
 
+  ///Get the database instance.
   static Database getDatabase() => _database;
 
   ///Initialize the database.

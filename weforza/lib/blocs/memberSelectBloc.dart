@@ -15,8 +15,10 @@ class MemberSelectBloc extends Bloc {
     _selectedMember = selected;
   }
 
+  ///Getter for [_selectedMember].
   Member get selectedMember => _selectedMember;
 
+  ///Dispose of this object.
   @override
   void dispose(){}
 }

@@ -14,7 +14,11 @@ class InjectionContainer {
   static Injector _injector;
 
   ///Initialize an [Injector] for production.
-  static void initProductionInjector(){
+  ///Note that this is an async function,since we initialize a production database.
+  static Future initProductionInjector() async {
+    //Initialize the production database.
+    await DatabaseProvider.initializeDatabase();
+    //Only now we configure the injector itself.
     _injector = Injector.getInjector();
     //database
     _injector.map<MemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);

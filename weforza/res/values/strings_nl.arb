@@ -49,6 +49,7 @@
 
   "AddRideTitle": "Nieuwe Rit",
   "AddRideInvalidDateSelection": "Eén of meerdere datums zijn al in gebruik",
+  "AddRideSubmit": "Selectie Toevoegen",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

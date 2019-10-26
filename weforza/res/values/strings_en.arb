@@ -49,6 +49,7 @@
 
   "AddRideTitle": "New Ride",
   "AddRideInvalidDateSelection": "One or more selected dates are already in use",
+  "AddRideSubmit": "Add Selection",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

@@ -4,34 +4,45 @@ import 'package:weforza/model/ride.dart';
 
 ///This interface defines a contract for manipulating [Ride]s.
 abstract class IRideRepository {
+  ///Get all rides.
   Future<List<Ride>> getAllRides();
 
+  ///Add a given ride.
   Future addRide(Ride ride);
 
+  ///Check if a ride with the given date already exists.
   Future<bool> checkIfExists(DateTime date);
 
+  ///Edit a given ride.
   Future editRide(Ride ride);
 
+  ///Delete a given ride.
   Future deleteRide(int id);
 }
 
 ///This class will manage the rides when in a production setting.
 class RideRepository implements IRideRepository {
   RideRepository(this._dao): assert(_dao != null);
+  ///The internal DAO instance.
   final RideDao _dao;
 
+  ///See [IRideRepository].
   @override
   Future addRide(Ride ride) => _dao.addRide(ride);
 
+  ///See [IRideRepository].
   @override
   Future<bool> checkIfExists(DateTime date) => _dao.checkIfExists(date);
 
+  ///See [IRideRepository].
   @override
   Future deleteRide(int id) => _dao.deleteRide(id);
 
+  ///See [IRideRepository].
   @override
   Future editRide(Ride ride) => _dao.editRide(ride);
 
+  ///See [IRideRepository].
   @override
   Future<List<Ride>> getAllRides() => _dao.getRides();
 

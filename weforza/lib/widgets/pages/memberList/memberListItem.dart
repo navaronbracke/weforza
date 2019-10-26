@@ -24,10 +24,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
   Widget build(BuildContext context) =>
       PlatformAwareWidgetBuilder.build(context, this);
 
-  ///Layout
-  ///
-  ///First name, last name and phone are on the left.
-  ///A details button is on the right.
+
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return ListTile(
@@ -54,10 +51,6 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
     );
   }
 
-  ///Layout
-  ///
-  ///First name, last name and phone are on the left.
-  ///A details button is on the right.
   @override
   Widget buildIosWidget(BuildContext context) {
     return Padding(

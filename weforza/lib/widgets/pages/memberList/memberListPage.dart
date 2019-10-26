@@ -33,10 +33,6 @@ class _MemberListPageState extends State<MemberListPage>
   ///The BLoC that handles the selection.
   final MemberSelectBloc _selectBloc;
 
-  ///Layout
-  ///
-  /// - AppBar (title + add person/import/export action)
-  /// - List || Empty || Loading || Error
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -68,10 +64,6 @@ class _MemberListPageState extends State<MemberListPage>
     );
   }
 
-  ///Layout
-  ///
-  /// - NavigationBar (title + add person/import/export action)
-  /// - List || Empty || Loading || Error
   @override
   Widget buildIosWidget(BuildContext context) {
     //Add person + list

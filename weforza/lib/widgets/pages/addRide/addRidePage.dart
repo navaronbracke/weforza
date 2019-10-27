@@ -23,6 +23,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///The BLoC for this page.
   final AddRideBloc _bloc;
 
+  String _emptySelectionMessage;
+
   @override
   Widget build(BuildContext context) =>
       PlatformAwareWidgetBuilder.build(context, this);
@@ -60,7 +62,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
+                Visibility(
+                  visible: _bloc.errorMessage.isNotEmpty,
+                  child: Text(_bloc.errorMessage),
+                ),
                 SizedBox(height: 10),
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
@@ -95,7 +100,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
+                  Visibility(
+                    visible: _bloc.errorMessage.isNotEmpty,
+                    child: Text(_bloc.errorMessage),
+                  ),
                   SizedBox(height: 10),
                   RaisedButton(
                     color: Theme.of(context).primaryColor,
@@ -132,7 +140,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
+                  Visibility(
+                    visible: _bloc.errorMessage.isNotEmpty,
+                    child: Text(_bloc.errorMessage),
+                  ),
                   SizedBox(height: 10),
                   CupertinoButton.filled(
                       pressedOpacity: 0.5,
@@ -168,12 +179,15 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(S.of(context).AddRideInvalidDateSelection),//TODO no rides selected message + put this error in the BLoC
+                    Visibility(
+                      visible: _bloc.errorMessage.isNotEmpty,
+                      child: Text(_bloc.errorMessage),
+                    ),
                     SizedBox(height: 10),
                     CupertinoButton.filled(
                         pressedOpacity: 0.5,
                         child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: (){
-                      //TODO save selection with bloc after checking valid dates + is there a selection
+                      //TODO save selection with bloc after checking selection > 0
                     }),
                   ],
                 ),
@@ -206,6 +220,11 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
           }
         }
     );
+  }
+
+  ///Initialize the string resources for this [Widget].
+  void initStrings(BuildContext context){
+    _emptySelectionMessage = S.of(context).AddRideEmptySelection;
   }
 
   ///See IRidePicker

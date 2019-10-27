@@ -48,9 +48,9 @@
   "AddMemberAlreadyExists": "This member already exists",
 
   "AddRideTitle": "New Ride",
-  "AddRideInvalidDateSelection": "One or more selected dates are already in use",
   "AddRideSubmit": "Add Selection",
   "AddRideLoadingFailed": "Could not load Calendar",
+  "AddRideEmptySelection": "Please select at least one date",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

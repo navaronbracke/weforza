@@ -38,6 +38,7 @@ class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget 
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),

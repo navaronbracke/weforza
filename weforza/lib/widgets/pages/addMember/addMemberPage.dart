@@ -91,24 +91,25 @@ class _AddMemberPageState extends State<AddMemberPage>
 
   ///Validate all current form input
   bool validateInputs(){
-    return _bloc.validateFirstName(
+    final firstNameValid =  _bloc.validateFirstName(
         _bloc.firstNameController.text,
         _firstNameRequiredMessage,
         _firstNameMaxLengthMessage,
         _firstNameIllegalCharactersMessage,
-        _firstNameBlankMessage).isEmpty &&
-        _bloc.validateLastName(
+        _firstNameBlankMessage).isEmpty;
+    final lastNameValid = _bloc.validateLastName(
             _bloc.lastNameController.text,
             _lastNameRequiredMessage,
             _lastNameMaxLengthMessage,
             _lastNameIllegalCharactersMessage,
-            _lastNameBlankMessage).isEmpty &&
-        _bloc.validatePhone(
+            _lastNameBlankMessage).isEmpty;
+    final phoneValid = _bloc.validatePhone(
             _bloc.phoneController.text,
             _phoneRequiredMessage,
             _phoneIllegalCharactersMessage,
             _phoneMinLengthMessage,
             _phoneMaxLengthMessage).isEmpty;
+    return firstNameValid && lastNameValid && phoneValid;
   }
 
   @override

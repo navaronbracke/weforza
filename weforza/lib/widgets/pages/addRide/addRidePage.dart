@@ -70,8 +70,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
                   child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                  onPressed:  (){
-                    //TODO save selection with bloc after checking valid dates + is there a selection
+                  onPressed: () async {
+                    if(_bloc.validateInputs(_emptySelectionMessage)){
+                      await _bloc.addRides();
+                      Navigator.pop(context);
+                    }else{
+                      setState(() {});
+                    }
                   },
                 ),
               ],
@@ -108,8 +113,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                   RaisedButton(
                     color: Theme.of(context).primaryColor,
                     child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                    onPressed:  (){
-                      //TODO save selection with bloc after checking valid dates + is there a selection
+                    onPressed:  () async {
+                      if(_bloc.validateInputs(_emptySelectionMessage)){
+                        await _bloc.addRides();
+                        Navigator.pop(context);
+                      }else{
+                        setState(() {});
+                      }
                     },
                   ),
                 ],
@@ -147,8 +157,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                   SizedBox(height: 10),
                   CupertinoButton.filled(
                       pressedOpacity: 0.5,
-                      child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: (){
-                    //TODO save selection with bloc after checking valid dates + is there a selection
+                      child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: () async {
+                    if(_bloc.validateInputs(_emptySelectionMessage)){
+                      await _bloc.addRides();
+                      Navigator.pop(context);
+                    }else{
+                      setState(() {});
+                    }
                   }),
                 ],
               ),
@@ -186,8 +201,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                     SizedBox(height: 10),
                     CupertinoButton.filled(
                         pressedOpacity: 0.5,
-                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: (){
-                      //TODO save selection with bloc after checking selection > 0
+                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: () async {
+                      if(_bloc.validateInputs(_emptySelectionMessage)){
+                        await _bloc.addRides();
+                        Navigator.pop(context);
+                      }else{
+                        setState(() {});
+                      }
                     }),
                   ],
                 ),

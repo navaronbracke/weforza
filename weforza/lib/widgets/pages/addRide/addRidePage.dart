@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/rideCalendarEvent.dart';
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/iRidePicker.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
@@ -13,7 +16,7 @@ class AddRidePage extends StatefulWidget {
 }
 
 ///This class is the State for [AddRidePage].
-class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRidePicker {
   _AddRidePageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC for this page.
@@ -49,7 +52,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
-              child: AddRideCalendar()
+              child: AddRideCalendar(this)
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
@@ -84,7 +87,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
           Flexible(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: AddRideCalendar(),
+              child: AddRideCalendar(this),
             ),
           ),
           Flexible(
@@ -122,7 +125,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-                child: AddRideCalendar()
+                child: AddRideCalendar(this)
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -158,7 +161,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
             Flexible(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 10),
-                child: AddRideCalendar(),
+                child: AddRideCalendar(this),
               ),
             ),
             Flexible(
@@ -182,4 +185,19 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       ),
     );
   }
+
+  ///See IRidePicker
+  @override
+  EventList<RideCalendarEvent> get markedDates => _bloc.markedDates;
+
+  ///See IRidePicker
+  @override
+  get onDayPressed => (date,events){
+    _bloc.onDayPressed(date);
+    setState(() {});
+  };
+
+  ///See IRidePicker
+  @override
+  DateTime get selectedDate => _bloc.selectedDate;
 }

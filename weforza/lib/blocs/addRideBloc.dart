@@ -64,6 +64,16 @@ class AddRideBloc extends Bloc {
     _existingRides = List.of(_markedDates.events.keys);
   }
 
+  ///Whether a day, has or had a ride planned beforehand.
+  bool dayHasRidePlanned(DateTime date){
+    assert(date != null);
+    return _existingRides.contains(date);
+  }
+
+  ///Whether a ride that is now selected, is a new to-be-scheduled ride.
+  bool dayIsNewlyScheduledRide(DateTime date) => _markedDates.events.keys.contains(date) && !_existingRides.contains(date);
+
+
   ///Dispose of this object.
   @override
   void dispose() {}

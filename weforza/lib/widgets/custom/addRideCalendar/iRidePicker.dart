@@ -15,4 +15,10 @@ abstract class IRidePicker {
 
   ///Load the existing rides into the calendar.
   Future loadRides();
+
+  ///Whether on a given date, there is or was a Ride planned.
+  bool dayHasRidePlanned(DateTime date);
+
+  ///Whether a given date is a newly scheduled ride.
+  bool dayIsNewlyScheduledRide(DateTime date);
 }

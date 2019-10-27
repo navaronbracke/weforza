@@ -89,6 +89,28 @@ class _AddMemberPageState extends State<AddMemberPage>
     _alreadyExistsMessage = translator.AddMemberAlreadyExists;
   }
 
+  ///Validate all current form input
+  bool validateInputs(){
+    return _bloc.validateFirstName(
+        _bloc.firstNameController.text,
+        _firstNameRequiredMessage,
+        _firstNameMaxLengthMessage,
+        _firstNameIllegalCharactersMessage,
+        _firstNameBlankMessage).isEmpty &&
+        _bloc.validateLastName(
+            _bloc.lastNameController.text,
+            _lastNameRequiredMessage,
+            _lastNameMaxLengthMessage,
+            _lastNameIllegalCharactersMessage,
+            _lastNameBlankMessage).isEmpty &&
+        _bloc.validatePhone(
+            _bloc.phoneController.text,
+            _phoneRequiredMessage,
+            _phoneIllegalCharactersMessage,
+            _phoneMinLengthMessage,
+            _phoneMaxLengthMessage).isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     _initStrings(context);
@@ -359,7 +381,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                     child: Text(S.of(context).AddMemberSubmit,
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
+                      //Validate the form before continuing.
+                      if(!validateInputs()){
+                        setState(() {});
+                      }else{
                         _alreadyExists = await _bloc.checkIfExists();
                         setState(() {});
                         if(!_alreadyExists){
@@ -481,7 +506,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                         child: Text(S.of(context).AddMemberSubmit,
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          //Validate the form before continuing.
+                          if(!validateInputs()){
+                            setState(() {});
+                          }else{
                             _alreadyExists = await _bloc.checkIfExists();
                             setState(() {});
                             if(!_alreadyExists){

@@ -107,10 +107,10 @@ class RideDao {
 
   RideDao(this._database):assert(_database != null);
 
-  ///Add a given Ride.
-  Future addRide(Ride ride) async {
-    assert(ride != null);
-    await _rideStore.add(_database, ride.toMap());
+  ///Add a given set of Rides.
+  Future addRides(List<Ride> rides) async {
+    assert(rides != null && rides.isNotEmpty);
+    await _rideStore.addAll(_database, rides.map((ride) => ride.toMap()));
   }
 
   ///Get all stored Rides.
@@ -127,19 +127,6 @@ class RideDao {
     list.sort((element1,element2)=> element1.date.compareTo(element2.date));
 
     return list;
-  }
-
-  ///Check if a given Ride exists.
-  Future<bool> checkIfExists(DateTime date) async {
-    final finder = Finder(
-      filter: Filter.and([
-        Filter.equals("date.year", date.year),
-        Filter.equals("date.month", date.month),
-        Filter.equals("date.day", date.day),
-      ])
-    );
-
-    return await _rideStore.findFirst(_database,finder: finder) != null;
   }
 
   ///Edit a given Ride.

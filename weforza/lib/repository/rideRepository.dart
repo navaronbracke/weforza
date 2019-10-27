@@ -6,9 +6,8 @@ import 'package:weforza/model/ride.dart';
 abstract class IRideRepository {
   Future<List<Ride>> getAllRides();
 
-  Future addRide(Ride ride);
+  Future addRides(List<Ride> rides);
 
-  Future<bool> checkIfExists(DateTime date);
 
   Future editRide(Ride ride);
 
@@ -21,10 +20,7 @@ class RideRepository implements IRideRepository {
   final RideDao _dao;
 
   @override
-  Future addRide(Ride ride) => _dao.addRide(ride);
-
-  @override
-  Future<bool> checkIfExists(DateTime date) => _dao.checkIfExists(date);
+  Future addRides(List<Ride> rides) => _dao.addRides(rides);
 
   @override
   Future deleteRide(int id) => _dao.deleteRide(id);
@@ -43,14 +39,9 @@ class TestRideRepository implements IRideRepository {
   final List<Ride> _list = List();
 
   @override
-  Future addRide(Ride ride) {
-    _list.add(ride);
+  Future addRides(List<Ride> rides) {
+    _list.addAll(rides);
     return null;
-  }
-
-  @override
-  Future<bool> checkIfExists(DateTime date) {
-    return Future.value(_list.firstWhere((r)=> r.date == date,orElse: null) != null);
   }
 
   @override

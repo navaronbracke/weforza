@@ -48,9 +48,9 @@
   "AddMemberAlreadyExists": "Dit lid bestaat al",
 
   "AddRideTitle": "Nieuwe Rit",
-  "AddRideInvalidDateSelection": "Eén of meerdere datums zijn al in gebruik",
   "AddRideSubmit": "Selectie Toevoegen",
   "AddRideLoadingFailed": "Kon de kalender niet laden",
+  "AddRideEmptySelection": "Gelieve minimum één datum te kiezen",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

@@ -10,6 +10,10 @@ class AddRideBloc extends Bloc {
   AddRideBloc(this._repository){
     assert(_repository != null);
     onDayPressed = (date){
+      //This date is in the past
+      DateTime today = DateTime.now();
+      if(date.isBefore(today)) return false;
+
       //There is a ride with this date.
       if(_existingRides.contains(date)) return false;
 
@@ -43,9 +47,6 @@ class AddRideBloc extends Bloc {
   ///The selected date.
   DateTime selectedDate;
 
-  ///Whether the current selection is erroneous.
-  bool isError = false;
-
   ///The error message, if applicable.
   String errorMessage = "";
 
@@ -78,5 +79,10 @@ class AddRideBloc extends Bloc {
   @override
   void dispose() {}
 
-  //TODO submit
+  ///Add the selected rides.
+  Future addRides() async {
+    if(_ridesToAdd.isNotEmpty){
+      await _repository.addRides(_ridesToAdd);
+    }
+  }
 }

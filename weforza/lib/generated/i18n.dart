@@ -25,7 +25,7 @@ class S implements WidgetsLocalizations {
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
-  String get AddRideInvalidDateSelection => "One or more selected dates are already in use";
+  String get AddRideEmptySelection => "Please select at least one date";
   String get AddRideLoadingFailed => "Could not load Calendar";
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
@@ -154,8 +154,6 @@ class $nl extends S {
   @override
   String get AddRideLoadingFailed => "Kon de kalender niet laden";
   @override
-  String get AddRideInvalidDateSelection => "Eén of meerdere datums zijn al in gebruik";
-  @override
   String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen";
   @override
   String get WednesdayPrefix => "Wo";
@@ -173,6 +171,8 @@ class $nl extends S {
   String get PersonDevicesLabel => "Toestellen";
   @override
   String get TuesdayPrefix => "Di";
+  @override
+  String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
   String get AddMemberPictureLabel => "Foto";
   @override

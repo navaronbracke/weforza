@@ -1,5 +1,4 @@
 
-
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:weforza/model/ride.dart';
 

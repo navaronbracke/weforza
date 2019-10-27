@@ -30,7 +30,7 @@ dependencies:
   # This package allows the use of Dependency Injection.
   flutter_simple_dependency_injection: ^1.0.1
 
-  #The following dependencies enable local persistence
+  # The following dependencies enable local persistence
   sembast: ^2.1.0
 
   # For OS-specific directory paths
@@ -39,6 +39,9 @@ dependencies:
 
   # This package allows the use of selecting images.
   image_picker: ^0.6.1+8
+
+  # The following package provides a calendar widget.
+  flutter_calendar_carousel: ^1.4.2
 
 dev_dependencies:
   flutter_test:

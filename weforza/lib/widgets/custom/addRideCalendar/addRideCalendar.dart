@@ -20,6 +20,9 @@ class AddRideCalendar extends StatefulWidget {
 
 class _AddRideCalendarState extends State<AddRideCalendar> implements PlatformAwareWidget {
 
+  ///Today stamp time variable.
+  DateTime today;
+
   ///Build the Calendar.
   Widget _buildCalendar() {
     return CalendarCarousel<RideCalendarEvent>(
@@ -56,7 +59,39 @@ class _AddRideCalendarState extends State<AddRideCalendar> implements PlatformAw
         return Text("");
       },
       locale: Localizations.localeOf(context).languageCode,
+      customDayBuilder: (
+          bool isSelectable,
+          int index,
+          bool isSelectedDay,
+          bool isToday,
+          bool isPrevMonthDay,
+          TextStyle textStyle,
+          bool isNextMonthDay,
+          bool isThisMonthDay,
+          DateTime day){
+          if(day.isBefore(today)){
+            if(widget.picker.dayHasRidePlanned(day)){
+              return _pastDayWithRide(day.day);
+            }else{
+              return _pastDayWithoutRide(day.day);
+            }
+          }else if(widget.picker.dayHasRidePlanned(day)){
+            return _dayWithAlreadyPlannedRide(day.day);
+          }else if(widget.picker.dayIsNewlyScheduledRide(day)){
+            return _dayWithNewlyPlannedRide(day.day);
+          }else{
+            return null;
+          }
+      },
+      markedDateWidget: Center(),
+      todayButtonColor: null,
     );
+  }
+
+  @override
+  void initState() {
+    today = DateTime.now();
+    super.initState();
   }
 
   @override
@@ -73,6 +108,74 @@ class _AddRideCalendarState extends State<AddRideCalendar> implements PlatformAw
   Widget buildIosWidget(BuildContext context) {
     return Material(
       child: _buildCalendar(),
+    );
+  }
+
+  ///Build a [Widget] for a day in the past, that didn't have a ride.
+  Widget _pastDayWithoutRide(int day){
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: ApplicationTheme.rideCalendarPastDayNoRideColor
+        ),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Center(child: Text("$day",textAlign: TextAlign.center,style: ApplicationTheme.rideCalendarDayBuilderStyle)),
+        ),
+      ),
+    );
+  }
+
+  ///Build a [Widget] for a day in the past, that did have a ride.
+  Widget _pastDayWithRide(int day){
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: ApplicationTheme.rideCalendarPastDayWithRideColor
+        ),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Center(child: Text("$day",textAlign: TextAlign.center,style: ApplicationTheme.rideCalendarDayBuilderStyle)),
+        ),
+      ),
+    );
+  }
+
+  ///Build a [Widget] for a day in the future, which already had a ride planned.
+  Widget _dayWithAlreadyPlannedRide(int day){
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Theme.of(context).primaryColor
+        ),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Center(child: Text("$day",textAlign: TextAlign.center,style: ApplicationTheme.rideCalendarDayBuilderStyle)),
+        ),
+      ),
+    );
+  }
+
+  ///Build a [Widget] for a day that just got a ride planned right now.
+  Widget _dayWithNewlyPlannedRide(int day){
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Theme.of(context).accentColor
+        ),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Center(child: Text("$day",textAlign: TextAlign.center,style: ApplicationTheme.rideCalendarDayBuilderStyle)),
+        ),
+      ),
     );
   }
 }

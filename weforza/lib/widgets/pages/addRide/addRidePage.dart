@@ -87,10 +87,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         children: <Widget>[
           Flexible(
             flex: 3,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: _buildCalendar(),
-            ),
+            child: _buildCalendar()
           ),
           Flexible(
             flex: 2,
@@ -228,4 +225,12 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///See IRidePicker
   @override
   Future loadRides() => _bloc.loadRides();
+
+  ///See IRidePicker
+  @override
+  bool dayHasRidePlanned(DateTime date) => _bloc.dayHasRidePlanned(date);
+
+  ///See IRidePicker
+  @override
+  bool dayIsNewlyScheduledRide(DateTime date) => _bloc.dayIsNewlyScheduledRide(date);
 }

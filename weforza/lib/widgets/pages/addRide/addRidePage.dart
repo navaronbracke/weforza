@@ -162,12 +162,11 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         child: Column(
           children: <Widget>[
             Flexible(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: _buildCalendar(),
-              ),
+              flex:3,
+              child: _buildCalendar()
             ),
             Flexible(
+              flex: 2,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

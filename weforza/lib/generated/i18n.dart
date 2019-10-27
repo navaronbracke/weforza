@@ -26,6 +26,7 @@ class S implements WidgetsLocalizations {
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideInvalidDateSelection => "One or more selected dates are already in use";
+  String get AddRideLoadingFailed => "Could not load Calendar";
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
   String get AppName => "WeForza";
@@ -150,6 +151,8 @@ class $nl extends S {
   String get RideListAddMemberInstruction => "Voeg leden toe";
   @override
   String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
+  @override
+  String get AddRideLoadingFailed => "Kon de kalender niet laden";
   @override
   String get AddRideInvalidDateSelection => "Eén of meerdere datums zijn al in gebruik";
   @override

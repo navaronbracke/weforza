@@ -50,6 +50,7 @@
   "AddRideTitle": "Nieuwe Rit",
   "AddRideInvalidDateSelection": "Eén of meerdere datums zijn al in gebruik",
   "AddRideSubmit": "Selectie Toevoegen",
+  "AddRideLoadingFailed": "Kon de kalender niet laden",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

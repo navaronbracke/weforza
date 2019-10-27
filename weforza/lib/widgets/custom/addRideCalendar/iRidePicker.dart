@@ -12,4 +12,7 @@ abstract class IRidePicker {
 
   ///The on day pressed callback.
   Function(DateTime date,List<RideCalendarEvent> events) get onDayPressed;
+
+  ///Load the existing rides into the calendar.
+  Future loadRides();
 }

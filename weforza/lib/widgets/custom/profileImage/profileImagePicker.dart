@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/custom/profileImagePicker/iProfileImagePicker.dart';
-import 'package:weforza/widgets/custom/profileImagePicker/profileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.

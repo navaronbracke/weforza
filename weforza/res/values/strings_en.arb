@@ -50,6 +50,7 @@
   "AddRideTitle": "New Ride",
   "AddRideInvalidDateSelection": "One or more selected dates are already in use",
   "AddRideSubmit": "Add Selection",
+  "AddRideLoadingFailed": "Could not load Calendar",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

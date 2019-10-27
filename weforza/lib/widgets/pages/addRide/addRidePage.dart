@@ -26,8 +26,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   String _emptySelectionMessage;
 
   @override
-  Widget build(BuildContext context) =>
-      PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context){
+    initStrings(context);
+    return PlatformAwareWidgetBuilder.build(context, this);
+  }
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

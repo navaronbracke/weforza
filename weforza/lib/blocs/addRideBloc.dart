@@ -1,5 +1,6 @@
 
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/rideCalendarEvent.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 ///This class represents the BLoC for AddRidePage.
@@ -8,6 +9,9 @@ class AddRideBloc extends Bloc {
 
   ///The repository that will handle the submit.
   final IRideRepository _repository;
+
+  ///The selected date.
+  DateTime selectedDate;
 
   ///Whether the current selection is erroneous.
   bool isError = false;

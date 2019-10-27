@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/widgets/custom/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendar.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.

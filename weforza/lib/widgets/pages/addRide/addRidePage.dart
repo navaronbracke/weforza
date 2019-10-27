@@ -1,17 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/injection/injector.dart';
 import 'package:weforza/widgets/custom/addRideCalendar.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
-  _AddRidePageState createState() => _AddRidePageState();
+  _AddRidePageState createState() => _AddRidePageState(InjectionContainer.get<AddRideBloc>());
 }
 
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+  _AddRidePageState(this._bloc): assert(_bloc != null);
+
+  ///The BLoC for this page.
+  final AddRideBloc _bloc;
+
   @override
   Widget build(BuildContext context) =>
       PlatformAwareWidgetBuilder.build(context, this);

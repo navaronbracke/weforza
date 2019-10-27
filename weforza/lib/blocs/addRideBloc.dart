@@ -79,6 +79,18 @@ class AddRideBloc extends Bloc {
   @override
   void dispose() {}
 
+  ///Validate if the selection is valid.
+  bool validateInputs(String selectionEmptyMessage){
+    if(_ridesToAdd.isEmpty){
+      errorMessage = selectionEmptyMessage;
+      return false;
+    }
+    else{
+      errorMessage = "";
+      return true;
+    }
+  }
+
   ///Add the selected rides.
   Future addRides() async {
     if(_ridesToAdd.isNotEmpty){

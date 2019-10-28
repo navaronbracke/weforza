@@ -23,11 +23,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///The BLoC for this page.
   final AddRideBloc _bloc;
 
-  String _emptySelectionMessage;
-
   @override
   Widget build(BuildContext context){
-    initStrings(context);
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 
@@ -56,32 +53,15 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
+          Flexible(
+              flex: 3,
               child: _buildCalendar()
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Visibility(
-                  visible: _bloc.errorMessage.isNotEmpty,
-                  child: Text(_bloc.errorMessage),
-                ),
-                SizedBox(height: 10),
-                RaisedButton(
-                  color: Theme.of(context).primaryColor,
-                  child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                  onPressed: () async {
-                    if(_bloc.validateInputs(_emptySelectionMessage)){
-                      await _bloc.addRides();
-                      Navigator.pop(context);
-                    }else{
-                      setState(() {});
-                    }
-                  },
-                ),
-              ],
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: _AddRideSubmit(_bloc),
             ),
           ),
         ],
@@ -98,34 +78,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       body: Column(
         children: <Widget>[
           Flexible(
-            flex: 3,
+            flex: 4,
             child: _buildCalendar()
           ),
-          Flexible(
+          Expanded(
             flex: 2,
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Visibility(
-                    visible: _bloc.errorMessage.isNotEmpty,
-                    child: Text(_bloc.errorMessage),
-                  ),
-                  SizedBox(height: 10),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                    onPressed:  () async {
-                      if(_bloc.validateInputs(_emptySelectionMessage)){
-                        await _bloc.addRides();
-                        Navigator.pop(context);
-                      }else{
-                        setState(() {});
-                      }
-                    },
-                  ),
-                ],
-              ),
+              child: _AddRideSubmit(_bloc)
             ),
           ),
         ],
@@ -144,30 +103,15 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
           child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
+            Flexible(
+                flex: 3,
                 child: _buildCalendar()
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Visibility(
-                    visible: _bloc.errorMessage.isNotEmpty,
-                    child: Text(_bloc.errorMessage),
-                  ),
-                  SizedBox(height: 10),
-                  CupertinoButton.filled(
-                      pressedOpacity: 0.5,
-                      child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: () async {
-                    if(_bloc.validateInputs(_emptySelectionMessage)){
-                      await _bloc.addRides();
-                      Navigator.pop(context);
-                    }else{
-                      setState(() {});
-                    }
-                  }),
-                ],
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: _AddRideSubmit(_bloc)
               ),
             ),
           ],
@@ -187,32 +131,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         child: Column(
           children: <Widget>[
             Flexible(
-              flex:3,
+              flex:4,
               child: _buildCalendar()
             ),
-            Flexible(
+            Expanded(
               flex: 2,
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Visibility(
-                      visible: _bloc.errorMessage.isNotEmpty,
-                      child: Text(_bloc.errorMessage),
-                    ),
-                    SizedBox(height: 10),
-                    CupertinoButton.filled(
-                        pressedOpacity: 0.5,
-                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: () async {
-                      if(_bloc.validateInputs(_emptySelectionMessage)){
-                        await _bloc.addRides();
-                        Navigator.pop(context);
-                      }else{
-                        setState(() {});
-                      }
-                    }),
-                  ],
-                ),
+                child: _AddRideSubmit(_bloc),
               ),
             ),
           ],
@@ -244,11 +169,6 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     );
   }
 
-  ///Initialize the string resources for this [Widget].
-  void initStrings(BuildContext context){
-    _emptySelectionMessage = S.of(context).AddRideEmptySelection;
-  }
-
   ///See IRidePicker
   @override
   EventList<RideCalendarEvent> get markedDates => _bloc.markedDates;
@@ -274,4 +194,65 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///See IRidePicker
   @override
   bool dayIsNewlyScheduledRide(DateTime date) => _bloc.dayIsNewlyScheduledRide(date);
+}
+
+///This [Widget] represents the submit section of [AddRidePage].
+class _AddRideSubmit extends StatefulWidget {
+  _AddRideSubmit(this.bloc): assert(bloc != null);
+
+  final AddRideBloc bloc;
+
+  @override
+  State<_AddRideSubmit> createState() => _AddRideSubmitState();
+
+}
+
+class _AddRideSubmitState extends State<_AddRideSubmit> implements PlatformAwareWidget {
+
+  @override
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+
+  @override
+  Widget buildAndroidWidget(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(widget.bloc.errorMessage),
+        SizedBox(height: 10),
+        RaisedButton(
+          color: Theme.of(context).primaryColor,
+          child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
+          onPressed: () async {
+            if(widget.bloc.validateInputs(S.of(context).AddRideEmptySelection)){
+              await widget.bloc.addRides();
+              Navigator.pop(context);
+            }else{
+              setState(() {});
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget buildIosWidget(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(widget.bloc.errorMessage),
+        SizedBox(height: 10),
+        CupertinoButton.filled(
+            pressedOpacity: 0.5,
+            child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)), onPressed: () async {
+              if(widget.bloc.validateInputs(S.of(context).AddRideEmptySelection)){
+                await widget.bloc.addRides();
+                Navigator.pop(context);
+              }else{
+                setState(() {});
+              }
+        }),
+      ],
+    );
+  }
 }

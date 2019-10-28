@@ -90,25 +90,25 @@ class _AddMemberPageState extends State<AddMemberPage>
   }
 
   ///Validate all current form input
-  bool validateInputs(){
+  bool cupertinoAllFormInputValidator(){
     final firstNameValid =  _bloc.validateFirstName(
         _bloc.firstNameController.text,
         _firstNameRequiredMessage,
         _firstNameMaxLengthMessage,
         _firstNameIllegalCharactersMessage,
-        _firstNameBlankMessage).isEmpty;
+        _firstNameBlankMessage) == null;
     final lastNameValid = _bloc.validateLastName(
             _bloc.lastNameController.text,
             _lastNameRequiredMessage,
             _lastNameMaxLengthMessage,
             _lastNameIllegalCharactersMessage,
-            _lastNameBlankMessage).isEmpty;
+            _lastNameBlankMessage) == null;
     final phoneValid = _bloc.validatePhone(
             _bloc.phoneController.text,
             _phoneRequiredMessage,
             _phoneIllegalCharactersMessage,
             _phoneMinLengthMessage,
-            _phoneMaxLengthMessage).isEmpty;
+            _phoneMaxLengthMessage) == null;
     return firstNameValid && lastNameValid && phoneValid;
   }
 
@@ -383,7 +383,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       //Validate the form before continuing.
-                      if(!validateInputs()){
+                      if(!cupertinoAllFormInputValidator()){
                         setState(() {});
                       }else{
                         _alreadyExists = await _bloc.checkIfExists();
@@ -508,7 +508,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
                           //Validate the form before continuing.
-                          if(!validateInputs()){
+                          if(!cupertinoAllFormInputValidator()){
                             setState(() {});
                           }else{
                             _alreadyExists = await _bloc.checkIfExists();

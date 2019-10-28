@@ -9,6 +9,8 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImageProvider.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -95,15 +97,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        //TODO replace wih image, use future builder, we need to check in async
-                        color: Theme.of(context).accentColor
-                    ),
-                  ),
+                  child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,0,0),
@@ -175,15 +169,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        //TODO replace wih image
-                        color: Theme.of(context).accentColor
-                    ),
-                  ),
+                  child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,15 +235,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          //TODO replace wih image
-                          color: CupertinoTheme.of(context).primaryContrastingColor
-                      ),
-                    ),
+                    child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,0,0,0),
@@ -329,15 +307,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          //TODO replace wih image
-                          color: CupertinoTheme.of(context).primaryContrastingColor
-                      ),
-                    ),
+                    child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

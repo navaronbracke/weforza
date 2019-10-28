@@ -7,11 +7,7 @@ abstract class IRideRepository {
   ///Get all rides.
   Future<List<Ride>> getAllRides();
 
-  ///Add a given ride.
-  Future addRide(Ride ride);
-
-  ///Check if a ride with the given date already exists.
-  Future<bool> checkIfExists(DateTime date);
+  Future addRides(List<Ride> rides);
 
   ///Edit a given ride.
   Future editRide(Ride ride);
@@ -28,11 +24,7 @@ class RideRepository implements IRideRepository {
 
   ///See [IRideRepository].
   @override
-  Future addRide(Ride ride) => _dao.addRide(ride);
-
-  ///See [IRideRepository].
-  @override
-  Future<bool> checkIfExists(DateTime date) => _dao.checkIfExists(date);
+  Future addRides(List<Ride> rides) => _dao.addRides(rides);
 
   ///See [IRideRepository].
   @override
@@ -54,14 +46,9 @@ class TestRideRepository implements IRideRepository {
   final List<Ride> _list = List();
 
   @override
-  Future addRide(Ride ride) {
-    _list.add(ride);
+  Future addRides(List<Ride> rides) {
+    _list.addAll(rides);
     return null;
-  }
-
-  @override
-  Future<bool> checkIfExists(DateTime date) {
-    return Future.value(_list.firstWhere((r)=> r.date == date,orElse: null) != null);
   }
 
   @override

@@ -34,8 +34,8 @@
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",
   "MemberDetailsWasPresentCountLabel": "Aanwezigheden: $count",
-  "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen.",
-  "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken.",
+  "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
+  "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
@@ -46,6 +46,11 @@
   "AddMemberSubmit": "Voeg nieuw lid toe",
   "AddMemberPictureLabel": "Foto",
   "AddMemberAlreadyExists": "Dit lid bestaat al",
+
+  "AddRideTitle": "Nieuwe Rit",
+  "AddRideSubmit": "Selectie Toevoegen",
+  "AddRideLoadingFailed": "Kon de kalender niet laden",
+  "AddRideEmptySelection": "Gelieve minimum één datum te kiezen",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

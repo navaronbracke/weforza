@@ -25,6 +25,10 @@ class S implements WidgetsLocalizations {
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
+  String get AddRideEmptySelection => "Please select at least one date";
+  String get AddRideLoadingFailed => "Could not load Calendar";
+  String get AddRideSubmit => "Add Selection";
+  String get AddRideTitle => "New Ride";
   String get AppName => "WeForza";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
@@ -37,8 +41,8 @@ class S implements WidgetsLocalizations {
   String get MemberDeleteDialogConfirm => "Delete";
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogTitle => "Delete Member";
-  String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member.";
-  String get MemberDetailsNoDevices => "This member has no devices yet.";
+  String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
+  String get MemberDetailsNoDevices => "This member has no devices yet";
   String get MemberDetailsTitle => "Details";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
   String get MemberListLoadingFailed => "Could not fetch members";
@@ -112,7 +116,7 @@ class $nl extends S {
   @override
   String get MemberDeleteDialogConfirm => "Verwijderen";
   @override
-  String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken.";
+  String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
   @override
   String get RideListNoMembers => "Er zijn geen leden";
   @override
@@ -128,6 +132,8 @@ class $nl extends S {
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe";
   @override
+  String get AddRideSubmit => "Selectie Toevoegen";
+  @override
   String get PersonLastNameLabel => "Familienaam";
   @override
   String get AddMemberSubmit => "Voeg nieuw lid toe";
@@ -140,11 +146,15 @@ class $nl extends S {
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
+  String get AddRideTitle => "Nieuwe Rit";
+  @override
   String get RideListAddMemberInstruction => "Voeg leden toe";
   @override
   String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
   @override
-  String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen.";
+  String get AddRideLoadingFailed => "Kon de kalender niet laden";
+  @override
+  String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen";
   @override
   String get WednesdayPrefix => "Wo";
   @override
@@ -161,6 +171,8 @@ class $nl extends S {
   String get PersonDevicesLabel => "Toestellen";
   @override
   String get TuesdayPrefix => "Di";
+  @override
+  String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
   String get AddMemberPictureLabel => "Foto";
   @override

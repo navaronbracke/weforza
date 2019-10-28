@@ -7,11 +7,11 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
-import 'package:weforza/blocs/iProfileImagePicker.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/custom/profileImagePicker.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
@@ -89,6 +89,29 @@ class _AddMemberPageState extends State<AddMemberPage>
     _phoneMaxLengthMessage =
         translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
     _alreadyExistsMessage = translator.AddMemberAlreadyExists;
+  }
+
+  ///Validate all current form input
+  bool cupertinoAllFormInputValidator(){
+    final firstNameValid =  _bloc.validateFirstName(
+        _bloc.firstNameController.text,
+        _firstNameRequiredMessage,
+        _firstNameMaxLengthMessage,
+        _firstNameIllegalCharactersMessage,
+        _firstNameBlankMessage) == null;
+    final lastNameValid = _bloc.validateLastName(
+            _bloc.lastNameController.text,
+            _lastNameRequiredMessage,
+            _lastNameMaxLengthMessage,
+            _lastNameIllegalCharactersMessage,
+            _lastNameBlankMessage) == null;
+    final phoneValid = _bloc.validatePhone(
+            _bloc.phoneController.text,
+            _phoneRequiredMessage,
+            _phoneIllegalCharactersMessage,
+            _phoneMinLengthMessage,
+            _phoneMaxLengthMessage) == null;
+    return firstNameValid && lastNameValid && phoneValid;
   }
 
   @override
@@ -361,7 +384,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                     child: Text(S.of(context).AddMemberSubmit,
                         style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
+                      //Validate the form before continuing.
+                      if(!cupertinoAllFormInputValidator()){
+                        setState(() {});
+                      }else{
                         _alreadyExists = await _bloc.checkIfExists();
                         setState(() {});
                         if(!_alreadyExists){
@@ -483,7 +509,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                         child: Text(S.of(context).AddMemberSubmit,
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
-                          if (_formKey.currentState.validate()) {
+                          //Validate the form before continuing.
+                          if(!cupertinoAllFormInputValidator()){
+                            setState(() {});
+                          }else{
                             _alreadyExists = await _bloc.checkIfExists();
                             setState(() {});
                             if(!_alreadyExists){

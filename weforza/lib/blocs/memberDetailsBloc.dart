@@ -21,6 +21,8 @@ class MemberDetailsBloc extends Bloc {
   List<String> get devices => List.unmodifiable(_member.devices);
   ///Get the id of the member.
   int get id => _member.id;
+  ///Get the filename of the image.
+  String get imageFileName => _member.profileImageFileName;
 
   ///Dispose of this object.
   @override

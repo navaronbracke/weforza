@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImageProvider.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -35,6 +37,12 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
   ///Only used on IOS, since Material uses InkWell.
   Color _currentColor;
 
+  String _getFilename(){
+    File image = widget.image;
+    if(image == null) return null;
+    return basename(image.path);
+  }
+
   @override
   void initState() {
     _currentColor = widget.idleColor;
@@ -58,7 +66,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
       padding: const EdgeInsets.all(15.0),
     ):
     GestureDetector(
-      child: ProfileImage(widget.image),
+      child: ProfileImage(ProfileImageProvider(_getFilename())),
       onTap: (){
         widget.onPressedHandler.pickProfileImage();
       }
@@ -97,7 +105,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
         }
       },
     ): GestureDetector(
-        child: ProfileImage(widget.image),
+        child: ProfileImage(ProfileImageProvider(_getFilename())),
         onTap: (){
           widget.onPressedHandler.pickProfileImage();
         }

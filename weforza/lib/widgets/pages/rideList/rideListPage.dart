@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
+import 'package:weforza/blocs/rideListMemberItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
@@ -368,7 +369,7 @@ class _RideListPageState extends State<RideListPage>
                 ? empty
                 : ListView.builder(
                     itemCount: data.length,
-                    itemBuilder: (context, index) => MemberItem(data[index]));
+                    itemBuilder: (context, index) => MemberItem(RideListMemberItemBloc(data[index])));
           }
         } else {
           return loading;

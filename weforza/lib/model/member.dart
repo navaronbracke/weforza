@@ -57,7 +57,7 @@ class Member {
       map["phone"],
       List.from(map["devices"]),
       map["wasPresentCount"],
-      map["profileImageFileName"]
+      map["profile"]
     );
   }
 }

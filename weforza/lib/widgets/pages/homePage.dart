@@ -19,18 +19,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   final List<Widget> _tabs = List.of([RideListPage(),MemberListPage()]);
   ///The selected index.
   int _selectedIndex = 0;
-  ///The tab controller for android.
-  TabController _tabController;
+  ///The page controller for android.
+  PageController _pageController;
 
   @override
   void initState() {
-    _tabController = TabController(vsync: this,length: _tabs.length,initialIndex: _selectedIndex);
+    _pageController = PageController(initialPage: _selectedIndex);
     super.initState();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -40,14 +40,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
-      body: TabBarView(children: _tabs,controller: _tabController),
+      body: PageView(
+        children: _tabs,
+        controller: _pageController,
+        onPageChanged: (page){
+          setState(() {_selectedIndex = page; });
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index){
-          setState(() {
-            _selectedIndex = index;
-          });
-          _tabController.index = _selectedIndex;
+          _pageController.animateToPage(index, duration: const Duration(milliseconds: 300),curve: Curves.easeInOut);
         },
         items: [
           BottomNavigationBarItem(

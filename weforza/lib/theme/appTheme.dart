@@ -12,10 +12,14 @@ abstract class ApplicationTheme {
   static final Color _iosPrimaryColor = Colors.blue;
   static final Color _iosAccentColor = Colors.blue.shade300;
 
-  ///Text Styles.
+  static final Color rideCalendarPastDayNoRideColor = Color.fromARGB(255, 89,111,128);
+  static final Color rideCalendarPastDayWithRideColor = Color.fromARGB(255, 52,95,128);
+
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
   static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);
+  static final TextStyle rideCalendarDayStyle = TextStyle(fontSize: 14,color: Colors.black);
+  static final TextStyle rideCalendarDayBuilderStyle = TextStyle(fontSize: 14, color: Colors.white);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

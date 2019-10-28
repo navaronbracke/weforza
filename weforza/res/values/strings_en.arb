@@ -34,8 +34,8 @@
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",
   "MemberDetailsWasPresentCountLabel": "Times present: $count",
-  "MemberDetailsNoDevices": "This member has no devices yet.",
-  "MemberDetailsAddDevicesInstruction": "Add devices by editing this member.",
+  "MemberDetailsNoDevices": "This member has no devices yet",
+  "MemberDetailsAddDevicesInstruction": "Add devices by editing this member",
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",
@@ -46,6 +46,11 @@
   "AddMemberSubmit": "Create New Member",
   "AddMemberPictureLabel": "Picture",
   "AddMemberAlreadyExists": "This member already exists",
+
+  "AddRideTitle": "New Ride",
+  "AddRideSubmit": "Add Selection",
+  "AddRideLoadingFailed": "Could not load Calendar",
+  "AddRideEmptySelection": "Please select at least one date",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

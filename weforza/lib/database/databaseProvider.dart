@@ -110,7 +110,7 @@ class RideDao {
   ///Add a given set of Rides.
   Future addRides(List<Ride> rides) async {
     assert(rides != null && rides.isNotEmpty);
-    await _rideStore.addAll(_database, rides.map((ride) => ride.toMap()));
+    await _rideStore.addAll(_database, rides.map((ride) => ride.toMap()).toList());
   }
 
   ///Get all stored Rides.

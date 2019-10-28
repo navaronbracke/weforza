@@ -30,14 +30,13 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
-  ///An image that should be used as profile image.
-  File _profileImage;
-
   ///A flag that indicates if a [Member], with the current values, already exists.
   bool _alreadyExists = false;
 
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
+
+  File _profileImage;
 
   ///The input labels.
   String _firstNameLabel;
@@ -248,7 +247,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                           _alreadyExists = await _bloc.checkIfExists();
                           setState(() {});
                           if(!_alreadyExists){
-                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                            _bloc.addMember(_getImageFileName(_profileImage)).then((val){
                               //Go back to member list page
                               Navigator.pop(context);
                             });
@@ -391,7 +390,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         _alreadyExists = await _bloc.checkIfExists();
                         setState(() {});
                         if(!_alreadyExists){
-                          _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                          _bloc.addMember(_getImageFileName(_profileImage)).then((val){
                             //Go back to member list page
                             Navigator.pop(context);
                           });
@@ -516,7 +515,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             _alreadyExists = await _bloc.checkIfExists();
                             setState(() {});
                             if(!_alreadyExists){
-                              _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                              _bloc.addMember(_getImageFileName(_profileImage)).then((val){
                                 //Go back to member list page
                                 Navigator.pop(context);
                               });
@@ -629,7 +628,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                           _alreadyExists = await _bloc.checkIfExists();
                           setState(() {});
                           if(!_alreadyExists){
-                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                            _bloc.addMember(_getImageFileName(_profileImage)).then((val){
                               //Go back to member list page
                               Navigator.pop(context);
                             });
@@ -664,4 +663,6 @@ class _AddMemberPageState extends State<AddMemberPage>
     _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
+
+  String _getImageFileName(File image) => (image == null) ? null : basename(image.path);
 }

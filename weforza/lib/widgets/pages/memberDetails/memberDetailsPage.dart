@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +11,6 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImageProvider.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -97,7 +98,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100),
+                  child: _loadImage(),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,0,0),
@@ -169,7 +170,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
+                  child: _loadImage()
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +236,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                    child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
+                    child: _loadImage()
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,0,0,0),
@@ -307,7 +308,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ProfileImage(ProfileImageProvider(_bloc.imageFileName),100)
+                    child: _loadImage()
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,6 +338,22 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ],
         ),
       ),
+    );
+  }
+
+  Widget _loadImage() {
+    return FutureBuilder(
+      future: _bloc.getImage(),
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return ProfileImage(null,100);
+          }
+          return ProfileImage(snapshot.data as File,100);
+        } else {
+          return ProfileImage(null,100);
+        }
+      }
     );
   }
 }

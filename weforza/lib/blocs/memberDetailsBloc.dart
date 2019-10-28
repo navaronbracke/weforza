@@ -1,4 +1,8 @@
 
+import 'dart:io';
+
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 
@@ -27,6 +31,15 @@ class MemberDetailsBloc extends Bloc {
   ///Dispose of this object.
   @override
   void dispose() {}
+
+  Future<File> getImage() async {
+    if(_member.profileImageFileName == null) return Future.value(null);
+    else {
+      final documentsDir = await getApplicationDocumentsDirectory();
+      File image = File(join(documentsDir.path,_member.profileImageFileName.substring(6)));
+      return await image.exists() ? image : null;
+    }
+  }
 
 
 }

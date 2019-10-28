@@ -51,11 +51,10 @@ class Ride {
   }
 
   static Ride fromMap(Map<String,dynamic> map){
-    List<Attendee> list = List();
-    map.forEach((key,value){
-      list.add(Attendee(value["firstname"], value["lastname"], value["phone"]));
-    });
-    return Ride(DateTime(map["year"],map["month"],map["day"]),list);
+    Map<String,dynamic> dateMap = map["date"];
+    DateTime date = DateTime(dateMap["year"],dateMap["month"],dateMap["day"]);
+    List<dynamic> attendees = map["attendees"];
+    return Ride(date,attendees.map((value) => Attendee(value["firstname"], value["lastname"], value["phone"])).toList());
   }
 }
 

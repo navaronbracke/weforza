@@ -13,7 +13,7 @@ class Member {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  Member(this.firstname,this.lastname,this.phone,this.devices,[this.wasPresentCount = 0,this.profileImageFileName]): assert(firstname != null && lastname != null && phone != null && devices != null);
+  Member(this.firstname,this.lastname,this.phone,this.devices,[this.wasPresentCount = 0,this.profileImageFilePath]): assert(firstname != null && lastname != null && phone != null && devices != null);
 
   ///An id for in the database.
   int id;
@@ -28,8 +28,8 @@ class Member {
   ///Note that [_phone] is a String, integers can't do leading zeroes.
   String phone;
 
-  ///The name of the image file that was chosen as profile image.
-  String profileImageFileName;
+  ///The path to the image file, that was chosen as profile picture.
+  String profileImageFilePath;
 
   ///A member's number of times he/she was present.
   int wasPresentCount;
@@ -45,7 +45,7 @@ class Member {
       "phone": phone,
       "wasPresentCount": wasPresentCount,
       "devices": devices,
-      "profile": profileImageFileName
+      "profile": profileImageFilePath
     };
   }
 

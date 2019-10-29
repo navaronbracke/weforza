@@ -1,9 +1,8 @@
 
 import 'dart:io';
 
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
@@ -26,20 +25,13 @@ class MemberDetailsBloc extends Bloc {
   ///Get the id of the member.
   int get id => _member.id;
   ///Get the filename of the image.
-  String get imageFileName => _member.profileImageFileName;
+  String get imageFileName => _member.profileImageFilePath;
 
   ///Dispose of this object.
   @override
   void dispose() {}
 
-  Future<File> getImage() async {
-    if(_member.profileImageFileName == null) return Future.value(null);
-    else {
-      final documentsDir = await getApplicationDocumentsDirectory();
-      File image = File(join(documentsDir.path,_member.profileImageFileName.substring(6)));
-      return await image.exists() ? image : null;
-    }
-  }
+  Future<File> getImage() => FileLoader.getImage(_member.profileImageFilePath);
 
 
 }

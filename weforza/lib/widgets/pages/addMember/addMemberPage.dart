@@ -1,11 +1,10 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
@@ -30,14 +29,13 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
-  ///An image that should be used as profile image.
-  File _profileImage;
-
   ///A flag that indicates if a [Member], with the current values, already exists.
   bool _alreadyExists = false;
 
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
+
+  File _profileImage;
 
   ///The input labels.
   String _firstNameLabel;
@@ -248,7 +246,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                           _alreadyExists = await _bloc.checkIfExists();
                           setState(() {});
                           if(!_alreadyExists){
-                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                            _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
                               //Go back to member list page
                               Navigator.pop(context);
                             });
@@ -391,7 +389,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         _alreadyExists = await _bloc.checkIfExists();
                         setState(() {});
                         if(!_alreadyExists){
-                          _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                          _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
                             //Go back to member list page
                             Navigator.pop(context);
                           });
@@ -516,7 +514,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             _alreadyExists = await _bloc.checkIfExists();
                             setState(() {});
                             if(!_alreadyExists){
-                              _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                              _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
                                 //Go back to member list page
                                 Navigator.pop(context);
                               });
@@ -629,7 +627,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                           _alreadyExists = await _bloc.checkIfExists();
                           setState(() {});
                           if(!_alreadyExists){
-                            _bloc.addMember((_profileImage == null)? null : basename(_profileImage.path)).then((val){
+                            _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
                               //Go back to member list page
                               Navigator.pop(context);
                             });
@@ -661,7 +659,9 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///See [IProfileImagePicker].
   @override
   Future<void> pickProfileImage() async {
-    _profileImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    _profileImage = await FilePicker.getFile(type: FileType.IMAGE);
     setState(() {});
   }
+
+  String _getImageFilePath(File image) => (image == null) ? null : image.path;
 }

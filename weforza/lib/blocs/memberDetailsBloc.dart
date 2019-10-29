@@ -1,5 +1,8 @@
 
+import 'dart:io';
+
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
@@ -21,10 +24,14 @@ class MemberDetailsBloc extends Bloc {
   List<String> get devices => List.unmodifiable(_member.devices);
   ///Get the id of the member.
   int get id => _member.id;
+  ///Get the filename of the image.
+  String get imageFileName => _member.profileImageFilePath;
 
   ///Dispose of this object.
   @override
   void dispose() {}
+
+  Future<File> getImage() => FileLoader.getImage(_member.profileImageFilePath);
 
 
 }

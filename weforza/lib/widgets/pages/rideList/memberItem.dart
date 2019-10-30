@@ -11,13 +11,25 @@ import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a [Member] within the 'Attendees' content panel of [RideListPage].
-class MemberItem extends StatelessWidget implements PlatformAwareWidget {
-  MemberItem(this._bloc,this._image): assert(_bloc != null);
+class MemberItem extends StatefulWidget {
+  MemberItem(this.bloc,this.image): assert(bloc != null);
   ///The BLoC for this item.
-  final RideListAttendeeItemBloc _bloc;
+  final RideListAttendeeItemBloc bloc;
 
   ///The image for this item.
-  final File _image;
+  final File image;
+
+  @override
+  _MemberItemState createState() => _MemberItemState();
+}
+
+class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget {
+
+  //(un)select
+
+  Color _backgroundColor;
+  Color _fontColor;
+  Color _splashColor;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -37,14 +49,14 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ProfileImage(_image,40),
+              ProfileImage(widget.image,40),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
                   SizedBox(height: 5),
-                  Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
                 ],
               ),
             ],
@@ -69,17 +81,17 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                ProfileImage(_image,40),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
-                  SizedBox(height: 5),
-                  Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ],
+                ProfileImage(widget.image,40),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                    SizedBox(height: 5),
+                    Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

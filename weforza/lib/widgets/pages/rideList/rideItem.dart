@@ -4,8 +4,6 @@ import 'package:weforza/blocs/rideListRideItemBloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-//TODO map function that takes a RideItemModel and outputs this
-
 ///This [Widget] represents a [Ride] within the 'Rides' content panel of [RideListPage].
 class RideItem extends StatefulWidget {
   RideItem(this.bloc): assert(bloc != null);
@@ -19,8 +17,11 @@ class RideItem extends StatefulWidget {
 
 class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
 
-  //Selected/Unselected font/bg/splash color
+  //(un)select
 
+  Color _backgroundColor;
+  Color _fontColor;
+  Color _splashColor;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);

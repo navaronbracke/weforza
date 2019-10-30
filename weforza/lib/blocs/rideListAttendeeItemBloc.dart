@@ -6,12 +6,12 @@ import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
 
 ///This class is the BLoC for RideListMemberItem.
-class RideListMemberItemBloc extends Bloc {
-  RideListMemberItemBloc(this._member): assert(_member != null);
+class RideListAttendeeItemBloc extends Bloc {
+  RideListAttendeeItemBloc(this._member,this.selected): assert(_member != null && selected != null);
+
+  bool selected;
 
   final Member _member;
-
-  String get imageFilename => _member.profileImageFilePath;
 
   String get firstName => _member.firstname;
 

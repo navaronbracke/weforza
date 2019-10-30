@@ -1,13 +1,26 @@
 
 import 'package:flutter/material.dart';
+import 'package:weforza/blocs/rideListRideItemBloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
+//TODO map function that takes a RideItemModel and outputs this
+
 ///This [Widget] represents a [Ride] within the 'Rides' content panel of [RideListPage].
-class RideItem extends StatelessWidget implements PlatformAwareWidget {
-  RideItem(this._ride): assert(_ride != null);
+class RideItem extends StatefulWidget {
+  RideItem(this.bloc): assert(bloc != null);
+
   ///The [Ride] of this item.
-  final Ride _ride;
+  final RideListRideItemBloc bloc;
+
+  @override
+  State<StatefulWidget> createState() => _RideItemState();
+}
+
+class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
+
+  //Selected/Unselected font/bg/splash color
+
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -24,7 +37,7 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Center(
-              child: Text("${_ride.getFormattedDate(context)}")
+              child: Text(widget.bloc.getFormattedDate(context))
           ),
         ),
       ),
@@ -41,7 +54,7 @@ class RideItem extends StatelessWidget implements PlatformAwareWidget {
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Center(
-              child: Text("${_ride.getFormattedDate(context)}")
+              child: Text(widget.bloc.getFormattedDate(context))
           ),
         ),
       ),

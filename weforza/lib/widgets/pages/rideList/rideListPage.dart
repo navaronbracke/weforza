@@ -2,11 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
-import 'package:weforza/blocs/rideListMemberItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/member.dart';
-import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/rideAttendeeItemModel.dart';
+import 'package:weforza/model/rideItemModel.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -91,7 +90,16 @@ class _RideListPageState extends State<RideListPage>
                 ],
               ),
             ),
-            Text(_bloc.attendingCount),
+            StreamBuilder(
+              stream: _bloc.attendingCount,
+              builder: (context,snapshot){
+                if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
+                  return snapshot.hasError ? Text("") : Text("${snapshot.data}");
+                } else{
+                  return Text("");
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -161,7 +169,16 @@ class _RideListPageState extends State<RideListPage>
             ),
             Expanded(
               child: Center(
-                child: Text(_bloc.attendingCount),
+                child: StreamBuilder(
+                  stream: _bloc.attendingCount,
+                  builder: (context,snapshot){
+                    if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
+                      return snapshot.hasError ? Text("") : Text("${snapshot.data}");
+                    } else{
+                      return Text("");
+                    }
+                  },
+                ),
               ),
             ),
             Row(
@@ -191,7 +208,16 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        trailing: Text(_bloc.attendingCount),
+        trailing: StreamBuilder(
+          stream: _bloc.attendingCount,
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
+              return snapshot.hasError ? Text("") : Text("${snapshot.data}");
+            } else{
+              return Text("");
+            }
+          },
+        ),
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -270,7 +296,16 @@ class _RideListPageState extends State<RideListPage>
             ),
             Expanded(
               child: Center(
-                child: Text(_bloc.attendingCount),
+                child: StreamBuilder(
+                  stream: _bloc.attendingCount,
+                  builder: (context,snapshot){
+                    if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
+                      return snapshot.hasError ? Text("") : Text("${snapshot.data}");
+                    } else{
+                      return Text("");
+                    }
+                  },
+                ),
               ),
             ),
             Padding(
@@ -306,14 +341,14 @@ class _RideListPageState extends State<RideListPage>
         Flexible(
             flex: 2,
             child: _rideListBuilder(
-                _bloc.getAllRides(),
+                _bloc.getRides(),
                 PlatformAwareLoadingIndicator(),
                 RideListRidesError(),
                 RideListRidesEmpty())),
         Flexible(
           flex: 3,
           child: _attendeesListBuilder(
-              _bloc.getAllMembers(),
+              _bloc.getAttendees(),
               PlatformAwareLoadingIndicator(),
               RideListMembersError(),
               RideListMembersEmpty()),
@@ -328,7 +363,7 @@ class _RideListPageState extends State<RideListPage>
   ///Returns [error] when [future] completed with an error.
   ///Returns [empty] when [future] returned an empty list.
   FutureBuilder _rideListBuilder(
-      Future<List<Ride>> future, Widget loading, Widget error, Widget empty) {
+      Future<List<RideItemModel>> future, Widget loading, Widget error, Widget empty) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -336,12 +371,12 @@ class _RideListPageState extends State<RideListPage>
           if (snapshot.hasError) {
             return error;
           } else {
-            List<Ride> data = snapshot.data as List<Ride>;
+            List<RideItemModel> data = snapshot.data as List<RideItemModel>;
             return (data == null || data.isEmpty)
                 ? empty
                 : ListView.builder(
                     itemCount: data.length,
-                    itemBuilder: (context, index) => RideItem(data[index]));
+                    itemBuilder: (context, index) => RideItem(data[index].bloc));
           }
         } else {
           return loading;
@@ -356,7 +391,7 @@ class _RideListPageState extends State<RideListPage>
   ///Returns [error] when [future] completed with an error.
   ///Returns [empty] when [future] returned an empty list.
   FutureBuilder _attendeesListBuilder(
-      Future<List<Member>> future, Widget loading, Widget error, Widget empty) {
+      Future<List<RideAttendeeItemModel>> future, Widget loading, Widget error, Widget empty) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -364,12 +399,12 @@ class _RideListPageState extends State<RideListPage>
           if (snapshot.hasError) {
             return error;
           } else {
-            List<Member> data = snapshot.data as List<Member>;
+            List<RideAttendeeItemModel> data = snapshot.data as List<RideAttendeeItemModel>;
             return (data == null || data.isEmpty)
                 ? empty
                 : ListView.builder(
                     itemCount: data.length,
-                    itemBuilder: (context, index) => MemberItem(RideListMemberItemBloc(data[index])));
+                    itemBuilder: (context, index) => MemberItem(data[index].bloc,data[index].image));
           }
         } else {
           return loading;

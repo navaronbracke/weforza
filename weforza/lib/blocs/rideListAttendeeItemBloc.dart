@@ -7,9 +7,9 @@ import 'package:weforza/model/member.dart';
 
 ///This class is the BLoC for RideListMemberItem.
 class RideListAttendeeItemBloc extends Bloc {
-  RideListAttendeeItemBloc(this._member,this.selected): assert(_member != null && selected != null);
+  RideListAttendeeItemBloc(this._member,this.isSelected): assert(_member != null && isSelected != null);
 
-  bool selected;
+  bool isSelected;
 
   final Member _member;
 

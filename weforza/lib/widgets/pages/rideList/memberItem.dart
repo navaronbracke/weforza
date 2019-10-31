@@ -27,21 +27,18 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
 
   //(un)select
 
-  Color _backgroundColor;
-  Color _fontColor;
-  Color _splashColor;
-
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
+      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
       elevation: 4.0,
       child: InkWell(
+        splashColor: ApplicationTheme.rideListItemSplashColor,
         onTap: (){
           //TODO: add/remove person from selected ride
-          //TODO change background
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -54,9 +51,13 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                    color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),
+                      overflow: TextOverflow.ellipsis),
                   SizedBox(height: 5),
-                  Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor)
+                      ,overflow: TextOverflow.ellipsis),
                 ],
               ),
             ],
@@ -72,9 +73,9 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
       child: GestureDetector(
         onTap: (){
           //TODO: add/remove person from selected ride
-          //TODO change background
         },
         child: Container(
+          color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -86,9 +87,13 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                    Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),
+                        overflow: TextOverflow.ellipsis),
                     SizedBox(height: 5),
-                    Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                    Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor)
+                        ,overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ],

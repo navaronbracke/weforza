@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/ride.dart';
 
 ///This class is the BLoC for RideListMemberItem.
 class RideListAttendeeItemBloc extends Bloc {
@@ -21,5 +22,7 @@ class RideListAttendeeItemBloc extends Bloc {
 
   @override
   void dispose() {}
+
+  Attendee attendeeFrom() => Attendee(firstName,lastName,_member.phone);
 
 }

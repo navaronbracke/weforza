@@ -18,8 +18,6 @@ class MemberDetailsBloc extends Bloc {
   String get lastName => _member.lastname;
   ///Get the phone of [_member].
   String get phone => _member.phone;
-  ///Get the amount of times [_member] was present.
-  int get wasPresentCount => _member.wasPresentCount;
   ///Get the list of devices of [_member].
   List<String> get devices => List.unmodifiable(_member.devices);
   ///Get the id of the member.
@@ -32,6 +30,8 @@ class MemberDetailsBloc extends Bloc {
   void dispose() {}
 
   Future<File> getImage() => FileLoader.getImage(_member.profileImageFilePath);
+
+  //TODO future for was present count
 
 
 }

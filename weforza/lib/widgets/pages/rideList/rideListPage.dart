@@ -7,14 +7,14 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/rideAttendeeItemModel.dart';
 import 'package:weforza/model/rideItemModel.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListAttendeeFilter.dart';
+import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/pages/rideList/memberItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideItem.dart';
 import 'package:weforza/widgets/pages/rideList/rideListMembersEmpty.dart';
-import 'package:weforza/widgets/pages/rideList/rideListMembersError.dart';
 import 'package:weforza/widgets/pages/rideList/rideListRidesEmpty.dart';
-import 'package:weforza/widgets/pages/rideList/rideListRidesError.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
@@ -26,11 +26,24 @@ class RideListPage extends StatefulWidget {
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRideSelector, IRideAttendeeSelector, AttendeeFilterHandler {
   _RideListPageState(this._bloc) : assert(_bloc != null);
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
+
+  ///The future that loads the rides.
+  Future<List<RideItemModel>> loadRidesFuture;
+
+  ///The future that loads the attendees.
+  Future<List<RideAttendeeItemModel>> loadAttendeesFuture;
+
+  @override
+  void initState() {
+    loadRidesFuture = _bloc.getRides();
+    loadAttendeesFuture = _bloc.getAttendees();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) =>
@@ -90,16 +103,7 @@ class _RideListPageState extends State<RideListPage>
                 ],
               ),
             ),
-            StreamBuilder(
-              stream: _bloc.attendingCount,
-              builder: (context,snapshot){
-                if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
-                  return snapshot.hasError ? Text("") : Text("${snapshot.data}");
-                } else{
-                  return Text("");
-                }
-              },
-            ),
+            Text(_bloc.attendeeCount),
           ],
         ),
       ),
@@ -114,14 +118,7 @@ class _RideListPageState extends State<RideListPage>
                 children: <Widget>[
                   Text(S.of(context).RideListFilterShowAttendingOnly,
                       style: TextStyle(fontSize: 14)),
-                  Switch(
-                    activeTrackColor: Theme.of(context).accentColor,
-                    activeColor: Colors.white,
-                    value: _bloc.showAttendingOnly,
-                    onChanged: (value) {
-                      //TODO change filter and update list
-                    },
-                  ),
+                  RideListAttendeeFilter(_bloc.filterState,this),
                 ],
               ),
             ],
@@ -169,16 +166,7 @@ class _RideListPageState extends State<RideListPage>
             ),
             Expanded(
               child: Center(
-                child: StreamBuilder(
-                  stream: _bloc.attendingCount,
-                  builder: (context,snapshot){
-                    if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
-                      return snapshot.hasError ? Text("") : Text("${snapshot.data}");
-                    } else{
-                      return Text("");
-                    }
-                  },
-                ),
+                child: Text(_bloc.attendeeCount),
               ),
             ),
             Row(
@@ -186,14 +174,7 @@ class _RideListPageState extends State<RideListPage>
                 Text(S.of(context).RideListFilterShowAttendingOnly,
                     style: TextStyle(fontSize: 14)),
                 SizedBox(width: 5),
-                Switch(
-                  activeTrackColor: Theme.of(context).accentColor,
-                  activeColor: Colors.white,
-                  value: _bloc.showAttendingOnly,
-                  onChanged: (value) {
-                    //TODO change filter and update list
-                  },
-                ),
+                RideListAttendeeFilter(_bloc.filterState,this),
               ],
             ),
           ],
@@ -208,16 +189,7 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        trailing: StreamBuilder(
-          stream: _bloc.attendingCount,
-          builder: (context,snapshot){
-            if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
-              return snapshot.hasError ? Text("") : Text("${snapshot.data}");
-            } else{
-              return Text("");
-            }
-          },
-        ),
+        trailing: Text(_bloc.attendeeCount),
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -249,14 +221,7 @@ class _RideListPageState extends State<RideListPage>
                   ),
                   Text(S.of(context).RideListFilterShowAttendingOnly,
                       style: TextStyle(fontSize: 14)),
-                  CupertinoSwitch(
-                    activeColor:
-                        CupertinoTheme.of(context).primaryContrastingColor,
-                    value: _bloc.showAttendingOnly,
-                    onChanged: (value) {
-                      //TODO change filter and update list
-                    },
-                  ),
+                  RideListAttendeeFilter(_bloc.filterState,this),
                 ],
               ),
             ),
@@ -296,16 +261,7 @@ class _RideListPageState extends State<RideListPage>
             ),
             Expanded(
               child: Center(
-                child: StreamBuilder(
-                  stream: _bloc.attendingCount,
-                  builder: (context,snapshot){
-                    if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.done){
-                      return snapshot.hasError ? Text("") : Text("${snapshot.data}");
-                    } else{
-                      return Text("");
-                    }
-                  },
-                ),
+                child: Text(_bloc.attendeeCount),
               ),
             ),
             Padding(
@@ -314,14 +270,7 @@ class _RideListPageState extends State<RideListPage>
                 children: <Widget>[
                   Text(S.of(context).RideListFilterShowAttendingOnly,
                       style: TextStyle(fontSize: 14)),
-                  CupertinoSwitch(
-                    activeColor:
-                        CupertinoTheme.of(context).primaryContrastingColor,
-                    value: _bloc.showAttendingOnly,
-                    onChanged: (value) {
-                      //TODO change filter and update list
-                    },
-                  ),
+                  RideListAttendeeFilter(_bloc.filterState,this),
                 ],
               ),
             ),
@@ -339,77 +288,81 @@ class _RideListPageState extends State<RideListPage>
     return Row(
       children: <Widget>[
         Flexible(
-            flex: 2,
-            child: _rideListBuilder(
-                _bloc.getRides(),
-                PlatformAwareLoadingIndicator(),
-                RideListRidesError(),
-                RideListRidesEmpty())),
+          flex: 2,
+          child: FutureBuilder(
+            future: loadRidesFuture,
+            builder: (context,snapshot){
+              if(snapshot.connectionState == ConnectionState.done){
+                if(snapshot.hasError){
+                  return Center(child: Text(S.of(context).RideListLoadingRidesError));
+                }else{
+                  return _buildRidesList(snapshot.data as List<RideItemModel>);
+                }
+              }else{
+                return Center(child: PlatformAwareLoadingIndicator());
+              }
+            },
+          ),
+        ),
         Flexible(
           flex: 3,
-          child: _attendeesListBuilder(
-              _bloc.getAttendees(),
-              PlatformAwareLoadingIndicator(),
-              RideListMembersError(),
-              RideListMembersEmpty()),
+          child: FutureBuilder(
+            future: loadAttendeesFuture,
+            builder: (context,snapshot){
+              if(snapshot.connectionState == ConnectionState.done){
+                if(snapshot.hasError){
+                  return Center(child: Text(S.of(context).RideListLoadingMembersError));
+                }else{
+                  return _buildAttendeesList(snapshot.data as List<RideAttendeeItemModel>);
+                }
+              }else{
+                return Center(child: PlatformAwareLoadingIndicator());
+              }
+            },
+          ),
         ),
       ],
     );
   }
 
-  ///This method returns a [FutureBuilder] for creating the content of the 'Rides' content area.
-  ///
-  ///Returns [loading] when [future] hasn't completed yet.
-  ///Returns [error] when [future] completed with an error.
-  ///Returns [empty] when [future] returned an empty list.
-  FutureBuilder _rideListBuilder(
-      Future<List<RideItemModel>> future, Widget loading, Widget error, Widget empty) {
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return error;
-          } else {
-            List<RideItemModel> data = snapshot.data as List<RideItemModel>;
-            return (data == null || data.isEmpty)
-                ? empty
-                : ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) => RideItem(data[index].bloc));
-          }
-        } else {
-          return loading;
-        }
-      },
-    );
+
+  Widget _buildRidesList(List<RideItemModel> items) {
+    return items.isEmpty ? RideListRidesEmpty() : ListView.builder(itemCount: items.length,
+        itemBuilder: (context, index) => RideItem(items[index].bloc,this));
   }
 
-  ///This method returns a [FutureBuilder] for creating the content of the 'Attendees' content area.
-  ///
-  ///Returns [loading] when [future] hasn't completed yet.
-  ///Returns [error] when [future] completed with an error.
-  ///Returns [empty] when [future] returned an empty list.
-  FutureBuilder _attendeesListBuilder(
-      Future<List<RideAttendeeItemModel>> future, Widget loading, Widget error, Widget empty) {
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return error;
-          } else {
-            List<RideAttendeeItemModel> data = snapshot.data as List<RideAttendeeItemModel>;
-            return (data == null || data.isEmpty)
-                ? empty
-                : ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) => MemberItem(data[index].bloc,data[index].image));
-          }
-        } else {
-          return loading;
-        }
-      },
-    );
+  Widget _buildAttendeesList(List<RideAttendeeItemModel> items) {
+    return items.isEmpty ? RideListMembersEmpty() : ListView.builder(itemCount: items.length,itemBuilder:
+        (context, index) => MemberItem(items[index].bloc,items[index].image,this));
+  }
+
+  @override
+  void selectAttendee(IRideAttendeeSelectable item) async {
+    await _bloc.selectAttendee(item);
+    setState(() {});
+  }
+
+  @override
+  void selectRide(IRideSelectable item){
+    setState(() {
+      _bloc.selectRide(item);
+      loadAttendeesFuture = _bloc.getAttendees();
+    });
+  }
+
+  @override
+  void enableFilter() {
+    setState(() {
+      _bloc.filterState = AttendeeFilterState.ON;
+      loadAttendeesFuture = _bloc.getAttendees();
+    });
+  }
+
+  @override
+  void disableFilter() {
+    setState(() {
+      _bloc.filterState = AttendeeFilterState.OFF;
+      loadAttendeesFuture = _bloc.getAttendees();
+    });
   }
 }

@@ -5,21 +5,27 @@ import 'package:weforza/model/ride.dart';
 
 ///This class represents a BLoC for a RideItem in RideListPage.
 class RideListRideItemBloc extends Bloc {
-  RideListRideItemBloc(this._ride,this.isSelected): assert(_ride != null && isSelected != null);
-
-  ///Whether this item is selected.
-  bool isSelected;
+  RideListRideItemBloc(this.ride,this.isSelected): assert(ride != null && isSelected != null);
 
   ///The internal ride object.
-  final Ride _ride;
+  final Ride ride;
+
+  bool isSelected;
 
 
   String getFormattedDate(BuildContext context){
     assert(context != null);
-    return _ride.getFormattedDate(context);
+    return ride.getFormattedDate(context);
   }
+
+  DateTime getDate() => ride.date;
 
   @override
   void dispose() {}
 
+  isAttendee(Attendee attendee) => ride.attendees.contains(attendee);
+
+  void add(Attendee attendee) => ride.attendees.add(attendee);
+
+  void remove(Attendee attendee) => ride.attendees.remove(attendee);
 }

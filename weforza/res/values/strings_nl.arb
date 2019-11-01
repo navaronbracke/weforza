@@ -25,10 +25,8 @@
   "RideListNoMembers": "Er zijn geen leden",
   "RideListAddRideInstructionPlus": "met de +",
   "RideListAddRideInstruction": "Voeg een rit toe",
-  "RideListAddMemberInstruction": "Voeg leden toe",
-  "RideListAddMemberInstructionUseMenu": "in het leden menu",
-  "RideListLoadingRidesFailed": "Kon de ritten niet ophalen",
-  "RideListLoadingMembersFailed": "Kon de leden niet ophalen",
+  "RideListLoadingMembersError": "Kon leden niet laden",
+  "RideListLoadingRidesError": "Kon ritten niet laden",
   "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
 
   "MemberDetailsTitle": "Details",

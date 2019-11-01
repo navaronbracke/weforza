@@ -6,26 +6,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideListAttendeeItemBloc.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a [Member] within the 'Attendees' content panel of [RideListPage].
 class MemberItem extends StatefulWidget {
-  MemberItem(this.bloc,this.image): assert(bloc != null);
+  MemberItem(this.bloc,this.image,this.selector): assert(bloc != null && selector != null);
   ///The BLoC for this item.
   final RideListAttendeeItemBloc bloc;
 
   ///The image for this item.
   final File image;
 
+  ///The selection handler.
+  final IRideAttendeeSelector selector;
+
   @override
   _MemberItemState createState() => _MemberItemState();
 }
 
-class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget {
-
-  //(un)select
+class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget, IRideAttendeeSelectable {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -38,7 +41,7 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
       child: InkWell(
         splashColor: ApplicationTheme.rideListItemSplashColor,
         onTap: (){
-          //TODO: add/remove person from selected ride
+          widget.selector.selectAttendee(this);
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -72,7 +75,7 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
     return Container(
       child: GestureDetector(
         onTap: (){
-          //TODO: add/remove person from selected ride
+          widget.selector.selectAttendee(this);
         },
         child: Container(
           color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
@@ -103,4 +106,14 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
       ),
     );
   }
+
+  @override
+  void select() {
+    setState(() {
+      widget.bloc.isSelected = !widget.bloc.isSelected;
+    });
+  }
+
+  @override
+  Attendee getAttendee() => widget.bloc.attendeeFrom();
 }

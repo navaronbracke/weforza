@@ -55,14 +55,12 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
-  String get RideListAddMemberInstruction => "Add members";
-  String get RideListAddMemberInstructionUseMenu => "in the members menu";
   String get RideListAddRideInstruction => "Add a ride";
   String get RideListAddRideInstructionPlus => "with the +";
   String get RideListAttendeesHeader => "Attendees";
   String get RideListFilterShowAttendingOnly => "Only attending people";
-  String get RideListLoadingMembersFailed => "Could not load the members";
-  String get RideListLoadingRidesFailed => "Could not load the rides";
+  String get RideListLoadingMembersError => "Could not load members";
+  String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoMembers => "There are no members";
   String get RideListNoRides => "There are no rides";
   String get RideListRidesHeader => "Rides";
@@ -91,8 +89,6 @@ class $nl extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  @override
-  String get RideListAddMemberInstructionUseMenu => "in het leden menu";
   @override
   String get RideListRidesHeader => "Ritten";
   @override
@@ -124,6 +120,8 @@ class $nl extends S {
   @override
   String get SundayPrefix => "Zo";
   @override
+  String get RideListLoadingRidesError => "Kon ritten niet laden";
+  @override
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
   @override
   String get PersonFirstNameLabel => "Voornaam";
@@ -138,7 +136,7 @@ class $nl extends S {
   @override
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
-  String get RideListLoadingMembersFailed => "Kon de leden niet ophalen";
+  String get RideListLoadingMembersError => "Kon leden niet laden";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override
@@ -147,10 +145,6 @@ class $nl extends S {
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
   String get AddRideTitle => "Nieuwe Rit";
-  @override
-  String get RideListAddMemberInstruction => "Voeg leden toe";
-  @override
-  String get RideListLoadingRidesFailed => "Kon de ritten niet ophalen";
   @override
   String get AddRideLoadingFailed => "Kon de kalender niet laden";
   @override

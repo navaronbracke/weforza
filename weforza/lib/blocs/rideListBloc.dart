@@ -33,53 +33,50 @@ class RideListBloc extends Bloc {
   String attendeeCount = "";
 
   ///The selected ride.
-  IRideSelectable selectedRide;
+  int _selectedRideIndex = -1;
+
+  List<RideItemModel> _rides;
 
   ///Load the rides from the database.
   Future<List<RideItemModel>> getRides() async {
-    List<Ride> data = await _rideRepository.getAllRides();
-    return data.map((ride) => RideItemModel(RideListRideItemBloc(ride, false))).toList();
+    var data = await _rideRepository.getAllRides();
+    int index = 0;
+    _rides = data.map((ride){
+      return RideItemModel(RideListRideItemBloc(ride,index++, false));
+    }).toList();
+    return _rides;
   }
 
-  Future<List<RideAttendeeItemModel>> getAttendees() async {
-    switch(filterState){
-      case AttendeeFilterState.DISABLED: return _getAllMembers();
-      case AttendeeFilterState.OFF: return _getAllMembersAndAttendeesOfCurrentRide(selectedRide.getRide());
-      case AttendeeFilterState.ON: return _getAttendeesOfCurrentRideOnly(selectedRide.getRide());
-    }
-    return Future.value(List());
-  }
-
-
-
-  ///Get all members from the database.
-  ///There will be no selection in the returned values.
-  ///This function is used when the filter is DISABLED.
-  Future<List<RideAttendeeItemModel>> _getAllMembers() async {
+  ///Get all Members without applying selection to the items.
+  Future<List<RideAttendeeItemModel>> getAllMembers() async {
     List<Member> data = await _memberRepository.getAllMembers();
     List<Future<RideAttendeeItemModel>> mappedMembers = data.map((member) => _mapMemberToAttendeeItemModel(member, false)).toList();
     return await Future.wait(mappedMembers);
   }
 
-  ///Get the members from the database.
-  ///The members, that are attending the given ride, will be marked.
-  ///This function is used when a ride is selected and the filter is OFF.
-  Future<List<RideAttendeeItemModel>> _getAllMembersAndAttendeesOfCurrentRide(Ride ride) async {
+  ///Get all Members and apply selection to the attendees of the currently selected ride.
+  ///Does a fallback to [getAllMembers] if no ride is selected.
+  Future<List<RideAttendeeItemModel>> getAllMembersWithAttendingSelected() async {
+    if(_selectedRideIndex == -1) return getAllMembers();
+
+    final Ride ride = _rides[_selectedRideIndex].getRide();
     List<Member> data = await _memberRepository.getAllMembers();
     List<Future<RideAttendeeItemModel>> mappedMembers = data.map((member) => _mapMemberToAttendeeItemModel(member, ride.attendees.contains(Attendee(member.firstname,member.lastname,member.phone)))).toList();
     return await Future.wait(mappedMembers);
   }
 
-  ///Get the members that are attending the given ride.
-  ///This function is used when a ride is selected and the filter is ON.
-  Future<List<RideAttendeeItemModel>> _getAttendeesOfCurrentRideOnly(Ride ride) async {
+  ///Get the attendees of the currently selected ride.
+  ///Does a fallback to [getAllMembers] if no ride is selected.
+  Future<List<RideAttendeeItemModel>> getAttendeesOnly() async {
+    if(_selectedRideIndex == -1) return getAllMembers();
+
+    final Ride ride = _rides[_selectedRideIndex].getRide();
     List<Member> data = await _memberRepository.getAllMembers();
     List<Future<RideAttendeeItemModel>> mappedMembers = data.where((member) => ride.attendees.contains(Attendee(member.firstname,member.lastname,member.phone)))
         .map((member) => _mapMemberToAttendeeItemModel(member, true))
         .toList();
     return await Future.wait(mappedMembers);
   }
-
 
   ///Map the given params to a [RideAttendeeItemModel].
   Future<RideAttendeeItemModel> _mapMemberToAttendeeItemModel(Member member,bool isSelected) async => RideAttendeeItemModel(RideListAttendeeItemBloc(member,isSelected), await FileLoader.getImage(member.profileImageFilePath));
@@ -88,30 +85,49 @@ class RideListBloc extends Bloc {
   @override
   void dispose() {}
 
+  ///Select (or unselect) a given ride.
   void selectRide(IRideSelectable item) {
-    if(selectedRide != null){
-      selectedRide.select();
-    }
-    selectedRide = item;
-    selectedRide.select();
-    attendeeCount = "${selectedRide.getRide().attendees.length}";
-    if(filterState == AttendeeFilterState.DISABLED){
+    //New selection
+    if(_selectedRideIndex == -1){
+      _selectedRideIndex = item.getIndex();
+      item.select();
       filterState = AttendeeFilterState.OFF;
+      attendeeCount = "${item.getCount()}";
+    }
+    //Same item -> unselect it
+    else if(_rides[_selectedRideIndex].bloc.getDateOfRide() == item.getDateOfRide()){
+      _selectedRideIndex = -1;
+      item.unSelect();
+      filterState = AttendeeFilterState.DISABLED;
+      attendeeCount = "";
+    }
+    //different item -> unselect previous one and select the item
+    else{
+      _rides[_selectedRideIndex].bloc.unSelect();
+      _selectedRideIndex = item.getIndex();
+      item.select();
+      attendeeCount = "${item.getCount()}";
+      //if this is a new selection, enable the filter
+      if(filterState == AttendeeFilterState.DISABLED){
+        filterState = AttendeeFilterState.OFF;
+      }
     }
   }
 
-  void selectAttendee(IRideAttendeeSelectable item) async {
-    if(selectedRide == null) return;
+  ///Select an attendee.
+  Future selectAttendee(IRideAttendeeSelectable item) async {
+    if(_selectedRideIndex == -1) return;
 
-    Attendee attendee = item.getAttendee();
-    if(selectedRide.isAttendeeOf(attendee)){
-      selectedRide.remove(attendee);
+    final Attendee attendee = item.getAttendee();
+    if(_rides[_selectedRideIndex].isAttendeeOfRide(attendee)){
+      _rides[_selectedRideIndex].remove(attendee);
+      item.unSelect();
     }else{
-      selectedRide.add(attendee);
+      _rides[_selectedRideIndex].add(attendee);
+      item.select();
     }
-    item.select();
-    await _rideRepository.editRide(selectedRide.getRide());
-    attendeeCount = "${selectedRide.getRide().attendees.length}";
+    await _rideRepository.editRide(_rides[_selectedRideIndex].getRide());
+    attendeeCount = "${_rides[_selectedRideIndex].count()}";
   }
 }
 

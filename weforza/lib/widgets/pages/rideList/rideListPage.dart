@@ -41,7 +41,7 @@ class _RideListPageState extends State<RideListPage>
   @override
   void initState() {
     loadRidesFuture = _bloc.getRides();
-    loadAttendeesFuture = _bloc.getAttendees();
+    loadAttendeesFuture = _bloc.getAllMembers();
     super.initState();
   }
 
@@ -346,23 +346,27 @@ class _RideListPageState extends State<RideListPage>
   void selectRide(IRideSelectable item){
     setState(() {
       _bloc.selectRide(item);
-      loadAttendeesFuture = _bloc.getAttendees();
+      switch(_bloc.filterState){
+        case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
+        case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
+        case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+      }
     });
   }
 
   @override
-  void enableFilter() {
+  void turnOnFilter() {
     setState(() {
       _bloc.filterState = AttendeeFilterState.ON;
-      loadAttendeesFuture = _bloc.getAttendees();
+      loadAttendeesFuture = _bloc.getAttendeesOnly();
     });
   }
 
   @override
-  void disableFilter() {
+  void turnOffFilter() {
     setState(() {
       _bloc.filterState = AttendeeFilterState.OFF;
-      loadAttendeesFuture = _bloc.getAttendees();
+      loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected();
     });
   }
 }

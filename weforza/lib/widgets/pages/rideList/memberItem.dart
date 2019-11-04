@@ -4,17 +4,30 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/rideListMemberItemBloc.dart';
+import 'package:weforza/blocs/rideListAttendeeItemBloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents a [Member] within the 'Attendees' content panel of [RideListPage].
-class MemberItem extends StatelessWidget implements PlatformAwareWidget {
-  MemberItem(this._bloc): assert(_bloc != null);
+class MemberItem extends StatefulWidget {
+  MemberItem(this.bloc,this.image,this.selector): assert(bloc != null && selector != null);
   ///The BLoC for this item.
-  final RideListMemberItemBloc _bloc;
+  final RideListAttendeeItemBloc bloc;
+
+  ///The image for this item.
+  final File image;
+
+  ///The selection handler.
+  final IRideAttendeeSelector selector;
+
+  @override
+  _MemberItemState createState() => _MemberItemState();
+}
+
+class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -22,11 +35,14 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
+      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
       elevation: 4.0,
       child: InkWell(
+        splashColor: ApplicationTheme.rideListItemSplashColor,
         onTap: (){
-          //TODO: add/remove person from selected ride
-          //TODO change background
+          setState(() {
+            widget.selector.selectAttendee(widget.bloc);
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -34,14 +50,18 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _loadImage(),
+              ProfileImage(widget.image,40),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                    color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),
+                      overflow: TextOverflow.ellipsis),
                   SizedBox(height: 5),
-                  Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
+                  Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor)
+                      ,overflow: TextOverflow.ellipsis),
                 ],
               ),
             ],
@@ -53,51 +73,40 @@ class MemberItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
     return Container(
       child: GestureDetector(
         onTap: (){
-          //TODO: add/remove person from selected ride
-          //TODO change background
+          setState(() {
+            widget.selector.selectAttendee(widget.bloc);
+          });
         },
         child: Container(
+          color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                _loadImage(),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle,overflow: TextOverflow.ellipsis),
-                  SizedBox(height: 5),
-                  Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle,overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ],
+                ProfileImage(widget.image,40),
+                SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),
+                        overflow: TextOverflow.ellipsis),
+                    SizedBox(height: 5),
+                    Text(widget.bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor)
+                        ,overflow: TextOverflow.ellipsis),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _loadImage() {
-    return FutureBuilder(
-        future: _bloc.getImage(),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
-            if(snapshot.hasError){
-              return ProfileImage(null,40);
-            }
-            return ProfileImage(snapshot.data as File,40);
-          } else {
-            return ProfileImage(null,40);
-          }
-        }
     );
   }
 }

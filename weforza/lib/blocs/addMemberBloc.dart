@@ -116,7 +116,7 @@ class AddMemberBloc extends Bloc {
 
   ///Add a new member. [imageFileName] is provided as the name of the selected profile image.
   Future addMember(String imageFileName) async {
-    await _repository.addMember(Member(_firstName,_lastName,_phone,List(),0,imageFileName));
+    await _repository.addMember(Member(_firstName,_lastName,_phone,List(),imageFileName));
   }
 
   ///Dispose of this object.

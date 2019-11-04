@@ -15,6 +15,12 @@ abstract class ApplicationTheme {
   static final Color rideCalendarPastDayNoRideColor = Color.fromARGB(255, 89,111,128);
   static final Color rideCalendarPastDayWithRideColor = Color.fromARGB(255, 52,95,128);
 
+  static final Color rideListItemSelectedColor = Colors.lightGreen;
+  static final Color rideListItemUnselectedColor = Colors.white;
+  static final Color rideListItemSelectedFontColor = Colors.white;
+  static final Color rideListItemUnselectedFontColor = Colors.black;
+  static final Color rideListItemSplashColor = Colors.green;
+
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
   static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);

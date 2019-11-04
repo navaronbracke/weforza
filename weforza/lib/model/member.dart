@@ -13,7 +13,7 @@ class Member {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  Member(this.firstname,this.lastname,this.phone,this.devices,[this.wasPresentCount = 0,this.profileImageFilePath]): assert(firstname != null && lastname != null && phone != null && devices != null);
+  Member(this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]): assert(firstname != null && lastname != null && phone != null && devices != null);
 
   ///An id for in the database.
   int id;
@@ -31,8 +31,6 @@ class Member {
   ///The path to the image file, that was chosen as profile picture.
   String profileImageFilePath;
 
-  ///A member's number of times he/she was present.
-  int wasPresentCount;
   ///The list of devices of this person.
   ///We can only retrieve device name reliably with bluetooth, hence the String.
   List<String> devices;
@@ -43,7 +41,6 @@ class Member {
       "firstname": firstname,
       "lastname": lastname,
       "phone": phone,
-      "wasPresentCount": wasPresentCount,
       "devices": devices,
       "profile": profileImageFilePath
     };
@@ -56,7 +53,6 @@ class Member {
       map["lastname"],
       map["phone"],
       List.from(map["devices"]),
-      map["wasPresentCount"],
       map["profile"]
     );
   }

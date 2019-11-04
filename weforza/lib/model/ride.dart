@@ -70,4 +70,10 @@ class Attendee {
   final String lastname;
   ///The attendee's phone.
   final String phone;
+
+  @override
+  bool operator ==(Object other) => other is Attendee && firstname == other.firstname && lastname == other.lastname && phone == other.phone;
+
+  @override
+  int get hashCode => hashValues(firstname, lastname,phone);
 }

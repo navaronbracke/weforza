@@ -14,9 +14,6 @@ class RideListMembersEmpty extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(S.of(context).RideListNoMembers),
-            SizedBox(height: 10),
-            Text(S.of(context).RideListAddMemberInstruction),
-            Text(S.of(context).RideListAddMemberInstructionUseMenu),
           ],
         ),
       ),

@@ -83,7 +83,6 @@ class TestMemberRepository implements IMemberRepository {
         m.firstname = member.firstname;
         m.lastname = member.lastname;
         m.profileImageFilePath = member.profileImageFilePath;
-        m.wasPresentCount = member.wasPresentCount;
         m.devices = member.devices;
       }
     }

@@ -25,10 +25,8 @@
   "RideListNoMembers": "There are no members",
   "RideListAddRideInstruction": "Add a ride",
   "RideListAddRideInstructionPlus": "with the +",
-  "RideListAddMemberInstruction": "Add members",
-  "RideListAddMemberInstructionUseMenu": "in the members menu",
-  "RideListLoadingRidesFailed": "Could not load the rides",
-  "RideListLoadingMembersFailed": "Could not load the members",
+  "RideListLoadingMembersError": "Could not load members",
+  "RideListLoadingRidesError": "Could not load rides",
   "RideListFilterShowAttendingOnly": "Only attending people",
 
   "MemberDetailsTitle": "Details",

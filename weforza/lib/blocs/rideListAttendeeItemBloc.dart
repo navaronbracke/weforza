@@ -5,9 +5,10 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 
 ///This class is the BLoC for RideListMemberItem.
-class RideListAttendeeItemBloc extends Bloc {
+class RideListAttendeeItemBloc extends Bloc implements IRideAttendeeSelectable {
   RideListAttendeeItemBloc(this._member,this.isSelected): assert(_member != null && isSelected != null);
 
   bool isSelected;
@@ -24,5 +25,14 @@ class RideListAttendeeItemBloc extends Bloc {
   void dispose() {}
 
   Attendee attendeeFrom() => Attendee(firstName,lastName,_member.phone);
+
+  @override
+  Attendee getAttendee() => Attendee(firstName,lastName,_member.phone);
+
+  @override
+  void select() => isSelected = true;
+
+  @override
+  void unSelect() => isSelected = false;
 
 }

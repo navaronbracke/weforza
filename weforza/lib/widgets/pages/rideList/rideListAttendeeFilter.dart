@@ -28,7 +28,7 @@ class _RideListAttendeeFilterState extends State<RideListAttendeeFilter> impleme
           activeColor: Colors.white,
           value: true,
           onChanged: (value) {
-            widget.handler.disableFilter();
+            widget.handler.turnOffFilter();
           }
       );
     }else if(widget.state == AttendeeFilterState.OFF){
@@ -37,7 +37,7 @@ class _RideListAttendeeFilterState extends State<RideListAttendeeFilter> impleme
           activeColor: Colors.white,
           value: false,
           onChanged: (value) {
-            widget.handler.enableFilter();
+            widget.handler.turnOnFilter();
           }
       );
     }else{
@@ -57,7 +57,7 @@ class _RideListAttendeeFilterState extends State<RideListAttendeeFilter> impleme
         activeColor: CupertinoTheme.of(context).primaryContrastingColor,
         value: true,
         onChanged: (value){
-          widget.handler.disableFilter();
+          widget.handler.turnOffFilter();
         },
       );
     }else if(widget.state == AttendeeFilterState.OFF){
@@ -65,7 +65,7 @@ class _RideListAttendeeFilterState extends State<RideListAttendeeFilter> impleme
         activeColor: CupertinoTheme.of(context).primaryContrastingColor,
         value: false,
         onChanged: (value){
-          widget.handler.enableFilter();
+          widget.handler.turnOnFilter();
         },
       );
     }else{
@@ -79,7 +79,7 @@ class _RideListAttendeeFilterState extends State<RideListAttendeeFilter> impleme
 }
 
 abstract class AttendeeFilterHandler {
-  void enableFilter();
+  void turnOnFilter();
 
-  void disableFilter();
+  void turnOffFilter();
 }

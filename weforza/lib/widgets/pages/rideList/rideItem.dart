@@ -20,7 +20,7 @@ class RideItem extends StatefulWidget {
   State<StatefulWidget> createState() => _RideItemState();
 }
 
-class _RideItemState extends State<RideItem> implements PlatformAwareWidget, IRideSelectable {
+class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -33,7 +33,11 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget, IRi
       child: InkWell(
         splashColor: ApplicationTheme.rideListItemSplashColor,
         onTap: (){
-          widget.selector.selectRide(this);
+          if(mounted){
+            setState(() {
+              widget.selector.selectRide(widget.bloc);
+            });
+          }
         },
         child: Padding(
           padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
@@ -50,7 +54,11 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget, IRi
   Widget buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        widget.selector.selectRide(this);
+        if(mounted){
+          setState(() {
+            widget.selector.selectRide(widget.bloc);
+          });
+        }
       },
       child: Container(
         color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
@@ -65,27 +73,4 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget, IRi
     );
   }
 
-  @override
-  void select() {
-    if(mounted){
-      setState(() {
-        widget.bloc.isSelected = !widget.bloc.isSelected;
-      });
-    }
-  }
-
-  @override
-  DateTime getDate() => widget.bloc.getDate();
-
-  @override
-  bool isAttendeeOf(Attendee attendee) => widget.bloc.isAttendee(attendee);
-
-  @override
-  void add(Attendee attendee) => widget.bloc.add(attendee);
-
-  @override
-  void remove(Attendee attendee) => widget.bloc.remove(attendee);
-
-  @override
-  Ride getRide() => widget.bloc.ride;
 }

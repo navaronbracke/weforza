@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideListAttendeeItemBloc.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
@@ -28,7 +27,7 @@ class MemberItem extends StatefulWidget {
   _MemberItemState createState() => _MemberItemState();
 }
 
-class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget, IRideAttendeeSelectable {
+class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -41,7 +40,9 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget,
       child: InkWell(
         splashColor: ApplicationTheme.rideListItemSplashColor,
         onTap: (){
-          widget.selector.selectAttendee(this);
+          setState(() {
+            widget.selector.selectAttendee(widget.bloc);
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -75,7 +76,9 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget,
     return Container(
       child: GestureDetector(
         onTap: (){
-          widget.selector.selectAttendee(this);
+          setState(() {
+            widget.selector.selectAttendee(widget.bloc);
+          });
         },
         child: Container(
           color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
@@ -106,14 +109,4 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget,
       ),
     );
   }
-
-  @override
-  void select() {
-    setState(() {
-      widget.bloc.isSelected = !widget.bloc.isSelected;
-    });
-  }
-
-  @override
-  Attendee getAttendee() => widget.bloc.attendeeFrom();
 }

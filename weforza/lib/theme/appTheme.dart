@@ -14,6 +14,9 @@ abstract class ApplicationTheme {
 
   static final Color rideCalendarPastDayNoRideColor = Color.fromARGB(255, 134,146,156);
   static final Color rideCalendarPastDayWithRideColor = Color.fromARGB(255, 52,95,128);
+  static final Color rideCalendarHeaderColor = Colors.black;
+  static final Color rideCalendarHeaderButtonIdleColor = Colors.black;
+  static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
 
   static final Color rideListItemSelectedColor = Colors.lightGreen;
   static final Color rideListItemUnselectedColor = Colors.white;

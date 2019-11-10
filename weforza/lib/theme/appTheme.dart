@@ -12,7 +12,7 @@ abstract class ApplicationTheme {
   static final Color _iosPrimaryColor = Colors.blue;
   static final Color _iosAccentColor = Colors.blue.shade300;
 
-  static final Color rideCalendarPastDayNoRideColor = Color.fromARGB(255, 89,111,128);
+  static final Color rideCalendarPastDayNoRideColor = Color.fromARGB(255, 134,146,156);
   static final Color rideCalendarPastDayWithRideColor = Color.fromARGB(255, 52,95,128);
 
   static final Color rideListItemSelectedColor = Colors.lightGreen;

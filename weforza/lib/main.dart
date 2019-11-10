@@ -10,6 +10,7 @@ import 'package:weforza/widgets/pages/homePage.dart';
 
 // Set up a Production injector and run the app.
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();

@@ -42,8 +42,8 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         }
       },
       child: Container(
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(color: _backgroundColor,borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Center(
           child: Text("${widget.bloc.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),

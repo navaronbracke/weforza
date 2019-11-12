@@ -48,27 +48,30 @@ class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidg
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        CupertinoIconButton(
-            Icons.arrow_back_ios,
-            ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-            ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageBack()),
-        Expanded(
-          child: Center(
-            child: Text(DateFormat.MMMM(Localizations.localeOf(context)
-                .languageCode)
-                .add_y()
-                .format(paginator.pageDate),
-              style: TextStyle(color: ApplicationTheme.rideCalendarHeaderColor),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+      child: Row(
+        children: <Widget>[
+          CupertinoIconButton(
+              Icons.arrow_back_ios,
+              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
+              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageBack()),
+          Expanded(
+            child: Center(
+              child: Text(DateFormat.MMMM(Localizations.localeOf(context)
+                  .languageCode)
+                  .add_y()
+                  .format(paginator.pageDate),
+                style: TextStyle(color: ApplicationTheme.rideCalendarHeaderColor),
+              ),
             ),
           ),
-        ),
-        CupertinoIconButton(
-            Icons.arrow_back_ios,
-            ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-            ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageForward()),
-      ],
+          CupertinoIconButton(
+              Icons.arrow_forward_ios,
+              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
+              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageForward()),
+        ],
+      ),
     );
   }
 

@@ -49,7 +49,7 @@ class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidg
   @override
   Widget buildIosWidget(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+      padding: MediaQuery.of(context).orientation == Orientation.portrait ?  const EdgeInsets.symmetric(vertical: 40,horizontal: 20): const EdgeInsets.all(20),
       child: Row(
         children: <Widget>[
           CupertinoIconButton(

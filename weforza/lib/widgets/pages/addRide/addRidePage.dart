@@ -115,7 +115,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         middle: Text(S.of(context).AddRideTitle),
         trailing: CupertinoIconButton(
           Icons.delete_sweep,
-          Colors.black38,Colors.black, () => _bloc.onRequestClear(),
+          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
         ),
       ),
       child: SafeArea(
@@ -147,7 +147,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         middle: Text(S.of(context).AddRideTitle),
         trailing: CupertinoIconButton(
           Icons.delete_sweep,
-          Colors.black38,Colors.black, () => _bloc.onRequestClear(),
+          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
         ),
       ),
       child: SafeArea(

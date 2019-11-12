@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
@@ -34,6 +35,11 @@ class AddRideBloc extends Bloc {
   ///A callback function for when a date is pressed.
   bool Function(DateTime date) onDayPressed;
 
+  ///A callback function that is fired when a selection clear is requested.
+  VoidCallback _onSelectionCleared;
+
+  set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
+
   AddRideBloc(this._repository){
     assert(_repository != null);
     onDayPressed = (date){
@@ -52,6 +58,14 @@ class AddRideBloc extends Bloc {
         return true;
       }
     };
+  }
+
+  void onRequestClear(){
+    if(_ridesToAdd.isNotEmpty && _onSelectionCleared != null){
+      _onSelectionCleared();
+      _ridesToAdd.clear();
+      _errorMessageController.add("");
+    }
   }
 
   ///Load the existing rides.

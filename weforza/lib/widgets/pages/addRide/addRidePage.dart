@@ -20,13 +20,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///The BLoC for this page.
   final AddRideBloc _bloc;
 
-  //region build widget
-
   @override
   void initState() {
-    final today = DateTime.now();
-    _bloc.pageDate = DateTime(today.year,today.month);
     super.initState();
+    _bloc.initCalendarDate();
   }
 
   @override
@@ -47,8 +44,6 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
         buildIOSLandscapeLayout(context)
     );
   }
-
-  //endregion
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {

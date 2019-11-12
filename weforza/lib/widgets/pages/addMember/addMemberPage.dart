@@ -113,10 +113,13 @@ class _AddMemberPageState extends State<AddMemberPage>
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     _initStrings(context);
-    return PlatformAwareWidgetBuilder.build(context, this);
   }
+
+  @override
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

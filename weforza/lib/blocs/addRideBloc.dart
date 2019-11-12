@@ -3,35 +3,18 @@ import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/widgets/pages/addRide/addRideCalendarPaginator.dart';
 
 ///This class represents the BLoC for AddRidePage.
-class AddRideBloc extends Bloc implements IAddRideCalendarPaginator {
-  AddRideBloc(this._repository){
-    assert(_repository != null);
-    onDayPressed = (date){
-      //This date is in the past
-      if(date.isBefore(DateTime.now())) return false;
-
-      //There is a ride with this date.
-      if(_existingRides.contains(date)) return false;
-
-      //This is a selected ride, unselect it.
-      if(_ridesToAdd.contains(date)){
-        _ridesToAdd.remove(date);
-        return true;
-      }else{
-        _ridesToAdd.add(date);
-        return true;
-      }
-    };
-  }
+class AddRideBloc extends Bloc {
 
   ///The repository that will handle the submit.
   final IRideRepository _repository;
 
   ///The date for the currently visible month in the calendar.
   DateTime pageDate;
+
+  ///The days in the month of [pageDate].
+  int daysInMonth = 0;
 
   ///The already persistent rides.
   List<DateTime> _existingRides;
@@ -44,6 +27,24 @@ class AddRideBloc extends Bloc implements IAddRideCalendarPaginator {
 
   ///A callback function for when a date is pressed.
   bool Function(DateTime date) onDayPressed;
+
+  AddRideBloc(this._repository){
+    assert(_repository != null);
+    onDayPressed = (date){
+      DateTime today = DateTime.now();
+      //This date is in the past OR there is a ride with this date.
+      if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)) return false;
+
+      //This is a selected ride, unselect it.
+      if(_ridesToAdd.contains(date)){
+        _ridesToAdd.remove(date);
+        return true;
+      }else{
+        _ridesToAdd.add(date);
+        return true;
+      }
+    };
+  }
 
   ///Load the existing rides.
   Future loadRides() async {
@@ -63,24 +64,32 @@ class AddRideBloc extends Bloc implements IAddRideCalendarPaginator {
     return !_existingRides.contains(date) && _ridesToAdd.contains(date);
   }
 
+  void initCalendarDate(){
+    final today = DateTime.now();
+    final jiffyDate = Jiffy([today.year,today.month,1]);
+    pageDate = jiffyDate.dateTime;
+    daysInMonth = jiffyDate.daysInMonth;
+  }
+
+  ///Add a month to [pageDate].
+  ///This does not trigger a page switch.
   void addMonth(){
     //Always take first day of month as reference
     final newDate = Jiffy([pageDate.year,pageDate.month,1])
       ..add(months: 1);
     pageDate = newDate.dateTime;
+    daysInMonth = newDate.daysInMonth;
   }
 
+  ///Subtract a month from [pageDate].
+  ///This does not trigger a page switch.
   void subtractMonth(){
     //Always take first day of month as reference
     final newDate = Jiffy([pageDate.year,pageDate.month,1])
       ..subtract(months: 1);
     pageDate = newDate.dateTime;
+    daysInMonth = newDate.daysInMonth;
   }
-
-
-  ///Dispose of this object.
-  @override
-  void dispose() {}
 
   ///Validate if the selection is valid.
   bool validateInputs(String selectionEmptyMessage){
@@ -101,9 +110,7 @@ class AddRideBloc extends Bloc implements IAddRideCalendarPaginator {
     }
   }
 
+  ///Dispose of this object.
   @override
-  void pageBack() => subtractMonth();
-
-  @override
-  void pageForward() => addMonth();
+  void dispose() {}
 }

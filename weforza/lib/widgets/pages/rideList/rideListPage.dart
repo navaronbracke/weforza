@@ -40,9 +40,9 @@ class _RideListPageState extends State<RideListPage>
 
   @override
   void initState() {
+    super.initState();
     loadRidesFuture = _bloc.getRides();
     loadAttendeesFuture = _bloc.getAllMembers();
-    super.initState();
   }
 
   @override

@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
@@ -22,8 +24,12 @@ class AddRideBloc extends Bloc {
   ///The rides to add on a submit.
   List<DateTime> _ridesToAdd = List();
 
-  ///The error message, if applicable.
-  String errorMessage = "";
+  ///The [StreamController] for the error message.
+  StreamController<String> _errorMessageController = StreamController.broadcast();
+  ///Get the error message stream.
+  Stream<String> get stream => _errorMessageController.stream;
+  ///Add [message] to the stream.
+  void addErrorMessage(String message) => _errorMessageController.add(message);
 
   ///A callback function for when a date is pressed.
   bool Function(DateTime date) onDayPressed;
@@ -38,9 +44,11 @@ class AddRideBloc extends Bloc {
       //This is a selected ride, unselect it.
       if(_ridesToAdd.contains(date)){
         _ridesToAdd.remove(date);
+        _errorMessageController.add("");
         return true;
       }else{
         _ridesToAdd.add(date);
+        _errorMessageController.add("");
         return true;
       }
     };
@@ -92,16 +100,7 @@ class AddRideBloc extends Bloc {
   }
 
   ///Validate if the selection is valid.
-  bool validateInputs(String selectionEmptyMessage){
-    if(_ridesToAdd.isEmpty){
-      errorMessage = selectionEmptyMessage;
-      return false;
-    }
-    else{
-      errorMessage = "";
-      return true;
-    }
-  }
+  bool validateInputs() => _ridesToAdd.isEmpty ? false : true;
 
   ///Add the selected rides.
   Future addRides() async {
@@ -112,5 +111,7 @@ class AddRideBloc extends Bloc {
 
   ///Dispose of this object.
   @override
-  void dispose() {}
+  void dispose() {
+    _errorMessageController.close();
+  }
 }

@@ -25,18 +25,22 @@ class _AddRideSubmitState extends State<AddRideSubmit> implements PlatformAwareW
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(widget.bloc.errorMessage),
+        StreamBuilder(
+          stream: widget.bloc.stream,
+          initialData: "",
+          builder: (context,snapshot) => Text(snapshot.data),
+        ),
         SizedBox(height: 10),
         RaisedButton(
           color: Theme.of(context).primaryColor,
           child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
           onPressed: () async {
-            if(widget.bloc.validateInputs(S.of(context).AddRideEmptySelection)){
+            if(widget.bloc.validateInputs()){
               await widget.bloc.addRides();
               //pass true to indicate a reload
               Navigator.pop(context,true);
             }else{
-              setState(() {});
+              widget.bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
             }
           },
         ),
@@ -49,17 +53,21 @@ class _AddRideSubmitState extends State<AddRideSubmit> implements PlatformAwareW
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(widget.bloc.errorMessage),
+        StreamBuilder(
+          stream: widget.bloc.stream,
+          initialData: "",
+          builder: (context,snapshot) => Text(snapshot.data),
+        ),
         SizedBox(height: 10),
         CupertinoButton.filled(
           pressedOpacity: 0.5,
           child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
             onPressed: () async {
-              if (widget.bloc.validateInputs(S.of(context).AddRideEmptySelection)) {
+              if (widget.bloc.validateInputs()) {
                 await widget.bloc.addRides();
                 Navigator.pop(context);
               } else {
-                setState(() {});
+                widget.bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
               }
             }
         ),

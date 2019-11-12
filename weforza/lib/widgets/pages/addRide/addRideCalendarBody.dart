@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
+import 'package:weforza/blocs/addRideCalendarItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendarItem.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendarPaginator.dart';
@@ -18,7 +19,18 @@ class AddRideCalendarBody extends StatefulWidget {
   _AddRideCalendarBodyState createState() => _AddRideCalendarBodyState();
 }
 
-class _AddRideCalendarBodyState extends State<AddRideCalendarBody> {
+class _AddRideCalendarBodyState extends State<AddRideCalendarBody> implements IRideDayScheduler {
+
+  List<AddRideCalendarItemBloc> itemBlocs = List();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.bloc.onSelectionCleared = (){
+      itemBlocs.forEach((child) => child.reset());
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -52,13 +64,17 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> {
     //A list of filler widgets for the offset + the actual day widgets
     List<Widget> items = List();
     //Add start offset widgets first
-    for(int i =0; i<offset; i++){
+    for(int i = 0; i<offset; i++){
       items.add(SizedBox(width: 30, height: 30));
     }
     //Add days of month
     int daysInMonth = widget.paginator.daysInMonth;
+    itemBlocs.clear();
     for(int i = 0; i< daysInMonth; i++){
-      items.add(AddRideCalendarItem(DateTime(pageDate.year,pageDate.month,i+1),widget.bloc));
+      final bloc = AddRideCalendarItemBloc(DateTime(pageDate.year,pageDate.month,i+1), this);
+      final item = AddRideCalendarItem(bloc);
+      items.add(item);
+      itemBlocs.add(bloc);
     }
     //Calculate the end offset
     //if the last day of the displayed month is a sunday, this is 0. If it is a monday it is 6.
@@ -93,4 +109,13 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> {
     }
     return output;
   }
+
+  @override
+  bool hasRidePlanned(DateTime date) => widget.bloc.dayHasRidePlanned(date);
+
+  @override
+  bool isNewlyScheduledRide(DateTime date) => widget.bloc.dayIsNewlyScheduledRide(date);
+
+  @override
+  bool onDayPressed(DateTime date) => widget.bloc.onDayPressed(date);
 }

@@ -51,6 +51,12 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete_sweep),
+            onPressed: () => _bloc.onRequestClear(),
+          ),
+        ],
       ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -76,6 +82,12 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete_sweep),
+            onPressed: () => _bloc.onRequestClear(),
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[

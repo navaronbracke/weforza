@@ -1,14 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/addRideBloc.dart';
+import 'package:weforza/blocs/addRideCalendarItemBloc.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
-  AddRideCalendarItem(this.date,this.bloc): assert(date != null && bloc != null);
+  AddRideCalendarItem(this.bloc): assert(bloc != null);
 
-  final DateTime date;
-  final AddRideBloc bloc;
+  final AddRideCalendarItemBloc bloc;
 
   @override
   _AddRideCalendarItemState createState() => _AddRideCalendarItemState();
@@ -22,6 +21,14 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
   @override
   void initState() {
     super.initState();
+    widget.bloc.onReset = (){
+      if(widget.bloc.isNewlyScheduledRide()){
+        setState(() {
+          _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
+          _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
+        });
+      }
+    };
     _setColors();
   }
 
@@ -29,7 +36,7 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        if(widget.bloc.onDayPressed(widget.date)){
+        if(widget.bloc.onDayPressed()){
           setState(() { _setColors(); });
         }
       },
@@ -38,16 +45,15 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         height: 30,
         decoration: BoxDecoration(color: _backgroundColor,borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Center(
-          child: Text("${widget.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),
+          child: Text("${widget.bloc.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),
         ),
       ),
     );
   }
 
   void _setColors(){
-    DateTime today = DateTime.now();
-    if(widget.date.isBefore(DateTime(today.year,today.month,today.day))){
-      if(widget.bloc.dayHasRidePlanned(widget.date)){
+    if(widget.bloc.isBeforeToday()){
+      if(widget.bloc.hasRidePlanned()){
         //Past day with ride
         _backgroundColor = ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarPastDayWithRideFontColor;
@@ -57,8 +63,8 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         _fontColor = ApplicationTheme.rideCalendarPastDayWithoutRideFontColor;
       }
     }else{
-      if(widget.bloc.dayHasRidePlanned(widget.date)){
-        if(widget.bloc.dayIsNewlyScheduledRide(widget.date)){
+      if(widget.bloc.hasRidePlanned()){
+        if(widget.bloc.isNewlyScheduledRide()){
           //new selected date
           _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarSelectedDayFontColor;

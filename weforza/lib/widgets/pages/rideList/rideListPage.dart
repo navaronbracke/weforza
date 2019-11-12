@@ -199,7 +199,13 @@ class _RideListPageState extends State<RideListPage>
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-              () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
+                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  if(value != null && value){
+                    setState(() {
+                      loadRidesFuture = _bloc.getRides();
+                    });
+                  }}),
+            ),
             SizedBox(width: 20),
             CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               //TODO scanning
@@ -250,7 +256,13 @@ class _RideListPageState extends State<RideListPage>
             Row(
               children: <Widget>[
                 CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
+                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                      if(value != null && value){
+                        setState(() {
+                          loadRidesFuture = _bloc.getRides();
+                        });
+                      }
+                    })),
                 SizedBox(width: 20),
                 CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO scanning

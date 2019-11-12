@@ -65,7 +65,8 @@ class _AddRideSubmitState extends State<AddRideSubmit> implements PlatformAwareW
             onPressed: () async {
               if (widget.bloc.validateInputs()) {
                 await widget.bloc.addRides();
-                Navigator.pop(context);
+                //pass true to indicate a reload
+                Navigator.pop(context,true);
               } else {
                 widget.bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
               }

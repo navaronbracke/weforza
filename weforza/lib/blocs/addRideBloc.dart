@@ -60,6 +60,7 @@ class AddRideBloc extends Bloc {
     };
   }
 
+  ///This function clears the current ride dates selection.
   void onRequestClear(){
     if(_ridesToAdd.isNotEmpty && _onSelectionCleared != null){
       _onSelectionCleared();
@@ -86,6 +87,7 @@ class AddRideBloc extends Bloc {
     return !_existingRides.contains(date) && _ridesToAdd.contains(date);
   }
 
+  ///Initialize the calendar date.
   void initCalendarDate(){
     final today = DateTime.now();
     final jiffyDate = Jiffy([today.year,today.month,1]);

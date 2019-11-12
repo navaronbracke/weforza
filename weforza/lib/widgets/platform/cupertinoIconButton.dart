@@ -14,7 +14,7 @@ class CupertinoIconButton extends StatefulWidget {
   final Color idleColor;
 
   ///The background color when pressed.
-  final onPressedColor;
+  final Color onPressedColor;
 
   @override
   _CupertinoIconButtonState createState() => _CupertinoIconButtonState();

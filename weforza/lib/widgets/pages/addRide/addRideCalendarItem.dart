@@ -36,6 +36,7 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+        //Update the widget if allowed
         if(widget.bloc.onDayPressed()){
           setState(() { _setColors(); });
         }
@@ -51,6 +52,7 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
     );
   }
 
+  ///Update the colors for the widget.
   void _setColors(){
     if(widget.bloc.isBeforeToday()){
       if(widget.bloc.hasRidePlanned()){

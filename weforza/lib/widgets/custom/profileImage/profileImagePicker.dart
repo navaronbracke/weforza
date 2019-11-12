@@ -37,8 +37,8 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> implements Plat
 
   @override
   void initState() {
-    _currentColor = widget.idleColor;
     super.initState();
+    _currentColor = widget.idleColor;
   }
 
   @override

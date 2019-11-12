@@ -5,6 +5,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -112,6 +113,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Text(S.of(context).AddRideTitle),
+        trailing: CupertinoIconButton(
+          Icons.delete_sweep,
+          Colors.black38,Colors.black, () => _bloc.onRequestClear(),
+        ),
       ),
       child: SafeArea(
           child: Row(
@@ -140,6 +145,10 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Text(S.of(context).AddRideTitle),
+        trailing: CupertinoIconButton(
+          Icons.delete_sweep,
+          Colors.black38,Colors.black, () => _bloc.onRequestClear(),
+        ),
       ),
       child: SafeArea(
         child: Column(

@@ -9,7 +9,7 @@ import 'package:weforza/widgets/pages/addRide/addRideCalendarPaginator.dart';
 
 ///This class is the [Widget] for the AddRide calendar body.
 class AddRideCalendarBody extends StatefulWidget {
-  AddRideCalendarBody(this.paginator,this.bloc): assert(paginator != null && bloc != null);
+  AddRideCalendarBody(Key key,this.bloc,this.paginator): assert(bloc != null && paginator != null && key != null),super(key: key);
 
   final AddRideBloc bloc;
   final IAddRideCalendarPaginator paginator;

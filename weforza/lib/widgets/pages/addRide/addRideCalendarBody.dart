@@ -47,9 +47,12 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> implements IR
           ],
         ),
         Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: _buildCalendarRows(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: _buildCalendarRows(),
+            ),
+            scrollDirection: Axis.vertical,
           ),
         ),
       ],
@@ -65,7 +68,7 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> implements IR
     List<Widget> items = List();
     //Add start offset widgets first
     for(int i = 0; i<offset; i++){
-      items.add(SizedBox(width: 30, height: 30));
+      items.add(SizedBox(width: 40, height: 40));
     }
     //Add days of month
     int daysInMonth = widget.paginator.daysInMonth;
@@ -81,7 +84,7 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> implements IR
     offset = 7 - DateTime(pageDate.year,pageDate.month,daysInMonth).weekday;
     //Add end offset widgets last
     for(int i = 0; i<offset; i++){
-      items.add(SizedBox(width: 30, height: 30));
+      items.add(SizedBox(width: 40, height: 40));
     }
 
     //The aforementioned items, but grouped in rows

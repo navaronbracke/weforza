@@ -16,21 +16,11 @@ class AddRideCalendar extends StatefulWidget {
 
 class _AddRideCalendarState extends State<AddRideCalendar> implements IAddRideCalendarPaginator {
 
-  Widget _calendarBody;
-  Widget _calendarHeader;
-
-  @override
-  void initState() {
-    super.initState();
-    _calendarHeader = AddRideCalendarHeader(this);
-    _calendarBody = AddRideCalendarBody(this,widget.bloc);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
-      _calendarHeader,
-      Expanded(child: _calendarBody),
+      AddRideCalendarHeader(this),
+      Expanded(child: AddRideCalendarBody(ValueKey<DateTime>(widget.bloc.pageDate),widget.bloc,this)),
     ]);
   }
 
@@ -44,8 +34,6 @@ class _AddRideCalendarState extends State<AddRideCalendar> implements IAddRideCa
   void pageForward() {
     setState(() {
       widget.bloc.addMonth();
-      _calendarHeader = AddRideCalendarHeader(this);
-      _calendarBody = AddRideCalendarBody(this,widget.bloc);
     });
   }
 
@@ -53,8 +41,6 @@ class _AddRideCalendarState extends State<AddRideCalendar> implements IAddRideCa
   void pageBack() {
     setState(() {
       widget.bloc.subtractMonth();
-      _calendarHeader = AddRideCalendarHeader(this);
-      _calendarBody = AddRideCalendarBody(this,widget.bloc);
     });
   }
 }

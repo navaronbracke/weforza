@@ -77,7 +77,13 @@ class _RideListPageState extends State<RideListPage>
                   IconButton(
                     icon: Icon(Icons.add),
                     color: Colors.white,
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                      if(value != null && value){
+                        setState(() {
+                          loadRidesFuture = _bloc.getRides();
+                        });
+                      }
+                    }),
                   ),
                   IconButton(
                     color: Colors.white,

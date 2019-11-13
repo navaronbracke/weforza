@@ -12,6 +12,9 @@ abstract class ApplicationTheme {
   static final Color _iosPrimaryColor = Colors.blue;
   static final Color _iosAccentColor = Colors.blue.shade300;
 
+  static final Color profileImagePickerIdleColor = Colors.blue.shade300;
+  static final Color profileImagePickerOnPressedColor = Colors.blue;
+
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
   static final Color rideCalendarFutureDayNoRideFontColor = Colors.black;

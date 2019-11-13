@@ -22,6 +22,7 @@ class S implements WidgetsLocalizations {
   TextDirection get textDirection => TextDirection.ltr;
 
   String get AddMemberAlreadyExists => "This member already exists";
+  String get AddMemberError => "Could not add member";
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
@@ -94,6 +95,8 @@ class $nl extends S {
   String get RideListRidesHeader => "Ritten";
   @override
   String get HomePageRidesTab => "Ritten";
+  @override
+  String get AddMemberError => "Kon lid niet toevoegen";
   @override
   String get FridayPrefix => "Vr";
   @override

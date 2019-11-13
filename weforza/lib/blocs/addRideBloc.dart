@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -26,7 +27,7 @@ class AddRideBloc extends Bloc {
   List<DateTime> _ridesToAdd = List();
 
   ///The [StreamController] for the error message.
-  StreamController<String> _errorMessageController = StreamController.broadcast();
+  StreamController<String> _errorMessageController = BehaviorSubject();
   ///Get the error message stream.
   Stream<String> get stream => _errorMessageController.stream;
   ///Add [message] to the stream.

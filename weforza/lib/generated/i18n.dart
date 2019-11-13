@@ -26,6 +26,7 @@ class S implements WidgetsLocalizations {
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideEmptySelection => "Please select at least one date";
+  String get AddRideError => "Could not add rides";
   String get AddRideLoadingFailed => "Could not load Calendar";
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
@@ -161,6 +162,8 @@ class $nl extends S {
   String get MemberListTitle => "Leden";
   @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get AddRideError => "Kon ritten niet toevoegen";
   @override
   String get PersonDevicesLabel => "Toestellen";
   @override

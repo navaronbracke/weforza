@@ -24,8 +24,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: _selectedIndex);
     super.initState();
+    _pageController = PageController(initialPage: _selectedIndex);
   }
 
   @override

@@ -41,6 +41,8 @@ dependencies:
 
   jiffy: ^2.1.1
 
+  rxdart: ^0.22.6
+
   # This package allows the use of selecting files.
   file_picker: ^1.4.2
 

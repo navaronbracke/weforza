@@ -79,7 +79,7 @@ class RideListBloc extends Bloc {
   }
 
   ///Map the given params to a [RideAttendeeItemModel].
-  Future<RideAttendeeItemModel> _mapMemberToAttendeeItemModel(Member member,bool isSelected) async => RideAttendeeItemModel(RideListAttendeeItemBloc(member,isSelected), await FileLoader.getImage(member.profileImageFilePath));
+  Future<RideAttendeeItemModel> _mapMemberToAttendeeItemModel(Member member,bool isSelected) async => RideAttendeeItemModel(RideListAttendeeItemBloc(member,await FileLoader.getImage(member.profileImageFilePath),isSelected));
 
   ///Dispose of this object.
   @override

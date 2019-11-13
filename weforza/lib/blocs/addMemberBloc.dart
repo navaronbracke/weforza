@@ -1,6 +1,8 @@
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -28,6 +30,8 @@ class AddMemberBloc extends Bloc {
   String _firstName;
   String _lastName;
   String _phone;
+
+  File image;
 
   ///The actual errors.
   String firstNameError;
@@ -127,11 +131,10 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-  ///Add a new member. [imageFileName] is provided as the name of the selected profile image.
-  Future<bool> addMember(String imageFileName) async {
+  Future<bool> addMember() async {
     bool result;
     if(!await _repository.checkIfExists(_firstName, _lastName, _phone)){
-      await _repository.addMember(Member(_firstName,_lastName,_phone,List(),imageFileName)).then((value){
+      await _repository.addMember(Member(_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
         result = true;
       },onError: (error){
         _alreadyExistsController.addError(Exception("Failed to add member"));
@@ -141,6 +144,10 @@ class AddMemberBloc extends Bloc {
     }
     _alreadyExistsController.add(!result);
     return result;
+  }
+
+  Future<void> pickImage() async {
+    image = await FilePicker.getFile(type: FileType.IMAGE);
   }
 
   ///Dispose of this object.

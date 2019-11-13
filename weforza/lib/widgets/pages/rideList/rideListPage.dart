@@ -351,7 +351,7 @@ class _RideListPageState extends State<RideListPage>
 
   Widget _buildAttendeesList(List<RideAttendeeItemModel> items) {
     return items.isEmpty ? RideListMembersEmpty() : ListView.builder(itemCount: items.length,itemBuilder:
-        (context, index) => MemberItem(items[index].bloc,items[index].image,this));
+        (context, index) => MemberItem(items[index].bloc,this));
   }
 
   @override

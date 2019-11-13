@@ -22,10 +22,12 @@ class S implements WidgetsLocalizations {
   TextDirection get textDirection => TextDirection.ltr;
 
   String get AddMemberAlreadyExists => "This member already exists";
+  String get AddMemberError => "Could not add member";
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideEmptySelection => "Please select at least one date";
+  String get AddRideError => "Could not add rides";
   String get AddRideLoadingFailed => "Could not load Calendar";
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
@@ -94,6 +96,8 @@ class $nl extends S {
   @override
   String get HomePageRidesTab => "Ritten";
   @override
+  String get AddMemberError => "Kon lid niet toevoegen";
+  @override
   String get FridayPrefix => "Vr";
   @override
   String get MemberDetailsTitle => "Details";
@@ -161,6 +165,8 @@ class $nl extends S {
   String get MemberListTitle => "Leden";
   @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get AddRideError => "Kon ritten niet toevoegen";
   @override
   String get PersonDevicesLabel => "Toestellen";
   @override

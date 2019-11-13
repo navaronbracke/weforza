@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +8,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
@@ -29,13 +27,8 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
-  ///A flag that indicates if a [Member], with the current values, already exists.
-  bool _alreadyExists = false;
-
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
-
-  File _profileImage;
 
   ///The input labels.
   String _firstNameLabel;
@@ -56,7 +49,10 @@ class _AddMemberPageState extends State<AddMemberPage>
   String _phoneIllegalCharactersMessage;
   String _phoneMinLengthMessage;
   String _phoneMaxLengthMessage;
-  String _alreadyExistsMessage;
+
+  ///The [Widget] for the image picker.
+  ///This can be a placeholder, a profile image or a loading indicator.
+  Widget imagePicker;
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -86,7 +82,6 @@ class _AddMemberPageState extends State<AddMemberPage>
         translator.PhoneMinLength("${_bloc.phoneMinLength}");
     _phoneMaxLengthMessage =
         translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
-    _alreadyExistsMessage = translator.AddMemberAlreadyExists;
   }
 
   ///Validate all current form input
@@ -110,6 +105,12 @@ class _AddMemberPageState extends State<AddMemberPage>
             _phoneMinLengthMessage,
             _phoneMaxLengthMessage) == null;
     return firstNameValid && lastNameValid && phoneValid;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
   }
 
   @override
@@ -222,40 +223,38 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                          imagePicker,
+                          SizedBox(height: 20),
+                          StreamBuilder<bool>(
+                            initialData: false,
+                            stream: _bloc.alreadyExistsStream,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError){
+                                return Text(S.of(context).AddMemberError);
+                              }else{
+                                return Visibility(
+                                  visible: snapshot.data,
+                                  child: Text(S.of(context).AddMemberAlreadyExists),
+                                );
+                              }
+                            },
+                          ),
+                          RaisedButton(
+                            color: Theme.of(context).primaryColor,
+                            child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                if(await _bloc.addMember()){
+                                  Navigator.pop(context);
+                                }
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            Container(
-              child: Align(
-                alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    Visibility(visible: _alreadyExists,child: Text(_alreadyExistsMessage)),
-                    SizedBox(height: 10),
-                    RaisedButton(
-                      color: Theme.of(context).primaryColor,
-                      child: Text(S.of(context).AddMemberSubmit,
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          _alreadyExists = await _bloc.checkIfExists();
-                          setState(() {});
-                          if(!_alreadyExists){
-                            _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
-                              //Go back to member list page
-                              Navigator.pop(context);
-                            });
-                          }
-                        }
-                      },
-                    ),
-                  ],
-                ),
               ),
             ),
           ],
@@ -365,37 +364,36 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                              imagePicker,
+                              SizedBox(height: 20),
+                              StreamBuilder<bool>(
+                                initialData: false,
+                                stream: _bloc.alreadyExistsStream,
+                                builder: (context,snapshot){
+                                  if(snapshot.hasError){
+                                    return Text(S.of(context).AddMemberError);
+                                  }else{
+                                    return Visibility(
+                                      visible: snapshot.data,
+                                      child: Text(S.of(context).AddMemberAlreadyExists),
+                                    );
+                                  }
+                                },
+                              ),
+                              CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                                  pressedOpacity: 0.5,
+                                  onPressed: () async {
+                                    if(cupertinoAllFormInputValidator()){
+                                      if(await _bloc.addMember()){
+                                        Navigator.pop(context);
+                                      }
+                                    }
+                                  }),
                             ],
                           ),
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ),
-              Container(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: CupertinoButton.filled(
-                    pressedOpacity: 0.5,
-                    child: Text(S.of(context).AddMemberSubmit,
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      //Validate the form before continuing.
-                      if(!cupertinoAllFormInputValidator()){
-                        setState(() {});
-                      }else{
-                        _alreadyExists = await _bloc.checkIfExists();
-                        setState(() {});
-                        if(!_alreadyExists){
-                          _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
-                            //Go back to member list page
-                            Navigator.pop(context);
-                          });
-                        }
-                      }
-                    },
                   ),
                 ),
               ),
@@ -494,33 +492,32 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          ProfileImagePicker(this,_profileImage,CupertinoTheme.of(context).primaryContrastingColor,CupertinoTheme.of(context).primaryColor),
+                          imagePicker,
+                          SizedBox(height: 5),
+                          StreamBuilder<bool>(
+                            initialData: false,
+                            stream: _bloc.alreadyExistsStream,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError){
+                                return Text(S.of(context).AddMemberError);
+                              }else{
+                                return Visibility(
+                                  visible: snapshot.data,
+                                  child: Text(S.of(context).AddMemberAlreadyExists),
+                                );
+                              }
+                            },
+                          ),
+                          CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                              pressedOpacity: 0.5,
+                              onPressed: () async {
+                                if(cupertinoAllFormInputValidator()){
+                                  if(await _bloc.addMember()){
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              }),
                         ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: CupertinoButton.filled(
-                        pressedOpacity: 0.5,
-                        child: Text(S.of(context).AddMemberSubmit,
-                            style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
-                          //Validate the form before continuing.
-                          if(!cupertinoAllFormInputValidator()){
-                            setState(() {});
-                          }else{
-                            _alreadyExists = await _bloc.checkIfExists();
-                            setState(() {});
-                            if(!_alreadyExists){
-                              _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
-                                //Go back to member list page
-                                Navigator.pop(context);
-                              });
-                            }
-                          }
-                        },
                       ),
                     ),
                   ),
@@ -610,30 +607,34 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        ProfileImagePicker(this,_profileImage,Theme.of(context).accentColor,Theme.of(context).primaryColor),
+                        imagePicker,
+                        SizedBox(height: 5),
+                        StreamBuilder<bool>(
+                          initialData: false,
+                          stream: _bloc.alreadyExistsStream,
+                          builder: (context,snapshot){
+                            if(snapshot.hasError){
+                              return Text(S.of(context).AddMemberError);
+                            }else{
+                              return Visibility(
+                                visible: snapshot.data,
+                                child: Text(S.of(context).AddMemberAlreadyExists),
+                              );
+                            }
+                          },
+                        ),
+                        RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+                              if(await _bloc.addMember()){
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                        ),
                       ],
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: RaisedButton(
-                      color: Theme.of(context).primaryColor,
-                      child: Text(S.of(context).AddMemberSubmit,
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          _alreadyExists = await _bloc.checkIfExists();
-                          setState(() {});
-                          if(!_alreadyExists){
-                            _bloc.addMember(_getImageFilePath(_profileImage)).then((val){
-                              //Go back to member list page
-                              Navigator.pop(context);
-                            });
-                          }
-                        }
-                      },
                     ),
                   ),
                 ),
@@ -654,14 +655,15 @@ class _AddMemberPageState extends State<AddMemberPage>
 
   ///See [IProfileImagePicker].
   @override
-  File getImage() => _profileImage;
-
-  ///See [IProfileImagePicker].
-  @override
   Future<void> pickProfileImage() async {
-    _profileImage = await FilePicker.getFile(type: FileType.IMAGE);
-    setState(() {});
+    setState(() {
+      imagePicker = Center(
+        child: PlatformAwareLoadingIndicator(),
+      );
+    });
+    await _bloc.pickImage();
+    setState(() {
+      imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
+    });
   }
-
-  String _getImageFilePath(File image) => (image == null) ? null : image.path;
 }

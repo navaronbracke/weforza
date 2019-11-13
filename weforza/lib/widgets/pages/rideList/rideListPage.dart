@@ -40,9 +40,9 @@ class _RideListPageState extends State<RideListPage>
 
   @override
   void initState() {
+    super.initState();
     loadRidesFuture = _bloc.getRides();
     loadAttendeesFuture = _bloc.getAllMembers();
-    super.initState();
   }
 
   @override
@@ -77,7 +77,13 @@ class _RideListPageState extends State<RideListPage>
                   IconButton(
                     icon: Icon(Icons.add),
                     color: Colors.white,
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                      if(value != null && value){
+                        setState(() {
+                          loadRidesFuture = _bloc.getRides();
+                        });
+                      }
+                    }),
                   ),
                   IconButton(
                     color: Colors.white,
@@ -193,7 +199,13 @@ class _RideListPageState extends State<RideListPage>
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-              () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
+                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  if(value != null && value){
+                    setState(() {
+                      loadRidesFuture = _bloc.getRides();
+                    });
+                  }}),
+            ),
             SizedBox(width: 20),
             CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               //TODO scanning
@@ -244,7 +256,13 @@ class _RideListPageState extends State<RideListPage>
             Row(
               children: <Widget>[
                 CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))),
+                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                      if(value != null && value){
+                        setState(() {
+                          loadRidesFuture = _bloc.getRides();
+                        });
+                      }
+                    })),
                 SizedBox(width: 20),
                 CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO scanning
@@ -333,7 +351,7 @@ class _RideListPageState extends State<RideListPage>
 
   Widget _buildAttendeesList(List<RideAttendeeItemModel> items) {
     return items.isEmpty ? RideListMembersEmpty() : ListView.builder(itemCount: items.length,itemBuilder:
-        (context, index) => MemberItem(items[index].bloc,items[index].image,this));
+        (context, index) => MemberItem(items[index].bloc,this));
   }
 
   @override

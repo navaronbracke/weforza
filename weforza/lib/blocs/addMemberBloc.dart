@@ -1,5 +1,10 @@
 
+import 'dart:async';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -18,10 +23,15 @@ class AddMemberBloc extends Bloc {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
 
+  StreamController<bool> _alreadyExistsController = BehaviorSubject();
+  Stream<bool> get alreadyExistsStream => _alreadyExistsController.stream;
+
   ///The actual inputs.
   String _firstName;
   String _lastName;
   String _phone;
+
+  File image;
 
   ///The actual errors.
   String firstNameError;
@@ -44,6 +54,10 @@ class AddMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+    if(value != _firstName){
+      //Clear the 'user exists' error when a different input is given
+      _alreadyExistsController.add(false);
+    }
     if(value == null || value.isEmpty)
     {
       firstNameError = isRequiredMessage;
@@ -67,6 +81,10 @@ class AddMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+    if(value != _lastName){
+      //Clear the 'user exists' error when a different input is given
+      _alreadyExistsController.add(false);
+    }
     if(value == null || value.isEmpty)
     {
       lastNameError = isRequiredMessage;
@@ -90,6 +108,10 @@ class AddMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
+    if(value != _phone){
+      //Clear the 'user exists' error when a different input is given
+      _alreadyExistsController.add(false);
+    }
     if(value == null || value.isEmpty)
     {
       phoneError = isRequiredMessage;
@@ -109,14 +131,23 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-  ///Check if a member with the current values already exists.
-  Future<bool> checkIfExists() {
-    return _repository.checkIfExists(_firstName, _lastName, _phone);
+  Future<bool> addMember() async {
+    bool result;
+    if(!await _repository.checkIfExists(_firstName, _lastName, _phone)){
+      await _repository.addMember(Member(_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
+        result = true;
+      },onError: (error){
+        _alreadyExistsController.addError(Exception("Failed to add member"));
+      });
+    }else{
+      result = false;
+    }
+    _alreadyExistsController.add(!result);
+    return result;
   }
 
-  ///Add a new member. [imageFileName] is provided as the name of the selected profile image.
-  Future addMember(String imageFileName) async {
-    await _repository.addMember(Member(_firstName,_lastName,_phone,List(),imageFileName));
+  Future<void> pickImage() async {
+    image = await FilePicker.getFile(type: FileType.IMAGE);
   }
 
   ///Dispose of this object.
@@ -124,5 +155,6 @@ class AddMemberBloc extends Bloc {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
+    _alreadyExistsController.close();
   }
 }

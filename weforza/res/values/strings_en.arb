@@ -44,11 +44,13 @@
   "AddMemberSubmit": "Create New Member",
   "AddMemberPictureLabel": "Picture",
   "AddMemberAlreadyExists": "This member already exists",
+  "AddMemberError": "Could not add member",
 
   "AddRideTitle": "New Ride",
   "AddRideSubmit": "Add Selection",
   "AddRideLoadingFailed": "Could not load Calendar",
   "AddRideEmptySelection": "Please select at least one date",
+  "AddRideError": "Could not add rides",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

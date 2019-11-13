@@ -238,8 +238,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                bool result = await _bloc.addMember(_getImageFilePath(_profileImage));
-                                if(result){
+                                if(await _bloc.addMember(_getImageFilePath(_profileImage))){
                                   Navigator.pop(context);
                                 }
                               }
@@ -379,11 +378,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   pressedOpacity: 0.5,
                                   onPressed: () async {
                                     if(cupertinoAllFormInputValidator()){
-                                      _bloc.addMember(_getImageFilePath(_profileImage)).then((value){
-                                        if(value){
-                                          Navigator.pop(context);
-                                        }
-                                      });
+                                      if(await _bloc.addMember(_getImageFilePath(_profileImage))){
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   }),
                             ],
@@ -509,11 +506,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                               pressedOpacity: 0.5,
                               onPressed: () async {
                                 if(cupertinoAllFormInputValidator()){
-                                  _bloc.addMember(_getImageFilePath(_profileImage)).then((value){
-                                    if(value){
-                                      Navigator.pop(context);
-                                    }
-                                  });
+                                  if(await _bloc.addMember(_getImageFilePath(_profileImage))){
+                                    Navigator.pop(context);
+                                  }
                                 }
                               }),
                         ],
@@ -627,11 +622,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                           child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              _bloc.addMember(_getImageFilePath(_profileImage)).then((value){
-                                if(value){
-                                  Navigator.pop(context);
-                                }
-                              });
+                              if(await _bloc.addMember(_getImageFilePath(_profileImage))){
+                                Navigator.pop(context);
+                              }
                             }
                           },
                         ),

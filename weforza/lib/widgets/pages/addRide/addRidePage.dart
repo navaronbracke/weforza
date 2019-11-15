@@ -203,35 +203,41 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      AddRideColorLegend(),
-                      SizedBox(height: 20),
-                      StreamBuilder<String>(
-                        initialData: "",
-                        stream: _bloc.stream,
-                        builder: (context,snapshot){
-                          if(snapshot.hasError){
-                            return Text(S.of(context).AddRideError);
-                          }else{
-                            return Text(snapshot.data);
-                          }
-                        },
+                      Expanded(
+                        child: AddRideColorLegend(),
                       ),
-                      SizedBox(height: 10),
-                      CupertinoButton.filled(
-                        pressedOpacity: 0.5,
-                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
-                          if(_bloc.validateInputs()){
-                            await _bloc.addRides();
-                            //pass true to indicate a reload
-                            Navigator.pop(context,true);
-                          }else{
-                            _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                          }
-                      },
-                    ),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            StreamBuilder<String>(
+                              initialData: "",
+                              stream: _bloc.stream,
+                              builder: (context,snapshot){
+                                if(snapshot.hasError){
+                                  return Text(S.of(context).AddRideError);
+                                }else{
+                                  return Text(snapshot.data);
+                                }
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            CupertinoButton.filled(
+                              pressedOpacity: 0.5,
+                              child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                              onPressed: () async {
+                                if(_bloc.validateInputs()){
+                                  await _bloc.addRides();
+                                  //pass true to indicate a reload
+                                  Navigator.pop(context,true);
+                                }else{
+                                  _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -264,34 +270,40 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
               flex: 2,
               child: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    AddRideColorLegend(),
-                    SizedBox(height: 20),
-                    StreamBuilder<String>(
-                      initialData: "",
-                      stream: _bloc.stream,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError){
-                          return Text(S.of(context).AddRideError);
-                        }else{
-                          return Text(snapshot.data);
-                        }
-                      },
+                    Expanded(
+                      child: AddRideColorLegend(),
                     ),
-                    SizedBox(height: 10),
-                    CupertinoButton.filled(
-                      pressedOpacity: 0.5,
-                      child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if(_bloc.validateInputs()){
-                          await _bloc.addRides();
-                          //pass true to indicate a reload
-                          Navigator.pop(context,true);
-                        }else{
-                          _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                        }
-                      },
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          StreamBuilder<String>(
+                            initialData: "",
+                            stream: _bloc.stream,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError){
+                                return Text(S.of(context).AddRideError);
+                              }else{
+                                return Text(snapshot.data);
+                              }
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          CupertinoButton.filled(
+                            pressedOpacity: 0.5,
+                            child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                            onPressed: () async {
+                              if(_bloc.validateInputs()){
+                                await _bloc.addRides();
+                                //pass true to indicate a reload
+                                Navigator.pop(context,true);
+                              }else{
+                                _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

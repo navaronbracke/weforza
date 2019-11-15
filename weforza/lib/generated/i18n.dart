@@ -26,6 +26,10 @@ class S implements WidgetsLocalizations {
   String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
+  String get AddRideColorLegendCurrentSelection => "Current Selection";
+  String get AddRideColorLegendFutureRide => "Future Ride";
+  String get AddRideColorLegendPastDay => "Past Day Without Ride";
+  String get AddRideColorLegendPastRide => "Past Day With Ride";
   String get AddRideEmptySelection => "Please select at least one date";
   String get AddRideError => "Could not add rides";
   String get AddRideLoadingFailed => "Could not load Calendar";
@@ -112,9 +116,13 @@ class $nl extends S {
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
   @override
+  String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
+  @override
   String get MondayPrefix => "Ma";
   @override
   String get MemberDeleteDialogConfirm => "Verwijderen";
+  @override
+  String get AddRideColorLegendFutureRide => "Toekomstige Rit";
   @override
   String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
   @override
@@ -140,6 +148,8 @@ class $nl extends S {
   @override
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
+  String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
+  @override
   String get RideListLoadingMembersError => "Kon leden niet laden";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
@@ -159,6 +169,8 @@ class $nl extends S {
   String get AppName => "WeForza";
   @override
   String get MemberListLoadingInProgress => "Leden aan het ophalen...";
+  @override
+  String get AddRideColorLegendPastDay => "Gepasseerde Dag Zonder Rit";
   @override
   String get SaturdayPrefix => "Za";
   @override

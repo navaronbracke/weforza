@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/widgets/pages/addRide/AddRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -70,32 +71,40 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
             child: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  StreamBuilder<String>(
-                    initialData: "",
-                    stream: _bloc.stream,
-                    builder: (context,snapshot){
-                      if(snapshot.hasError){
-                        return Text(S.of(context).AddRideError);
-                      }else{
-                        return Text(snapshot.data);
-                      }
-                    },
+                  Expanded(
+                    child: AddRideColorLegend(),
                   ),
-                  SizedBox(height: 10),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      if(_bloc.validateInputs()){
-                        await _bloc.addRides();
-                        //pass true to indicate a reload
-                        Navigator.pop(context,true);
-                      }else{
-                        _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                      }
-                    },
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        StreamBuilder<String>(
+                          initialData: "",
+                          stream: _bloc.stream,
+                          builder: (context,snapshot){
+                            if(snapshot.hasError){
+                              return Text(S.of(context).AddRideError);
+                            }else{
+                              return Text(snapshot.data);
+                            }
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
+                          onPressed: () async {
+                            if(_bloc.validateInputs()){
+                              await _bloc.addRides();
+                              //pass true to indicate a reload
+                              Navigator.pop(context,true);
+                            }else{
+                              _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -121,42 +130,48 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
       body: Column(
         children: <Widget>[
           Flexible(
-            flex: 4,
+            flex: 3,
             child: _buildCalendar(),
           ),
           Expanded(
             flex: 2,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  StreamBuilder<String>(
-                    initialData: "",
-                    stream: _bloc.stream,
-                    builder: (context,snapshot){
-                      if(snapshot.hasError){
-                        return Text(S.of(context).AddRideError);
-                      }else{
-                        return Text(snapshot.data);
-                      }
-                    },
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: AddRideColorLegend(),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      StreamBuilder<String>(
+                        initialData: "",
+                        stream: _bloc.stream,
+                        builder: (context,snapshot){
+                          if(snapshot.hasError){
+                            return Text(S.of(context).AddRideError);
+                          }else{
+                            return Text(snapshot.data);
+                          }
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      RaisedButton(
+                        color: Theme.of(context).primaryColor,
+                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
+                        onPressed: () async {
+                          if(_bloc.validateInputs()){
+                            await _bloc.addRides();
+                            //pass true to indicate a reload
+                            Navigator.pop(context,true);
+                          }else{
+                            _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  RaisedButton(
-                    color: Theme.of(context).primaryColor,
-                    child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                    onPressed: () async {
-                      if(_bloc.validateInputs()){
-                        await _bloc.addRides();
-                        //pass true to indicate a reload
-                        Navigator.pop(context,true);
-                      }else{
-                        _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                      }
-                    },
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -188,33 +203,41 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      StreamBuilder<String>(
-                        initialData: "",
-                        stream: _bloc.stream,
-                        builder: (context,snapshot){
-                          if(snapshot.hasError){
-                            return Text(S.of(context).AddRideError);
-                          }else{
-                            return Text(snapshot.data);
-                          }
-                        },
+                      Expanded(
+                        child: AddRideColorLegend(),
                       ),
-                      SizedBox(height: 10),
-                      CupertinoButton.filled(
-                        pressedOpacity: 0.5,
-                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
-                          if(_bloc.validateInputs()){
-                            await _bloc.addRides();
-                            //pass true to indicate a reload
-                            Navigator.pop(context,true);
-                          }else{
-                            _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                          }
-                      },
-                    ),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            StreamBuilder<String>(
+                              initialData: "",
+                              stream: _bloc.stream,
+                              builder: (context,snapshot){
+                                if(snapshot.hasError){
+                                  return Text(S.of(context).AddRideError);
+                                }else{
+                                  return Text(snapshot.data);
+                                }
+                              },
+                            ),
+                            SizedBox(height: 10),
+                            CupertinoButton.filled(
+                              pressedOpacity: 0.5,
+                              child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                              onPressed: () async {
+                                if(_bloc.validateInputs()){
+                                  await _bloc.addRides();
+                                  //pass true to indicate a reload
+                                  Navigator.pop(context,true);
+                                }else{
+                                  _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -247,32 +270,40 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
               flex: 2,
               child: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    StreamBuilder<String>(
-                      initialData: "",
-                      stream: _bloc.stream,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError){
-                          return Text(S.of(context).AddRideError);
-                        }else{
-                          return Text(snapshot.data);
-                        }
-                      },
+                    Expanded(
+                      child: AddRideColorLegend(),
                     ),
-                    SizedBox(height: 10),
-                    CupertinoButton.filled(
-                      pressedOpacity: 0.5,
-                      child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                      onPressed: () async {
-                        if(_bloc.validateInputs()){
-                          await _bloc.addRides();
-                          //pass true to indicate a reload
-                          Navigator.pop(context,true);
-                        }else{
-                          _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                        }
-                      },
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          StreamBuilder<String>(
+                            initialData: "",
+                            stream: _bloc.stream,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError){
+                                return Text(S.of(context).AddRideError);
+                              }else{
+                                return Text(snapshot.data);
+                              }
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          CupertinoButton.filled(
+                            pressedOpacity: 0.5,
+                            child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                            onPressed: () async {
+                              if(_bloc.validateInputs()){
+                                await _bloc.addRides();
+                                //pass true to indicate a reload
+                                Navigator.pop(context,true);
+                              }else{
+                                _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -122,7 +122,7 @@ class AddRideBloc extends Bloc {
   ///Add the selected rides.
   Future addRides() async {
     if(_ridesToAdd.isNotEmpty){
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).catchError((){
+      await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).catchError((error){
         _errorMessageController.addError(Exception("Failed to add rides"));
       });
     }

@@ -51,6 +51,10 @@
   "AddRideLoadingFailed": "Could not load Calendar",
   "AddRideEmptySelection": "Please select at least one date",
   "AddRideError": "Could not add rides",
+  "AddRideColorLegendPastDay": "Past Day Without Ride",
+  "AddRideColorLegendPastRide": "Past Day With Ride",
+  "AddRideColorLegendCurrentSelection": "Current Selection",
+  "AddRideColorLegendFutureRide": "Future Ride",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

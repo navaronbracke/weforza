@@ -281,7 +281,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   child: Row(
                     children: <Widget>[
                       Flexible(
-                        flex: 2,
+                        flex: 4,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
                           child: Column(
@@ -357,7 +357,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                         ),
                       ),
                       Flexible(
-                        flex: 1,
+                        flex: 3,
                         child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -387,6 +387,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                       if(await _bloc.addMember()){
                                         Navigator.pop(context);
                                       }
+                                    }else{
+                                      setState(() {});
                                     }
                                   }),
                             ],
@@ -515,6 +517,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   if(await _bloc.addMember()){
                                     Navigator.pop(context);
                                   }
+                                }else{
+                                  setState(() {});
                                 }
                               }),
                         ],

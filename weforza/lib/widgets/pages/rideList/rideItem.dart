@@ -28,13 +28,22 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
-      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+      color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
+       : ApplicationTheme.rideListItemUnselectedColor,
       elevation: 4.0,
       child: InkWell(
-        splashColor: ApplicationTheme.rideListItemSplashColor,
+        splashColor: widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSplashColor : ApplicationTheme.rideListItemSelectModeSplashColor,
         onTap: (){
           if(mounted){
             setState(() {
+              widget.selector.selectRide(widget.bloc);
+            });
+          }
+        },
+        onLongPress: (){
+          if(mounted){
+            setState(() {
+              widget.selector.enableDeleteMode();
               widget.selector.selectRide(widget.bloc);
             });
           }
@@ -60,8 +69,17 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
           });
         }
       },
+      onLongPress: (){
+        if(mounted){
+          setState(() {
+            widget.selector.enableDeleteMode();
+            widget.selector.selectRide(widget.bloc);
+          });
+        }
+      },
       child: Container(
-        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+        color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
+            : ApplicationTheme.rideListItemUnselectedColor,
         child: Padding(
           padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
           child: Center(

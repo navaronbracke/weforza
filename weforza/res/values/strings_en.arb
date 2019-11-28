@@ -28,6 +28,7 @@
   "RideListLoadingMembersError": "Could not load members",
   "RideListLoadingRidesError": "Could not load rides",
   "RideListFilterShowAttendingOnly": "Only attending people",
+  "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",

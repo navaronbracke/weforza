@@ -28,6 +28,7 @@
   "RideListLoadingMembersError": "Kon leden niet laden",
   "RideListLoadingRidesError": "Kon ritten niet laden",
   "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
+  "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",

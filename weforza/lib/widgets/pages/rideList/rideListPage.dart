@@ -109,25 +109,37 @@ class _RideListPageState extends State<RideListPage>
                 ],
               ),
             ),
-            Text(_bloc.attendeeCount),
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: StreamBuilder<String>(
+                stream: _bloc.attendeeCount,
+                initialData: "",
+                builder: (context,snapshot){
+                  return snapshot.hasError ? Text("") : Text(snapshot.data);
+                },
+              ),
+            ),
           ],
         ),
       ),
       body: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Center(), //This is a filler widget
-              ),
-              Row(
-                children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
-              ),
-            ],
+          Visibility(
+            visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Center(), //This is a filler widget
+                ),
+                Row(
+                  children: <Widget>[
+                    Text(S.of(context).RideListFilterShowAttendingOnly,
+                        style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: _buildPageBody(),
@@ -170,18 +182,30 @@ class _RideListPageState extends State<RideListPage>
                 ),
               ],
             ),
-            Expanded(
-              child: Center(
-                child: Text(_bloc.attendeeCount),
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Expanded(
+                child: Center(
+                  child: StreamBuilder<String>(
+                    stream: _bloc.attendeeCount,
+                    initialData: "",
+                    builder: (context,snapshot){
+                      return snapshot.hasError ? Text("") : Text(snapshot.data);
+                    },
+                  ),
+                ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                Text(S.of(context).RideListFilterShowAttendingOnly,
-                    style: TextStyle(fontSize: 14)),
-                SizedBox(width: 5),
-                RideListAttendeeFilter(_bloc.filterState,this),
-              ],
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Row(
+                children: <Widget>[
+                  Text(S.of(context).RideListFilterShowAttendingOnly,
+                      style: TextStyle(fontSize: 14)),
+                  SizedBox(width: 5),
+                  RideListAttendeeFilter(_bloc.filterState,this),
+                ],
+              ),
             ),
           ],
         ),
@@ -195,7 +219,16 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        trailing: Text(_bloc.attendeeCount),
+        trailing: Visibility(
+          visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+          child: StreamBuilder<String>(
+            stream: _bloc.attendeeCount,
+            initialData: "",
+            builder: (context,snapshot){
+              return snapshot.hasError ? Text("") : Text(snapshot.data);
+            },
+          ),
+        ),
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -224,17 +257,20 @@ class _RideListPageState extends State<RideListPage>
       child: SafeArea(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Center(),//Filler Widget
-                  ),
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Center(),//Filler Widget
+                    ),
+                    Text(S.of(context).RideListFilterShowAttendingOnly,
+                        style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -277,19 +313,31 @@ class _RideListPageState extends State<RideListPage>
                 }),
               ],
             ),
-            Expanded(
-              child: Center(
-                child: Text(_bloc.attendeeCount),
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Expanded(
+                child: Center(
+                  child: StreamBuilder<String>(
+                    stream: _bloc.attendeeCount,
+                    initialData: "",
+                    builder: (context,snapshot){
+                      return snapshot.hasError ? Text("") : Text(snapshot.data);
+                    },
+                  ),
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-              child: Row(
-                children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                child: Row(
+                  children: <Widget>[
+                    Text(S.of(context).RideListFilterShowAttendingOnly,
+                        style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
               ),
             ),
           ],
@@ -324,17 +372,21 @@ class _RideListPageState extends State<RideListPage>
         ),
         Flexible(
           flex: 3,
-          child: FutureBuilder(
-            future: loadAttendeesFuture,
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.done){
-                if(snapshot.hasError){
-                  return Center(child: Text(S.of(context).RideListLoadingMembersError));
-                }else{
-                  return _buildAttendeesList(snapshot.data as List<RideAttendeeItemModel>);
-                }
+          child: StreamBuilder<PanelDisplayMode>(
+            stream: _bloc.displayStream,
+            initialData: PanelDisplayMode.ATTENDEES,
+            builder: (context, snapshot){
+              if(snapshot.hasError){
+                return Center(
+                  child: Text(S.of(context).RideListPanelDisplayError,softWrap: true),
+                );
               }else{
-                return Center(child: PlatformAwareLoadingIndicator());
+                switch(snapshot.data){
+                  case PanelDisplayMode.ATTENDEES: return _buildAttendeesPanel();
+                  case PanelDisplayMode.RIDE_DELETION: return _buildDeleteRidesPanel();
+                  case PanelDisplayMode.BLUETOOTH: return _buildBluetoothScanningPanel();
+                }
+                return Center();
               }
             },
           ),
@@ -354,20 +406,55 @@ class _RideListPageState extends State<RideListPage>
         (context, index) => MemberItem(items[index].bloc,this));
   }
 
+  Widget _buildAttendeesPanel(){
+    return FutureBuilder(
+      future: loadAttendeesFuture,
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(child: Text(S.of(context).RideListLoadingMembersError));
+          }else{
+            return _buildAttendeesList(snapshot.data as List<RideAttendeeItemModel>);
+          }
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _buildDeleteRidesPanel(){
+    return Center(
+      child: Text("Delete Ride Panel here"),
+    );
+    //TODO
+  }
+
+  Widget _buildBluetoothScanningPanel(){
+    return Center(
+      child: Text("Bluetooth Panel here"),
+    );
+    //TODO
+  }
+
   @override
   void selectAttendee(IRideAttendeeSelectable item) async {
-    await _bloc.selectAttendee(item);
-    setState(() {});
+    if(_bloc.selectionMode == RideSelectionMode.NORMAL){
+      await _bloc.selectAttendee(item);
+      setState(() {});
+    }
   }
 
   @override
   void selectRide(IRideSelectable item){
     setState(() {
       _bloc.selectRide(item);
-      switch(_bloc.filterState){
-        case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
-        case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
-        case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+      if(_bloc.selectionMode == RideSelectionMode.NORMAL){
+        switch(_bloc.filterState){
+          case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
+          case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
+          case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+        }
       }
     });
   }
@@ -387,4 +474,10 @@ class _RideListPageState extends State<RideListPage>
       loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected();
     });
   }
+
+  @override
+  void enableDeleteMode() => _bloc.enableDeletionMode();
+
+  @override
+  bool get isDeleteMode => _bloc.selectionMode == RideSelectionMode.DELETION;
 }

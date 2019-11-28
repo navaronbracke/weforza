@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideListAttendeeItemBloc.dart';
 import 'package:weforza/blocs/rideListRideItemBloc.dart';
@@ -29,13 +30,23 @@ class RideListBloc extends Bloc {
   ///The current filter state.
   AttendeeFilterState filterState = AttendeeFilterState.DISABLED;
 
-  ///The current attendee count.
-  String attendeeCount = "";
+  ///The list of rides that are selected for deletion.
+  List<DateTime> _ridesToBeDeleted = List();
+
+  ///The current ride selection mode.
+  RideSelectionMode selectionMode = RideSelectionMode.NORMAL;
+
+  StreamController<String> _attendeeCountController = BehaviorSubject();
+  Stream<String> get attendeeCount => _attendeeCountController.stream;
 
   ///The selected ride.
   int _selectedRideIndex = -1;
 
   List<RideItemModel> _rides;
+
+  ///The controller for the display mode.
+  StreamController<PanelDisplayMode> _displayModeController = BehaviorSubject();
+  Stream<PanelDisplayMode> get displayStream => _displayModeController.stream;
 
   ///Load the rides from the database.
   Future<List<RideItemModel>> getRides() async {
@@ -83,33 +94,62 @@ class RideListBloc extends Bloc {
 
   ///Dispose of this object.
   @override
-  void dispose() {}
+  void dispose() {
+    _displayModeController.close();
+    _attendeeCountController.close();
+  }
+
+  void enableDeletionMode(){
+    if(selectionMode == RideSelectionMode.NORMAL){
+      selectionMode = RideSelectionMode.DELETION;
+      _displayModeController.add(PanelDisplayMode.RIDE_DELETION);
+    }
+  }
 
   ///Select (or unselect) a given ride.
   void selectRide(IRideSelectable item) {
-    //New selection
-    if(_selectedRideIndex == -1){
-      _selectedRideIndex = item.getIndex();
-      item.select();
-      filterState = AttendeeFilterState.OFF;
-      attendeeCount = "${item.getCount()}";
-    }
-    //Same item -> unselect it
-    else if(_rides[_selectedRideIndex].bloc.getDateOfRide() == item.getDateOfRide()){
-      _selectedRideIndex = -1;
-      item.unSelect();
+    //Delete selection mode
+    if(selectionMode == RideSelectionMode.DELETION){
+      _selectedRideIndex = -1;//unselect selected ride
+      _attendeeCountController.add("");
       filterState = AttendeeFilterState.DISABLED;
-      attendeeCount = "";
-    }
-    //different item -> unselect previous one and select the item
-    else{
-      _rides[_selectedRideIndex].bloc.unSelect();
-      _selectedRideIndex = item.getIndex();
-      item.select();
-      attendeeCount = "${item.getCount()}";
-      //if this is a new selection, enable the filter
-      if(filterState == AttendeeFilterState.DISABLED){
+      DateTime date = item.getDateOfRide();
+      if(_ridesToBeDeleted.contains(date)){
+        _ridesToBeDeleted.remove(date);
+        item.unSelect();
+      }else{
+        _ridesToBeDeleted.add(date);
+        item.select();
+      }
+      selectionMode = _ridesToBeDeleted.isEmpty ? RideSelectionMode.NORMAL : RideSelectionMode.DELETION;
+      _displayModeController.add(selectionMode == RideSelectionMode.NORMAL ? PanelDisplayMode.ATTENDEES : PanelDisplayMode.RIDE_DELETION);
+    }else{
+      //Normal selection mode
+
+      //New selection
+      if(_selectedRideIndex == -1){
+        _selectedRideIndex = item.getIndex();
+        item.select();
         filterState = AttendeeFilterState.OFF;
+        _attendeeCountController.add("${item.getCount()}");
+      }
+      //Same item -> unselect it
+      else if(_rides[_selectedRideIndex].bloc.getDateOfRide() == item.getDateOfRide()){
+        _selectedRideIndex = -1;
+        item.unSelect();
+        filterState = AttendeeFilterState.DISABLED;
+        _attendeeCountController.add("");
+      }
+      //different item -> unselect previous one and select the item
+      else{
+        _rides[_selectedRideIndex].bloc.unSelect();
+        _selectedRideIndex = item.getIndex();
+        item.select();
+        _attendeeCountController.add("${item.getCount()}");
+        //if this is a new selection, enable the filter
+        if(filterState == AttendeeFilterState.DISABLED){
+          filterState = AttendeeFilterState.OFF;
+        }
       }
     }
   }
@@ -127,11 +167,23 @@ class RideListBloc extends Bloc {
       item.select();
     }
     await _rideRepository.editRide(_rides[_selectedRideIndex].getRide());
-    attendeeCount = "${_rides[_selectedRideIndex].count()}";
+    _attendeeCountController.add("${_rides[_selectedRideIndex].count()}");
   }
 }
 
 ///This enum defines the state for the filter.
 enum AttendeeFilterState {
   DISABLED,ON,OFF
+}
+
+///This enum defines the state for the selection mode.
+///[RideSelectionMode.NORMAL] is the standard selection mode, where rides can be selected for showing attendees.
+enum RideSelectionMode {
+  NORMAL,DELETION
+}
+
+///This enum defines the panel display mode for this bloc's Widget.
+///It defines which panel is displayed on the right side.
+enum PanelDisplayMode {
+  ATTENDEES, BLUETOOTH, RIDE_DELETION
 }

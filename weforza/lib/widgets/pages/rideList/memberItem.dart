@@ -30,10 +30,10 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
-      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectModeSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
       elevation: 4.0,
       child: InkWell(
-        splashColor: ApplicationTheme.rideListItemSplashColor,
+        splashColor: ApplicationTheme.rideListItemSelectModeSplashColor,
         onTap: (){
           setState(() {
             widget.selector.selectAttendee(widget.bloc);
@@ -76,7 +76,7 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
           });
         },
         child: Container(
-          color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+          color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectModeSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

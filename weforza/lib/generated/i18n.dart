@@ -69,6 +69,7 @@ class S implements WidgetsLocalizations {
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoMembers => "There are no members";
   String get RideListNoRides => "There are no rides";
+  String get RideListPanelDisplayError => "Something went wrong! Can't show anything here.";
   String get RideListRidesHeader => "Rides";
   String get SaturdayPrefix => "Sat";
   String get SundayPrefix => "Sun";
@@ -193,6 +194,8 @@ class $nl extends S {
   String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
+  @override
+  String get RideListPanelDisplayError => "Er ging iets mis! Kan niks tonen.";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override

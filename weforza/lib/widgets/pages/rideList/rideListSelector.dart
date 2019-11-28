@@ -2,7 +2,12 @@
 import 'package:weforza/model/ride.dart';
 
 abstract class IRideSelector {
+  ///Select or un-select [item]
   void selectRide(IRideSelectable item);
+  ///Whether we are in delete mode
+  bool get isDeleteMode;
+
+  void enableDeleteMode();
 }
 
 abstract class IRideAttendeeSelector {

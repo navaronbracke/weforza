@@ -52,7 +52,12 @@ class _AddMemberPageState extends State<AddMemberPage>
 
   ///The [Widget] for the image picker.
   ///This can be a placeholder, a profile image or a loading indicator.
-  Widget imagePicker;
+  Widget _imagePicker;
+
+  ///The [FocusNode]s for the inputs
+  FocusNode _firstNameFocusNode;
+  FocusNode _lastNameFocusNode;
+  FocusNode _phoneFocusNode;
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -110,7 +115,10 @@ class _AddMemberPageState extends State<AddMemberPage>
   @override
   void initState() {
     super.initState();
-    imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
+    _imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
+    _firstNameFocusNode = FocusNode();
+    _lastNameFocusNode = FocusNode();
+    _phoneFocusNode = FocusNode();
   }
 
   @override
@@ -153,6 +161,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                       child: Column(
                         children: <Widget>[
                           TextFormField(
+                            focusNode: _firstNameFocusNode,
+                            textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _firstNameLabel,
@@ -169,9 +179,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                             autovalidate: _bloc.autoValidateFirstName,
                             onChanged: (value) => setState(
                                 () => _bloc.autoValidateFirstName = true),
+                            onFieldSubmitted: (value){
+                              _focusChange(context,_firstNameFocusNode,_lastNameFocusNode);
+                            },
                           ),
                           SizedBox(height: 5),
                           TextFormField(
+                            focusNode: _lastNameFocusNode,
+                            textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _lastNameLabel,
@@ -188,9 +203,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                             autovalidate: _bloc.autoValidateLastName,
                             onChanged: (value) => setState(
                                 () => _bloc.autoValidateLastName = true),
+                            onFieldSubmitted: (value){
+                              _focusChange(context,_lastNameFocusNode,_phoneFocusNode);
+                            },
                           ),
                           SizedBox(height: 5),
                           TextFormField(
+                            focusNode: _phoneFocusNode,
+                            textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _phoneLabel,
@@ -210,6 +230,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                             inputFormatters: [
                               WhitelistingTextInputFormatter.digitsOnly
                             ],
+                            onFieldSubmitted: (value){
+                              _phoneFocusNode.unfocus();
+                            },
                           ),
                         ],
                       ),
@@ -223,20 +246,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          imagePicker,
+                          _imagePicker,
                           SizedBox(height: 20),
                           StreamBuilder<bool>(
                             initialData: false,
                             stream: _bloc.alreadyExistsStream,
                             builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Text(S.of(context).AddMemberError);
-                              }else{
-                                return Visibility(
-                                  visible: snapshot.data,
-                                  child: Text(S.of(context).AddMemberAlreadyExists),
-                                );
-                              }
+                              return snapshot.hasError ? Text(S.of(context).AddMemberError) :
+                              snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
                           RaisedButton(
@@ -288,6 +305,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               CupertinoTextField(
+                                focusNode: _firstNameFocusNode,
+                                textInputAction: TextInputAction.next,
                                 controller: _bloc.firstNameController,
                                 placeholder: _firstNameLabel,
                                 autocorrect: false,
@@ -302,6 +321,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                                         _firstNameBlankMessage);
                                   });
                                 },
+                                onSubmitted: (value){
+                                  _focusChange(context,_firstNameFocusNode,_lastNameFocusNode);
+                                },
                               ),
                               Text(
                                   CupertinoFormErrorFormatter.formatErrorMessage(
@@ -309,6 +331,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   style: ApplicationTheme.iosFormErrorStyle),
                               SizedBox(height: 5),
                               CupertinoTextField(
+                                focusNode: _lastNameFocusNode,
+                                textInputAction: TextInputAction.next,
                                 controller: _bloc.lastNameController,
                                 placeholder: _lastNameLabel,
                                 autocorrect: false,
@@ -323,6 +347,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                                         _lastNameBlankMessage);
                                   });
                                 },
+                                onSubmitted: (value){
+                                  _focusChange(context,_lastNameFocusNode,_phoneFocusNode);
+                                },
                               ),
                               Text(
                                   CupertinoFormErrorFormatter.formatErrorMessage(
@@ -330,6 +357,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   style: ApplicationTheme.iosFormErrorStyle),
                               SizedBox(height: 5),
                               CupertinoTextField(
+                                focusNode: _phoneFocusNode,
+                                textInputAction: TextInputAction.done,
                                 controller: _bloc.phoneController,
                                 autocorrect: false,
                                 keyboardType: TextInputType.phone,
@@ -346,6 +375,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                                         _phoneMinLengthMessage,
                                         _phoneMaxLengthMessage);
                                   });
+                                },
+                                onSubmitted: (value){
+                                  _phoneFocusNode.unfocus();
                                 },
                               ),
                               Text(
@@ -364,20 +396,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              imagePicker,
+                              _imagePicker,
                               SizedBox(height: 20),
                               StreamBuilder<bool>(
                                 initialData: false,
                                 stream: _bloc.alreadyExistsStream,
                                 builder: (context,snapshot){
-                                  if(snapshot.hasError){
-                                    return Text(S.of(context).AddMemberError);
-                                  }else{
-                                    return Visibility(
-                                      visible: snapshot.data,
-                                      child: Text(S.of(context).AddMemberAlreadyExists),
-                                    );
-                                  }
+                                  return snapshot.hasError ? Text(S.of(context).AddMemberError) :
+                                  snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                                 },
                               ),
                               CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
@@ -423,6 +449,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CupertinoTextField(
+                    focusNode: _firstNameFocusNode,
+                    textInputAction: TextInputAction.next,
                     controller: _bloc.firstNameController,
                     placeholder: _firstNameLabel,
                     autocorrect: false,
@@ -437,6 +465,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                             _firstNameBlankMessage);
                       });
                     },
+                    onSubmitted: (value){
+                      _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                    },
                   ),
                   Text(
                       CupertinoFormErrorFormatter.formatErrorMessage(
@@ -444,6 +475,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                       style: ApplicationTheme.iosFormErrorStyle),
                   SizedBox(height: 5),
                   CupertinoTextField(
+                    focusNode: _lastNameFocusNode,
+                    textInputAction: TextInputAction.next,
                     controller: _bloc.lastNameController,
                     placeholder: _lastNameLabel,
                     autocorrect: false,
@@ -458,6 +491,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                             _lastNameBlankMessage);
                       });
                     },
+                    onSubmitted: (value){
+                      _focusChange(context, _lastNameFocusNode, _phoneFocusNode);
+                    },
                   ),
                   Text(
                       CupertinoFormErrorFormatter.formatErrorMessage(
@@ -465,6 +501,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                       style: ApplicationTheme.iosFormErrorStyle),
                   SizedBox(height: 5),
                   CupertinoTextField(
+                    focusNode: _phoneFocusNode,
+                    textInputAction: TextInputAction.done,
                     controller: _bloc.phoneController,
                     autocorrect: false,
                     keyboardType: TextInputType.phone,
@@ -482,6 +520,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                             _phoneMaxLengthMessage);
                       });
                     },
+                    onSubmitted: (value){
+                      _phoneFocusNode.unfocus();
+                    },
                   ),
                   Text(
                       CupertinoFormErrorFormatter.formatErrorMessage(
@@ -494,20 +535,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          imagePicker,
+                          _imagePicker,
                           SizedBox(height: 5),
                           StreamBuilder<bool>(
                             initialData: false,
                             stream: _bloc.alreadyExistsStream,
                             builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Text(S.of(context).AddMemberError);
-                              }else{
-                                return Visibility(
-                                  visible: snapshot.data,
-                                  child: Text(S.of(context).AddMemberAlreadyExists),
-                                );
-                              }
+                              return snapshot.hasError ? Text(S.of(context).AddMemberError) :
+                              snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
                           CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
@@ -548,6 +583,8 @@ class _AddMemberPageState extends State<AddMemberPage>
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  focusNode: _firstNameFocusNode,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _firstNameLabel,
@@ -564,9 +601,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                   autovalidate: _bloc.autoValidateFirstName,
                   onChanged: (value) =>
                       setState(() => _bloc.autoValidateFirstName = true),
+                  onFieldSubmitted: (value){
+                    _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                  },
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  focusNode: _lastNameFocusNode,
+                  textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _lastNameLabel,
@@ -583,9 +625,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                   autovalidate: _bloc.autoValidateLastName,
                   onChanged: (value) =>
                       setState(() => _bloc.autoValidateLastName = true),
+                  onFieldSubmitted: (value){
+                    _focusChange(context, _lastNameFocusNode, _phoneFocusNode);
+                  },
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  focusNode: _phoneFocusNode,
+                  textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _phoneLabel,
@@ -603,6 +650,9 @@ class _AddMemberPageState extends State<AddMemberPage>
                   onChanged: (value) =>
                       setState(() => _bloc.autoValidatePhone = true),
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  onFieldSubmitted: (value){
+                    _phoneFocusNode.unfocus();
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
@@ -611,20 +661,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        imagePicker,
+                        _imagePicker,
                         SizedBox(height: 5),
                         StreamBuilder<bool>(
                           initialData: false,
                           stream: _bloc.alreadyExistsStream,
                           builder: (context,snapshot){
-                            if(snapshot.hasError){
-                              return Text(S.of(context).AddMemberError);
-                            }else{
-                              return Visibility(
-                                visible: snapshot.data,
-                                child: Text(S.of(context).AddMemberAlreadyExists),
-                              );
-                            }
+                            return snapshot.hasError ? Text(S.of(context).AddMemberError) :
+                            snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                           },
                         ),
                         RaisedButton(
@@ -654,6 +698,9 @@ class _AddMemberPageState extends State<AddMemberPage>
   @override
   void dispose() {
     _bloc.dispose();
+    _firstNameFocusNode.dispose();
+    _lastNameFocusNode.dispose();
+    _phoneFocusNode.dispose();
     super.dispose();
   }
 
@@ -661,13 +708,18 @@ class _AddMemberPageState extends State<AddMemberPage>
   @override
   Future<void> pickProfileImage() async {
     setState(() {
-      imagePicker = Center(
+      _imagePicker = Center(
         child: PlatformAwareLoadingIndicator(),
       );
     });
     await _bloc.pickImage();
     setState(() {
-      imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
+      _imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
     });
+  }
+
+  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 }

@@ -708,8 +708,12 @@ class _AddMemberPageState extends State<AddMemberPage>
   @override
   Future<void> pickProfileImage() async {
     setState(() {
-      _imagePicker = Center(
-        child: PlatformAwareLoadingIndicator(),
+      _imagePicker = SizedBox(
+        width: 80,
+        height: 80,
+        child: Center(
+          child: PlatformAwareLoadingIndicator(),
+        ),
       );
     });
     await _bloc.pickImage();

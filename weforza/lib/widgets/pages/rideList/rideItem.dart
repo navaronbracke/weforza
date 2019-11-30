@@ -41,7 +41,7 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
           }
         },
         onLongPress: (){
-          if(mounted){
+          if(mounted && !widget.selector.isDeleteMode){
             setState(() {
               widget.selector.enableDeleteMode();
               widget.selector.selectRide(widget.bloc);

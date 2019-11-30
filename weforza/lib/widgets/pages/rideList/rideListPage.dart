@@ -404,16 +404,22 @@ class _RideListPageState extends State<RideListPage>
   }
 
   @override
-  void selectRide(IRideSelectable item){
-    setState(() {
-      _bloc.selectRide(item);
-      if(_bloc.selectionMode == RideSelectionMode.NORMAL){
-        switch(_bloc.filterState){
-          case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
-          case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
-          case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
-        }
+  void selectRide(IRideSelectable item) async {
+    _bloc.hasMembers().then((loadMembers){
+      if(loadMembers){
+        setState(() {
+          _bloc.selectRide(item);
+          if(_bloc.selectionMode == RideSelectionMode.NORMAL){
+            switch(_bloc.filterState){
+              case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
+              case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
+              case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+            }
+          }
+        });
       }
+    },onError: (error){
+      _bloc.catchHasMembersError();
     });
   }
 

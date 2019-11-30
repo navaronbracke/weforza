@@ -49,6 +49,10 @@ class MemberDao {
     await _memberStore.add(_database, member.toMap());
   }
 
+  Future<bool> hasMembers() async {
+    return await _memberStore.count(_database) > 0;
+  }
+
   ///Get all stored members.
   Future<List<Member>> getMembers() async {
     final finder = Finder(

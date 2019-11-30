@@ -184,6 +184,12 @@ class RideListBloc extends Bloc {
     await _rideRepository.editRide(_rides[_selectedRideIndex].getRide());
     _attendeeCountController.add("${_rides[_selectedRideIndex].count()}");
   }
+
+  Future<bool> hasMembers() => _memberRepository.hasMembers();
+
+  void catchHasMembersError(){
+    _displayModeController.addError(Exception("Could not check if there are members"));
+  }
 }
 
 ///This enum defines the state for the filter.

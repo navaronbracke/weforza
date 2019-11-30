@@ -106,23 +106,38 @@ class RideListBloc extends Bloc {
     }
   }
 
+  void resetSelectionMode(){
+    selectionMode = RideSelectionMode.NORMAL;
+    _ridesToBeDeleted = List();
+    filterState = AttendeeFilterState.DISABLED;
+    _selectedRideIndex = -1;
+    _attendeeCountController.add("");
+    _displayModeController.add(PanelDisplayMode.ATTENDEES);
+  }
+
   ///Select (or unselect) a given ride.
   void selectRide(IRideSelectable item) {
     //Delete selection mode
     if(selectionMode == RideSelectionMode.DELETION){
-      _selectedRideIndex = -1;//unselect selected ride
-      _attendeeCountController.add("");
-      filterState = AttendeeFilterState.DISABLED;
+      if(_selectedRideIndex != -1){
+        _rides[_selectedRideIndex].bloc.unSelect();
+        _selectedRideIndex = -1;
+        _attendeeCountController.add("");
+        filterState = AttendeeFilterState.DISABLED;
+      }
       DateTime date = item.getDateOfRide();
       if(_ridesToBeDeleted.contains(date)){
         _ridesToBeDeleted.remove(date);
         item.unSelect();
+        if(_ridesToBeDeleted.isEmpty){
+          resetSelectionMode();
+        }
       }else{
         _ridesToBeDeleted.add(date);
         item.select();
+        selectionMode = RideSelectionMode.DELETION;
+        _displayModeController.add(PanelDisplayMode.RIDE_DELETION);
       }
-      selectionMode = _ridesToBeDeleted.isEmpty ? RideSelectionMode.NORMAL : RideSelectionMode.DELETION;
-      _displayModeController.add(selectionMode == RideSelectionMode.NORMAL ? PanelDisplayMode.ATTENDEES : PanelDisplayMode.RIDE_DELETION);
     }else{
       //Normal selection mode
 

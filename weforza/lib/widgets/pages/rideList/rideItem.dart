@@ -77,14 +77,20 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
           });
         }
       },
-      child: Container(
-        color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
-            : ApplicationTheme.rideListItemUnselectedColor,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
-          child: Center(
-              child: Text(widget.bloc.getFormattedDate(context),style:
-              TextStyle(color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),)
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
+              : ApplicationTheme.rideListItemUnselectedColor,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
+            child: Center(
+                child: Text(widget.bloc.getFormattedDate(context),style:
+                TextStyle(color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),)
+            ),
           ),
         ),
       ),

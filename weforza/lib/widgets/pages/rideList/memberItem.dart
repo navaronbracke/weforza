@@ -68,15 +68,19 @@ class _MemberItemState extends State<MemberItem> implements PlatformAwareWidget 
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return Container(
-      child: GestureDetector(
-        onTap: (){
-          setState(() {
-            widget.selector.selectAttendee(widget.bloc);
-          });
-        },
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          widget.selector.selectAttendee(widget.bloc);
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Container(
-          color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectModeSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectModeSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

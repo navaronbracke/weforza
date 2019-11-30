@@ -117,7 +117,7 @@ class _RideListPageState extends State<RideListPage>
             visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
             child: Row(
               children: <Widget>[
-                Text(S.of(context).RideListFilterShowAttendingOnly,
+                Text(S.of(context).RideListAttendeesHeader,
                     style: TextStyle(fontSize: 14)),
                 RideListAttendeeFilter(_bloc.filterState,this),
               ],
@@ -181,7 +181,7 @@ class _RideListPageState extends State<RideListPage>
               visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
               child: Row(
                 children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
+                  Text(S.of(context).RideListAttendeesHeader,
                       style: TextStyle(fontSize: 14)),
                   RideListAttendeeFilter(_bloc.filterState,this),
                 ],
@@ -198,7 +198,7 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        leading: Row(
+        middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
                   () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
@@ -217,23 +217,27 @@ class _RideListPageState extends State<RideListPage>
             CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               //TODO import and export rides
             }),
+            Expanded(
+              child: Visibility(
+                visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                child: Center(
+                  child: StreamBuilder<String>(
+                    stream: _bloc.attendeeCount,
+                    initialData: "",
+                    builder: (context,snapshot){
+                      return snapshot.hasError ? Text("") : Text(snapshot.data);
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
-        ),
-        middle: Visibility(
-          visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-          child: StreamBuilder<String>(
-            stream: _bloc.attendeeCount,
-            initialData: "",
-            builder: (context,snapshot){
-              return snapshot.hasError ? Text("") : Text(snapshot.data);
-            },
-          ),
         ),
         trailing: Visibility(
           visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
           child: Row(
             children: <Widget>[
-              Text(S.of(context).RideListFilterShowAttendingOnly,
+              Text(S.of(context).RideListAttendeesHeader,
                   style: TextStyle(fontSize: 14)),
               RideListAttendeeFilter(_bloc.filterState,this),
             ],
@@ -251,7 +255,7 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        leading: Row(
+        middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
                   () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
@@ -270,23 +274,27 @@ class _RideListPageState extends State<RideListPage>
             CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               //TODO import and export rides
             }),
+            Expanded(
+              child: Visibility(
+                visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                child: Center(
+                  child: StreamBuilder<String>(
+                    stream: _bloc.attendeeCount,
+                    initialData: "",
+                    builder: (context,snapshot){
+                      return snapshot.hasError ? Text("") : Text(snapshot.data);
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
-        ),
-        middle: Visibility(
-          visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-          child: StreamBuilder<String>(
-            stream: _bloc.attendeeCount,
-            initialData: "",
-            builder: (context,snapshot){
-              return snapshot.hasError ? Text("") : Text(snapshot.data);
-            },
-          ),
         ),
         trailing: Visibility(
           visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
           child: Row(
             children: <Widget>[
-              Text(S.of(context).RideListFilterShowAttendingOnly,
+              Text(S.of(context).RideListAttendeesHeader,
                   style: TextStyle(fontSize: 14)),
               RideListAttendeeFilter(_bloc.filterState,this),
             ],
@@ -352,7 +360,7 @@ class _RideListPageState extends State<RideListPage>
   }
 
   Widget _buildAttendeesList(List<RideAttendeeItemModel> items) {
-    return items.isEmpty ? RideListMembersEmpty() : ListView.builder(itemCount: items.length,itemBuilder:
+    return items.isEmpty ? RideListMembersEmpty(_bloc.filterState == AttendeeFilterState.ON) : ListView.builder(itemCount: items.length,itemBuilder:
         (context, index) => MemberItem(items[index].bloc,this));
   }
 

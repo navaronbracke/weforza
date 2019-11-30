@@ -64,9 +64,9 @@ class S implements WidgetsLocalizations {
   String get RideListAddRideInstruction => "Add a ride";
   String get RideListAddRideInstructionPlus => "with the +";
   String get RideListAttendeesHeader => "Attendees";
-  String get RideListFilterShowAttendingOnly => "Only attending people";
   String get RideListLoadingMembersError => "Could not load members";
   String get RideListLoadingRidesError => "Could not load rides";
+  String get RideListNoAttendees => "There are no attendees";
   String get RideListNoMembers => "There are no members";
   String get RideListNoRides => "There are no rides";
   String get RideListPanelDisplayError => "Something went wrong! Can't show anything here.";
@@ -116,6 +116,8 @@ class $nl extends S {
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
+  @override
+  String get RideListNoAttendees => "Er zijn geen aanwezigen";
   @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
@@ -190,8 +192,6 @@ class $nl extends S {
   String get AddMemberPictureLabel => "Foto";
   @override
   String get RideListAddRideInstructionPlus => "met de +";
-  @override
-  String get RideListFilterShowAttendingOnly => "Enkel aanwezigen";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
   @override

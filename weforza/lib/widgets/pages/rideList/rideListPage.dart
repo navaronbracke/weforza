@@ -200,50 +200,49 @@ class _RideListPageState extends State<RideListPage>
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                  () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                setState(() {
-                  _bloc.resetSelectionMode();
-                  loadRidesFuture = _bloc.getRides();
-                  loadAttendeesFuture = _bloc.getAllMembers();
-                });
+              CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  setState(() {
+                    _bloc.resetSelectionMode();
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
+                }),
+              ),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO scanning
               }),
-            ),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO scanning
-            }),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO import and export rides
-            }),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO import and export rides
+              }),
             Expanded(
               child: Visibility(
-                visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-                child: Center(
-                  child: StreamBuilder<String>(
-                    stream: _bloc.attendeeCount,
-                    initialData: "",
-                    builder: (context,snapshot){
-                      return snapshot.hasError ? Text("") : Text(snapshot.data);
-                    },
+                  visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                  child: Center(
+                    child: StreamBuilder<String>(
+                      stream: _bloc.attendeeCount,
+                      initialData: "",
+                      builder: (context,snapshot){
+                        return snapshot.hasError ? Text("") : Text(snapshot.data);
+                      },
+                    ),
                   ),
                 ),
-              ),
             ),
-          ],
-        ),
-        trailing: Visibility(
-          visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-          child: Row(
-            children: <Widget>[
-              Text(S.of(context).RideListAttendeesHeader,
-                  style: TextStyle(fontSize: 14)),
-              RideListAttendeeFilter(_bloc.filterState,this),
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Row(
+                children: <Widget>[
+                    Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ),
       child: SafeArea(
         child: _buildPageBody()
       ),
@@ -257,52 +256,51 @@ class _RideListPageState extends State<RideListPage>
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                  () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                setState(() {
-                  _bloc.resetSelectionMode();
-                  loadRidesFuture = _bloc.getRides();
-                  loadAttendeesFuture = _bloc.getAllMembers();
-                });
+              CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  setState(() {
+                    _bloc.resetSelectionMode();
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
+                }),
+              ),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO scanning
               }),
-            ),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO scanning
-            }),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO import and export rides
-            }),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO import and export rides
+              }),
             Expanded(
               child: Visibility(
-                visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-                child: Center(
-                  child: StreamBuilder<String>(
-                    stream: _bloc.attendeeCount,
-                    initialData: "",
-                    builder: (context,snapshot){
-                      return snapshot.hasError ? Text("") : Text(snapshot.data);
-                    },
+                  visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                  child: Center(
+                    child: StreamBuilder<String>(
+                      stream: _bloc.attendeeCount,
+                      initialData: "",
+                      builder: (context,snapshot){
+                        return snapshot.hasError ? Text("") : Text(snapshot.data);
+                      },
+                    ),
                   ),
                 ),
-              ),
             ),
-          ],
-        ),
-        trailing: Visibility(
-          visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
-          child: Row(
-            children: <Widget>[
-              Text(S.of(context).RideListAttendeesHeader,
-                  style: TextStyle(fontSize: 14)),
-              RideListAttendeeFilter(_bloc.filterState,this),
+            Visibility(
+              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              child: Row(
+                children: <Widget>[
+                    Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ),
       child: SafeArea(
-          child: _buildPageBody()
+        child: _buildPageBody(),
       ),
     );
   }

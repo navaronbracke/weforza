@@ -78,11 +78,11 @@ class _RideListPageState extends State<RideListPage>
                     icon: Icon(Icons.add),
                     color: Colors.white,
                     onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                      if(value != null && value){
-                        setState(() {
-                          loadRidesFuture = _bloc.getRides();
-                        });
-                      }
+                      setState(() {
+                        //TODO reset bloc internal state for filter/count/right panel display
+                        loadRidesFuture = _bloc.getRides();
+                        loadAttendeesFuture = _bloc.getAllMembers();
+                      });
                     }),
                   ),
                   IconButton(
@@ -159,7 +159,13 @@ class _RideListPageState extends State<RideListPage>
               children: <Widget>[
                 IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                    setState(() {
+                      //TODO reset bloc internal state for filter/count/right panel display
+                      loadRidesFuture = _bloc.getRides();
+                      loadAttendeesFuture = _bloc.getAllMembers();
+                    });
+                  }),
                 ),
                 IconButton(
                   icon: Icon(Icons.bluetooth_searching),
@@ -232,12 +238,13 @@ class _RideListPageState extends State<RideListPage>
         middle: Row(
           children: <Widget>[
             CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                  if(value != null && value){
-                    setState(() {
-                      loadRidesFuture = _bloc.getRides();
-                    });
-                  }}),
+                () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  setState(() {
+                    //TODO reset bloc internal state for filter/count/right panel display
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
+                }),
             ),
             SizedBox(width: 20),
             CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
@@ -292,13 +299,13 @@ class _RideListPageState extends State<RideListPage>
             Row(
               children: <Widget>[
                 CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                      if(value != null && value){
-                        setState(() {
-                          loadRidesFuture = _bloc.getRides();
-                        });
-                      }
-                    })),
+                  () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                    setState(() {
+                      //TODO reset bloc internal state for filter/count/right panel display
+                      loadRidesFuture = _bloc.getRides();
+                      loadAttendeesFuture = _bloc.getAllMembers();
+                    });
+                  })),
                 SizedBox(width: 20),
                 CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO scanning

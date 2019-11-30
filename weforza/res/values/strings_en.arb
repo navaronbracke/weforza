@@ -23,11 +23,11 @@
   "RideListAttendeesHeader": "Attendees",
   "RideListNoRides": "There are no rides",
   "RideListNoMembers": "There are no members",
+  "RideListNoAttendees": "There are no attendees",
   "RideListAddRideInstruction": "Add a ride",
   "RideListAddRideInstructionPlus": "with the +",
   "RideListLoadingMembersError": "Could not load members",
   "RideListLoadingRidesError": "Could not load rides",
-  "RideListFilterShowAttendingOnly": "Only attending people",
   "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
 
   "MemberDetailsTitle": "Details",

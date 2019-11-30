@@ -23,11 +23,11 @@
   "RideListAttendeesHeader": "Aanwezigen",
   "RideListNoRides": "Er zijn geen ritten",
   "RideListNoMembers": "Er zijn geen leden",
+  "RideListNoAttendees": "Er zijn geen aanwezigen",
   "RideListAddRideInstructionPlus": "met de +",
   "RideListAddRideInstruction": "Voeg een rit toe",
   "RideListLoadingMembersError": "Kon leden niet laden",
   "RideListLoadingRidesError": "Kon ritten niet laden",
-  "RideListFilterShowAttendingOnly": "Enkel aanwezigen",
   "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
 
   "MemberDetailsTitle": "Details",

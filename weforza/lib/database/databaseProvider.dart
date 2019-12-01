@@ -156,25 +156,26 @@ class RideDao {
 
   Future removeAttendeeFromRides(Attendee attendee) async {
     assert(attendee != null);
-    final finder = Finder(
-      filter: Filter.and(List.of([Filter.equals("attendees.phone", attendee.phone),Filter.equals("attendees.firstname", attendee.firstname),Filter.equals("attendees.lastname", attendee.lastname)])),
-    );
-    //Fetch the affected rides
-    final records = await _rideStore.find(_database,finder: finder);
+
+    final records = await _rideStore.find(_database,finder: Finder());
     if(records.isEmpty) return;
 
-    //Update the rides
+    //Update the rides if they have the attendee
     List<Map<String,dynamic>> updatedRecords = records.map((record) {
       final ride = Ride.fromMap(record.value);
-      ride.attendees.remove(attendee);
+      if(ride.attendees.contains(attendee)){
+        ride.attendees.remove(attendee);
+      }
       return ride.toMap();
     }).toList();
 
     //Save
-    await _database.transaction((transaction) {
-      updatedRecords.forEach((record) async {
-        await _rideStore.update(transaction, record);
+    await _database.transaction((transaction) async {
+      List<Future> futures = List();
+      updatedRecords.forEach((record){
+        futures.add(_rideStore.update(transaction,record));
       });
+      await Future.wait(futures);
     });
     
   }

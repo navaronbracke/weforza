@@ -27,6 +27,8 @@ class RideListBloc extends Bloc {
 
   //endregion
 
+  bool membersIsNotEmpty = false;
+
   ///The current filter state.
   AttendeeFilterState filterState = AttendeeFilterState.DISABLED;
 
@@ -183,7 +185,10 @@ class RideListBloc extends Bloc {
     _attendeeCountController.add("${_selectedRide.getCount()}");
   }
 
-  Future<bool> hasMembers() => _memberRepository.hasMembers();
+  Future<bool> hasMembers() async {
+    membersIsNotEmpty = await _memberRepository.hasMembers();
+    return membersIsNotEmpty;
+  }
 
   void catchHasMembersError(){
     _displayModeController.addError(Exception("Could not check if there are members"));

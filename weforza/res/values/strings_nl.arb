@@ -29,6 +29,7 @@
   "RideListLoadingMembersError": "Kon leden niet laden",
   "RideListLoadingRidesError": "Kon ritten niet laden",
   "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
+  "RideListDeleteRidesDescription": "Geselecteerde ritten verwijderen?",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",
@@ -38,8 +39,6 @@
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
-  "MemberDeleteDialogCancel": "Annuleren",
-  "MemberDeleteDialogConfirm": "Verwijderen",
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
@@ -72,6 +71,7 @@
   "PhoneMinLength": "Een telefoonnummer is minimum $minLength cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum $maxLength cijfers lang",
 
-
-  "ValueIsRequired": "$value is verplicht"
+  "ValueIsRequired": "$value is verplicht",
+  "DialogCancel": "Annuleren",
+  "DialogDelete": "Verwijderen"
 }

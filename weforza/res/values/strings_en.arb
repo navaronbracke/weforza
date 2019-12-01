@@ -29,6 +29,7 @@
   "RideListLoadingMembersError": "Could not load members",
   "RideListLoadingRidesError": "Could not load rides",
   "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
+  "RideListDeleteRidesDescription": "Delete the selected rides?",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",
@@ -38,8 +39,6 @@
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",
-  "MemberDeleteDialogCancel": "Cancel",
-  "MemberDeleteDialogConfirm": "Delete",
 
   "AddMemberTitle": "New Member",
   "AddMemberSubmit": "Create New Member",
@@ -72,5 +71,7 @@
   "PhoneMinLength": "A phone number is minimum $minLength digits long",
   "PhoneMaxLength": "A phone number is maximum $maxLength digits long",
 
-  "ValueIsRequired": "$value is required"
+  "ValueIsRequired": "$value is required",
+  "DialogCancel": "Cancel",
+  "DialogDelete": "Delete"
 }

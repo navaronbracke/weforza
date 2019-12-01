@@ -8,6 +8,7 @@ import 'package:weforza/model/rideAttendeeItemModel.dart';
 import 'package:weforza/model/rideItemModel.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListAttendeeFilter.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRideDelete.dart';
 import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -26,7 +27,7 @@ class RideListPage extends StatefulWidget {
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRideSelector, IRideAttendeeSelector, AttendeeFilterHandler {
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRideSelector, IRideAttendeeSelector, AttendeeFilterHandler, IRideDeleteHandler {
   _RideListPageState(this._bloc) : assert(_bloc != null);
 
   ///The BLoC for this [Widget].
@@ -99,7 +100,7 @@ class _RideListPageState extends State<RideListPage>
             Expanded(
               child: Center(
                 child: Visibility(
-                  visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                  visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
                   child: StreamBuilder<String>(
                     stream: _bloc.attendeeCount,
                     initialData: "",
@@ -114,7 +115,7 @@ class _RideListPageState extends State<RideListPage>
         ),
         actions: <Widget>[
           Visibility(
-            visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+            visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
             child: Row(
               children: <Widget>[
                 Text(S.of(context).RideListAttendeesHeader,
@@ -163,7 +164,7 @@ class _RideListPageState extends State<RideListPage>
               Expanded(
                 child: Center(
                   child: Visibility(
-                    visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                    visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
                     child: StreamBuilder<String>(
                       stream: _bloc.attendeeCount,
                       initialData: "",
@@ -178,7 +179,7 @@ class _RideListPageState extends State<RideListPage>
           ),
           actions: <Widget>[
             Visibility(
-              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
               child: Row(
                 children: <Widget>[
                   Text(S.of(context).RideListAttendeesHeader,
@@ -219,7 +220,7 @@ class _RideListPageState extends State<RideListPage>
               }),
             Expanded(
               child: Visibility(
-                  visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                  visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
                   child: Center(
                     child: StreamBuilder<String>(
                       stream: _bloc.attendeeCount,
@@ -232,7 +233,7 @@ class _RideListPageState extends State<RideListPage>
                 ),
             ),
             Visibility(
-              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
               child: Row(
                 children: <Widget>[
                     Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
@@ -275,7 +276,7 @@ class _RideListPageState extends State<RideListPage>
               }),
             Expanded(
               child: Visibility(
-                  visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+                  visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
                   child: Center(
                     child: StreamBuilder<String>(
                       stream: _bloc.attendeeCount,
@@ -288,7 +289,7 @@ class _RideListPageState extends State<RideListPage>
                 ),
             ),
             Visibility(
-              visible: _bloc.selectionMode == RideSelectionMode.NORMAL,
+              visible: _bloc.displayMode == PanelDisplayMode.ATTENDEES,
               child: Row(
                 children: <Widget>[
                     Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
@@ -339,7 +340,7 @@ class _RideListPageState extends State<RideListPage>
               }else{
                 switch(snapshot.data){
                   case PanelDisplayMode.ATTENDEES: return _buildAttendeesPanel();
-                  case PanelDisplayMode.RIDE_DELETION: return _buildDeleteRidesPanel();
+                  case PanelDisplayMode.RIDE_DELETION: return RideListRideDelete(this);
                   case PanelDisplayMode.BLUETOOTH: return _buildBluetoothScanningPanel();
                 }
                 return Center();
@@ -379,13 +380,6 @@ class _RideListPageState extends State<RideListPage>
     );
   }
 
-  Widget _buildDeleteRidesPanel(){
-    return Center(
-      child: Text("Delete Ride Panel here"),
-    );
-    //TODO
-  }
-
   Widget _buildBluetoothScanningPanel(){
     return Center(
       child: Text("Bluetooth Panel here"),
@@ -395,7 +389,7 @@ class _RideListPageState extends State<RideListPage>
 
   @override
   void selectAttendee(IRideAttendeeSelectable item) async {
-    if(_bloc.selectionMode == RideSelectionMode.NORMAL){
+    if(_bloc.displayMode == PanelDisplayMode.ATTENDEES){
       await _bloc.selectAttendee(item);
       setState(() {});
     }
@@ -407,7 +401,7 @@ class _RideListPageState extends State<RideListPage>
       if(loadMembers){
         setState(() {
           _bloc.selectRide(item);
-          if(_bloc.selectionMode == RideSelectionMode.NORMAL){
+          if(_bloc.displayMode == PanelDisplayMode.ATTENDEES){
             switch(_bloc.filterState){
               case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
               case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
@@ -441,5 +435,21 @@ class _RideListPageState extends State<RideListPage>
   void enableDeleteMode() => _bloc.enableDeletionMode();
 
   @override
-  bool get isDeleteMode => _bloc.selectionMode == RideSelectionMode.DELETION;
+  bool get isDeleteMode => _bloc.displayMode == PanelDisplayMode.RIDE_DELETION;
+
+  @override
+  void cancelDeletion() {
+    setState(() {
+      _bloc.resetSelectionMode();
+    });
+  }
+
+  @override
+  void deleteSelection() {
+    // TODO: implement deleteSelection
+    //lock the displayed rides to prevent selection + show loading indicator
+    //await the deletion
+    //if error -> push to stream
+    //if success -> reset selection mode + load rides and attendees
+  }
 }

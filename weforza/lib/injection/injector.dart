@@ -31,7 +31,7 @@ class InjectionContainer {
     _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
     _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
     _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
-    _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember));
+    _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember,i.get<IMemberRepository>(),i.get<IRideRepository>()));
     _injector.map<RideListBloc>((i) => RideListBloc(i.get<IMemberRepository>(),i.get<IRideRepository>()));
     _injector.map<AddRideBloc>((i) => AddRideBloc(i.get<IRideRepository>()));
     //other

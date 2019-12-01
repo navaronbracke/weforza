@@ -36,6 +36,8 @@ class S implements WidgetsLocalizations {
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
   String get AppName => "WeForza";
+  String get DialogCancel => "Cancel";
+  String get DialogDelete => "Delete";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -43,8 +45,6 @@ class S implements WidgetsLocalizations {
   String get HomePageRidesTab => "Rides";
   String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
-  String get MemberDeleteDialogCancel => "Cancel";
-  String get MemberDeleteDialogConfirm => "Delete";
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogTitle => "Delete Member";
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
@@ -64,6 +64,7 @@ class S implements WidgetsLocalizations {
   String get RideListAddRideInstruction => "Add a ride";
   String get RideListAddRideInstructionPlus => "with the +";
   String get RideListAttendeesHeader => "Attendees";
+  String get RideListDeleteRidesDescription => "Delete the selected rides?";
   String get RideListLoadingMembersError => "Could not load members";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoAttendees => "There are no attendees";
@@ -97,6 +98,8 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
+  String get DialogDelete => "Verwijderen";
+  @override
   String get RideListRidesHeader => "Ritten";
   @override
   String get HomePageRidesTab => "Ritten";
@@ -123,15 +126,11 @@ class $nl extends S {
   @override
   String get MondayPrefix => "Ma";
   @override
-  String get MemberDeleteDialogConfirm => "Verwijderen";
-  @override
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
   @override
   String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
   @override
   String get RideListNoMembers => "Er zijn geen leden";
-  @override
-  String get MemberDeleteDialogCancel => "Annuleren";
   @override
   String get SundayPrefix => "Zo";
   @override
@@ -173,6 +172,8 @@ class $nl extends S {
   @override
   String get MemberListLoadingInProgress => "Leden aan het ophalen...";
   @override
+  String get DialogCancel => "Annuleren";
+  @override
   String get AddRideColorLegendPastDay => "Gepasseerde Dag Zonder Rit";
   @override
   String get SaturdayPrefix => "Za";
@@ -192,6 +193,8 @@ class $nl extends S {
   String get AddMemberPictureLabel => "Foto";
   @override
   String get RideListAddRideInstructionPlus => "met de +";
+  @override
+  String get RideListDeleteRidesDescription => "Geselecteerde ritten verwijderen?";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
   @override

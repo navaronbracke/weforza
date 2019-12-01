@@ -155,4 +155,29 @@ class RideDao {
     await _rideStore.delete(_database,finder: finder);
   }
 
+  Future removeAttendeeFromRides(Attendee attendee) async {
+    assert(attendee != null);
+    final finder = Finder(
+      filter: Filter.and(List.of([Filter.equals("attendees.phone", attendee.phone),Filter.equals("attendees.firstname", attendee.firstname),Filter.equals("attendees.lastname", attendee.lastname)])),
+    );
+    //Fetch the affected rides
+    final records = await _rideStore.find(_database,finder: finder);
+    if(records.isEmpty) return;
+
+    //Update the rides
+    List<Map<String,dynamic>> updatedRecords = records.map((record) {
+      final ride = Ride.fromMap(record.value);
+      ride.attendees.remove(attendee);
+      return ride.toMap();
+    }).toList();
+
+    //Save
+    await _database.transaction((transaction) {
+      updatedRecords.forEach((record) async {
+        await _rideStore.update(transaction, record);
+      });
+    });
+    
+  }
+
 }

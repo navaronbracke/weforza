@@ -23,8 +23,6 @@ class RideListAttendeeItemBloc extends Bloc implements IRideAttendeeSelectable {
   @override
   void dispose() {}
 
-  Attendee attendeeFrom() => Attendee(firstName,lastName,_member.phone);
-
   @override
   Attendee getAttendee() => Attendee(firstName,lastName,_member.phone);
 

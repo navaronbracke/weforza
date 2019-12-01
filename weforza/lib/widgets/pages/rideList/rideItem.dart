@@ -34,7 +34,7 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
       child: InkWell(
         splashColor: widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSplashColor : ApplicationTheme.rideListItemSelectModeSplashColor,
         onTap: (){
-          if(mounted){
+          if(mounted && !widget.selector.isBusy){
             setState(() {
               widget.selector.selectRide(widget.bloc);
             });
@@ -63,7 +63,7 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        if(mounted){
+        if(mounted && !widget.selector.isBusy){
           setState(() {
             widget.selector.selectRide(widget.bloc);
           });

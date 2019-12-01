@@ -28,6 +28,7 @@
   "RideListAddRideInstructionPlus": "with the +",
   "RideListLoadingMembersError": "Could not load members",
   "RideListLoadingRidesError": "Could not load rides",
+  "RideListDeleteRidesError": "Could not delete rides",
   "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
   "RideListDeleteRidesDescription": "Delete the selected rides?",
 

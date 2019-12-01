@@ -7,6 +7,8 @@ abstract class IRideSelector {
   ///Whether we are in delete mode
   bool get isDeleteMode;
 
+  bool get isBusy;
+
   void enableDeleteMode();
 }
 

@@ -65,6 +65,7 @@ class S implements WidgetsLocalizations {
   String get RideListAddRideInstructionPlus => "with the +";
   String get RideListAttendeesHeader => "Attendees";
   String get RideListDeleteRidesDescription => "Delete the selected rides?";
+  String get RideListDeleteRidesError => "Could not delete rides";
   String get RideListLoadingMembersError => "Could not load members";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoAttendees => "There are no attendees";
@@ -97,6 +98,8 @@ class $nl extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  @override
+  String get RideListDeleteRidesError => "Kon ritten niet verwijderen";
   @override
   String get DialogDelete => "Verwijderen";
   @override

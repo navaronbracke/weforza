@@ -145,13 +145,12 @@ class RideDao {
     await _rideStore.update(_database,ride.toMap(),finder: finder);
   }
 
-  ///Delete a Ride with the given key.
-  Future deleteRide(int id) async {
-    assert(id != null);
+  Future deleteRides(List<int> rides) async {
     final finder = Finder(
-      filter: Filter.byKey(id),
+      filter: Filter.custom((record){
+        return rides.contains(record.key);
+      })
     );
-
     await _rideStore.delete(_database,finder: finder);
   }
 

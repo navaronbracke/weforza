@@ -33,6 +33,12 @@ class _RideListPageState extends State<RideListPage>
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
 
+  @override
+  Stream<bool> get isBusyStream => _bloc.stream;
+
+  @override
+  bool get isBusy => _bloc.isDeleting;
+
   ///The future that loads the rides.
   Future<List<RideItemModel>> loadRidesFuture;
 
@@ -444,10 +450,12 @@ class _RideListPageState extends State<RideListPage>
 
   @override
   void deleteSelection() {
-    // TODO: implement deleteSelection
-    //lock the displayed rides to prevent selection + show loading indicator
-    //await the deletion
-    //if error -> push to stream
-    //if success -> reset selection mode + load rides and attendees
+    _bloc.deleteSelection().then((_){
+      setState(() {
+        _bloc.resetSelectionMode();
+        loadRidesFuture = _bloc.getRides();
+        loadAttendeesFuture = _bloc.getAllMembers();
+      });
+    });
   }
 }

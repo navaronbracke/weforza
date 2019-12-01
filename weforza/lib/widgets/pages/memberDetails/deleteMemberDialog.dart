@@ -6,7 +6,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 abstract class MemberDeleteHandler {
-  deleteMember();
+  Future<void> deleteMember();
 }
 
 ///This [Widget] is the dialog for deleting a member in [MemberDetailsPage].

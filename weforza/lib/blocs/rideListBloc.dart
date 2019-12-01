@@ -28,6 +28,12 @@ class RideListBloc extends Bloc {
   //endregion
 
   bool membersIsNotEmpty = false;
+  
+  ///Whether we are processing a delete request. 
+  bool isDeleting = false;
+  
+  StreamController<bool> _isDeletingController = BehaviorSubject(); 
+  Stream<bool> get stream => _isDeletingController.stream;
 
   ///The current filter state.
   AttendeeFilterState filterState = AttendeeFilterState.DISABLED;
@@ -97,6 +103,7 @@ class RideListBloc extends Bloc {
   void dispose() {
     _displayModeController.close();
     _attendeeCountController.close();
+    _isDeletingController.close();
   }
 
   void enableDeletionMode(){
@@ -192,6 +199,21 @@ class RideListBloc extends Bloc {
 
   void catchHasMembersError(){
     _displayModeController.addError(Exception("Could not check if there are members"));
+  }
+
+  Future<void> deleteSelection() async {
+    isDeleting = true;
+    _isDeletingController.add(isDeleting);
+    //delete rides
+    await _rideRepository.deleteRides(
+        _ridesToBeDeleted.map((item){
+          return item.getRide();
+        }).toList()).then((value){
+      isDeleting = false;
+      _isDeletingController.add(isDeleting);
+    },onError: (error){
+      _isDeletingController.addError(Exception("Could not delete rides"));
+    });
   }
 }
 

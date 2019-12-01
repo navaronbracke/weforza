@@ -28,6 +28,7 @@
   "RideListAddRideInstruction": "Voeg een rit toe",
   "RideListLoadingMembersError": "Kon leden niet laden",
   "RideListLoadingRidesError": "Kon ritten niet laden",
+  "RideListDeleteRidesError": "Kon ritten niet verwijderen",
   "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
   "RideListDeleteRidesDescription": "Geselecteerde ritten verwijderen?",
 

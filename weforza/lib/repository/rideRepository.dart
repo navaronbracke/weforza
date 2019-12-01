@@ -12,8 +12,8 @@ abstract class IRideRepository {
   ///Edit a given ride.
   Future editRide(Ride ride);
 
-  ///Delete a given ride.
-  Future deleteRide(int id);
+  ///Delete the given rides.
+  Future deleteRides(List<Ride> rides);
 
   ///Remove [attendee] from all the rides where it occurs.
   Future removeAttendeeFromRides(Attendee attendee);
@@ -31,10 +31,6 @@ class RideRepository implements IRideRepository {
 
   ///See [IRideRepository].
   @override
-  Future deleteRide(int id) => _dao.deleteRide(id);
-
-  ///See [IRideRepository].
-  @override
   Future editRide(Ride ride) => _dao.editRide(ride);
 
   ///See [IRideRepository].
@@ -43,6 +39,11 @@ class RideRepository implements IRideRepository {
 
   @override
   Future removeAttendeeFromRides(Attendee attendee) => _dao.removeAttendeeFromRides(attendee);
+
+  @override
+  Future deleteRides(List<Ride> rides) => _dao.deleteRides(rides.map((ride){
+        return ride.id;
+  }).toList());
 }
 
 ///This class is a test version of [IRideRepository].
@@ -53,12 +54,6 @@ class TestRideRepository implements IRideRepository {
   @override
   Future addRides(List<Ride> rides) {
     _list.addAll(rides);
-    return null;
-  }
-
-  @override
-  Future deleteRide(int id) {
-    _list.removeWhere((r) => r.id == id);
     return null;
   }
 
@@ -88,6 +83,9 @@ class TestRideRepository implements IRideRepository {
     return null;
   }
 
-
-
+  @override
+  Future deleteRides(List<Ride> rides) {
+    _list.removeWhere((ride){return rides.contains(ride);});
+    return null;
+  }
 }

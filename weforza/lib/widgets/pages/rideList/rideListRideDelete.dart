@@ -25,6 +25,8 @@ class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget 
   Widget buildAndroidWidget(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(S.of(context).RideListDeleteRidesDescription,softWrap: true),
           SizedBox(height: 10),
@@ -57,6 +59,8 @@ class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget 
   Widget buildIosWidget(BuildContext context) {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(S.of(context).RideListDeleteRidesDescription,softWrap: true),
           SizedBox(height: 10),

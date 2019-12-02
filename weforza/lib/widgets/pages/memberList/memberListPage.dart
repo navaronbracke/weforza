@@ -89,6 +89,7 @@ class _MemberListPageState extends State<MemberListPage>
         ),
       ),
       child: SafeArea(
+        bottom: false,
         child: _listBuilder(_listBloc.getKnownPeople(), MemberListLoading(),
             MemberListError(), MemberListEmpty(), _selectBloc),
       ),

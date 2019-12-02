@@ -4,13 +4,18 @@ import 'dart:io';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/ride.dart';
+import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {
-  MemberDetailsBloc(this._member): assert(_member != null);
+  MemberDetailsBloc(this._member,this._memberRepository,this._rideRepository): assert(_member != null && _memberRepository != null && _rideRepository != null);
 
   ///The [Member] that should be displayed.
   final Member _member;
+  final IMemberRepository _memberRepository;
+  final IRideRepository _rideRepository;
 
   ///Get the first name of [_member].
   String get firstName => _member.firstname;
@@ -30,6 +35,11 @@ class MemberDetailsBloc extends Bloc {
   void dispose() {}
 
   Future<File> getImage() => FileLoader.getImage(_member.profileImageFilePath);
+
+  Future deleteMember() async {
+    await _rideRepository.removeAttendeeFromRides(Attendee(_member.firstname,_member.lastname,_member.phone));
+    await _memberRepository.deleteMember(_member.id);
+  }
 
   //TODO future for was present count
 

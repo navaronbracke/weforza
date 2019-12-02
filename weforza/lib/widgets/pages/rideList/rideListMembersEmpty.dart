@@ -4,6 +4,10 @@ import 'package:weforza/generated/i18n.dart';
 
 ///This class represents an empty list [Widget] for the 'Members' section of [RideListPage].
 class RideListMembersEmpty extends StatelessWidget {
+  RideListMembersEmpty(this.filterIsEnabled): assert(filterIsEnabled != null);
+
+  final bool filterIsEnabled;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -13,7 +17,7 @@ class RideListMembersEmpty extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(S.of(context).RideListNoMembers),
+            Text(filterIsEnabled ? S.of(context).RideListNoAttendees :  S.of(context).RideListNoMembers,softWrap: true),
           ],
         ),
       ),

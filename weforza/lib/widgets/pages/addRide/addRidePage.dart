@@ -96,8 +96,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                           onPressed: () async {
                             if(_bloc.validateInputs()){
                               await _bloc.addRides();
-                              //pass true to indicate a reload
-                              Navigator.pop(context,true);
+                              Navigator.pop(context);
                             }else{
                               _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                             }
@@ -161,8 +160,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                         onPressed: () async {
                           if(_bloc.validateInputs()){
                             await _bloc.addRides();
-                            //pass true to indicate a reload
-                            Navigator.pop(context,true);
+                            Navigator.pop(context);
                           }else{
                             _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                           }
@@ -228,8 +226,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                               onPressed: () async {
                                 if(_bloc.validateInputs()){
                                   await _bloc.addRides();
-                                  //pass true to indicate a reload
-                                  Navigator.pop(context,true);
+                                  Navigator.pop(context);
                                 }else{
                                   _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                                 }
@@ -295,8 +292,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                             onPressed: () async {
                               if(_bloc.validateInputs()){
                                 await _bloc.addRides();
-                                //pass true to indicate a reload
-                                Navigator.pop(context,true);
+                                Navigator.pop(context);
                               }else{
                                 _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                               }

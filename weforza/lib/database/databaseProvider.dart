@@ -49,6 +49,10 @@ class MemberDao {
     await _memberStore.add(_database, member.toMap());
   }
 
+  Future<bool> hasMembers() async {
+    return await _memberStore.count(_database) > 0;
+  }
+
   ///Get all stored members.
   Future<List<Member>> getMembers() async {
     final finder = Finder(
@@ -141,14 +145,39 @@ class RideDao {
     await _rideStore.update(_database,ride.toMap(),finder: finder);
   }
 
-  ///Delete a Ride with the given key.
-  Future deleteRide(int id) async {
-    assert(id != null);
+  Future deleteRides(List<int> rides) async {
     final finder = Finder(
-      filter: Filter.byKey(id),
+      filter: Filter.custom((record){
+        return rides.contains(record.key);
+      })
     );
-
     await _rideStore.delete(_database,finder: finder);
+  }
+
+  Future removeAttendeeFromRides(Attendee attendee) async {
+    assert(attendee != null);
+
+    final records = await _rideStore.find(_database,finder: Finder());
+    if(records.isEmpty) return;
+
+    //Update the rides if they have the attendee
+    List<Map<String,dynamic>> updatedRecords = records.map((record) {
+      final ride = Ride.fromMap(record.value);
+      if(ride.attendees.contains(attendee)){
+        ride.attendees.remove(attendee);
+      }
+      return ride.toMap();
+    }).toList();
+
+    //Save
+    await _database.transaction((transaction) async {
+      List<Future> futures = List();
+      updatedRecords.forEach((record){
+        futures.add(_rideStore.update(transaction,record));
+      });
+      await Future.wait(futures);
+    });
+    
   }
 
 }

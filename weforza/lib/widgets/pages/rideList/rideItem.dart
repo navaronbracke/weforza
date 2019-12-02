@@ -28,13 +28,22 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
   @override
   Widget buildAndroidWidget(BuildContext context) {
     return Card(
-      color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
+      color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
+       : ApplicationTheme.rideListItemUnselectedColor,
       elevation: 4.0,
       child: InkWell(
-        splashColor: ApplicationTheme.rideListItemSplashColor,
+        splashColor: widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSplashColor : ApplicationTheme.rideListItemSelectModeSplashColor,
         onTap: (){
-          if(mounted){
+          if(mounted && !widget.selector.isBusy){
             setState(() {
+              widget.selector.selectRide(widget.bloc);
+            });
+          }
+        },
+        onLongPress: (){
+          if(mounted && !widget.selector.isDeleteMode){
+            setState(() {
+              widget.selector.enableDeleteMode();
               widget.selector.selectRide(widget.bloc);
             });
           }
@@ -54,19 +63,34 @@ class _RideItemState extends State<RideItem> implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        if(mounted){
+        if(mounted && !widget.selector.isBusy){
           setState(() {
             widget.selector.selectRide(widget.bloc);
           });
         }
       },
-      child: Container(
-        color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedColor : ApplicationTheme.rideListItemUnselectedColor,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
-          child: Center(
-              child: Text(widget.bloc.getFormattedDate(context),style:
-              TextStyle(color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),)
+      onLongPress: (){
+        if(mounted){
+          setState(() {
+            widget.selector.enableDeleteMode();
+            widget.selector.selectRide(widget.bloc);
+          });
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.bloc.isSelected ? (widget.selector.isDeleteMode ? ApplicationTheme.rideListItemDeleteModeSelectedColor : ApplicationTheme.rideListItemSelectModeSelectedColor)
+              : ApplicationTheme.rideListItemUnselectedColor,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 15, 8, 15),
+            child: Center(
+                child: Text(widget.bloc.getFormattedDate(context),style:
+                TextStyle(color: widget.bloc.isSelected ? ApplicationTheme.rideListItemSelectedFontColor : ApplicationTheme.rideListItemUnselectedFontColor),)
+            ),
           ),
         ),
       ),

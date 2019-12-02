@@ -251,6 +251,7 @@ class _RideListPageState extends State<RideListPage>
           ),
         ),
       child: SafeArea(
+        bottom: false,
         child: _buildPageBody()
       ),
     );
@@ -307,6 +308,7 @@ class _RideListPageState extends State<RideListPage>
           ),
         ),
       child: SafeArea(
+        bottom: false,
         child: _buildPageBody(),
       ),
     );

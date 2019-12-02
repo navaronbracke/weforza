@@ -16,6 +16,8 @@ abstract class IMemberRepository {
   Future<bool> checkIfExists(String firstname,String lastname, String phone);
   ///Edit member.
   Future editMember(Member member);
+
+  Future<bool> hasMembers();
 }
 
 ///This class will manage the members when in a production setting.
@@ -44,6 +46,9 @@ class MemberRepository implements IMemberRepository {
   ///See [IMemberRepository].
   @override
   Future editMember(Member member) => _dao.editMember(member);
+
+  @override
+  Future<bool> hasMembers() => _dao.hasMembers();
 }
 
 ///This class is a test version of [IMemberRepository].
@@ -88,4 +93,7 @@ class TestMemberRepository implements IMemberRepository {
     }
     throw Exception("$member was null");
   }
+
+  @override
+  Future<bool> hasMembers() => Future.value(_list.isNotEmpty);
 }

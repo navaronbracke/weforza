@@ -2,7 +2,14 @@
 import 'package:weforza/model/ride.dart';
 
 abstract class IRideSelector {
+  ///Select or un-select [item]
   void selectRide(IRideSelectable item);
+  ///Whether we are in delete mode
+  bool get isDeleteMode;
+
+  bool get isBusy;
+
+  void enableDeleteMode();
 }
 
 abstract class IRideAttendeeSelector {
@@ -18,13 +25,24 @@ abstract class IRideAttendeeSelectable {
 }
 
 abstract class IRideSelectable {
-  DateTime getDateOfRide();
 
-  int getIndex();
+  Ride getRide();
+
+  int getCount() => getRide()?.attendees?.length ?? 0;
+
+  bool isAttendeeOfRide(Attendee attendee) => getRide().attendees.contains(attendee);
+
+  void addAttendee(Attendee attendee);
+
+  void removeAttendee(Attendee attendee);
 
   void unSelect();
 
   void select();
 
-  int getCount();
+  @override
+  bool operator ==(Object other) => other is IRideSelectable && getRide() == other.getRide();
+
+  @override
+  int get hashCode => getRide().hashCode;
 }

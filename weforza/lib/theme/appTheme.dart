@@ -44,19 +44,29 @@ abstract class ApplicationTheme {
   //Ride Calendar Header Button Color when pressed
   static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
 
-  //RideList Item Background Color when selected
-  static final Color rideListItemSelectedColor = Colors.lightGreen;
+
   //RideList Item Background Color when not selected
   static final Color rideListItemUnselectedColor = Colors.white;
-
-  //RideList Item Font Color when selected
-  static final Color rideListItemSelectedFontColor = Colors.white;
 
   //RideList Item Font Color when not selected
   static final Color rideListItemUnselectedFontColor = Colors.black;
 
-  //RideList Item Splash Color(Used in Material Widget)
-  static final Color rideListItemSplashColor = Colors.green;
+  //RideList Item Font Color when selected.
+  static final Color rideListItemSelectedFontColor = Colors.white;
+
+
+  //RideList Item Background Color when selected and in normal selection mode.
+  static final Color rideListItemSelectModeSelectedColor = Colors.green;
+
+  //RideList Item Material Splash Color when in normal selection mode.
+  static final Color rideListItemSelectModeSplashColor = Colors.green.shade300.withAlpha(150);
+
+  //RideList Item Background Color when selected and in delete selection mode.
+  static final Color rideListItemDeleteModeSelectedColor = Colors.red;
+
+  static final Color rideListItemDeleteModeSplashColor = Colors.red.shade300.withAlpha(150);
+
+
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);

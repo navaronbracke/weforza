@@ -59,6 +59,12 @@ class Ride {
     List<dynamic> attendees = map["attendees"];
     return Ride(date,attendees.map((value) => Attendee(value["firstname"], value["lastname"], value["phone"])).toList());
   }
+
+  @override
+  bool operator ==(Object other) => other is Ride && date == other.date;
+
+  @override
+  int get hashCode => hashValues(date,hashList(attendees));
 }
 
 ///This class represents an Attendee for a Ride.

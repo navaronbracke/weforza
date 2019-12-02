@@ -8,6 +8,7 @@ import 'package:weforza/model/rideAttendeeItemModel.dart';
 import 'package:weforza/model/rideItemModel.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListAttendeeFilter.dart';
+import 'package:weforza/widgets/pages/rideList/rideListRideDelete.dart';
 import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -26,11 +27,17 @@ class RideListPage extends StatefulWidget {
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRideSelector, IRideAttendeeSelector, AttendeeFilterHandler {
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IRideSelector, IRideAttendeeSelector, AttendeeFilterHandler, IRideDeleteHandler {
   _RideListPageState(this._bloc) : assert(_bloc != null);
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
+
+  @override
+  Stream<bool> get isBusyStream => _bloc.stream;
+
+  @override
+  bool get isBusy => _bloc.isDeleting;
 
   ///The future that loads the rides.
   Future<List<RideItemModel>> loadRidesFuture;
@@ -71,122 +78,125 @@ class _RideListPageState extends State<RideListPage>
       appBar: AppBar(
         title: Row(
           children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              color: Colors.white,
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                setState(() {
+                  _bloc.resetSelectionMode();
+                  loadRidesFuture = _bloc.getRides();
+                  loadAttendeesFuture = _bloc.getAllMembers();
+                });
+              }),
+            ),
+            IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.bluetooth_searching),
+              onPressed: () {
+                //TODO scanning
+              },
+            ),
+            IconButton(
+              color: Colors.white,
+              icon: Icon(Icons.import_export),
+              onPressed: () {
+                //TODO import/export rides
+              },
+            ),
             Expanded(
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    color: Colors.white,
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                      if(value != null && value){
-                        setState(() {
-                          loadRidesFuture = _bloc.getRides();
-                        });
-                      }
-                    }),
-                  ),
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.bluetooth_searching),
-                    onPressed: () {
-                      //TODO scanning
+              child: Center(
+                child: Visibility(
+                  visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+                  child: StreamBuilder<String>(
+                    stream: _bloc.attendeeCount,
+                    initialData: "",
+                    builder: (context,snapshot){
+                      return snapshot.hasError ? Text("") : Text(snapshot.data);
                     },
                   ),
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.file_download),
-                    onPressed: () {
-                      //TODO import rides
-                    },
-                  ),
-                  IconButton(
-                    color: Colors.white,
-                    icon: Icon(Icons.file_upload),
-                    onPressed: () {
-                      //TODO export rides
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
-            Text(_bloc.attendeeCount),
           ],
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Center(), //This is a filler widget
-              ),
-              Row(
-                children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
-              ),
-            ],
-          ),
-          Expanded(
-            child: _buildPageBody(),
+        actions: <Widget>[
+          Visibility(
+            visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+            child: Row(
+              children: <Widget>[
+                Text(S.of(context).RideListAttendeesHeader,
+                    style: TextStyle(fontSize: 14)),
+                RideListAttendeeFilter(_bloc.filterState,this),
+              ],
+            ),
           ),
         ],
       ),
+      body: _buildPageBody()
     );
   }
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())),
-                ),
-                IconButton(
-                  icon: Icon(Icons.bluetooth_searching),
-                  onPressed: () {
-                    //TODO scanning
-                  },
-                ),
-                SizedBox(width: 20),
-                IconButton(
-                  icon: Icon(Icons.file_download),
-                  onPressed: () {
-                    //TODO import rides
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.file_upload),
-                  onPressed: () {
-                    //TODO export rides
-                  },
-                ),
-              ],
-            ),
-            Expanded(
-              child: Center(
-                child: Text(_bloc.attendeeCount),
+        appBar: AppBar(
+          title: Row(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add),
+                color: Colors.white,
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  setState(() {
+                    _bloc.resetSelectionMode();
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
+                }),
               ),
-            ),
-            Row(
-              children: <Widget>[
-                Text(S.of(context).RideListFilterShowAttendingOnly,
-                    style: TextStyle(fontSize: 14)),
-                SizedBox(width: 5),
-                RideListAttendeeFilter(_bloc.filterState,this),
-              ],
+              IconButton(
+                color: Colors.white,
+                icon: Icon(Icons.bluetooth_searching),
+                onPressed: () {
+                  //TODO scanning
+                },
+              ),
+              IconButton(
+                color: Colors.white,
+                icon: Icon(Icons.import_export),
+                onPressed: () {
+                  //TODO import/export rides
+                },
+              ),
+              Expanded(
+                child: Center(
+                  child: Visibility(
+                    visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+                    child: StreamBuilder<String>(
+                      stream: _bloc.attendeeCount,
+                      initialData: "",
+                      builder: (context,snapshot){
+                        return snapshot.hasError ? Text("") : Text(snapshot.data);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            Visibility(
+              visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+              child: Row(
+                children: <Widget>[
+                  Text(S.of(context).RideListAttendeesHeader,
+                      style: TextStyle(fontSize: 14)),
+                  RideListAttendeeFilter(_bloc.filterState,this),
+                ],
+              ),
             ),
           ],
         ),
-      ),
-      body: _buildPageBody(),
+        body: _buildPageBody()
     );
   }
 
@@ -195,53 +205,53 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        trailing: Text(_bloc.attendeeCount),
         middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+              CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
                     () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                  if(value != null && value){
-                    setState(() {
-                      loadRidesFuture = _bloc.getRides();
-                    });
-                  }}),
+                  setState(() {
+                    _bloc.resetSelectionMode();
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
+                }),
+              ),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO scanning
+              }),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO import and export rides
+              }),
+            Expanded(
+              child: Visibility(
+                  visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+                  child: Center(
+                    child: StreamBuilder<String>(
+                      stream: _bloc.attendeeCount,
+                      initialData: "",
+                      builder: (context,snapshot){
+                        return snapshot.hasError ? Text("") : Text(snapshot.data);
+                      },
+                    ),
+                  ),
+                ),
             ),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO scanning
-            }),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO import
-            }),
-            SizedBox(width: 20),
-            CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO export
-            }),
-          ],
-        ),
-      ),
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            Visibility(
+              visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
               child: Row(
                 children: <Widget>[
-                  Expanded(
-                    child: Center(),//Filler Widget
-                  ),
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
+                    Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: _buildPageBody(),
-            ),
-          ],
+            ],
+          ),
         ),
+      child: SafeArea(
+        child: _buildPageBody()
       ),
     );
   }
@@ -253,48 +263,49 @@ class _RideListPageState extends State<RideListPage>
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-                      if(value != null && value){
-                        setState(() {
-                          loadRidesFuture = _bloc.getRides();
-                        });
-                      }
-                    })),
-                SizedBox(width: 20),
-                CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO scanning
+              CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                    () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
+                  setState(() {
+                    _bloc.resetSelectionMode();
+                    loadRidesFuture = _bloc.getRides();
+                    loadAttendeesFuture = _bloc.getAllMembers();
+                  });
                 }),
-                SizedBox(width: 20),
-                CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO import
-                }),
-                SizedBox(width: 20),
-                CupertinoIconButton(Icons.file_upload,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO export
-                }),
-              ],
-            ),
-            Expanded(
-              child: Center(
-                child: Text(_bloc.attendeeCount),
               ),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.bluetooth_searching,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO scanning
+              }),
+              SizedBox(width: 20),
+              CupertinoIconButton(Icons.import_export,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO import and export rides
+              }),
+            Expanded(
+              child: Visibility(
+                  visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
+                  child: Center(
+                    child: StreamBuilder<String>(
+                      stream: _bloc.attendeeCount,
+                      initialData: "",
+                      builder: (context,snapshot){
+                        return snapshot.hasError ? Text("") : Text(snapshot.data);
+                      },
+                    ),
+                  ),
+                ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            Visibility(
+              visible: _bloc.membersIsNotEmpty && _bloc.displayMode == PanelDisplayMode.ATTENDEES,
               child: Row(
                 children: <Widget>[
-                  Text(S.of(context).RideListFilterShowAttendingOnly,
-                      style: TextStyle(fontSize: 14)),
-                  RideListAttendeeFilter(_bloc.filterState,this),
-                ],
+                    Text(S.of(context).RideListAttendeesHeader,style: TextStyle(fontSize: 14)),
+                    RideListAttendeeFilter(_bloc.filterState,this),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       child: SafeArea(
         child: _buildPageBody(),
       ),
@@ -324,17 +335,21 @@ class _RideListPageState extends State<RideListPage>
         ),
         Flexible(
           flex: 3,
-          child: FutureBuilder(
-            future: loadAttendeesFuture,
-            builder: (context,snapshot){
-              if(snapshot.connectionState == ConnectionState.done){
-                if(snapshot.hasError){
-                  return Center(child: Text(S.of(context).RideListLoadingMembersError));
-                }else{
-                  return _buildAttendeesList(snapshot.data as List<RideAttendeeItemModel>);
-                }
+          child: StreamBuilder<PanelDisplayMode>(
+            stream: _bloc.displayStream,
+            initialData: PanelDisplayMode.ATTENDEES,
+            builder: (context, snapshot){
+              if(snapshot.hasError){
+                return Center(
+                  child: Text(S.of(context).RideListPanelDisplayError,softWrap: true),
+                );
               }else{
-                return Center(child: PlatformAwareLoadingIndicator());
+                switch(snapshot.data){
+                  case PanelDisplayMode.ATTENDEES: return _buildAttendeesPanel();
+                  case PanelDisplayMode.RIDE_DELETION: return RideListRideDelete(this);
+                  case PanelDisplayMode.BLUETOOTH: return _buildBluetoothScanningPanel();
+                }
+                return Center();
               }
             },
           ),
@@ -350,25 +365,57 @@ class _RideListPageState extends State<RideListPage>
   }
 
   Widget _buildAttendeesList(List<RideAttendeeItemModel> items) {
-    return items.isEmpty ? RideListMembersEmpty() : ListView.builder(itemCount: items.length,itemBuilder:
+    return items.isEmpty ? RideListMembersEmpty(_bloc.filterState == AttendeeFilterState.ON) : ListView.builder(itemCount: items.length,itemBuilder:
         (context, index) => MemberItem(items[index].bloc,this));
+  }
+
+  Widget _buildAttendeesPanel(){
+    return FutureBuilder(
+      future: loadAttendeesFuture,
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(child: Text(S.of(context).RideListLoadingMembersError));
+          }else{
+            return _buildAttendeesList(snapshot.data as List<RideAttendeeItemModel>);
+          }
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _buildBluetoothScanningPanel(){
+    return Center(
+      child: Text("Bluetooth Panel here"),
+    );
+    //TODO
   }
 
   @override
   void selectAttendee(IRideAttendeeSelectable item) async {
-    await _bloc.selectAttendee(item);
-    setState(() {});
+    if(_bloc.displayMode == PanelDisplayMode.ATTENDEES){
+      await _bloc.selectAttendee(item);
+      setState(() {});
+    }
   }
 
   @override
-  void selectRide(IRideSelectable item){
-    setState(() {
-      _bloc.selectRide(item);
-      switch(_bloc.filterState){
-        case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
-        case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
-        case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
-      }
+  void selectRide(IRideSelectable item) async {
+    _bloc.hasMembers().then((hasMembers){
+      setState(() {
+        _bloc.selectRide(item);
+        if(hasMembers && _bloc.displayMode == PanelDisplayMode.ATTENDEES){
+          switch(_bloc.filterState){
+            case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
+            case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
+            case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+          }
+        }
+      });
+    },onError: (error){
+      _bloc.catchHasMembersError();
     });
   }
 
@@ -385,6 +432,30 @@ class _RideListPageState extends State<RideListPage>
     setState(() {
       _bloc.filterState = AttendeeFilterState.OFF;
       loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected();
+    });
+  }
+
+  @override
+  void enableDeleteMode() => _bloc.enableDeletionMode();
+
+  @override
+  bool get isDeleteMode => _bloc.displayMode == PanelDisplayMode.RIDE_DELETION;
+
+  @override
+  void cancelDeletion() {
+    setState(() {
+      _bloc.resetSelectionMode();
+    });
+  }
+
+  @override
+  void deleteSelection() {
+    _bloc.deleteSelection().then((_){
+      setState(() {
+        _bloc.resetSelectionMode();
+        loadRidesFuture = _bloc.getRides();
+        loadAttendeesFuture = _bloc.getAllMembers();
+      });
     });
   }
 }

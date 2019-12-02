@@ -4,14 +4,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/deleteMemberBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -22,7 +21,7 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, MemberDeleteHandler {
   _MemberDetailsPageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC in charge of the content.
@@ -79,7 +78,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              showDialog(context: context, builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+              showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
               .then((value){
                 //Member was deleted, go back to list
                 if(value){
@@ -150,7 +149,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: (){
-              showDialog(context: context, builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+              showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
                   .then((value){
                     //Member was deleted, go back to list
                     if(value){
@@ -215,7 +214,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             }),
             SizedBox(width: 30),
             CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))
+              showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
                   .then((value){
                 //Member was deleted, go back to list
                 if(value){
@@ -287,7 +286,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             }),
             SizedBox(width: 30),
             CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> _DeleteMemberDialog(DeleteMemberBloc(InjectionContainer.get<IMemberRepository>(),_bloc.id)))              .then((value){
+              showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this)).then((value){
                 //Member was deleted, go back to list
                 if(value){
                   Navigator.pop(context);
@@ -356,6 +355,9 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
       }
     );
   }
+
+  @override
+  deleteMember() async => await _bloc.deleteMember();
 }
 
 ///This [Widget] is displayed when a member that is displayed in [MemberDetailsPage] has no devices.
@@ -371,63 +373,6 @@ class _MemberDetailsDevicesEmpty extends StatelessWidget {
           Text(S.of(context).MemberDetailsAddDevicesInstruction),
         ],
       ),
-    );
-  }
-}
-
-///This [Widget] is the dialog for deleting a member in [MemberDetailsPage].
-class _DeleteMemberDialog extends StatelessWidget implements PlatformAwareWidget {
-  _DeleteMemberDialog(this._bloc);
-
-  ///The Bloc that handles a submit.
-  final DeleteMemberBloc _bloc;
-
-  @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
-
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return AlertDialog(
-      title: Text(S.of(context).MemberDeleteDialogTitle),
-      content: Text(S.of(context).MemberDeleteDialogDescription),
-      actions: <Widget>[
-        FlatButton(
-          child: Text(S.of(context).MemberDeleteDialogCancel),
-          onPressed: (){
-            Navigator.pop(context,false);
-          },
-        ),
-        FlatButton(
-          child: Text(S.of(context).MemberDeleteDialogConfirm,style: TextStyle(color: Colors.red)),
-          onPressed: () async {
-            await _bloc.deleteMember();
-            Navigator.pop(context,true);
-          },
-        ),
-      ],
-    );
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return CupertinoAlertDialog(
-      title: Text(S.of(context).MemberDeleteDialogTitle),
-      content: Text(S.of(context).MemberDeleteDialogDescription),
-      actions: <Widget>[
-        CupertinoButton(
-          child: Text(S.of(context).MemberDeleteDialogCancel),
-          onPressed: (){
-            Navigator.pop(context,false);
-          },
-        ),
-        CupertinoButton(
-          child: Text(S.of(context).MemberDeleteDialogConfirm,style: TextStyle(color: Colors.red)),
-          onPressed: () async {
-            await _bloc.deleteMember();
-            Navigator.pop(context,true);
-          },
-        ),
-      ],
     );
   }
 }

@@ -15,11 +15,9 @@ class HomePage extends StatefulWidget {
 ///This is the [State] class for [HomePage].
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin implements PlatformAwareWidget {
 
-  ///The tabs for this page.
-  final List<Widget> _tabs = List.of([RideListPage(),MemberListPage()]);
   ///The selected index.
   int _selectedIndex = 0;
-  ///The page controller for android.
+  
   PageController _pageController;
 
   @override
@@ -41,7 +39,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: _tabs,
+        children: [RideListPage(),MemberListPage()],
         controller: _pageController,
         onPageChanged: (page){
           setState(() {_selectedIndex = page; });
@@ -68,20 +66,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBuilder: (context,index){
-        return _tabs[index];
-      },
-      tabBar: CupertinoTabBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.directions_bike),
+    return CupertinoPageScaffold(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: PageView(
+              children: [RideListPage(),MemberListPage()],
+              controller: _pageController,
+              onPageChanged: (page){
+                setState(() {_selectedIndex = page; });
+              },
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-          ),
+          CupertinoTabBar(
+            currentIndex: _selectedIndex,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.directions_bike)),
+              BottomNavigationBarItem(icon: Icon(Icons.people)),
+            ],
+            onTap: (index){
+              _pageController.animateToPage(index, duration: const Duration(milliseconds: 300),curve: Curves.easeInOut);
+            },
+          )
         ],
-      ),
+      )
     );
   }
 }

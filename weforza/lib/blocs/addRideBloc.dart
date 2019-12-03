@@ -39,6 +39,11 @@ class AddRideBloc extends Bloc {
   ///A callback function that is fired when a selection clear is requested.
   VoidCallback _onSelectionCleared;
 
+
+  bool _isBusy = false;
+  StreamController<bool> _isBusyController = BehaviorSubject();
+  Stream<bool> get isBusy => _isBusyController.stream;
+
   set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
 
   AddRideBloc(this._repository){
@@ -121,9 +126,16 @@ class AddRideBloc extends Bloc {
 
   ///Add the selected rides.
   Future addRides() async {
-    if(_ridesToAdd.isNotEmpty){
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).catchError((error){
+    if(!_isBusy && _ridesToAdd.isNotEmpty){
+      _isBusy = true;
+      _isBusyController.add(_isBusy);
+      await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).then((_){
+        _isBusy = false;
+        _isBusyController.add(_isBusy);
+      },onError: (error){
         _errorMessageController.addError(Exception("Failed to add rides"));
+        _isBusy = false;
+        _isBusyController.add(_isBusy);
       });
     }
   }
@@ -131,6 +143,7 @@ class AddRideBloc extends Bloc {
   ///Dispose of this object.
   @override
   void dispose() {
+    _isBusyController.close();
     _errorMessageController.close();
   }
 }

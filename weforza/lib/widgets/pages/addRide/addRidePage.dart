@@ -90,16 +90,23 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                           },
                         ),
                         SizedBox(height: 10),
-                        RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                          onPressed: () async {
-                            if(_bloc.validateInputs()){
-                              await _bloc.addRides();
-                              Navigator.pop(context);
-                            }else{
-                              _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                            }
+                        StreamBuilder<bool>(
+                          initialData: false,
+                          builder: (context,snapshot){
+                            return snapshot.data ? Center(
+                              child: PlatformAwareLoadingIndicator(),
+                            ): RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
+                              onPressed: () async {
+                                if(_bloc.validateInputs()){
+                                  await _bloc.addRides();
+                                  Navigator.pop(context);
+                                }else{
+                                  _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                                }
+                              },
+                            );
                           },
                         ),
                       ],
@@ -154,16 +161,23 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                         },
                       ),
                       SizedBox(height: 10),
-                      RaisedButton(
-                        color: Theme.of(context).primaryColor,
-                        child: Text(S.of(context).AddRideSubmit,softWrap: true,style:TextStyle(color: Colors.white)),
-                        onPressed: () async {
-                          if(_bloc.validateInputs()){
-                            await _bloc.addRides();
-                            Navigator.pop(context);
-                          }else{
-                            _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                          }
+                      StreamBuilder<bool>(
+                        initialData: false,
+                        builder: (context,snapshot){
+                          return snapshot.data ? Center(
+                            child: PlatformAwareLoadingIndicator(),
+                          ): RaisedButton(
+                            color: Theme.of(context).primaryColor,
+                            child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
+                            onPressed: () async {
+                              if(_bloc.validateInputs()){
+                                await _bloc.addRides();
+                                Navigator.pop(context);
+                              }else{
+                                _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                              }
+                            },
+                          );
                         },
                       ),
                     ],
@@ -220,16 +234,23 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                               },
                             ),
                             SizedBox(height: 10),
-                            CupertinoButton.filled(
-                              pressedOpacity: 0.5,
-                              child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                              onPressed: () async {
-                                if(_bloc.validateInputs()){
-                                  await _bloc.addRides();
-                                  Navigator.pop(context);
-                                }else{
-                                  _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                                }
+                            StreamBuilder<bool>(
+                              initialData: false,
+                              builder: (context,snapshot){
+                                return snapshot.data ? Center(
+                                  child: PlatformAwareLoadingIndicator(),
+                                ): CupertinoButton.filled(
+                                  pressedOpacity: 0.5,
+                                  child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                                  onPressed: () async {
+                                    if(_bloc.validateInputs()){
+                                      await _bloc.addRides();
+                                      Navigator.pop(context);
+                                    }else{
+                                      _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                                    }
+                                  },
+                                );
                               },
                             ),
                           ],
@@ -286,16 +307,23 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                             },
                           ),
                           SizedBox(height: 10),
-                          CupertinoButton.filled(
-                            pressedOpacity: 0.5,
-                            child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              if(_bloc.validateInputs()){
-                                await _bloc.addRides();
-                                Navigator.pop(context);
-                              }else{
-                                _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                              }
+                          StreamBuilder<bool>(
+                            initialData: false,
+                            builder: (context,snapshot){
+                              return snapshot.data ? Center(
+                                child: PlatformAwareLoadingIndicator(),
+                              ): CupertinoButton.filled(
+                                pressedOpacity: 0.5,
+                                child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
+                                onPressed: () async {
+                                  if(_bloc.validateInputs()){
+                                    await _bloc.addRides();
+                                    Navigator.pop(context);
+                                  }else{
+                                    _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
+                                  }
+                                },
+                              );
                             },
                           ),
                         ],

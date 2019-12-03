@@ -56,7 +56,7 @@ class MemberDao {
   ///Get all stored members.
   Future<List<Member>> getMembers() async {
     final finder = Finder(
-        sortOrders: [SortOrder("firstname"),SortOrder("lastname")]
+        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("phone")]
     );
 
     final records = await _memberStore.find(_database,finder: finder);
@@ -121,16 +121,17 @@ class RideDao {
 
   ///Get all stored Rides.
   Future<List<Ride>> getRides() async {
-    final finder = Finder();
+    final finder = Finder(
+      sortOrders: [SortOrder("date",false)]
+    );
 
-    final records = await _rideStore.find(_database,finder:finder);
+    final records = await _rideStore.find(_database,finder: finder);
 
     final list = records.map((record){
       final ride = Ride.fromMap(record.value);
       ride.id = record.key;
       return ride;
     }).toList();
-    list.sort((element1,element2)=> element1.date.compareTo(element2.date));
 
     return list;
   }

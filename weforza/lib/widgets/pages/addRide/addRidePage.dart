@@ -100,8 +100,9 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                               child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
                               onPressed: () async {
                                 if(_bloc.validateInputs()){
-                                  await _bloc.addRides();
-                                  Navigator.pop(context);
+                                  if(await _bloc.addRides()){
+                                    Navigator.pop(context);
+                                  }
                                 }else{
                                   _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                                 }
@@ -171,8 +172,9 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                             child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
                             onPressed: () async {
                               if(_bloc.validateInputs()){
-                                await _bloc.addRides();
-                                Navigator.pop(context);
+                                if(await _bloc.addRides()){
+                                  Navigator.pop(context);
+                                }
                               }else{
                                 _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                               }
@@ -244,8 +246,9 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                   child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
                                   onPressed: () async {
                                     if(_bloc.validateInputs()){
-                                      await _bloc.addRides();
-                                      Navigator.pop(context);
+                                      if(await _bloc.addRides()){
+                                        Navigator.pop(context);
+                                      }
                                     }else{
                                       _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                                     }
@@ -317,8 +320,9 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                 child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
                                 onPressed: () async {
                                   if(_bloc.validateInputs()){
-                                    await _bloc.addRides();
-                                    Navigator.pop(context);
+                                    if(await _bloc.addRides()){
+                                      Navigator.pop(context);
+                                    }
                                   }else{
                                     _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
                                   }

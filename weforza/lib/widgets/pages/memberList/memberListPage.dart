@@ -59,7 +59,7 @@ class _MemberListPageState extends State<MemberListPage>
           ),
         ],
       ),
-      body: _listBuilder(_listBloc.getKnownPeople(), MemberListLoading(),
+      body: _listBuilder(_listBloc.getMembers(), MemberListLoading(),
           MemberListError(), MemberListEmpty(), _selectBloc),
     );
   }
@@ -90,7 +90,7 @@ class _MemberListPageState extends State<MemberListPage>
       ),
       child: SafeArea(
         bottom: false,
-        child: _listBuilder(_listBloc.getKnownPeople(), MemberListLoading(),
+        child: _listBuilder(_listBloc.getMembers(), MemberListLoading(),
             MemberListError(), MemberListEmpty(), _selectBloc),
       ),
     );

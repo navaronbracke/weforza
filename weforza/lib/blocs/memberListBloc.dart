@@ -14,7 +14,7 @@ class MemberListBloc extends Bloc {
   final IMemberRepository _memberRepository;
 
   ///Fetch the known people.
-  Future<List<Member>> getKnownPeople() => _memberRepository.getAllMembers();
+  Future<List<Member>> getMembers() => _memberRepository.getAllMembers();
 
   ///Dispose of this object.
   @override

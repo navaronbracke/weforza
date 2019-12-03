@@ -39,25 +39,15 @@ class Ride {
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "date": {
-        "year": date.year,
-        "month": date.month,
-        "day": date.day,
-      },
-      "attendees": attendees.map((member) => {
-        "firstname": member.firstname,
-        "lastname": member.lastname,
-        "phone": member.phone,
-      })
+      "date": date.toString(),
+      "attendees": attendees.map((member) => member.toMap())
     };
   }
 
   ///Create a Ride from a Map.
   static Ride fromMap(Map<String,dynamic> map){
-    Map<String,dynamic> dateMap = map["date"];
-    DateTime date = DateTime(dateMap["year"],dateMap["month"],dateMap["day"]);
     List<dynamic> attendees = map["attendees"];
-    return Ride(date,attendees.map((value) => Attendee(value["firstname"], value["lastname"], value["phone"])).toList());
+    return Ride(DateTime.parse(map["date"]),attendees.map((value) => Attendee.fromMap(value)).toList());
   }
 
   @override
@@ -76,6 +66,14 @@ class Attendee {
   final String lastname;
   ///The attendee's phone.
   final String phone;
+
+  static Attendee fromMap(Map<String,dynamic> map) => Attendee(map["firstname"],map["lastname"],map["phone"]);
+
+  Map<String,dynamic> toMap() => {
+    "firstname": firstname,
+    "lastname": lastname,
+    "phone": phone,
+  };
 
   @override
   bool operator ==(Object other) => other is Attendee && firstname == other.firstname && lastname == other.lastname && phone == other.phone;

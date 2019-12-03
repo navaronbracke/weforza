@@ -125,19 +125,23 @@ class AddRideBloc extends Bloc {
   bool validateInputs() => _ridesToAdd.isEmpty ? false : true;
 
   ///Add the selected rides.
-  Future addRides() async {
+  Future<bool> addRides() async {
+    bool result = false;
     if(!_isBusy && _ridesToAdd.isNotEmpty){
       _isBusy = true;
       _isBusyController.add(_isBusy);
       await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).then((_){
         _isBusy = false;
         _isBusyController.add(_isBusy);
+        _errorMessageController.add("");
+        result = true;
       },onError: (error){
         _errorMessageController.addError(Exception("Failed to add rides"));
         _isBusy = false;
         _isBusyController.add(_isBusy);
       });
     }
+    return result;
   }
 
   ///Dispose of this object.

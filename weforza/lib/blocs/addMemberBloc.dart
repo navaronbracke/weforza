@@ -50,6 +50,8 @@ class AddMemberBloc extends Bloc {
   bool autoValidateLastName = false;
   bool autoValidatePhone = false;
 
+  bool _isBusy = false;
+
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
@@ -132,17 +134,23 @@ class AddMemberBloc extends Bloc {
   }
 
   Future<bool> addMember() async {
-    bool result;
-    if(!await _repository.checkIfExists(_firstName, _lastName, _phone)){
-      await _repository.addMember(Member(_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
-        result = true;
+    bool result = false;
+    if(!_isBusy){
+      _isBusy = true;
+      await _repository.checkIfExists(_firstName, _lastName, _phone).then((exists) async {
+        _alreadyExistsController.add(exists);
+        if(!exists){
+          await _repository.addMember(Member(_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
+            result = true;
+          },onError: (error){
+            _alreadyExistsController.addError(Exception("Failed to add member"));
+          });
+        }
       },onError: (error){
         _alreadyExistsController.addError(Exception("Failed to add member"));
       });
-    }else{
-      result = false;
+      _isBusy = false;
     }
-    _alreadyExistsController.add(!result);
     return result;
   }
 

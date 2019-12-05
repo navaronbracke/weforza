@@ -2,8 +2,8 @@
 import 'dart:io';
 
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 
 ///This class is the BLoC for RideListMemberItem.

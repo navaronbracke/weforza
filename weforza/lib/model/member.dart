@@ -2,6 +2,9 @@
 ///
 ///A member has a first name, last name and a phone number.
 class Member {
+  Member(this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]):
+        assert(firstname != null && lastname != null && phone != null && devices != null);
+
   ///Regex for a member's first or last name.
   ///
   ///The Regex is language independent.
@@ -12,8 +15,6 @@ class Member {
   ///Regex for a member's phone number.
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
-
-  Member(this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]): assert(firstname != null && lastname != null && phone != null && devices != null);
 
   ///An id for in the database.
   int id;

@@ -2,8 +2,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
@@ -17,11 +15,6 @@ class AddMemberBloc extends Bloc {
 
   ///The [IMemberRepository] that handles the submit.
   final IMemberRepository _repository;
-
-  ///The form text controllers.
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
 
   StreamController<bool> _alreadyExistsController = BehaviorSubject();
   Stream<bool> get alreadyExistsStream => _alreadyExistsController.stream;
@@ -154,15 +147,11 @@ class AddMemberBloc extends Bloc {
     return result;
   }
 
-  Future<void> pickImage() async {
-    image = await FilePicker.getFile(type: FileType.IMAGE);
-  }
+  Future<void> pickImage() async => image = await _repository.pickImage();
 
   ///Dispose of this object.
   @override
   void dispose() {
-    firstNameController.dispose();
-    lastNameController.dispose();
     _alreadyExistsController.close();
   }
 }

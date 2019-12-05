@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileLoader.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 

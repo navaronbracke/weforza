@@ -1,5 +1,6 @@
 
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/ride.dart';
 
 ///This interface defines a contract for manipulating [Ride]s.

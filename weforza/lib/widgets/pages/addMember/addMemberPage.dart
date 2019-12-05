@@ -30,6 +30,10 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///The BLoC in charge of the form.
   final AddMemberBloc _bloc;
 
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
   ///The input labels.
   String _firstNameLabel;
   String _lastNameLabel;
@@ -55,9 +59,9 @@ class _AddMemberPageState extends State<AddMemberPage>
   Widget _imagePicker;
 
   ///The [FocusNode]s for the inputs
-  FocusNode _firstNameFocusNode;
-  FocusNode _lastNameFocusNode;
-  FocusNode _phoneFocusNode;
+  FocusNode _firstNameFocusNode = FocusNode();
+  FocusNode _lastNameFocusNode = FocusNode();
+  FocusNode _phoneFocusNode = FocusNode();
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -92,19 +96,19 @@ class _AddMemberPageState extends State<AddMemberPage>
   ///Validate all current form input
   bool cupertinoAllFormInputValidator(){
     final firstNameValid =  _bloc.validateFirstName(
-        _bloc.firstNameController.text,
+        _firstNameController.text,
         _firstNameRequiredMessage,
         _firstNameMaxLengthMessage,
         _firstNameIllegalCharactersMessage,
         _firstNameBlankMessage) == null;
     final lastNameValid = _bloc.validateLastName(
-            _bloc.lastNameController.text,
+            _lastNameController.text,
             _lastNameRequiredMessage,
             _lastNameMaxLengthMessage,
             _lastNameIllegalCharactersMessage,
             _lastNameBlankMessage) == null;
     final phoneValid = _bloc.validatePhone(
-            _bloc.phoneController.text,
+            _phoneController.text,
             _phoneRequiredMessage,
             _phoneIllegalCharactersMessage,
             _phoneMinLengthMessage,
@@ -116,9 +120,6 @@ class _AddMemberPageState extends State<AddMemberPage>
   void initState() {
     super.initState();
     _imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
-    _firstNameFocusNode = FocusNode();
-    _lastNameFocusNode = FocusNode();
-    _phoneFocusNode = FocusNode();
   }
 
   @override
@@ -167,7 +168,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               contentPadding: EdgeInsets.all(10),
                               labelText: _firstNameLabel,
                             ),
-                            controller: _bloc.firstNameController,
+                            controller: _firstNameController,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
                             validator: (value) => _bloc.validateFirstName(
@@ -191,7 +192,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               contentPadding: EdgeInsets.all(10),
                               labelText: _lastNameLabel,
                             ),
-                            controller: _bloc.lastNameController,
+                            controller: _lastNameController,
                             autocorrect: false,
                             keyboardType: TextInputType.text,
                             validator: (value) => _bloc.validateLastName(
@@ -215,7 +216,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               contentPadding: EdgeInsets.all(10),
                               labelText: _phoneLabel,
                             ),
-                            controller: _bloc.phoneController,
+                            controller: _phoneController,
                             autocorrect: false,
                             keyboardType: TextInputType.phone,
                             validator: (value) => _bloc.validatePhone(
@@ -307,7 +308,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               CupertinoTextField(
                                 focusNode: _firstNameFocusNode,
                                 textInputAction: TextInputAction.next,
-                                controller: _bloc.firstNameController,
+                                controller: _firstNameController,
                                 placeholder: _firstNameLabel,
                                 autocorrect: false,
                                 keyboardType: TextInputType.text,
@@ -333,7 +334,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               CupertinoTextField(
                                 focusNode: _lastNameFocusNode,
                                 textInputAction: TextInputAction.next,
-                                controller: _bloc.lastNameController,
+                                controller: _lastNameController,
                                 placeholder: _lastNameLabel,
                                 autocorrect: false,
                                 keyboardType: TextInputType.text,
@@ -359,7 +360,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               CupertinoTextField(
                                 focusNode: _phoneFocusNode,
                                 textInputAction: TextInputAction.done,
-                                controller: _bloc.phoneController,
+                                controller: _phoneController,
                                 autocorrect: false,
                                 keyboardType: TextInputType.phone,
                                 placeholder: _phoneLabel,
@@ -451,7 +452,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   CupertinoTextField(
                     focusNode: _firstNameFocusNode,
                     textInputAction: TextInputAction.next,
-                    controller: _bloc.firstNameController,
+                    controller: _firstNameController,
                     placeholder: _firstNameLabel,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
@@ -477,7 +478,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   CupertinoTextField(
                     focusNode: _lastNameFocusNode,
                     textInputAction: TextInputAction.next,
-                    controller: _bloc.lastNameController,
+                    controller: _lastNameController,
                     placeholder: _lastNameLabel,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
@@ -503,7 +504,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   CupertinoTextField(
                     focusNode: _phoneFocusNode,
                     textInputAction: TextInputAction.done,
-                    controller: _bloc.phoneController,
+                    controller: _phoneController,
                     autocorrect: false,
                     keyboardType: TextInputType.phone,
                     placeholder: _phoneLabel,
@@ -589,7 +590,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                     contentPadding: EdgeInsets.all(10),
                     labelText: _firstNameLabel,
                   ),
-                  controller: _bloc.firstNameController,
+                  controller: _firstNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateFirstName(
@@ -613,7 +614,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                     contentPadding: EdgeInsets.all(10),
                     labelText: _lastNameLabel,
                   ),
-                  controller: _bloc.lastNameController,
+                  controller: _lastNameController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateLastName(
@@ -637,7 +638,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                     contentPadding: EdgeInsets.all(10),
                     labelText: _phoneLabel,
                   ),
-                  controller: _bloc.phoneController,
+                  controller: _phoneController,
                   autocorrect: false,
                   keyboardType: TextInputType.phone,
                   validator: (value) => _bloc.validatePhone(
@@ -701,6 +702,9 @@ class _AddMemberPageState extends State<AddMemberPage>
     _firstNameFocusNode.dispose();
     _lastNameFocusNode.dispose();
     _phoneFocusNode.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 

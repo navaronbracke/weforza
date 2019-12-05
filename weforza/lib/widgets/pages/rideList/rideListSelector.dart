@@ -1,4 +1,5 @@
 
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/ride.dart';
 
 abstract class IRideSelector {

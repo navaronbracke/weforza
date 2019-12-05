@@ -2,6 +2,7 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:path/path.dart';
@@ -23,25 +24,25 @@ class DatabaseProvider {
 
   ///Dispose of the database.
   static Future dispose() async {
-    if(_database != null)
-    {
-      await _database.close();
-    }
-    throw Exception("Database Not Initialized");
+    if(_database == null) throw Exception("Database Not Initialized");
+
+    await _database.close();
   }
 }
 
 ///This class manages Members in the database.
 class MemberDao {
+  MemberDao(this._database): assert(_database != null);
+
   ///The key for this Dao's Store object.
-  static const String MEMBER_STORE_KEY = "member";
+  static const String member_store_key = "member";
 
   ///The Store, which manipulates the database.
-  final _memberStore = intMapStoreFactory.store(MEMBER_STORE_KEY);
+  final _memberStore = intMapStoreFactory.store(member_store_key);
   ///A reference to the database, which is needed by the Store.
   final Database _database;
 
-  MemberDao(this._database):assert(_database != null);
+
 
   ///Add [member] to the database.
   Future addMember(Member member) async {
@@ -103,15 +104,16 @@ class MemberDao {
 
 ///This class manages Rides in the database.
 class RideDao {
+  RideDao(this._database): assert(_database != null);
   ///The Store key for this object.
-  static const String RIDE_STORE_KEY = "ride";
+  static const String ride_store_key = "ride";
 
   ///The Store for this object.
-  final _rideStore = intMapStoreFactory.store(RIDE_STORE_KEY);
+  final _rideStore = intMapStoreFactory.store(ride_store_key);
   ///A reference to the database for this object.
   final Database _database;
 
-  RideDao(this._database):assert(_database != null);
+
 
   ///Add a given set of Rides.
   Future addRides(List<Ride> rides) async {

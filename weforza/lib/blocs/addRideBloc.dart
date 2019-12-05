@@ -10,6 +10,25 @@ import 'package:weforza/repository/rideRepository.dart';
 
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
+  AddRideBloc(this._repository){
+    assert(_repository != null);
+    onDayPressed = (date){
+      DateTime today = DateTime.now();
+      //This date is in the past OR there is a ride with this date.
+      if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)) return false;
+
+      //This is a selected ride, unselect it.
+      if(_ridesToAdd.contains(date)){
+        _ridesToAdd.remove(date);
+        _errorMessageController.add("");
+        return true;
+      }else{
+        _ridesToAdd.add(date);
+        _errorMessageController.add("");
+        return true;
+      }
+    };
+  }
 
   ///The repository that will handle the submit.
   final IRideRepository _repository;
@@ -45,26 +64,6 @@ class AddRideBloc extends Bloc {
   Stream<bool> get isBusy => _isBusyController.stream;
 
   set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
-
-  AddRideBloc(this._repository){
-    assert(_repository != null);
-    onDayPressed = (date){
-      DateTime today = DateTime.now();
-      //This date is in the past OR there is a ride with this date.
-      if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)) return false;
-
-      //This is a selected ride, unselect it.
-      if(_ridesToAdd.contains(date)){
-        _ridesToAdd.remove(date);
-        _errorMessageController.add("");
-        return true;
-      }else{
-        _ridesToAdd.add(date);
-        _errorMessageController.add("");
-        return true;
-      }
-    };
-  }
 
   ///This function clears the current ride dates selection.
   void onRequestClear(){

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/model/member.dart';
 
@@ -16,8 +18,10 @@ abstract class IMemberRepository {
   Future<bool> checkIfExists(String firstname,String lastname, String phone);
   ///Edit member.
   Future editMember(Member member);
-
+  ///Check if there are members.
   Future<bool> hasMembers();
+  ///Pick a profile image.
+  Future<File> pickImage();
 }
 
 ///This class will manage the members when in a production setting.
@@ -49,6 +53,9 @@ class MemberRepository implements IMemberRepository {
 
   @override
   Future<bool> hasMembers() => _dao.hasMembers();
+
+  @override
+  Future<File> pickImage() => FilePicker.getFile(type: FileType.IMAGE);
 }
 
 ///This class is a test version of [IMemberRepository].
@@ -96,4 +103,7 @@ class TestMemberRepository implements IMemberRepository {
 
   @override
   Future<bool> hasMembers() => Future.value(_list.isNotEmpty);
+
+  @override
+  Future<File> pickImage() => null;
 }

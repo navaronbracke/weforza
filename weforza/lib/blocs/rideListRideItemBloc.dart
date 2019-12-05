@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/pages/rideList/rideListSelector.dart';
 

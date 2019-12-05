@@ -6,6 +6,7 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideListAttendeeItemBloc.dart';
 import 'package:weforza/blocs/rideListRideItemBloc.dart';
 import 'package:weforza/file/fileLoader.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendeeItemModel.dart';

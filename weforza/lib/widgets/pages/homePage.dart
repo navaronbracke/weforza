@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/memberLoader.dart';
+import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -9,11 +13,14 @@ import 'package:weforza/generated/i18n.dart';
 ///It allows navigating between [RideListPage] and [MemberListPage].
 class HomePage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState(InjectionContainer.get<IMemberRepository>());
 }
 
 ///This is the [State] class for [HomePage].
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin implements PlatformAwareWidget {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin implements PlatformAwareWidget, MemberLoader {
+  _HomePageState(this._memberRepository): assert(_memberRepository != null);
+
+  final IMemberRepository _memberRepository;
 
   ///The selected index.
   int _selectedIndex = 0;
@@ -24,6 +31,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    memberFuture = _memberRepository.getAllMembers();
   }
 
   @override
@@ -39,7 +47,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: [RideListPage(),MemberListPage()],
+        children: [RideListPage(this),MemberListPage(this)],
         controller: _pageController,
         onPageChanged: (page){
           setState(() {_selectedIndex = page; });
@@ -71,7 +79,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: <Widget>[
           Expanded(
             child: PageView(
-              children: [RideListPage(),MemberListPage()],
+              children: [RideListPage(this),MemberListPage(this)],
               controller: _pageController,
               onPageChanged: (page){
                 setState(() {_selectedIndex = page; });
@@ -92,4 +100,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       )
     );
   }
+
+  @override
+  Future<List<Member>> memberFuture;
 }

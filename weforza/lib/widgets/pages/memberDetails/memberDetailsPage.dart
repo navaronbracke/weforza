@@ -8,6 +8,8 @@ import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
@@ -16,8 +18,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
+  MemberDetailsPage(this.member): assert(member != null);
+
+  final Member member;
+
   @override
-  _MemberDetailsPageState createState() => _MemberDetailsPageState(InjectionContainer.get<MemberDetailsBloc>());
+  _MemberDetailsPageState createState() => _MemberDetailsPageState(MemberDetailsBloc(InjectionContainer.get<IMemberRepository>(),InjectionContainer.get<IRideRepository>()));
 }
 
 ///This is the [State] class for [MemberDetailsPage].
@@ -48,15 +54,15 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   ///Build the list of devices from [_bloc.devices].
   Widget _buildDevicesList(Widget empty){
-    if(_bloc.devices.isEmpty){
+    if(widget.member.devices.isEmpty){
       return empty;
     }else{
       return ListView.builder(
-        itemCount: _bloc.devices.length,
+        itemCount: widget.member.devices.length,
         itemBuilder: (context, index){
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(_bloc.devices[index]),
+            child: Text(widget.member.devices[index]),
           );
         },
       );
@@ -104,10 +110,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                       SizedBox(height: 10),
                       //Text(S.of(context).MemberDetailsWasPresentCountLabel()),
                     ],
@@ -174,10 +180,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                     SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                    Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                     SizedBox(height: 10),
                     //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
                   ],
@@ -242,10 +248,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                        Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                        Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                         SizedBox(height: 10),
-                        Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                        Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                         SizedBox(height: 10),
                         //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
                       ],
@@ -312,10 +318,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(_bloc.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(_bloc.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(_bloc.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                       SizedBox(height: 10),
                       //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
                     ],
@@ -342,7 +348,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   Widget _loadImage() {
     return FutureBuilder(
-      future: _bloc.getImage(),
+      future: _bloc.getImage(widget.member.profileImageFilePath),
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
@@ -357,7 +363,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   }
 
   @override
-  deleteMember() async => await _bloc.deleteMember();
+  deleteMember() async => await _bloc.deleteMember(widget.member);
 }
 
 ///This [Widget] is displayed when a member that is displayed in [MemberDetailsPage] has no devices.

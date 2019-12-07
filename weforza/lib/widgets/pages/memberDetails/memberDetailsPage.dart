@@ -115,7 +115,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                       SizedBox(height: 10),
                       Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                       SizedBox(height: 10),
-                      //Text(S.of(context).MemberDetailsWasPresentCountLabel()),
+                      FutureBuilder<int>(
+                        future: _bloc.getAttendingCount(widget.member),
+                        builder: (context,snapshot){
+                          if(snapshot.connectionState == ConnectionState.done){
+                            if(snapshot.hasError){
+                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
+                            }
+                            return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
+                          }else{
+                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -185,7 +197,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                     SizedBox(height: 10),
                     Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                     SizedBox(height: 10),
-                    //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                    FutureBuilder<int>(
+                      future: _bloc.getAttendingCount(widget.member),
+                      builder: (context,snapshot){
+                        if(snapshot.connectionState == ConnectionState.done){
+                          if(snapshot.hasError){
+                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
+                          }
+                          return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
+                        }else{
+                          return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
+                        }
+                      },
+                    ),
                   ],
                 ),
               ],
@@ -253,7 +277,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                         SizedBox(height: 10),
                         Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                         SizedBox(height: 10),
-                        //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                        FutureBuilder<int>(
+                          future: _bloc.getAttendingCount(widget.member),
+                          builder: (context,snapshot){
+                            if(snapshot.connectionState == ConnectionState.done){
+                              if(snapshot.hasError){
+                                return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
+                              }
+                              return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
+                            }else{
+                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -323,7 +359,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                       SizedBox(height: 10),
                       Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
                       SizedBox(height: 10),
-                      //Text(S.of(context).MemberDetailsWasPresentCountLabel("${_bloc.wasPresentCount}")),
+                      FutureBuilder<int>(
+                        future: _bloc.getAttendingCount(widget.member),
+                        builder: (context,snapshot){
+                          if(snapshot.connectionState == ConnectionState.done){
+                            if(snapshot.hasError){
+                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
+                            }
+                            return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
+                          }else{
+                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
+                          }
+                        },
+                      ),
                     ],
                   ),
                 ],

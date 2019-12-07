@@ -50,6 +50,8 @@ class S implements WidgetsLocalizations {
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
   String get MemberDetailsNoDevices => "This member has no devices yet";
   String get MemberDetailsTitle => "Details";
+  String get MemberDetailsWasPresentCountCalculating => "Calculating...";
+  String get MemberDetailsWasPresentCountError => "Unknown";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
   String get MemberListLoadingFailed => "Could not fetch members";
   String get MemberListLoadingInProgress => "Loading members...";
@@ -106,6 +108,8 @@ class $nl extends S {
   String get RideListRidesHeader => "Ritten";
   @override
   String get HomePageRidesTab => "Ritten";
+  @override
+  String get MemberDetailsWasPresentCountError => "Onbekend";
   @override
   String get AddMemberError => "Kon lid niet toevoegen";
   @override
@@ -184,6 +188,8 @@ class $nl extends S {
   String get MemberListTitle => "Leden";
   @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get MemberDetailsWasPresentCountCalculating => "Berekenen...";
   @override
   String get AddRideError => "Kon ritten niet toevoegen";
   @override

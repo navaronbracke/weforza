@@ -1,10 +1,4 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:weforza/blocs/addMemberBloc.dart';
-import 'package:weforza/blocs/addRideBloc.dart';
-import 'package:weforza/blocs/memberDetailsBloc.dart';
-import 'package:weforza/blocs/memberListBloc.dart';
-import 'package:weforza/blocs/memberSelectBloc.dart';
-import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -27,13 +21,6 @@ class InjectionContainer {
     //repositories
     _injector.map<IMemberRepository>((i) => MemberRepository(i.get<MemberDao>()),isSingleton: true);
     _injector.map<IRideRepository>((i) => RideRepository(i.get<RideDao>()),isSingleton: true);
-    //blocs
-    _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
-    _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
-    _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
-    _injector.map<MemberDetailsBloc>((i) => MemberDetailsBloc(i.get<MemberSelectBloc>().selectedMember,i.get<IMemberRepository>(),i.get<IRideRepository>()));
-    _injector.map<RideListBloc>((i) => RideListBloc(i.get<IMemberRepository>(),i.get<IRideRepository>()));
-    _injector.map<AddRideBloc>((i) => AddRideBloc(i.get<IRideRepository>()));
     //other
   }
 
@@ -44,12 +31,6 @@ class InjectionContainer {
     //repositories
     _injector.map<IMemberRepository>((i) => TestMemberRepository(),isSingleton: true);
     _injector.map<IRideRepository>((i) => TestRideRepository(),isSingleton: true);
-    //blocs
-    _injector.map<MemberListBloc>((i) => MemberListBloc(i.get<IMemberRepository>()));
-    _injector.map<MemberSelectBloc>((i) => MemberSelectBloc(),isSingleton: true);
-    _injector.map<AddMemberBloc>((i) => AddMemberBloc(i.get<IMemberRepository>()));
-    _injector.map<RideListBloc>((i) => RideListBloc(i.get<IMemberRepository>(),i.get<IRideRepository>()));
-    _injector.map<AddRideBloc>((i) => AddRideBloc(i.get<IRideRepository>()));
   }
 
   ///Get a dependency of type [T].

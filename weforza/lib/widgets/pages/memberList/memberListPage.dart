@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/memberListBloc.dart';
-import 'package:weforza/blocs/memberSelectBloc.dart';
-import 'package:weforza/injection/injector.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/memberLoader.dart';
+import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
@@ -15,23 +15,19 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] will display a list of members.
 class MemberListPage extends StatefulWidget {
+  MemberListPage(this.loader): assert(loader != null);
+
+  final MemberLoader loader;
+
   @override
-  _MemberListPageState createState() => _MemberListPageState(
-      InjectionContainer.get<MemberListBloc>(),
-      InjectionContainer.get<MemberSelectBloc>());
+  _MemberListPageState createState() => _MemberListPageState(InjectionContainer.get<IMemberRepository>());
 }
 
 ///This is the [State] class for [MemberListPage].
-class _MemberListPageState extends State<MemberListPage>
-    implements PlatformAwareWidget {
-  _MemberListPageState(this._listBloc, this._selectBloc)
-      : assert(_listBloc != null && _selectBloc != null);
+class _MemberListPageState extends State<MemberListPage> implements PlatformAwareWidget {
+  IMemberRepository _memberRepository;
 
-  ///The BLoC that handles the list.
-  final MemberListBloc _listBloc;
-
-  ///The BLoC that handles the selection.
-  final MemberSelectBloc _selectBloc;
+  _MemberListPageState(this._memberRepository): assert(_memberRepository != null);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -42,7 +38,13 @@ class _MemberListPageState extends State<MemberListPage>
           //Add person button
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
+              if(value != null && value){
+                setState(() {
+                  widget.loader.memberFuture = _memberRepository.getAllMembers();
+                });
+              }
+            }),
           ),
           //Import button
           IconButton(
@@ -59,8 +61,8 @@ class _MemberListPageState extends State<MemberListPage>
           ),
         ],
       ),
-      body: _listBuilder(_listBloc.getMembers(), MemberListLoading(),
-          MemberListError(), MemberListEmpty(), _selectBloc),
+      body: _listBuilder(widget.loader.memberFuture, MemberListLoading(),
+          MemberListError(), MemberListEmpty()),
     );
   }
 
@@ -75,7 +77,13 @@ class _MemberListPageState extends State<MemberListPage>
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
+                if(value != null && value){
+                  setState(() {
+                    widget.loader.memberFuture = _memberRepository.getAllMembers();
+                  });
+                }
+              });
             }),
             SizedBox(width: 10),
             CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
@@ -90,8 +98,8 @@ class _MemberListPageState extends State<MemberListPage>
       ),
       child: SafeArea(
         bottom: false,
-        child: _listBuilder(_listBloc.getMembers(), MemberListLoading(),
-            MemberListError(), MemberListEmpty(), _selectBloc),
+        child: _listBuilder(widget.loader.memberFuture, MemberListLoading(),
+            MemberListError(), MemberListEmpty()),
       ),
     );
   }
@@ -101,12 +109,6 @@ class _MemberListPageState extends State<MemberListPage>
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 
-  @override
-  void dispose() {
-    _listBloc.dispose();
-    super.dispose();
-  }
-
   ///Build a [FutureBuilder] that will construct the main body of this widget.
   ///
   ///Displays [loading] when [future] is still busy.
@@ -114,7 +116,7 @@ class _MemberListPageState extends State<MemberListPage>
   ///Displays [empty] when [future] completed, but there is nothing to show.
   ///Displays a list of [MemberListItem] when there is data.
   FutureBuilder _listBuilder(Future<List<Member>> future, Widget loading,
-      Widget error, Widget empty, MemberSelectBloc bloc) {
+      Widget error, Widget empty) {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
@@ -128,7 +130,7 @@ class _MemberListPageState extends State<MemberListPage>
                 : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberListItem(data[index], bloc));
+                    MemberListItem(data[index]));
           }
         } else {
           return loading;

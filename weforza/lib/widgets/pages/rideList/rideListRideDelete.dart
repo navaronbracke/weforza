@@ -11,64 +11,74 @@ abstract class IRideDeleteHandler {
 
   void cancelDeletion();
 
-  void deleteSelection();
-
-  Stream<bool> get isBusyStream;
+  Future<void> deleteSelection();
 }
 
-class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget {
+class RideListRideDelete extends StatefulWidget {
   RideListRideDelete(this.handler): assert(handler != null);
 
   final IRideDeleteHandler handler;
+
+  @override
+  _RideListRideDeleteState createState() => _RideListRideDeleteState();
+}
+
+class _RideListRideDeleteState extends State<RideListRideDelete> implements PlatformAwareWidget {
+
+  Future<void> _future;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: handler.isBusyStream,
+    return (_future == null) ? Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text(S.of(context).RideListDeleteRidesDescription,softWrap: true),
+          SizedBox(height: 10),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                FlatButton(
+                  child: Text(S.of(context).DialogCancel),
+                  onPressed: (){
+                    widget.handler.cancelDeletion();
+                  },
+                ),
+                SizedBox(width: 10),
+                FlatButton(
+                  child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
+                  onPressed: (){
+                    setState(() {
+                      _future = widget.handler.deleteSelection();
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ): FutureBuilder(
+      future: _future,
       builder: (context,snapshot){
-        if(snapshot.hasError){
-          return Center(
-            child: Text(S.of(context).RideListDeleteRidesError),
-          );
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(
+              child: Text(S.of(context).RideListDeleteRidesError),
+            );
+          }
+          return Center();
         }else{
-          return snapshot.data ? Center(
+          return Center(
             child: SizedBox(
               width: 100,
               height: 100,
               child: PlatformAwareLoadingIndicator(),
-            ),
-          ) : Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(S.of(context).RideListDeleteRidesDescription,softWrap: true),
-                SizedBox(height: 10),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(S.of(context).DialogCancel),
-                        onPressed: (){
-                          handler.cancelDeletion();
-                        },
-                      ),
-                      SizedBox(width: 10),
-                      FlatButton(
-                        child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
-                        onPressed: (){
-                          handler.deleteSelection();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ),
           );
         }
@@ -78,7 +88,7 @@ class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget 
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return Center(
+    return (_future == null) ? Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,14 +102,16 @@ class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget 
                 CupertinoButton(
                   child: Text(S.of(context).DialogCancel),
                   onPressed: (){
-                    handler.cancelDeletion();
+                    widget.handler.cancelDeletion();
                   },
                 ),
                 SizedBox(width: 10),
                 CupertinoButton(
                   child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
                   onPressed: (){
-                    handler.deleteSelection();
+                    setState(() {
+                      _future = widget.handler.deleteSelection();
+                    });
                   },
                 ),
               ],
@@ -107,6 +119,26 @@ class RideListRideDelete extends StatelessWidget implements PlatformAwareWidget 
           ),
         ],
       ),
+    ): FutureBuilder(
+      future: _future,
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(
+              child: Text(S.of(context).RideListDeleteRidesError),
+            );
+          }
+          return Center();
+        }else{
+          return Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: PlatformAwareLoadingIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }

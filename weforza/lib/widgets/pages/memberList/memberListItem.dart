@@ -9,10 +9,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a list item for [MemberListPage].
 class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
-  MemberListItem(this._member): assert(_member != null);
+  MemberListItem(this._member,this._callback): assert(_member != null && _callback != null);
 
   ///The member for this item.
   final Member _member;
+  ///A callback that is fired when the members should reload.
+  final Function(bool reload) _callback;
 
   @override
   Widget build(BuildContext context) =>
@@ -31,7 +33,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
         ],
       ),
       onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member))).then((value) => _callback(value));
       },
     );
   }
@@ -40,7 +42,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member))).then((value) => _callback(value));
       },
       child: Container(
         decoration: BoxDecoration(),

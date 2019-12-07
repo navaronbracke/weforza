@@ -38,6 +38,7 @@ class S implements WidgetsLocalizations {
   String get AppName => "WeForza";
   String get DialogCancel => "Cancel";
   String get DialogDelete => "Delete";
+  String get DialogOk => "Ok";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -46,6 +47,7 @@ class S implements WidgetsLocalizations {
   String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
+  String get MemberDeleteDialogErrorDescription => "Could not delete member";
   String get MemberDeleteDialogTitle => "Delete Member";
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
   String get MemberDetailsNoDevices => "This member has no devices yet";
@@ -106,6 +108,8 @@ class $nl extends S {
   String get DialogDelete => "Verwijderen";
   @override
   String get RideListRidesHeader => "Ritten";
+  @override
+  String get DialogOk => "Ok";
   @override
   String get HomePageRidesTab => "Ritten";
   @override
@@ -174,6 +178,8 @@ class $nl extends S {
   String get MemberDetailsNoDevices => "Dit lid heeft nog geen toestellen";
   @override
   String get WednesdayPrefix => "Wo";
+  @override
+  String get MemberDeleteDialogErrorDescription => "Kon lid niet verwijderen";
   @override
   String get AppName => "WeForza";
   @override

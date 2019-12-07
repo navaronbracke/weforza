@@ -180,7 +180,17 @@ class RideDao {
       });
       await Future.wait(futures);
     });
-    
+  }
+
+  Future<int> getAttendingCount(Attendee attendee) async {
+    final records = await _rideStore.find(_database,finder: Finder(
+      filter: Filter.custom((record){
+        final map = record.value as Map;
+        return map["attendees"].isNotEmpty;
+      })
+    ));
+    List<Ride> rides = records.map((record) => Ride.fromMap(record.value)).toList();
+    return rides.where((ride)=> ride.attendees.contains(attendee)).length;
   }
 
 }

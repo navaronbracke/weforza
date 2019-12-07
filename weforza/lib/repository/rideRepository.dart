@@ -18,6 +18,8 @@ abstract class IRideRepository {
 
   ///Remove [attendee] from all the rides where it occurs.
   Future removeAttendeeFromRides(Attendee attendee);
+
+  Future<int> getAttendingCount(Attendee attendee);
 }
 
 ///This class will manage the rides when in a production setting.
@@ -45,6 +47,9 @@ class RideRepository implements IRideRepository {
   Future deleteRides(List<Ride> rides) => _dao.deleteRides(rides.map((ride){
         return ride.id;
   }).toList());
+
+  @override
+  Future<int> getAttendingCount(Attendee attendee) => _dao.getAttendingCount(attendee);
 }
 
 ///This class is a test version of [IRideRepository].
@@ -88,5 +93,10 @@ class TestRideRepository implements IRideRepository {
   Future deleteRides(List<Ride> rides) {
     _list.removeWhere((ride){return rides.contains(ride);});
     return null;
+  }
+
+  @override
+  Future<int> getAttendingCount(Attendee attendee) {
+    return Future.value(_list.where((ride)=> ride.attendees.isNotEmpty && ride.attendees.contains(attendee)).length);
   }
 }

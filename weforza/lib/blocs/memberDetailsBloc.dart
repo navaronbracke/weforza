@@ -26,7 +26,8 @@ class MemberDetailsBloc extends Bloc {
     await _memberRepository.deleteMember(member.id);
   }
 
-  //TODO future for was present count
-
-
+  Future<int> getAttendingCount(Member member){
+    assert(member != null);
+    return _rideRepository.getAttendingCount(Attendee(member.firstname,member.lastname,member.phone));
+  }
 }

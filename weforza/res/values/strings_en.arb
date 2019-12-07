@@ -35,6 +35,8 @@
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",
   "MemberDetailsWasPresentCountLabel": "Times present: $count",
+  "MemberDetailsWasPresentCountCalculating": "Calculating...",
+  "MemberDetailsWasPresentCountError": "Unknown",
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsAddDevicesInstruction": "Add devices by editing this member",
 

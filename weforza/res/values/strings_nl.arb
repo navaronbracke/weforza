@@ -42,6 +42,7 @@
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
+  "MemberDeleteDialogErrorDescription": "Kon lid niet verwijderen",
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
@@ -76,5 +77,6 @@
 
   "ValueIsRequired": "$value is verplicht",
   "DialogCancel": "Annuleren",
-  "DialogDelete": "Verwijderen"
+  "DialogDelete": "Verwijderen",
+  "DialogOk": "Ok"
 }

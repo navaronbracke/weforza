@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -16,7 +17,7 @@ import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 class AddMemberPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
-      _AddMemberPageState(InjectionContainer.get<AddMemberBloc>());
+      _AddMemberPageState(AddMemberBloc(InjectionContainer.get<IMemberRepository>()));
 }
 
 ///This is the [State] class for [AddMemberPage].
@@ -263,7 +264,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 if(await _bloc.addMember()){
-                                  Navigator.pop(context);
+                                  Navigator.pop(context,true);
                                 }
                               }
                             },
@@ -412,7 +413,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   onPressed: () async {
                                     if(cupertinoAllFormInputValidator()){
                                       if(await _bloc.addMember()){
-                                        Navigator.pop(context);
+                                        Navigator.pop(context,true);
                                       }
                                     }else{
                                       setState(() {});
@@ -551,7 +552,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               onPressed: () async {
                                 if(cupertinoAllFormInputValidator()){
                                   if(await _bloc.addMember()){
-                                    Navigator.pop(context);
+                                    Navigator.pop(context,true);
                                   }
                                 }else{
                                   setState(() {});
@@ -678,7 +679,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               if(await _bloc.addMember()){
-                                Navigator.pop(context);
+                                Navigator.pop(context,true);
                               }
                             }
                           },

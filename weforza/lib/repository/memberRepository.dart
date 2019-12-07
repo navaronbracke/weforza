@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/file/fileLoader.dart';
 import 'package:weforza/model/member.dart';
 
 ///This interface defines a contract for manipulating members.
@@ -22,6 +23,8 @@ abstract class IMemberRepository {
   Future<bool> hasMembers();
   ///Pick a profile image.
   Future<File> pickImage();
+
+  Future<File> getImage(String path);
 }
 
 ///This class will manage the members when in a production setting.
@@ -56,6 +59,9 @@ class MemberRepository implements IMemberRepository {
 
   @override
   Future<File> pickImage() => FilePicker.getFile(type: FileType.IMAGE);
+
+  @override
+  Future<File> getImage(String path) => FileLoader.getImage(path);
 }
 
 ///This class is a test version of [IMemberRepository].
@@ -106,4 +112,9 @@ class TestMemberRepository implements IMemberRepository {
 
   @override
   Future<File> pickImage() => null;
+
+  @override
+  Future<File> getImage(String path) {
+    return null;
+  }
 }

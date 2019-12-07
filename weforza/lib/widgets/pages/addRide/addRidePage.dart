@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/AddRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -12,7 +13,7 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
-  _AddRidePageState createState() => _AddRidePageState(InjectionContainer.get<AddRideBloc>());
+  _AddRidePageState createState() => _AddRidePageState(AddRideBloc(InjectionContainer.get<IRideRepository>()));
 }
 
 ///This class is the State for [AddRidePage].

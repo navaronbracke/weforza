@@ -27,7 +27,17 @@ class MemberListPage extends StatefulWidget {
 class _MemberListPageState extends State<MemberListPage> implements PlatformAwareWidget {
   IMemberRepository _memberRepository;
 
-  _MemberListPageState(this._memberRepository): assert(_memberRepository != null);
+  Function(bool reload) reloadMembersCallback;
+
+  _MemberListPageState(this._memberRepository): assert(_memberRepository != null){
+    reloadMembersCallback = (bool reload){
+      if(reload != null && reload){
+        setState(() {
+          widget.loader.memberFuture = _memberRepository.getAllMembers();
+        });
+      }
+    };
+  }
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -38,13 +48,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
           //Add person button
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
-              if(value != null && value){
-                setState(() {
-                  widget.loader.memberFuture = _memberRepository.getAllMembers();
-                });
-              }
-            }),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value)=> reloadMembersCallback(value)),
           ),
           //Import button
           IconButton(
@@ -77,13 +81,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
-                if(value != null && value){
-                  setState(() {
-                    widget.loader.memberFuture = _memberRepository.getAllMembers();
-                  });
-                }
-              });
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value)=> reloadMembersCallback(value));
             }),
             SizedBox(width: 10),
             CupertinoIconButton(Icons.file_download,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
@@ -130,7 +128,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
                 : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberListItem(data[index]));
+                    MemberListItem(data[index],reloadMembersCallback));
           }
         } else {
           return loading;

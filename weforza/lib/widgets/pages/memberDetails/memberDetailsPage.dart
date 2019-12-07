@@ -87,8 +87,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
               .then((value){
                 //Member was deleted, go back to list
-                if(value){
-                  Navigator.pop(context);
+                if(value != null && value){
+                  Navigator.pop(context,true);
                 }
               });
             },
@@ -170,8 +170,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
                   .then((value){
                     //Member was deleted, go back to list
-                    if(value){
-                      Navigator.pop(context);
+                    if(value != null && value){
+                      Navigator.pop(context,true);
                     }
                   });
             },
@@ -247,8 +247,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
                   .then((value){
                 //Member was deleted, go back to list
-                if(value){
-                  Navigator.pop(context);
+                if(value != null && value){
+                  Navigator.pop(context,true);
                 }
               });
             }),
@@ -330,8 +330,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this)).then((value){
                 //Member was deleted, go back to list
-                if(value){
-                  Navigator.pop(context);
+                if(value != null && value){
+                  Navigator.pop(context,true);
                 }
               });
             }),

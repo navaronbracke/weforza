@@ -29,12 +29,6 @@ class RideListBloc extends Bloc {
   //endregion
 
   bool membersIsNotEmpty = false;
-  
-  ///Whether we are processing a delete request. 
-  bool isDeleting = false;
-  
-  StreamController<bool> _isDeletingController = BehaviorSubject(); 
-  Stream<bool> get stream => _isDeletingController.stream;
 
   ///The current filter state.
   AttendeeFilterState filterState = AttendeeFilterState.DISABLED;
@@ -66,30 +60,34 @@ class RideListBloc extends Bloc {
   }
 
   ///Get all Members without applying selection to the items.
-  Future<List<RideAttendeeItemModel>> getAllMembers() async {
-    List<Member> data = await _memberRepository.getAllMembers();
+  Future<List<RideAttendeeItemModel>> getAllMembers(Future<List<Member>> membersFuture) async {
+    if(membersFuture == null) membersFuture = _memberRepository.getAllMembers();
+
+    List<Member> data = await membersFuture;
     List<Future<RideAttendeeItemModel>> mappedMembers = data.map((member) => _mapMemberToAttendeeItemModel(member, false)).toList();
     return await Future.wait(mappedMembers);
   }
 
   ///Get all Members and apply selection to the attendees of the currently selected ride.
   ///Does a fallback to [getAllMembers] if no ride is selected.
-  Future<List<RideAttendeeItemModel>> getAllMembersWithAttendingSelected() async {
-    if(_selectedRide == null) return getAllMembers();
+  Future<List<RideAttendeeItemModel>> getAllMembersWithAttendingSelected(Future<List<Member>> membersFuture) async {
+    if(_selectedRide == null) return getAllMembers(membersFuture);
+    if(membersFuture == null) membersFuture = _memberRepository.getAllMembers();
 
     final Ride ride = _selectedRide.getRide();
-    List<Member> data = await _memberRepository.getAllMembers();
+    List<Member> data = await membersFuture;
     List<Future<RideAttendeeItemModel>> mappedMembers = data.map((member) => _mapMemberToAttendeeItemModel(member, ride.attendees.contains(Attendee(member.firstname,member.lastname,member.phone)))).toList();
     return await Future.wait(mappedMembers);
   }
 
   ///Get the attendees of the currently selected ride.
   ///Does a fallback to [getAllMembers] if no ride is selected.
-  Future<List<RideAttendeeItemModel>> getAttendeesOnly() async {
-    if(_selectedRide == null) return getAllMembers();
+  Future<List<RideAttendeeItemModel>> getAttendeesOnly(Future<List<Member>> membersFuture) async {
+    if(_selectedRide == null) return getAllMembers(membersFuture);
+    if(membersFuture == null) membersFuture = _memberRepository.getAllMembers();
 
     final Ride ride = _selectedRide.getRide();
-    List<Member> data = await _memberRepository.getAllMembers();
+    List<Member> data = await membersFuture;
     List<Future<RideAttendeeItemModel>> mappedMembers = data.where((member) => ride.attendees.contains(Attendee(member.firstname,member.lastname,member.phone)))
         .map((member) => _mapMemberToAttendeeItemModel(member, true))
         .toList();
@@ -104,7 +102,6 @@ class RideListBloc extends Bloc {
   void dispose() {
     _displayModeController.close();
     _attendeeCountController.close();
-    _isDeletingController.close();
   }
 
   void enableDeletionMode(){
@@ -198,23 +195,11 @@ class RideListBloc extends Bloc {
     return membersIsNotEmpty;
   }
 
-  void catchHasMembersError(){
-    _displayModeController.addError(Exception("Could not check if there are members"));
-  }
-
   Future<void> deleteSelection() async {
-    isDeleting = true;
-    _isDeletingController.add(isDeleting);
-    //delete rides
     await _rideRepository.deleteRides(
         _ridesToBeDeleted.map((item){
           return item.getRide();
-        }).toList()).then((value){
-      isDeleting = false;
-      _isDeletingController.add(isDeleting);
-    },onError: (error){
-      _isDeletingController.addError(Exception("Could not delete rides"));
-    });
+        }).toList());
   }
 }
 

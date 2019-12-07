@@ -6,6 +6,9 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/rideAttendeeItemModel.dart';
 import 'package:weforza/model/rideItemModel.dart';
+import 'package:weforza/repository/memberLoader.dart';
+import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListAttendeeFilter.dart';
 import 'package:weforza/widgets/pages/rideList/rideListRideDelete.dart';
@@ -20,9 +23,13 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
+  RideListPage(this.loader): assert(loader != null);
+
+  final MemberLoader loader;
+
   @override
   State<RideListPage> createState() =>
-      _RideListPageState(InjectionContainer.get<RideListBloc>());
+      _RideListPageState(RideListBloc(InjectionContainer.get<IMemberRepository>(),InjectionContainer.get<IRideRepository>()));
 }
 
 ///This class is the [State] for [RideListPage].
@@ -32,12 +39,6 @@ class _RideListPageState extends State<RideListPage>
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
-
-  @override
-  Stream<bool> get isBusyStream => _bloc.stream;
-
-  @override
-  bool get isBusy => _bloc.isDeleting;
 
   ///The future that loads the rides.
   Future<List<RideItemModel>> loadRidesFuture;
@@ -49,7 +50,7 @@ class _RideListPageState extends State<RideListPage>
   void initState() {
     super.initState();
     loadRidesFuture = _bloc.getRides();
-    loadAttendeesFuture = _bloc.getAllMembers();
+    loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
   }
 
   @override
@@ -85,7 +86,7 @@ class _RideListPageState extends State<RideListPage>
                 setState(() {
                   _bloc.resetSelectionMode();
                   loadRidesFuture = _bloc.getRides();
-                  loadAttendeesFuture = _bloc.getAllMembers();
+                  loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
                 });
               }),
             ),
@@ -149,7 +150,7 @@ class _RideListPageState extends State<RideListPage>
                   setState(() {
                     _bloc.resetSelectionMode();
                     loadRidesFuture = _bloc.getRides();
-                    loadAttendeesFuture = _bloc.getAllMembers();
+                    loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
                   });
                 }),
               ),
@@ -212,7 +213,7 @@ class _RideListPageState extends State<RideListPage>
                   setState(() {
                     _bloc.resetSelectionMode();
                     loadRidesFuture = _bloc.getRides();
-                    loadAttendeesFuture = _bloc.getAllMembers();
+                    loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
                   });
                 }),
               ),
@@ -269,7 +270,7 @@ class _RideListPageState extends State<RideListPage>
                   setState(() {
                     _bloc.resetSelectionMode();
                     loadRidesFuture = _bloc.getRides();
-                    loadAttendeesFuture = _bloc.getAllMembers();
+                    loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
                   });
                 }),
               ),
@@ -410,14 +411,14 @@ class _RideListPageState extends State<RideListPage>
         _bloc.selectRide(item);
         if(hasMembers && _bloc.displayMode == PanelDisplayMode.ATTENDEES){
           switch(_bloc.filterState){
-            case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(); break;
-            case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(); break;
-            case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(); break;
+            case AttendeeFilterState.DISABLED: loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture); break;
+            case AttendeeFilterState.OFF: loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(widget.loader.memberFuture); break;
+            case AttendeeFilterState.ON: loadAttendeesFuture = _bloc.getAttendeesOnly(widget.loader.memberFuture); break;
           }
         }
       });
     },onError: (error){
-      _bloc.catchHasMembersError();
+      loadAttendeesFuture = Future.error(Exception("Could not check if there were members"));
     });
   }
 
@@ -425,7 +426,7 @@ class _RideListPageState extends State<RideListPage>
   void turnOnFilter() {
     setState(() {
       _bloc.filterState = AttendeeFilterState.ON;
-      loadAttendeesFuture = _bloc.getAttendeesOnly();
+      loadAttendeesFuture = _bloc.getAttendeesOnly(widget.loader.memberFuture);
     });
   }
 
@@ -433,7 +434,7 @@ class _RideListPageState extends State<RideListPage>
   void turnOffFilter() {
     setState(() {
       _bloc.filterState = AttendeeFilterState.OFF;
-      loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected();
+      loadAttendeesFuture = _bloc.getAllMembersWithAttendingSelected(widget.loader.memberFuture);
     });
   }
 
@@ -451,12 +452,12 @@ class _RideListPageState extends State<RideListPage>
   }
 
   @override
-  void deleteSelection() {
-    _bloc.deleteSelection().then((_){
+  Future<void> deleteSelection() {
+    return _bloc.deleteSelection().then((_){
       setState(() {
         _bloc.resetSelectionMode();
         loadRidesFuture = _bloc.getRides();
-        loadAttendeesFuture = _bloc.getAllMembers();
+        loadAttendeesFuture = _bloc.getAllMembers(widget.loader.memberFuture);
       });
     });
   }

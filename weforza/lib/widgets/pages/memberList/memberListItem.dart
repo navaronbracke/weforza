@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/memberSelectBloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
@@ -11,14 +10,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a list item for [MemberListPage].
 class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
-  MemberListItem(this._member, this._selectBloc)
-      : assert(_member != null && _selectBloc != null);
+  MemberListItem(this._member): assert(_member != null);
 
   ///The member for this item.
   final Member _member;
-
-  ///The BLoC that handles the selection.
-  final MemberSelectBloc _selectBloc;
 
   @override
   Widget build(BuildContext context) =>
@@ -43,8 +38,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           child: IconButton(
             icon: Icon(Icons.contacts, color: Theme.of(context).primaryColor),
             onPressed: () => {
-              _selectBloc.selectedMember = _member,
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()))
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member)))
             },
           ),
         ),
@@ -74,8 +68,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
           SizedBox(
             width: 40,
             child: CupertinoIconButton(Icons.contacts,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              _selectBloc.selectedMember = _member;
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_member)));
             }),
           ),
         ],

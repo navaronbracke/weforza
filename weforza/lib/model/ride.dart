@@ -1,20 +1,15 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/model/attendee.dart';
 
 ///This class represents a Ride.
 class Ride {
-  Ride(this.date,this.attendees) : assert(date != null && attendees != null);
+  Ride(this.date,[this.numberOfAttendees = 0]) : assert(date != null && numberOfAttendees != null);
 
-  ///An id for in the database.
-  int id;
-
-  ///The Date of the Ride.
+  ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
-
-  ///The attendees of the Ride.
-  final List<Attendee> attendees;
+  ///The number of attendees.
+  int numberOfAttendees;
 
   ///Get [date], but formatted with a day prefix.
   String getFormattedDate(BuildContext context){
@@ -40,20 +35,18 @@ class Ride {
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "date": date.toString(),
-      "attendees": attendees.map((member) => member.toMap())
+      "numberOfAttendees": numberOfAttendees
     };
   }
 
-  ///Create a Ride from a Map.
-  static Ride fromMap(Map<String,dynamic> map){
-    List<dynamic> attendees = map["attendees"];
-    return Ride(DateTime.parse(map["date"]),attendees.map((value) => Attendee.fromMap(value)).toList());
+  static Ride of(DateTime date, Map<String,dynamic> values){
+    assert(date != null && values != null);
+    return Ride(date,values["numberOfAttendees"]);
   }
 
   @override
-  bool operator ==(Object other) => other is Ride && date == other.date;
+  bool operator ==(Object other) => other is Ride && date == other.date && numberOfAttendees == other.numberOfAttendees;
 
   @override
-  int get hashCode => hashValues(date,hashList(attendees));
+  int get hashCode => hashValues(date,numberOfAttendees);
 }

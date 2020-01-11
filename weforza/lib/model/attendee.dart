@@ -16,14 +16,8 @@ class Attendee {
 
   static Attendee of(String uuid,Map<String,dynamic> values){
     assert(uuid != null && uuid.isEmpty && values != null);
-    return Attendee(uuid,values["firstname"],values["lastname"],values["image"]);
+    return Attendee(uuid,values["firstname"],values["lastname"],values["profile"]);
   }
-
-  Map<String,dynamic> toMap() => {
-    "firstname": firstname,
-    "lastname": lastname,
-    "image": image
-  };
 
   @override
   bool operator ==(Object other) => other is Attendee && uuid == other.uuid && firstname == other.firstname && lastname == other.lastname && image == other.image;

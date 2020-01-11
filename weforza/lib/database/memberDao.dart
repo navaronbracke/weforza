@@ -1,9 +1,10 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/model/RideAttendee.dart';
+import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 
-///This interface defines a contract to manipulate a [Member] in persistent storage.
+///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
   ///Add a [Member] to the database.
   Future<void> addMember(Member member);
@@ -19,6 +20,12 @@ abstract class IMemberDao {
 
   ///Check if a [Member] with the given values exists.
   Future<bool> exists(String uuid, String firstname, String lastname, String phone);
+
+  ///Get the number of rides a [Member] with the given id attended.
+  Future<int> getAttendingCountForAttendee(String uuid);
+
+  ///Get the [Attendee]s of a given ride.
+  Future<List<Attendee>> getRideAttendees(DateTime date);
 
   //TODO add /edit /delete device for member
 }
@@ -86,5 +93,27 @@ class MemberDao implements IMemberDao {
     ]));
 
     return await _memberStore.findFirst(_database,finder: finder) != null;
+  }
+
+  @override
+  Future<int> getAttendingCountForAttendee(String uuid) async {
+    final finder = Finder(filter: Filter.equals("attendee", uuid));
+
+    final records = await _rideAttendeeStore.find(_database,finder: finder);
+
+    return records.length;
+  }
+
+  @override
+  Future<List<Attendee>> getRideAttendees(DateTime date) async {
+    final rideAttendeeFinder = Finder(filter: Filter.equals("date", date.toIso8601String()));
+    //fetch the attendees of the ride and map to their uuid's
+    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,finder: rideAttendeeFinder);
+    final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]);
+    //fetch the members that belong to the attendee uuid's
+    final memberFinder = Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)));
+    final memberRecords = await _memberStore.find(_database,finder: memberFinder);
+    //map the record snapshots to Attendee objects
+    return memberRecords.map((record) => Attendee.of(record.key, record.value));
   }
 }

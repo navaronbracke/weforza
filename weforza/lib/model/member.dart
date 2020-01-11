@@ -48,6 +48,6 @@ class Member {
   ///Create a member from a Map and a given uuid.
   static Member of(String uuid,Map<String,dynamic> values){
     assert(uuid != null && uuid.isNotEmpty && values != null);
-    return Member(uuid,values["firstname"],values["lastname"],values["phone"],List.from(values["devices"]),values["prodile"]);
+    return Member(uuid,values["firstname"],values["lastname"],values["phone"],List.from(values["devices"]),values["profile"]);
   }
 }

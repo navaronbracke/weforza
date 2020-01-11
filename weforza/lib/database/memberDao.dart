@@ -1,0 +1,90 @@
+import 'package:sembast/sembast.dart';
+import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/model/RideAttendee.dart';
+import 'package:weforza/model/member.dart';
+
+///This interface defines a contract to manipulate a [Member] in persistent storage.
+abstract class IMemberDao {
+  ///Add a [Member] to the database.
+  Future<void> addMember(Member member);
+
+  ///Delete a [Member] from the database.
+  Future<void> deleteMember(String uuid);
+
+  ///Update a [Member].
+  Future<void> updateMember(Member member);
+
+  ///Get all [Member]s.
+  Future<List<Member>> getMembers();
+
+  ///Check if a [Member] with the given values exists.
+  Future<bool> exists(String uuid, String firstname, String lastname, String phone);
+
+  //TODO add /edit /delete device for member
+}
+
+///This class is an implementation of [IMemberDao].
+class MemberDao implements IMemberDao {
+  MemberDao(this._database): assert(_database != null);
+
+  ///A reference to the database, which is needed by the Store.
+  final Database _database;
+  ///A reference to the [Member] store.
+  final _memberStore = DatabaseProvider.memberStore;
+  ///A reference to the [RideAttendee] store.
+  final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+
+  @override
+  Future<void> addMember(Member member) async  {
+    assert(member != null);
+    await _memberStore.record(member.uuid).add(_database, member.toMap());
+  }
+
+  @override
+  Future<void> deleteMember(String uuid) async {
+    assert(uuid != null && uuid.isNotEmpty);
+    //delete the ride attendee records and the member
+    final memberFinder = Finder(filter: Filter.byKey(uuid));
+    final memberRidesFinder = Finder(filter: Filter.equals("attendee", uuid));
+    
+    await _database.transaction((txn) async {
+      await _memberStore.delete(txn,finder: memberFinder);
+      await _rideAttendeeStore.delete(txn,finder: memberRidesFinder);
+    });
+  }
+
+  @override
+  Future<List<Member>> getMembers() async {
+    final finder = Finder(
+        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("phone")]
+    );
+
+    final records = await _memberStore.find(_database,finder: finder);
+
+    return records.map((record)=> Member.of(record.key, record.value)).toList();
+  }
+
+  @override
+  Future<void> updateMember(Member member) async {
+    assert(member != null);
+    final finder = Finder(
+      filter: Filter.byKey(member.uuid),
+    );
+
+    await _memberStore.update(_database,member.toMap(),finder: finder);
+  }
+
+  @override
+  Future<bool> exists(String uuid, String firstname, String lastname, String phone) async {
+    assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null);
+
+    final finder = Finder(filter: Filter.and([
+      Filter.byKey(uuid),
+      Filter.equals("firstname", firstname),
+      Filter.equals("lastname", lastname),
+      Filter.equals("phone", phone),
+    ]));
+
+    return await _memberStore.findFirst(_database,finder: finder) != null;
+  }
+}

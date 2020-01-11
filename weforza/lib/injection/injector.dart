@@ -18,6 +18,7 @@ class InjectionContainer {
     //database
     _injector.map<MemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
     _injector.map<RideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    //TODO rideAttendee dao
     //repositories
     _injector.map<IMemberRepository>((i) => MemberRepository(i.get<MemberDao>()),isSingleton: true);
     _injector.map<IRideRepository>((i) => RideRepository(i.get<RideDao>()),isSingleton: true);

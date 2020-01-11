@@ -3,26 +3,31 @@ import 'package:flutter/widgets.dart';
 
 ///This class represents an Attendee for a [Ride].
 class Attendee {
-  Attendee(this.firstname,this.lastname,this.phone): assert(firstname != null && lastname != null && phone != null);
+  Attendee(this.uuid,this.firstname,this.lastname,this.image): assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null);
 
+  ///The GUID for the attendee.
+  final String uuid;
   ///The attendee's first name.
   final String firstname;
   ///The attendee's last name.
   final String lastname;
-  ///The attendee's phone.
-  final String phone;
+  ///The file path of the attendee's profile image.
+  final String image;
 
-  static Attendee fromMap(Map<String,dynamic> map) => Attendee(map["firstname"],map["lastname"],map["phone"]);
+  static Attendee of(String uuid,Map<String,dynamic> values){
+    assert(uuid != null && uuid.isEmpty && values != null);
+    return Attendee(uuid,values["firstname"],values["lastname"],values["image"]);
+  }
 
   Map<String,dynamic> toMap() => {
     "firstname": firstname,
     "lastname": lastname,
-    "phone": phone,
+    "image": image
   };
 
   @override
-  bool operator ==(Object other) => other is Attendee && firstname == other.firstname && lastname == other.lastname && phone == other.phone;
+  bool operator ==(Object other) => other is Attendee && uuid == other.uuid && firstname == other.firstname && lastname == other.lastname && image == other.image;
 
   @override
-  int get hashCode => hashValues(firstname, lastname,phone);
+  int get hashCode => hashValues(firstname, lastname,uuid,image);
 }

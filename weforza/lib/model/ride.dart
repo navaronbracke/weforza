@@ -1,15 +1,17 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/model/RideAttendee.dart';
 
 ///This class represents a Ride.
 class Ride {
-  Ride(this.date,[this.numberOfAttendees = 0]) : assert(date != null && numberOfAttendees != null);
+  Ride(this.date) : assert(date != null);
 
   ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
   ///The number of attendees.
-  int numberOfAttendees;
+  ///This is separately calculated from the entries in [RideAttendee].
+  int numberOfAttendees = 0;
 
   ///Get [date], but formatted with a day prefix.
   String getFormattedDate(BuildContext context){
@@ -33,16 +35,9 @@ class Ride {
   }
 
   ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
-    return {
-      "numberOfAttendees": numberOfAttendees
-    };
-  }
-
-  static Ride of(DateTime date, Map<String,dynamic> values){
-    assert(date != null && values != null);
-    return Ride(date,values["numberOfAttendees"]);
-  }
+  ///We do not really store any data (yet).
+  ///The date is the key, so we do not include it here.
+  Map<String,dynamic> toMap() => {};
 
   @override
   bool operator ==(Object other) => other is Ride && date == other.date && numberOfAttendees == other.numberOfAttendees;

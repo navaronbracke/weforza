@@ -18,7 +18,7 @@ class RideAttendee {
 
   Map<String,dynamic> toMap(){
     return {
-      "date": rideDate,
+      "date": rideDate.toIso8601String(),
       "attendee": attendeeId
     };
   }

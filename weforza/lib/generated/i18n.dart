@@ -23,7 +23,6 @@ class S implements WidgetsLocalizations {
 
   String get AddMemberAlreadyExists => "This member already exists";
   String get AddMemberError => "Could not add member";
-  String get AddMemberPictureLabel => "Picture";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideColorLegendCurrentSelection => "Current Selection";
@@ -204,8 +203,6 @@ class $nl extends S {
   String get TuesdayPrefix => "Di";
   @override
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
-  @override
-  String get AddMemberPictureLabel => "Foto";
   @override
   String get RideListAddRideInstructionPlus => "met de +";
   @override

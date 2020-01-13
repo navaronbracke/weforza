@@ -9,11 +9,11 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents the detail page for a [Member].
@@ -23,7 +23,7 @@ class MemberDetailsPage extends StatefulWidget {
   final Member member;
 
   @override
-  _MemberDetailsPageState createState() => _MemberDetailsPageState(MemberDetailsBloc(InjectionContainer.get<IMemberRepository>(),InjectionContainer.get<IRideRepository>()));
+  _MemberDetailsPageState createState() => _MemberDetailsPageState(MemberDetailsBloc(InjectionContainer.get<MemberRepository>()));
 }
 
 ///This is the [State] class for [MemberDetailsPage].
@@ -395,16 +395,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   }
 
   Widget _loadImage() {
-    return FutureBuilder(
-      future: _bloc.getImage(widget.member.profileImageFilePath),
+    return FutureBuilder<File>(
+      future: _bloc.loadProfileImage(widget.member.profileImageFilePath),
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return ProfileImage(null,100);
+            return Center(child: Text(S.of(context).MemberDetailsLoadPictureError,softWrap: true));
           }
-          return ProfileImage(snapshot.data as File,100);
+          return ProfileImage(snapshot.data,
+              ApplicationTheme.profileImagePlaceholderIconColor,
+              ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
+              Icons.person,100);
         } else {
-          return ProfileImage(null,100);
+          return Center(child: PlatformAwareLoadingIndicator());
         }
       }
     );

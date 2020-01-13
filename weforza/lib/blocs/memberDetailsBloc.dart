@@ -15,7 +15,7 @@ class MemberDetailsBloc extends Bloc {
   @override
   void dispose() {}
 
-  Future<File> getImage(String path) => _memberRepository.loadProfileImageFromDisk(path);
+  Future<File> loadProfileImage(String path) => _memberRepository.loadProfileImageFromDisk(path);
 
   Future deleteMember(Member member) async {
     assert(member != null);

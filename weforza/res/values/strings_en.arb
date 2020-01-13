@@ -39,6 +39,7 @@
   "MemberDetailsWasPresentCountError": "Unknown",
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsAddDevicesInstruction": "Add devices by editing this member",
+  "MemberDetailsLoadPictureError": "Could not load profile picture",
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",

@@ -2,6 +2,7 @@ import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/database/rideDao.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
@@ -21,8 +22,10 @@ class InjectionContainer {
     _injector.map<IMemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
     _injector.map<IRideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
     //repositories
-    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>()),isSingleton: true);
+    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
     _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
+    //file handler
+    _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
     //other
   }
 

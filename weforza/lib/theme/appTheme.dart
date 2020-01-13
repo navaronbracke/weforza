@@ -12,9 +12,6 @@ abstract class ApplicationTheme {
   static final Color _iosPrimaryColor = Colors.blue;
   static final Color _iosAccentColor = Colors.blue.shade300;
 
-  static final Color profileImagePickerIdleColor = Colors.blue.shade300;
-  static final Color profileImagePickerOnPressedColor = Colors.blue;
-
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
   static final Color rideCalendarFutureDayNoRideFontColor = Colors.black;
@@ -43,28 +40,6 @@ abstract class ApplicationTheme {
 
   //Ride Calendar Header Button Color when pressed
   static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
-
-
-  //RideList Item Background Color when not selected
-  static final Color rideListItemUnselectedColor = Colors.white;
-
-  //RideList Item Font Color when not selected
-  static final Color rideListItemUnselectedFontColor = Colors.black;
-
-  //RideList Item Font Color when selected.
-  static final Color rideListItemSelectedFontColor = Colors.white;
-
-
-  //RideList Item Background Color when selected and in normal selection mode.
-  static final Color rideListItemSelectModeSelectedColor = Colors.green;
-
-  //RideList Item Material Splash Color when in normal selection mode.
-  static final Color rideListItemSelectModeSplashColor = Colors.green.shade300.withAlpha(150);
-
-  //RideList Item Background Color when selected and in delete selection mode.
-  static final Color rideListItemDeleteModeSelectedColor = Colors.red;
-
-  static final Color rideListItemDeleteModeSplashColor = Colors.red.shade300.withAlpha(150);
 
 
 

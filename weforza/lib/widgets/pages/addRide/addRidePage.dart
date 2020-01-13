@@ -347,7 +347,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///Build the calendar.
   Widget _buildCalendar(){
     return FutureBuilder(
-      future: _bloc.loadRides(),
+      future: _bloc.loadRideDates(),
         builder: (context,snapshot){
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){

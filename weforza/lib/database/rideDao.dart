@@ -23,6 +23,9 @@ abstract class IRideDao {
   ///Update the [Attendee]s for the [Ride] with the given date.
   ///The attendees of the [Ride] with the given date will be replaced by [attendees].
   Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees);
+
+  ///Get the dates of the existing rides.
+  Future<List<DateTime>> getRideDates();
 }
 
 class RideDao implements IRideDao {
@@ -84,6 +87,12 @@ class RideDao implements IRideDao {
       await _rideAttendeeStore.records(attendees.map((a)=> a.uuid))
           .put(txn, attendees.map((a)=> a.toMap()));
     });
+  }
+
+  @override
+  Future<List<DateTime>> getRideDates() async {
+    final rides = await _rideStore.findKeys(_database);
+    return rides.map((ride) => DateTime.parse(ride));
   }
 
   Future<Map<DateTime, int>> _getAttendeeCountPerRide() async {

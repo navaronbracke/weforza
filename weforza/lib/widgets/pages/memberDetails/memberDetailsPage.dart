@@ -1,6 +1,3 @@
-
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,19 +5,19 @@ import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
-  MemberDetailsPage(this.member): assert(member != null);
+  MemberDetailsPage(this.memberItem): assert(memberItem != null);
 
-  final Member member;
+  final MemberItem memberItem;
 
   @override
   _MemberDetailsPageState createState() => _MemberDetailsPageState(MemberDetailsBloc(InjectionContainer.get<MemberRepository>()));
@@ -54,15 +51,15 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   ///Build the list of devices from [_bloc.devices].
   Widget _buildDevicesList(Widget empty){
-    if(widget.member.devices.isEmpty){
+    if(widget.memberItem.devices.isEmpty){
       return empty;
     }else{
       return ListView.builder(
-        itemCount: widget.member.devices.length,
+        itemCount: widget.memberItem.devices.length,
         itemBuilder: (context, index){
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(widget.member.devices[index]),
+            child: Text(widget.memberItem.devices[index]),
           );
         },
       );
@@ -103,20 +100,20 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: _loadImage(),
+                  child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,0,0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
                       SizedBox(height: 10),
                       FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(widget.member),
+                        future: _bloc.getAttendingCount(widget.memberItem.uuid),
                         builder: (context,snapshot){
                           if(snapshot.connectionState == ConnectionState.done){
                             if(snapshot.hasError){
@@ -187,18 +184,18 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: _loadImage()
+                  child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                     SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
+                    Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
                     SizedBox(height: 10),
                     FutureBuilder<int>(
-                      future: _bloc.getAttendingCount(widget.member),
+                      future: _bloc.getAttendingCount(widget.memberItem.uuid),
                       builder: (context,snapshot){
                         if(snapshot.connectionState == ConnectionState.done){
                           if(snapshot.hasError){
@@ -265,20 +262,20 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                    child: _loadImage()
+                    child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,0,0,0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                        Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                        Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                         SizedBox(height: 10),
-                        Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
+                        Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
                         SizedBox(height: 10),
                         FutureBuilder<int>(
-                          future: _bloc.getAttendingCount(widget.member),
+                          future: _bloc.getAttendingCount(widget.memberItem.uuid),
                           builder: (context,snapshot){
                             if(snapshot.connectionState == ConnectionState.done){
                               if(snapshot.hasError){
@@ -349,18 +346,18 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: _loadImage()
+                    child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.member.firstname,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(widget.member.lastname,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(widget.member.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
                       SizedBox(height: 10),
                       FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(widget.member),
+                        future: _bloc.getAttendingCount(widget.memberItem.uuid),
                         builder: (context,snapshot){
                           if(snapshot.connectionState == ConnectionState.done){
                             if(snapshot.hasError){
@@ -394,27 +391,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     );
   }
 
-  Widget _loadImage() {
-    return FutureBuilder<File>(
-      future: _bloc.loadProfileImage(widget.member.profileImageFilePath),
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return Center(child: Text(S.of(context).MemberDetailsLoadPictureError,softWrap: true));
-          }
-          return ProfileImage(snapshot.data,
-              ApplicationTheme.profileImagePlaceholderIconColor,
-              ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
-              Icons.person,100);
-        } else {
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      }
-    );
-  }
-
   @override
-  deleteMember() async => await _bloc.deleteMember(widget.member);
+  deleteMember() async => await _bloc.deleteMember(widget.memberItem.uuid);
 }
 
 ///This [Widget] is displayed when a member that is displayed in [MemberDetailsPage] has no devices.

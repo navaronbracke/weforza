@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: [RideListPage(this),MemberListPage()],
+        children: [RideListPage(),MemberListPage()],
         controller: _pageController,
         onPageChanged: (page){
           setState(() {_selectedIndex = page; });
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: <Widget>[
           Expanded(
             child: PageView(
-              children: [RideListPage(this),MemberListPage()],
+              children: [RideListPage(),MemberListPage()],
               controller: _pageController,
               onPageChanged: (page){
                 setState(() {_selectedIndex = page; });

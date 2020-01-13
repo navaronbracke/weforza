@@ -2,32 +2,28 @@
 import 'dart:io';
 
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {
-  MemberDetailsBloc(this._memberRepository,this._rideRepository): assert(_memberRepository != null && _rideRepository != null);
+  MemberDetailsBloc(this._memberRepository): assert(_memberRepository != null);
 
-  final IMemberRepository _memberRepository;
-  final IRideRepository _rideRepository;
+  final MemberRepository _memberRepository;
 
   ///Dispose of this object.
   @override
   void dispose() {}
 
-  Future<File> getImage(String path) => _memberRepository.getImage(path);
+  Future<File> getImage(String path) => _memberRepository.loadProfileImageFromDisk(path);
 
   Future deleteMember(Member member) async {
     assert(member != null);
-    await _rideRepository.removeAttendeeFromRides(Attendee(member.firstname,member.lastname,member.phone));
-    await _memberRepository.deleteMember(member.id);
+    await _memberRepository.deleteMember(member.uuid);
   }
 
   Future<int> getAttendingCount(Member member){
     assert(member != null);
-    return _rideRepository.getAttendingCount(Attendee(member.firstname,member.lastname,member.phone));
+    return _memberRepository.getAttendingCountForAttendee(member.uuid);
   }
 }

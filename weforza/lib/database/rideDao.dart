@@ -8,7 +8,7 @@ import 'package:weforza/model/rideAttendee.dart';
 ///This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {
 
-  ///Add rides for the given dates.
+  ///Add rides to the database.
   Future<void> addRides(List<Ride> rides);
 
   ///Delete a ride with the given ride date.
@@ -17,14 +17,12 @@ abstract class IRideDao {
   ///Delete all rides.
   Future<void> deleteAllRides();
 
-  ///Get all rides.
+  ///Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
   Future<List<Ride>> getRides();
 
   ///Update the [Attendee]s for the [Ride] with the given date.
-  Future<void> updateAttendees(DateTime date, List<RideAttendee> attendees);
-
-  ///Get the number of attendees per ride date.
-  Future<Map<DateTime,int>> getAttendeeCountPerRide();
+  ///The attendees of the [Ride] with the given date will be replaced by [attendees].
+  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees);
 }
 
 class RideDao implements IRideDao {
@@ -68,7 +66,7 @@ class RideDao implements IRideDao {
   Future<List<Ride>> getRides() async {
     final records =  await _rideStore.find(_database);
     final rides = records.map((record) => Ride(DateTime.parse(record.key)));
-    final attendeesPerRide = await getAttendeeCountPerRide();
+    final attendeesPerRide = await _getAttendeeCountPerRide();
     rides.map((ride){
       if(attendeesPerRide.containsKey(ride.date)){
         ride.numberOfAttendees = attendeesPerRide[ride.date];
@@ -78,7 +76,7 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateAttendees(DateTime date, List<RideAttendee> attendees) async {
+  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees) async {
     final finder = Finder(filter: Filter.equals("date", date.toIso8601String()));
 
     await _database.transaction((txn) async {
@@ -88,8 +86,7 @@ class RideDao implements IRideDao {
     });
   }
 
-  @override
-  Future<Map<DateTime, int>> getAttendeeCountPerRide() async {
+  Future<Map<DateTime, int>> _getAttendeeCountPerRide() async {
     //Get all ride attendee records.
     final List<RecordSnapshot<String, dynamic>> records = await _rideAttendeeStore.find(_database);
     final Map<DateTime,int> map = {};

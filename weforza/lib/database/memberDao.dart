@@ -19,12 +19,13 @@ abstract class IMemberDao {
   Future<List<Member>> getMembers();
 
   ///Check if a [Member] with the given values exists.
-  Future<bool> exists(String uuid, String firstname, String lastname, String phone);
+  Future<bool> memberExists(String firstname, String lastname, String phone);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
 
   ///Get the [Attendee]s of a given ride.
+  ///This method is intended for use with a [Ride] detail page.
   Future<List<Attendee>> getRideAttendees(DateTime date);
 
   //TODO add /edit /delete device for member
@@ -82,11 +83,10 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<bool> exists(String uuid, String firstname, String lastname, String phone) async {
-    assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null);
+  Future<bool> memberExists(String firstname, String lastname, String phone) async {
+    assert(firstname != null && lastname != null && phone != null);
 
     final finder = Finder(filter: Filter.and([
-      Filter.byKey(uuid),
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
       Filter.equals("phone", phone),

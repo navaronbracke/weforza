@@ -50,6 +50,7 @@ class S implements WidgetsLocalizations {
   String get MemberDeleteDialogErrorDescription => "Could not delete member";
   String get MemberDeleteDialogTitle => "Delete Member";
   String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
+  String get MemberDetailsLoadPictureError => "Could not load profile picture";
   String get MemberDetailsNoDevices => "This member has no devices yet";
   String get MemberDetailsTitle => "Details";
   String get MemberDetailsWasPresentCountCalculating => "Calculating...";
@@ -104,6 +105,8 @@ class $nl extends S {
 
   @override
   String get RideListDeleteRidesError => "Kon ritten niet verwijderen";
+  @override
+  String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
   @override
   String get DialogDelete => "Verwijderen";
   @override

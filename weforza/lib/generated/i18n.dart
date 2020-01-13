@@ -23,6 +23,7 @@ class S implements WidgetsLocalizations {
 
   String get AddMemberAlreadyExists => "This member already exists";
   String get AddMemberError => "Could not add member";
+  String get AddMemberPickImageError => "Could not load image";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideColorLegendCurrentSelection => "Current Selection";
@@ -187,6 +188,8 @@ class $nl extends S {
   String get DialogCancel => "Annuleren";
   @override
   String get AddRideColorLegendPastDay => "Gepasseerde Dag Zonder Rit";
+  @override
+  String get AddMemberPickImageError => "Kon afbeelding niet laden";
   @override
   String get SaturdayPrefix => "Za";
   @override

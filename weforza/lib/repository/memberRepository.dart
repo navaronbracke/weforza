@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/attendee.dart';
 
 ///This class provides an API to work with members.
 class MemberRepository {
@@ -23,6 +24,10 @@ class MemberRepository {
   Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 
   Future<void> updateMember(Member member) => _dao.updateMember(member);
+
+  Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
+
+  Future<List<Attendee>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);
 
   Future<File> chooseProfileImageFromGallery() => _fileHandler.chooseProfileImageFromGallery();
 

@@ -1,120 +1,30 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:weforza/database/databaseProvider.dart';
-import 'package:weforza/file/fileLoader.dart';
+import 'package:weforza/database/memberDao.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
 
-///This interface defines a contract for manipulating members.
-abstract class IMemberRepository {
-
-  ///Get a list of all members.
-  Future<List<Member>> getAllMembers();
-  ///Add a member to the list of members.
-  Future addMember(Member member);
-  ///Remove a member.
-  Future deleteMember(int id);
-  ///Check if a given member exists with the given values.
-  Future<bool> checkIfExists(String firstname,String lastname, String phone);
-  ///Edit member.
-  Future editMember(Member member);
-  ///Check if there are members.
-  Future<bool> hasMembers();
-  ///Pick a profile image.
-  Future<File> pickImage();
-
-  Future<File> getImage(String path);
-}
-
-///This class will manage the members when in a production setting.
-class MemberRepository implements IMemberRepository {
-  MemberRepository(this._dao): assert(_dao != null);
+///This class provides an API to work with members.
+class MemberRepository {
+  MemberRepository(this._dao,this._fileHandler): assert(_dao != null && _fileHandler != null);
 
   ///The internal DAO instance.
-  final MemberDao _dao;
+  final IMemberDao _dao;
+  ///The internal [IFileHandler] instance.
+  final IFileHandler _fileHandler;
 
-  ///See [IMemberRepository].
-  @override
-  Future addMember(Member member) => _dao.addMember(member);
+  Future<void> addMember(Member member) => _dao.addMember(member);
 
-  ///See [IMemberRepository].
-  @override
-  Future<List<Member>> getAllMembers() => _dao.getMembers();
+  Future<List<Member>> getMembers() => _dao.getMembers();
 
-  ///See [IMemberRepository].
-  @override
-  Future deleteMember(int id) async => _dao.deleteMember(id);
+  Future<bool> memberExists(String firstname, String lastname, String phone) => _dao.memberExists(firstname, lastname, phone);
 
-  ///See [IMemberRepository].
-  @override
-  Future<bool> checkIfExists(String firstname,String lastname, String phone)async => _dao.checkIfExists(firstname, lastname, phone);
+  Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 
-  ///See [IMemberRepository].
-  @override
-  Future editMember(Member member) => _dao.editMember(member);
+  Future<void> updateMember(Member member) => _dao.updateMember(member);
 
-  @override
-  Future<bool> hasMembers() => _dao.hasMembers();
+  Future<File> chooseProfileImageFromGallery() => _fileHandler.chooseProfileImageFromGallery();
 
-  @override
-  Future<File> pickImage() => FilePicker.getFile(type: FileType.IMAGE);
-
-  @override
-  Future<File> getImage(String path) => FileLoader.getImage(path);
-}
-
-///This class is a test version of [IMemberRepository].
-class TestMemberRepository implements IMemberRepository {
-  TestMemberRepository();
-
-  final List<Member> _list = List();
-
-  @override
-  Future addMember(Member member){
-    _list.add(member);
-    return null;
-  }
-
-  @override
-  Future deleteMember(int id) {
-    _list.removeWhere((m) => m.id == id);
-    return null;
-  }
-
-  @override
-  Future<List<Member>> getAllMembers() {
-    return Future.value(_list);
-  }
-
-  @override
-  Future<bool> checkIfExists(String firstname,String lastname, String phone) {
-    return Future.value(_list.firstWhere((m) => m != null && m.firstname == firstname && m.lastname == lastname && m.phone == phone,orElse: null) != null);
-  }
-
-  @override
-  Future editMember(Member member) {
-    if(member != null){
-      Member m = _list.firstWhere((m)=> m.id == member.id,orElse: null);
-      if(m != null){
-        m.phone = member.phone;
-        m.firstname = member.firstname;
-        m.lastname = member.lastname;
-        m.profileImageFilePath = member.profileImageFilePath;
-        m.devices = member.devices;
-      }
-    }
-    throw Exception("$member was null");
-  }
-
-  @override
-  Future<bool> hasMembers() => Future.value(_list.isNotEmpty);
-
-  @override
-  Future<File> pickImage() => null;
-
-  @override
-  Future<File> getImage(String path) {
-    return null;
-  }
+  Future<File> loadProfileImageFromDisk(String path) => _fileHandler.loadProfileImageFromDisk(path);
 }

@@ -9,8 +9,8 @@ import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
 class ProfileImagePicker extends StatelessWidget {
-  ProfileImagePicker(this.onPressedHandler,this.image,this.placeholderIconColor,this.placeholderBackgroundColor)
-      : assert(onPressedHandler != null && placeholderIconColor != null && placeholderBackgroundColor != null);
+  ProfileImagePicker(this.onPressedHandler,this.image,this.placeholderIconColor,this.placeholderBackgroundColor,this._size)
+      : assert(onPressedHandler != null && placeholderIconColor != null && placeholderBackgroundColor != null && _size != null);
 
   ///A [VoidCallback] for when this [Widget] is tapped.
   final IProfileImagePicker onPressedHandler;
@@ -20,10 +20,12 @@ class ProfileImagePicker extends StatelessWidget {
   final Color placeholderIconColor;
   final Color placeholderBackgroundColor;
 
+  final double _size;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        child: ProfileImage(image,placeholderIconColor,placeholderBackgroundColor),
+        child: ProfileImage(image,placeholderIconColor,placeholderBackgroundColor,Icons.camera_alt,_size),
         onTap: () => onPressedHandler.pickProfileImage()
     );
   }

@@ -48,6 +48,7 @@
   "AddMemberSubmit": "Voeg nieuw lid toe",
   "AddMemberAlreadyExists": "Dit lid bestaat al",
   "AddMemberError": "Kon lid niet toevoegen",
+  "AddMemberPickImageError": "Kon afbeelding niet laden",
 
   "AddRideTitle": "Nieuwe Rit",
   "AddRideSubmit": "Selectie Toevoegen",

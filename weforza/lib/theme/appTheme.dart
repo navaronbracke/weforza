@@ -41,6 +41,12 @@ abstract class ApplicationTheme {
   //Ride Calendar Header Button Color when pressed
   static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
 
+  ///The profile image placeholder's icon color.
+  static final Color profileImagePlaceholderIconColor = Colors.white;
+  ///The profile image placeholder icon's background color.
+  static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
+
+
 
 
   //MemberList Item First Name Text Style

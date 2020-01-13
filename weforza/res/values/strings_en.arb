@@ -48,6 +48,7 @@
   "AddMemberSubmit": "Create New Member",
   "AddMemberAlreadyExists": "This member already exists",
   "AddMemberError": "Could not add member",
+  "AddMemberPickImageError": "Could not load image",
 
   "AddRideTitle": "New Ride",
   "AddRideSubmit": "Add Selection",

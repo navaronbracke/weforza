@@ -248,7 +248,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   child: Center(
                                     child: PlatformAwareLoadingIndicator(),
                                   ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,75));
+                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
                               }
                             },
                           ),
@@ -261,6 +261,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
+                          SizedBox(height: 5),
                           RaisedButton(
                             color: Theme.of(context).primaryColor,
                             child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
@@ -413,7 +414,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                                       child: Center(
                                         child: PlatformAwareLoadingIndicator(),
                                       ),
-                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,75));
+                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
                                   }
                                 },
                               ),
@@ -426,6 +427,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                                 },
                               ),
+                              SizedBox(height: 5),
                               CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                                   pressedOpacity: 0.5,
                                   onPressed: () async {
@@ -468,6 +470,24 @@ class _AddMemberPageState extends State<AddMemberPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Center(
+                    child: StreamBuilder<ProfileImagePickingState>(
+                      initialData: ProfileImagePickingState.IDLE,
+                      stream: _bloc.imagePickingStream,
+                      builder: (context,snapshot){
+                        if(snapshot.hasError){
+                          return Text(S.of(context).AddMemberPickImageError,softWrap: true);
+                        }else{
+                          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: PlatformAwareLoadingIndicator(),
+                          ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   CupertinoTextField(
                     focusNode: _firstNameFocusNode,
                     textInputAction: TextInputAction.next,
@@ -554,24 +574,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          StreamBuilder<ProfileImagePickingState>(
-                            initialData: ProfileImagePickingState.IDLE,
-                            stream: _bloc.imagePickingStream,
-                            builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Center(child: Text(S.of(context).AddMemberPickImageError,softWrap: true));
-                              }else{
-                                return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                  width: 80,
-                                  height: 80,
-                                  child: Center(
-                                    child: PlatformAwareLoadingIndicator(),
-                                  ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,75));
-                              }
-                            },
-                          ),
-                          SizedBox(height: 5),
                           StreamBuilder<bool>(
                             initialData: false,
                             stream: _bloc.alreadyExistsStream,
@@ -580,6 +582,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
+                          SizedBox(height: 5),
                           CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                               pressedOpacity: 0.5,
                               onPressed: () async {
@@ -617,6 +620,24 @@ class _AddMemberPageState extends State<AddMemberPage>
             padding: EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
+                Center(
+                  child: StreamBuilder<ProfileImagePickingState>(
+                    initialData: ProfileImagePickingState.IDLE,
+                    stream: _bloc.imagePickingStream,
+                    builder: (context,snapshot){
+                      if(snapshot.hasError){
+                        return Text(S.of(context).AddMemberPickImageError,softWrap: true);
+                      }else{
+                        return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: PlatformAwareLoadingIndicator(),
+                        ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
                 TextFormField(
                   focusNode: _firstNameFocusNode,
                   textInputAction: TextInputAction.next,
@@ -695,24 +716,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        StreamBuilder<ProfileImagePickingState>(
-                          initialData: ProfileImagePickingState.IDLE,
-                          stream: _bloc.imagePickingStream,
-                          builder: (context,snapshot){
-                            if(snapshot.hasError){
-                              return Center(child: Text(S.of(context).AddMemberPickImageError,softWrap: true));
-                            }else{
-                              return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                width: 80,
-                                height: 80,
-                                child: Center(
-                                  child: PlatformAwareLoadingIndicator(),
-                                ),
-                              ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
-                            }
-                          },
-                        ),
-                        SizedBox(height: 5),
                         StreamBuilder<bool>(
                           initialData: false,
                           stream: _bloc.alreadyExistsStream,
@@ -721,6 +724,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                           },
                         ),
+                        SizedBox(height: 5),
                         RaisedButton(
                           color: Theme.of(context).primaryColor,
                           child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),

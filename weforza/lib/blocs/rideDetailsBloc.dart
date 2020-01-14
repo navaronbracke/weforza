@@ -8,9 +8,6 @@ import 'package:weforza/repository/memberRepository.dart';
 class RideDetailsBloc extends Bloc {
   RideDetailsBloc(this._repository): assert(_repository != null);
 
-  ///A date formatting pattern for in the top of the detail page.
-  final String datePattern = "E, d MMMM yyyy";
-
   final MemberRepository _repository;
 
   Future<List<AttendeeItem>> getRideAttendees(DateTime date) async {

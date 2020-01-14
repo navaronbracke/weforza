@@ -41,8 +41,8 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> addRides(List<Ride> rides) async {
-    await _rideStore.records(rides.map((r) => r.date.toIso8601String()))
-        .put(_database, rides.map((r)=> r.toMap()));
+    await _rideStore.records(rides.map((r) => r.date.toIso8601String()).toList())
+        .put(_database, rides.map((r)=> r.toMap()).toList());
   }
 
   @override
@@ -67,15 +67,19 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Ride>> getRides() async {
-    final records =  await _rideStore.find(_database);
-    final rides = records.map((record) => Ride(DateTime.parse(record.key)));
+    //Get the rides
+    final rideRecords =  await _rideStore.find(_database);
+    final rides = rideRecords.map((record) => Ride(DateTime.parse(record.key))).toList();
+    //Get the attendees per ride
     final attendeesPerRide = await _getAttendeeCountPerRide();
-    rides.map((ride){
+    //Per ride update its attendee count.
+    rides.forEach((ride){
       if(attendeesPerRide.containsKey(ride.date)){
         ride.numberOfAttendees = attendeesPerRide[ride.date];
       }
     });
-    return rides;
+    rides.sort((Ride r1, Ride r2)=> r1.date.compareTo(r2.date));
+    return rides.reversed.toList();
   }
 
   @override
@@ -84,15 +88,15 @@ class RideDao implements IRideDao {
 
     await _database.transaction((txn) async {
       await _rideAttendeeStore.delete(txn,finder: finder);
-      await _rideAttendeeStore.records(attendees.map((a)=> a.uuid))
-          .put(txn, attendees.map((a)=> a.toMap()));
+      await _rideAttendeeStore.records(attendees.map((a)=> a.uuid).toList())
+          .put(txn, attendees.map((a)=> a.toMap()).toList());
     });
   }
 
   @override
   Future<List<DateTime>> getRideDates() async {
     final rides = await _rideStore.findKeys(_database);
-    return rides.map((ride) => DateTime.parse(ride));
+    return rides.map((ride) => DateTime.parse(ride)).toList();
   }
 
   Future<Map<DateTime, int>> _getAttendeeCountPerRide() async {

@@ -66,7 +66,6 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    //Add person + list
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -97,12 +96,6 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 
-  ///Build a [FutureBuilder] that will construct the main body of this widget.
-  ///
-  ///Displays [loading] when [future] is still busy.
-  ///Displays [error] when [future] completed with an error.
-  ///Displays [empty] when [future] completed, but there is nothing to show.
-  ///Displays a list of [MemberListItem] when there is data.
   FutureBuilder _listBuilder(Future<List<MemberItem>> future, Widget loading,
       Widget error, Widget empty) {
     return FutureBuilder<List<MemberItem>>(

@@ -20,25 +20,16 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Text(ride.getFormattedDate(context)),
-            Expanded(child: Center()),
-            Row(
-              children: <Widget>[
-                Icon(Icons.people),
-                SizedBox(
-                  child: Center(child: Text("${ride.numberOfAttendees}")),
-                  width: 60,
-                ),
-              ],
-            ),
-          ],
-        ),
+    return ListTile(
+      title: Text(ride.getFormattedDate(context)),
+      trailing: Row(
+        children: <Widget>[
+          Icon(Icons.people),
+          SizedBox(
+            child: Center(child: Text("${ride.numberOfAttendees}")),
+            width: 60,
+          ),
+        ],
       ),
     );
   }

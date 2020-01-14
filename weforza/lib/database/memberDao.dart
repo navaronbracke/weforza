@@ -111,9 +111,10 @@ class MemberDao implements IMemberDao {
     final rideAttendeeRecords = await _rideAttendeeStore.find(_database,finder: rideAttendeeFinder);
     final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]);
     //fetch the members that belong to the attendee uuid's
-    final memberFinder = Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)));
+    final memberFinder = Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key))
+        ,sortOrders: [SortOrder("firstname"),SortOrder("lastname")]);
     final memberRecords = await _memberStore.find(_database,finder: memberFinder);
     //map the record snapshots to Attendee objects
-    return memberRecords.map((record) => Attendee.of(record.key, record.value));
+    return memberRecords.map((record) => Attendee.of(record.key, record.value)).toList();
   }
 }

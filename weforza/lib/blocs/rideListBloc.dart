@@ -13,7 +13,7 @@ class RideListBloc extends Bloc {
   final RideRepository _rideRepository;
 
   ///Load the rides from the database.
-  Future<List<Ride>> getRides() async => await _rideRepository.getRides();
+  Future<List<Ride>> getRides() => _rideRepository.getRides();
 
   @override
   void dispose() {}

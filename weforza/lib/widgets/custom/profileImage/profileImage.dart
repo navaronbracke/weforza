@@ -30,7 +30,7 @@ class ProfileImage extends StatelessWidget {
           color: _placeholderBackgroundColor
       ),
       child: Center(
-        child: Icon(_icon,color: _placeholderIconColor,size: .8*_size),
+        child: Icon(_icon,color: _placeholderIconColor,size: .7*_size),
       ),
     ) : ClipOval(child: Image.file(_image,width: _size,height: _size,fit: BoxFit.cover));
   }

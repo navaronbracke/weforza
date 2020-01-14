@@ -25,7 +25,17 @@ class RideListPage extends StatefulWidget {
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage>
     implements PlatformAwareWidget {
-  _RideListPageState(this._bloc) : assert(_bloc != null);
+  _RideListPageState(this._bloc) : assert(_bloc != null) {
+    onItemClicked = (Ride ride){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RideDetailsPage(ride))).then((value){
+        if(value != null && value){
+          setState(() {
+            loadRidesFuture = _bloc.getRides();
+          });
+        }
+      });
+    };
+  }
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
@@ -39,15 +49,6 @@ class _RideListPageState extends State<RideListPage>
   void initState() {
     super.initState();
     loadRidesFuture = _bloc.getRides();
-    onItemClicked = (Ride ride){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => RideDetailsPage(ride))).then((value){
-        if(value != null && value){
-          setState(() {
-            loadRidesFuture = _bloc.getRides();
-          });
-        }
-      });
-    };
   }
 
   @override
@@ -82,13 +83,13 @@ class _RideListPageState extends State<RideListPage>
                   child: Text(S.of(context).RideListLoadingRidesError),
                 );
               }else{
-                if(snapshot.data.isEmpty){
+                if(snapshot.data == null || snapshot.data.isEmpty){
                   return RideListRidesEmpty();
                 }else{
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context,index){
-                      return RideListItem(snapshot.data[index],onItemClicked);
+                      return RideListItem(snapshot.data[index]);
                     });
                 }
               }
@@ -125,13 +126,13 @@ class _RideListPageState extends State<RideListPage>
                     child: Text(S.of(context).RideListLoadingRidesError),
                   );
                 }else{
-                  if(snapshot.data.isEmpty){
+                  if(snapshot.data == null || snapshot.data.isEmpty){
                     return RideListRidesEmpty();
                   }else{
                     return ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context,index){
-                          return RideListItem(snapshot.data[index],onItemClicked);
+                          return RideListItem(snapshot.data[index]);
                         });
                   }
                 }

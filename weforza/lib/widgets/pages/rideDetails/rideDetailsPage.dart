@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -33,7 +32,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(DateFormat(_bloc.datePattern,Localizations.localeOf(context).languageCode).format(widget.ride.date)),
+        title: Text(widget.ride.getFormattedDate(context)),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.delete),onPressed: (){
             //TODO: delete dialog
@@ -73,7 +72,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        leading: Text(DateFormat(_bloc.datePattern,Localizations.localeOf(context).languageCode).format(widget.ride.date)),
+        leading: Text(widget.ride.getFormattedDate(context)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[

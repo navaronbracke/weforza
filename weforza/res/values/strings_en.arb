@@ -24,6 +24,9 @@
   "RideListAddRideInstruction": "Add a ride with the +",
   "RideListLoadingRidesError": "Could not load rides",
 
+  "RideDetailsLoadAttendeesError": "Could not load attendees",
+  "RideDetailsNoAttendees": "This ride has no attendees",
+
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",
   "MemberDetailsWasPresentCountLabel": "Times present: $count",

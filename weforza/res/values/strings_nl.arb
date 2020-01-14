@@ -24,6 +24,9 @@
   "RideListAddRideInstruction": "Voeg een rit toe met de +",
   "RideListLoadingRidesError": "Kon ritten niet laden",
 
+  "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
+  "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",
   "MemberDetailsWasPresentCountLabel": "Aanwezigheden: $count",

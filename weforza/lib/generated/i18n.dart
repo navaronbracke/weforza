@@ -66,6 +66,8 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideDetailsLoadAttendeesError => "Could not load attendees";
+  String get RideDetailsNoAttendees => "This ride has no attendees";
   String get RideListAddRideInstruction => "Add a ride with the +";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoRides => "There are no rides";
@@ -132,6 +134,8 @@ class $nl extends S {
   @override
   String get SundayPrefix => "Zo";
   @override
+  String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
+  @override
   String get RideListLoadingRidesError => "Kon ritten niet laden";
   @override
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
@@ -169,6 +173,8 @@ class $nl extends S {
   String get AppName => "WeForza";
   @override
   String get MemberListLoadingInProgress => "Leden aan het ophalen...";
+  @override
+  String get RideDetailsLoadAttendeesError => "Kon de aanwezigen niet laden";
   @override
   String get DialogCancel => "Annuleren";
   @override

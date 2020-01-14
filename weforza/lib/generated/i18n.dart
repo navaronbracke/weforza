@@ -66,17 +66,9 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
-  String get RideListAddRideInstruction => "Add a ride";
-  String get RideListAddRideInstructionPlus => "with the +";
-  String get RideListAttendeesHeader => "Attendees";
-  String get RideListDeleteRidesDescription => "Delete the selected rides?";
-  String get RideListDeleteRidesError => "Could not delete rides";
-  String get RideListLoadingMembersError => "Could not load members";
+  String get RideListAddRideInstruction => "Add a ride with the +";
   String get RideListLoadingRidesError => "Could not load rides";
-  String get RideListNoAttendees => "There are no attendees";
-  String get RideListNoMembers => "There are no members";
   String get RideListNoRides => "There are no rides";
-  String get RideListPanelDisplayError => "Something went wrong! Can't show anything here.";
   String get RideListRidesHeader => "Rides";
   String get SaturdayPrefix => "Sat";
   String get SundayPrefix => "Sun";
@@ -104,8 +96,6 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get RideListDeleteRidesError => "Kon ritten niet verwijderen";
-  @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
   @override
   String get DialogDelete => "Verwijderen";
@@ -126,15 +116,11 @@ class $nl extends S {
   @override
   String get UnknownDate => "Onbekende Datum";
   @override
-  String get RideListAttendeesHeader => "Aanwezigen";
-  @override
   String get RideListNoRides => "Er zijn geen ritten";
   @override
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
-  @override
-  String get RideListNoAttendees => "Er zijn geen aanwezigen";
   @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
@@ -143,8 +129,6 @@ class $nl extends S {
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
   @override
   String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
-  @override
-  String get RideListNoMembers => "Er zijn geen leden";
   @override
   String get SundayPrefix => "Zo";
   @override
@@ -156,7 +140,7 @@ class $nl extends S {
   @override
   String get AddMemberTitle => "Nieuw lid";
   @override
-  String get RideListAddRideInstruction => "Voeg een rit toe";
+  String get RideListAddRideInstruction => "Voeg een rit toe met de +";
   @override
   String get AddRideSubmit => "Selectie Toevoegen";
   @override
@@ -165,8 +149,6 @@ class $nl extends S {
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
-  @override
-  String get RideListLoadingMembersError => "Kon leden niet laden";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override
@@ -210,13 +192,7 @@ class $nl extends S {
   @override
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
-  String get RideListAddRideInstructionPlus => "met de +";
-  @override
-  String get RideListDeleteRidesDescription => "Geselecteerde ritten verwijderen?";
-  @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
-  @override
-  String get RideListPanelDisplayError => "Er ging iets mis! Kan niks tonen.";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override

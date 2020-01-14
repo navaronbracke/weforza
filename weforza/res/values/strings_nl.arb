@@ -20,17 +20,9 @@
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
   "RideListRidesHeader": "Ritten",
-  "RideListAttendeesHeader": "Aanwezigen",
   "RideListNoRides": "Er zijn geen ritten",
-  "RideListNoMembers": "Er zijn geen leden",
-  "RideListNoAttendees": "Er zijn geen aanwezigen",
-  "RideListAddRideInstructionPlus": "met de +",
-  "RideListAddRideInstruction": "Voeg een rit toe",
-  "RideListLoadingMembersError": "Kon leden niet laden",
+  "RideListAddRideInstruction": "Voeg een rit toe met de +",
   "RideListLoadingRidesError": "Kon ritten niet laden",
-  "RideListDeleteRidesError": "Kon ritten niet verwijderen",
-  "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
-  "RideListDeleteRidesDescription": "Geselecteerde ritten verwijderen?",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",

@@ -20,17 +20,9 @@
   "MemberListAddMemberInstruction": "Add members by using the menu above",
 
   "RideListRidesHeader": "Rides",
-  "RideListAttendeesHeader": "Attendees",
   "RideListNoRides": "There are no rides",
-  "RideListNoMembers": "There are no members",
-  "RideListNoAttendees": "There are no attendees",
-  "RideListAddRideInstruction": "Add a ride",
-  "RideListAddRideInstructionPlus": "with the +",
-  "RideListLoadingMembersError": "Could not load members",
+  "RideListAddRideInstruction": "Add a ride with the +",
   "RideListLoadingRidesError": "Could not load rides",
-  "RideListDeleteRidesError": "Could not delete rides",
-  "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
-  "RideListDeleteRidesDescription": "Delete the selected rides?",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",

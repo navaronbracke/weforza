@@ -44,7 +44,7 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
   Widget buildIosWidget(BuildContext context) {
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(14.0),
         child: Row(
           children: <Widget>[
             Text(ride.getFormattedDate(context)),

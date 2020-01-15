@@ -199,10 +199,17 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text(S.of(context).AddRideTitle),
-        trailing: CupertinoIconButton(
-          Icons.delete_sweep,
-          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).AddRideTitle)),
+            ),
+            CupertinoIconButton(
+              Icons.delete_sweep,
+              CupertinoTheme.of(context).primaryColor,
+              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+            ),
+          ],
         ),
       ),
       child: SafeArea(
@@ -275,10 +282,17 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text(S.of(context).AddRideTitle),
-        trailing: CupertinoIconButton(
-          Icons.delete_sweep,
-          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).AddRideTitle)),
+            ),
+            CupertinoIconButton(
+              Icons.delete_sweep,
+              CupertinoTheme.of(context).primaryColor,
+              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+            ),
+          ],
         ),
       ),
       child: SafeArea(

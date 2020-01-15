@@ -104,13 +104,22 @@ class _RideListPageState extends State<RideListPage>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        leading: Text(S.of(context).RideListRidesHeader),
-        trailing: CupertinoIconButton(Icons.add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).RideListRidesHeader)),
+            ),
+            CupertinoIconButton(
+              Icons.add,
+              CupertinoTheme.of(context).primaryColor,
+              CupertinoTheme.of(context).primaryContrastingColor,
               () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage())).then((value){
-            setState(() {
-              loadRidesFuture = _bloc.getRides();
-            });
-          }),
+                setState(() {
+                  loadRidesFuture = _bloc.getRides();
+                });
+              }),
+            ),
+          ],
         ),
       ),
       child: SafeArea(

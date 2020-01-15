@@ -1,5 +1,8 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/memberDao.dart';
+import 'package:weforza/database/rideDao.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
@@ -16,21 +19,19 @@ class InjectionContainer {
     //Only now we configure the injector itself.
     _injector = Injector.getInjector();
     //database
-    _injector.map<MemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
-    _injector.map<RideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    _injector.map<IMemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    _injector.map<IRideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
     //repositories
-    _injector.map<IMemberRepository>((i) => MemberRepository(i.get<MemberDao>()),isSingleton: true);
-    _injector.map<IRideRepository>((i) => RideRepository(i.get<RideDao>()),isSingleton: true);
+    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
+    _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
+    //file handler
+    _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
     //other
   }
 
   ///Initialize an [Injector] for testing.
   static void initTestInjector(){
     _injector = Injector.getInjector();
-
-    //repositories
-    _injector.map<IMemberRepository>((i) => TestMemberRepository(),isSingleton: true);
-    _injector.map<IRideRepository>((i) => TestRideRepository(),isSingleton: true);
   }
 
   ///Get a dependency of type [T].

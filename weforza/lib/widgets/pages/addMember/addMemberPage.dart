@@ -17,7 +17,7 @@ import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 class AddMemberPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
-      _AddMemberPageState(AddMemberBloc(InjectionContainer.get<IMemberRepository>()));
+      _AddMemberPageState(AddMemberBloc(InjectionContainer.get<MemberRepository>()));
 }
 
 ///This is the [State] class for [AddMemberPage].
@@ -39,7 +39,6 @@ class _AddMemberPageState extends State<AddMemberPage>
   String _firstNameLabel;
   String _lastNameLabel;
   String _phoneLabel;
-  String _pictureLabel;
 
   ///Error messages.
   String _firstNameRequiredMessage;
@@ -55,10 +54,6 @@ class _AddMemberPageState extends State<AddMemberPage>
   String _phoneMinLengthMessage;
   String _phoneMaxLengthMessage;
 
-  ///The [Widget] for the image picker.
-  ///This can be a placeholder, a profile image or a loading indicator.
-  Widget _imagePicker;
-
   ///The [FocusNode]s for the inputs
   FocusNode _firstNameFocusNode = FocusNode();
   FocusNode _lastNameFocusNode = FocusNode();
@@ -71,7 +66,6 @@ class _AddMemberPageState extends State<AddMemberPage>
     _firstNameLabel = translator.PersonFirstNameLabel;
     _lastNameLabel = translator.PersonLastNameLabel;
     _phoneLabel = translator.PersonTelephoneLabel;
-    _pictureLabel = translator.AddMemberPictureLabel;
 
     _firstNameRequiredMessage = translator.ValueIsRequired(_firstNameLabel);
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
@@ -94,8 +88,8 @@ class _AddMemberPageState extends State<AddMemberPage>
         translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
   }
 
-  ///Validate all current form input
-  bool cupertinoAllFormInputValidator(){
+  ///Validate all current form input for IOS.
+  bool iosAllFormInputValidator(){
     final firstNameValid =  _bloc.validateFirstName(
         _firstNameController.text,
         _firstNameRequiredMessage,
@@ -115,12 +109,6 @@ class _AddMemberPageState extends State<AddMemberPage>
             _phoneMinLengthMessage,
             _phoneMaxLengthMessage) == null;
     return firstNameValid && lastNameValid && phoneValid;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
   }
 
   @override
@@ -247,8 +235,23 @@ class _AddMemberPageState extends State<AddMemberPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          _imagePicker,
+                          StreamBuilder<ProfileImagePickingState>(
+                            initialData: ProfileImagePickingState.IDLE,
+                            stream: _bloc.imagePickingStream,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError){
+                                return Center(child: Text(S.of(context).AddMemberPickImageError,softWrap: true));
+                              }else{
+                                return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                                  width: 80,
+                                  height: 80,
+                                  child: Center(
+                                    child: PlatformAwareLoadingIndicator(),
+                                  ),
+                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                              }
+                            },
+                          ),
                           SizedBox(height: 20),
                           StreamBuilder<bool>(
                             initialData: false,
@@ -258,6 +261,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
+                          SizedBox(height: 5),
                           RaisedButton(
                             color: Theme.of(context).primaryColor,
                             child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
@@ -360,7 +364,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                               SizedBox(height: 5),
                               CupertinoTextField(
                                 focusNode: _phoneFocusNode,
-                                textInputAction: TextInputAction.done,
+                                textInputAction: TextInputAction.unspecified,
                                 controller: _phoneController,
                                 autocorrect: false,
                                 keyboardType: TextInputType.phone,
@@ -397,8 +401,23 @@ class _AddMemberPageState extends State<AddMemberPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                              _imagePicker,
+                              StreamBuilder<ProfileImagePickingState>(
+                                initialData: ProfileImagePickingState.IDLE,
+                                stream: _bloc.imagePickingStream,
+                                builder: (context,snapshot){
+                                  if(snapshot.hasError){
+                                    return Center(child: Text(S.of(context).AddMemberPickImageError,softWrap: true));
+                                  }else{
+                                    return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                                      width: 80,
+                                      height: 80,
+                                      child: Center(
+                                        child: PlatformAwareLoadingIndicator(),
+                                      ),
+                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                                  }
+                                },
+                              ),
                               SizedBox(height: 20),
                               StreamBuilder<bool>(
                                 initialData: false,
@@ -408,10 +427,11 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                                 },
                               ),
+                              SizedBox(height: 5),
                               CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                                   pressedOpacity: 0.5,
                                   onPressed: () async {
-                                    if(cupertinoAllFormInputValidator()){
+                                    if(iosAllFormInputValidator()){
                                       if(await _bloc.addMember()){
                                         Navigator.pop(context,true);
                                       }
@@ -450,6 +470,24 @@ class _AddMemberPageState extends State<AddMemberPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Center(
+                    child: StreamBuilder<ProfileImagePickingState>(
+                      initialData: ProfileImagePickingState.IDLE,
+                      stream: _bloc.imagePickingStream,
+                      builder: (context,snapshot){
+                        if(snapshot.hasError){
+                          return Text(S.of(context).AddMemberPickImageError,softWrap: true);
+                        }else{
+                          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: PlatformAwareLoadingIndicator(),
+                          ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 10),
                   CupertinoTextField(
                     focusNode: _firstNameFocusNode,
                     textInputAction: TextInputAction.next,
@@ -504,7 +542,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   SizedBox(height: 5),
                   CupertinoTextField(
                     focusNode: _phoneFocusNode,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.unspecified,
                     controller: _phoneController,
                     autocorrect: false,
                     keyboardType: TextInputType.phone,
@@ -536,9 +574,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                          _imagePicker,
-                          SizedBox(height: 5),
                           StreamBuilder<bool>(
                             initialData: false,
                             stream: _bloc.alreadyExistsStream,
@@ -547,10 +582,11 @@ class _AddMemberPageState extends State<AddMemberPage>
                               snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                             },
                           ),
+                          SizedBox(height: 5),
                           CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
                               pressedOpacity: 0.5,
                               onPressed: () async {
-                                if(cupertinoAllFormInputValidator()){
+                                if(iosAllFormInputValidator()){
                                   if(await _bloc.addMember()){
                                     Navigator.pop(context,true);
                                   }
@@ -584,6 +620,24 @@ class _AddMemberPageState extends State<AddMemberPage>
             padding: EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
+                Center(
+                  child: StreamBuilder<ProfileImagePickingState>(
+                    initialData: ProfileImagePickingState.IDLE,
+                    stream: _bloc.imagePickingStream,
+                    builder: (context,snapshot){
+                      if(snapshot.hasError){
+                        return Text(S.of(context).AddMemberPickImageError,softWrap: true);
+                      }else{
+                        return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+                          width: 80,
+                          height: 80,
+                          child: PlatformAwareLoadingIndicator(),
+                        ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(height: 10),
                 TextFormField(
                   focusNode: _firstNameFocusNode,
                   textInputAction: TextInputAction.next,
@@ -662,9 +716,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Text(_pictureLabel, style: TextStyle(fontSize: 16)),
-                        _imagePicker,
-                        SizedBox(height: 5),
                         StreamBuilder<bool>(
                           initialData: false,
                           stream: _bloc.alreadyExistsStream,
@@ -673,6 +724,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
                           },
                         ),
+                        SizedBox(height: 5),
                         RaisedButton(
                           color: Theme.of(context).primaryColor,
                           child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
@@ -696,6 +748,16 @@ class _AddMemberPageState extends State<AddMemberPage>
     );
   }
 
+  ///See [IProfileImagePicker].
+  @override
+  Future<void> pickProfileImage() async => await _bloc.pickImage();
+
+
+  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
   ///Dispose of this object.
   @override
   void dispose() {
@@ -707,28 +769,5 @@ class _AddMemberPageState extends State<AddMemberPage>
     _lastNameController.dispose();
     _phoneController.dispose();
     super.dispose();
-  }
-
-  ///See [IProfileImagePicker].
-  @override
-  Future<void> pickProfileImage() async {
-    setState(() {
-      _imagePicker = SizedBox(
-        width: 80,
-        height: 80,
-        child: Center(
-          child: PlatformAwareLoadingIndicator(),
-        ),
-      );
-    });
-    await _bloc.pickImage();
-    setState(() {
-      _imagePicker = ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePickerIdleColor,ApplicationTheme.profileImagePickerOnPressedColor);
-    });
-  }
-
-  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
   }
 }

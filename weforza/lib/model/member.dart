@@ -1,9 +1,7 @@
 ///This class represents a 'Member.'
-///
-///A member has a first name, last name and a phone number.
 class Member {
-  Member(this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]):
-        assert(firstname != null && lastname != null && phone != null && devices != null);
+  Member(this.uuid,this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]):
+        assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null && devices != null);
 
   ///Regex for a member's first or last name.
   ///
@@ -16,8 +14,8 @@ class Member {
   ///Allows 8 to 15 digits. (15 digits is the maximum according to the E.164 standard).
   static final RegExp phoneNumberRegex = RegExp(r"\d{8,15}");
 
-  ///An id for in the database.
-  int id;
+  ///The member's GUID.
+  final String uuid;
 
   ///A member's first name.
   String firstname;
@@ -26,15 +24,15 @@ class Member {
   String lastname;
 
   ///A member's phone number.
-  ///Note that [_phone] is a String, integers can't do leading zeroes.
+  ///Note that [phone] is a String, integers can't do leading zeroes.
   String phone;
 
-  ///The path to the image file, that was chosen as profile picture.
+  ///The path to an optional profile picture.
   String profileImageFilePath;
 
   ///The list of devices of this person.
   ///We can only retrieve device name reliably with bluetooth, hence the String.
-  List<String> devices;
+  final List<String> devices;
 
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
@@ -47,14 +45,9 @@ class Member {
     };
   }
 
-  ///Create a Member from a Map.
-  static Member fromMap(Map<String,dynamic> map) {
-    return Member(
-      map["firstname"],
-      map["lastname"],
-      map["phone"],
-      List.from(map["devices"]),
-      map["profile"]
-    );
+  ///Create a member from a Map and a given uuid.
+  static Member of(String uuid,Map<String,dynamic> values){
+    assert(uuid != null && uuid.isNotEmpty && values != null);
+    return Member(uuid,values["firstname"],values["lastname"],values["phone"],List.from(values["devices"]),values["profile"]);
   }
 }

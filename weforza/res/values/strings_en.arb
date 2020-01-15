@@ -20,17 +20,16 @@
   "MemberListAddMemberInstruction": "Add members by using the menu above",
 
   "RideListRidesHeader": "Rides",
-  "RideListAttendeesHeader": "Attendees",
   "RideListNoRides": "There are no rides",
-  "RideListNoMembers": "There are no members",
-  "RideListNoAttendees": "There are no attendees",
-  "RideListAddRideInstruction": "Add a ride",
-  "RideListAddRideInstructionPlus": "with the +",
-  "RideListLoadingMembersError": "Could not load members",
+  "RideListAddRideInstruction": "Add a ride with the +",
   "RideListLoadingRidesError": "Could not load rides",
-  "RideListDeleteRidesError": "Could not delete rides",
-  "RideListPanelDisplayError": "Something went wrong! Can't show anything here.",
-  "RideListDeleteRidesDescription": "Delete the selected rides?",
+
+  "RideDetailsLoadAttendeesError": "Could not load attendees",
+  "RideDetailsNoAttendees": "This ride has no attendees",
+
+  "RideDeleteDialogTitle": "Delete Ride",
+  "RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",
+  "RideDeleteDialogErrorDescription": "Could not delete ride",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telephone: $phone",
@@ -39,6 +38,7 @@
   "MemberDetailsWasPresentCountError": "Unknown",
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsAddDevicesInstruction": "Add devices by editing this member",
+  "MemberDetailsLoadPictureError": "Could not load profile picture",
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",
@@ -46,9 +46,9 @@
 
   "AddMemberTitle": "New Member",
   "AddMemberSubmit": "Create New Member",
-  "AddMemberPictureLabel": "Picture",
   "AddMemberAlreadyExists": "This member already exists",
   "AddMemberError": "Could not add member",
+  "AddMemberPickImageError": "Could not load image",
 
   "AddRideTitle": "New Ride",
   "AddRideSubmit": "Add Selection",

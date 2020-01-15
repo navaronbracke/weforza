@@ -109,7 +109,7 @@ class MemberDao implements IMemberDao {
     final rideAttendeeFinder = Finder(filter: Filter.equals("date", date.toIso8601String()));
     //fetch the attendees of the ride and map to their uuid's
     final rideAttendeeRecords = await _rideAttendeeStore.find(_database,finder: rideAttendeeFinder);
-    final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]);
+    final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]).toList();
     //fetch the members that belong to the attendee uuid's
     final memberFinder = Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key))
         ,sortOrders: [SortOrder("firstname"),SortOrder("lastname")]);

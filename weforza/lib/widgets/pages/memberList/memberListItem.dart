@@ -28,9 +28,7 @@ class MemberListItem extends StatelessWidget implements PlatformAwareWidget {
         leading: ProfileImage(_memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,Icons.person,40),
         title: Text(_memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle, overflow: TextOverflow.ellipsis),
         subtitle: Text(_memberItem.lastName, style: ApplicationTheme.memberListItemLastNameTextStyle, overflow: TextOverflow.ellipsis),
-      onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_memberItem))).then((value) => _callback(value));
-      },
+      onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage(_memberItem))).then((value) => _callback(value)),
     );
   }
 

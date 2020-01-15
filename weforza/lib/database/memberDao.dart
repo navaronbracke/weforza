@@ -44,7 +44,9 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async  {
-    assert(member != null);
+    assert(member != null && member.uuid != null && member.uuid.isNotEmpty
+        && member.firstname != null && member.lastname != null
+        && member.phone != null && member.devices != null);
     await _memberStore.record(member.uuid).add(_database, member.toMap());
   }
 
@@ -74,7 +76,7 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> updateMember(Member member) async {
-    assert(member != null);
+    assert(member != null && member.firstname != null && member.lastname != null && member.phone != null && member.devices != null);
     final finder = Finder(
       filter: Filter.byKey(member.uuid),
     );
@@ -97,6 +99,8 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<int> getAttendingCountForAttendee(String uuid) async {
+    assert(uuid != null && uuid.isNotEmpty);
+
     final finder = Finder(filter: Filter.equals("attendee", uuid));
 
     final records = await _rideAttendeeStore.find(_database,finder: finder);
@@ -106,6 +110,7 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<List<Attendee>> getRideAttendees(DateTime date) async {
+    assert(date != null);
     final rideAttendeeFinder = Finder(filter: Filter.equals("date", date.toIso8601String()));
     //fetch the attendees of the ride and map to their uuid's
     final rideAttendeeRecords = await _rideAttendeeStore.find(_database,finder: rideAttendeeFinder);

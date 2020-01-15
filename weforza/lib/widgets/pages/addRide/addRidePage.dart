@@ -13,7 +13,7 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
-  _AddRidePageState createState() => _AddRidePageState(AddRideBloc(InjectionContainer.get<IRideRepository>()));
+  _AddRidePageState createState() => _AddRidePageState(AddRideBloc(InjectionContainer.get<RideRepository>()));
 }
 
 ///This class is the State for [AddRidePage].
@@ -102,7 +102,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                               onPressed: () async {
                                 if(_bloc.validateInputs()){
                                   if(await _bloc.addRides()){
-                                    Navigator.pop(context);
+                                    Navigator.pop(context,true);
                                   }
                                 }else{
                                   _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -174,7 +174,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                             onPressed: () async {
                               if(_bloc.validateInputs()){
                                 if(await _bloc.addRides()){
-                                  Navigator.pop(context);
+                                  Navigator.pop(context,true);
                                 }
                               }else{
                                 _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -199,10 +199,17 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text(S.of(context).AddRideTitle),
-        trailing: CupertinoIconButton(
-          Icons.delete_sweep,
-          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).AddRideTitle)),
+            ),
+            CupertinoIconButton(
+              Icons.delete_sweep,
+              CupertinoTheme.of(context).primaryColor,
+              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+            ),
+          ],
         ),
       ),
       child: SafeArea(
@@ -248,7 +255,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                   onPressed: () async {
                                     if(_bloc.validateInputs()){
                                       if(await _bloc.addRides()){
-                                        Navigator.pop(context);
+                                        Navigator.pop(context,true);
                                       }
                                     }else{
                                       _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -275,10 +282,17 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text(S.of(context).AddRideTitle),
-        trailing: CupertinoIconButton(
-          Icons.delete_sweep,
-          CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear(),
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).AddRideTitle)),
+            ),
+            CupertinoIconButton(
+              Icons.delete_sweep,
+              CupertinoTheme.of(context).primaryColor,
+              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+            ),
+          ],
         ),
       ),
       child: SafeArea(
@@ -322,7 +336,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                 onPressed: () async {
                                   if(_bloc.validateInputs()){
                                     if(await _bloc.addRides()){
-                                      Navigator.pop(context);
+                                      Navigator.pop(context,true);
                                     }
                                   }else{
                                     _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -347,7 +361,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   ///Build the calendar.
   Widget _buildCalendar(){
     return FutureBuilder(
-      future: _bloc.loadRides(),
+      future: _bloc.loadRideDates(),
         builder: (context,snapshot){
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){

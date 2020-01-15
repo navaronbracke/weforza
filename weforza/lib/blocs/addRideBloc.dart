@@ -31,7 +31,7 @@ class AddRideBloc extends Bloc {
   }
 
   ///The repository that will handle the submit.
-  final IRideRepository _repository;
+  final RideRepository _repository;
 
   ///The date for the currently visible month in the calendar.
   DateTime pageDate;
@@ -69,11 +69,8 @@ class AddRideBloc extends Bloc {
     }
   }
 
-  ///Load the existing rides.
-  Future loadRides() async {
-    List<Ride> data = await _repository.getAllRides();
-    _existingRides = data.map((ride) => ride.date).toList();
-  }
+  ///Load the existing ride dates.
+  Future loadRideDates() async => _existingRides = await _repository.getRideDates();
 
   ///Whether a day, has or had a ride planned beforehand.
   bool dayHasRidePlanned(DateTime date){
@@ -120,16 +117,16 @@ class AddRideBloc extends Bloc {
 
   ///Add the selected rides.
   Future<bool> addRides() async {
-    bool result = false;
+    bool ridesCreated = false;
     if(_ridesToAdd.isNotEmpty){
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date,List())).toList()).then((_){
+      await _repository.addRides(_ridesToAdd.map((date) => Ride(date)).toList()).then((_){
         _errorMessageController.add("");
-        result = true;
+        ridesCreated = true;
       },onError: (error){
         _errorMessageController.addError(Exception("Failed to add rides"));
       });
     }
-    return result;
+    return ridesCreated;
   }
 
   ///Dispose of this object.

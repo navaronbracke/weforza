@@ -3,21 +3,26 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 ///This is the [Bloc] for AddMemberPage.
 class AddMemberBloc extends Bloc {
-  ///Standard issue constructor.
-  ///Takes an [IMemberRepository].
   AddMemberBloc(this._repository): assert(_repository != null);
 
   ///The [IMemberRepository] that handles the submit.
-  final IMemberRepository _repository;
+  final MemberRepository _repository;
+
+  ///The instance that will generate uuid's.
+  final Uuid _uuidGenerator = Uuid();
 
   StreamController<bool> _alreadyExistsController = BehaviorSubject();
   Stream<bool> get alreadyExistsStream => _alreadyExistsController.stream;
+
+  StreamController<ProfileImagePickingState> _imagePickingController = BehaviorSubject();
+  Stream<ProfileImagePickingState> get imagePickingStream => _imagePickingController.stream;
 
   ///The actual inputs.
   String _firstName;
@@ -125,12 +130,12 @@ class AddMemberBloc extends Bloc {
   }
 
   Future<bool> addMember() async {
-    bool result = false;
-    await _repository.checkIfExists(_firstName, _lastName, _phone).then((exists) async {
+    bool memberCreated = false;
+    await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
       _alreadyExistsController.add(exists);
       if(!exists){
-        await _repository.addMember(Member(_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
-          result = true;
+        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
+          memberCreated = true;
         },onError: (error){
           _alreadyExistsController.addError(Exception("Failed to add member"));
         });
@@ -138,14 +143,28 @@ class AddMemberBloc extends Bloc {
     },onError: (error){
       _alreadyExistsController.addError(Exception("Failed to add member"));
     });
-    return result;
+    return memberCreated;
   }
 
-  Future<void> pickImage() async => image = await _repository.pickImage();
+  Future<void> pickImage() async {
+    _imagePickingController.add(ProfileImagePickingState.LOADING);
+    await _repository.chooseProfileImageFromGallery().then((img){
+      image = img;
+      _imagePickingController.add(ProfileImagePickingState.IDLE);
+    },onError: (error){
+      _imagePickingController.addError(Exception("Could not pick a profile image"));
+    });
+  }
 
   ///Dispose of this object.
   @override
   void dispose() {
     _alreadyExistsController.close();
+    _imagePickingController.close();
   }
+}
+
+///This enum declares values for the profile image picking stream.
+enum ProfileImagePickingState {
+  LOADING, IDLE
 }

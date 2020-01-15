@@ -2,7 +2,7 @@
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:weforza/model/attendee.dart';
+import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:path/path.dart';
@@ -11,6 +11,13 @@ import 'package:path/path.dart';
 class DatabaseProvider {
   ///The internal database instance.
   static Database _database;
+
+  ///The data store for [Member].
+  static final memberStore = stringMapStoreFactory.store("member");
+  ///The data store for [Ride].
+  static final rideStore = stringMapStoreFactory.store("ride");
+  ///The data store for [RideAttendee].
+  static final rideAttendeeStore = stringMapStoreFactory.store("rideAttendee");
 
   ///Get the database instance.
   static Database getDatabase() => _database;
@@ -28,169 +35,4 @@ class DatabaseProvider {
 
     await _database.close();
   }
-}
-
-///This class manages Members in the database.
-class MemberDao {
-  MemberDao(this._database): assert(_database != null);
-
-  ///The key for this Dao's Store object.
-  static const String member_store_key = "member";
-
-  ///The Store, which manipulates the database.
-  final _memberStore = intMapStoreFactory.store(member_store_key);
-  ///A reference to the database, which is needed by the Store.
-  final Database _database;
-
-
-
-  ///Add [member] to the database.
-  Future addMember(Member member) async {
-    assert(member != null);
-    await _memberStore.add(_database, member.toMap());
-  }
-
-  Future<bool> hasMembers() async {
-    return await _memberStore.count(_database) > 0;
-  }
-
-  ///Get all stored members.
-  Future<List<Member>> getMembers() async {
-    final finder = Finder(
-        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("phone")]
-    );
-
-    final records = await _memberStore.find(_database,finder: finder);
-
-    return records.map((record){
-      final member = Member.fromMap(record.value);
-      member.id = record.key;
-      return member;
-    }).toList();
-  }
-
-  ///Check if a given member exists.
-  Future<bool> checkIfExists(String firstname,String lastname, String phone) async {
-    assert(firstname != null && lastname != null && phone != null);
-    final finder = Finder(filter: Filter.and([
-      Filter.equals("firstname", firstname),
-      Filter.equals("lastname", lastname),
-      Filter.equals("phone", phone)
-    ]));
-    return await _memberStore.findFirst(_database,finder: finder) != null;
-  }
-
-  ///Delete a Member with the given key.
-  Future deleteMember(int id) async {
-    assert(id != null);
-    final finder = Finder(
-      filter: Filter.byKey(id),
-    );
-
-    await _memberStore.delete(_database,finder: finder);
-  }
-
-  ///Edit a given member.
-  Future editMember(Member member) async {
-    assert(member != null);
-    final finder = Finder(
-      filter: Filter.byKey(member.id),
-    );
-
-    await _memberStore.update(_database,member.toMap(),finder: finder);
-  }
-
-}
-
-///This class manages Rides in the database.
-class RideDao {
-  RideDao(this._database): assert(_database != null);
-  ///The Store key for this object.
-  static const String ride_store_key = "ride";
-
-  ///The Store for this object.
-  final _rideStore = intMapStoreFactory.store(ride_store_key);
-  ///A reference to the database for this object.
-  final Database _database;
-
-
-
-  ///Add a given set of Rides.
-  Future addRides(List<Ride> rides) async {
-    assert(rides != null && rides.isNotEmpty);
-    await _rideStore.addAll(_database, rides.map((ride) => ride.toMap()).toList());
-  }
-
-  ///Get all stored Rides.
-  Future<List<Ride>> getRides() async {
-    final finder = Finder(
-      sortOrders: [SortOrder("date",false)]
-    );
-
-    final records = await _rideStore.find(_database,finder: finder);
-
-    final list = records.map((record){
-      final ride = Ride.fromMap(record.value);
-      ride.id = record.key;
-      return ride;
-    }).toList();
-
-    return list;
-  }
-
-  ///Edit a given Ride.
-  Future editRide(Ride ride) async {
-    assert(ride != null);
-    final finder = Finder(
-      filter: Filter.byKey(ride.id),
-    );
-
-    await _rideStore.update(_database,ride.toMap(),finder: finder);
-  }
-
-  Future deleteRides(List<int> rides) async {
-    final finder = Finder(
-      filter: Filter.custom((record){
-        return rides.contains(record.key);
-      })
-    );
-    await _rideStore.delete(_database,finder: finder);
-  }
-
-  Future removeAttendeeFromRides(Attendee attendee) async {
-    assert(attendee != null);
-
-    final records = await _rideStore.find(_database,finder: Finder());
-    if(records.isEmpty) return;
-
-    //Update the rides if they have the attendee
-    List<Map<String,dynamic>> updatedRecords = records.map((record) {
-      final ride = Ride.fromMap(record.value);
-      if(ride.attendees.contains(attendee)){
-        ride.attendees.remove(attendee);
-      }
-      return ride.toMap();
-    }).toList();
-
-    //Save
-    await _database.transaction((transaction) async {
-      List<Future> futures = List();
-      updatedRecords.forEach((record){
-        futures.add(_rideStore.update(transaction,record));
-      });
-      await Future.wait(futures);
-    });
-  }
-
-  Future<int> getAttendingCount(Attendee attendee) async {
-    final records = await _rideStore.find(_database,finder: Finder(
-      filter: Filter.custom((record){
-        final map = record.value as Map;
-        return map["attendees"].isNotEmpty;
-      })
-    ));
-    List<Ride> rides = records.map((record) => Ride.fromMap(record.value)).toList();
-    return rides.where((ride)=> ride.attendees.contains(attendee)).length;
-  }
-
 }

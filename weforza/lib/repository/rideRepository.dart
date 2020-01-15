@@ -1,102 +1,23 @@
 
-import 'package:weforza/database/databaseProvider.dart';
-import 'package:weforza/model/attendee.dart';
+import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/rideAttendee.dart';
 
-///This interface defines a contract for manipulating [Ride]s.
-abstract class IRideRepository {
-  ///Get all rides.
-  Future<List<Ride>> getAllRides();
-
-  Future addRides(List<Ride> rides);
-
-  ///Edit a given ride.
-  Future editRide(Ride ride);
-
-  ///Delete the given rides.
-  Future deleteRides(List<Ride> rides);
-
-  ///Remove [attendee] from all the rides where it occurs.
-  Future removeAttendeeFromRides(Attendee attendee);
-
-  Future<int> getAttendingCount(Attendee attendee);
-}
-
-///This class will manage the rides when in a production setting.
-class RideRepository implements IRideRepository {
+///This class will manage the rides.
+class RideRepository {
   RideRepository(this._dao): assert(_dao != null);
   ///The internal DAO instance.
   final RideDao _dao;
 
-  ///See [IRideRepository].
-  @override
-  Future addRides(List<Ride> rides) => _dao.addRides(rides);
+  Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
 
-  ///See [IRideRepository].
-  @override
-  Future editRide(Ride ride) => _dao.editRide(ride);
+  Future<void> deleteRide(DateTime date) => _dao.deleteRide(date);
 
-  ///See [IRideRepository].
-  @override
-  Future<List<Ride>> getAllRides() => _dao.getRides();
+  Future<void> deleteAllRides() => _dao.deleteAllRides();
 
-  @override
-  Future removeAttendeeFromRides(Attendee attendee) => _dao.removeAttendeeFromRides(attendee);
+  Future<List<Ride>> getRides() => _dao.getRides();
 
-  @override
-  Future deleteRides(List<Ride> rides) => _dao.deleteRides(rides.map((ride){
-        return ride.id;
-  }).toList());
+  Future<List<DateTime>> getRideDates() => _dao.getRideDates();
 
-  @override
-  Future<int> getAttendingCount(Attendee attendee) => _dao.getAttendingCount(attendee);
-}
-
-///This class is a test version of [IRideRepository].
-class TestRideRepository implements IRideRepository {
-
-  final List<Ride> _list = List();
-
-  @override
-  Future addRides(List<Ride> rides) {
-    _list.addAll(rides);
-    return null;
-  }
-
-  @override
-  Future editRide(Ride ride) {
-    if(ride != null){
-      Ride r = _list.firstWhere((r)=> r.id == ride.id,orElse: null);
-      if(r != null){
-        r.attendees.clear();
-        r.attendees.addAll(ride.attendees);
-      }
-    }
-    return null;
-  }
-
-  @override
-  Future<List<Ride>> getAllRides() {
-    return Future.value(_list);
-  }
-
-  @override
-  Future removeAttendeeFromRides(Attendee attendee) {
-    List<Ride> rides = _list.where((ride) => ride.attendees.contains(attendee));
-    rides.forEach((ride)=>{
-      ride.attendees.remove(attendee)
-    });
-    return null;
-  }
-
-  @override
-  Future deleteRides(List<Ride> rides) {
-    _list.removeWhere((ride){return rides.contains(ride);});
-    return null;
-  }
-
-  @override
-  Future<int> getAttendingCount(Attendee attendee) {
-    return Future.value(_list.where((ride)=> ride.attendees.isNotEmpty && ride.attendees.contains(attendee)).length);
-  }
+  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees) => _dao.updateAttendeesForRideWithDate(date, attendees);
 }

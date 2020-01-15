@@ -16,7 +16,6 @@ class RideListRidesEmpty extends StatelessWidget {
             Text(S.of(context).RideListNoRides),
             SizedBox(height: 10),
             Text(S.of(context).RideListAddRideInstruction),
-            Text(S.of(context).RideListAddRideInstructionPlus),
           ],
         ),
       ),

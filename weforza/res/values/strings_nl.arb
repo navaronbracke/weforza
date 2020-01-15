@@ -20,17 +20,17 @@
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
   "RideListRidesHeader": "Ritten",
-  "RideListAttendeesHeader": "Aanwezigen",
   "RideListNoRides": "Er zijn geen ritten",
-  "RideListNoMembers": "Er zijn geen leden",
-  "RideListNoAttendees": "Er zijn geen aanwezigen",
-  "RideListAddRideInstructionPlus": "met de +",
-  "RideListAddRideInstruction": "Voeg een rit toe",
-  "RideListLoadingMembersError": "Kon leden niet laden",
+  "RideListAddRideInstruction": "Voeg een rit toe met de +",
   "RideListLoadingRidesError": "Kon ritten niet laden",
-  "RideListDeleteRidesError": "Kon ritten niet verwijderen",
-  "RideListPanelDisplayError": "Er ging iets mis! Kan niks tonen.",
-  "RideListDeleteRidesDescription": "Geselecteerde ritten verwijderen?",
+
+  "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
+  "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+
+
+  "RideDeleteDialogTitle": "Verwijder Rit",
+  "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
+  "RideDeleteDialogErrorDescription": "Kon rit niet verwijderen",
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsPhoneFormat": "Telefoon: $phone",
@@ -39,6 +39,7 @@
   "MemberDetailsWasPresentCountError": "Onbekend",
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
   "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken",
+  "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
@@ -46,9 +47,9 @@
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
-  "AddMemberPictureLabel": "Foto",
   "AddMemberAlreadyExists": "Dit lid bestaat al",
   "AddMemberError": "Kon lid niet toevoegen",
+  "AddMemberPickImageError": "Kon afbeelding niet laden",
 
   "AddRideTitle": "Nieuwe Rit",
   "AddRideSubmit": "Selectie Toevoegen",

@@ -66,6 +66,9 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
+  String get RideDeleteDialogErrorDescription => "Could not delete ride";
+  String get RideDeleteDialogTitle => "Delete Ride";
   String get RideDetailsLoadAttendeesError => "Could not load attendees";
   String get RideDetailsNoAttendees => "This ride has no attendees";
   String get RideListAddRideInstruction => "Add a ride with the +";
@@ -142,6 +145,8 @@ class $nl extends S {
   @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
+  String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
+  @override
   String get AddMemberTitle => "Nieuw lid";
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe met de +";
@@ -161,6 +166,8 @@ class $nl extends S {
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
   String get AddRideTitle => "Nieuwe Rit";
+  @override
+  String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override
   String get AddRideLoadingFailed => "Kon de kalender niet laden";
   @override
@@ -199,6 +206,8 @@ class $nl extends S {
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
+  @override
+  String get RideDeleteDialogTitle => "Verwijder Rit";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override

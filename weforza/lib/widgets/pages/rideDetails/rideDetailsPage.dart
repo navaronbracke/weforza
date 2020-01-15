@@ -7,6 +7,8 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/attendeeItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideAttendeeItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -17,10 +19,11 @@ class RideDetailsPage extends StatefulWidget {
   final Ride ride;
 
   @override
-  _RideDetailsPageState createState() => _RideDetailsPageState(RideDetailsBloc(InjectionContainer.get<MemberRepository>()));
+  _RideDetailsPageState createState() => _RideDetailsPageState(RideDetailsBloc(
+      InjectionContainer.get<MemberRepository>(),InjectionContainer.get<RideRepository>()));
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget {
+class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget, RideDeleteHandler {
   _RideDetailsPageState(this._bloc): assert(_bloc != null);
 
   final RideDetailsBloc _bloc;
@@ -32,7 +35,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.ride.getFormattedDate(context)),
+        title: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_pin),
@@ -41,7 +44,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
-            //TODO: delete dialog
+            showDialog(context: context, builder: (context)=> DeleteRideDialog(this))
+                .then((value){
+              //Ride was deleted, go back to list
+              if(value != null && value){
+                Navigator.pop(context,true);
+              }
+            });
           }),
         ],
       ),
@@ -74,7 +83,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Text(widget.ride.getFormattedDate(context)),
+              child: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -84,7 +93,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO delete  dialog
+                  showDialog(context: context, builder: (context)=> DeleteRideDialog(this))
+                      .then((value){
+                    //Ride was deleted, go back to list
+                    if(value != null && value){
+                      Navigator.pop(context,true);
+                    }
+                  });
                 }),
               ],
             ),
@@ -114,4 +129,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
     );
   }
+
+  @override
+  Future<void> deleteRide() => _bloc.deleteRide(widget.ride.date);
 }

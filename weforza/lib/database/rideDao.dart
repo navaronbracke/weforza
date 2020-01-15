@@ -41,8 +41,10 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> addRides(List<Ride> rides) async {
-    await _rideStore.records(rides.map((r) => r.date.toIso8601String()).toList())
-        .put(_database, rides.map((r)=> r.toMap()).toList());
+    assert(rides != null);
+    final filteredRides = rides.where((Ride r) => r.date != null);
+    await _rideStore.records(filteredRides.map((r) => r.date.toIso8601String()).toList())
+        .put(_database, filteredRides.map((r)=> r.toMap()).toList());
   }
 
   @override
@@ -55,6 +57,7 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> deleteRide(DateTime date) async {
+    assert(date != null);
     final isoDate = date.toIso8601String();
     final rideFinder = Finder(filter: Filter.byKey(isoDate));
     final rideAttendeeFinder = Finder(filter: Filter.equals("date", isoDate));
@@ -84,12 +87,17 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees) async {
+    assert(date != null && attendees != null);
     final finder = Finder(filter: Filter.equals("date", date.toIso8601String()));
+    final filteredAttendees = attendees
+        .where((RideAttendee ra)=> ra != null && ra.uuid != null
+        && ra.uuid.isNotEmpty && ra.rideDate != null
+        && ra.attendeeId != null && ra.attendeeId.isNotEmpty).toList();
 
     await _database.transaction((txn) async {
       await _rideAttendeeStore.delete(txn,finder: finder);
-      await _rideAttendeeStore.records(attendees.map((a)=> a.uuid).toList())
-          .put(txn, attendees.map((a)=> a.toMap()).toList());
+      await _rideAttendeeStore.records(filteredAttendees.map((a)=> a.uuid).toList())
+          .put(txn, filteredAttendees.map((a)=> a.toMap()).toList());
     });
   }
 

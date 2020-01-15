@@ -34,15 +34,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       appBar: AppBar(
         title: Text(widget.ride.getFormattedDate(context)),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.delete),onPressed: (){
-            //TODO: delete dialog
-          }),
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: (){
               //TODO: goto assignment page
             },
           ),
+          IconButton(icon: Icon(Icons.delete),onPressed: (){
+            //TODO: delete dialog
+          }),
         ],
       ),
       body: FutureBuilder<List<AttendeeItem>>(
@@ -51,7 +51,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           if(snapshot.hasError){
             return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
           }else{
-            if(snapshot.data.isEmpty){
+            if(snapshot.data == null || snapshot.data.isEmpty){
               return Center(child: Text(S.of(context).RideDetailsNoAttendees));
             }else{
               return ListView.builder(
@@ -68,21 +68,26 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        leading: Text(widget.ride.getFormattedDate(context)),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+        middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO delete  dialog
-            }),
-            SizedBox(width: 10),
-            CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO goto assignment screen
-            }),
+            Expanded(
+              child: Text(widget.ride.getFormattedDate(context)),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO goto assignment screen
+                }),
+                SizedBox(width: 10),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  //TODO delete  dialog
+                }),
+              ],
+            ),
           ],
         ),
       ),

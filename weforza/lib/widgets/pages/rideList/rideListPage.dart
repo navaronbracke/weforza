@@ -7,7 +7,6 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -26,21 +25,20 @@ class RideListPage extends StatefulWidget {
 class _RideListPageState extends State<RideListPage>
     implements PlatformAwareWidget {
   _RideListPageState(this._bloc) : assert(_bloc != null) {
-    onItemClicked = (Ride ride){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => RideDetailsPage(ride))).then((value){
-        if(value != null && value){
-          setState(() {
-            loadRidesFuture = _bloc.getRides();
-          });
-        }
-      });
+    _onReload = (bool reload){
+      if(reload != null && reload){
+        setState(() {
+          loadRidesFuture = _bloc.getRides();
+        });
+      }
     };
   }
 
   ///The BLoC for this [Widget].
   final RideListBloc _bloc;
 
-  Function(Ride ride) onItemClicked;
+  ///This callback triggers a reload.
+  Function _onReload;
 
   ///The future that loads the rides.
   Future<List<Ride>> loadRidesFuture;
@@ -89,7 +87,7 @@ class _RideListPageState extends State<RideListPage>
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context,index){
-                      return RideListItem(snapshot.data[index]);
+                      return RideListItem(snapshot.data[index],_onReload);
                     });
                 }
               }
@@ -132,7 +130,7 @@ class _RideListPageState extends State<RideListPage>
                     return ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context,index){
-                          return RideListItem(snapshot.data[index]);
+                          return RideListItem(snapshot.data[index],_onReload);
                         });
                   }
                 }

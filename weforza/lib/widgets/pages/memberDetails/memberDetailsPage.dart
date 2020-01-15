@@ -232,23 +232,29 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   Widget buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).MemberDetailsTitle),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+        middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO goto edit
-            }),
-            SizedBox(width: 30),
-            CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+            Expanded(
+              child: Center(child: Text(S.of(context).MemberDetailsTitle)),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO goto edit
+                }),
+                SizedBox(width: 30),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
                   .then((value){
-                //Member was deleted, go back to list
-                if(value != null && value){
-                  Navigator.pop(context,true);
-                }
-              });
-            }),
+                    //Member was deleted, go back to list
+                    if(value != null && value){
+                      Navigator.pop(context,true);
+                    }
+                  });
+                }),
+              ],
+            ),
           ],
         ),
         transitionBetweenRoutes: false,
@@ -316,22 +322,29 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   Widget buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).MemberDetailsTitle),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+        middle: Row(
           children: <Widget>[
-            CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              //TODO goto edit
-            }),
-            SizedBox(width: 30),
-            CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this)).then((value){
-                //Member was deleted, go back to list
-                if(value != null && value){
-                  Navigator.pop(context,true);
-                }
-              });
-            }),
+            Expanded(
+              child: Center(child: Text(S.of(context).MemberDetailsTitle)),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                //TODO goto edit
+                }),
+                SizedBox(width: 30),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                  .then((value){
+                    //Member was deleted, go back to list
+                    if(value != null && value){
+                      Navigator.pop(context,true);
+                    }
+                  });
+                }),
+              ],
+            ),
           ],
         ),
         transitionBetweenRoutes: false,

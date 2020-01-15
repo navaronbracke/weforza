@@ -91,9 +91,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO goto assignment screen
                 }),
-                SizedBox(width: 10),
+                SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showDialog(context: context, builder: (context)=> DeleteRideDialog(this))
+                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this))
                       .then((value){
                     //Ride was deleted, go back to list
                     if(value != null && value){
@@ -114,7 +114,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             if(snapshot.hasError){
               return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
             }else{
-              if(snapshot.data.isEmpty){
+              if(snapshot.data == null || snapshot.data.isEmpty){
                 return Center(child: Text(S.of(context).RideDetailsNoAttendees));
               }else{
                 return ListView.builder(

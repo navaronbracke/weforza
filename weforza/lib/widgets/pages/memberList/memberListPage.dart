@@ -69,17 +69,16 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text(S.of(context).MemberListTitle),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+        middle: Row(
           children: <Widget>[
+            Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
             CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
                 if(_onReload != null){
                   _onReload(value);
                 }
               });
-            })
+            }),
           ],
         ),
       ),

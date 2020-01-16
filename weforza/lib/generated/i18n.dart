@@ -66,6 +66,7 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideAttendeeAssignmentTitle => "Assign attendees";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -158,6 +159,8 @@ class $nl extends S {
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
+  @override
+  String get RideAttendeeAssignmentTitle => "Aanwezigen toewijzen";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override

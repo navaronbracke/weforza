@@ -60,6 +60,8 @@
   "AddRideColorLegendCurrentSelection": "Current Selection",
   "AddRideColorLegendFutureRide": "Future Ride",
 
+  "RideAttendeeAssignmentTitle": "Assign attendees",
+
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
   "PersonTelephoneLabel": "Telephone",

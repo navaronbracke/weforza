@@ -8,6 +8,7 @@ import 'package:weforza/model/attendeeItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideAttendeeItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -40,7 +41,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: (){
-              //TODO: goto assignment page
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
+              //TODO observe value, reload attendees if true
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
@@ -89,7 +91,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO goto assignment screen
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
+                  //TODO observe value, reload attendees if true
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){

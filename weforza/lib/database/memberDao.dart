@@ -44,15 +44,17 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async  {
-    assert(member != null && member.uuid != null && member.uuid.isNotEmpty
-        && member.firstname != null && member.lastname != null
-        && member.phone != null && member.devices != null);
+    assert(member != null);
+    ///The uuid is already used
+    if(await _memberStore.findFirst(_database,finder: Finder(filter: Filter.byKey(member.uuid)))!= null){
+      throw Exception("The member's uuid: ${member.uuid} is already in use");
+    }
     await _memberStore.record(member.uuid).add(_database, member.toMap());
   }
 
   @override
   Future<void> deleteMember(String uuid) async {
-    assert(uuid != null && uuid.isNotEmpty);
+    assert(uuid != null);
     //delete the ride attendee records and the member
     final memberFinder = Finder(filter: Filter.byKey(uuid));
     final memberRidesFinder = Finder(filter: Filter.equals("attendee", uuid));
@@ -76,7 +78,7 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> updateMember(Member member) async {
-    assert(member != null && member.firstname != null && member.lastname != null && member.phone != null && member.devices != null);
+    assert(member != null);
     final finder = Finder(
       filter: Filter.byKey(member.uuid),
     );
@@ -86,8 +88,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<bool> memberExists(String firstname, String lastname, String phone) async {
-    assert(firstname != null && lastname != null && phone != null);
-
     final finder = Finder(filter: Filter.and([
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
@@ -99,8 +99,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<int> getAttendingCountForAttendee(String uuid) async {
-    assert(uuid != null && uuid.isNotEmpty);
-
     final finder = Finder(filter: Filter.equals("attendee", uuid));
 
     final records = await _rideAttendeeStore.find(_database,finder: finder);

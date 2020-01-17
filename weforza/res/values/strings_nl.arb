@@ -61,7 +61,8 @@
   "AddRideColorLegendCurrentSelection": "Huidige Selectie",
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
-  "RideAttendeeAssignmentTitle": "Aanwezigen toewijzen",
+  "RideAttendeeAssignmentTitle": "Aanwezigen $date",
+  "RideAttendeeAssignmentInstruction": "Selecteer de aanwezigen voor de rit",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

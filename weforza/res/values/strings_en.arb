@@ -60,7 +60,8 @@
   "AddRideColorLegendCurrentSelection": "Current Selection",
   "AddRideColorLegendFutureRide": "Future Ride",
 
-  "RideAttendeeAssignmentTitle": "Assign attendees",
+  "RideAttendeeAssignmentTitle": "Attendees $date",
+  "RideAttendeeAssignmentInstruction": "Select the attendees for the ride",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

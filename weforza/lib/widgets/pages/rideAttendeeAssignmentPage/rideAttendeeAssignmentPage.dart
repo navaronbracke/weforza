@@ -9,6 +9,7 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentListEmpty.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentLoading.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanError.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning.dart';
 
 
@@ -50,7 +51,9 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
             case RideAttendeeAssignmentPageDisplayMode.LOADING_ERROR:
               return RideAttendeeAssignmentGenericError(title,S.of(context).MemberListLoadingFailed);
             case RideAttendeeAssignmentPageDisplayMode.SCANNING_ERROR:
-              return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentScanningFailed);
+              return RideAttendeeAssignmentScanError(title,_bloc);
+            default:
+              return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentGenericError);
           }
         }
       },

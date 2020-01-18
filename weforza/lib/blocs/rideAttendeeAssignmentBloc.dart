@@ -16,6 +16,10 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner {
   StreamController<RideAttendeeAssignmentPageDisplayMode> _displayModeController = BehaviorSubject();
   Stream<RideAttendeeAssignmentPageDisplayMode> get displayMode => _displayModeController.stream;
 
+  ///The current display mode for the stream.
+  RideAttendeeAssignmentPageDisplayMode _attendeeAssignmentPageDisplayMode = RideAttendeeAssignmentPageDisplayMode.LOADING;
+
+
   @override
   void dispose() {
     _displayModeController.close();
@@ -23,11 +27,20 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner {
 
   @override
   void startScan() {
-    // TODO: implement startScan
+    if(_attendeeAssignmentPageDisplayMode == RideAttendeeAssignmentPageDisplayMode.IDLE){
+      _attendeeAssignmentPageDisplayMode = RideAttendeeAssignmentPageDisplayMode.SCANNING;
+      _displayModeController.add(_attendeeAssignmentPageDisplayMode);
+      // TODO: implement startScan -> trigger bluetooth scan with flutter blue instance
+    }
   }
 
   @override
   void stopScan() {
-    // TODO: implement stopScan
+    if(_attendeeAssignmentPageDisplayMode == RideAttendeeAssignmentPageDisplayMode.SCANNING || _attendeeAssignmentPageDisplayMode == RideAttendeeAssignmentPageDisplayMode.SCANNING_ERROR){
+      _attendeeAssignmentPageDisplayMode = RideAttendeeAssignmentPageDisplayMode.IDLE;
+      _displayModeController.add(_attendeeAssignmentPageDisplayMode);
+      // TODO: implement stopScan -> stop scan with flutter blue instance
+
+    }
   }
 }

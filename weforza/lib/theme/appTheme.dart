@@ -46,6 +46,11 @@ abstract class ApplicationTheme {
   ///The profile image placeholder icon's background color.
   static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
 
+  ///The start color for the bluetooth scanning animation.
+  static final Color bluetoothScanningAnimationStartColor = Colors.blue;
+  ///The end color for the bluetooth scanning animation.
+  static final Color bluetoothScanningAnimationEndColor = Colors.blue.shade200;
+
 
 
 

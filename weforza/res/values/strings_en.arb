@@ -14,7 +14,7 @@
   "HomePageMembersTab": "Members",
 
   "MemberListTitle": "Members",
-  "MemberListLoadingFailed": "Could not fetch members",
+  "MemberListLoadingFailed": "Could not load members",
   "MemberListLoadingInProgress": "Loading members...",
   "MemberListNoItems": "There are no members to display",
   "MemberListAddMemberInstruction": "Add members by using the menu above",
@@ -62,6 +62,9 @@
 
   "RideAttendeeAssignmentTitle": "Attendees $date",
   "RideAttendeeAssignmentInstruction": "Select the attendees for the ride",
+  "RideAttendeeAssignmentGenericError": "Something went wrong",
+  "RideAttendeeAssignmentScanningFailed": "Something went wrong during the scan",
+  "RideAttendeeAssignmentStopScan": "Stop Scan",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

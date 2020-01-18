@@ -56,7 +56,7 @@ class S implements WidgetsLocalizations {
   String get MemberDetailsWasPresentCountCalculating => "Calculating...";
   String get MemberDetailsWasPresentCountError => "Unknown";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
-  String get MemberListLoadingFailed => "Could not fetch members";
+  String get MemberListLoadingFailed => "Could not load members";
   String get MemberListLoadingInProgress => "Loading members...";
   String get MemberListNoItems => "There are no members to display";
   String get MemberListTitle => "Members";
@@ -66,7 +66,10 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideAttendeeAssignmentGenericError => "Something went wrong";
   String get RideAttendeeAssignmentInstruction => "Select the attendees for the ride";
+  String get RideAttendeeAssignmentScanningFailed => "Something went wrong during the scan";
+  String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -139,9 +142,13 @@ class $nl extends S {
   @override
   String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
   @override
+  String get RideAttendeeAssignmentStopScan => "Stop Scan";
+  @override
   String get SundayPrefix => "Zo";
   @override
   String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
+  @override
+  String get RideAttendeeAssignmentScanningFailed => "Er liep iets fout tijdens de scan";
   @override
   String get RideListLoadingRidesError => "Kon ritten niet laden";
   @override
@@ -221,7 +228,7 @@ class $nl extends S {
   @override
   String get HomePageMembersTab => "Leden";
   @override
-  String get MemberListLoadingFailed => "Kon geen leden ophalen";
+  String get MemberListLoadingFailed => "Kon leden niet ophalen";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
   @override

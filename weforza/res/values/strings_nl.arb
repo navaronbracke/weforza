@@ -14,7 +14,7 @@
   "HomePageMembersTab": "Leden",
 
   "MemberListTitle": "Leden",
-  "MemberListLoadingFailed": "Kon geen leden ophalen",
+  "MemberListLoadingFailed": "Kon leden niet ophalen",
   "MemberListLoadingInProgress": "Leden aan het ophalen...",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
@@ -63,6 +63,9 @@
 
   "RideAttendeeAssignmentTitle": "Aanwezigen $date",
   "RideAttendeeAssignmentInstruction": "Selecteer de aanwezigen voor de rit",
+  "RideAttendeeGenericError": "Er liep iets fout",
+  "RideAttendeeAssignmentScanningFailed": "Er liep iets fout tijdens de scan",
+  "RideAttendeeAssignmentStopScan": "Stop Scan",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

@@ -85,7 +85,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
+              child: Center(child: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16))),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,

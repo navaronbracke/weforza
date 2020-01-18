@@ -4,7 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/model/rideAttendeeAssignmentPageDisplayMode.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentGenericError.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentListEmpty.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentLoading.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning.dart';
 
 
 class RideAttendeeAssignmentPage extends StatefulWidget {
@@ -16,52 +21,47 @@ class RideAttendeeAssignmentPage extends StatefulWidget {
   _RideAttendeeAssignmentPageState createState() => _RideAttendeeAssignmentPageState(RideAttendeeAssignmentBloc());
 }
 
-class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage> implements PlatformAwareWidget {
+class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage> {
   _RideAttendeeAssignmentPageState(this._bloc): assert(_bloc != null);
 
   final RideAttendeeAssignmentBloc _bloc;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context){
+    final String title = S.of(context).RideAttendeeAssignmentTitle(
+        DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+            .languageCode)
+            .format(widget.ride.date));
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    // TODO: implement buildAndroidWidget
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).RideAttendeeAssignmentTitle(DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
-            .languageCode).format(widget.ride.date))),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.bluetooth),
-            onPressed: (){
-              //TODO update streambuilder and start scanning
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Center(child: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(S.of(context).RideAttendeeAssignmentInstruction),
-          )),
-          Expanded(
-            child: ListView.builder(
-                itemBuilder: (context,index){
-                  return ListTile(
-                    title: Text("$index"),
-                  );
-                },itemCount: 20),
-          ),
-        ],
-      ),
+    return StreamBuilder<RideAttendeeAssignmentPageDisplayMode>(
+      stream: _bloc.displayMode,
+      initialData: RideAttendeeAssignmentPageDisplayMode.LOADING,
+      builder: (context,snapshot){
+        if(snapshot.hasError){
+          return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentGenericError);
+        }else{
+          switch(snapshot.data){
+            case RideAttendeeAssignmentPageDisplayMode.IDLE:
+              return _buildList(title);
+            case RideAttendeeAssignmentPageDisplayMode.LOADING:
+              return RideAttendeeAssignmentLoading(title);
+            case RideAttendeeAssignmentPageDisplayMode.SCANNING:
+              return RideAttendeeAssignmentScanning(title,_bloc);
+            case RideAttendeeAssignmentPageDisplayMode.LOADING_ERROR:
+              return RideAttendeeAssignmentGenericError(title,S.of(context).MemberListLoadingFailed);
+            case RideAttendeeAssignmentPageDisplayMode.SCANNING_ERROR:
+              return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentScanningFailed);
+          }
+        }
+      },
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    // TODO: implement buildIosWidget
-    return null;
+  Widget _buildList(String title){
+    if(_bloc.members == null || _bloc.members.isEmpty){
+      return RideAttendeeAssignmentListEmpty(title);
+    }else{
+      return RideAttendeeAssignmentList(_bloc.members,title,_bloc);
+    }
   }
 }

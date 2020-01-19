@@ -61,7 +61,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                             .languageCode)
                             .format(widget.ride.date))
                 ),
-                actions: <Widget>[
+                actions: _bloc.items.isEmpty ? []: <Widget>[
                   IconButton(
                     icon: Icon(Icons.bluetooth),
                     onPressed: (){
@@ -85,7 +85,10 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                     },
                   ),
                   Expanded(
-                    child: ListView.builder(itemBuilder: (context,index)=> RideAttendeeAssignmentItem(_bloc.items[index])),
+                    child: ListView.builder(
+                        itemBuilder: (context,index)=> RideAttendeeAssignmentItem(_bloc.items[index]),
+                        itemCount: _bloc.items.length,
+                    ),
                   ),
                 ],
               ),
@@ -94,12 +97,30 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
               future: _bloc.loadMembers(),
               builder: (context,snapshot){
                 if(snapshot.hasError){
-                  return Center(
-                    child: Text(S.of(context).MemberListLoadingFailed),
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                          S.of(context).RideAttendeeAssignmentTitle(
+                              DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                                  .languageCode)
+                                  .format(widget.ride.date))
+                      ),
+                    ),
+                    body: Center(
+                      child: Text(S.of(context).MemberListLoadingFailed),
+                    ),
                   );
                 }else{
-                  return Center(
-                    child: PlatformAwareLoadingIndicator(),
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                          S.of(context).RideAttendeeAssignmentTitle(
+                              DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                                  .languageCode)
+                                  .format(widget.ride.date))
+                      ),
+                    ),
+                    body: Center(child: PlatformAwareLoadingIndicator()),
                   );
                 }
               },
@@ -108,20 +129,40 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
               future: _bloc.scanFuture,
               builder: (context,snapshot){
                 if(snapshot.hasError){
-                  return Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(S.of(context).RideAttendeeAssignmentScanningFailed),
-                        SizedBox(height: 20),
-                        FlatButton(
-                            child: Text(S.of(context).DialogOk),
-                            onPressed: () => _bloc.onScanErrorDismissed()
-                        )
-                      ],
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                          S.of(context).RideAttendeeAssignmentTitle(
+                              DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                                  .languageCode)
+                                  .format(widget.ride.date))
+                      ),
+                    ),
+                    body: Center(
+                      child: Column(
+                        children: <Widget>[
+                          Text(S.of(context).RideAttendeeAssignmentScanningFailed),
+                          SizedBox(height: 20),
+                          FlatButton(
+                              child: Text(S.of(context).DialogOk),
+                              onPressed: () => _bloc.onScanErrorDismissed()
+                          )
+                        ],
+                      ),
                     ),
                   );
                 }else{
-                  return RideAttendeeAssignmentScanning(_bloc);
+                  return Scaffold(
+                    appBar: AppBar(
+                      title: Text(
+                          S.of(context).RideAttendeeAssignmentTitle(
+                              DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                                  .languageCode)
+                                  .format(widget.ride.date))
+                      ),
+                    ),
+                    body: RideAttendeeAssignmentScanning(_bloc),
+                  );
                 }
               },
             );

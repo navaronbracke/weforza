@@ -24,8 +24,9 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
   Widget buildAndroidWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        widget.bloc.onSelected();
-        setState(() {});
+        setState(() {
+          widget.bloc.onSelected();
+        });
       },
       child: Card(
         color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedBackgroundColor : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor,
@@ -71,8 +72,9 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
   Widget buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        widget.bloc.onSelected();
-        setState(() {});
+        setState(() {
+          widget.bloc.onSelected();
+        });
       },
       child: Container(
         decoration: BoxDecoration(

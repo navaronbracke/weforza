@@ -51,8 +51,18 @@ abstract class ApplicationTheme {
   ///The end color for the bluetooth scanning animation.
   static final Color bluetoothScanningAnimationEndColor = Colors.blue.shade200;
 
-
-
+  ///The font color for an unselected ride attendee.
+  static final Color rideAttendeeUnSelectedFontColor = Colors.black;
+  ///The font color for a selected ride attendee.
+  static final Color rideAttendeeSelectedFontColor = Colors.white;
+  ///The background color for an unselected ride attendee.
+  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
+  ///The background color for a selected ride attendee.
+  static final Color rideAttendeeSelectedBackgroundColor = Colors.lightGreen;
+  ///The profile image placeholder background color when the ride attendee is unselected.
+  static final Color rideAttendeeUnselectedPlaceholderBackgroundColor = Colors.blue;
+  ///The profile image placeholder background color when the ride attendee is selected.
+  static final Color rideAttendeeSelectedPlaceholderBackgroundColor = Colors.green;
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);

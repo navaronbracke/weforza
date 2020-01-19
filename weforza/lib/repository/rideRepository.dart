@@ -19,5 +19,9 @@ class RideRepository {
 
   Future<List<DateTime>> getRideDates() => _dao.getRideDates();
 
-  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees) => _dao.updateAttendeesForRideWithDate(date, attendees);
+  Future<void> updateAttendeesForRideWithDate(Ride ride, List<RideAttendee> attendees) => _dao.updateAttendeesForRideWithDate(ride, attendees);
+
+  Future<bool> addAttendeeToRide(Ride ride,RideAttendee attendee) => _dao.addAttendeeToRide(ride, attendee);
+
+  Future<bool> removeAttendee(Ride ride, String uuid) => _dao.removeAttendeeFromRide(ride, uuid);
 }

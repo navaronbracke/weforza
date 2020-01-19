@@ -44,7 +44,7 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async  {
-    assert(member != null);
+    assert(member != null && member.uuid != null);
     ///The uuid is already used
     if(await _memberStore.findFirst(_database,finder: Finder(filter: Filter.byKey(member.uuid)))!= null){
       throw Exception("The member's uuid: ${member.uuid} is already in use");

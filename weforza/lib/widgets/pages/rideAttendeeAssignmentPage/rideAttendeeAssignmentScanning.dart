@@ -8,9 +8,8 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeAssignmentScanning extends StatefulWidget {
-  RideAttendeeAssignmentScanning(this.title,this.scanner): assert(title != null && scanner != null);
+  RideAttendeeAssignmentScanning(this.scanner): assert(scanner != null);
 
-  final String title;
   final AttendeeScanner scanner;
 
   @override
@@ -43,67 +42,56 @@ class _RideAttendeeAssignmentScanningState extends State<RideAttendeeAssignmentS
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 7,
-              child: AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 7,
+            child: AnimatedBuilder(
+              animation: _colorTween,
+              builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Center(
+              child: FlatButton(
+                child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
+                onPressed: (){
+                  widget.scanner.stopScan();
+                },
               ),
             ),
-            Flexible(
-              flex: 2,
-              child: Center(
-                child: FlatButton(
-                  child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
-                  onPressed: (){
-                    widget.scanner.stopScan();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Text(widget.title),
-      ),
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 7,
-              child: AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 7,
+            child: AnimatedBuilder(
+              animation: _colorTween,
+              builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Center(
+              child: CupertinoButton(
+                child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
+                onPressed: (){
+                  widget.scanner.stopScan();
+                },
               ),
             ),
-            Flexible(
-              flex: 2,
-              child: Center(
-                child: CupertinoButton(
-                  child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
-                  onPressed: (){
-                    widget.scanner.stopScan();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

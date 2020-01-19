@@ -3,14 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rideAttendeeAssignmentPageDisplayMode.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentGenericError.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentListEmpty.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentLoading.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanError.dart';
+import 'package:weforza/model/rideAttendeeDisplayMode.dart';
+import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 
 class RideAttendeeAssignmentPage extends StatefulWidget {
@@ -19,52 +20,131 @@ class RideAttendeeAssignmentPage extends StatefulWidget {
   final Ride ride;
 
   @override
-  _RideAttendeeAssignmentPageState createState() => _RideAttendeeAssignmentPageState(RideAttendeeAssignmentBloc());
+  _RideAttendeeAssignmentPageState createState() => _RideAttendeeAssignmentPageState(
+      RideAttendeeAssignmentBloc(InjectionContainer.get<RideRepository>(),InjectionContainer.get<MemberRepository>(),ride)
+  );
 }
 
-class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage> {
+class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage> implements PlatformAwareWidget {
   _RideAttendeeAssignmentPageState(this._bloc): assert(_bloc != null);
 
   final RideAttendeeAssignmentBloc _bloc;
 
   @override
-  Widget build(BuildContext context){
-    final String title = S.of(context).RideAttendeeAssignmentTitle(
-        DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
-            .languageCode)
-            .format(widget.ride.date));
+  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
-    return StreamBuilder<RideAttendeeAssignmentPageDisplayMode>(
-      stream: _bloc.displayMode,
-      initialData: RideAttendeeAssignmentPageDisplayMode.LOADING,
+  @override
+  Widget buildAndroidWidget(BuildContext context) {
+    return StreamBuilder<RideAttendeeDisplayMode>(
+      stream: _bloc.displayModeStream,
+      initialData: RideAttendeeDisplayMode.MEMBERS,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentGenericError);
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                  S.of(context).RideAttendeeAssignmentTitle(
+                      DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                          .languageCode)
+                          .format(widget.ride.date))
+              ),
+            ),
+            body: Center(child: Text(S.of(context).RideAttendeeAssignmentGenericError)),
+          );
         }else{
           switch(snapshot.data){
-            case RideAttendeeAssignmentPageDisplayMode.IDLE:
-              return _buildList(title);
-            case RideAttendeeAssignmentPageDisplayMode.LOADING:
-              return RideAttendeeAssignmentLoading(title);
-            case RideAttendeeAssignmentPageDisplayMode.SCANNING:
-              return RideAttendeeAssignmentScanning(title,_bloc);
-            case RideAttendeeAssignmentPageDisplayMode.LOADING_ERROR:
-              return RideAttendeeAssignmentGenericError(title,S.of(context).MemberListLoadingFailed);
-            case RideAttendeeAssignmentPageDisplayMode.SCANNING_ERROR:
-              return RideAttendeeAssignmentScanError(title,_bloc);
-            default:
-              return RideAttendeeAssignmentGenericError(title,S.of(context).RideAttendeeAssignmentGenericError);
+            case RideAttendeeDisplayMode.IDLE: return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                    S.of(context).RideAttendeeAssignmentTitle(
+                        DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                            .languageCode)
+                            .format(widget.ride.date))
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.bluetooth),
+                    onPressed: (){
+                      setState(() {
+                        _bloc.startScan();
+                      });
+                    },
+                  ),
+                ],
+              ),
+              body: _bloc.items.isEmpty ?
+              Center(child: Text(S.of(context).MemberListNoItems)) :
+              Column(
+                children: <Widget>[
+                  StreamBuilder<String>(
+                    initialData: S.of(context).RideAttendeeAssignmentInstruction,
+                    builder: (context,snapshot){
+                      if(snapshot.hasError){
+                        return Text(S.of(context).RideAttendeeAssignmentGenericError);
+                      }else{ return Text(snapshot.data); }
+                    },
+                  ),
+                  Expanded(
+                    child: ListView.builder(itemBuilder: (context,index)=> RideAttendeeAssignmentItem(_bloc.items[index])),
+                  ),
+                ],
+              ),
+            );
+            case RideAttendeeDisplayMode.MEMBERS: return FutureBuilder<void>(
+              future: _bloc.loadMembers(),
+              builder: (context,snapshot){
+                if(snapshot.hasError){
+                  return Center(
+                    child: Text(S.of(context).MemberListLoadingFailed),
+                  );
+                }else{
+                  return Center(
+                    child: PlatformAwareLoadingIndicator(),
+                  );
+                }
+              },
+            );//future builder for members
+            case RideAttendeeDisplayMode.SCANNING: return FutureBuilder<void>(
+              future: _bloc.scanFuture,
+              builder: (context,snapshot){
+                if(snapshot.hasError){
+                  return Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text(S.of(context).RideAttendeeAssignmentScanningFailed),
+                        SizedBox(height: 20),
+                        FlatButton(
+                            child: Text(S.of(context).DialogOk),
+                            onPressed: () => _bloc.onScanErrorDismissed()
+                        )
+                      ],
+                    ),
+                  );
+                }else{
+                  return RideAttendeeAssignmentScanning(_bloc);
+                }
+              },
+            );
+            default: return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                    S.of(context).RideAttendeeAssignmentTitle(
+                        DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
+                            .languageCode)
+                            .format(widget.ride.date))
+                ),
+              ),
+              body: Center(child: Text(S.of(context).RideAttendeeAssignmentGenericError)),
+            );
           }
         }
       },
     );
   }
 
-  Widget _buildList(String title){
-    if(_bloc.members == null || _bloc.members.isEmpty){
-      return RideAttendeeAssignmentListEmpty(title);
-    }else{
-      return RideAttendeeAssignmentList(_bloc.members,title,_bloc);
-    }
+  @override
+  Widget buildIosWidget(BuildContext context) {
+    // TODO: implement buildIosWidget
+    return null;
   }
 }

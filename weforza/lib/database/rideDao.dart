@@ -89,7 +89,7 @@ class RideDao implements IRideDao {
 
     await _database.transaction((txn) async {
       await _rideAttendeeStore.delete(txn,finder: finder);
-      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.uuid}").toList())
+      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
           .put(txn, attendees.map((a)=> a.toMap()).toList());
       ride.numberOfAttendees = attendees.length;
     });
@@ -103,12 +103,12 @@ class RideDao implements IRideDao {
 
   @override
   Future<bool> addAttendeeToRide(Ride ride, RideAttendee attendee) async {
-    assert(ride != null && ride.date != null && attendee != null && attendee.uuid != null && attendee.uuid.isNotEmpty);
+    assert(ride != null && ride.date != null && attendee != null && attendee.attendeeId != null && attendee.attendeeId.isNotEmpty);
     final date = ride.date.toIso8601String();
 
-    if(await _rideAttendeeStore.findFirst(_database,finder: Finder(filter: Filter.byKey("$date${attendee.uuid}"))) == null){
+    if(await _rideAttendeeStore.findFirst(_database,finder: Finder(filter: Filter.byKey("$date${attendee.attendeeId}"))) == null){
       await _database.transaction((txn)async {
-        await _rideAttendeeStore.record("$date${attendee.uuid}").put(txn, attendee.toMap());
+        await _rideAttendeeStore.record("$date${attendee.attendeeId}").put(txn, attendee.toMap());
         ride.numberOfAttendees++;
       });
       return true;

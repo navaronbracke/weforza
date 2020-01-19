@@ -15,7 +15,7 @@ class Attendee {
   final String image;
 
   static Attendee of(String uuid,Map<String,dynamic> values){
-    assert(uuid != null && uuid.isEmpty && values != null);
+    assert(values != null);
     return Attendee(uuid,values["firstname"],values["lastname"],values["profile"]);
   }
 

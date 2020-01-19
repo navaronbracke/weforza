@@ -28,12 +28,10 @@ abstract class IRideDao {
   Future<List<DateTime>> getRideDates();
 
   ///Add the attendee with the given id to the ride.
-  ///Returns whether it was added.
-  Future<bool> addAttendeeToRide(Ride ride, RideAttendee attendee);
+  Future<void> addAttendeeToRide(Ride ride, RideAttendee attendee);
 
   ///Remove the attendee with the given id from the ride.
-  ///Returns whether it was removed.
-  Future<bool> removeAttendeeFromRide(Ride ride, String uuid);
+  Future<void> removeAttendeeFromRide(Ride ride, String uuid);
 }
 
 class RideDao implements IRideDao {
@@ -102,32 +100,24 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<bool> addAttendeeToRide(Ride ride, RideAttendee attendee) async {
+  Future<void> addAttendeeToRide(Ride ride, RideAttendee attendee) async {
     assert(ride != null && ride.date != null && attendee != null && attendee.attendeeId != null && attendee.attendeeId.isNotEmpty);
     final date = ride.date.toIso8601String();
 
-    if(await _rideAttendeeStore.findFirst(_database,finder: Finder(filter: Filter.byKey("$date${attendee.attendeeId}"))) == null){
-      await _database.transaction((txn)async {
-        await _rideAttendeeStore.record("$date${attendee.attendeeId}").put(txn, attendee.toMap());
-        ride.numberOfAttendees++;
-      });
-      return true;
-    }else{
-      return false;
-    }
+    await _database.transaction((txn) async {
+      await _rideAttendeeStore.record("$date${attendee.attendeeId}").put(txn, attendee.toMap());
+      ride.numberOfAttendees++;
+    });
   }
 
   @override
-  Future<bool> removeAttendeeFromRide(Ride ride, String uuid) async {
+  Future<void> removeAttendeeFromRide(Ride ride, String uuid) async {
     assert(ride != null && ride.date != null && uuid != null);
     final date = ride.date.toIso8601String();
-    if((await _rideAttendeeStore.findFirst(_database,finder: Finder(filter: Filter.byKey("$date$uuid"))) != null)){
-      await _database.transaction((txn)async {
-        await _rideAttendeeStore.delete(txn,finder: Finder(filter: Filter.byKey("$date$uuid")));
-        ride.numberOfAttendees--;
-      });
-      return true;
-    }
-    return false;
+
+    await _database.transaction((txn) async {
+      await _rideAttendeeStore.delete(txn,finder: Finder(filter: Filter.byKey("$date$uuid")));
+      ride.numberOfAttendees--;
+    });
   }
 }

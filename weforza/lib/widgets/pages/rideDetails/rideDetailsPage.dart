@@ -29,6 +29,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   final RideDetailsBloc _bloc;
 
+  Future<List<AttendeeItem>> attendeesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    attendeesFuture = _bloc.getRideAttendees(widget.ride.date);
+  }
+
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
@@ -42,7 +50,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             icon: Icon(Icons.person_pin),
             onPressed: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
-              //TODO observe value, reload attendees if true
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
@@ -57,7 +64,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
         ],
       ),
       body: FutureBuilder<List<AttendeeItem>>(
-        future: _bloc.getRideAttendees(widget.ride.date),
+        future: attendeesFuture,
         builder: (context,snapshot){
           if(snapshot.hasError){
             return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
@@ -92,7 +99,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               children: <Widget>[
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
-                  //TODO observe value, reload attendees if true
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
@@ -112,7 +118,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       child: SafeArea(
         bottom: false,
         child: FutureBuilder<List<AttendeeItem>>(
-          future: _bloc.getRideAttendees(widget.ride.date),
+          future: attendeesFuture,
           builder: (context,snapshot){
             if(snapshot.hasError){
               return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));

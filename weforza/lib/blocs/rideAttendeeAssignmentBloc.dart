@@ -75,14 +75,14 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   @override
   void select(RideAttendeeAssignmentItemBloc item) async {
     await _rideRepository.addAttendeeToRide(ride, RideAttendee(ride.date,item.attendee.uuid)).then((value){
-      if(value){ item.selected = true; }
+      item.selected = true;
     },onError: (error)=> _messageController.addError(error));
   }
 
   @override
   void unSelect(RideAttendeeAssignmentItemBloc item) async {
     await _rideRepository.removeAttendee(ride, item.attendee.uuid).then((value){
-      if(value){ item.selected = false; }
+      item.selected = false;
     },onError: (error) => _messageController.addError(error));
   }
 

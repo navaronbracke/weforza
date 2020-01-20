@@ -2,23 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/provider/rideProvider.dart';
 
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget implements PlatformAwareWidget {
-  RideListItem(this.ride,this._callback): assert(ride != null && _callback != null);
+  RideListItem(this.ride): assert(ride != null);
 
   final Ride ride;
-
-  ///A callback that is fired when the rides should reload.
-  final Function(bool reload) _callback;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
     child: PlatformAwareWidgetBuilder.build(context, this),
-    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (context)=> RideDetailsPage(ride))).then((value) => _callback(value)),
+    onTap: (){
+      Provider.of<RideProvider>(context).selectedRide = ride;
+      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> RideDetailsPage()));
+    },
   );
 
   @override

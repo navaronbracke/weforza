@@ -1,26 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/provider/memberProvider.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
-  MemberDetailsPage(this.memberItem): assert(memberItem != null);
-
-  final MemberItem memberItem;
 
   @override
-  _MemberDetailsPageState createState() => _MemberDetailsPageState(MemberDetailsBloc(InjectionContainer.get<MemberRepository>()));
+  _MemberDetailsPageState createState() => _MemberDetailsPageState(
+      MemberDetailsBloc(InjectionContainer.get<MemberRepository>(),InjectionContainer.get<DeviceRepository>())
+  );
 }
 
 ///This is the [State] class for [MemberDetailsPage].
@@ -50,24 +52,35 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   }
 
   ///Build the list of devices from [_bloc.devices].
-  Widget _buildDevicesList(Widget empty){
-    if(widget.memberItem.devices.isEmpty){
-      return empty;
-    }else{
-      return ListView.builder(
-        itemCount: widget.memberItem.devices.length,
-        itemBuilder: (context, index){
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(widget.memberItem.devices[index]),
-          );
-        },
-      );
-    }
+  Widget _buildDevicesList(String uuid){
+    return FutureBuilder<List<String>>(
+      future: _bloc.getMemberDevices(uuid),
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          final list = snapshot.data;
+          if(list.isEmpty){
+            return Center(
+              child: Text(S.of(context).MemberDetailsNoDevices),
+            );
+          }else{
+            return ListView.builder(itemBuilder: (context,index){
+              //TODO item with buttons
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(list[index]),
+              );
+            }, itemCount: list.length);
+          }
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
+    );
   }
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
+    final member = Provider.of<MemberProvider>(context).selectedMember;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
@@ -80,15 +93,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: (){
-              showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
-              .then((value){
-                //Member was deleted, go back to list
-                if(value != null && value){
-                  Navigator.pop(context,true);
-                }
-              });
-            },
+            onPressed: ()=> showDialog(context: context, builder: (context)=> DeleteMemberDialog(this,member.uuid)),
           ),
         ],
       ),
@@ -100,20 +105,20 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10,0,0,0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
                       SizedBox(height: 10),
                       FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(widget.memberItem.uuid),
+                        future: _bloc.getAttendingCount(member.uuid),
                         builder: (context,snapshot){
                           if(snapshot.connectionState == ConnectionState.done){
                             if(snapshot.hasError){
@@ -138,7 +143,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                   Expanded(
-                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                    child: _buildDevicesList(member.uuid),
                   ),
                 ],
               ),
@@ -151,6 +156,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
+    final member = Provider.of<MemberProvider>(context).selectedMember;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
@@ -163,15 +169,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: (){
-              showDialog(context: context, builder: (context)=> DeleteMemberDialog(this))
-                  .then((value){
-                    //Member was deleted, go back to list
-                    if(value != null && value){
-                      Navigator.pop(context,true);
-                    }
-                  });
-            },
+            onPressed: ()=> showDialog(context: context, builder: (context)=> DeleteMemberDialog(this,member.uuid)),
           ),
         ],
       ),
@@ -184,18 +182,18 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
+                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                     SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
+                    Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
                     SizedBox(height: 10),
                     FutureBuilder<int>(
-                      future: _bloc.getAttendingCount(widget.memberItem.uuid),
+                      future: _bloc.getAttendingCount(member.uuid),
                       builder: (context,snapshot){
                         if(snapshot.connectionState == ConnectionState.done){
                           if(snapshot.hasError){
@@ -218,7 +216,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                 Expanded(
-                  child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                  child: _buildDevicesList(member.uuid),
                 ),
               ],
             ),
@@ -230,6 +228,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
+    final member = Provider.of<MemberProvider>(context).selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -244,15 +243,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 //TODO goto edit
                 }),
                 SizedBox(width: 30),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
-                  .then((value){
-                    //Member was deleted, go back to list
-                    if(value != null && value){
-                      Navigator.pop(context,true);
-                    }
-                  });
-                }),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
               ],
             ),
           ],
@@ -268,20 +260,20 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                    child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
+                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10,0,0,0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                        Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                        Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                         SizedBox(height: 10),
-                        Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
+                        Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
                         SizedBox(height: 10),
                         FutureBuilder<int>(
-                          future: _bloc.getAttendingCount(widget.memberItem.uuid),
+                          future: _bloc.getAttendingCount(member.uuid),
                           builder: (context,snapshot){
                             if(snapshot.connectionState == ConnectionState.done){
                               if(snapshot.hasError){
@@ -306,7 +298,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                   children: <Widget>[
                     Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                     Expanded(
-                      child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                      child: _buildDevicesList(member.uuid),
                     ),
                   ],
                 ),
@@ -320,6 +312,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
+    final member = Provider.of<MemberProvider>(context).selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -334,15 +327,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 //TODO goto edit
                 }),
                 SizedBox(width: 30),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
-                  .then((value){
-                    //Member was deleted, go back to list
-                    if(value != null && value){
-                      Navigator.pop(context,true);
-                    }
-                  });
-                }),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
+                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
               ],
             ),
           ],
@@ -359,18 +345,18 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ProfileImage(widget.memberItem.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
+                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(widget.memberItem.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(widget.memberItem.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                       SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(widget.memberItem.phone)),
+                      Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
                       SizedBox(height: 10),
                       FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(widget.memberItem.uuid),
+                        future: _bloc.getAttendingCount(member.uuid),
                         builder: (context,snapshot){
                           if(snapshot.connectionState == ConnectionState.done){
                             if(snapshot.hasError){
@@ -393,7 +379,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
                   Expanded(
-                    child: _buildDevicesList(_MemberDetailsDevicesEmpty()),
+                    child: _buildDevicesList(member.uuid),
                   ),
                 ],
               ),
@@ -405,22 +391,5 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   }
 
   @override
-  deleteMember() async => await _bloc.deleteMember(widget.memberItem.uuid);
-}
-
-///This [Widget] is displayed when a member that is displayed in [MemberDetailsPage] has no devices.
-class _MemberDetailsDevicesEmpty extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(S.of(context).MemberDetailsNoDevices),
-          Text(S.of(context).MemberDetailsAddDevicesInstruction),
-        ],
-      ),
-    );
-  }
+  deleteMember(String uuid) async => await _bloc.deleteMember(uuid);
 }

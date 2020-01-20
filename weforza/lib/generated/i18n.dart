@@ -49,7 +49,6 @@ class S implements WidgetsLocalizations {
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogErrorDescription => "Could not delete member";
   String get MemberDeleteDialogTitle => "Delete Member";
-  String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
   String get MemberDetailsLoadPictureError => "Could not load profile picture";
   String get MemberDetailsNoDevices => "This member has no devices yet";
   String get MemberDetailsTitle => "Details";
@@ -140,8 +139,6 @@ class $nl extends S {
   String get MondayPrefix => "Ma";
   @override
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
-  @override
-  String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
   @override
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   @override

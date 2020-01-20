@@ -6,15 +6,16 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 abstract class MemberDeleteHandler {
-  Future<void> deleteMember();
+  Future<void> deleteMember(String uuid);
 }
 
 ///This [Widget] is the dialog for deleting a member in [MemberDetailsPage].
 class DeleteMemberDialog extends StatefulWidget {
-  DeleteMemberDialog(this._handler): assert(_handler != null);
+  DeleteMemberDialog(this._handler,this._memberId): assert(_handler != null && _memberId != null);
 
   ///The Bloc that handles a submit.
   final MemberDeleteHandler _handler;
+  final String _memberId;
 
   @override
   _DeleteMemberDialogState createState() => _DeleteMemberDialogState();
@@ -37,21 +38,24 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
         FlatButton(
           child: Text(S.of(context).DialogOk),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
       ]: <Widget>[
         FlatButton(
           child: Text(S.of(context).DialogCancel),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
         FlatButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            await widget._handler.deleteMember().then((_){
-              Navigator.pop(context,true);
+            await widget._handler.deleteMember(widget._memberId).then((_){
+              final navigator = Navigator.of(context);
+              //Pop both the dialog and the detail screen
+              navigator.pop();
+              navigator.pop();
             },onError: (error){
               setState(() {
                 hasError = true;
@@ -72,21 +76,24 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
         CupertinoButton(
           child: Text(S.of(context).DialogOk),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
       ]: <Widget>[
         CupertinoButton(
           child: Text(S.of(context).DialogCancel),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
         CupertinoButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            await widget._handler.deleteMember().then((_){
-              Navigator.pop(context,true);
+            await widget._handler.deleteMember(widget._memberId).then((_){
+              final navigator = Navigator.of(context);
+              //Pop both the dialog and the detail screen
+              navigator.pop();
+              navigator.pop();
             },onError: (error){
               setState(() {
                 hasError = true;

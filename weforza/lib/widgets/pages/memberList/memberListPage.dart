@@ -62,6 +62,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<MemberProvider>(context).loadMembersIfNotLoaded();
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 

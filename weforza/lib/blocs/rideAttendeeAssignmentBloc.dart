@@ -15,10 +15,9 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAttendeeSelector {
-  RideAttendeeAssignmentBloc(this._rideRepository,this._memberRepository,this.ride):
-        assert(_memberRepository != null && _rideRepository != null && ride != null);
-  
-  final Ride ride;
+  RideAttendeeAssignmentBloc(this._rideRepository,this._memberRepository):
+        assert(_memberRepository != null && _rideRepository != null);
+
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
 
@@ -37,7 +36,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   Future<void> get scanFuture => _scanCompleter?.future;
   Completer<void> _scanCompleter;
 
-  Future<void> loadMembers() async {
+  Future<void> loadMembers(Ride ride) async {
     final members = await _memberRepository.getMembers();
     final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
     items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
@@ -60,7 +59,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
 
   void onScanErrorDismissed() => _displayModeController.add(RideAttendeeDisplayMode.IDLE);
 
-  void onSubmit() async {
+  void onSubmit(Ride ride) async {
     _submittingController.add(true);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()

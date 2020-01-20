@@ -12,6 +12,12 @@ class MemberProvider {
 
   Future<List<MemberItem>> membersFuture;
 
+  void loadMembersIfNotLoaded(){
+    if(membersFuture == null){
+      loadMembers();
+    }
+  }
+
   void loadMembers() async {
     List<Member> members = await _repository.getMembers();
     List<Future<MemberItem>> items = members.map((member) async => MemberItem(member,await _repository.loadProfileImageFromDisk(member.profileImageFilePath))).toList();

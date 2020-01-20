@@ -26,12 +26,6 @@ abstract class IRideDao {
 
   ///Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
-
-  ///Add the attendee with the given id to the ride.
-  Future<void> addAttendeeToRide(Ride ride, RideAttendee attendee);
-
-  ///Remove the attendee with the given id from the ride.
-  Future<void> removeAttendeeFromRide(Ride ride, String uuid);
 }
 
 class RideDao implements IRideDao {
@@ -97,27 +91,5 @@ class RideDao implements IRideDao {
   Future<List<DateTime>> getRideDates() async {
     final rides = await _rideStore.findKeys(_database);
     return rides.map((ride) => DateTime.parse(ride)).toList();
-  }
-
-  @override
-  Future<void> addAttendeeToRide(Ride ride, RideAttendee attendee) async {
-    assert(ride != null && ride.date != null && attendee != null && attendee.attendeeId != null && attendee.attendeeId.isNotEmpty);
-    final date = ride.date.toIso8601String();
-
-    await _database.transaction((txn) async {
-      await _rideAttendeeStore.record("$date${attendee.attendeeId}").put(txn, attendee.toMap());
-      ride.numberOfAttendees++;
-    });
-  }
-
-  @override
-  Future<void> removeAttendeeFromRide(Ride ride, String uuid) async {
-    assert(ride != null && ride.date != null && uuid != null);
-    final date = ride.date.toIso8601String();
-
-    await _database.transaction((txn) async {
-      await _rideAttendeeStore.delete(txn,finder: Finder(filter: Filter.byKey("$date$uuid")));
-      ride.numberOfAttendees--;
-    });
   }
 }

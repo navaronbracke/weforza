@@ -65,6 +65,7 @@
   "RideAttendeeAssignmentGenericError": "Something went wrong",
   "RideAttendeeAssignmentScanningFailed": "Something went wrong during the scan",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
+  "RideAttendeeAssignmentConfirm": "Save",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

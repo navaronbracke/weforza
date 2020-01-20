@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/memberListBloc.dart';
+import 'package:provider/provider.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
-import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
@@ -12,60 +10,38 @@ import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/provider/memberProvider.dart';
 
 ///This [Widget] will display a list of members.
 class MemberListPage extends StatefulWidget {
   @override
-  _MemberListPageState createState() => _MemberListPageState(MemberListBloc(InjectionContainer.get<MemberRepository>()));
+  _MemberListPageState createState() => _MemberListPageState();
 }
 
 ///This is the [State] class for [MemberListPage].
 class _MemberListPageState extends State<MemberListPage> implements PlatformAwareWidget {
-  _MemberListPageState(this._bloc): assert(_bloc != null) {
-    _onReload = (bool reload){
-      if(reload != null && reload){
-        setState(() {
-          membersFuture = _bloc.loadMembers();
-        });
-      }
-    };
-  }
-
-  final MemberListBloc _bloc;
-
-  Future<List<MemberItem>> membersFuture;
-  ///This callback triggers a reload.
-  Function _onReload;
-
-  @override
-  void initState() {
-    super.initState();
-    membersFuture = _bloc.loadMembers();
-  }
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
+    final MemberProvider provider = Provider.of<MemberProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberListTitle),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
-              if(_onReload != null){
-                _onReload(value);
-              }
-            }),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
           ),
         ],
       ),
-      body: _listBuilder(membersFuture, MemberListLoading(),
+      body: _listBuilder(provider.membersFuture, MemberListLoading(),
           MemberListError(), MemberListEmpty()),
     );
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
+    final MemberProvider provider = Provider.of<MemberProvider>(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -73,18 +49,14 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
           children: <Widget>[
             Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
             CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((value){
-                if(_onReload != null){
-                  _onReload(value);
-                }
-              });
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()));
             }),
           ],
         ),
       ),
       child: SafeArea(
         bottom: false,
-        child: _listBuilder(membersFuture, MemberListLoading(),
+        child: _listBuilder(provider.membersFuture, MemberListLoading(),
             MemberListError(), MemberListEmpty()),
       ),
     );
@@ -108,7 +80,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
             return (data == null || data.isEmpty) ? empty : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberListItem(data[index],_onReload));
+                    MemberListItem(data[index]));
           }
         } else {
           return loading;

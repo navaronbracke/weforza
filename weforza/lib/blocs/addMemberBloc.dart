@@ -134,7 +134,7 @@ class AddMemberBloc extends Bloc {
     await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
       _alreadyExistsController.add(exists);
       if(!exists){
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,List(),(image == null) ? null : image.path)).then((value){
+        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(image == null) ? null : image.path)).then((value){
           memberCreated = true;
         },onError: (error){
           _alreadyExistsController.addError(Exception("Failed to add member"));

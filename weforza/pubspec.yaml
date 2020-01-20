@@ -30,6 +30,9 @@ dependencies:
   # This package allows the use of Dependency Injection.
   flutter_simple_dependency_injection: ^1.0.1
 
+  # This package provides provider inherited widgets.
+  provider: ^4.0.2
+
   # The following dependency provides local persistence
   sembast: ^2.1.0
 

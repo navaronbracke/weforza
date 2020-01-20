@@ -17,20 +17,14 @@ class RideAttendeeAssignmentItemBloc extends Bloc {
   String get firstName => attendee.firstName;
   String get lastName => attendee.lastName;
 
-  bool _busy = false;
-
   @override
   void dispose() {}
 
   void onSelected() {
-    if(!_busy){
-      _busy = true;
-      if(selected){
-        selector.unSelect(this);
-      }else{
-        selector.select(this);
-      }
-      _busy = false;
+    if(selected){
+      selector.unSelect(this);
+    }else{
+      selector.select(this);
     }
   }
 }

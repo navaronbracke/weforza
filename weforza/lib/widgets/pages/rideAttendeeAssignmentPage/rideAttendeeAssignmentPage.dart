@@ -10,6 +10,7 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -90,6 +91,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                         itemCount: _bloc.items.length,
                     ),
                   ),
+                  RideAttendeeAssignmentSubmit(() => _bloc.onSubmit()),
                 ],
               ),
             );

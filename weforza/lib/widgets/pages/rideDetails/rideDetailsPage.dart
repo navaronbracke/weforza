@@ -49,7 +49,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride))).then((_){
+                setState(() {
+                  attendeesFuture = _bloc.getRideAttendees(widget.ride.date);
+                });
+              });
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
@@ -98,7 +102,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride)));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(widget.ride))).then((_){
+                    setState(() {
+                      attendeesFuture = _bloc.getRideAttendees(widget.ride.date);
+                    });
+                  });
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){

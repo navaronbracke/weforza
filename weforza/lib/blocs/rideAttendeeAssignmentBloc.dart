@@ -22,15 +22,17 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
 
-  final StreamController<String> _messageController = BehaviorSubject();
-  Stream<String> get messageStream => _messageController.stream;
-
   final StreamController<RideAttendeeDisplayMode> _displayModeController = BehaviorSubject();
   Stream<RideAttendeeDisplayMode> get displayModeStream => _displayModeController.stream;
+
+  final StreamController<bool> _submittingController = BehaviorSubject();
+  Stream<bool> get submitStream => _submittingController.stream;
 
   String get titleDateFormat => "d/M/yyyy";
 
   List<RideAttendeeAssignmentItemBloc> items;
+
+  List<String> _rideAttendees = List();
 
   Future<void> get scanFuture => _scanCompleter?.future;
   Completer<void> _scanCompleter;
@@ -39,6 +41,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
     final members = await _memberRepository.getMembers();
     final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
     items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
+    _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.attendee.uuid).toList());
     _displayModeController.add(RideAttendeeDisplayMode.IDLE);
   }
 
@@ -57,6 +60,15 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
 
   void onScanErrorDismissed() => _displayModeController.add(RideAttendeeDisplayMode.IDLE);
 
+  void onSubmit() async {
+    _submittingController.add(true);
+    await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
+            (uuid)=> RideAttendee(ride.date,uuid)).toList()
+    ).then((_){
+      _submittingController.add(false);
+    },onError: (error)=> _submittingController.addError(error));
+  }
+
   @override
   void startScan() {
     _displayModeController.add(RideAttendeeDisplayMode.SCANNING);
@@ -73,22 +85,24 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   }
 
   @override
-  void select(RideAttendeeAssignmentItemBloc item) async {
-    await _rideRepository.addAttendeeToRide(ride, RideAttendee(ride.date,item.attendee.uuid)).then((value){
+  void select(RideAttendeeAssignmentItemBloc item) {
+    if(!_rideAttendees.contains(item.attendee.uuid)){
+      _rideAttendees.add(item.attendee.uuid);
       item.selected = true;
-    },onError: (error)=> _messageController.addError(error));
+    }
   }
 
   @override
-  void unSelect(RideAttendeeAssignmentItemBloc item) async {
-    await _rideRepository.removeAttendee(ride, item.attendee.uuid).then((value){
+  void unSelect(RideAttendeeAssignmentItemBloc item) {
+    if(_rideAttendees.contains(item.attendee.uuid)){
+      _rideAttendees.remove(item.attendee.uuid);
       item.selected = false;
-    },onError: (error) => _messageController.addError(error));
+    }
   }
 
   @override
   void dispose() {
-    _messageController.close();
     _displayModeController.close();
+    _submittingController.close();
   }
 }

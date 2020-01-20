@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendeeDisplayMode.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -13,16 +13,14 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/provider/rideProvider.dart';
 
 
 class RideAttendeeAssignmentPage extends StatefulWidget {
-  RideAttendeeAssignmentPage(this.ride): assert(ride != null);
-
-  final Ride ride;
 
   @override
   _RideAttendeeAssignmentPageState createState() => _RideAttendeeAssignmentPageState(
-      RideAttendeeAssignmentBloc(InjectionContainer.get<RideRepository>(),InjectionContainer.get<MemberRepository>(),ride)
+      RideAttendeeAssignmentBloc(InjectionContainer.get<RideRepository>(),InjectionContainer.get<MemberRepository>())
   );
 }
 
@@ -36,6 +34,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
+    final ride = Provider.of<RideProvider>(context).selectedRide;
     return StreamBuilder<RideAttendeeDisplayMode>(
       stream: _bloc.displayModeStream,
       initialData: RideAttendeeDisplayMode.MEMBERS,
@@ -47,7 +46,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                   S.of(context).RideAttendeeAssignmentTitle(
                       DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                           .languageCode)
-                          .format(widget.ride.date))
+                          .format(ride.date))
               ),
             ),
             body: Center(child: Text(S.of(context).RideAttendeeAssignmentGenericError)),
@@ -60,7 +59,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                     S.of(context).RideAttendeeAssignmentTitle(
                         DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                             .languageCode)
-                            .format(widget.ride.date))
+                            .format(ride.date))
                 ),
                 actions: _bloc.items.isEmpty ? []: <Widget>[
                   IconButton(
@@ -91,12 +90,12 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                         itemCount: _bloc.items.length,
                     ),
                   ),
-                  RideAttendeeAssignmentSubmit(() => _bloc.onSubmit()),
+                  RideAttendeeAssignmentSubmit(() => _bloc.onSubmit(ride)),
                 ],
               ),
             );
             case RideAttendeeDisplayMode.MEMBERS: return FutureBuilder<void>(
-              future: _bloc.loadMembers(),
+              future: _bloc.loadMembers(ride),
               builder: (context,snapshot){
                 if(snapshot.hasError){
                   return Scaffold(
@@ -105,7 +104,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                           S.of(context).RideAttendeeAssignmentTitle(
                               DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                                   .languageCode)
-                                  .format(widget.ride.date))
+                                  .format(ride.date))
                       ),
                     ),
                     body: Center(
@@ -119,7 +118,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                           S.of(context).RideAttendeeAssignmentTitle(
                               DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                                   .languageCode)
-                                  .format(widget.ride.date))
+                                  .format(ride.date))
                       ),
                     ),
                     body: Center(child: PlatformAwareLoadingIndicator()),
@@ -137,7 +136,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                           S.of(context).RideAttendeeAssignmentTitle(
                               DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                                   .languageCode)
-                                  .format(widget.ride.date))
+                                  .format(ride.date))
                       ),
                     ),
                     body: Center(
@@ -160,7 +159,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                           S.of(context).RideAttendeeAssignmentTitle(
                               DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                                   .languageCode)
-                                  .format(widget.ride.date))
+                                  .format(ride.date))
                       ),
                     ),
                     body: RideAttendeeAssignmentScanning(_bloc),
@@ -174,7 +173,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                     S.of(context).RideAttendeeAssignmentTitle(
                         DateFormat(_bloc.titleDateFormat,Localizations.localeOf(context)
                             .languageCode)
-                            .format(widget.ride.date))
+                            .format(ride.date))
                 ),
               ),
               body: Center(child: Text(S.of(context).RideAttendeeAssignmentGenericError)),

@@ -11,6 +11,12 @@ class RideProvider {
 
   Future<List<Ride>> ridesFuture;
 
+  void loadRidesIfNotLoaded(){
+    if(ridesFuture == null){
+      loadRides();
+    }
+  }
+
   void loadRides(){
     ridesFuture = _repository.getRides();
   }

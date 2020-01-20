@@ -30,6 +30,7 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
       },
       child: Card(
         color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedBackgroundColor : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor,
+        elevation: 2,
         child: Container(
           child: Padding(
             padding: EdgeInsets.all(10),
@@ -79,6 +80,13 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
       child: Container(
         decoration: BoxDecoration(
           color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedBackgroundColor : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+                color: Colors.black54,
+                blurRadius: 15.0,
+                offset: Offset(0.0, 0.75)
+            )
+          ],
         ),
         child: Padding(
           padding: EdgeInsets.all(10),

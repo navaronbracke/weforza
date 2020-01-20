@@ -47,9 +47,12 @@ class _RideAttendeeAssignmentScanningState extends State<RideAttendeeAssignmentS
         children: <Widget>[
           Expanded(
             flex: 7,
-            child: AnimatedBuilder(
-              animation: _colorTween,
-              builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+            child: AspectRatio(
+              aspectRatio: 100/100,
+              child: AnimatedBuilder(
+                animation: _colorTween,
+                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+              ),
             ),
           ),
           Flexible(
@@ -75,9 +78,12 @@ class _RideAttendeeAssignmentScanningState extends State<RideAttendeeAssignmentS
         children: <Widget>[
           Expanded(
             flex: 7,
-            child: AnimatedBuilder(
-              animation: _colorTween,
-              builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+            child: AspectRatio(
+              aspectRatio: 100/100,
+              child: AnimatedBuilder(
+                animation: _colorTween,
+                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
+              ),
             ),
           ),
           Flexible(

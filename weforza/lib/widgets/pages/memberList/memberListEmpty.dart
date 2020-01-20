@@ -19,6 +19,4 @@ class MemberListEmpty extends StatelessWidget {
       ),
     );
   }
-
-
 }

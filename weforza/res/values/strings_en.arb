@@ -15,7 +15,6 @@
 
   "MemberListTitle": "Members",
   "MemberListLoadingFailed": "Could not load members",
-  "MemberListLoadingInProgress": "Loading members...",
   "MemberListNoItems": "There are no members to display",
   "MemberListAddMemberInstruction": "Add members by using the menu above",
 

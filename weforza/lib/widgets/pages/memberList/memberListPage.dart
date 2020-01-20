@@ -7,8 +7,8 @@ import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
-import 'package:weforza/widgets/pages/memberList/memberListLoading.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/provider/memberProvider.dart';
 
@@ -34,8 +34,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
           ),
         ],
       ),
-      body: _listBuilder(provider.membersFuture, MemberListLoading(),
-          MemberListError(), MemberListEmpty()),
+      body: _listBuilder(provider.membersFuture),
     );
   }
 
@@ -56,8 +55,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
       ),
       child: SafeArea(
         bottom: false,
-        child: _listBuilder(provider.membersFuture, MemberListLoading(),
-            MemberListError(), MemberListEmpty()),
+        child: _listBuilder(provider.membersFuture),
       ),
     );
   }
@@ -67,23 +65,22 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
     return PlatformAwareWidgetBuilder.build(context, this);
   }
 
-  FutureBuilder _listBuilder(Future<List<MemberItem>> future, Widget loading,
-      Widget error, Widget empty) {
+  Widget _listBuilder(Future<List<MemberItem>> future) {
     return FutureBuilder<List<MemberItem>>(
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return error;
+            return MemberListError();
           } else {
             List<MemberItem> data = snapshot.data;
-            return (data == null || data.isEmpty) ? empty : ListView.builder(
+            return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
                     MemberListItem(data[index]));
           }
         } else {
-          return loading;
+          return Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );

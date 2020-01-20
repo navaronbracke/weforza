@@ -56,7 +56,6 @@ class S implements WidgetsLocalizations {
   String get MemberDetailsWasPresentCountError => "Unknown";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
   String get MemberListLoadingFailed => "Could not load members";
-  String get MemberListLoadingInProgress => "Loading members...";
   String get MemberListNoItems => "There are no members to display";
   String get MemberListTitle => "Members";
   String get MondayPrefix => "Mon";
@@ -187,8 +186,6 @@ class $nl extends S {
   String get MemberDeleteDialogErrorDescription => "Kon lid niet verwijderen";
   @override
   String get AppName => "WeForza";
-  @override
-  String get MemberListLoadingInProgress => "Leden aan het ophalen...";
   @override
   String get RideDetailsLoadAttendeesError => "Kon de aanwezigen niet laden";
   @override

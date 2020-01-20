@@ -15,7 +15,6 @@
 
   "MemberListTitle": "Leden",
   "MemberListLoadingFailed": "Kon leden niet ophalen",
-  "MemberListLoadingInProgress": "Leden aan het ophalen...",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 

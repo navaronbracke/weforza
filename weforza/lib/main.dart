@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
@@ -35,7 +36,7 @@ class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget 
   Widget build(BuildContext context){
     return MultiProvider(
       providers: [
-        Provider<RideProvider>(create: (_) => RideProvider()),
+        Provider<RideProvider>(create: (_) => RideProvider(InjectionContainer.get<RideRepository>())),
         Provider<MemberProvider>(create: (_) => MemberProvider(InjectionContainer.get<MemberRepository>()))
       ],
       child: PlatformAwareWidgetBuilder.build(context, this),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
@@ -12,6 +13,7 @@ import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
+import 'package:weforza/widgets/provider/memberProvider.dart';
 
 ///This [Widget] represents the form for adding a member.
 class AddMemberPage extends StatefulWidget {
@@ -268,7 +270,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 if(await _bloc.addMember()){
-                                  Navigator.pop(context,true);
+                                  Provider.of<MemberProvider>(context).loadMembers();
+                                  Navigator.pop(context);
                                 }
                               }
                             },
@@ -433,7 +436,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   onPressed: () async {
                                     if(iosAllFormInputValidator()){
                                       if(await _bloc.addMember()){
-                                        Navigator.pop(context,true);
+                                        Provider.of<MemberProvider>(context).loadMembers();
+                                        Navigator.pop(context);
                                       }
                                     }else{
                                       setState(() {});
@@ -588,7 +592,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                               onPressed: () async {
                                 if(iosAllFormInputValidator()){
                                   if(await _bloc.addMember()){
-                                    Navigator.pop(context,true);
+                                    Provider.of<MemberProvider>(context).loadMembers();
+                                    Navigator.pop(context);
                                   }
                                 }else{
                                   setState(() {});
@@ -731,7 +736,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               if(await _bloc.addMember()){
-                                Navigator.pop(context,true);
+                                Provider.of<MemberProvider>(context).loadMembers();
+                                Navigator.pop(context);
                               }
                             }
                           },

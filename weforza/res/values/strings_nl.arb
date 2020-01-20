@@ -38,7 +38,6 @@
   "MemberDetailsWasPresentCountCalculating": "Berekenen...",
   "MemberDetailsWasPresentCountError": "Onbekend",
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
-  "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",

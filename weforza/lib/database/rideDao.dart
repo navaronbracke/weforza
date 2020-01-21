@@ -80,10 +80,15 @@ class RideDao implements IRideDao {
     final finder = Finder(filter: Filter.equals("date", date));
 
     await _database.transaction((txn) async {
+      //Delete old ones, replace by new ones.
       await _rideAttendeeStore.delete(txn,finder: finder);
       await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
           .put(txn, attendees.map((a)=> a.toMap()).toList());
-      ride.numberOfAttendees = attendees.length;
+      //create the updated ride object from the existing ride, but with the new count.
+      final updatedRide = ride.toMap();
+      updatedRide["attendees"] = attendees.length;
+      //update the ride.
+      await _rideStore.update(txn, updatedRide,finder: Finder(filter: Filter.byKey(date)));
     });
   }
 

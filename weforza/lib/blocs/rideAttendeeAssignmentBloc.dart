@@ -11,6 +11,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/rideAttendeeDisplayMode.dart';
 import 'package:weforza/model/rideAttendeeSelector.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
@@ -59,13 +60,17 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
 
   void onScanErrorDismissed() => _displayModeController.add(RideAttendeeDisplayMode.IDLE);
 
-  void onSubmit(Ride ride) async {
+  Future<bool> onSubmit(Ride ride) async {
+    bool result = false;
     _submittingController.add(true);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
+      RideProvider.reloadRides = true;
       _submittingController.add(false);
+      result = true;
     },onError: (error)=> _submittingController.addError(error));
+    return result;
   }
 
   @override

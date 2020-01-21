@@ -27,8 +27,6 @@ abstract class IMemberDao {
   ///Get the [Attendee]s of a given ride.
   ///This method is intended for use with a [Ride] detail page.
   Future<List<Attendee>> getRideAttendees(DateTime date);
-
-  //TODO add /edit /delete device for member
 }
 
 ///This class is an implementation of [IMemberDao].

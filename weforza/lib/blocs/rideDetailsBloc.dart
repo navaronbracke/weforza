@@ -12,8 +12,7 @@ class RideDetailsBloc extends Bloc {
   final MemberRepository _memberRepository;
   final RideRepository _rideRepository;
 
-
-  Future<List<AttendeeItem>> getRideAttendees(DateTime date) async {
+  Future<List<AttendeeItem>> loadRideAttendees(DateTime date) async {
     List<Attendee> attendees = await _memberRepository.getRideAttendees(date);
     List<Future<AttendeeItem>> items = attendees.map((attendee) async =>
         AttendeeItem(attendee.uuid,attendee.firstname,attendee.lastname,await _memberRepository.loadProfileImageFromDisk(attendee.image))).toList();

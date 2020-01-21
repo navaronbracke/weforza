@@ -1,17 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
-import 'package:weforza/widgets/provider/memberProvider.dart';
-import 'package:weforza/widgets/provider/rideProvider.dart';
 
 // Set up a Production injector and run the app.
 void main() async {
@@ -33,15 +28,7 @@ class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget 
   final String _appName = "WeForza";
 
   @override
-  Widget build(BuildContext context){
-    return MultiProvider(
-      providers: [
-        Provider<RideProvider>(create: (_) => RideProvider(InjectionContainer.get<RideRepository>())),
-        Provider<MemberProvider>(create: (_) => MemberProvider(InjectionContainer.get<MemberRepository>()))
-      ],
-      child: PlatformAwareWidgetBuilder.build(context, this),
-    );
-  }
+  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {

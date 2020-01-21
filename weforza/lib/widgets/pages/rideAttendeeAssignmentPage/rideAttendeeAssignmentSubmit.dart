@@ -43,7 +43,7 @@ class RideAttendeeAssignmentSubmit extends StatelessWidget implements PlatformAw
             }else{
               return snapshot.data ? PlatformAwareLoadingIndicator()
                   : RaisedButton(
-                child: Text(S.of(context).RideAttendeeAssignmentConfirm),
+                child: Text(S.of(context).RideAttendeeAssignmentConfirm,style: TextStyle(color: Colors.white)),
                 onPressed: () => onPressed(),
                 color: ApplicationTheme.rideAttendeeSubmitButtonColor,
               );
@@ -67,7 +67,7 @@ class RideAttendeeAssignmentSubmit extends StatelessWidget implements PlatformAw
             }else{
               return snapshot.data ? PlatformAwareLoadingIndicator()
                   : RaisedButton(
-                      child: Text(S.of(context).RideAttendeeAssignmentConfirm),
+                      child: Text(S.of(context).RideAttendeeAssignmentConfirm,style: TextStyle(color: Colors.white)),
                       onPressed: () => onPressed(),
                       color: ApplicationTheme.rideAttendeeSubmitButtonColor,
                   );
@@ -91,7 +91,7 @@ class RideAttendeeAssignmentSubmit extends StatelessWidget implements PlatformAw
             }else{
               return snapshot.data ? PlatformAwareLoadingIndicator()
                   : CupertinoButton(
-                      child: Text(S.of(context).RideAttendeeAssignmentConfirm),
+                      child: Text(S.of(context).RideAttendeeAssignmentConfirm,style: TextStyle(color: Colors.white)),
                       onPressed: () => onPressed(),
                       color: ApplicationTheme.rideAttendeeSubmitButtonColor,
               );
@@ -115,7 +115,7 @@ class RideAttendeeAssignmentSubmit extends StatelessWidget implements PlatformAw
             }else{
               return snapshot.data ? PlatformAwareLoadingIndicator()
                   : CupertinoButton(
-                    child: Text(S.of(context).RideAttendeeAssignmentConfirm),
+                    child: Text(S.of(context).RideAttendeeAssignmentConfirm,style: TextStyle(color: Colors.white)),
                     onPressed: () => onPressed(),
                     color: ApplicationTheme.rideAttendeeSubmitButtonColor,
               );

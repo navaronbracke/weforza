@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -14,7 +14,6 @@ import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/provider/memberProvider.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
@@ -80,7 +79,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
-    final member = Provider.of<MemberProvider>(context).selectedMember;
+    final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
@@ -156,7 +155,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
-    final member = Provider.of<MemberProvider>(context).selectedMember;
+    final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
@@ -228,7 +227,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
-    final member = Provider.of<MemberProvider>(context).selectedMember;
+    final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -312,7 +311,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
-    final member = Provider.of<MemberProvider>(context).selectedMember;
+    final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/rideAttendeeDisplayMode.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
@@ -13,7 +13,6 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/provider/rideProvider.dart';
 
 
 class RideAttendeeAssignmentPage extends StatefulWidget {
@@ -34,7 +33,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    final ride = Provider.of<RideProvider>(context).selectedRide;
+    final ride = RideProvider.selectedRide;
     return StreamBuilder<RideAttendeeDisplayMode>(
       stream: _bloc.displayModeStream,
       initialData: RideAttendeeDisplayMode.MEMBERS,
@@ -90,7 +89,11 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
                         itemCount: _bloc.items.length,
                     ),
                   ),
-                  RideAttendeeAssignmentSubmit(() => _bloc.onSubmit(ride)),
+                  RideAttendeeAssignmentSubmit(() async {
+                    if(await _bloc.onSubmit(ride)){
+                      Navigator.of(context).pop(true);
+                    }
+                  }),
                 ],
               ),
             );

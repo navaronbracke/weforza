@@ -2,10 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/provider/memberProvider.dart';
 
 abstract class MemberDeleteHandler {
   Future<void> deleteMember(String uuid);
@@ -54,7 +53,7 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
             await widget._handler.deleteMember(widget._memberId).then((_){
-              Provider.of<MemberProvider>(context).loadMembers();
+              MemberProvider.reloadMembers = true;
               final navigator = Navigator.of(context);
               //Pop both the dialog and the detail screen
               navigator.pop();
@@ -93,7 +92,7 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
             await widget._handler.deleteMember(widget._memberId).then((_){
-              Provider.of<MemberProvider>(context).loadMembers();
+              MemberProvider.reloadMembers = true;
               final navigator = Navigator.of(context);
               //Pop both the dialog and the detail screen
               navigator.pop();

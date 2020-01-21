@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/provider/rideProvider.dart';
 
 
 abstract class RideDeleteHandler {
@@ -49,9 +48,8 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
         FlatButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            final provider = Provider.of<RideProvider>(context);
-            await widget._handler.deleteRide(provider.selectedRide.date).then((_){
-              provider.loadRides();
+            await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
+              RideProvider.reloadRides = true;
               final navigator = Navigator.of(context);
               //Pop the dialog and the detail off the stack
               navigator.pop(context);
@@ -89,9 +87,8 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
         CupertinoButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            final provider = Provider.of<RideProvider>(context);
-            await widget._handler.deleteRide(provider.selectedRide.date).then((_){
-              provider.loadRides();
+            await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
+              RideProvider.reloadRides = true;
               final navigator = Navigator.of(context);
               //Pop the dialog and the detail off the stack
               navigator.pop(context);

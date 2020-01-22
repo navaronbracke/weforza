@@ -6,11 +6,11 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/pages/memberList/memberListError.dart';
-import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -101,7 +101,7 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
             return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberListItem(data[index],(){
+                    MemberWithPictureListItem(data[index],(){
                       MemberProvider.selectedMember = data[index];
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())).then((_)=> _onReload());
                     }));

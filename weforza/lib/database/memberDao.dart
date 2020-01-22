@@ -1,7 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/model/RideAttendee.dart';
-import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
@@ -24,9 +23,9 @@ abstract class IMemberDao {
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
 
-  ///Get the [Attendee]s of a given ride.
+  ///Get the [Member]s of a given ride.
   ///This method is intended for use with a [Ride] detail page.
-  Future<List<Attendee>> getRideAttendees(DateTime date);
+  Future<List<Member>> getRideAttendees(DateTime date);
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -105,7 +104,7 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<List<Attendee>> getRideAttendees(DateTime date) async {
+  Future<List<Member>> getRideAttendees(DateTime date) async {
     assert(date != null);
     //fetch the attendees of the ride and map to their uuid's
     final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
@@ -115,7 +114,7 @@ class MemberDao implements IMemberDao {
     final memberRecords = await _memberStore.find(_database,
         finder: Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)),
             sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
-    //map the record snapshots to Attendee objects
-    return memberRecords.map((record) => Attendee.of(record.key, record.value)).toList();
+    //map the record snapshots
+    return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
   }
 }

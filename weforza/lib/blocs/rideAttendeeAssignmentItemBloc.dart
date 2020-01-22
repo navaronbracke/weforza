@@ -2,20 +2,20 @@
 import 'dart:io';
 
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/model/attendeeItem.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/rideAttendeeSelector.dart';
 
 class RideAttendeeAssignmentItemBloc extends Bloc {
-  RideAttendeeAssignmentItemBloc(this.attendee,this.selected,this.selector):
-        assert(attendee != null && selected != null && selector != null);
+  RideAttendeeAssignmentItemBloc(this.member,this.selected,this.selector):
+        assert(member != null && selected != null && selector != null);
 
   final RideAttendeeSelector selector;
-  final AttendeeItem attendee;
+  final MemberItem member;
   bool selected;
 
-  File get image => attendee.picture;
-  String get firstName => attendee.firstName;
-  String get lastName => attendee.lastName;
+  File get image => member.profileImage;
+  String get firstName => member.firstName;
+  String get lastName => member.lastName;
 
   @override
   void dispose() {}

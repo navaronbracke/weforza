@@ -1,7 +1,7 @@
 
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/model/attendee.dart';
-import 'package:weforza/model/attendeeItem.dart';
+import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
@@ -12,10 +12,10 @@ class RideDetailsBloc extends Bloc {
   final MemberRepository _memberRepository;
   final RideRepository _rideRepository;
 
-  Future<List<AttendeeItem>> loadRideAttendees(DateTime date) async {
-    List<Attendee> attendees = await _memberRepository.getRideAttendees(date);
-    List<Future<AttendeeItem>> items = attendees.map((attendee) async =>
-        AttendeeItem(attendee.uuid,attendee.firstname,attendee.lastname,await _memberRepository.loadProfileImageFromDisk(attendee.image))).toList();
+  Future<List<MemberItem>> loadRideAttendees(DateTime date) async {
+    List<Member> attendees = await _memberRepository.getRideAttendees(date);
+    List<Future<MemberItem>> items = attendees.map((attendee) async =>
+        MemberItem(attendee,await _memberRepository.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
     return Future.wait(items);
   }
 

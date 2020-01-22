@@ -4,9 +4,9 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
-import 'package:weforza/model/attendeeItem.dart';
 import 'package:weforza/model/attendeeScanner.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/rideAttendeeDisplayMode.dart';
@@ -41,18 +41,13 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
     final members = await _memberRepository.getMembers();
     final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
     items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
-    _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.attendee.uuid).toList());
+    _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.member.uuid).toList());
     _displayModeController.add(RideAttendeeDisplayMode.IDLE);
   }
 
   Future<RideAttendeeAssignmentItemBloc> _mapMemberToItem(Member member,bool selected) async {
     return RideAttendeeAssignmentItemBloc(
-        AttendeeItem(
-            member.uuid,
-            member.firstname,
-            member.lastname,
-            await _memberRepository.loadProfileImageFromDisk(member.profileImageFilePath)
-        ),
+        MemberItem(member,await _memberRepository.loadProfileImageFromDisk(member.profileImageFilePath)),
         selected,
         this
     );
@@ -90,16 +85,16 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
 
   @override
   void select(RideAttendeeAssignmentItemBloc item) {
-    if(!_rideAttendees.contains(item.attendee.uuid)){
-      _rideAttendees.add(item.attendee.uuid);
+    if(!_rideAttendees.contains(item.member.uuid)){
+      _rideAttendees.add(item.member.uuid);
       item.selected = true;
     }
   }
 
   @override
   void unSelect(RideAttendeeAssignmentItemBloc item) {
-    if(_rideAttendees.contains(item.attendee.uuid)){
-      _rideAttendees.remove(item.attendee.uuid);
+    if(_rideAttendees.contains(item.member.uuid)){
+      _rideAttendees.remove(item.member.uuid);
       item.selected = false;
     }
   }

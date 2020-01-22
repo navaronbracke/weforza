@@ -4,13 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/attendeeItem.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideAttendeeItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -27,7 +27,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   final RideDetailsBloc _bloc;
 
-  Future<List<AttendeeItem>> attendeesFuture;
+  Future<List<MemberItem>> attendeesFuture;
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           }),
         ],
       ),
-      body: FutureBuilder<List<AttendeeItem>>(
+      body: FutureBuilder<List<MemberItem>>(
         future: attendeesFuture,
         builder: (context,snapshot){
           if(snapshot.hasError){
@@ -73,7 +73,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             }else{
               return ListView.builder(
                 itemBuilder: (context,index){
-                  return RideAttendeeItem(snapshot.data[index]);
+                  return MemberWithPictureListItem(snapshot.data[index]);
                 },
                 itemCount: snapshot.data.length);
             }
@@ -117,7 +117,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: FutureBuilder<List<AttendeeItem>>(
+        child: FutureBuilder<List<MemberItem>>(
           future: attendeesFuture,
           builder: (context,snapshot){
             if(snapshot.hasError){
@@ -128,7 +128,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               }else{
                 return ListView.builder(
                     itemBuilder: (context,index){
-                      return RideAttendeeItem(snapshot.data[index]);
+                      return MemberWithPictureListItem(snapshot.data[index]);
                     },
                     itemCount: snapshot.data.length);
               }

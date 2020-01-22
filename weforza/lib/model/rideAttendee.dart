@@ -1,7 +1,6 @@
-import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/ride.dart';
 
-///This class represents an intermediary table that connects [Ride] with [Attendee].
+///This class represents an intermediary table that connects [Ride] with [Member].
 class RideAttendee {
   RideAttendee(this.rideDate,this.attendeeId): assert(rideDate != null && attendeeId != null && attendeeId.isNotEmpty);
 

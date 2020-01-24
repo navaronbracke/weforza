@@ -14,7 +14,7 @@
   "HomePageMembersTab": "Leden",
 
   "MemberListTitle": "Leden",
-  "MemberListLoadingFailed": "Kon leden niet ophalen",
+  "MemberListLoadingFailed": "Kon leden niet laden",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
@@ -32,12 +32,12 @@
   "RideDeleteDialogErrorDescription": "Kon rit niet verwijderen",
 
   "MemberDetailsTitle": "Details",
-  "MemberDetailsPhoneFormat": "Telefoon: $phone",
-  "MemberDetailsWasPresentCountLabel": "Aanwezigheden: $count",
-  "MemberDetailsWasPresentCountCalculating": "Berekenen...",
-  "MemberDetailsWasPresentCountError": "Onbekend",
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
+  "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsAddDeviceError" : "Kon toestel niet toevoegen",
+  "MemberDetailsEditDeviceError": "Kon toestel niet bewerken",
+  "MemberDetailsDeleteDeviceError": "Kon toestel niet verwijderen",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
@@ -69,7 +69,6 @@
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
   "PersonTelephoneLabel": "Telefoon",
-  "PersonDevicesLabel": "Toestellen",
 
   "FirstNameMaxLength": "Voornaam kan niet langer zijn dan $maxLength letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan $maxLength letters",

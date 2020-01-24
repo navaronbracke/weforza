@@ -11,6 +11,7 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -32,7 +33,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
   final MemberDetailsBloc _bloc;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
@@ -47,33 +48,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     return OrientationAwareWidgetBuilder.build(context,
         buildIOSPortraitLayout(context),
         buildIOSLandscapeLayout(context)
-    );
-  }
-
-  ///Build the list of devices from [_bloc.devices].
-  Widget _buildDevicesList(String uuid){
-    return FutureBuilder<List<String>>(
-      future: _bloc.getMemberDevices(uuid),
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          final list = snapshot.data;
-          if(list.isEmpty){
-            return Center(
-              child: Text(S.of(context).MemberDetailsNoDevices),
-            );
-          }else{
-            return ListView.builder(itemBuilder: (context,index){
-              //TODO item with buttons
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(list[index]),
-              );
-            }, itemCount: list.length);
-          }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
     );
   }
 
@@ -96,57 +70,44 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ),
         ],
       ),
-      body: Row(
+      body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                    Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                      SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
-                      SizedBox(height: 10),
-                      FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(member.uuid),
-                        builder: (context,snapshot){
-                          if(snapshot.connectionState == ConnectionState.done){
-                            if(snapshot.hasError){
-                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
-                            }
-                            return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
-                          }else{
-                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.phone),
+                        SizedBox(width: 5),
+                        Text(member.phone),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                  Expanded(
-                    child: _buildDevicesList(member.uuid),
-                  ),
-                ],
-              ),
-            ),
+              child: _buildDevicesList(member.uuid)
           ),
         ],
       ),
@@ -164,7 +125,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             icon: Icon(Icons.edit),
             onPressed: (){
               //TODO goto edit
-            }
+            },
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -173,52 +134,52 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                    SizedBox(height: 10),
-                    Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
-                    SizedBox(height: 10),
-                    FutureBuilder<int>(
-                      future: _bloc.getAttendingCount(member.uuid),
-                      builder: (context,snapshot){
-                        if(snapshot.connectionState == ConnectionState.done){
-                          if(snapshot.hasError){
-                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
-                          }
-                          return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
-                        }else{
-                          return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
-                        }
-                      },
+          Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                        Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                      ],
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.phone),
+                          SizedBox(width: 5),
+                          Text(member.phone),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                    ),
+                  ),
+                  //tel/count
+                ],
+              ),
+            ],
           ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                Expanded(
-                  child: _buildDevicesList(member.uuid),
-                ),
-              ],
-            ),
+              child: _buildDevicesList(member.uuid)
           ),
         ],
       ),
@@ -239,7 +200,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                //TODO goto edit
+                  //TODO goto edit
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -251,57 +212,44 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
-        child: Row(
+        child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10,10, 0, 10),
-                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                        Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                        SizedBox(height: 10),
-                        Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
-                        SizedBox(height: 10),
-                        FutureBuilder<int>(
-                          future: _bloc.getAttendingCount(member.uuid),
-                          builder: (context,snapshot){
-                            if(snapshot.connectionState == ConnectionState.done){
-                              if(snapshot.hasError){
-                                return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
-                              }
-                              return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
-                            }else{
-                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.phone),
+                          SizedBox(width: 5),
+                          Text(member.phone),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                    Expanded(
-                      child: _buildDevicesList(member.uuid),
-                    ),
-                  ],
-                ),
-              ),
+                child: _buildDevicesList(member.uuid)
             ),
           ],
         ),
@@ -323,7 +271,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                //TODO goto edit
+                  //TODO goto edit
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -335,57 +283,121 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
-          child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor)
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                      SizedBox(height: 10),
-                      Text(S.of(context).MemberDetailsPhoneFormat(member.phone)),
-                      SizedBox(height: 10),
-                      FutureBuilder<int>(
-                        future: _bloc.getAttendingCount(member.uuid),
-                        builder: (context,snapshot){
-                          if(snapshot.connectionState == ConnectionState.done){
-                            if(snapshot.hasError){
-                              return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountError));
-                            }
-                            return Text(S.of(context).MemberDetailsWasPresentCountLabel("${snapshot.data}"));
-                          }else{
-                            return Text(S.of(context).MemberDetailsWasPresentCountLabel(S.of(context).MemberDetailsWasPresentCountCalculating));
-                          }
-                        },
+            Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                          Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Center(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.phone),
+                            SizedBox(width: 5),
+                            Text(member.phone),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                      ),
+                    ),
+                    //tel/count
+                  ],
+                ),
+              ],
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(S.of(context).PersonDevicesLabel,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
-                  Expanded(
-                    child: _buildDevicesList(member.uuid),
-                  ),
-                ],
-              ),
+                child: _buildDevicesList(member.uuid)
             ),
           ],
         ),
       ),
+    );
+  }
+
+  ///Build the list of devices for the member with the given ID.
+  Widget _buildDevicesList(String uuid){
+    return FutureBuilder<List<String>>(
+      future: _bloc.getMemberDevices(uuid),
+      builder: (context,snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Center(
+              child: Text(S.of(context).MemberDetailsLoadDevicesError),
+            );
+          }else{
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Row(
+                    children: <Widget>[
+                      //TODO input field + add button
+                      //create add device widget
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: (snapshot.data.isEmpty) ? MemberDevicesEmpty() :
+                  ListView.builder(itemBuilder: (context,index){
+                    //TODO item with buttons
+                    return Text("${snapshot.data[index]}");
+                  },itemCount: snapshot.data.length),
+                ),
+              ],
+            );
+          }
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
+    );
+  }
+
+  ///Build the attending count widget.
+  Widget _buildAttendingCountWidget(Future<int> future){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.location_on),
+        SizedBox(width: 5),
+        FutureBuilder<int>(
+          future: future,
+          builder: (context,snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              if(snapshot.hasError){
+                return Text("?");
+              }
+              return Text("${snapshot.data}");
+            }else{
+              return PlatformAwareLoadingIndicator();
+            }
+          },
+        )
+      ],
     );
   }
 

@@ -66,9 +66,9 @@ class S implements WidgetsLocalizations {
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
   String get RideAttendeeAssignmentConfirm => "Save";
-  String get RideAttendeeAssignmentGenericError => "Something went wrong";
   String get RideAttendeeAssignmentInstruction => "Select the attendees for the ride";
-  String get RideAttendeeAssignmentScanningFailed => "Something went wrong during the scan";
+  String get RideAttendeeAssignmentReturnToList => "Return to the list";
+  String get RideAttendeeAssignmentScanningFailed => "The scan failed";
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
@@ -146,7 +146,7 @@ class $nl extends S {
   @override
   String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
   @override
-  String get RideAttendeeAssignmentScanningFailed => "Er liep iets fout tijdens de scan";
+  String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
   @override
   String get RideListLoadingRidesError => "Kon ritten niet laden";
   @override
@@ -191,6 +191,8 @@ class $nl extends S {
   String get MemberDeleteDialogErrorDescription => "Kon lid niet verwijderen";
   @override
   String get AppName => "WeForza";
+  @override
+  String get RideAttendeeAssignmentReturnToList => "Terug naar de lijst";
   @override
   String get RideDetailsLoadAttendeesError => "Kon de aanwezigen niet laden";
   @override

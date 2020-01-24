@@ -7,7 +7,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/model/attendeeScanner.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
@@ -18,7 +17,7 @@ import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
-class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAttendeeSelector {
+class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository):
         assert(ride != null && _memberRepository != null && _rideRepository != null);
 

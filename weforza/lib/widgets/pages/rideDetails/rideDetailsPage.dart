@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -48,7 +49,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage())).then((value){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
+                RideAttendeeAssignmentBloc(
+                    RideProvider.selectedRide,
+                    InjectionContainer.get<RideRepository>(),
+                    InjectionContainer.get<MemberRepository>()
+                )
+              ))).then((value){
                 if(value != null && value){
                   setState(() {
                     attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
@@ -98,7 +105,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage())).then((value){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
+                      RideAttendeeAssignmentBloc(
+                          RideProvider.selectedRide,
+                          InjectionContainer.get<RideRepository>(),
+                          InjectionContainer.get<MemberRepository>()
+                      )
+                  ))).then((value){
                     if(value != null && value){
                       setState(() {
                         attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);

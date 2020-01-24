@@ -1,110 +1,90 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/model/attendeeScanner.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanningError.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class RideAttendeeAssignmentScanning extends StatefulWidget {
-  RideAttendeeAssignmentScanning(this.scanner): assert(scanner != null);
+///This widget represents an ongoing scan [future].
+///Its [onStopScan] callback allows to terminate a scan or to return from a failed scan.
+class RideAttendeeAssignmentScanning extends StatelessWidget implements PlatformAwareWidget {
+  RideAttendeeAssignmentScanning(this.future,this.title,this.onStopScan): assert(future != null && title != null && onStopScan != null);
 
-  final AttendeeScanner scanner;
-
-  @override
-  _RideAttendeeAssignmentScanningState createState() => _RideAttendeeAssignmentScanningState();
-}
-
-class _RideAttendeeAssignmentScanningState extends State<RideAttendeeAssignmentScanning> with SingleTickerProviderStateMixin implements PlatformAwareWidget {
-  AnimationController _scanAnimationController;
-  Animation _colorTween;
-
-  @override
-  void initState() {
-    super.initState();
-    _scanAnimationController = AnimationController(vsync: this,duration: Duration(milliseconds: 400))
-      ..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _scanAnimationController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _scanAnimationController.forward();
-      }
-    });
-    _colorTween = ColorTween(
-        begin: ApplicationTheme.bluetoothScanningAnimationStartColor,
-        end: ApplicationTheme.bluetoothScanningAnimationEndColor)
-        .animate(_scanAnimationController);
-  }
+  final String title;
+  final Future<void> future;
+  final VoidCallback onStopScan;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 7,
-            child: AspectRatio(
-              aspectRatio: 100/100,
-              child: AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
-              ),
+    return FutureBuilder<void>(
+      future: future,
+      builder: (context,snapshot){
+        if(snapshot.hasError){
+          return RideAttendeeAssignmentScanningError(title,onStopScan);
+        }else{
+          return Scaffold(
+            appBar: AppBar(title: Text(title,style: TextStyle(fontSize: 16))),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 7,
+                  child: null,//TODO scanning animation
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Center(
+                    child: FlatButton(
+                      child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
+                      onPressed: onStopScan,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Flexible(
-            flex: 2,
-            child: Center(
-              child: FlatButton(
-                child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
-                onPressed: (){
-                  widget.scanner.stopScan();
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 7,
-            child: AspectRatio(
-              aspectRatio: 100/100,
-              child: AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context,child)=> Icon(Icons.bluetooth,color: _colorTween.value),
-              ),
+    return FutureBuilder<void>(
+      future: future,
+      builder: (context,snapshot){
+        if(snapshot.hasError){
+          return RideAttendeeAssignmentScanningError(title,onStopScan);
+        }else{
+          return CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
+              transitionBetweenRoutes: false,
+              middle: Text(title),
             ),
-          ),
-          Flexible(
-            flex: 2,
-            child: Center(
-              child: CupertinoButton(
-                child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
-                onPressed: (){
-                  widget.scanner.stopScan();
-                },
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 7,
+                  child: null,//TODO scanning animation
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Center(
+                    child: CupertinoButton(
+                      child: Text(S.of(context).RideAttendeeAssignmentStopScan,style: TextStyle(color: Colors.red)),
+                      onPressed: onStopScan,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _scanAnimationController.dispose();
   }
 }

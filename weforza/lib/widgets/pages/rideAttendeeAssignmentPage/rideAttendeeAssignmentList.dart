@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentEmpty.dart';
+import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -41,7 +41,7 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
           ),
         ],
       ),
-      body: items.isEmpty ? RideAttendeeAssignmentEmpty() :
+      body: items.isEmpty ? _RideAttendeeAssignmentEmpty() :
       ListView.builder(itemBuilder: (context,index){
         return RideAttendeeAssignmentItem(items[index]);
       }, itemCount: items.length),
@@ -53,29 +53,52 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Row(
-          mainAxisSize: MainAxisSize.min,
+        middle: items.isEmpty ? Text(title) : Row(
           children: <Widget>[
-            CupertinoIconButton(
-                Icons.bluetooth,
-                CupertinoTheme.of(context).primaryColor,
-                CupertinoTheme.of(context).primaryContrastingColor,
-                onStartScan
+            Expanded(
+              child: Center(child: Text(title)),
             ),
-            SizedBox(width: 30),
-            CupertinoIconButton(
-                Icons.check,
-                CupertinoTheme.of(context).primaryColor,
-                CupertinoTheme.of(context).primaryContrastingColor,
-                onSave
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                CupertinoIconButton(
+                    Icons.bluetooth,
+                    CupertinoTheme.of(context).primaryColor,
+                    CupertinoTheme.of(context).primaryContrastingColor,
+                    onStartScan
+                ),
+                SizedBox(width: 30),
+                CupertinoIconButton(
+                    Icons.check,
+                    CupertinoTheme.of(context).primaryColor,
+                    CupertinoTheme.of(context).primaryContrastingColor,
+                    onSave
+                ),
+              ],
             ),
           ],
         ),
       ),
-      child: items.isEmpty ? RideAttendeeAssignmentEmpty() :
-      ListView.builder(itemBuilder: (context,index){
-        return RideAttendeeAssignmentItem(items[index]);
-      }, itemCount: items.length),
+      child: items.isEmpty ? _RideAttendeeAssignmentEmpty() :
+      SafeArea(
+        bottom: false,
+        child: ListView.builder(itemBuilder: (context,index){
+          return RideAttendeeAssignmentItem(items[index]);
+        }, itemCount: items.length),
+      ),
+    );
+  }
+}
+
+class _RideAttendeeAssignmentEmpty extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(Icons.error_outline),
+        Text(S.of(context).MemberListNoItems),
+      ],
     );
   }
 }

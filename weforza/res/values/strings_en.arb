@@ -59,7 +59,6 @@
   "AddRideColorLegendFutureRide": "Future Ride",
 
   "RideAttendeeAssignmentTitle": "Attendees $date",
-  "RideAttendeeAssignmentInstruction": "Select the attendees for the ride",
   "RideAttendeeAssignmentScanningFailed": "The scan failed",
   "RideAttendeeAssignmentReturnToList": "Return to the list",
   "RideAttendeeAssignmentStopScan": "Stop Scan",

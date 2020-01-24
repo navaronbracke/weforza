@@ -66,7 +66,6 @@ class S implements WidgetsLocalizations {
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
   String get RideAttendeeAssignmentConfirm => "Save";
-  String get RideAttendeeAssignmentInstruction => "Select the attendees for the ride";
   String get RideAttendeeAssignmentReturnToList => "Return to the list";
   String get RideAttendeeAssignmentScanningFailed => "The scan failed";
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
@@ -105,8 +104,6 @@ class $nl extends S {
 
   @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
-  @override
-  String get RideAttendeeAssignmentInstruction => "Selecteer de aanwezigen voor de rit";
   @override
   String get DialogDelete => "Verwijderen";
   @override

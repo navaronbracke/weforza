@@ -60,7 +60,6 @@
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
   "RideAttendeeAssignmentTitle": "Aanwezigen $date",
-  "RideAttendeeAssignmentInstruction": "Selecteer de aanwezigen voor de rit",
   "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
   "RideAttendeeAssignmentStopScan": "Stop Scan",

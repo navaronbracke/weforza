@@ -212,6 +212,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: <Widget>[
             Row(
@@ -283,6 +284,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: <Widget>[
             Column(
@@ -348,27 +350,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               child: Text(S.of(context).MemberDetailsLoadDevicesError),
             );
           }else{
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Row(
-                    children: <Widget>[
-                      //TODO input field + add button
-                      //create add device widget
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: (snapshot.data.isEmpty) ? MemberDevicesEmpty() :
-                  ListView.builder(itemBuilder: (context,index){
-                    //TODO item with buttons
-                    return Text("${snapshot.data[index]}");
-                  },itemCount: snapshot.data.length),
-                ),
-              ],
-            );
+            return snapshot.data.isEmpty ? MemberDevicesEmpty() :
+            ListView.builder(itemBuilder: (context,index){
+              //TODO device icon?
+              return Padding(
+                padding: const EdgeInsets.all(2),
+                child: Text(snapshot.data[index],softWrap: true),
+              );
+            },itemCount: snapshot.data.length);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

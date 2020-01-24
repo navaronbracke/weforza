@@ -42,11 +42,6 @@ abstract class ApplicationTheme {
   ///The profile image placeholder icon's background color.
   static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
 
-  ///The start color for the bluetooth scanning animation.
-  static final Color bluetoothScanningAnimationStartColor = Colors.blue;
-  ///The end color for the bluetooth scanning animation.
-  static final Color bluetoothScanningAnimationEndColor = Colors.red;
-
   ///The font color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedFontColor = Colors.black;
   ///The font color for a selected ride attendee.
@@ -59,8 +54,6 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeUnselectedPlaceholderBackgroundColor = Colors.blue;
   ///The profile image placeholder background color when the ride attendee is selected.
   static final Color rideAttendeeSelectedPlaceholderBackgroundColor = Colors.green;
-  ///The color for the ride attendee assignment submit button.
-  static final Color rideAttendeeSubmitButtonColor = Colors.green;
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);

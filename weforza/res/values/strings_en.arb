@@ -60,8 +60,8 @@
 
   "RideAttendeeAssignmentTitle": "Attendees $date",
   "RideAttendeeAssignmentInstruction": "Select the attendees for the ride",
-  "RideAttendeeAssignmentGenericError": "Something went wrong",
-  "RideAttendeeAssignmentScanningFailed": "Something went wrong during the scan",
+  "RideAttendeeAssignmentScanningFailed": "The scan failed",
+  "RideAttendeeAssignmentReturnToList": "Return to the list",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentConfirm": "Save",
 

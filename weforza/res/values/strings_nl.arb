@@ -61,8 +61,8 @@
 
   "RideAttendeeAssignmentTitle": "Aanwezigen $date",
   "RideAttendeeAssignmentInstruction": "Selecteer de aanwezigen voor de rit",
-  "RideAttendeeGenericError": "Er liep iets fout",
-  "RideAttendeeAssignmentScanningFailed": "Er liep iets fout tijdens de scan",
+  "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
+  "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentConfirm": "Opslaan",
 

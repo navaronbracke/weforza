@@ -63,6 +63,7 @@
   "RideAttendeeAssignmentReturnToList": "Return to the list",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentConfirm": "Save",
+  "RideAttendeeAssignmentError": "Something went wrong",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

@@ -64,6 +64,7 @@
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentConfirm": "Opslaan",
+  "RideAttendeeAssignmentError": "Er liep iets fout",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

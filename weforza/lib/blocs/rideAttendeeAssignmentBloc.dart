@@ -1,9 +1,12 @@
 
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
+import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/attendeeScanner.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
@@ -16,19 +19,15 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAttendeeSelector {
-  RideAttendeeAssignmentBloc(this._rideRepository,this._memberRepository):
-        assert(_memberRepository != null && _rideRepository != null);
+  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository):
+        assert(ride != null && _memberRepository != null && _rideRepository != null);
 
+  final Ride ride;
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
 
   final StreamController<RideAttendeeDisplayMode> _displayModeController = BehaviorSubject();
   Stream<RideAttendeeDisplayMode> get displayModeStream => _displayModeController.stream;
-
-  final StreamController<bool> _submittingController = BehaviorSubject();
-  Stream<bool> get submitStream => _submittingController.stream;
-
-  String get titleDateFormat => "d/M/yyyy";
 
   List<RideAttendeeAssignmentItemBloc> items;
 
@@ -37,7 +36,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   Future<void> get scanFuture => _scanCompleter?.future;
   Completer<void> _scanCompleter;
 
-  Future<void> loadMembers(Ride ride) async {
+  Future<void> loadMembers() async {
     final members = await _memberRepository.getMembers();
     final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
     items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
@@ -53,23 +52,28 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
     );
   }
 
-  void onScanErrorDismissed() => _displayModeController.add(RideAttendeeDisplayMode.IDLE);
-
-  Future<bool> onSubmit(Ride ride) async {
+  Future<bool> onSubmit() async {
     bool result = false;
-    _submittingController.add(true);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
       RideProvider.reloadRides = true;
-      _submittingController.add(false);
       result = true;
-    },onError: (error)=> _submittingController.addError(error));
+    },onError: (error) => //errors are handled in the StreamBuilder that consumes this stream
+        _displayModeController.addError(error));
     return result;
   }
 
+  String getTitle(BuildContext context){
+    return S.of(context).RideAttendeeAssignmentTitle(
+        DateFormat("d/M/yyyy", Localizations.localeOf(context).languageCode)
+            .format(ride.date));
+  }
+
+
   @override
   void startScan() {
+    //errors are handled by the FutureBuilder that consumes the scan future
     _displayModeController.add(RideAttendeeDisplayMode.SCANNING);
     //TODO if bluetooth is off -> throw error -> create dialog
     // TODO: start scan with flutter blue instance if not scanning
@@ -102,6 +106,5 @@ class RideAttendeeAssignmentBloc extends Bloc implements AttendeeScanner, RideAt
   @override
   void dispose() {
     _displayModeController.close();
-    _submittingController.close();
   }
 }

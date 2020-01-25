@@ -95,7 +95,7 @@ class RideAttendeeAssignmentScanning extends StatelessWidget implements Platform
       children: <Widget>[
         AspectRatio(
           aspectRatio: 1,
-          child: FlareActor("bluetooth_scanning.flr",animation: "scan"),
+          child: FlareActor("assets/bluetooth_scanning.flr",animation: "scan"),
         ),
         Icon(Icons.bluetooth,size: 50,color: Colors.blue),
       ],

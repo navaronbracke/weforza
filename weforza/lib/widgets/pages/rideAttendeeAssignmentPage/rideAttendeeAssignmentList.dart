@@ -60,7 +60,7 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
         ],
       ),
       body: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
-       widget.items.isEmpty ? _RideAttendeeAssignmentEmpty() :
+       widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
       ListView.builder(itemBuilder: (context,index){
         return RideAttendeeAssignmentItem(widget.items[index]);
       }, itemCount: widget.items.length),
@@ -110,7 +110,7 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
         ),
       ),
       child: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
-       widget.items.isEmpty ? _RideAttendeeAssignmentEmpty() :
+       widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
       SafeArea(
         bottom: false,
         child: ListView.builder(itemBuilder: (context,index){

@@ -1,3 +1,4 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,7 +33,7 @@ class RideAttendeeAssignmentScanning extends StatelessWidget implements Platform
               children: <Widget>[
                 Expanded(
                   flex: 7,
-                  child: null,//TODO scanning animation
+                  child: _buildAnimation(),
                 ),
                 Flexible(
                   flex: 2,
@@ -69,7 +70,7 @@ class RideAttendeeAssignmentScanning extends StatelessWidget implements Platform
               children: <Widget>[
                 Expanded(
                   flex: 7,
-                  child: null,//TODO scanning animation
+                  child: _buildAnimation(),
                 ),
                 Flexible(
                   flex: 2,
@@ -85,6 +86,19 @@ class RideAttendeeAssignmentScanning extends StatelessWidget implements Platform
           );
         }
       },
+    );
+  }
+
+  Widget _buildAnimation(){
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1,
+          child: FlareActor("bluetooth_scanning.flr",animation: "scan"),
+        ),
+        Icon(Icons.bluetooth,size: 50,color: Colors.blue),
+      ],
     );
   }
 }

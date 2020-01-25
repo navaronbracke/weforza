@@ -5,12 +5,13 @@ import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget displays the manual attendee assignment overview.
 ///It presents the members in a list and shows whether they are attending the ride that was selected.
 ///It provides the option to start scanning and to save the selection.
-class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwareWidget {
+class RideAttendeeAssignmentList extends StatefulWidget {
   RideAttendeeAssignmentList(this.title,this.items,this.onStartScan,this.onSave):
         assert(title != null && items != null && onStartScan != null && onSave != null);
 
@@ -22,6 +23,13 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
 
   final VoidCallback onSave;
 
+  _RideAttendeeAssignmentListState createState() => _RideAttendeeAssignmentListState();
+}
+
+class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList> implements PlatformAwareWidget {
+  //This flag indicates if this widget is busy submitting.
+  bool _isBusy = false;
+
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
@@ -29,22 +37,33 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
   Widget buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title,style: TextStyle(fontSize: 16)),
-        actions: items.isEmpty ? [] : <Widget>[
+        title: Text(widget.title,style: TextStyle(fontSize: 16)),
+        actions: _isBusy || widget.items.isEmpty ? [] : <Widget>[
           IconButton(
-              icon: Icon(Icons.bluetooth),
-              onPressed: onStartScan,
+            icon: Icon(Icons.bluetooth),
+            onPressed: widget.onStartScan,
           ),
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: onSave,
+            onPressed: (){
+              if(!_isBusy){
+                setState(() {
+                  _isBusy = true;
+                });
+                widget.onSave();
+                setState(() {
+                  _isBusy = false;
+                });
+              }
+            },
           ),
         ],
       ),
-      body: items.isEmpty ? _RideAttendeeAssignmentEmpty() :
+      body: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
+       widget.items.isEmpty ? _RideAttendeeAssignmentEmpty() :
       ListView.builder(itemBuilder: (context,index){
-        return RideAttendeeAssignmentItem(items[index]);
-      }, itemCount: items.length),
+        return RideAttendeeAssignmentItem(widget.items[index]);
+      }, itemCount: widget.items.length),
     );
   }
 
@@ -53,10 +72,11 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: items.isEmpty ? Text(title) : Row(
+        middle: _isBusy || widget.items.isEmpty ? Text(widget.title) :
+        Row(
           children: <Widget>[
             Expanded(
-              child: Center(child: Text(title)),
+              child: Center(child: Text(widget.title)),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -65,26 +85,37 @@ class RideAttendeeAssignmentList extends StatelessWidget implements PlatformAwar
                     Icons.bluetooth,
                     CupertinoTheme.of(context).primaryColor,
                     CupertinoTheme.of(context).primaryContrastingColor,
-                    onStartScan
+                    widget.onStartScan
                 ),
                 SizedBox(width: 30),
                 CupertinoIconButton(
                     Icons.check,
                     CupertinoTheme.of(context).primaryColor,
                     CupertinoTheme.of(context).primaryContrastingColor,
-                    onSave
+                    (){
+                      if(!_isBusy){
+                        setState(() {
+                          _isBusy = true;
+                        });
+                        widget.onSave();
+                        setState(() {
+                          _isBusy = false;
+                        });
+                      }
+                    }
                 ),
               ],
             ),
           ],
         ),
       ),
-      child: items.isEmpty ? _RideAttendeeAssignmentEmpty() :
+      child: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
+       widget.items.isEmpty ? _RideAttendeeAssignmentEmpty() :
       SafeArea(
         bottom: false,
         child: ListView.builder(itemBuilder: (context,index){
-          return RideAttendeeAssignmentItem(items[index]);
-        }, itemCount: items.length),
+          return RideAttendeeAssignmentItem(widget.items[index]);
+        }, itemCount: widget.items.length),
       ),
     );
   }

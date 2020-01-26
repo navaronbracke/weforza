@@ -39,6 +39,7 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
   @override
   Widget buildIosWidget(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(),
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Row(

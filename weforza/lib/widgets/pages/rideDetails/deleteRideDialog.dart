@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 
 abstract class RideDeleteHandler {
-  Future<void> deleteRide();
+  Future<void> deleteRide(DateTime date);
 }
 
 class DeleteRideDialog extends StatefulWidget {
@@ -34,21 +35,25 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
         FlatButton(
           child: Text(S.of(context).DialogOk),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
       ]: <Widget>[
         FlatButton(
           child: Text(S.of(context).DialogCancel),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
         FlatButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            await widget._handler.deleteRide().then((_){
-              Navigator.pop(context,true);
+            await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
+              RideProvider.reloadRides = true;
+              final navigator = Navigator.of(context);
+              //Pop the dialog and the detail off the stack
+              navigator.pop(context);
+              navigator.pop(context);
             },onError: (error){
               setState(() {
                 hasError = true;
@@ -69,21 +74,25 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
         CupertinoButton(
           child: Text(S.of(context).DialogOk),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
       ]: <Widget>[
         CupertinoButton(
           child: Text(S.of(context).DialogCancel),
           onPressed: (){
-            Navigator.pop(context,false);
+            Navigator.pop(context);
           },
         ),
         CupertinoButton(
           child: Text(S.of(context).DialogDelete,style: TextStyle(color: Colors.red)),
           onPressed: () async {
-            await widget._handler.deleteRide().then((_){
-              Navigator.pop(context,true);
+            await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
+              RideProvider.reloadRides = true;
+              final navigator = Navigator.of(context);
+              //Pop the dialog and the detail off the stack
+              navigator.pop(context);
+              navigator.pop(context);
             },onError: (error){
               setState(() {
                 hasError = true;

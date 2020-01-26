@@ -1,7 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/model/RideAttendee.dart';
-import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/member.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
@@ -24,11 +23,9 @@ abstract class IMemberDao {
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
 
-  ///Get the [Attendee]s of a given ride.
+  ///Get the [Member]s of a given ride.
   ///This method is intended for use with a [Ride] detail page.
-  Future<List<Attendee>> getRideAttendees(DateTime date);
-
-  //TODO add /edit /delete device for member
+  Future<List<Member>> getRideAttendees(DateTime date);
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -44,15 +41,17 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async  {
-    assert(member != null && member.uuid != null && member.uuid.isNotEmpty
-        && member.firstname != null && member.lastname != null
-        && member.phone != null && member.devices != null);
+    assert(member != null && member.uuid != null);
+    ///The uuid is already used
+    if(await _memberStore.findFirst(_database,finder: Finder(filter: Filter.byKey(member.uuid)))!= null){
+      throw Exception("The member's uuid: ${member.uuid} is already in use");
+    }
     await _memberStore.record(member.uuid).add(_database, member.toMap());
   }
 
   @override
   Future<void> deleteMember(String uuid) async {
-    assert(uuid != null && uuid.isNotEmpty);
+    assert(uuid != null);
     //delete the ride attendee records and the member
     final memberFinder = Finder(filter: Filter.byKey(uuid));
     final memberRidesFinder = Finder(filter: Filter.equals("attendee", uuid));
@@ -76,7 +75,7 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> updateMember(Member member) async {
-    assert(member != null && member.firstname != null && member.lastname != null && member.phone != null && member.devices != null);
+    assert(member != null);
     final finder = Finder(
       filter: Filter.byKey(member.uuid),
     );
@@ -86,8 +85,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<bool> memberExists(String firstname, String lastname, String phone) async {
-    assert(firstname != null && lastname != null && phone != null);
-
     final finder = Finder(filter: Filter.and([
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
@@ -99,8 +96,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<int> getAttendingCountForAttendee(String uuid) async {
-    assert(uuid != null && uuid.isNotEmpty);
-
     final finder = Finder(filter: Filter.equals("attendee", uuid));
 
     final records = await _rideAttendeeStore.find(_database,finder: finder);
@@ -109,17 +104,17 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<List<Attendee>> getRideAttendees(DateTime date) async {
+  Future<List<Member>> getRideAttendees(DateTime date) async {
     assert(date != null);
-    final rideAttendeeFinder = Finder(filter: Filter.equals("date", date.toIso8601String()));
     //fetch the attendees of the ride and map to their uuid's
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,finder: rideAttendeeFinder);
+    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
+        finder: Finder(filter: Filter.equals("date", date.toIso8601String())));
     final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]).toList();
     //fetch the members that belong to the attendee uuid's
-    final memberFinder = Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key))
-        ,sortOrders: [SortOrder("firstname"),SortOrder("lastname")]);
-    final memberRecords = await _memberStore.find(_database,finder: memberFinder);
-    //map the record snapshots to Attendee objects
-    return memberRecords.map((record) => Attendee.of(record.key, record.value)).toList();
+    final memberRecords = await _memberStore.find(_database,
+        finder: Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)),
+            sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
+    //map the record snapshots
+    return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
   }
 }

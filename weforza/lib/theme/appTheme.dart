@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 ///This class provides the application [ThemeData].
 abstract class ApplicationTheme {
 
-  ///Android Theme colors.
-  static final Color _androidPrimaryColor = Colors.blue;
-  static final Color _androidAccentColor = Colors.blue.shade300;
-
-  ///Cupertino Theme colors.
-  static final Color _iosPrimaryColor = Colors.blue;
-  static final Color _iosAccentColor = Colors.blue.shade300;
+  ///Primary/Accent Theme colors.
+  static final Color _primaryColor = Colors.blue;
+  static final Color _accentColor = Colors.blue.shade300;
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -46,8 +42,18 @@ abstract class ApplicationTheme {
   ///The profile image placeholder icon's background color.
   static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
 
-
-
+  ///The font color for an unselected ride attendee.
+  static final Color rideAttendeeUnSelectedFontColor = Colors.black;
+  ///The font color for a selected ride attendee.
+  static final Color rideAttendeeSelectedFontColor = Colors.white;
+  ///The background color for an unselected ride attendee.
+  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
+  ///The background color for a selected ride attendee.
+  static final Color rideAttendeeSelectedBackgroundColor = Colors.lightGreen;
+  ///The profile image placeholder background color when the ride attendee is unselected.
+  static final Color rideAttendeeUnselectedPlaceholderBackgroundColor = Colors.blue;
+  ///The profile image placeholder background color when the ride attendee is selected.
+  static final Color rideAttendeeSelectedPlaceholderBackgroundColor = Colors.green;
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
@@ -61,17 +67,17 @@ abstract class ApplicationTheme {
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
-       primaryColor: _androidPrimaryColor,
-       accentColor: _androidAccentColor,
-       splashColor: _androidAccentColor.withAlpha(150)
+       primaryColor: _primaryColor,
+       accentColor: _accentColor,
+       splashColor: _accentColor.withAlpha(150)
      );
   }
 
   ///Provide the IOS theme.
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
-      primaryColor: _iosPrimaryColor,
-      primaryContrastingColor: _iosAccentColor
+      primaryColor: _primaryColor,
+      primaryContrastingColor: _accentColor
     );
   }
 }

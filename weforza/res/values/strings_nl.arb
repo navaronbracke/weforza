@@ -14,8 +14,7 @@
   "HomePageMembersTab": "Leden",
 
   "MemberListTitle": "Leden",
-  "MemberListLoadingFailed": "Kon geen leden ophalen",
-  "MemberListLoadingInProgress": "Leden aan het ophalen...",
+  "MemberListLoadingFailed": "Kon leden niet laden",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
@@ -33,13 +32,12 @@
   "RideDeleteDialogErrorDescription": "Kon rit niet verwijderen",
 
   "MemberDetailsTitle": "Details",
-  "MemberDetailsPhoneFormat": "Telefoon: $phone",
-  "MemberDetailsWasPresentCountLabel": "Aanwezigheden: $count",
-  "MemberDetailsWasPresentCountCalculating": "Berekenen...",
-  "MemberDetailsWasPresentCountError": "Onbekend",
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
-  "MemberDetailsAddDevicesInstruction": "Voeg toestellen toe door dit lid te bewerken",
+  "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsAddDeviceError" : "Kon toestel niet toevoegen",
+  "MemberDetailsEditDeviceError": "Kon toestel niet bewerken",
+  "MemberDetailsDeleteDeviceError": "Kon toestel niet verwijderen",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
@@ -61,10 +59,16 @@
   "AddRideColorLegendCurrentSelection": "Huidige Selectie",
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
+  "RideAttendeeAssignmentTitle": "Aanwezigen $date",
+  "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
+  "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
+  "RideAttendeeAssignmentStopScan": "Stop Scan",
+  "RideAttendeeAssignmentConfirm": "Opslaan",
+  "RideAttendeeAssignmentError": "Er liep iets fout",
+
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
   "PersonTelephoneLabel": "Telefoon",
-  "PersonDevicesLabel": "Toestellen",
 
   "FirstNameMaxLength": "Voornaam kan niet langer zijn dan $maxLength letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan $maxLength letters",

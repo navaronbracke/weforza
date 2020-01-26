@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
@@ -268,7 +269,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 if(await _bloc.addMember()){
-                                  Navigator.pop(context,true);
+                                  MemberProvider.reloadMembers = true;
+                                  Navigator.pop(context);
                                 }
                               }
                             },
@@ -433,7 +435,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                   onPressed: () async {
                                     if(iosAllFormInputValidator()){
                                       if(await _bloc.addMember()){
-                                        Navigator.pop(context,true);
+                                        MemberProvider.reloadMembers = true;
+                                        Navigator.pop(context);
                                       }
                                     }else{
                                       setState(() {});
@@ -588,7 +591,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                               onPressed: () async {
                                 if(iosAllFormInputValidator()){
                                   if(await _bloc.addMember()){
-                                    Navigator.pop(context,true);
+                                    MemberProvider.reloadMembers = true;
+                                    Navigator.pop(context);
                                   }
                                 }else{
                                   setState(() {});
@@ -731,7 +735,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               if(await _bloc.addMember()){
-                                Navigator.pop(context,true);
+                                MemberProvider.reloadMembers = true;
+                                Navigator.pop(context);
                               }
                             }
                           },

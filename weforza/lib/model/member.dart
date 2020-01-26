@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 ///This class represents a 'Member.'
 class Member {
-  Member(this.uuid,this.firstname,this.lastname,this.phone,this.devices,[this.profileImageFilePath]):
-        assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null && devices != null);
+  Member(this.uuid,this.firstname,this.lastname,this.phone,[this.profileImageFilePath]):
+        assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null);
 
   ///Regex for a member's first or last name.
   ///
@@ -30,17 +32,12 @@ class Member {
   ///The path to an optional profile picture.
   String profileImageFilePath;
 
-  ///The list of devices of this person.
-  ///We can only retrieve device name reliably with bluetooth, hence the String.
-  final List<String> devices;
-
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
       "firstname": firstname,
       "lastname": lastname,
       "phone": phone,
-      "devices": devices,
       "profile": profileImageFilePath
     };
   }
@@ -48,6 +45,15 @@ class Member {
   ///Create a member from a Map and a given uuid.
   static Member of(String uuid,Map<String,dynamic> values){
     assert(uuid != null && uuid.isNotEmpty && values != null);
-    return Member(uuid,values["firstname"],values["lastname"],values["phone"],List.from(values["devices"]),values["profile"]);
+    return Member(uuid,values["firstname"],values["lastname"],values["phone"],values["profile"]);
   }
+
+  @override
+  bool operator ==(Object other) => other is Member
+      && uuid == other.uuid && firstname == other.firstname
+      && lastname == other.lastname && phone == other.phone
+      && profileImageFilePath == other.profileImageFilePath;
+
+  @override
+  int get hashCode => hashValues(firstname, lastname,uuid,phone,profileImageFilePath);
 }

@@ -77,47 +77,43 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
           widget.bloc.onSelected();
         });
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedBackgroundColor : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.black54,
-                blurRadius: 15.0,
-                offset: Offset(0.0, 0.75)
-            )
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              ProfileImage(
-                  widget.bloc.image,
-                  ApplicationTheme.profileImagePlaceholderIconColor,
-                  widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
-                  Icons.person,
-                  40
-              ),
-              SizedBox(width: 5),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                      widget.bloc.firstName,
-                      style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-                          color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedFontColor : ApplicationTheme.rideAttendeeUnSelectedFontColor),
-                      overflow: TextOverflow.ellipsis
-                  ),
-                  SizedBox(height: 4),
-                  Text(widget.bloc.lastName,
-                      style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-                          color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedFontColor : ApplicationTheme.rideAttendeeUnSelectedFontColor),
-                      overflow: TextOverflow.ellipsis
-                  ),
-                ],
-              ),
-            ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Container(
+          decoration: BoxDecoration(
+            color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedBackgroundColor : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor,
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                ProfileImage(
+                    widget.bloc.image,
+                    ApplicationTheme.profileImagePlaceholderIconColor,
+                    widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
+                    Icons.person,
+                    40
+                ),
+                SizedBox(width: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                        widget.bloc.firstName,
+                        style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                            color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedFontColor : ApplicationTheme.rideAttendeeUnSelectedFontColor),
+                        overflow: TextOverflow.ellipsis
+                    ),
+                    SizedBox(height: 4),
+                    Text(widget.bloc.lastName,
+                        style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                            color: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedFontColor : ApplicationTheme.rideAttendeeUnSelectedFontColor),
+                        overflow: TextOverflow.ellipsis
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

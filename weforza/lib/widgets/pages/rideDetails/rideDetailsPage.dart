@@ -1,26 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/attendeeItem.dart';
-import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideAttendeeItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideDetailsPage extends StatefulWidget {
-  RideDetailsPage(this.ride): assert(ride != null);
-
-  final Ride ride;
 
   @override
   _RideDetailsPageState createState() => _RideDetailsPageState(RideDetailsBloc(
-      InjectionContainer.get<MemberRepository>(),InjectionContainer.get<RideRepository>()));
+      InjectionContainer.get<MemberRepository>(),InjectionContainer.get<RideRepository>())
+  );
 }
 
 class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget, RideDeleteHandler {
@@ -28,34 +28,49 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   final RideDetailsBloc _bloc;
 
+  Future<List<MemberItem>> attendeesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+  }
+
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
+    final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
+        title: Text(ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: (){
-              //TODO: goto assignment page
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
+                RideAttendeeAssignmentBloc(
+                    RideProvider.selectedRide,
+                    InjectionContainer.get<RideRepository>(),
+                    InjectionContainer.get<MemberRepository>()
+                )
+              ))).then((value){
+                if(value != null && value){
+                  setState(() {
+                    attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+                  });
+                }
+              });
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
-            showDialog(context: context, builder: (context)=> DeleteRideDialog(this))
-                .then((value){
-              //Ride was deleted, go back to list
-              if(value != null && value){
-                Navigator.pop(context,true);
-              }
-            });
+            showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
           }),
         ],
       ),
-      body: FutureBuilder<List<AttendeeItem>>(
-        future: _bloc.getRideAttendees(widget.ride.date),
+      body: FutureBuilder<List<MemberItem>>(
+        future: attendeesFuture,
         builder: (context,snapshot){
           if(snapshot.hasError){
             return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
@@ -65,7 +80,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             }else{
               return ListView.builder(
                 itemBuilder: (context,index){
-                  return RideAttendeeItem(snapshot.data[index]);
+                  return MemberWithPictureListItem(snapshot.data[index]);
                 },
                 itemCount: snapshot.data.length);
             }
@@ -77,29 +92,36 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   @override
   Widget buildIosWidget(BuildContext context) {
+    final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Text(widget.ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
+              child: Center(child: Text(ride.getFormattedDate(context),style: TextStyle(fontSize: 16))),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO goto assignment screen
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
+                      RideAttendeeAssignmentBloc(
+                          RideProvider.selectedRide,
+                          InjectionContainer.get<RideRepository>(),
+                          InjectionContainer.get<MemberRepository>()
+                      )
+                  ))).then((value){
+                    if(value != null && value){
+                      setState(() {
+                        attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+                      });
+                    }
+                  });
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this))
-                      .then((value){
-                    //Ride was deleted, go back to list
-                    if(value != null && value){
-                      Navigator.pop(context,true);
-                    }
-                  });
+                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
                 }),
               ],
             ),
@@ -108,8 +130,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: FutureBuilder<List<AttendeeItem>>(
-          future: _bloc.getRideAttendees(widget.ride.date),
+        child: FutureBuilder<List<MemberItem>>(
+          future: attendeesFuture,
           builder: (context,snapshot){
             if(snapshot.hasError){
               return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
@@ -119,7 +141,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               }else{
                 return ListView.builder(
                     itemBuilder: (context,index){
-                      return RideAttendeeItem(snapshot.data[index]);
+                      return MemberWithPictureListItem(snapshot.data[index]);
                     },
                     itemCount: snapshot.data.length);
               }
@@ -131,5 +153,5 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
   }
 
   @override
-  Future<void> deleteRide() => _bloc.deleteRide(widget.ride.date);
+  Future<void> deleteRide(DateTime date) => _bloc.deleteRide(date);
 }

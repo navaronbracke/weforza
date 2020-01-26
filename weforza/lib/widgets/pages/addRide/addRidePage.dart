@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/AddRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
@@ -102,7 +103,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                               onPressed: () async {
                                 if(_bloc.validateInputs()){
                                   if(await _bloc.addRides()){
-                                    Navigator.pop(context,true);
+                                    RideProvider.reloadRides = true;
+                                    Navigator.pop(context);
                                   }
                                 }else{
                                   _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -174,7 +176,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                             onPressed: () async {
                               if(_bloc.validateInputs()){
                                 if(await _bloc.addRides()){
-                                  Navigator.pop(context,true);
+                                  RideProvider.reloadRides = true;
+                                  Navigator.pop(context);
                                 }
                               }else{
                                 _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -255,7 +258,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                   onPressed: () async {
                                     if(_bloc.validateInputs()){
                                       if(await _bloc.addRides()){
-                                        Navigator.pop(context,true);
+                                        RideProvider.reloadRides = true;
+                                        Navigator.pop(context);
                                       }
                                     }else{
                                       _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
@@ -336,7 +340,8 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                                 onPressed: () async {
                                   if(_bloc.validateInputs()){
                                     if(await _bloc.addRides()){
-                                      Navigator.pop(context,true);
+                                      RideProvider.reloadRides = true;
+                                      Navigator.pop(context);
                                     }
                                   }else{
                                     _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);

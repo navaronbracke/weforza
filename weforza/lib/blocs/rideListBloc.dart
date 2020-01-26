@@ -1,21 +1,16 @@
 
-import 'dart:async';
-
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
-///This is the BLoC for RideListPage.
+///This Bloc will load the rides.
 class RideListBloc extends Bloc {
-  RideListBloc(this._rideRepository): assert(_rideRepository != null);
+  RideListBloc(this._repository): assert(_repository != null);
 
-  ///The [IRideRepository] that will manage the Rides section of RideListPage.
-  final RideRepository _rideRepository;
+  final RideRepository _repository;
 
-  ///Load the rides from the database.
-  Future<List<Ride>> getRides() => _rideRepository.getRides();
+  Future<List<Ride>> loadRides() => _repository.getRides();
 
   @override
   void dispose() {}
 }
-

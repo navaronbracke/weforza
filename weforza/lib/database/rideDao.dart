@@ -1,7 +1,6 @@
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
-import 'package:weforza/model/attendee.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 
@@ -20,9 +19,9 @@ abstract class IRideDao {
   ///Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
   Future<List<Ride>> getRides();
 
-  ///Update the [Attendee]s for the [Ride] with the given date.
-  ///The attendees of the [Ride] with the given date will be replaced by [attendees].
-  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees);
+  ///Update the [Attendee]s for the [Ride].
+  ///The attendees of the [Ride] will be replaced by [attendees].
+  Future<void> updateAttendeesForRideWithDate(Ride ride, List<RideAttendee> attendees);
 
   ///Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
@@ -42,9 +41,8 @@ class RideDao implements IRideDao {
   @override
   Future<void> addRides(List<Ride> rides) async {
     assert(rides != null);
-    final filteredRides = rides.where((Ride r) => r.date != null);
-    await _rideStore.records(filteredRides.map((r) => r.date.toIso8601String()).toList())
-        .put(_database, filteredRides.map((r)=> r.toMap()).toList());
+    await _rideStore.records(rides.map((r) => r.date.toIso8601String()).toList())
+        .put(_database, rides.map((r)=> r.toMap()).toList());
   }
 
   @override
@@ -70,34 +68,26 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Ride>> getRides() async {
-    //Get the rides
-    final rideRecords =  await _rideStore.find(_database);
-    final rides = rideRecords.map((record) => Ride(DateTime.parse(record.key))).toList();
-    //Get the attendees per ride
-    final attendeesPerRide = await _getAttendeeCountPerRide();
-    //Per ride update its attendee count.
-    rides.forEach((ride){
-      if(attendeesPerRide.containsKey(ride.date)){
-        ride.numberOfAttendees = attendeesPerRide[ride.date];
-      }
-    });
-    rides.sort((Ride r1, Ride r2)=> r1.date.compareTo(r2.date));
-    return rides.reversed.toList();
+    final rideRecords =  await _rideStore.find(_database,finder: Finder(sortOrders: [SortOrder(Field.key,false)]));
+    return rideRecords.map((record) => Ride.of(DateTime.parse(record.key), record.value)).toList();
   }
 
   @override
-  Future<void> updateAttendeesForRideWithDate(DateTime date, List<RideAttendee> attendees) async {
-    assert(date != null && attendees != null);
-    final finder = Finder(filter: Filter.equals("date", date.toIso8601String()));
-    final filteredAttendees = attendees
-        .where((RideAttendee ra)=> ra != null && ra.uuid != null
-        && ra.uuid.isNotEmpty && ra.rideDate != null
-        && ra.attendeeId != null && ra.attendeeId.isNotEmpty).toList();
+  Future<void> updateAttendeesForRideWithDate(Ride ride, List<RideAttendee> attendees) async {
+    assert(ride != null && ride.date != null && attendees != null);
+    final date = ride.date.toIso8601String();
+    final finder = Finder(filter: Filter.equals("date", date));
 
     await _database.transaction((txn) async {
+      //Delete old ones, replace by new ones.
       await _rideAttendeeStore.delete(txn,finder: finder);
-      await _rideAttendeeStore.records(filteredAttendees.map((a)=> a.uuid).toList())
-          .put(txn, filteredAttendees.map((a)=> a.toMap()).toList());
+      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
+          .put(txn, attendees.map((a)=> a.toMap()).toList());
+      //create the updated ride object from the existing ride, but with the new count.
+      final updatedRide = ride.toMap();
+      updatedRide["attendees"] = attendees.length;
+      //update the ride.
+      await _rideStore.update(txn, updatedRide,finder: Finder(filter: Filter.byKey(date)));
     });
   }
 
@@ -105,21 +95,5 @@ class RideDao implements IRideDao {
   Future<List<DateTime>> getRideDates() async {
     final rides = await _rideStore.findKeys(_database);
     return rides.map((ride) => DateTime.parse(ride)).toList();
-  }
-
-  Future<Map<DateTime, int>> _getAttendeeCountPerRide() async {
-    //Get all ride attendee records.
-    final List<RecordSnapshot<String, dynamic>> records = await _rideAttendeeStore.find(_database);
-    final Map<DateTime,int> map = {};
-    //Count the occurrences of the keys.
-    records.forEach((record){
-      final key = DateTime.parse(record.value["date"]);
-      if(map.containsKey(key)){
-        map[key]++;
-      }else{
-        map[key] = 1;
-      }
-    });
-    return map;
   }
 }

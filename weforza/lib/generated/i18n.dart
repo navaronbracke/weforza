@@ -49,23 +49,27 @@ class S implements WidgetsLocalizations {
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogErrorDescription => "Could not delete member";
   String get MemberDeleteDialogTitle => "Delete Member";
-  String get MemberDetailsAddDevicesInstruction => "Add devices by editing this member";
+  String get MemberDetailsAddDeviceError => "Could not add device";
+  String get MemberDetailsDeleteDeviceError => "Could not delete device";
+  String get MemberDetailsEditDeviceError => "Could not edit device";
+  String get MemberDetailsLoadDevicesError => "Could not load devices";
   String get MemberDetailsLoadPictureError => "Could not load profile picture";
   String get MemberDetailsNoDevices => "This member has no devices yet";
   String get MemberDetailsTitle => "Details";
-  String get MemberDetailsWasPresentCountCalculating => "Calculating...";
-  String get MemberDetailsWasPresentCountError => "Unknown";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
-  String get MemberListLoadingFailed => "Could not fetch members";
-  String get MemberListLoadingInProgress => "Loading members...";
+  String get MemberListLoadingFailed => "Could not load members";
   String get MemberListNoItems => "There are no members to display";
   String get MemberListTitle => "Members";
   String get MondayPrefix => "Mon";
-  String get PersonDevicesLabel => "Devices";
   String get PersonFirstNameLabel => "First Name";
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideAttendeeAssignmentConfirm => "Save";
+  String get RideAttendeeAssignmentError => "Something went wrong";
+  String get RideAttendeeAssignmentReturnToList => "Return to the list";
+  String get RideAttendeeAssignmentScanningFailed => "The scan failed";
+  String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -83,10 +87,9 @@ class S implements WidgetsLocalizations {
   String get WednesdayPrefix => "Wed";
   String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
-  String MemberDetailsPhoneFormat(String phone) => "Telephone: $phone";
-  String MemberDetailsWasPresentCountLabel(String count) => "Times present: $count";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
   String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
+  String RideAttendeeAssignmentTitle(String date) => "Attendees $date";
   String ValueIsRequired(String value) => "$value is required";
 }
 
@@ -111,19 +114,21 @@ class $nl extends S {
   @override
   String get HomePageRidesTab => "Ritten";
   @override
-  String get MemberDetailsWasPresentCountError => "Onbekend";
-  @override
   String get AddMemberError => "Kon lid niet toevoegen";
   @override
   String get FridayPrefix => "Vr";
   @override
   String get MemberDetailsTitle => "Details";
   @override
+  String get MemberDetailsLoadDevicesError => "Kon toestellen niet laden";
+  @override
   String get UnknownDate => "Onbekende Datum";
   @override
   String get RideListNoRides => "Er zijn geen ritten";
   @override
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
+  @override
+  String get MemberDetailsDeleteDeviceError => "Kon toestel niet verwijderen";
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
   @override
@@ -133,11 +138,13 @@ class $nl extends S {
   @override
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
   @override
-  String get MemberDetailsAddDevicesInstruction => "Voeg toestellen toe door dit lid te bewerken";
+  String get RideAttendeeAssignmentStopScan => "Stop Scan";
   @override
   String get SundayPrefix => "Zo";
   @override
   String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
+  @override
+  String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
   @override
   String get RideListLoadingRidesError => "Kon ritten niet laden";
   @override
@@ -148,6 +155,8 @@ class $nl extends S {
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
   @override
   String get AddMemberTitle => "Nieuw lid";
+  @override
+  String get MemberDetailsAddDeviceError => "Kon toestel niet toevoegen";
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe met de +";
   @override
@@ -167,6 +176,8 @@ class $nl extends S {
   @override
   String get AddRideTitle => "Nieuwe Rit";
   @override
+  String get MemberDetailsEditDeviceError => "Kon toestel niet bewerken";
+  @override
   String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override
   String get AddRideLoadingFailed => "Kon de kalender niet laden";
@@ -179,7 +190,7 @@ class $nl extends S {
   @override
   String get AppName => "WeForza";
   @override
-  String get MemberListLoadingInProgress => "Leden aan het ophalen...";
+  String get RideAttendeeAssignmentReturnToList => "Terug naar de lijst";
   @override
   String get RideDetailsLoadAttendeesError => "Kon de aanwezigen niet laden";
   @override
@@ -195,11 +206,9 @@ class $nl extends S {
   @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
-  String get MemberDetailsWasPresentCountCalculating => "Berekenen...";
+  String get RideAttendeeAssignmentError => "Er liep iets fout";
   @override
   String get AddRideError => "Kon ritten niet toevoegen";
-  @override
-  String get PersonDevicesLabel => "Toestellen";
   @override
   String get TuesdayPrefix => "Di";
   @override
@@ -217,7 +226,9 @@ class $nl extends S {
   @override
   String get HomePageMembersTab => "Leden";
   @override
-  String get MemberListLoadingFailed => "Kon geen leden ophalen";
+  String get MemberListLoadingFailed => "Kon leden niet laden";
+  @override
+  String get RideAttendeeAssignmentConfirm => "Opslaan";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
   @override
@@ -227,13 +238,11 @@ class $nl extends S {
   @override
   String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
   @override
-  String MemberDetailsPhoneFormat(String phone) => "Telefoon: $phone";
-  @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
   @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
   @override
-  String MemberDetailsWasPresentCountLabel(String count) => "Aanwezigheden: $count";
+  String RideAttendeeAssignmentTitle(String date) => "Aanwezigen $date";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

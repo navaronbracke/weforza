@@ -119,7 +119,8 @@ class AddRideBloc extends Bloc {
   Future<bool> addRides() async {
     bool ridesCreated = false;
     if(_ridesToAdd.isNotEmpty){
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date)).toList()).then((_){
+      await _repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).then((_)
+      {
         _errorMessageController.add("");
         ridesCreated = true;
       },onError: (error){

@@ -1,4 +1,7 @@
 
+import 'dart:async';
+
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
@@ -12,16 +15,23 @@ class RideDetailsBloc extends Bloc {
   final MemberRepository _memberRepository;
   final RideRepository _rideRepository;
 
+  StreamController<String> _attendeesCountController = BehaviorSubject<String>();
+  Stream<String> get attendeesCount => _attendeesCountController.stream;
+
   Future<List<MemberItem>> loadRideAttendees(DateTime date) async {
     List<Member> attendees = await _memberRepository.getRideAttendees(date);
     List<Future<MemberItem>> items = attendees.map((attendee) async =>
         MemberItem(attendee,await _memberRepository.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
-    return Future.wait(items);
+    final list = await Future.wait(items);
+    _attendeesCountController.add(items.length.toString());
+    return list;
   }
 
   Future<void> deleteRide(DateTime date) => _rideRepository.deleteRide(date);
 
   @override
-  void dispose() {}
+  void dispose() {
+    _attendeesCountController.close();
+  }
 
 }

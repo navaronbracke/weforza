@@ -66,8 +66,14 @@
   "RideAttendeeAssignmentConfirm": "Opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
 
+  "EditRideTitle": "Rit Bewerken",
+
   "RideStart": "Vertrek",
   "RideDestination": "Aankomst",
+  "RideTitleUnknown": "Rit zonder titel",
+  "RideStartUnknown": "Ride zonder start adres",
+  "RideDestinationUnknown": "Rit zonder aankomst adres",
+  "RideDistanceUnknown": "Ride met onbekende afstand",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

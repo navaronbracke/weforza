@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a single item for the ride list page.
@@ -24,13 +26,7 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
         children: <Widget>[
           Text(ride.getFormattedDate(context)),
           Expanded(child: Center()),
-          Row(
-            children: <Widget>[
-              Text("${ride.numberOfAttendees}"),
-              SizedBox(width: 4),
-              Icon(Icons.people),
-            ],
-          ),
+          RideAttendeeCounter(ride.numberOfAttendees.toString()),
         ],
       ),
     );
@@ -49,8 +45,8 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
             Row(
               children: <Widget>[
                 Text("${ride.numberOfAttendees}"),
-                SizedBox(width: 4),
-                Icon(Icons.people),
+                SizedBox(width: 5),
+                Icon(Icons.people,color: ApplicationTheme.rideAttendeeCounterIconColor),
               ],
             ),
           ],

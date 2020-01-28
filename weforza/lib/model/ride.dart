@@ -4,7 +4,14 @@ import 'package:intl/intl.dart';
 
 ///This class represents a Ride.
 class Ride {
-  Ride(this.date) : assert(date != null);
+  Ride({
+    @required this.date,
+    this.numberOfAttendees = 0,
+    this.title,
+    this.startAddress,
+    this.destinationAddress,
+    this.distance = 0.0
+  }): assert(date != null && numberOfAttendees != null && distance != null);
 
   ///A date formatting pattern for in the top of the detail page.
   static final String datePattern = "EEEE d MMMM yyyy";
@@ -46,13 +53,14 @@ class Ride {
   ///Create a [Ride] of a Map
   static Ride of(DateTime date,Map<String,dynamic> values){
     assert(date != null && values != null);
-    final ride = Ride(date);
-    ride.title = values["title"];
-    ride.numberOfAttendees = values["attendees"];
-    ride.startAddress = values["start"];
-    ride.destinationAddress = values["destination"];
-    ride.distance = values["distance"];
-    return ride;
+    return Ride(
+      date: date,
+      numberOfAttendees: values["attendees"],
+      title: values["title"],
+      destinationAddress: values["destination"],
+      startAddress: values["start"],
+      distance: values["distance"]
+    );
   }
 
   @override

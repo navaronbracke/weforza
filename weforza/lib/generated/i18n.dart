@@ -39,6 +39,7 @@ class S implements WidgetsLocalizations {
   String get DialogCancel => "Cancel";
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
+  String get DistanceKm => "Km";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -73,12 +74,14 @@ class S implements WidgetsLocalizations {
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
+  String get RideDestination => "Destination";
   String get RideDetailsLoadAttendeesError => "Could not load attendees";
   String get RideDetailsNoAttendees => "This ride has no attendees";
   String get RideListAddRideInstruction => "Add a ride with the +";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoRides => "There are no rides";
   String get RideListRidesHeader => "Rides";
+  String get RideStart => "Start";
   String get SaturdayPrefix => "Sat";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
@@ -103,6 +106,8 @@ class $nl extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  @override
+  String get DistanceKm => "Km";
   @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
   @override
@@ -214,6 +219,8 @@ class $nl extends S {
   @override
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
+  String get RideDestination => "Aankomst";
+  @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
   @override
   String get RideDeleteDialogTitle => "Verwijder Rit";
@@ -231,6 +238,8 @@ class $nl extends S {
   String get RideAttendeeAssignmentConfirm => "Opslaan";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
+  @override
+  String get RideStart => "Vertrek";
   @override
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override

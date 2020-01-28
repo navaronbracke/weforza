@@ -65,6 +65,9 @@
   "RideAttendeeAssignmentConfirm": "Save",
   "RideAttendeeAssignmentError": "Something went wrong",
 
+  "RideStart": "Start",
+  "RideDestination": "Destination",
+
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
   "PersonTelephoneLabel": "Telephone",
@@ -82,5 +85,7 @@
   "ValueIsRequired": "$value is required",
   "DialogCancel": "Cancel",
   "DialogDelete": "Delete",
-  "DialogOk": "Ok"
+  "DialogOk": "Ok",
+
+  "DistanceKm": "Km"
 }

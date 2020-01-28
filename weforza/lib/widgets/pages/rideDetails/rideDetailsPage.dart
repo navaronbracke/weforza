@@ -9,9 +9,9 @@ import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
+import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -58,7 +58,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   @override
   Widget buildAndroidLandscapeLayout(BuildContext context) {
-    // TODO: implement buildAndroidLandscapeLayout
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -85,13 +84,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              //TODO go to edit ride
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
+                if(value != null && value){
+                  setState(() {});
+                }
+              });
             },
           ),
-          //TODO put this in edit ride as the delete button
-          //IconButton(icon: Icon(Icons.delete),onPressed: (){
-          //  showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
-          //}),
         ],
       ),
       body: Column(
@@ -99,8 +98,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8),
-            child: Text("Driedaagse Beernem - Halle - Zulte Driedaagse Beernem - Halle - Zulte Driedaagse Beernem - Halle - Zulte",
-                softWrap: true,maxLines: 2,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+            child: Text(ride.title ?? S.of(context).RideTitleUnknown,
+                softWrap: true,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
             ),
           ),
           Expanded(
@@ -121,8 +123,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                           ],
                         ),
                         SizedBox(height: 4),
-                        Text("Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi",
-                            softWrap: true,maxLines: 3, overflow: TextOverflow.ellipsis
+                        Text(
+                            ride.startAddress ?? S.of(context).RideStartUnknown,
+                            softWrap: true,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis
                         ),
                         SizedBox(height: 10),
                         Row(
@@ -133,15 +138,18 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                           ],
                         ),
                         SizedBox(height: 4),
-                        Text("Kapelstraat 100, 9100 Sint-Niklaas Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi",
-                            softWrap: true,maxLines: 3, overflow: TextOverflow.ellipsis
+                        Text(
+                            ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
+                            softWrap: true,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis
                         ),
                         SizedBox(height: 20),
                         Row(
                           children: <Widget>[
                             Row(
                               children: <Widget>[
-                                Text("9999.99"),
+                                Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
                                 SizedBox(width: 5),
                                 Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
                               ],
@@ -178,7 +186,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   @override
   Widget buildAndroidPortraitLayout(BuildContext context) {
-    // TODO: implement buildAndroidPortraitLayout
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -205,7 +212,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              //TODO go to edit ride
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
+                if(value != null && value){
+                  setState(() {});
+                }
+              });
             },
           ),
         ],
@@ -218,8 +229,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text("Driedaagse Beernem - Halle - Zulte Driedaagse Beernem - Halle - Zulte Driedaagse Beernem - Halle - Zulte",
-                    softWrap: true,maxLines: 3,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+                Text(ride.title ?? S.of(context).RideTitleUnknown,
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
                 ),
                 SizedBox(height: 4),
                 Row(
@@ -230,8 +244,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                   ],
                 ),
                 SizedBox(height: 4),
-                Text("Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi",
-                    softWrap: true,maxLines: 3, overflow: TextOverflow.ellipsis
+                Text(
+                    ride.startAddress ?? S.of(context).RideStartUnknown,
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis
                 ),
                 SizedBox(height: 10),
                 Row(
@@ -242,15 +259,18 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                   ],
                 ),
                 SizedBox(height: 4),
-                Text("Kapelstraat 100, 9100 Sint-Niklaas Dorp-West 24, 9080 Lochristi Dorp-West 24, 9080 Lochristi",
-                    softWrap: true,maxLines: 3, overflow: TextOverflow.ellipsis
+                Text(
+                    ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis
                 ),
                 SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text("9999.99"),
+                        Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
                         SizedBox(width: 5),
                         Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
@@ -282,7 +302,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
 
   @override
   Widget buildIOSLandscapeLayout(BuildContext context) {
-    // TODO: implement buildIOSLandscapeLayout
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -315,13 +334,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                   Icons.edit,
                   CupertinoTheme.of(context).primaryColor,
                   CupertinoTheme.of(context).primaryContrastingColor, (){
-                      //TODO goto edit ride
-                    },
-                ),
-                //TODO put this in edit ride as the delete button
-                //CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                //  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
-                //}),
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
+                    if(value != null && value){
+                      setState(() {});
+                    }
+                  });
+                }),
               ],
             ),
           ],
@@ -329,14 +347,100 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildAttendeesList(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(ride.title ?? S.of(context).RideTitleUnknown,
+                  softWrap: true,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+              ),
+            ),
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
+                              Icon(Icons.forward),
+                              SizedBox(width: 4),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                              ride.startAddress ?? S.of(context).RideStartUnknown,
+                              softWrap: true,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: <Widget>[
+                              Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(width: 4),
+                              Icon(Icons.flag),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                              ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
+                              softWrap: true,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
+                                  SizedBox(width: 5),
+                                  Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              Expanded(child: Center()),
+                              StreamBuilder<String>(
+                                initialData: "",
+                                stream: _bloc.attendeesCount,
+                                builder: (context,snapshot){
+                                  if(snapshot.hasError || snapshot.data == ""){
+                                    return Center();
+                                  }else{
+                                    return RideAttendeeCounter(snapshot.data);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 4,
+                    child: _buildAttendeesList(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget buildIOSPortraitLayout(BuildContext context) {
-    // TODO: implement buildIOSPortraitLayout
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -366,12 +470,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                 }),
                 SizedBox(width: 30),
                 CupertinoIconButton(
-                  Icons.edit,
-                  CupertinoTheme.of(context).primaryColor,
-                  CupertinoTheme.of(context).primaryContrastingColor, (){
-                  //TODO goto edit ride
-                  },
-                ),
+                    Icons.edit,
+                    CupertinoTheme.of(context).primaryColor,
+                    CupertinoTheme.of(context).primaryContrastingColor, (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
+                    if(value != null && value){
+                      setState(() {});
+                    }
+                  });
+                }),
               ],
             ),
           ],
@@ -379,16 +486,85 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildAttendeesList(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(ride.title ?? S.of(context).RideTitleUnknown,
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: <Widget>[
+                      Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
+                      Icon(Icons.forward),
+                      SizedBox(width: 4),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                      ride.startAddress ?? S.of(context).RideStartUnknown,
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(width: 4),
+                      Icon(Icons.flag),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                      ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
+                      softWrap: true,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
+                          SizedBox(width: 5),
+                          Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      Expanded(child: Center()),
+                      StreamBuilder<String>(
+                        initialData: "",
+                        stream: _bloc.attendeesCount,
+                        builder: (context,snapshot){
+                          if(snapshot.hasError || snapshot.data == ""){
+                            return Center();
+                          }else{
+                            return RideAttendeeCounter(snapshot.data);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _buildAttendeesList(),
+            ),
+          ],
+        ),
       ),
     );
   }
-
-  //TODO ad this into edit widget
-  //RideDeleteHandler
-  //
-  //@override
-  //Future<void> deleteRide(DateTime date) => _bloc.deleteRide(date);
 
   Widget _buildAttendeesList(){
     return FutureBuilder<List<MemberItem>>(

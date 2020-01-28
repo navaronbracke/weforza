@@ -65,8 +65,14 @@
   "RideAttendeeAssignmentConfirm": "Save",
   "RideAttendeeAssignmentError": "Something went wrong",
 
+  "EditRideTitle": "Edit Ride",
+
   "RideStart": "Start",
   "RideDestination": "Destination",
+  "RideTitleUnknown": "Ride without title",
+  "RideStartUnknown": "Ride without departure address",
+  "RideDestinationUnknown": "Ride without destination address",
+  "RideDistanceUnknown": "Ride with unknown distance",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

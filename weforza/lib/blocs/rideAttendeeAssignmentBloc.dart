@@ -57,6 +57,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
       RideProvider.reloadRides = true;
+      RideProvider.selectedRide = ride;
       result = true;
     },onError: (error) => //errors are handled in the StreamBuilder that consumes this stream
         _displayModeController.addError(error));
@@ -68,9 +69,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
         DateFormat("d/M/yyyy", Localizations.localeOf(context).languageCode)
             .format(ride.date));
   }
-
-
-  @override
+  
   void startScan() {
     //errors are handled by the FutureBuilder that consumes the scan future
     _displayModeController.add(RideAttendeeDisplayMode.SCANNING);
@@ -79,7 +78,6 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
     _scanCompleter = Completer();
   }
 
-  @override
   void stopScan() {
     // TODO: stop scan with flutter blue instance if scanning
     _scanCompleter.complete();

@@ -69,7 +69,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
         DateFormat("d/M/yyyy", Localizations.localeOf(context).languageCode)
             .format(ride.date));
   }
-  
+
   void startScan() {
     //errors are handled by the FutureBuilder that consumes the scan future
     _displayModeController.add(RideAttendeeDisplayMode.SCANNING);

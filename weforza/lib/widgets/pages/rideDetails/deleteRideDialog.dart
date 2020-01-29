@@ -51,8 +51,7 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
             await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
               RideProvider.reloadRides = true;
               final navigator = Navigator.of(context);
-              //Pop the dialog,the edit and the detail off the stack
-              navigator.pop(context);
+              //Pop the dialog and the detail off the stack
               navigator.pop(context);
               navigator.pop(context);
             },onError: (error){
@@ -91,8 +90,7 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
             await widget._handler.deleteRide(RideProvider.selectedRide.date).then((_){
               RideProvider.reloadRides = true;
               final navigator = Navigator.of(context);
-              //Pop the dialog,the edit and the detail off the stack
-              navigator.pop(context);
+              //Pop the dialog and the detail off the stack
               navigator.pop(context);
               navigator.pop(context);
             },onError: (error){

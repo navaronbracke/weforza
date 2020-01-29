@@ -13,8 +13,9 @@ class Ride {
     this.distance = 0.0
   }): assert(date != null && numberOfAttendees != null && distance != null);
 
-  ///A date formatting pattern for in the top of the detail page.
-  static final String datePattern = "EEEE d MMMM yyyy";
+  ///Date formatting patterns
+  static final String LongDatePattern = "EEEE d MMMM yyyy";
+  static final String ShortDatePattern = "EEE d MMM yyyy";
 
   ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
@@ -35,8 +36,9 @@ class Ride {
   double distance;
 
   ///Get [date], but formatted with a day prefix.
-  String getFormattedDate(BuildContext context){
-    return DateFormat(datePattern,Localizations.localeOf(context)
+  ///This method can return a short or long format, depending on [shortForm].
+  String getFormattedDate(BuildContext context,[bool shortForm = true]){
+    return DateFormat(shortForm ? ShortDatePattern : LongDatePattern,Localizations.localeOf(context)
         .languageCode).format(date);
   }
 

@@ -202,7 +202,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO goto edit
                 }),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
                         ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
               ],
@@ -274,7 +274,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
                   //TODO goto edit
                 }),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
                         ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
               ],

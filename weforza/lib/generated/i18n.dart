@@ -76,17 +76,13 @@ class S implements WidgetsLocalizations {
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
   String get RideDestination => "Destination";
-  String get RideDestinationUnknown => "Ride without destination address";
   String get RideDetailsLoadAttendeesError => "Could not load attendees";
   String get RideDetailsNoAttendees => "This ride has no attendees";
-  String get RideDistanceUnknown => "Ride with unknown distance";
   String get RideListAddRideInstruction => "Add a ride with the +";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoRides => "There are no rides";
   String get RideListRidesHeader => "Rides";
   String get RideStart => "Start";
-  String get RideStartUnknown => "Ride without departure address";
-  String get RideTitleUnknown => "Ride without title";
   String get SaturdayPrefix => "Sat";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
@@ -142,8 +138,6 @@ class $nl extends S {
   @override
   String get AddMemberAlreadyExists => "Dit lid bestaat al";
   @override
-  String get RideStartUnknown => "Ride zonder start adres";
-  @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
   String get EditRideTitle => "Rit Bewerken";
@@ -165,8 +159,6 @@ class $nl extends S {
   String get PhoneIllegalCharacters => "Een telefoonnummer bestaat enkel uit cijfers";
   @override
   String get PersonFirstNameLabel => "Voornaam";
-  @override
-  String get RideDestinationUnknown => "Rit zonder aankomst adres";
   @override
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
   @override
@@ -218,8 +210,6 @@ class $nl extends S {
   @override
   String get SaturdayPrefix => "Za";
   @override
-  String get RideTitleUnknown => "Rit zonder titel";
-  @override
   String get MemberListTitle => "Leden";
   @override
   String get PersonTelephoneLabel => "Telefoon";
@@ -239,8 +229,6 @@ class $nl extends S {
   String get RideDeleteDialogTitle => "Verwijder Rit";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
-  @override
-  String get RideDistanceUnknown => "Ride met onbekende afstand";
   @override
   String get ThursdayPrefix => "Do";
   @override

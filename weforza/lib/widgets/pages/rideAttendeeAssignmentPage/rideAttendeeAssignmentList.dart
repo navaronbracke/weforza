@@ -87,7 +87,7 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
                     CupertinoTheme.of(context).primaryContrastingColor,
                     widget.onStartScan
                 ),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(
                     Icons.check,
                     CupertinoTheme.of(context).primaryColor,

@@ -6,11 +6,13 @@ import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
+import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -24,7 +26,7 @@ class RideDetailsPage extends StatefulWidget {
   );
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget {
+class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget, RideDeleteHandler {
   _RideDetailsPageState(this._bloc): assert(_bloc != null);
 
   final RideDetailsBloc _bloc;
@@ -61,7 +63,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
-        title: Text(ride.getFormattedDate(context),style: TextStyle(fontSize: 16)),
+        title: Text(ride.getFormattedDate(context,false),style: TextStyle(fontSize: 16)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_pin),
@@ -91,96 +93,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               });
             },
           ),
+          IconButton(icon: Icon(Icons.delete),onPressed: (){
+            showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+          }),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(ride.title ?? S.of(context).RideTitleUnknown,
-                softWrap: true,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                            Icon(Icons.forward),
-                            SizedBox(width: 4),
-                          ],
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                            ride.startAddress ?? S.of(context).RideStartUnknown,
-                            softWrap: true,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: <Widget>[
-                            Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                            SizedBox(width: 4),
-                            Icon(Icons.flag),
-                          ],
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                            ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
-                            softWrap: true,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
-                                SizedBox(width: 5),
-                                Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            Expanded(child: Center()),
-                            StreamBuilder<String>(
-                              initialData: "",
-                              stream: _bloc.attendeesCount,
-                              builder: (context,snapshot){
-                                if(snapshot.hasError || snapshot.data == ""){
-                                  return Center();
-                                }else{
-                                  return RideAttendeeCounter(snapshot.data);
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 4,
-                  child: _buildAttendeesList(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
     );
   }
 
@@ -219,84 +137,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
               });
             },
           ),
+          IconButton(icon: Icon(Icons.delete),onPressed: (){
+            showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+          }),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(ride.title ?? S.of(context).RideTitleUnknown,
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
-                ),
-                SizedBox(height: 4),
-                Row(
-                  children: <Widget>[
-                    Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                    Icon(Icons.forward),
-                    SizedBox(width: 4),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Text(
-                    ride.startAddress ?? S.of(context).RideStartUnknown,
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: <Widget>[
-                    Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 4),
-                    Icon(Icons.flag),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Text(
-                    ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
-                        SizedBox(width: 5),
-                        Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    Expanded(child: Center()),
-                    StreamBuilder<String>(
-                      initialData: "",
-                      stream: _bloc.attendeesCount,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError || snapshot.data == ""){
-                          return Center();
-                        }else{
-                          return RideAttendeeCounter(snapshot.data);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: _buildAttendeesList(),
-          ),
-        ],
-      ),
+      body: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
     );
   }
 
@@ -309,7 +155,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Center(child: Text(ride.getFormattedDate(context),style: TextStyle(fontSize: 16))),
+              child: Center(child: Text(ride.getFormattedDate(context,false),style: TextStyle(fontSize: 16))),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -329,7 +175,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                     }
                   });
                 }),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(
                   Icons.edit,
                   CupertinoTheme.of(context).primaryColor,
@@ -340,6 +186,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                     }
                   });
                 }),
+                SizedBox(width: 10),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+                }),
               ],
             ),
           ],
@@ -347,94 +197,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(ride.title ?? S.of(context).RideTitleUnknown,
-                  softWrap: true,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                              Icon(Icons.forward),
-                              SizedBox(width: 4),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                              ride.startAddress ?? S.of(context).RideStartUnknown,
-                              softWrap: true,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: <Widget>[
-                              Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(width: 4),
-                              Icon(Icons.flag),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                              ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
-                              softWrap: true,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
-                                  SizedBox(width: 5),
-                                  Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              Expanded(child: Center()),
-                              StreamBuilder<String>(
-                                initialData: "",
-                                stream: _bloc.attendeesCount,
-                                builder: (context,snapshot){
-                                  if(snapshot.hasError || snapshot.data == ""){
-                                    return Center();
-                                  }else{
-                                    return RideAttendeeCounter(snapshot.data);
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 4,
-                    child: _buildAttendeesList(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
       ),
     );
   }
@@ -468,7 +231,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                     }
                   });
                 }),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(
                     Icons.edit,
                     CupertinoTheme.of(context).primaryColor,
@@ -479,6 +242,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                     }
                   });
                 }),
+                SizedBox(width: 10),
+                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
+                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+                }),
               ],
             ),
           ],
@@ -486,82 +253,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 8,left: 8,right: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(ride.title ?? S.of(context).RideTitleUnknown,
-                      softWrap: true,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
-                  ),
-                  SizedBox(height: 4),
-                  Row(
-                    children: <Widget>[
-                      Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                      Icon(Icons.forward),
-                      SizedBox(width: 4),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                      ride.startAddress ?? S.of(context).RideStartUnknown,
-                      softWrap: true,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                      SizedBox(width: 4),
-                      Icon(Icons.flag),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                      ride.destinationAddress ?? S.of(context).RideDestinationUnknown,
-                      softWrap: true,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text(ride.distance == 0.0 ? S.of(context).RideDistanceUnknown : ride.distance.toString()),
-                          SizedBox(width: 5),
-                          Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      Expanded(child: Center()),
-                      StreamBuilder<String>(
-                        initialData: "",
-                        stream: _bloc.attendeesCount,
-                        builder: (context,snapshot){
-                          if(snapshot.hasError || snapshot.data == ""){
-                            return Center();
-                          }else{
-                            return RideAttendeeCounter(snapshot.data);
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: _buildAttendeesList(),
-            ),
-          ],
-        ),
+        child: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
       ),
     );
   }
@@ -586,4 +278,173 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       },
     );
   }
+
+  Widget _buildBodyWithTitle(Ride ride){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(ride.title,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
+                          Icon(Icons.forward),
+                          SizedBox(width: 4),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                          ride.startAddress ?? "-",
+                          softWrap: true,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: <Widget>[
+                          Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(width: 4),
+                          Icon(Icons.flag),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                          ride.destinationAddress ?? "-",
+                          softWrap: true,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text(ride.distance == 0.0 ? "-" : ride.distance.toString()),
+                              SizedBox(width: 5),
+                              Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          Expanded(child: Center()),
+                          StreamBuilder<String>(
+                            initialData: "",
+                            stream: _bloc.attendeesCount,
+                            builder: (context,snapshot){
+                              if(snapshot.hasError || snapshot.data == ""){
+                                return Center();
+                              }else{
+                                return RideAttendeeCounter(snapshot.data);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 4,
+                child: _buildAttendeesList(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBodyWithoutTitle(Ride ride){
+    return Row(
+      children: <Widget>[
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
+                    Icon(Icons.forward),
+                    SizedBox(width: 4),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Text(
+                    ride.startAddress ?? "-",
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4),
+                    Icon(Icons.flag),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Text(
+                    ride.destinationAddress ?? "-",
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(ride.distance == 0.0 ? "-" : ride.distance.toString()),
+                        SizedBox(width: 5),
+                        Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    Expanded(child: Center()),
+                    StreamBuilder<String>(
+                      initialData: "",
+                      stream: _bloc.attendeesCount,
+                      builder: (context,snapshot){
+                        if(snapshot.hasError || snapshot.data == ""){
+                          return Center();
+                        }else{
+                          return RideAttendeeCounter(snapshot.data);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 4,
+          child: _buildAttendeesList(),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Future<void> deleteRide(DateTime date) => _bloc.deleteRide(date);
 }

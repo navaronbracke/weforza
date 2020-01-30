@@ -40,7 +40,11 @@ class S implements WidgetsLocalizations {
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
   String get DistanceKm => "Km";
-  String get EditRideTitle => "Edit Ride";
+  String get EditRideDepartureLabel => "Departure";
+  String get EditRideDestinationLabel => "Destination";
+  String get EditRideDistanceLabel => "Distance";
+  String get EditRidePageTitle => "Edit Ride";
+  String get EditRideTitleLabel => "Title";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -108,6 +112,10 @@ class $nl extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
+  String get EditRidePageTitle => "Rit Bewerken";
+  @override
+  String get EditRideTitleLabel => "Titel";
+  @override
   String get DistanceKm => "Km";
   @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
@@ -140,11 +148,11 @@ class $nl extends S {
   @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
-  String get EditRideTitle => "Rit Bewerken";
-  @override
   String get MondayPrefix => "Ma";
   @override
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
+  @override
+  String get EditRideDistanceLabel => "Afstand";
   @override
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   @override
@@ -218,11 +226,15 @@ class $nl extends S {
   @override
   String get AddRideError => "Kon ritten niet toevoegen";
   @override
+  String get EditRideDestinationLabel => "Bestemming";
+  @override
   String get TuesdayPrefix => "Di";
   @override
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
-  String get RideDestination => "Aankomst";
+  String get RideDestination => "Bestemming";
+  @override
+  String get EditRideDepartureLabel => "Vertrek";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
   @override

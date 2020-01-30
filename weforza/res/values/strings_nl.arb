@@ -26,7 +26,6 @@
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
 
-
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
   "RideDeleteDialogErrorDescription": "Kon rit niet verwijderen",
@@ -66,10 +65,14 @@
   "RideAttendeeAssignmentConfirm": "Opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
 
-  "EditRideTitle": "Rit Bewerken",
+  "EditRidePageTitle": "Rit Bewerken",
+  "EditRideTitleLabel": "Titel",
+  "EditRideDepartureLabel": "Vertrek",
+  "EditRideDestinationLabel": "Bestemming",
+  "EditRideDistanceLabel": "Afstand",
 
   "RideStart": "Vertrek",
-  "RideDestination": "Aankomst",
+  "RideDestination": "Bestemming",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

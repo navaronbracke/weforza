@@ -65,7 +65,11 @@
   "RideAttendeeAssignmentConfirm": "Save",
   "RideAttendeeAssignmentError": "Something went wrong",
 
-  "EditRideTitle": "Edit Ride",
+  "EditRidePageTitle": "Edit Ride",
+  "EditRideTitleLabel": "Title",
+  "EditRideDepartureLabel": "Departure",
+  "EditRideDestinationLabel": "Destination",
+  "EditRideDistanceLabel": "Distance",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

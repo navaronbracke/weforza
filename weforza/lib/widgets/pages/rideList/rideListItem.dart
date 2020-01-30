@@ -24,7 +24,7 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
     return ListTile(
       title: Row(
         children: <Widget>[
-          Text(ride.getFormattedDate(context)),
+          Text(ride.getFormattedDate(context,false)),
           Expanded(child: Center()),
           RideAttendeeCounter(ride.numberOfAttendees.toString()),
         ],
@@ -40,7 +40,7 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
         padding: const EdgeInsets.all(14.0),
         child: Row(
           children: <Widget>[
-            Text(ride.getFormattedDate(context)),
+            Text(ride.getFormattedDate(context,false)),
             Expanded(child: Center()),
             Row(
               children: <Widget>[

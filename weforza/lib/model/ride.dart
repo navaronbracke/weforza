@@ -14,8 +14,15 @@ class Ride {
   }): assert(date != null && numberOfAttendees != null && distance != null);
 
   ///Date formatting patterns
-  static final String LongDatePattern = "EEEE d MMMM yyyy";
-  static final String ShortDatePattern = "EEE d MMM yyyy";
+  static final String longDatePattern = "EEEE d MMMM yyyy";
+  static final String shortDatePattern = "EEE d MMM yyyy";
+
+  ///Address regex for departure/destination addresses.
+  ///Between 1 and 80 letters, digits, spaces or characters that are included in the regex.
+  ///The first group in the regex OR are the regex pattern classes for digits, whitespace and letters.
+  ///The second group are the characters that don't have to be escaped,
+  ///while the last group contains the characters that have to be escaped for the pattern.
+  static final RegExp addressRegex = RegExp(r"^([\p{Letter}\d\s]|[#,;:'&/°]|[\.\(\)\-]){1,80}$",unicode: true);
 
   ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
@@ -38,7 +45,7 @@ class Ride {
   ///Get [date], but formatted with a day prefix.
   ///This method can return a short or long format, depending on [shortForm].
   String getFormattedDate(BuildContext context,[bool shortForm = true]){
-    return DateFormat(shortForm ? ShortDatePattern : LongDatePattern,Localizations.localeOf(context)
+    return DateFormat(shortForm ? shortDatePattern : longDatePattern,Localizations.localeOf(context)
         .languageCode).format(date);
   }
 

@@ -32,6 +32,8 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
 
   List<String> _rideAttendees = List();
 
+  Future<void> submitFuture;
+
   Future<void> get scanFuture => _scanCompleter?.future;
   Completer<void> _scanCompleter;
 
@@ -51,17 +53,15 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
     );
   }
 
-  Future<bool> onSubmit() async {
-    bool result = false;
+  Future<void> onSubmit() async {
+    _displayModeController.add(RideAttendeeDisplayMode.SAVING);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
       RideProvider.reloadRides = true;
       RideProvider.selectedRide = ride;
-      result = true;
     },onError: (error) => //errors are handled in the StreamBuilder that consumes this stream
         _displayModeController.addError(error));
-    return result;
   }
 
   String getTitle(BuildContext context){

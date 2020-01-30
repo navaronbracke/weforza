@@ -98,7 +98,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           }),
         ],
       ),
-      body: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
+      body: _buildLandscapeBody(ride),
     );
   }
 
@@ -142,7 +142,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           }),
         ],
       ),
-      body: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
+      body: _buildPortraitBody(ride),
     );
   }
 
@@ -197,7 +197,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
+        child: _buildLandscapeBody(ride),
       ),
     );
   }
@@ -253,11 +253,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
       ),
       child: SafeArea(
         bottom: false,
-        child: ride.title == null ? _buildBodyWithoutTitle(ride) : _buildBodyWithTitle(ride)
+        child: _buildPortraitBody(ride),
       ),
     );
   }
 
+  ///Build the ride attendees list.
   Widget _buildAttendeesList(){
     return FutureBuilder<List<MemberItem>>(
       future: attendeesFuture,
@@ -279,15 +280,95 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     );
   }
 
-  Widget _buildBodyWithTitle(Ride ride){
+  ///Build the panel that displays Start/Destination , Distance and Attendees count.
+  Widget _buildPropertiesPanel(Ride ride){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(width: 4),
+            Icon(Icons.forward),
+          ],
+        ),
+        SizedBox(height: 4),
+        Text(
+            ride.startAddress ?? "-",
+            softWrap: true,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: <Widget>[
+            Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(width: 4),
+            Icon(Icons.flag),
+          ],
+        ),
+        SizedBox(height: 4),
+        Text(
+            ride.destinationAddress ?? "-",
+            softWrap: true,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis
+        ),
+        SizedBox(height: 20),
+        Row(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(ride.distance == 0.0 ? "-" : ride.distance.toString()),
+                SizedBox(width: 5),
+                Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            ),
+            Expanded(child: Center()),
+            StreamBuilder<String>(
+              initialData: "",
+              stream: _bloc.attendeesCount,
+              builder: (context,snapshot){
+                if(snapshot.hasError || snapshot.data == ""){
+                  return Center();
+                }else{
+                  return RideAttendeeCounter(snapshot.data);
+                }
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  ///Build the page main body.
+  ///Encompasses an optional title at the top,
+  ///the ride properties on the left and the attendees on the right.
+  Widget _buildLandscapeBody(Ride ride){
+    return (ride.title == null || ride.title.isEmpty) ? Row(
+      children: <Widget>[
+        Flexible(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8,left: 8),
+            child: _buildPropertiesPanel(ride),
+          ),
+        ),
+        Flexible(
+          flex: 4,
+          child: _buildAttendeesList(),
+        ),
+      ],
+    ) : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(ride.title,
+          child: Text(
+              ride.title,
               softWrap: true,
-              maxLines: 3,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
           ),
@@ -299,64 +380,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                 flex: 2,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                          Icon(Icons.forward),
-                          SizedBox(width: 4),
-                        ],
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                          ride.startAddress ?? "-",
-                          softWrap: true,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: <Widget>[
-                          Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                          SizedBox(width: 4),
-                          Icon(Icons.flag),
-                        ],
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                          ride.destinationAddress ?? "-",
-                          softWrap: true,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Text(ride.distance == 0.0 ? "-" : ride.distance.toString()),
-                              SizedBox(width: 5),
-                              Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          Expanded(child: Center()),
-                          StreamBuilder<String>(
-                            initialData: "",
-                            stream: _bloc.attendeesCount,
-                            builder: (context,snapshot){
-                              if(snapshot.hasError || snapshot.data == ""){
-                                return Center();
-                              }else{
-                                return RideAttendeeCounter(snapshot.data);
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: _buildPropertiesPanel(ride),
                 ),
               ),
               Flexible(
@@ -370,71 +394,36 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     );
   }
 
-  Widget _buildBodyWithoutTitle(Ride ride){
-    return Row(
-      children: <Widget>[
+  ///Build the page main body.
+  ///Encompasses an optional title at the top,
+  ///the ride properties below the title and the attendees at the bottom.
+  Widget _buildPortraitBody(Ride ride){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: (ride.title == null || ride.title.isEmpty) ? <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: _buildPropertiesPanel(ride),
+        ),
+        Expanded(
+          child: _buildAttendeesList(),
+        ),
+      ] : <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+              ride.title,
+              softWrap: true,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)
+          ),
+        ),
         Flexible(
           flex: 2,
           child: Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-                    Icon(Icons.forward),
-                    SizedBox(width: 4),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Text(
-                    ride.startAddress ?? "-",
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: <Widget>[
-                    Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 4),
-                    Icon(Icons.flag),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Text(
-                    ride.destinationAddress ?? "-",
-                    softWrap: true,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(ride.distance == 0.0 ? "-" : ride.distance.toString()),
-                        SizedBox(width: 5),
-                        Text(S.of(context).DistanceKm,style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    Expanded(child: Center()),
-                    StreamBuilder<String>(
-                      initialData: "",
-                      stream: _bloc.attendeesCount,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError || snapshot.data == ""){
-                          return Center();
-                        }else{
-                          return RideAttendeeCounter(snapshot.data);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: _buildPropertiesPanel(ride),
           ),
         ),
         Flexible(

@@ -285,13 +285,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: 4),
-            Icon(Icons.forward),
-          ],
-        ),
+        Text(S.of(context).RideStart,style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 4),
         Text(
             ride.startAddress ?? "-",
@@ -300,13 +294,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             overflow: TextOverflow.ellipsis
         ),
         SizedBox(height: 10),
-        Row(
-          children: <Widget>[
-            Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: 4),
-            Icon(Icons.flag),
-          ],
-        ),
+        Text(S.of(context).RideDestination,style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 4),
         Text(
             ride.destinationAddress ?? "-",

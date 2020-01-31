@@ -73,17 +73,21 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
               ],
             );
           }else{
-            return AlertDialog(
-              title: Text(S.of(context).MemberDeleteDialogTitle),
-              content: Center(child: PlatformAwareLoadingIndicator()),
-              contentPadding: EdgeInsets.zero,
+            return Dialog(
+              child: SizedBox(
+                width: 280,
+                height: 280,
+                child: Center(child: PlatformAwareLoadingIndicator()),
+              ),
             );
           }
         }else{
-          return AlertDialog(
-            title: Text(S.of(context).MemberDeleteDialogTitle),
-            content: Center(child: PlatformAwareLoadingIndicator()),
-            contentPadding: EdgeInsets.zero,
+          return Dialog(
+            child: SizedBox(
+              width: 280,
+              height: 280,
+              child: Center(child: PlatformAwareLoadingIndicator()),
+            ),
           );
         }
       },
@@ -134,15 +138,21 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
               ],
             );
           }else{
-            return CupertinoAlertDialog(
-              title: Text(S.of(context).MemberDeleteDialogTitle),
-              content: Center(child: PlatformAwareLoadingIndicator()),
+            return CupertinoPopupSurface(
+              child: SizedBox(
+                width: 280,
+                height: 280,
+                child: Center(child: PlatformAwareLoadingIndicator()),
+              ),
             );
           }
         }else{
-          return CupertinoAlertDialog(
-            title: Text(S.of(context).MemberDeleteDialogTitle),
-            content: Center(child: PlatformAwareLoadingIndicator()),
+          return CupertinoPopupSurface(
+            child: SizedBox(
+              width: 280,
+              height: 280,
+              child: Center(child: PlatformAwareLoadingIndicator()),
+            ),
           );
         }
       },

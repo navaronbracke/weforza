@@ -389,7 +389,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
       ],
     );
   }
-  
+
   @override
-  deleteMember() async => await _bloc.deleteMember(MemberProvider.selectedMember.uuid);
+  Future<void> deleteMember() => _bloc.deleteMember(MemberProvider.selectedMember.uuid);
 }

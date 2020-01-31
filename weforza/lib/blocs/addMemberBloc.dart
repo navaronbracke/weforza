@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -18,8 +19,8 @@ class AddMemberBloc extends Bloc {
   ///The instance that will generate uuid's.
   final Uuid _uuidGenerator = Uuid();
 
-  StreamController<bool> _alreadyExistsController = BehaviorSubject();
-  Stream<bool> get alreadyExistsStream => _alreadyExistsController.stream;
+  StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
+  Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
 
   StreamController<ProfileImagePickingState> _imagePickingController = BehaviorSubject();
   Stream<ProfileImagePickingState> get imagePickingStream => _imagePickingController.stream;
@@ -54,7 +55,7 @@ class AddMemberBloc extends Bloc {
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _firstName){
       //Clear the 'user exists' error when a different input is given
-      _alreadyExistsController.add(false);
+      _submitStateController.add(AddMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -81,7 +82,7 @@ class AddMemberBloc extends Bloc {
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _lastName){
       //Clear the 'user exists' error when a different input is given
-      _alreadyExistsController.add(false);
+      _submitStateController.add(AddMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -108,7 +109,7 @@ class AddMemberBloc extends Bloc {
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
     if(value != _phone){
       //Clear the 'user exists' error when a different input is given
-      _alreadyExistsController.add(false);
+      _submitStateController.add(AddMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -129,21 +130,21 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-  Future<bool> addMember() async {
-    bool memberCreated = false;
+  Future<void> addMember(VoidCallback onSuccess) async {
+    _submitStateController.add(AddMemberSubmitState.SUBMIT);
     await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
-      _alreadyExistsController.add(exists);
-      if(!exists){
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(image == null) ? null : image.path)).then((value){
-          memberCreated = true;
+      if(exists){
+        _submitStateController.add(AddMemberSubmitState.ERR_MEMBER_EXISTS);
+      }else{
+        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(image == null) ? null : image.path)).then((_){
+          onSuccess();
         },onError: (error){
-          _alreadyExistsController.addError(Exception("Failed to add member"));
+          _submitStateController.add(AddMemberSubmitState.ERR_SUBMIT_MEMBER);
         });
       }
     },onError: (error){
-      _alreadyExistsController.addError(Exception("Failed to add member"));
+      _submitStateController.add(AddMemberSubmitState.ERR_SUBMIT_MEMBER);
     });
-    return memberCreated;
   }
 
   Future<void> pickImage() async {
@@ -159,7 +160,7 @@ class AddMemberBloc extends Bloc {
   ///Dispose of this object.
   @override
   void dispose() {
-    _alreadyExistsController.close();
+    _submitStateController.close();
     _imagePickingController.close();
   }
 }
@@ -167,4 +168,13 @@ class AddMemberBloc extends Bloc {
 ///This enum declares values for the profile image picking stream.
 enum ProfileImagePickingState {
   LOADING, IDLE
+}
+
+///This enum declares the different states for submitting a new [Member].
+///[AddMemberSubmitState.IDLE] There is no submit in progress.
+///[AddMemberSubmitState.SUBMIT] A submit is in progress.
+///[AddMemberSubmitState.ERR_SUBMIT_MEMBER] A submit failed because the member could not be saved.
+///[AddMemberSubmitState.ERR_MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
+enum AddMemberSubmitState {
+  IDLE, SUBMIT, ERR_MEMBER_EXISTS, ERR_SUBMIT_MEMBER
 }

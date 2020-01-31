@@ -10,6 +10,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
+import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
@@ -254,27 +255,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                             },
                           ),
                           SizedBox(height: 20),
-                          StreamBuilder<bool>(
-                            initialData: false,
-                            stream: _bloc.alreadyExistsStream,
-                            builder: (context,snapshot){
-                              return snapshot.hasError ? Text(S.of(context).AddMemberError) :
-                              snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
-                            },
-                          ),
-                          SizedBox(height: 5),
-                          RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                if(await _bloc.addMember()){
-                                  MemberProvider.reloadMembers = true;
-                                  Navigator.pop(context);
-                                }
-                              }
-                            },
-                          ),
+                          AddMemberSubmit(_bloc.submitStream,() async {
+                            if (_formKey.currentState.validate()) {
+                              await _bloc.addMember((){
+                                MemberProvider.reloadMembers = true;
+                                Navigator.pop(context);
+                              });
+                            }
+                          }),
                         ],
                       ),
                     ),
@@ -421,27 +409,16 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 },
                               ),
                               SizedBox(height: 20),
-                              StreamBuilder<bool>(
-                                initialData: false,
-                                stream: _bloc.alreadyExistsStream,
-                                builder: (context,snapshot){
-                                  return snapshot.hasError ? Text(S.of(context).AddMemberError) :
-                                  snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
-                                },
-                              ),
-                              SizedBox(height: 5),
-                              CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
-                                  pressedOpacity: 0.5,
-                                  onPressed: () async {
-                                    if(iosAllFormInputValidator()){
-                                      if(await _bloc.addMember()){
-                                        MemberProvider.reloadMembers = true;
-                                        Navigator.pop(context);
-                                      }
-                                    }else{
-                                      setState(() {});
-                                    }
-                                  }),
+                              AddMemberSubmit(_bloc.submitStream,() async {
+                                if (iosAllFormInputValidator()) {
+                                  await _bloc.addMember((){
+                                    MemberProvider.reloadMembers = true;
+                                    Navigator.pop(context);
+                                  });
+                                }else {
+                                  setState(() {});
+                                }
+                              }),
                             ],
                           ),
                         ),
@@ -574,32 +551,16 @@ class _AddMemberPageState extends State<AddMemberPage>
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          StreamBuilder<bool>(
-                            initialData: false,
-                            stream: _bloc.alreadyExistsStream,
-                            builder: (context,snapshot){
-                              return snapshot.hasError ? Text(S.of(context).AddMemberError) :
-                              snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
-                            },
-                          ),
-                          SizedBox(height: 5),
-                          CupertinoButton.filled(child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
-                              pressedOpacity: 0.5,
-                              onPressed: () async {
-                                if(iosAllFormInputValidator()){
-                                  if(await _bloc.addMember()){
-                                    MemberProvider.reloadMembers = true;
-                                    Navigator.pop(context);
-                                  }
-                                }else{
-                                  setState(() {});
-                                }
-                              }),
-                        ],
-                      ),
+                      child: AddMemberSubmit(_bloc.submitStream,() async {
+                        if (iosAllFormInputValidator()) {
+                          await _bloc.addMember((){
+                            MemberProvider.reloadMembers = true;
+                            Navigator.pop(context);
+                          });
+                        }else {
+                          setState(() {});
+                        }
+                      }),
                     ),
                   ),
                 ],
@@ -717,32 +678,14 @@ class _AddMemberPageState extends State<AddMemberPage>
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        StreamBuilder<bool>(
-                          initialData: false,
-                          stream: _bloc.alreadyExistsStream,
-                          builder: (context,snapshot){
-                            return snapshot.hasError ? Text(S.of(context).AddMemberError) :
-                            snapshot.data ? Text(S.of(context).AddMemberAlreadyExists) : Text("");
-                          },
-                        ),
-                        SizedBox(height: 5),
-                        RaisedButton(
-                          color: Theme.of(context).primaryColor,
-                          child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              if(await _bloc.addMember()){
-                                MemberProvider.reloadMembers = true;
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                    child: AddMemberSubmit(_bloc.submitStream,() async {
+                      if (_formKey.currentState.validate()) {
+                        await _bloc.addMember((){
+                          MemberProvider.reloadMembers = true;
+                          Navigator.pop(context);
+                        });
+                      }
+                    }),
                   ),
                 ),
               ],

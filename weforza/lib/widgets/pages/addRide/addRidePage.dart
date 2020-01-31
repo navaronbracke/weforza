@@ -5,8 +5,9 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/widgets/pages/addRide/AddRideColorLegend.dart';
+import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
+import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -78,42 +79,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                     child: AddRideColorLegend(),
                   ),
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        StreamBuilder<String>(
-                          initialData: "",
-                          stream: _bloc.stream,
-                          builder: (context,snapshot){
-                            if(snapshot.hasError){
-                              return Text(S.of(context).AddRideError);
-                            }else{
-                              return Text(snapshot.data);
-                            }
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        StreamBuilder<bool>(
-                          initialData: false,
-                          builder: (context,snapshot){
-                            return snapshot.data ? Center(
-                              child: PlatformAwareLoadingIndicator(),
-                            ): RaisedButton(
-                              color: Theme.of(context).primaryColor,
-                              child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
-                              onPressed: () async {
-                                if(_bloc.validateInputs()){
-                                  if(await _bloc.addRides()){
-                                    RideProvider.reloadRides = true;
-                                    Navigator.pop(context);
-                                  }
-                                }else{
-                                  _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                    child: Center(
+                      child: AddRideSubmit(_bloc.submitStream,() async {
+                        await _bloc.addRides((){
+                          RideProvider.reloadRides = true;
+                          Navigator.pop(context);
+                        });
+                      }),
                     ),
                   ),
                 ],
@@ -151,42 +123,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                   child: AddRideColorLegend(),
                 ),
                 Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      StreamBuilder<String>(
-                        initialData: "",
-                        stream: _bloc.stream,
-                        builder: (context,snapshot){
-                          if(snapshot.hasError){
-                            return Text(S.of(context).AddRideError);
-                          }else{
-                            return Text(snapshot.data);
-                          }
-                        },
-                      ),
-                      SizedBox(height: 10),
-                      StreamBuilder<bool>(
-                        initialData: false,
-                        builder: (context,snapshot){
-                          return snapshot.data ? Center(
-                            child: PlatformAwareLoadingIndicator(),
-                          ): RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            child: Text(S.of(context).AddRideSubmit,style:TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              if(_bloc.validateInputs()){
-                                if(await _bloc.addRides()){
-                                  RideProvider.reloadRides = true;
-                                  Navigator.pop(context);
-                                }
-                              }else{
-                                _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                              }
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                  child: Center(
+                    child: AddRideSubmit(_bloc.submitStream,() async {
+                      await _bloc.addRides((){
+                        RideProvider.reloadRides = true;
+                        Navigator.pop(context);
+                      });
+                    }),
                   ),
                 ),
               ],
@@ -233,42 +176,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                         child: AddRideColorLegend(),
                       ),
                       Expanded(
-                        child: Column(
-                          children: <Widget>[
-                            StreamBuilder<String>(
-                              initialData: "",
-                              stream: _bloc.stream,
-                              builder: (context,snapshot){
-                                if(snapshot.hasError){
-                                  return Text(S.of(context).AddRideError);
-                                }else{
-                                  return Text(snapshot.data);
-                                }
-                              },
-                            ),
-                            SizedBox(height: 10),
-                            StreamBuilder<bool>(
-                              initialData: false,
-                              builder: (context,snapshot){
-                                return snapshot.data ? Center(
-                                  child: PlatformAwareLoadingIndicator(),
-                                ): CupertinoButton.filled(
-                                  pressedOpacity: 0.5,
-                                  child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                                  onPressed: () async {
-                                    if(_bloc.validateInputs()){
-                                      if(await _bloc.addRides()){
-                                        RideProvider.reloadRides = true;
-                                        Navigator.pop(context);
-                                      }
-                                    }else{
-                                      _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                                    }
-                                  },
-                                );
-                              },
-                            ),
-                          ],
+                        child: Center(
+                          child: AddRideSubmit(_bloc.submitStream,() async {
+                            await _bloc.addRides((){
+                              RideProvider.reloadRides = true;
+                              Navigator.pop(context);
+                            });
+                          }),
                         ),
                       ),
                   ],
@@ -315,42 +229,13 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
                       child: AddRideColorLegend(),
                     ),
                     Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          StreamBuilder<String>(
-                            initialData: "",
-                            stream: _bloc.stream,
-                            builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Text(S.of(context).AddRideError);
-                              }else{
-                                return Text(snapshot.data);
-                              }
-                            },
-                          ),
-                          SizedBox(height: 10),
-                          StreamBuilder<bool>(
-                            initialData: false,
-                            builder: (context,snapshot){
-                              return snapshot.data ? Center(
-                                child: PlatformAwareLoadingIndicator(),
-                              ): CupertinoButton.filled(
-                                pressedOpacity: 0.5,
-                                child: Text(S.of(context).AddRideSubmit,softWrap: true,style: TextStyle(color: Colors.white)),
-                                onPressed: () async {
-                                  if(_bloc.validateInputs()){
-                                    if(await _bloc.addRides()){
-                                      RideProvider.reloadRides = true;
-                                      Navigator.pop(context);
-                                    }
-                                  }else{
-                                    _bloc.addErrorMessage(S.of(context).AddRideEmptySelection);
-                                  }
-                                },
-                              );
-                            },
-                          ),
-                        ],
+                      child: Center(
+                        child: AddRideSubmit(_bloc.submitStream,() async {
+                          await _bloc.addRides((){
+                            RideProvider.reloadRides = true;
+                            Navigator.pop(context);
+                          });
+                        }),
                       ),
                     ),
                   ],

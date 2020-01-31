@@ -134,22 +134,22 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
               ],
             );
           }else{
-            return CupertinoPopupSurface(
-              child: SizedBox(
-                width: 280,
-                height: 280,
+            return CupertinoAlertDialog(
+              content: SizedBox(
+                width: 140,
+                height: 140,
                 child: Center(child: PlatformAwareLoadingIndicator()),
               ),
             );
           }
         }else{
-          return CupertinoPopupSurface(
-            child: SizedBox(
-              width: 280,
-              height: 280,
-              child: Center(child: PlatformAwareLoadingIndicator()),
-            ),
-          );
+            return CupertinoAlertDialog(
+              content: SizedBox(
+                width: 140,
+                height: 140,
+                child: Center(child: PlatformAwareLoadingIndicator()),
+              ),
+            );
         }
       },
     );

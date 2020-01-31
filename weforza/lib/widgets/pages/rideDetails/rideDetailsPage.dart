@@ -26,7 +26,7 @@ class RideDetailsPage extends StatefulWidget {
   );
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget, RideDeleteHandler {
+class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget, DeleteRideHandler {
   _RideDetailsPageState(this._bloc): assert(_bloc != null);
 
   final RideDetailsBloc _bloc;
@@ -94,7 +94,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
-            showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+            showDialog(context: context, barrierDismissible: false, builder: (context)=> DeleteRideDialog(this));
           }),
         ],
       ),
@@ -138,7 +138,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
-            showDialog(context: context, builder: (context)=> DeleteRideDialog(this));
+            showDialog(context: context, barrierDismissible: false, builder: (context)=> DeleteRideDialog(this));
           }),
         ],
       ),
@@ -423,5 +423,5 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
   }
 
   @override
-  Future<void> deleteRide(DateTime date) => _bloc.deleteRide(date);
+  Future<void> deleteRide() => _bloc.deleteRide(RideProvider.selectedRide.date);
 }

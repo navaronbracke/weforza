@@ -26,7 +26,7 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, MemberDeleteHandler {
+class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, DeleteMemberHandler {
   _MemberDetailsPageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC in charge of the content.
@@ -66,7 +66,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: ()=> showDialog(context: context, builder: (context)=> DeleteMemberDialog(this,member.uuid)),
+            onPressed: ()=> showDialog(context: context,barrierDismissible: false, builder: (context)=> DeleteMemberDialog(this)),
           ),
         ],
       ),
@@ -129,7 +129,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: ()=> showDialog(context: context, builder: (context)=> DeleteMemberDialog(this,member.uuid)),
+            onPressed: ()=> showDialog(context: context,barrierDismissible: false, builder: (context)=> DeleteMemberDialog(this)),
           ),
         ],
       ),
@@ -204,7 +204,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
+                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
               ],
             ),
           ],
@@ -276,7 +276,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this,member.uuid))),
+                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
               ],
             ),
           ],
@@ -389,7 +389,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
       ],
     );
   }
-
+  
   @override
-  deleteMember(String uuid) async => await _bloc.deleteMember(uuid);
+  deleteMember() async => await _bloc.deleteMember(MemberProvider.selectedMember.uuid);
 }

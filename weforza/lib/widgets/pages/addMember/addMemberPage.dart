@@ -169,8 +169,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 _firstNameIllegalCharactersMessage,
                                 _firstNameBlankMessage),
                             autovalidate: _bloc.autoValidateFirstName,
-                            onChanged: (value) => setState(
-                                () => _bloc.autoValidateFirstName = true),
                             onFieldSubmitted: (value){
                               _focusChange(context,_firstNameFocusNode,_lastNameFocusNode);
                             },
@@ -193,8 +191,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 _lastNameIllegalCharactersMessage,
                                 _lastNameBlankMessage),
                             autovalidate: _bloc.autoValidateLastName,
-                            onChanged: (value) => setState(
-                                () => _bloc.autoValidateLastName = true),
                             onFieldSubmitted: (value){
                               _focusChange(context,_lastNameFocusNode,_phoneFocusNode);
                             },
@@ -217,8 +213,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 _phoneMinLengthMessage,
                                 _phoneMaxLengthMessage),
                             autovalidate: _bloc.autoValidatePhone,
-                            onChanged: (value) =>
-                                setState(() => _bloc.autoValidatePhone = true),
                             inputFormatters: [
                               WhitelistingTextInputFormatter.digitsOnly
                             ],
@@ -620,8 +614,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                       _firstNameIllegalCharactersMessage,
                       _firstNameBlankMessage),
                   autovalidate: _bloc.autoValidateFirstName,
-                  onChanged: (value) =>
-                      setState(() => _bloc.autoValidateFirstName = true),
                   onFieldSubmitted: (value){
                     _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
                   },
@@ -644,8 +636,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                       _lastNameIllegalCharactersMessage,
                       _lastNameBlankMessage),
                   autovalidate: _bloc.autoValidateLastName,
-                  onChanged: (value) =>
-                      setState(() => _bloc.autoValidateLastName = true),
                   onFieldSubmitted: (value){
                     _focusChange(context, _lastNameFocusNode, _phoneFocusNode);
                   },
@@ -668,8 +658,6 @@ class _AddMemberPageState extends State<AddMemberPage>
                       _phoneMinLengthMessage,
                       _phoneMaxLengthMessage),
                   autovalidate: _bloc.autoValidatePhone,
-                  onChanged: (value) =>
-                      setState(() => _bloc.autoValidatePhone = true),
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   onFieldSubmitted: (value){
                     _phoneFocusNode.unfocus();

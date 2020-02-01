@@ -158,6 +158,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _firstNameLabel,
+                              helperText: " ",//Prevent popping up and down after validation
                             ),
                             controller: _firstNameController,
                             autocorrect: false,
@@ -180,6 +181,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _lastNameLabel,
+                              helperText: " ",//Prevent popping up and down after validation
                             ),
                             controller: _lastNameController,
                             autocorrect: false,
@@ -202,6 +204,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10),
                               labelText: _phoneLabel,
+                              helperText: " ",//Prevent popping up and down after validation
                             ),
                             controller: _phoneController,
                             autocorrect: false,
@@ -603,6 +606,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _firstNameLabel,
+                    helperText: " ",//Prevent popping up and down after validation
                   ),
                   controller: _firstNameController,
                   autocorrect: false,
@@ -625,6 +629,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _lastNameLabel,
+                    helperText: " ",//Prevent popping up and down after validation
                   ),
                   controller: _lastNameController,
                   autocorrect: false,
@@ -647,6 +652,7 @@ class _AddMemberPageState extends State<AddMemberPage>
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _phoneLabel,
+                    helperText: " ",//Prevent popping up and down after validation
                   ),
                   controller: _phoneController,
                   autocorrect: false,

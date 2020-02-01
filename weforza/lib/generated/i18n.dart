@@ -48,6 +48,8 @@ class S implements WidgetsLocalizations {
   String get EditRideDistanceLabel => "Distance";
   String get EditRideDistancePositive => "Distance must be greater than zero";
   String get EditRidePageTitle => "Edit Ride";
+  String get EditRideSubmit => "Save Changes";
+  String get EditRideSubmitError => "Failed to save the changes";
   String get EditRideTitleLabel => "Title";
   String get EditRideTitleWhitespace => "A title can't be only whitespace";
   String get FirstNameBlank => "First Name can't be just whitespace";
@@ -258,9 +260,13 @@ class $nl extends S {
   @override
   String get RideDeleteDialogTitle => "Verwijder Rit";
   @override
+  String get EditRideSubmit => "Wijzigingen Opslaan";
+  @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override
   String get ThursdayPrefix => "Do";
+  @override
+  String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
   @override
   String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override

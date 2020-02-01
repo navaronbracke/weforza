@@ -40,11 +40,16 @@ class S implements WidgetsLocalizations {
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
   String get DistanceKm => "Km";
+  String get EditRideAddressInvalid => "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -";
+  String get EditRideAddressWhitespace => "An address cannot be only whitespace";
   String get EditRideDepartureLabel => "Departure";
   String get EditRideDestinationLabel => "Destination";
+  String get EditRideDistanceInvalid => "Please enter a valid distance";
   String get EditRideDistanceLabel => "Distance";
+  String get EditRideDistancePositive => "Distance must be greater than zero";
   String get EditRidePageTitle => "Edit Ride";
   String get EditRideTitleLabel => "Title";
+  String get EditRideTitleWhitespace => "A title can't be only whitespace";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -93,6 +98,9 @@ class S implements WidgetsLocalizations {
   String get TuesdayPrefix => "Tue";
   String get UnknownDate => "Unknown Date";
   String get WednesdayPrefix => "Wed";
+  String EditRideAddressMaxLength(String maxLength) => "An address can't be longer than $maxLength characters";
+  String EditRideDistanceMaximum(String maxDistance) => "A ride cannot have a distance that exceeds $maxDistance Km";
+  String EditRideTitleMaxLength(String maxLength) => "A title can't be longer than $maxLength characters";
   String FirstNameMaxLength(String maxLength) => "First Name can't be longer than $maxLength characters";
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
@@ -115,6 +123,10 @@ class $nl extends S {
   String get EditRidePageTitle => "Rit Bewerken";
   @override
   String get EditRideTitleLabel => "Titel";
+  @override
+  String get EditRideTitleWhitespace => "Een titel mag niet enkel witruimte zijn";
+  @override
+  String get EditRideDistanceInvalid => "Gelieve een geldige afstand in te geven";
   @override
   String get DistanceKm => "Km";
   @override
@@ -154,6 +166,8 @@ class $nl extends S {
   @override
   String get EditRideDistanceLabel => "Afstand";
   @override
+  String get EditRideDistancePositive => "Een afstand moet groter zijn dan nul";
+  @override
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   @override
   String get SundayPrefix => "Zo";
@@ -171,6 +185,8 @@ class $nl extends S {
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
   @override
   String get AddMemberTitle => "Nieuw lid";
+  @override
+  String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberDetailsAddDeviceError => "Kon toestel niet toevoegen";
   @override
@@ -230,6 +246,8 @@ class $nl extends S {
   @override
   String get TuesdayPrefix => "Di";
   @override
+  String get EditRideAddressWhitespace => "Een adres mag niet enkel witruimte zijn";
+  @override
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
   String get RideDestination => "Bestemming";
@@ -267,6 +285,12 @@ class $nl extends S {
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
   @override
   String RideAttendeeAssignmentTitle(String date) => "Aanwezigen $date";
+  @override
+  String EditRideTitleMaxLength(String maxLength) => "Een titel mag niet langer zijn dan $maxLength karakters";
+  @override
+  String EditRideAddressMaxLength(String maxLength) => "Een adres mag niet langer zijn dan $maxLength karakters";
+  @override
+  String EditRideDistanceMaximum(String maxDistance) => "De afstand van een rit mag niet groter zijn dan $maxDistance Km";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

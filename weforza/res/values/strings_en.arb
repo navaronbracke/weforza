@@ -78,6 +78,8 @@
   "EditRideAddressWhitespace": "An address cannot be only whitespace",
   "EditRideAddressMaxLength": "An address can't be longer than $maxLength characters",
   "EditRideAddressInvalid": "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -",
+  "EditRideSubmit": "Save Changes",
+  "EditRideSubmitError": "Failed to save the changes",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

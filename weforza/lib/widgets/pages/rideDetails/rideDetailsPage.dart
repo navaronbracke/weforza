@@ -86,11 +86,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
-                if(value != null && value){
-                  setState(() {});
-                }
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
@@ -130,11 +126,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
-                if(value != null && value){
-                  setState(() {});
-                }
-              });
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
             },
           ),
           IconButton(icon: Icon(Icons.delete),onPressed: (){
@@ -180,11 +172,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                   Icons.edit,
                   CupertinoTheme.of(context).primaryColor,
                   CupertinoTheme.of(context).primaryContrastingColor, (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
-                    if(value != null && value){
-                      setState(() {});
-                    }
-                  });
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
@@ -236,11 +224,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
                     Icons.edit,
                     CupertinoTheme.of(context).primaryColor,
                     CupertinoTheme.of(context).primaryContrastingColor, (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage())).then((value){
-                    if(value != null && value){
-                      setState(() {});
-                    }
-                  });
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){

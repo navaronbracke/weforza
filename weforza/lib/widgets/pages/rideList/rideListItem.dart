@@ -99,14 +99,7 @@ class RideListItem extends StatelessWidget
                 children: <Widget>[
                   Text(ride.getFormattedDate(context, false)),
                   Expanded(child: Center()),
-                  Row(
-                    children: <Widget>[
-                      Text("${ride.numberOfAttendees}"),
-                      SizedBox(width: 5),
-                      Icon(Icons.people,
-                          color: ApplicationTheme.rideAttendeeCounterIconColor),
-                    ],
-                  ),
+                  RideAttendeeCounter("${ride.numberOfAttendees}"),
                 ],
               ),
             ),
@@ -122,21 +115,14 @@ class RideListItem extends StatelessWidget
                     ride.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16,color: Colors.blue),
                   ),
                   SizedBox(height: 5),
                   Row(
                     children: <Widget>[
                       Text(ride.getFormattedDate(context, false)),
                       Expanded(child: Center()),
-                      Row(
-                        children: <Widget>[
-                          Text("${ride.numberOfAttendees}"),
-                          SizedBox(width: 5),
-                          Icon(Icons.people,
-                              color: ApplicationTheme
-                                  .rideAttendeeCounterIconColor),
-                        ],
-                      ),
+                      RideAttendeeCounter(ride.numberOfAttendees.toString())
                     ],
                   )
                 ],
@@ -156,14 +142,7 @@ class RideListItem extends StatelessWidget
                 children: <Widget>[
                   Text(ride.getFormattedDate(context, false)),
                   Expanded(child: Center()),
-                  Row(
-                    children: <Widget>[
-                      Text("${ride.numberOfAttendees}"),
-                      SizedBox(width: 5),
-                      Icon(Icons.people,
-                          color: ApplicationTheme.rideAttendeeCounterIconColor),
-                    ],
-                  ),
+                  RideAttendeeCounter("${ride.numberOfAttendees}"),
                 ],
               ),
             ),
@@ -179,21 +158,14 @@ class RideListItem extends StatelessWidget
                     ride.title,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16,color: Colors.blue),
                   ),
                   SizedBox(height: 5),
                   Row(
                     children: <Widget>[
                       Text(ride.getFormattedDate(context, false)),
                       Expanded(child: Center()),
-                      Row(
-                        children: <Widget>[
-                          Text("${ride.numberOfAttendees}"),
-                          SizedBox(width: 5),
-                          Icon(Icons.people,
-                              color: ApplicationTheme
-                                  .rideAttendeeCounterIconColor),
-                        ],
-                      ),
+                      RideAttendeeCounter(ride.numberOfAttendees.toString())
                     ],
                   )
                 ],

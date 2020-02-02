@@ -24,6 +24,24 @@ class Ride {
   ///while the last group contains the characters that have to be escaped for the pattern.
   static final RegExp addressRegex = RegExp(r"^([\p{Letter}\d\s]|[#,;:'&/°]|[\.\(\)\-]){1,80}$",unicode: true);
 
+  ///Convert a number's mantissa.
+  ///This method converts commas into dots and dots into commas.
+  ///If the value is null or doesn't contain a number nor a mantissa, the value is returned unmodified.
+  ///Else the value is returned with its mantissa replaced by its opposite, a comma if it was a dot and a dot if it was a comma.
+  ///Only the dot and comma can be used as separators.
+  ///[oldSeparator] and [newSeparator] should be each other's opposite. Thus either "," and "." or "." and "," .
+  static String convertNumberSeparator(String value, {String oldSeparator = ",", String newSeparator = "."}){
+    assert((oldSeparator == "," && newSeparator == ".") || (oldSeparator == "." && newSeparator == ","));
+
+    final distanceRegex = (oldSeparator == ",") ? RegExp(r"^\d+,\d+$") : RegExp(r"^\d+\.\d+$");
+    if(value != null && distanceRegex.hasMatch(value)){
+      //Fix delimiter
+      final values = value.split(oldSeparator);
+      value = "${values[0]}$newSeparator${values[1]}";
+    }
+    return value;
+  }
+
   ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
 

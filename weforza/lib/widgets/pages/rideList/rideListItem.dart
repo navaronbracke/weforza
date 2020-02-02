@@ -6,8 +6,9 @@ import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a single item for the ride list page.
-class RideListItem extends StatelessWidget implements PlatformAwareWidget {
-  RideListItem(this.ride,this._onTap): assert(ride != null && _onTap != null);
+class RideListItem extends StatelessWidget
+    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+  RideListItem(this.ride, this._onTap) : assert(ride != null && _onTap != null);
 
   final Ride ride;
 
@@ -15,43 +16,189 @@ class RideListItem extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    child: PlatformAwareWidgetBuilder.build(context, this),
-    onTap: _onTap,
-  );
+        child: PlatformAwareWidgetBuilder.build(context, this),
+        onTap: _onTap,
+      );
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: <Widget>[
-          Text(ride.getFormattedDate(context,false)),
-          Expanded(child: Center()),
-          RideAttendeeCounter(ride.numberOfAttendees.toString()),
-        ],
-      ),
-    );
+    return OrientationAwareWidgetBuilder.build(
+        context,
+        buildAndroidPortraitLayout(context),
+        buildAndroidLandscapeLayout(context));
   }
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(),
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Row(
-          children: <Widget>[
-            Text(ride.getFormattedDate(context,false)),
-            Expanded(child: Center()),
-            Row(
+    return OrientationAwareWidgetBuilder.build(context,
+        buildIOSPortraitLayout(context), buildIOSLandscapeLayout(context));
+  }
+
+  @override
+  Widget buildAndroidLandscapeLayout(BuildContext context) {
+    return (ride.title == null || ride.title.isEmpty)
+        ? ListTile(
+            title: Row(
               children: <Widget>[
-                Text("${ride.numberOfAttendees}"),
-                SizedBox(width: 5),
-                Icon(Icons.people,color: ApplicationTheme.rideAttendeeCounterIconColor),
+                Text(ride.getFormattedDate(context, false)),
+                Expanded(child: Center()),
+                RideAttendeeCounter(ride.numberOfAttendees.toString()),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : ListTile(
+            title: Text(
+              ride.title,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Row(
+              children: <Widget>[
+                Text(ride.getFormattedDate(context, false)),
+                Expanded(child: Center()),
+                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+              ],
+            ));
+  }
+
+  @override
+  Widget buildAndroidPortraitLayout(BuildContext context) {
+    return (ride.title == null || ride.title.isEmpty)
+        ? ListTile(
+            title: Row(
+              children: <Widget>[
+                Text(ride.getFormattedDate(context, false)),
+                Expanded(child: Center()),
+                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+              ],
+            ),
+          )
+        : ListTile(
+            title: Text(
+              ride.title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: Row(
+              children: <Widget>[
+                Text(ride.getFormattedDate(context, false)),
+                Expanded(child: Center()),
+                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+              ],
+            ));
+  }
+
+  @override
+  Widget buildIOSLandscapeLayout(BuildContext context) {
+    return (ride.title == null || ride.title.isEmpty)
+        ? Container(
+            decoration: BoxDecoration(),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Row(
+                children: <Widget>[
+                  Text(ride.getFormattedDate(context, false)),
+                  Expanded(child: Center()),
+                  Row(
+                    children: <Widget>[
+                      Text("${ride.numberOfAttendees}"),
+                      SizedBox(width: 5),
+                      Icon(Icons.people,
+                          color: ApplicationTheme.rideAttendeeCounterIconColor),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    ride.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    children: <Widget>[
+                      Text(ride.getFormattedDate(context, false)),
+                      Expanded(child: Center()),
+                      Row(
+                        children: <Widget>[
+                          Text("${ride.numberOfAttendees}"),
+                          SizedBox(width: 5),
+                          Icon(Icons.people,
+                              color: ApplicationTheme
+                                  .rideAttendeeCounterIconColor),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+  }
+
+  @override
+  Widget buildIOSPortraitLayout(BuildContext context) {
+    return (ride.title == null || ride.title.isEmpty)
+        ? Container(
+            decoration: BoxDecoration(),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Row(
+                children: <Widget>[
+                  Text(ride.getFormattedDate(context, false)),
+                  Expanded(child: Center()),
+                  Row(
+                    children: <Widget>[
+                      Text("${ride.numberOfAttendees}"),
+                      SizedBox(width: 5),
+                      Icon(Icons.people,
+                          color: ApplicationTheme.rideAttendeeCounterIconColor),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(),
+            child: Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    ride.title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    children: <Widget>[
+                      Text(ride.getFormattedDate(context, false)),
+                      Expanded(child: Center()),
+                      Row(
+                        children: <Widget>[
+                          Text("${ride.numberOfAttendees}"),
+                          SizedBox(width: 5),
+                          Icon(Icons.people,
+                              color: ApplicationTheme
+                                  .rideAttendeeCounterIconColor),
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }

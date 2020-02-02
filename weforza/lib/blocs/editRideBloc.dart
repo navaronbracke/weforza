@@ -135,10 +135,10 @@ class EditRideBloc extends Bloc {
     //Grab a copy first
     final newRide = Ride(
       date: ride.date,
-      title: titleInput,
+      title: titleInput == "" ? null : titleInput,
       numberOfAttendees: ride.numberOfAttendees,
-      destinationAddress: destinationInput,
-      startAddress: departureInput,
+      destinationAddress: destinationInput == "" ? null : destinationInput,
+      startAddress: departureInput == "" ? null : departureInput,
       distance: distanceInput
     );
     //Save the copy, if it fails, nothing gets overwritten.

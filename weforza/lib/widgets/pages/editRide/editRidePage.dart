@@ -14,15 +14,19 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class EditRidePage extends StatefulWidget {
   @override
-  _EditRidePageState createState() => _EditRidePageState(EditRideBloc(InjectionContainer.get<RideRepository>(),RideProvider.selectedRide));
+  _EditRidePageState createState() => _EditRidePageState(EditRideBloc(
+      InjectionContainer.get<RideRepository>(), RideProvider.selectedRide));
 }
 
-class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWidget {
-  _EditRidePageState(this._bloc): assert(_bloc != null){
+class _EditRidePageState extends State<EditRidePage>
+    implements PlatformAwareWidget {
+  _EditRidePageState(this._bloc) : assert(_bloc != null) {
     _titleController = TextEditingController(text: _bloc.titleInput);
     _departureController = TextEditingController(text: _bloc.departureInput);
-    _destinationController = TextEditingController(text: _bloc.destinationInput);
-    _distanceController = TextEditingController(text: _bloc.distanceInput == 0.0 ? "" : "${_bloc.distanceInput}");
+    _destinationController =
+        TextEditingController(text: _bloc.destinationInput);
+    _distanceController = TextEditingController(
+        text: _bloc.distanceInput == 0.0 ? "" : "${_bloc.distanceInput}");
   }
 
   final EditRideBloc _bloc;
@@ -62,13 +66,16 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
     _departureLabel = translator.EditRideDepartureLabel;
     _destinationLabel = translator.EditRideDestinationLabel;
     _distanceLabel = translator.EditRideDistanceLabel;
-    _titleMaxLengthMessage = translator.EditRideTitleMaxLength("${_bloc.titleMaxLength}");
+    _titleMaxLengthMessage =
+        translator.EditRideTitleMaxLength("${_bloc.titleMaxLength}");
     _titleWhitespaceMessage = translator.EditRideTitleWhitespace;
     _distanceInvalidMessage = translator.EditRideDistanceInvalid;
     _distancePositiveMessage = translator.EditRideDistancePositive;
-    _distanceMaximumMessage = translator.EditRideDistanceMaximum("${_bloc.maxDistanceInKm}");
+    _distanceMaximumMessage =
+        translator.EditRideDistanceMaximum("${_bloc.maxDistanceInKm}");
     _addressWhitespaceMessage = translator.EditRideAddressWhitespace;
-    _addressMaxLengthMessage = translator.EditRideAddressMaxLength("${_bloc.addressMaxLength}");
+    _addressMaxLengthMessage =
+        translator.EditRideAddressMaxLength("${_bloc.addressMaxLength}");
     _addressInvalidMessage = translator.EditRideAddressInvalid;
   }
 
@@ -97,9 +104,11 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.calendar_today,size: 30),
+                      Icon(Icons.calendar_today, size: 30),
                       SizedBox(width: 4),
-                      Text(ride.getFormattedDate(context,false),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16)),
+                      Text(ride.getFormattedDate(context, false),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16)),
                     ],
                   ),
                 ),
@@ -109,21 +118,19 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _titleLabel,
-                    helperText: " ",//Prevent popping up and down during validation
+                    helperText:
+                        " ", //Prevent popping up and down during validation
                   ),
                   controller: _titleController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateTitle(
-                      value,
-                      _titleWhitespaceMessage,
-                      _titleMaxLengthMessage
-                  ),
+                      value, _titleWhitespaceMessage, _titleMaxLengthMessage),
                   autovalidate: _bloc.autoValidateTitle,
-                  onChanged: (value)=> setState((){
+                  onChanged: (value) => setState(() {
                     _bloc.autoValidateTitle = true;
                   }),
-                  onFieldSubmitted: (value){
+                  onFieldSubmitted: (value) {
                     _focusChange(context, _titleFocusNode, _departureFocusNode);
                   },
                 ),
@@ -134,7 +141,8 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _departureLabel,
-                    helperText: " ",//Prevent popping up and down during validation
+                    helperText:
+                        " ", //Prevent popping up and down during validation
                   ),
                   controller: _departureController,
                   autocorrect: false,
@@ -143,14 +151,14 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                       value,
                       _addressWhitespaceMessage,
                       _addressMaxLengthMessage,
-                      _addressInvalidMessage
-                  ),
+                      _addressInvalidMessage),
                   autovalidate: _bloc.autoValidateDepartureAddress,
-                  onChanged: (value)=> setState((){
+                  onChanged: (value) => setState(() {
                     _bloc.autoValidateDepartureAddress = true;
                   }),
-                  onFieldSubmitted: (value){
-                    _focusChange(context, _departureFocusNode, _destinationFocusNode);
+                  onFieldSubmitted: (value) {
+                    _focusChange(
+                        context, _departureFocusNode, _destinationFocusNode);
                   },
                 ),
                 SizedBox(height: 5),
@@ -160,7 +168,8 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     labelText: _destinationLabel,
-                    helperText: " ",//Prevent popping up and down during validation
+                    helperText:
+                        " ", //Prevent popping up and down during validation
                   ),
                   controller: _destinationController,
                   autocorrect: false,
@@ -169,14 +178,14 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                       value,
                       _addressWhitespaceMessage,
                       _addressMaxLengthMessage,
-                      _addressInvalidMessage
-                  ),
+                      _addressInvalidMessage),
                   autovalidate: _bloc.autoValidateDestinationAddress,
-                  onChanged: (value)=> setState((){
+                  onChanged: (value) => setState(() {
                     _bloc.autoValidateDestinationAddress = true;
                   }),
-                  onFieldSubmitted: (value){
-                    _focusChange(context, _destinationFocusNode,_distanceFocusNode);
+                  onFieldSubmitted: (value) {
+                    _focusChange(
+                        context, _destinationFocusNode, _distanceFocusNode);
                   },
                 ),
                 SizedBox(height: 5),
@@ -187,7 +196,8 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                     contentPadding: EdgeInsets.all(10),
                     labelText: _distanceLabel,
                     suffixText: S.of(context).DistanceKm,
-                    helperText: " ",//Prevent popping up and down during validation
+                    helperText:
+                        " ", //Prevent popping up and down during validation
                   ),
                   controller: _distanceController,
                   autocorrect: false,
@@ -199,19 +209,19 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                     _distanceMaximumMessage,
                   ),
                   autovalidate: _bloc.autoValidateDistance,
-                  onChanged: (value)=> setState((){
+                  onChanged: (value) => setState(() {
                     _bloc.autoValidateDistance = true;
                   }),
-                  onFieldSubmitted: (value){
+                  onFieldSubmitted: (value) {
                     _distanceFocusNode.unfocus();
                   },
                 ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child: Center(
-                    child: EditRideSubmit(_bloc.stream,() async {
-                      if(_formKey.currentState.validate()){
-                        await _bloc.editRide((Ride updatedRide){
+                    child: EditRideSubmit(_bloc.stream, () async {
+                      if (_formKey.currentState.validate()) {
+                        await _bloc.editRide((Ride updatedRide) {
                           RideProvider.reloadRides = true;
                           RideProvider.selectedRide = updatedRide;
                           Navigator.pop(context);
@@ -236,21 +246,25 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
         transitionBetweenRoutes: false,
         middle: Text(S.of(context).EditRidePageTitle),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SafeArea(
+        bottom: false,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Icon(Icons.calendar_today,size: 30),
+                      Icon(Icons.calendar_today, size: 30),
                       SizedBox(width: 4),
-                      Text(ride.getFormattedDate(context,false),style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16)),
+                      Text(ride.getFormattedDate(context, false),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 16)),
                     ],
                   ),
                 ),
@@ -263,15 +277,13 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   keyboardType: TextInputType.text,
                   onChanged: (value) {
                     setState(() {
-                      _bloc.validateTitle(
-                          value,
-                          _titleWhitespaceMessage,
-                          _titleMaxLengthMessage
-                      );
+                      _bloc.validateTitle(value, _titleWhitespaceMessage,
+                          _titleMaxLengthMessage);
                     });
                   },
-                  onSubmitted: (value){
-                    _focusChange(context, _titleFocusNode, _departureFocusNode);
+                  onSubmitted: (value) {
+                    _focusChange(
+                        context, _titleFocusNode, _departureFocusNode);
                   },
                 ),
                 Text(
@@ -292,12 +304,12 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                           value,
                           _addressWhitespaceMessage,
                           _addressMaxLengthMessage,
-                          _addressInvalidMessage
-                      );
+                          _addressInvalidMessage);
                     });
                   },
-                  onSubmitted: (value){
-                    _focusChange(context, _departureFocusNode, _destinationFocusNode);
+                  onSubmitted: (value) {
+                    _focusChange(
+                        context, _departureFocusNode, _destinationFocusNode);
                   },
                 ),
                 Text(
@@ -318,12 +330,12 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                           value,
                           _addressWhitespaceMessage,
                           _addressMaxLengthMessage,
-                          _addressInvalidMessage
-                      );
+                          _addressInvalidMessage);
                     });
                   },
-                  onSubmitted: (value){
-                    _focusChange(context, _destinationFocusNode,_distanceFocusNode);
+                  onSubmitted: (value) {
+                    _focusChange(
+                        context, _destinationFocusNode, _distanceFocusNode);
                   },
                 ),
                 Text(
@@ -336,9 +348,10 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                   textInputAction: TextInputAction.done,
                   controller: _distanceController,
                   placeholder: _distanceLabel,
-                  suffix: Text(S.of(context).DistanceKm),
+                  suffix: Text("${S.of(context).DistanceKm} "),
                   autocorrect: false,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
                     setState(() {
                       _bloc.validateDistance(
@@ -349,7 +362,7 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                       );
                     });
                   },
-                  onSubmitted: (value){
+                  onSubmitted: (value) {
                     _distanceFocusNode.unfocus();
                   },
                 ),
@@ -358,11 +371,11 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
                         _bloc.distanceError),
                     style: ApplicationTheme.iosFormErrorStyle),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Center(
-                    child: EditRideSubmit(_bloc.stream,() async {
-                      if(_formKey.currentState.validate()){
-                        await _bloc.editRide((Ride updatedRide){
+                    child: EditRideSubmit(_bloc.stream, () async {
+                      if (_formKey.currentState.validate()) {
+                        await _bloc.editRide((Ride updatedRide) {
                           RideProvider.reloadRides = true;
                           RideProvider.selectedRide = updatedRide;
                           Navigator.pop(context);
@@ -393,7 +406,8 @@ class _EditRidePageState extends State<EditRidePage> implements PlatformAwareWid
     super.dispose();
   }
 
-  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  void _focusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }

@@ -20,11 +20,11 @@ class AddRideBloc extends Bloc {
       //This is a selected ride, unselect it.
       if(_ridesToAdd.contains(date)){
         _ridesToAdd.remove(date);
-        _errorMessageController.add("");
+        _submitController.add(AddRideSubmitState.IDLE);
         return true;
       }else{
         _ridesToAdd.add(date);
-        _errorMessageController.add("");
+        _submitController.add(AddRideSubmitState.IDLE);
         return true;
       }
     };
@@ -32,6 +32,9 @@ class AddRideBloc extends Bloc {
 
   ///The repository that will handle the submit.
   final RideRepository _repository;
+
+  final StreamController<AddRideSubmitState> _submitController = BehaviorSubject();
+  Stream<AddRideSubmitState> get submitStream => _submitController.stream;
 
   ///The date for the currently visible month in the calendar.
   DateTime pageDate;
@@ -44,13 +47,6 @@ class AddRideBloc extends Bloc {
 
   ///The rides to add on a submit.
   List<DateTime> _ridesToAdd = List();
-
-  ///The [StreamController] for the error message.
-  StreamController<String> _errorMessageController = BehaviorSubject();
-  ///Get the error message stream.
-  Stream<String> get stream => _errorMessageController.stream;
-  ///Add [message] to the stream.
-  void addErrorMessage(String message) => _errorMessageController.add(message);
 
   ///A callback function for when a date is pressed.
   bool Function(DateTime date) onDayPressed;
@@ -65,7 +61,7 @@ class AddRideBloc extends Bloc {
     if(_ridesToAdd.isNotEmpty && _onSelectionCleared != null){
       _onSelectionCleared();
       _ridesToAdd.clear();
-      _errorMessageController.add("");
+      _submitController.add(AddRideSubmitState.IDLE);
     }
   }
 
@@ -112,26 +108,33 @@ class AddRideBloc extends Bloc {
     daysInMonth = newDate.daysInMonth;
   }
 
-  ///Validate if the selection is valid.
-  bool validateInputs() => _ridesToAdd.isEmpty ? false : true;
-
   ///Add the selected rides.
-  Future<bool> addRides() async {
-    bool ridesCreated = false;
+  Future<void> addRides(VoidCallback onSuccess) async {
     if(_ridesToAdd.isNotEmpty){
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date)).toList()).then((_){
-        _errorMessageController.add("");
-        ridesCreated = true;
+      _submitController.add(AddRideSubmitState.SUBMIT);
+      await _repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).then((_)
+      {
+        onSuccess();
       },onError: (error){
-        _errorMessageController.addError(Exception("Failed to add rides"));
+        _submitController.add(AddRideSubmitState.ERR_SUBMIT);
       });
+    }else{
+      _submitController.add(AddRideSubmitState.ERR_NO_SELECTION);
     }
-    return ridesCreated;
   }
 
   ///Dispose of this object.
   @override
   void dispose() {
-    _errorMessageController.close();
+    _submitController.close();
   }
+}
+
+///This enum declares the different states for the ride submit process.
+///[AddRideSubmitState.IDLE] There is no submit in progress.
+///[AddRideSubmitState.SUBMIT] There is a submit in progress.
+///[AddRideSubmitState.ERR_SUBMIT] The rides could not be saved.
+///[AddRideSubmitState.ERR_NO_SELECTION] There is no selection to save.
+enum AddRideSubmitState {
+  IDLE, SUBMIT, ERR_NO_SELECTION, ERR_SUBMIT
 }

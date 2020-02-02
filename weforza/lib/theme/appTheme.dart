@@ -64,6 +64,8 @@ abstract class ApplicationTheme {
   //Cupertino Form Input Error Text Style
   static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);
 
+  static final Color rideAttendeeCounterIconColor = Colors.black87;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

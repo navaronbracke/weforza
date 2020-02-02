@@ -65,6 +65,25 @@
   "RideAttendeeAssignmentConfirm": "Save",
   "RideAttendeeAssignmentError": "Something went wrong",
 
+  "EditRidePageTitle": "Edit Ride",
+  "EditRideTitleLabel": "Title",
+  "EditRideDepartureLabel": "Departure",
+  "EditRideDestinationLabel": "Destination",
+  "EditRideDistanceLabel": "Distance",
+  "EditRideTitleMaxLength": "A title can't be longer than $maxLength characters",
+  "EditRideTitleWhitespace": "A title can't be only whitespace",
+  "EditRideDistanceInvalid": "Please enter a valid distance",
+  "EditRideDistancePositive": "Distance must be greater than zero",
+  "EditRideDistanceMaximum": "A ride cannot have a distance that exceeds $maxDistance Km",
+  "EditRideAddressWhitespace": "An address cannot be only whitespace",
+  "EditRideAddressMaxLength": "An address can't be longer than $maxLength characters",
+  "EditRideAddressInvalid": "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -",
+  "EditRideSubmit": "Save Changes",
+  "EditRideSubmitError": "Failed to save the changes",
+
+  "RideStart": "Start",
+  "RideDestination": "Destination",
+
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
   "PersonTelephoneLabel": "Telephone",
@@ -82,5 +101,7 @@
   "ValueIsRequired": "$value is required",
   "DialogCancel": "Cancel",
   "DialogDelete": "Delete",
-  "DialogOk": "Ok"
+  "DialogOk": "Ok",
+
+  "DistanceKm": "Km"
 }

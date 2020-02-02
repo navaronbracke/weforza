@@ -5,7 +5,6 @@ import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget displays the manual attendee assignment overview.
@@ -27,8 +26,6 @@ class RideAttendeeAssignmentList extends StatefulWidget {
 }
 
 class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList> implements PlatformAwareWidget {
-  //This flag indicates if this widget is busy submitting.
-  bool _isBusy = false;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
@@ -38,29 +35,18 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title,style: TextStyle(fontSize: 16)),
-        actions: _isBusy || widget.items.isEmpty ? [] : <Widget>[
+        actions: widget.items.isEmpty ? [] : <Widget>[
           IconButton(
             icon: Icon(Icons.bluetooth),
             onPressed: widget.onStartScan,
           ),
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: (){
-              if(!_isBusy){
-                setState(() {
-                  _isBusy = true;
-                });
-                widget.onSave();
-                setState(() {
-                  _isBusy = false;
-                });
-              }
-            },
+            onPressed: () => widget.onSave(),
           ),
         ],
       ),
-      body: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
-       widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
+      body: widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
       ListView.builder(itemBuilder: (context,index){
         return RideAttendeeAssignmentItem(widget.items[index]);
       }, itemCount: widget.items.length),
@@ -72,7 +58,7 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: _isBusy || widget.items.isEmpty ? Text(widget.title) :
+        middle: widget.items.isEmpty ? Text(widget.title) :
         Row(
           children: <Widget>[
             Expanded(
@@ -87,30 +73,19 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
                     CupertinoTheme.of(context).primaryContrastingColor,
                     widget.onStartScan
                 ),
-                SizedBox(width: 30),
+                SizedBox(width: 10),
                 CupertinoIconButton(
                     Icons.check,
                     CupertinoTheme.of(context).primaryColor,
                     CupertinoTheme.of(context).primaryContrastingColor,
-                    (){
-                      if(!_isBusy){
-                        setState(() {
-                          _isBusy = true;
-                        });
-                        widget.onSave();
-                        setState(() {
-                          _isBusy = false;
-                        });
-                      }
-                    }
+                    () => widget.onSave()
                 ),
               ],
             ),
           ],
         ),
       ),
-      child: _isBusy ? Center(child: PlatformAwareLoadingIndicator()) :
-       widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
+      child: widget.items.isEmpty ? Center(child: _RideAttendeeAssignmentEmpty()) :
       SafeArea(
         bottom: false,
         child: ListView.builder(itemBuilder: (context,index){

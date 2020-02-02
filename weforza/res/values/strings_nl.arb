@@ -26,7 +26,6 @@
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
 
-
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
   "RideDeleteDialogErrorDescription": "Kon rit niet verwijderen",
@@ -66,6 +65,25 @@
   "RideAttendeeAssignmentConfirm": "Opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
 
+  "EditRidePageTitle": "Rit Bewerken",
+  "EditRideTitleLabel": "Titel",
+  "EditRideDepartureLabel": "Vertrek",
+  "EditRideDestinationLabel": "Bestemming",
+  "EditRideDistanceLabel": "Afstand",
+  "EditRideTitleMaxLength": "Een titel mag niet langer zijn dan $maxLength karakters",
+  "EditRideTitleWhitespace": "Een titel mag niet enkel witruimte zijn",
+  "EditRideDistanceInvalid": "Gelieve een geldige afstand in te geven",
+  "EditRideDistancePositive": "Een afstand moet groter zijn dan nul",
+  "EditRideDistanceMaximum": "De afstand van een rit mag niet groter zijn dan $maxDistance Km",
+  "EditRideAddressWhitespace": "Een adres mag niet enkel witruimte zijn",
+  "EditRideAddressMaxLength": "Een adres mag niet langer zijn dan $maxLength karakters",
+  "EditRideAddressInvalid": "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten",
+  "EditRideSubmit": "Wijzigingen Opslaan",
+  "EditRideSubmitError": "Kon de wijzigingen niet opslaan",
+
+  "RideStart": "Vertrek",
+  "RideDestination": "Bestemming",
+
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
   "PersonTelephoneLabel": "Telefoon",
@@ -83,5 +101,7 @@
   "ValueIsRequired": "$value is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
-  "DialogOk": "Ok"
+  "DialogOk": "Ok",
+
+  "DistanceKm": "Km"
 }

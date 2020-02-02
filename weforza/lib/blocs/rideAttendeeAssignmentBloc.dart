@@ -32,6 +32,8 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
 
   List<String> _rideAttendees = List();
 
+  Future<void> submitFuture;
+
   Future<void> get scanFuture => _scanCompleter?.future;
   Completer<void> _scanCompleter;
 
@@ -51,16 +53,15 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
     );
   }
 
-  Future<bool> onSubmit() async {
-    bool result = false;
+  Future<void> onSubmit() async {
+    _displayModeController.add(RideAttendeeDisplayMode.SAVING);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
       RideProvider.reloadRides = true;
-      result = true;
+      RideProvider.selectedRide = ride;
     },onError: (error) => //errors are handled in the StreamBuilder that consumes this stream
         _displayModeController.addError(error));
-    return result;
   }
 
   String getTitle(BuildContext context){
@@ -69,8 +70,6 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
             .format(ride.date));
   }
 
-
-  @override
   void startScan() {
     //errors are handled by the FutureBuilder that consumes the scan future
     _displayModeController.add(RideAttendeeDisplayMode.SCANNING);
@@ -79,7 +78,6 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
     _scanCompleter = Completer();
   }
 
-  @override
   void stopScan() {
     // TODO: stop scan with flutter blue instance if scanning
     _scanCompleter.complete();

@@ -360,10 +360,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                               SizedBox(height: 5),
                               CupertinoTextField(
                                 focusNode: _phoneFocusNode,
-                                textInputAction: TextInputAction.unspecified,
+                                textInputAction: TextInputAction.done,
                                 controller: _phoneController,
                                 autocorrect: false,
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.number,
                                 placeholder: _phoneLabel,
                                 inputFormatters: [
                                   WhitelistingTextInputFormatter.digitsOnly
@@ -528,10 +528,10 @@ class _AddMemberPageState extends State<AddMemberPage>
                   SizedBox(height: 5),
                   CupertinoTextField(
                     focusNode: _phoneFocusNode,
-                    textInputAction: TextInputAction.unspecified,
+                    textInputAction: TextInputAction.done,
                     controller: _phoneController,
                     autocorrect: false,
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.number,
                     placeholder: _phoneLabel,
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly

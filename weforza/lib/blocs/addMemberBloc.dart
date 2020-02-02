@@ -54,7 +54,6 @@ class AddMemberBloc extends Bloc {
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _firstName){
-      autoValidateFirstName = true;
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(AddMemberSubmitState.IDLE);
     }
@@ -82,7 +81,6 @@ class AddMemberBloc extends Bloc {
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _lastName){
-      autoValidateLastName = true;
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(AddMemberSubmitState.IDLE);
     }
@@ -110,7 +108,6 @@ class AddMemberBloc extends Bloc {
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
     if(value != _phone){
-      autoValidatePhone = true;
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(AddMemberSubmitState.IDLE);
     }

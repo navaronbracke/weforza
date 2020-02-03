@@ -10,6 +10,7 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -60,9 +61,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: (){
-              //TODO goto edit
-            },
+            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())),
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -123,9 +122,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: (){
-              //TODO goto edit
-            },
+            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())),
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -200,7 +197,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO goto edit
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
@@ -272,7 +269,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  //TODO goto edit
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,

@@ -34,9 +34,9 @@
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
-  "MemberDetailsAddDeviceError" : "Kon toestel niet toevoegen",
-  "MemberDetailsEditDeviceError": "Kon toestel niet bewerken",
-  "MemberDetailsDeleteDeviceError": "Kon toestel niet verwijderen",
+  "EditMemberTitle": "Lid Bewerken",
+  "EditMemberError": "Kon de wijzigingen niet opslaan",
+  "EditMemberSubmit" : "Wijzigingen Opslaan",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",
@@ -44,9 +44,9 @@
 
   "AddMemberTitle": "Nieuw lid",
   "AddMemberSubmit": "Voeg nieuw lid toe",
-  "AddMemberAlreadyExists": "Dit lid bestaat al",
+  "MemberAlreadyExists": "Dit lid bestaat al",
   "AddMemberError": "Kon lid niet toevoegen",
-  "AddMemberPickImageError": "Kon afbeelding niet laden",
+  "MemberPickImageError": "Kon afbeelding niet laden",
 
   "AddRideTitle": "Nieuwe Rit",
   "AddRideSubmit": "Selectie Toevoegen",

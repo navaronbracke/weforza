@@ -2,34 +2,35 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 
-///This is the [Bloc] for AddMemberPage.
-class AddMemberBloc extends Bloc {
-  AddMemberBloc(this._repository): assert(_repository != null);
+class EditMemberBloc extends Bloc {
+  EditMemberBloc(this._repository,this.member): assert(_repository != null && member != null){
+    image = member.profileImage;
+    firstName = member.firstName;
+    lastName = member.lastName;
+    phone = member.phone;
+  }
 
+  final MemberItem member;
   ///The [IMemberRepository] that handles the submit.
   final MemberRepository _repository;
 
-  ///The instance that will generate uuid's.
-  final Uuid _uuidGenerator = Uuid();
-
-  StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
-  Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
+  StreamController<EditMemberSubmitState> _submitStateController = BehaviorSubject();
+  Stream<EditMemberSubmitState> get submitStream => _submitStateController.stream;
 
   StreamController<ProfileImagePickingState> _imagePickingController = BehaviorSubject();
   Stream<ProfileImagePickingState> get imagePickingStream => _imagePickingController.stream;
 
   ///The actual inputs.
-  String _firstName;
-  String _lastName;
-  String _phone;
+  String firstName;
+  String lastName;
+  String phone;
 
   File image;
 
@@ -50,13 +51,14 @@ class AddMemberBloc extends Bloc {
   bool autoValidateLastName = false;
   bool autoValidatePhone = false;
 
+
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != _firstName){
+    if(value != firstName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(EditMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -68,7 +70,7 @@ class AddMemberBloc extends Bloc {
       firstNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
-      _firstName = value;
+      firstName = value;
       firstNameError = null;
     }
     else{
@@ -81,9 +83,9 @@ class AddMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != _lastName){
+    if(value != lastName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(EditMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -95,7 +97,7 @@ class AddMemberBloc extends Bloc {
       lastNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
-      _lastName = value;
+      lastName = value;
       lastNameError = null;
     }
     else{
@@ -108,9 +110,9 @@ class AddMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
-    if(value != _phone){
+    if(value != phone){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(EditMemberSubmitState.IDLE);
     }
     if(value == null || value.isEmpty)
     {
@@ -122,7 +124,7 @@ class AddMemberBloc extends Bloc {
       phoneError = maxLengthMessage;
     }
     else if(Member.phoneNumberRegex.hasMatch(value)){
-      _phone = value;
+      phone = value;
       phoneError = null;
     }
     else{
@@ -131,20 +133,27 @@ class AddMemberBloc extends Bloc {
     return phoneError;
   }
 
-  Future<void> addMember(VoidCallback onSuccess) async {
-    _submitStateController.add(AddMemberSubmitState.SUBMIT);
-    await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
+  Future<void> editMember(void Function(MemberItem updatedMember) onSuccess) async {
+    _submitStateController.add(EditMemberSubmitState.SUBMIT);
+    final Member newMember = Member(
+      member.uuid,
+      firstName,
+      lastName,
+      phone,
+      (image == null) ? null : image.path,
+    );
+    await _repository.memberExists(firstName, lastName, phone,member.uuid).then((exists) async {
       if(exists){
-        _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
+        _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       }else{
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(image == null) ? null : image.path)).then((_){
-          onSuccess();
+        await _repository.updateMember(newMember).then((_){
+          onSuccess(MemberItem(newMember,image));
         },onError: (error){
-          _submitStateController.add(AddMemberSubmitState.ERROR);
+          _submitStateController.add(EditMemberSubmitState.ERROR);
         });
       }
     },onError: (error){
-      _submitStateController.add(AddMemberSubmitState.ERROR);
+      _submitStateController.add(EditMemberSubmitState.ERROR);
     });
   }
 
@@ -158,7 +167,6 @@ class AddMemberBloc extends Bloc {
     });
   }
 
-  ///Dispose of this object.
   @override
   void dispose() {
     _submitStateController.close();
@@ -166,11 +174,6 @@ class AddMemberBloc extends Bloc {
   }
 }
 
-///This enum declares the different states for submitting a new [Member].
-///[AddMemberSubmitState.IDLE] There is no submit in progress.
-///[AddMemberSubmitState.SUBMIT] A submit is in progress.
-///[AddMemberSubmitState.ERROR] A submit failed because the member could not be saved.
-///[AddMemberSubmitState.MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
-enum AddMemberSubmitState {
-  IDLE, SUBMIT, MEMBER_EXISTS, ERROR
+enum EditMemberSubmitState {
+  IDLE,SUBMIT,MEMBER_EXISTS,ERROR,
 }

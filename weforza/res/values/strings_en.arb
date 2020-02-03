@@ -45,6 +45,8 @@
   "AddMemberError": "Could not add member",
   "MemberPickImageError": "Could not load image",
   "EditMemberTitle": "Edit Member",
+  "EditMemberError": "Failed to save the changes",
+  "EditMemberSubmit": "Save Changes",
 
   "AddRideTitle": "New Ride",
   "AddRideSubmit": "Add Selection",

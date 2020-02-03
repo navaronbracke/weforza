@@ -43,6 +43,8 @@ class MemberDao implements IMemberDao {
   final _memberStore = DatabaseProvider.memberStore;
   ///A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+  ///A reference to the [Device] store.
+  final _deviceStore = DatabaseProvider.deviceStore;
 
   @override
   Future<void> addMember(Member member) async  {
@@ -57,13 +59,15 @@ class MemberDao implements IMemberDao {
   @override
   Future<void> deleteMember(String uuid) async {
     assert(uuid != null);
-    //delete the ride attendee records and the member
+    //delete the ride attendee records, the member's devices and the member
     final memberFinder = Finder(filter: Filter.byKey(uuid));
     final memberRidesFinder = Finder(filter: Filter.equals("attendee", uuid));
+    final memberDeviceFinder = Finder(filter: Filter.equals("owner", uuid));
     
     await _database.transaction((txn) async {
       await _memberStore.delete(txn,finder: memberFinder);
       await _rideAttendeeStore.delete(txn,finder: memberRidesFinder);
+      await _deviceStore.delete(txn,finder: memberDeviceFinder);
     });
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
@@ -12,6 +13,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDeviceItem.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -338,7 +340,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
 
   ///Build the list of devices for the member with the given ID.
   Widget _buildDevicesList(String uuid){
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<List<Device>>(
       future: _bloc.getMemberDevices(uuid),
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
@@ -349,11 +351,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
           }else{
             return snapshot.data.isEmpty ? MemberDevicesEmpty() :
             ListView.builder(itemBuilder: (context,index){
-              //TODO device icon?
-              return Padding(
-                padding: const EdgeInsets.all(2),
-                child: Text(snapshot.data[index],softWrap: true),
-              );
+              return MemberDeviceItem(snapshot.data[index]);
             },itemCount: snapshot.data.length);
           }
         }else{

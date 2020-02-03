@@ -1,15 +1,16 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/editMemberBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
-  AddMemberSubmit(this.stream,this.onPressed): assert(stream != null && onPressed != null);
+class EditMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
+  EditMemberSubmit(this.stream,this.onPressed): assert(stream != null && onPressed != null);
 
-  final Stream<AddMemberSubmitState> stream;
+  final Stream<EditMemberSubmitState> stream;
   final VoidCallback onPressed;
 
   @override
@@ -17,15 +18,15 @@ class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildAndroidWidget(BuildContext context) {
-    return StreamBuilder<AddMemberSubmitState>(
-      initialData: AddMemberSubmitState.IDLE,
+    return StreamBuilder<EditMemberSubmitState>(
+      initialData: EditMemberSubmitState.IDLE,
       stream: stream,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return Text(S.of(context).AddMemberError);
+          return Text(S.of(context).EditMemberError);
         }else{
           switch(snapshot.data){
-            case AddMemberSubmitState.IDLE: return Column(
+            case EditMemberSubmitState.IDLE: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 //Show an empty text widget, to prevent popping when an already existing member is entered.
@@ -33,25 +34,25 @@ class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
                 SizedBox(height: 5),
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                  child: Text(S.of(context).EditMemberSubmit, style: TextStyle(color: Colors.white)),
                   onPressed: onPressed,
                 )
               ],
             );
-            case AddMemberSubmitState.SUBMIT: return PlatformAwareLoadingIndicator();
-            case AddMemberSubmitState.MEMBER_EXISTS: return Column(
+            case EditMemberSubmitState.SUBMIT: return PlatformAwareLoadingIndicator();
+            case EditMemberSubmitState.MEMBER_EXISTS: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(S.of(context).MemberAlreadyExists),
                 SizedBox(height: 5),
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                  child: Text(S.of(context).EditMemberSubmit, style: TextStyle(color: Colors.white)),
                   onPressed: onPressed,
                 )
               ],
             );
-            default: return Text(S.of(context).AddMemberError);
+            default: return Text(S.of(context).EditMemberError);
           }
         }
       },
@@ -60,41 +61,41 @@ class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
 
   @override
   Widget buildIosWidget(BuildContext context) {
-    return StreamBuilder<AddMemberSubmitState>(
-      initialData: AddMemberSubmitState.IDLE,
+    return StreamBuilder<EditMemberSubmitState>(
+      initialData: EditMemberSubmitState.IDLE,
       stream: stream,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return Text(S.of(context).AddMemberError);
+          return Text(S.of(context).EditMemberError);
         }else{
           switch(snapshot.data){
-            case AddMemberSubmitState.IDLE: return Column(
+            case EditMemberSubmitState.IDLE: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 //Show an empty text widget, to prevent popping when an already existing member is entered.
                 Text(""),
                 SizedBox(height: 5),
-                CupertinoButton.filled(
-                  child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                CupertinoButton(
+                  child: Text(S.of(context).EditMemberSubmit),
                   pressedOpacity: 0.5,
                   onPressed: onPressed,
                 )
               ],
             );
-            case AddMemberSubmitState.SUBMIT: return PlatformAwareLoadingIndicator();
-            case AddMemberSubmitState.MEMBER_EXISTS: return Column(
+            case EditMemberSubmitState.SUBMIT: return PlatformAwareLoadingIndicator();
+            case EditMemberSubmitState.MEMBER_EXISTS: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(S.of(context).MemberAlreadyExists),
                 SizedBox(height: 5),
-                CupertinoButton.filled(
-                  child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),
+                CupertinoButton(
+                  child: Text(S.of(context).EditMemberSubmit),
                   pressedOpacity: 0.5,
                   onPressed: onPressed,
                 )
               ],
             );
-            default: return Text(S.of(context).AddMemberError);
+            default: return Text(S.of(context).EditMemberError);
           }
         }
       },

@@ -18,7 +18,12 @@ abstract class IMemberDao {
   Future<List<Member>> getMembers();
 
   ///Check if a [Member] with the given values exists.
-  Future<bool> memberExists(String firstname, String lastname, String phone);
+  ///If [uuid] is null or empty, it checks whether there is a member with the given values.
+  ///
+  ///If [uuid] isn't null or empty it checks if there is a member with the values and a uuid that is different from [uuid].
+  ///A member with the same values and uuid means it's the owner of said values.
+  ///This would merely overwrite the old one with a copy of itself and is thus harmless.
+  Future<bool> memberExists(String firstname, String lastname, String phone,[String uuid]);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
@@ -84,12 +89,17 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<bool> memberExists(String firstname, String lastname, String phone) async {
-    final finder = Finder(filter: Filter.and([
+  Future<bool> memberExists(String firstname, String lastname, String phone, [String uuid]) async {
+    final List<Filter> filters = [
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
       Filter.equals("phone", phone),
-    ]));
+    ];
+    if(uuid != null && uuid.isNotEmpty){
+      filters.add(Filter.notEquals(Field.key, uuid));
+    }
+
+    final finder = Finder(filter: Filter.and(filters));
 
     return await _memberStore.findFirst(_database,finder: finder) != null;
   }

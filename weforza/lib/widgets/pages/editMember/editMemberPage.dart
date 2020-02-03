@@ -2,41 +2,44 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/addMemberBloc.dart';
-import 'package:weforza/provider/memberProvider.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
+import 'package:weforza/blocs/editMemberBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/provider/memberProvider.dart';
+import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
-import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
+import 'package:weforza/widgets/pages/editMember/editMemberSubmit.dart';
+import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
-///This [Widget] represents the form for adding a member.
-class AddMemberPage extends StatefulWidget {
+class EditMemberPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() =>
-      _AddMemberPageState(AddMemberBloc(InjectionContainer.get<MemberRepository>()));
+  _EditMemberPageState createState() => _EditMemberPageState(
+      EditMemberBloc(InjectionContainer.get<MemberRepository>(), MemberProvider.selectedMember)
+  );
 }
 
-///This is the [State] class for [AddMemberPage].
-class _AddMemberPageState extends State<AddMemberPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
-  _AddMemberPageState(this._bloc): assert(_bloc != null);
+class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
+  _EditMemberPageState(this._bloc): assert(_bloc != null){
+    _firstNameController = TextEditingController(text: _bloc.firstName);
+    _lastNameController = TextEditingController(text: _bloc.lastName);
+    _phoneController = TextEditingController(text: _bloc.phone);
+  }
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
   ///The BLoC in charge of the form.
-  final AddMemberBloc _bloc;
+  final EditMemberBloc _bloc;
 
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  TextEditingController _firstNameController;
+  TextEditingController _lastNameController;
+  TextEditingController _phoneController;
 
   ///The input labels.
   String _firstNameLabel;
@@ -100,17 +103,17 @@ class _AddMemberPageState extends State<AddMemberPage>
         _firstNameIllegalCharactersMessage,
         _firstNameBlankMessage) == null;
     final lastNameValid = _bloc.validateLastName(
-            _lastNameController.text,
-            _lastNameRequiredMessage,
-            _lastNameMaxLengthMessage,
-            _lastNameIllegalCharactersMessage,
-            _lastNameBlankMessage) == null;
+        _lastNameController.text,
+        _lastNameRequiredMessage,
+        _lastNameMaxLengthMessage,
+        _lastNameIllegalCharactersMessage,
+        _lastNameBlankMessage) == null;
     final phoneValid = _bloc.validatePhone(
-            _phoneController.text,
-            _phoneRequiredMessage,
-            _phoneIllegalCharactersMessage,
-            _phoneMinLengthMessage,
-            _phoneMaxLengthMessage) == null;
+        _phoneController.text,
+        _phoneRequiredMessage,
+        _phoneIllegalCharactersMessage,
+        _phoneMinLengthMessage,
+        _phoneMaxLengthMessage) == null;
     return firstNameValid && lastNameValid && phoneValid;
   }
 
@@ -138,7 +141,7 @@ class _AddMemberPageState extends State<AddMemberPage>
   Widget buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).AddMemberTitle),
+        title: Text(S.of(context).EditMemberTitle),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -172,8 +175,8 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 _firstNameBlankMessage),
                             autovalidate: _bloc.autoValidateFirstName,
                             onChanged: (value)=> setState(() {
-                                _bloc.autoValidateFirstName = true;
-                              }),
+                              _bloc.autoValidateFirstName = true;
+                            }),
                             onFieldSubmitted: (value){
                               _focusChange(context,_firstNameFocusNode,_lastNameFocusNode);
                             },
@@ -262,10 +265,11 @@ class _AddMemberPageState extends State<AddMemberPage>
                             },
                           ),
                           SizedBox(height: 20),
-                          AddMemberSubmit(_bloc.submitStream,() async {
+                          EditMemberSubmit(_bloc.submitStream,() async {
                             if (_formKey.currentState.validate()) {
-                              await _bloc.addMember((){
+                              await _bloc.editMember((MemberItem updatedMember){
                                 MemberProvider.reloadMembers = true;
+                                MemberProvider.selectedMember = updatedMember;
                                 Navigator.pop(context);
                               });
                             }
@@ -287,7 +291,7 @@ class _AddMemberPageState extends State<AddMemberPage>
   Widget buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddMemberTitle),
+        middle: Text(S.of(context).EditMemberTitle),
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
@@ -416,14 +420,13 @@ class _AddMemberPageState extends State<AddMemberPage>
                                 },
                               ),
                               SizedBox(height: 20),
-                              AddMemberSubmit(_bloc.submitStream,() async {
+                              EditMemberSubmit(_bloc.submitStream,() async {
                                 if (_iosAllFormInputValidator()) {
-                                  await _bloc.addMember((){
+                                  await _bloc.editMember((MemberItem updatedMember){
                                     MemberProvider.reloadMembers = true;
+                                    MemberProvider.selectedMember = updatedMember;
                                     Navigator.pop(context);
                                   });
-                                }else {
-                                  setState(() {});
                                 }
                               }),
                             ],
@@ -558,14 +561,13 @@ class _AddMemberPageState extends State<AddMemberPage>
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                     child: Center(
-                      child: AddMemberSubmit(_bloc.submitStream,() async {
+                      child: EditMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
-                          await _bloc.addMember((){
+                          await _bloc.editMember((MemberItem updatedMember){
                             MemberProvider.reloadMembers = true;
+                            MemberProvider.selectedMember = updatedMember;
                             Navigator.pop(context);
                           });
-                        }else {
-                          setState(() {});
                         }
                       }),
                     ),
@@ -691,10 +693,11 @@ class _AddMemberPageState extends State<AddMemberPage>
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                   child: Center(
-                    child: AddMemberSubmit(_bloc.submitStream,() async {
+                    child: EditMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.addMember((){
+                        await _bloc.editMember((MemberItem updatedMember){
                           MemberProvider.reloadMembers = true;
+                          MemberProvider.selectedMember = updatedMember;
                           Navigator.pop(context);
                         });
                       }

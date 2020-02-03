@@ -247,146 +247,151 @@ class _EditRidePageState extends State<EditRidePage>
         middle: Text(S.of(context).EditRidePageTitle),
       ),
       child: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Icon(Icons.calendar_today, size: 30),
-                      SizedBox(width: 4),
-                      Text(ride.getFormattedDate(context, false),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.calendar_today, size: 30),
+                            SizedBox(width: 4),
+                            Text(ride.getFormattedDate(context, false),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                      CupertinoTextField(
+                        focusNode: _titleFocusNode,
+                        textInputAction: TextInputAction.next,
+                        controller: _titleController,
+                        placeholder: _titleLabel,
+                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          setState(() {
+                            _bloc.validateTitle(value, _titleWhitespaceMessage,
+                                _titleMaxLengthMessage);
+                          });
+                        },
+                        onSubmitted: (value) {
+                          _focusChange(
+                              context, _titleFocusNode, _departureFocusNode);
+                        },
+                      ),
+                      Text(
+                          CupertinoFormErrorFormatter.formatErrorMessage(
+                              _bloc.titleError),
+                          style: ApplicationTheme.iosFormErrorStyle),
+                      SizedBox(height: 5),
+                      CupertinoTextField(
+                        focusNode: _departureFocusNode,
+                        textInputAction: TextInputAction.next,
+                        controller: _departureController,
+                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        placeholder: _departureLabel,
+                        onChanged: (value) {
+                          setState(() {
+                            _bloc.validateDepartureAddress(
+                                value,
+                                _addressWhitespaceMessage,
+                                _addressMaxLengthMessage,
+                                _addressInvalidMessage);
+                          });
+                        },
+                        onSubmitted: (value) {
+                          _focusChange(
+                              context, _departureFocusNode, _destinationFocusNode);
+                        },
+                      ),
+                      Text(
+                          CupertinoFormErrorFormatter.formatErrorMessage(
+                              _bloc.departureError),
+                          style: ApplicationTheme.iosFormErrorStyle),
+                      SizedBox(height: 5),
+                      CupertinoTextField(
+                        focusNode: _destinationFocusNode,
+                        textInputAction: TextInputAction.next,
+                        controller: _destinationController,
+                        placeholder: _destinationLabel,
+                        autocorrect: false,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {
+                          setState(() {
+                            _bloc.validateDestinationAddress(
+                                value,
+                                _addressWhitespaceMessage,
+                                _addressMaxLengthMessage,
+                                _addressInvalidMessage);
+                          });
+                        },
+                        onSubmitted: (value) {
+                          _focusChange(
+                              context, _destinationFocusNode, _distanceFocusNode);
+                        },
+                      ),
+                      Text(
+                          CupertinoFormErrorFormatter.formatErrorMessage(
+                              _bloc.destinationError),
+                          style: ApplicationTheme.iosFormErrorStyle),
+                      SizedBox(height: 5),
+                      CupertinoTextField(
+                        focusNode: _distanceFocusNode,
+                        textInputAction: TextInputAction.done,
+                        controller: _distanceController,
+                        placeholder: _distanceLabel,
+                        suffix: Text("${S.of(context).DistanceKm} "),
+                        autocorrect: false,
+                        keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                        onChanged: (value) {
+                          setState(() {
+                            _bloc.validateDistance(
+                              value,
+                              _distanceInvalidMessage,
+                              _distancePositiveMessage,
+                              _distanceMaximumMessage,
+                            );
+                          });
+                        },
+                        onSubmitted: (value) {
+                          _distanceFocusNode.unfocus();
+                        },
+                      ),
+                      Text(
+                          CupertinoFormErrorFormatter.formatErrorMessage(
+                              _bloc.distanceError),
+                          style: ApplicationTheme.iosFormErrorStyle),
                     ],
                   ),
                 ),
-                CupertinoTextField(
-                  focusNode: _titleFocusNode,
-                  textInputAction: TextInputAction.next,
-                  controller: _titleController,
-                  placeholder: _titleLabel,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    setState(() {
-                      _bloc.validateTitle(value, _titleWhitespaceMessage,
-                          _titleMaxLengthMessage);
-                    });
-                  },
-                  onSubmitted: (value) {
-                    _focusChange(
-                        context, _titleFocusNode, _departureFocusNode);
-                  },
-                ),
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        _bloc.titleError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-                SizedBox(height: 5),
-                CupertinoTextField(
-                  focusNode: _departureFocusNode,
-                  textInputAction: TextInputAction.next,
-                  controller: _departureController,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  placeholder: _departureLabel,
-                  onChanged: (value) {
-                    setState(() {
-                      _bloc.validateDepartureAddress(
-                          value,
-                          _addressWhitespaceMessage,
-                          _addressMaxLengthMessage,
-                          _addressInvalidMessage);
-                    });
-                  },
-                  onSubmitted: (value) {
-                    _focusChange(
-                        context, _departureFocusNode, _destinationFocusNode);
-                  },
-                ),
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        _bloc.departureError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-                SizedBox(height: 5),
-                CupertinoTextField(
-                  focusNode: _destinationFocusNode,
-                  textInputAction: TextInputAction.next,
-                  controller: _destinationController,
-                  placeholder: _destinationLabel,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    setState(() {
-                      _bloc.validateDestinationAddress(
-                          value,
-                          _addressWhitespaceMessage,
-                          _addressMaxLengthMessage,
-                          _addressInvalidMessage);
-                    });
-                  },
-                  onSubmitted: (value) {
-                    _focusChange(
-                        context, _destinationFocusNode, _distanceFocusNode);
-                  },
-                ),
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        _bloc.destinationError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-                SizedBox(height: 5),
-                CupertinoTextField(
-                  focusNode: _distanceFocusNode,
-                  textInputAction: TextInputAction.done,
-                  controller: _distanceController,
-                  placeholder: _distanceLabel,
-                  suffix: Text("${S.of(context).DistanceKm} "),
-                  autocorrect: false,
-                  keyboardType:
-                      TextInputType.numberWithOptions(decimal: true),
-                  onChanged: (value) {
-                    setState(() {
-                      _bloc.validateDistance(
-                        value,
-                        _distanceInvalidMessage,
-                        _distancePositiveMessage,
-                        _distanceMaximumMessage,
-                      );
-                    });
-                  },
-                  onSubmitted: (value) {
-                    _distanceFocusNode.unfocus();
-                  },
-                ),
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        _bloc.distanceError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Center(
-                    child: EditRideSubmit(_bloc.stream, () async {
-                      if (_formKey.currentState.validate()) {
-                        await _bloc.editRide((Ride updatedRide) {
-                          RideProvider.reloadRides = true;
-                          RideProvider.selectedRide = updatedRide;
-                          Navigator.pop(context);
-                        });
-                      }
-                    }),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Center(
+                child: EditRideSubmit(_bloc.stream,() async {
+                  if(iosAllFormInputValidator()){
+                    await _bloc.editRide((Ride updatedRide) {
+                      RideProvider.reloadRides = true;
+                      RideProvider.selectedRide = updatedRide;
+                      Navigator.pop(context);
+                    });
+                  }
+                }),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -410,5 +415,26 @@ class _EditRidePageState extends State<EditRidePage>
       BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  ///Validate all current form input for IOS.
+  bool iosAllFormInputValidator(){
+    final titleValid = _bloc.validateTitle(_titleController.text, _titleWhitespaceMessage, _titleMaxLengthMessage) == null;
+    final departureValid = _bloc.validateDepartureAddress(
+        _departureController.text,
+        _addressWhitespaceMessage,
+        _addressMaxLengthMessage,
+        _addressInvalidMessage) == null;
+    final destinationValid = _bloc.validateDestinationAddress(
+        _destinationController.text,
+        _addressWhitespaceMessage,
+        _addressMaxLengthMessage,
+        _addressInvalidMessage) == null;
+    final distanceValid = _bloc.validateDistance(
+      _distanceController.text,
+      _distanceInvalidMessage,
+      _distancePositiveMessage,
+      _distanceMaximumMessage) == null;
+    return titleValid && departureValid && destinationValid && distanceValid;
   }
 }

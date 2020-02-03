@@ -47,8 +47,8 @@ class EditRideSubmit extends StatelessWidget implements PlatformAwareWidget {
           return Text(S.of(context).EditRideSubmitError);
         }else{
           switch(snapshot.data){
-            case EditRideSubmitState.IDLE: return CupertinoButton.filled(
-              child: Text(S.of(context).EditRideSubmit, style: TextStyle(color: Colors.white)),
+            case EditRideSubmitState.IDLE: return CupertinoButton(
+              child: Text(S.of(context).EditRideSubmit),
               pressedOpacity: 0.5,
               onPressed: onPressed,
             );

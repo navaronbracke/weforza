@@ -67,6 +67,7 @@ class S implements WidgetsLocalizations {
   String get MemberDetailsLoadDevicesError => "Could not load devices";
   String get MemberDetailsLoadPictureError => "Could not load profile picture";
   String get MemberDetailsNoDevices => "This member has no devices yet";
+  String get MemberDetailsNoDevicesAddDevice => "Add a device";
   String get MemberDetailsTitle => "Details";
   String get MemberListAddMemberInstruction => "Add members by using the menu above";
   String get MemberListLoadingFailed => "Could not load members";
@@ -235,6 +236,8 @@ class $nl extends S {
   String get SaturdayPrefix => "Za";
   @override
   String get MemberListTitle => "Leden";
+  @override
+  String get MemberDetailsNoDevicesAddDevice => "Voeg een toestel toe";
   @override
   String get PersonTelephoneLabel => "Telefoon";
   @override

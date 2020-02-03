@@ -42,7 +42,7 @@ class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
             case AddMemberSubmitState.ERR_MEMBER_EXISTS: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(S.of(context).AddMemberAlreadyExists),
+                Text(S.of(context).MemberAlreadyExists),
                 SizedBox(height: 5),
                 RaisedButton(
                   color: Theme.of(context).primaryColor,
@@ -86,7 +86,7 @@ class AddMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
             case AddMemberSubmitState.ERR_MEMBER_EXISTS: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(S.of(context).AddMemberAlreadyExists),
+                Text(S.of(context).MemberAlreadyExists),
                 SizedBox(height: 5),
                 CupertinoButton.filled(
                   child: Text(S.of(context).AddMemberSubmit, style: TextStyle(color: Colors.white)),

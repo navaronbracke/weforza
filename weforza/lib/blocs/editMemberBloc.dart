@@ -142,7 +142,7 @@ class EditMemberBloc extends Bloc {
       phone,
       (image == null) ? null : image.path,
     );
-    await _repository.memberExists(firstName, lastName, phone).then((exists) async {
+    await _repository.memberExists(firstName, lastName, phone,member.uuid).then((exists) async {
       if(exists){
         _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       }else{

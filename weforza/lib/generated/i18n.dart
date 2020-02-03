@@ -21,9 +21,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get AddMemberAlreadyExists => "This member already exists";
   String get AddMemberError => "Could not add member";
-  String get AddMemberPickImageError => "Could not load image";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
   String get AddRideColorLegendCurrentSelection => "Current Selection";
@@ -40,6 +38,7 @@ class S implements WidgetsLocalizations {
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
   String get DistanceKm => "Km";
+  String get EditMemberTitle => "Edit Member";
   String get EditRideAddressInvalid => "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -";
   String get EditRideAddressWhitespace => "An address cannot be only whitespace";
   String get EditRideDepartureLabel => "Departure";
@@ -59,12 +58,10 @@ class S implements WidgetsLocalizations {
   String get HomePageRidesTab => "Rides";
   String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
+  String get MemberAlreadyExists => "This member already exists";
   String get MemberDeleteDialogDescription => "Are you sure that you want to delete this member?";
   String get MemberDeleteDialogErrorDescription => "Could not delete member";
   String get MemberDeleteDialogTitle => "Delete Member";
-  String get MemberDetailsAddDeviceError => "Could not add device";
-  String get MemberDetailsDeleteDeviceError => "Could not delete device";
-  String get MemberDetailsEditDeviceError => "Could not edit device";
   String get MemberDetailsLoadDevicesError => "Could not load devices";
   String get MemberDetailsLoadPictureError => "Could not load profile picture";
   String get MemberDetailsNoDevices => "This member has no devices yet";
@@ -73,6 +70,7 @@ class S implements WidgetsLocalizations {
   String get MemberListLoadingFailed => "Could not load members";
   String get MemberListNoItems => "There are no members to display";
   String get MemberListTitle => "Members";
+  String get MemberPickImageError => "Could not load image";
   String get MondayPrefix => "Mon";
   String get PersonFirstNameLabel => "First Name";
   String get PersonLastNameLabel => "Last Name";
@@ -156,15 +154,13 @@ class $nl extends S {
   @override
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
   @override
-  String get MemberDetailsDeleteDeviceError => "Kon toestel niet verwijderen";
-  @override
-  String get AddMemberAlreadyExists => "Dit lid bestaat al";
-  @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
   String get MondayPrefix => "Ma";
   @override
   String get AddRideColorLegendFutureRide => "Toekomstige Rit";
+  @override
+  String get EditMemberTitle => "Lid Bewerken";
   @override
   String get EditRideDistanceLabel => "Afstand";
   @override
@@ -184,13 +180,13 @@ class $nl extends S {
   @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
+  String get MemberAlreadyExists => "Dit lid bestaat al";
+  @override
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
   @override
   String get AddMemberTitle => "Nieuw lid";
   @override
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
-  @override
-  String get MemberDetailsAddDeviceError => "Kon toestel niet toevoegen";
   @override
   String get RideListAddRideInstruction => "Voeg een rit toe met de +";
   @override
@@ -210,8 +206,6 @@ class $nl extends S {
   @override
   String get AddRideTitle => "Nieuwe Rit";
   @override
-  String get MemberDetailsEditDeviceError => "Kon toestel niet bewerken";
-  @override
   String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override
   String get AddRideLoadingFailed => "Kon de kalender niet laden";
@@ -222,6 +216,8 @@ class $nl extends S {
   @override
   String get MemberDeleteDialogErrorDescription => "Kon lid niet verwijderen";
   @override
+  String get MemberPickImageError => "Kon afbeelding niet laden";
+  @override
   String get AppName => "WeForza";
   @override
   String get RideAttendeeAssignmentReturnToList => "Terug naar de lijst";
@@ -231,8 +227,6 @@ class $nl extends S {
   String get DialogCancel => "Annuleren";
   @override
   String get AddRideColorLegendPastDay => "Gepasseerde Dag Zonder Rit";
-  @override
-  String get AddMemberPickImageError => "Kon afbeelding niet laden";
   @override
   String get SaturdayPrefix => "Za";
   @override

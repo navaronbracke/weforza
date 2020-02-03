@@ -10,8 +10,14 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 
 class EditMemberBloc extends Bloc {
-  EditMemberBloc(this._repository): assert(_repository != null);
+  EditMemberBloc(this._repository,this.member): assert(_repository != null && member != null){
+    image = member.profileImage;
+    firstName = member.firstName;
+    lastName = member.lastName;
+    phone = member.phone;
+  }
 
+  final MemberItem member;
   ///The [IMemberRepository] that handles the submit.
   final MemberRepository _repository;
 
@@ -22,9 +28,9 @@ class EditMemberBloc extends Bloc {
   Stream<ProfileImagePickingState> get imagePickingStream => _imagePickingController.stream;
 
   ///The actual inputs.
-  String _firstName;
-  String _lastName;
-  String _phone;
+  String firstName;
+  String lastName;
+  String phone;
 
   File image;
 
@@ -50,7 +56,7 @@ class EditMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != _firstName){
+    if(value != firstName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(EditMemberSubmitState.IDLE);
     }
@@ -64,7 +70,7 @@ class EditMemberBloc extends Bloc {
       firstNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
-      _firstName = value;
+      firstName = value;
       firstNameError = null;
     }
     else{
@@ -77,7 +83,7 @@ class EditMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != _lastName){
+    if(value != lastName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(EditMemberSubmitState.IDLE);
     }
@@ -91,7 +97,7 @@ class EditMemberBloc extends Bloc {
       lastNameError = maxLengthMessage;
     }
     else if(Member.personNameRegex.hasMatch(value)){
-      _lastName = value;
+      lastName = value;
       lastNameError = null;
     }
     else{
@@ -104,7 +110,7 @@ class EditMemberBloc extends Bloc {
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
   String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
-    if(value != _phone){
+    if(value != phone){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(EditMemberSubmitState.IDLE);
     }
@@ -118,7 +124,7 @@ class EditMemberBloc extends Bloc {
       phoneError = maxLengthMessage;
     }
     else if(Member.phoneNumberRegex.hasMatch(value)){
-      _phone = value;
+      phone = value;
       phoneError = null;
     }
     else{
@@ -127,17 +133,16 @@ class EditMemberBloc extends Bloc {
     return phoneError;
   }
 
-  Future<void> editMember(MemberItem oldMember,void Function(MemberItem updatedMember) onSuccess) async {
+  Future<void> editMember(void Function(MemberItem updatedMember) onSuccess) async {
     _submitStateController.add(EditMemberSubmitState.SUBMIT);
     final Member newMember = Member(
-      oldMember.uuid,
-      _firstName,
-      _lastName,
-      _phone,
+      member.uuid,
+      firstName,
+      lastName,
+      phone,
       (image == null) ? null : image.path,
     );
-    //TODO onSuccess -> updates the load flag, the selected item and pops
-    await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
+    await _repository.memberExists(firstName, lastName, phone).then((exists) async {
       if(exists){
         _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       }else{

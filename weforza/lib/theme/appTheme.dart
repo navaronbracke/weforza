@@ -66,6 +66,8 @@ abstract class ApplicationTheme {
 
   static final Color rideAttendeeCounterIconColor = Colors.black87;
 
+  static final Color deviceIconColor = Colors.blue.shade200;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

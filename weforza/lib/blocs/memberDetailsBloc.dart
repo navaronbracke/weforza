@@ -1,4 +1,5 @@
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
@@ -23,7 +24,7 @@ class MemberDetailsBloc extends Bloc {
     return _memberRepository.getAttendingCountForAttendee(uuid);
   }
 
-  Future<List<String>> getMemberDevices(String uuid){
+  Future<List<Device>> getMemberDevices(String uuid){
     assert(uuid != null && uuid.isNotEmpty);
     return _deviceRepository.getOwnerDevices(uuid);
   }

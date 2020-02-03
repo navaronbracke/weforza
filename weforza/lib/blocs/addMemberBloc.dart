@@ -135,16 +135,16 @@ class AddMemberBloc extends Bloc {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
     await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
       if(exists){
-        _submitStateController.add(AddMemberSubmitState.ERR_MEMBER_EXISTS);
+        _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
       }else{
         await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(image == null) ? null : image.path)).then((_){
           onSuccess();
         },onError: (error){
-          _submitStateController.add(AddMemberSubmitState.ERR_SUBMIT_MEMBER);
+          _submitStateController.add(AddMemberSubmitState.ERROR);
         });
       }
     },onError: (error){
-      _submitStateController.add(AddMemberSubmitState.ERR_SUBMIT_MEMBER);
+      _submitStateController.add(AddMemberSubmitState.ERROR);
     });
   }
 
@@ -169,8 +169,8 @@ class AddMemberBloc extends Bloc {
 ///This enum declares the different states for submitting a new [Member].
 ///[AddMemberSubmitState.IDLE] There is no submit in progress.
 ///[AddMemberSubmitState.SUBMIT] A submit is in progress.
-///[AddMemberSubmitState.ERR_SUBMIT_MEMBER] A submit failed because the member could not be saved.
-///[AddMemberSubmitState.ERR_MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
+///[AddMemberSubmitState.ERROR] A submit failed because the member could not be saved.
+///[AddMemberSubmitState.MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
 enum AddMemberSubmitState {
-  IDLE, SUBMIT, ERR_MEMBER_EXISTS, ERR_SUBMIT_MEMBER
+  IDLE, SUBMIT, MEMBER_EXISTS, ERROR
 }

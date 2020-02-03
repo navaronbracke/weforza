@@ -35,6 +35,8 @@
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
   "EditMemberTitle": "Lid Bewerken",
+  "EditMemberError": "Kon de wijzigingen niet opslaan",
+  "EditMemberSubmit" : "Wijzigingen Opslaan",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",

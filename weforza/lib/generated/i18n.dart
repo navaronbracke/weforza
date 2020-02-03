@@ -38,6 +38,8 @@ class S implements WidgetsLocalizations {
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
   String get DistanceKm => "Km";
+  String get EditMemberError => "Failed to save the changes";
+  String get EditMemberSubmit => "Save Changes";
   String get EditMemberTitle => "Edit Member";
   String get EditRideAddressInvalid => "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -";
   String get EditRideAddressWhitespace => "An address cannot be only whitespace";
@@ -119,6 +121,8 @@ class $nl extends S {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
+  @override
+  String get EditMemberSubmit => "Wijzigingen Opslaan";
   @override
   String get EditRidePageTitle => "Rit Bewerken";
   @override
@@ -265,6 +269,8 @@ class $nl extends S {
   String get FirstNameIllegalCharacters => "Voornaam mag enkel letters, spaties of ' - bevatten";
   @override
   String get HomePageMembersTab => "Leden";
+  @override
+  String get EditMemberError => "Kon de wijzigingen niet opslaan";
   @override
   String get MemberListLoadingFailed => "Kon leden niet laden";
   @override

@@ -10,6 +10,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

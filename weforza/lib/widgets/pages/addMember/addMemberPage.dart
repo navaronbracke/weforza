@@ -12,6 +12,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
@@ -24,8 +25,7 @@ class AddMemberPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [AddMemberPage].
-class _AddMemberPageState extends State<AddMemberPage>
-    implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
+class _AddMemberPageState extends State<AddMemberPage> implements IProfileImagePicker {
   _AddMemberPageState(this._bloc): assert(_bloc != null);
 
   ///The key for the form.
@@ -117,25 +117,19 @@ class _AddMemberPageState extends State<AddMemberPage>
   @override
   Widget build(BuildContext context) {
     _initStrings(context);
-    return PlatformAwareWidgetBuilder.build(context, this);
+    return PlatformAwareWidget(
+      android: () => OrientationAwareWidget(
+        portrait: () => _buildAndroidPortraitLayout(context),
+        landscape: () => _buildAndroidLandscapeLayout(context),
+      ),
+      ios: () => OrientationAwareWidget(
+        portrait: () => _buildIOSPortraitLayout(context),
+        landscape: () => _buildIOSLandscapeLayout(context),
+      ),
+    );
   }
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(
-        context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context));
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context), buildIOSLandscapeLayout(context));
-  }
-
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddMemberTitle),
@@ -283,8 +277,7 @@ class _AddMemberPageState extends State<AddMemberPage>
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).AddMemberTitle),
@@ -441,8 +434,7 @@ class _AddMemberPageState extends State<AddMemberPage>
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).AddMemberTitle),
@@ -579,8 +571,7 @@ class _AddMemberPageState extends State<AddMemberPage>
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddMemberTitle),

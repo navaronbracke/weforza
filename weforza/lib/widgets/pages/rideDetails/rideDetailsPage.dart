@@ -16,6 +16,7 @@ import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideDetailsPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class RideDetailsPage extends StatefulWidget {
   );
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAwareWidget,PlatformAndOrientationAwareWidget, DeleteRideHandler {
+class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRideHandler {
   _RideDetailsPageState(this._bloc): assert(_bloc != null);
 
   final RideDetailsBloc _bloc;
@@ -40,26 +41,18 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => OrientationAwareWidget(
+      portrait: () => _buildAndroidPortraitLayout(context),
+      landscape: () => _buildAndroidLandscapeLayout(context),
+    ),
+    ios: () => OrientationAwareWidget(
+      portrait: () => _buildIOSPortraitLayout(context),
+      landscape: () => _buildIOSLandscapeLayout(context),
+    ),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context)
-    );
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context),
-        buildIOSLandscapeLayout(context)
-    );
-  }
-
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -98,8 +91,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -138,8 +130,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -190,8 +181,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements PlatformAw
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

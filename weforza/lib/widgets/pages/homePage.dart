@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 ///This is the [State] class for [HomePage].
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin implements PlatformAwareWidget {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
   ///The selected index.
   int _selectedIndex = 0;
@@ -33,10 +33,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       body: PageView(
         children: [RideListPage(),MemberListPage()],
@@ -64,8 +66,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       child: Column(
         children: <Widget>[

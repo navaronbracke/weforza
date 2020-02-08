@@ -24,14 +24,16 @@ class WeForzaApp extends StatefulWidget {
   State<StatefulWidget> createState() => _WeForzaAppState();
 }
 
-class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget {
+class _WeForzaAppState extends State<WeForzaApp> {
   final String _appName = "WeForza";
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(),
+    ios: () => _buildIosWidget(),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget() {
     return MaterialApp(
       title: _appName,
       localizationsDelegates: [
@@ -45,8 +47,8 @@ class _WeForzaAppState extends State<WeForzaApp> implements PlatformAwareWidget 
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+
+  Widget _buildIosWidget() {
     return CupertinoApp(
       title: _appName,
       localizationsDelegates: [

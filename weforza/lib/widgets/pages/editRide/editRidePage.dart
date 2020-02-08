@@ -10,6 +10,7 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/editRide/editRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class EditRidePage extends StatefulWidget {
@@ -18,8 +19,7 @@ class EditRidePage extends StatefulWidget {
       InjectionContainer.get<RideRepository>(), RideProvider.selectedRide));
 }
 
-class _EditRidePageState extends State<EditRidePage>
-    implements PlatformAwareWidget,PlatformAndOrientationAwareWidget {
+class _EditRidePageState extends State<EditRidePage> {
   _EditRidePageState(this._bloc) : assert(_bloc != null) {
     _titleController = TextEditingController(text: _bloc.titleInput);
     _departureController = TextEditingController(text: _bloc.departureInput);
@@ -82,22 +82,18 @@ class _EditRidePageState extends State<EditRidePage>
   @override
   Widget build(BuildContext context) {
     _initStrings(context);
-    return PlatformAwareWidgetBuilder.build(context, this);
+    return PlatformAwareWidget(
+      android: () => OrientationAwareWidget(
+        portrait: () => _buildAndroidPortraitLayout(context),
+        landscape: () => _buildAndroidLandscapeLayout(context),
+      ),
+      ios: () => OrientationAwareWidget(
+        portrait: () => _buildIOSPortraitLayout(context),
+        landscape: () => _buildIOSLandscapeLayout(context),
+      ),
+    );
   }
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(
-        context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context));
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context), buildIOSLandscapeLayout(context));
-  }
 
   @override
   void dispose() {
@@ -113,8 +109,7 @@ class _EditRidePageState extends State<EditRidePage>
     super.dispose();
   }
 
-  void _focusChange(
-      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
@@ -140,8 +135,7 @@ class _EditRidePageState extends State<EditRidePage>
     return titleValid && departureValid && destinationValid && distanceValid;
   }
 
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -293,8 +287,7 @@ class _EditRidePageState extends State<EditRidePage>
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -446,8 +439,7 @@ class _EditRidePageState extends State<EditRidePage>
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -605,8 +597,7 @@ class _EditRidePageState extends State<EditRidePage>
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

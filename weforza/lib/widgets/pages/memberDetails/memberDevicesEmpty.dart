@@ -1,17 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/device.dart';
+import 'package:weforza/provider/memberProvider.dart';
+import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceOverviewPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget is shown as replacement of a [Member]'s devices, if it has none.
-class MemberDevicesEmpty extends StatelessWidget implements PlatformAwareWidget {
-  @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+class MemberDevicesEmpty extends StatelessWidget {
+  MemberDevicesEmpty(this._onReload): assert(_onReload != null);
+
+  final VoidCallback _onReload;
 
   @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
+
+  Widget _buildAndroidWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -25,15 +37,19 @@ class MemberDevicesEmpty extends StatelessWidget implements PlatformAwareWidget 
         FlatButton(
           child: Text(S.of(context).MemberDetailsNoDevicesAddDevice,style: TextStyle(color: Colors.blue)),
           onPressed: (){
-            //TODO go to manage devices screen
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                DeviceOverviewPage(
+                    DeviceOverviewBloc(
+                        MemberProvider.selectedMember.uuid,List<Device>(),InjectionContainer.get<DeviceRepository>())
+                ),
+            )).then((_)=> _onReload());
           },
         ),
       ],
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -47,12 +63,15 @@ class MemberDevicesEmpty extends StatelessWidget implements PlatformAwareWidget 
         CupertinoButton(
           child: Text(S.of(context).MemberDetailsNoDevicesAddDevice),
           onPressed: (){
-            //TODO go to manage devices screen
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                DeviceOverviewPage(
+                    DeviceOverviewBloc(
+                        MemberProvider.selectedMember.uuid,List<Device>(),InjectionContainer.get<DeviceRepository>())
+                ),
+            )).then((_)=> _onReload());
           },
         ),
       ],
     );
   }
-
-
 }

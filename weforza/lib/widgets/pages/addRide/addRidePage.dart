@@ -9,6 +9,7 @@ import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -19,7 +20,7 @@ class AddRidePage extends StatefulWidget {
 }
 
 ///This class is the State for [AddRidePage].
-class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget {
+class _AddRidePageState extends State<AddRidePage> {
   _AddRidePageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC for this page.
@@ -32,26 +33,18 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
   }
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context)=> PlatformAwareWidget(
+    android: () => OrientationAwareWidget(
+      portrait: () => _buildAndroidPortraitLayout(context),
+      landscape: () => _buildAndroidLandscapeLayout(context),
+    ),
+    ios: () => OrientationAwareWidget(
+      portrait: () => _buildIOSPortraitLayout(context),
+      landscape: () => _buildIOSLandscapeLayout(context),
+    ),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context)
-    );
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context),
-        buildIOSLandscapeLayout(context)
-    );
-  }
-
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
@@ -97,8 +90,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
@@ -140,8 +132,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -195,8 +186,7 @@ class _AddRidePageState extends State<AddRidePage> implements PlatformAwareWidge
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

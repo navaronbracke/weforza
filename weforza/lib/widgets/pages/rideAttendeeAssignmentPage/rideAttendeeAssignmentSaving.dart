@@ -5,17 +5,20 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class RideAttendeeAssignmentSaving extends StatelessWidget implements PlatformAwareWidget {
-  RideAttendeeAssignmentSaving(this.future,this.title): assert(future != null && title != null);
+class RideAttendeeAssignmentSaving extends StatelessWidget {
+  RideAttendeeAssignmentSaving(this.future,this.title):
+        assert(future != null && title != null);
 
   final String title;
   final Future<void> future;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
       builder: (context,snapshot){
@@ -31,8 +34,7 @@ class RideAttendeeAssignmentSaving extends StatelessWidget implements PlatformAw
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
       builder: (context,snapshot){

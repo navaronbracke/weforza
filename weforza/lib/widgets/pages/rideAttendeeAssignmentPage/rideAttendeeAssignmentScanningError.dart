@@ -6,17 +6,20 @@ import 'package:weforza/generated/i18n.dart';
 
 ///This widget represents an error widget for a failed scan.
 ///It provides the user with a way to return to the manual assignment screen by using its [onPressed] callback.
-class RideAttendeeAssignmentScanningError extends StatelessWidget implements PlatformAwareWidget {
-  RideAttendeeAssignmentScanningError(this.title,this.onPressed): assert(title != null && onPressed != null);
+class RideAttendeeAssignmentScanningError extends StatelessWidget {
+  RideAttendeeAssignmentScanningError(this.title,this.onPressed):
+        assert(title != null && onPressed != null);
 
   final String title;
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title,style: TextStyle(fontSize: 16))),
       body: Column(
@@ -32,8 +35,7 @@ class RideAttendeeAssignmentScanningError extends StatelessWidget implements Pla
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

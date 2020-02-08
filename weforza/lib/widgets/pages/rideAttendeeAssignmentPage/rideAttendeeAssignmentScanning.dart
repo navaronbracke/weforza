@@ -8,18 +8,21 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget represents an ongoing scan [future].
 ///Its [onStopScan] callback allows to terminate a scan or to return from a failed scan.
-class RideAttendeeAssignmentScanning extends StatelessWidget implements PlatformAwareWidget {
-  RideAttendeeAssignmentScanning(this.future,this.title,this.onStopScan): assert(future != null && title != null && onStopScan != null);
+class RideAttendeeAssignmentScanning extends StatelessWidget {
+  RideAttendeeAssignmentScanning(this.future,this.title,this.onStopScan):
+        assert(future != null && title != null && onStopScan != null);
 
   final String title;
   final Future<void> future;
   final VoidCallback onStopScan;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
       builder: (context,snapshot){
@@ -52,8 +55,7 @@ class RideAttendeeAssignmentScanning extends StatelessWidget implements Platform
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
       builder: (context,snapshot){

@@ -25,13 +25,15 @@ class RideAttendeeAssignmentList extends StatefulWidget {
   _RideAttendeeAssignmentListState createState() => _RideAttendeeAssignmentListState();
 }
 
-class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList> implements PlatformAwareWidget {
+class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList> {
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title,style: TextStyle(fontSize: 16)),
@@ -53,8 +55,7 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

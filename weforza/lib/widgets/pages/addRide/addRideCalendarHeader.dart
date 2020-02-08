@@ -8,16 +8,18 @@ import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents the header for the ride calendar in [AddRidePage].
-class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidget {
+class AddRideCalendarHeader extends StatelessWidget {
   AddRideCalendarHeader(this.paginator): assert(paginator != null);
 
   final IAddRideCalendarPaginator paginator;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Row(
       children: <Widget>[
         IconButton(
@@ -46,8 +48,7 @@ class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidg
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return Padding(
       padding: MediaQuery.of(context).orientation == Orientation.portrait ?  const EdgeInsets.symmetric(vertical: 40,horizontal: 20): const EdgeInsets.all(20),
       child: Row(

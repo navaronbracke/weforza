@@ -6,17 +6,19 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class AddRideSubmit extends StatelessWidget implements PlatformAwareWidget {
+class AddRideSubmit extends StatelessWidget {
   AddRideSubmit(this.stream,this.onPressed): assert(onPressed != null && stream != null);
 
   final Stream<AddRideSubmitState> stream;
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return StreamBuilder<AddRideSubmitState>(
       stream: stream,
       initialData: AddRideSubmitState.IDLE,
@@ -57,8 +59,7 @@ class AddRideSubmit extends StatelessWidget implements PlatformAwareWidget {
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return StreamBuilder<AddRideSubmitState>(
       stream: stream,
       initialData: AddRideSubmitState.IDLE,

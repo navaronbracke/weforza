@@ -15,13 +15,15 @@ class RideAttendeeAssignmentItem extends StatefulWidget {
   _RideAttendeeAssignmentItemState createState() => _RideAttendeeAssignmentItemState();
 }
 
-class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem> implements PlatformAwareWidget {
+class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem> {
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
         setState(() {
@@ -69,8 +71,8 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+
+  Widget _buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
         setState(() {

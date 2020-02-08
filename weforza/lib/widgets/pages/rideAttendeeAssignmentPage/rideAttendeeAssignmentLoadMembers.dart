@@ -5,17 +5,20 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class RideAttendeeAssignmentLoadMembers extends StatelessWidget implements PlatformAwareWidget {
-  RideAttendeeAssignmentLoadMembers(this.title,this.future): assert(title != null && future != null);
+class RideAttendeeAssignmentLoadMembers extends StatelessWidget {
+  RideAttendeeAssignmentLoadMembers(this.title,this.future):
+        assert(title != null && future != null);
 
   final Future<void> future;
   final String title;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
       builder: (context,snapshot){
@@ -41,8 +44,8 @@ class RideAttendeeAssignmentLoadMembers extends StatelessWidget implements Platf
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+
+  Widget _buildIosWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: future,
         builder: (context,snapshot){

@@ -6,6 +6,7 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/provider/deviceProvider.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -16,6 +17,7 @@ import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDeviceItem.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -29,33 +31,45 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, DeleteMemberHandler {
-  _MemberDetailsPageState(this._bloc): assert(_bloc != null);
+class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
+  _MemberDetailsPageState(this._bloc): assert(_bloc != null){
+    _onReloadDevices = (){
+      if(DeviceProvider.reloadDevices){
+        DeviceProvider.reloadDevices = false;
+        setState(() {
+          devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
+        });
+      }
+    };
+  }
 
   ///The BLoC in charge of the content.
   final MemberDetailsBloc _bloc;
 
-  @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  //TODO reload devices when returning from overview after initiating navigation in device list header button
+  Future<List<Device>> devicesFuture;
+
+  VoidCallback _onReloadDevices;
 
   @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context)
-    );
+  void initState() {
+    super.initState();
+    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
   }
 
   @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context),
-        buildIOSLandscapeLayout(context)
-    );
-  }
+  Widget build(BuildContext context)=> PlatformAwareWidget(
+    android: () => OrientationAwareWidget(
+      portrait: () => _buildAndroidPortraitLayout(context),
+      landscape: () => _buildAndroidLandscapeLayout(context),
+    ),
+    ios: () => OrientationAwareWidget(
+      portrait: () => _buildIOSPortraitLayout(context),
+      landscape: () => _buildIOSLandscapeLayout(context),
+    ),
+  );
 
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
@@ -108,15 +122,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             ],
           ),
           Expanded(
-              child: _buildDevicesList(member.uuid)
+              child: _buildDevicesList()
           ),
         ],
       ),
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
@@ -178,15 +191,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             ],
           ),
           Expanded(
-              child: _buildDevicesList(member.uuid)
+              child: _buildDevicesList()
           ),
         ],
       ),
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -249,7 +261,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               ],
             ),
             Expanded(
-                child: _buildDevicesList(member.uuid)
+                child: _buildDevicesList()
             ),
           ],
         ),
@@ -257,8 +269,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -330,7 +341,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               ],
             ),
             Expanded(
-                child: _buildDevicesList(member.uuid)
+                child: _buildDevicesList()
             ),
           ],
         ),
@@ -338,10 +349,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     );
   }
 
-  ///Build the list of devices for the member with the given ID.
-  Widget _buildDevicesList(String uuid){
+  ///Build the list of devices.
+  Widget _buildDevicesList(){
     return FutureBuilder<List<Device>>(
-      future: _bloc.getMemberDevices(uuid),
+      future: devicesFuture,
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
@@ -349,7 +360,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               child: Text(S.of(context).MemberDetailsLoadDevicesError),
             );
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesEmpty() :
+            return snapshot.data.isEmpty ? MemberDevicesEmpty(_onReloadDevices) :
             ListView.builder(itemBuilder: (context,index){
               return MemberDeviceItem(snapshot.data[index]);
             },itemCount: snapshot.data.length);

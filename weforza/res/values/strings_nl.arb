@@ -35,6 +35,14 @@
   "MemberDetailsNoDevicesAddDevice": "Voeg een toestel toe",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+
+  "DeviceOverviewTitle" : "Toestellen Beheren",
+  "DeviceOverviewNoDevices": "Er zijn geen toestellen",
+  "DeviceNameLabel": "Naam Toestel",
+  "AddDeviceError": "Kon toestel niet toevoegen",
+  "AddDeviceAlreadyExists": "Dit toestel bestaat al",
+  "AddDeviceGenericError": "Er liep iets fout",
+
   "EditMemberTitle": "Lid Bewerken",
   "EditMemberError": "Kon de wijzigingen niet opslaan",
   "EditMemberSubmit" : "Wijzigingen Opslaan",
@@ -84,6 +92,15 @@
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
+
+  "DeviceUnknown": "Overig",
+  "DeviceGPS": "GPS",
+  "DevicePhone": "Telefoon",
+  "DeviceWatch": "Horloge",
+  "DeviceTablet": "Tablet",
+  "DeviceHeadset": "Koptelefoon",
+  "DevicePulseMonitor": "Hartslagmeter",
+  "DeviceNameMaxLength": "De naam van een toestel mag niet langer zijn dan $maxLength karakters",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

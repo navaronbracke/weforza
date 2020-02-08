@@ -49,6 +49,9 @@ dependencies:
   # RxDart provides extensions to Dart Streams
   rxdart: ^0.22.6
 
+  # This package provides a Tuple class.
+  tuple: ^1.0.3
+
   # This package provides platform independent file picking.
   file_picker: ^1.4.2
 

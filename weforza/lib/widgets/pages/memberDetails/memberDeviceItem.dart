@@ -32,9 +32,7 @@ class MemberDeviceItem extends StatelessWidget {
             child: _mapDeviceTypeToIcon(),
           ),
           Expanded(
-            child: Center(
-              child: Text(device.name,overflow: TextOverflow.ellipsis),
-            ),
+            child: Text(device.name,overflow: TextOverflow.ellipsis)
           ),
         ],
       ),

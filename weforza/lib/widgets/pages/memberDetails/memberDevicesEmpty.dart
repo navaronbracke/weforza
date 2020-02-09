@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/provider/memberProvider.dart';
-import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceOverviewPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -38,10 +35,7 @@ class MemberDevicesEmpty extends StatelessWidget {
           child: Text(S.of(context).MemberDetailsNoDevicesAddDevice,style: TextStyle(color: Colors.blue)),
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                DeviceOverviewPage(
-                    DeviceOverviewBloc(
-                        MemberProvider.selectedMember.uuid,List<Device>(),InjectionContainer.get<DeviceRepository>())
-                ),
+                DeviceOverviewPage(DeviceOverviewBloc(List<Device>())),
             )).then((_)=> _onReload());
           },
         ),
@@ -64,10 +58,7 @@ class MemberDevicesEmpty extends StatelessWidget {
           child: Text(S.of(context).MemberDetailsNoDevicesAddDevice),
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                DeviceOverviewPage(
-                    DeviceOverviewBloc(
-                        MemberProvider.selectedMember.uuid,List<Device>(),InjectionContainer.get<DeviceRepository>())
-                ),
+                DeviceOverviewPage(DeviceOverviewBloc(List<Device>())),
             )).then((_)=> _onReload());
           },
         ),

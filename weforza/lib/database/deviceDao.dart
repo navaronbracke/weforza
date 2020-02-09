@@ -26,9 +26,7 @@ class DeviceDao implements IDeviceDao {
 
   @override
   Future<void> addDevice(Device device) async {
-    if(!await deviceExists(device.name)){
-      await _deviceStore.record(device.name).add(_database, device.toMap());
-    }
+    await _deviceStore.record(device.name).add(_database, device.toMap());
   }
 
   @override

@@ -35,7 +35,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
               ],
             ),
           )
@@ -49,7 +49,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
               ],
             ));
   }
@@ -61,7 +61,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
               ],
             ),
           )
@@ -75,7 +75,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
               ],
             ));
   }
@@ -90,7 +90,7 @@ class RideListItem extends StatelessWidget {
                 children: <Widget>[
                   Text(ride.getFormattedDate(context, false)),
                   Expanded(child: Center()),
-                  RideAttendeeCounter("${ride.numberOfAttendees}"),
+                  RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
                 ],
               ),
             ),
@@ -113,7 +113,7 @@ class RideListItem extends StatelessWidget {
                     children: <Widget>[
                       Text(ride.getFormattedDate(context, false)),
                       Expanded(child: Center()),
-                      RideAttendeeCounter(ride.numberOfAttendees.toString())
+                      RideAttendeeCounter(count: ride.numberOfAttendees.toString())
                     ],
                   )
                 ],
@@ -132,7 +132,7 @@ class RideListItem extends StatelessWidget {
                 children: <Widget>[
                   Text(ride.getFormattedDate(context, false)),
                   Expanded(child: Center()),
-                  RideAttendeeCounter("${ride.numberOfAttendees}"),
+                  RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
                 ],
               ),
             ),
@@ -155,7 +155,7 @@ class RideListItem extends StatelessWidget {
                     children: <Widget>[
                       Text(ride.getFormattedDate(context, false)),
                       Expanded(child: Center()),
-                      RideAttendeeCounter(ride.numberOfAttendees.toString())
+                      RideAttendeeCounter(count: ride.numberOfAttendees.toString())
                     ],
                   )
                 ],

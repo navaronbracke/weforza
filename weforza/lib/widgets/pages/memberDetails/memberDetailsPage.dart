@@ -210,12 +210,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
-                }),
+                CupertinoIconButton(icon: Icons.edit,
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
+                CupertinoIconButton(
+                    icon: Icons.delete,
+                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                ),
               ],
             ),
           ],
@@ -281,12 +282,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
-                }),
+                CupertinoIconButton(icon: Icons.edit,
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
+                CupertinoIconButton(
+                    icon: Icons.delete,
+                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                ),
               ],
             ),
           ],

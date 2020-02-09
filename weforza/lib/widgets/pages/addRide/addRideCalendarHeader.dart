@@ -54,9 +54,11 @@ class AddRideCalendarHeader extends StatelessWidget {
       child: Row(
         children: <Widget>[
           CupertinoIconButton(
-              Icons.arrow_back_ios,
-              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageBack()),
+              icon: Icons.arrow_back_ios,
+              idleColor: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
+              onPressedColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+              onPressed: () => paginator.pageBack()
+          ),
           Expanded(
             child: Center(
               child: Text(DateFormat.MMMM(Localizations.localeOf(context)
@@ -68,9 +70,11 @@ class AddRideCalendarHeader extends StatelessWidget {
             ),
           ),
           CupertinoIconButton(
-              Icons.arrow_forward_ios,
-              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageForward()),
+              icon: Icons.arrow_forward_ios,
+              idleColor: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
+              onPressedColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+              onPressed: () => paginator.pageForward()
+          ),
         ],
       ),
     );

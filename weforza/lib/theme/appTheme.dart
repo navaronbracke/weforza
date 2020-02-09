@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 abstract class ApplicationTheme {
 
   ///Primary/Accent Theme colors.
-  static final Color _primaryColor = Colors.blue;
-  static final Color _accentColor = Colors.blue.shade300;
+  static const Color primaryColor = Colors.blue;
+  static const Color accentColor = Color(0xFF64B5F6);
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -71,17 +71,17 @@ abstract class ApplicationTheme {
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
-       primaryColor: _primaryColor,
-       accentColor: _accentColor,
-       splashColor: _accentColor.withAlpha(150)
+       primaryColor: primaryColor,
+       accentColor: accentColor,
+       splashColor: accentColor.withAlpha(150)
      );
   }
 
   ///Provide the IOS theme.
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
-      primaryColor: _primaryColor,
-      primaryContrastingColor: _accentColor
+      primaryColor: primaryColor,
+      primaryContrastingColor: accentColor
     );
   }
 }

@@ -9,7 +9,7 @@ import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 ///It displays a profile picture, a first name and a last name.
 ///It also takes an optional on tap callback.
 class MemberWithPictureListItem extends StatelessWidget {
-  MemberWithPictureListItem(this.item,[this.onTap]): assert(item != null);
+  MemberWithPictureListItem({@required this.item, this.onTap}): assert(item != null);
 
   final MemberItem item;
 

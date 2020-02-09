@@ -47,6 +47,7 @@ class S implements WidgetsLocalizations {
   String get DeviceTablet => "Tablet";
   String get DeviceUnknown => "Other";
   String get DeviceWatch => "Watch";
+  String get DevicesHeader => "Devices";
   String get DialogCancel => "Cancel";
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
@@ -218,6 +219,8 @@ class $nl extends S {
   String get RideDestination => "Bestemming";
   @override
   String get EditRideDepartureLabel => "Vertrek";
+  @override
+  String get DevicesHeader => "Toestellen";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override

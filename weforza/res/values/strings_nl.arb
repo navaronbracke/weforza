@@ -39,6 +39,7 @@
   "DeviceOverviewTitle" : "Toestellen Beheren",
   "DeviceOverviewNoDevices": "Er zijn geen toestellen",
   "DeviceNameLabel": "Naam Toestel",
+  "DevicesHeader": "Toestellen",
   "AddDeviceError": "Kon toestel niet toevoegen",
   "AddDeviceAlreadyExists": "Dit toestel bestaat al",
   "AddDeviceGenericError": "Er liep iets fout",

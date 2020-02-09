@@ -294,7 +294,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                 if(snapshot.hasError || snapshot.data == ""){
                   return Center();
                 }else{
-                  return RideAttendeeCounter(snapshot.data);
+                  return RideAttendeeCounter(count: snapshot.data);
                 }
               },
             ),

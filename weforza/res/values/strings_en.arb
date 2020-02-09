@@ -39,6 +39,7 @@
   "DeviceOverviewTitle" : "Manage Devices",
   "DeviceOverviewNoDevices": "No Devices",
   "DeviceNameLabel": "Device Name",
+  "DevicesHeader": "Devices",
   "AddDeviceError": "Could not add device",
   "AddDeviceAlreadyExists": "This device already exists",
   "AddDeviceGenericError": "Something went wrong",

@@ -245,7 +245,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
           }else{
             return ListView.builder(
                 itemBuilder: (context,index){
-                  return MemberWithPictureListItem(snapshot.data[index]);
+                  return MemberWithPictureListItem(item: snapshot.data[index]);
                 },
                 itemCount: snapshot.data.length);
           }

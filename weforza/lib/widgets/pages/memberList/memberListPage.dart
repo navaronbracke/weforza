@@ -102,7 +102,8 @@ class _MemberListPageState extends State<MemberListPage> {
             return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberWithPictureListItem(data[index],(){
+                    MemberWithPictureListItem(
+                      item: data[index], onTap:(){
                       MemberProvider.selectedMember = data[index];
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())).then((_)=> _onReload());
                     }));

@@ -142,9 +142,8 @@ class _AddRidePageState extends State<AddRidePage> {
               child: Center(child: Text(S.of(context).AddRideTitle)),
             ),
             CupertinoIconButton(
-              Icons.delete_sweep,
-              CupertinoTheme.of(context).primaryColor,
-              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+              icon: Icons.delete_sweep,
+              onPressed: () => _bloc.onRequestClear(),
             ),
           ],
         ),
@@ -196,9 +195,8 @@ class _AddRidePageState extends State<AddRidePage> {
               child: Center(child: Text(S.of(context).AddRideTitle)),
             ),
             CupertinoIconButton(
-              Icons.delete_sweep,
-              CupertinoTheme.of(context).primaryColor,
-              CupertinoTheme.of(context).primaryContrastingColor, () => _bloc.onRequestClear()
+              icon: Icons.delete_sweep,
+              onPressed: () => _bloc.onRequestClear(),
             ),
           ],
         ),

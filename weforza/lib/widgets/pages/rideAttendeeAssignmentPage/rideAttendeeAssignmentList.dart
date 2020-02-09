@@ -69,17 +69,13 @@ class _RideAttendeeAssignmentListState extends State<RideAttendeeAssignmentList>
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(
-                    Icons.bluetooth,
-                    CupertinoTheme.of(context).primaryColor,
-                    CupertinoTheme.of(context).primaryContrastingColor,
-                    widget.onStartScan
+                    icon: Icons.bluetooth,
+                    onPressed: () => widget.onStartScan()
                 ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
-                    Icons.check,
-                    CupertinoTheme.of(context).primaryColor,
-                    CupertinoTheme.of(context).primaryContrastingColor,
-                    () => widget.onSave()
+                    icon: Icons.check,
+                    onPressed: () => widget.onSave(),
                 ),
               ],
             ),

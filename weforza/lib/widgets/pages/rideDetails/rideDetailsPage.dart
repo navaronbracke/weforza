@@ -143,14 +143,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
-                      RideAttendeeAssignmentBloc(
-                          RideProvider.selectedRide,
-                          InjectionContainer.get<RideRepository>(),
-                          InjectionContainer.get<MemberRepository>()
-                      )
-                  ))).then((value){
+                CupertinoIconButton(
+                    icon: Icons.person_pin,
+                    onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) =>
+                              RideAttendeeAssignmentPage(
+                                  RideAttendeeAssignmentBloc(RideProvider.selectedRide, InjectionContainer.get<RideRepository>(), InjectionContainer.get<MemberRepository>()
+                      )))).then((value){
                     if(value != null && value){
                       setState(() {
                         attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
@@ -160,15 +160,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                 }),
                 SizedBox(width: 10),
                 CupertinoIconButton(
-                  Icons.edit,
-                  CupertinoTheme.of(context).primaryColor,
-                  CupertinoTheme.of(context).primaryContrastingColor, (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
-                }),
+                  icon: Icons.edit,
+                  onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
-                }),
+                CupertinoIconButton(
+                    icon: Icons.delete, onPressed: ()=> showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this))),
               ],
             ),
           ],
@@ -194,32 +190,28 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.person_pin,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => RideAttendeeAssignmentPage(
-                      RideAttendeeAssignmentBloc(
-                          RideProvider.selectedRide,
-                          InjectionContainer.get<RideRepository>(),
-                          InjectionContainer.get<MemberRepository>()
-                      )
-                  ))).then((value){
-                    if(value != null && value){
-                      setState(() {
-                        attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+                CupertinoIconButton(
+                    icon: Icons.person_pin,
+                    onPressed: (){
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) =>
+                              RideAttendeeAssignmentPage(
+                                  RideAttendeeAssignmentBloc(RideProvider.selectedRide, InjectionContainer.get<RideRepository>(), InjectionContainer.get<MemberRepository>()
+                                  )))).then((value){
+                        if(value != null && value){
+                          setState(() {
+                            attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+                          });
+                        }
                       });
-                    }
-                  });
-                }),
+                    }),
                 SizedBox(width: 10),
                 CupertinoIconButton(
-                    Icons.edit,
-                    CupertinoTheme.of(context).primaryColor,
-                    CupertinoTheme.of(context).primaryContrastingColor, (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()));
-                }),
+                    icon: Icons.edit,
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> EditRidePage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this));
-                }),
+                CupertinoIconButton(
+                    icon: Icons.delete, onPressed: ()=> showCupertinoDialog(context: context, builder: (context)=> DeleteRideDialog(this))),
               ],
             ),
           ],

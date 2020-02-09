@@ -76,10 +76,11 @@ class _MemberListPageState extends State<MemberListPage> {
         middle: Row(
           children: <Widget>[
             Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
-            CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()))
-                  .then((_)=>_onReload());
-            }),
+            CupertinoIconButton(
+                icon: Icons.person_add,
+                onPressed: ()=> Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=> AddMemberPage())
+                ).then((_)=>_onReload())),
           ],
         ),
       ),

@@ -38,9 +38,9 @@ abstract class ApplicationTheme {
   static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
 
   ///The profile image placeholder's icon color.
-  static final Color profileImagePlaceholderIconColor = Colors.white;
+  static const Color profileImagePlaceholderIconColor = Colors.white;
   ///The profile image placeholder icon's background color.
-  static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
+  static const Color profileImagePlaceholderIconBackgroundColor = Color(0xFF1976D2);
 
   ///The font color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedFontColor = Colors.black;

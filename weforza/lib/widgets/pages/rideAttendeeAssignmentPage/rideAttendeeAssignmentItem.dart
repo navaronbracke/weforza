@@ -39,11 +39,10 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
             child: Row(
               children: <Widget>[
                 ProfileImage(
-                    widget.bloc.image,
-                    ApplicationTheme.profileImagePlaceholderIconColor,
-                    widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
-                    Icons.person,
-                    40
+                    image: widget.bloc.image,
+                    backgroundColor: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
+                    icon: Icons.person,
+                    size: 40
                 ),
                 SizedBox(width: 5),
                 Column(
@@ -90,11 +89,10 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
             child: Row(
               children: <Widget>[
                 ProfileImage(
-                    widget.bloc.image,
-                    ApplicationTheme.profileImagePlaceholderIconColor,
-                    widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
-                    Icons.person,
-                    40
+                    image: widget.bloc.image,
+                    backgroundColor: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
+                    icon: Icons.person,
+                    size: 40
                 ),
                 SizedBox(width: 5),
                 Column(

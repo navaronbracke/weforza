@@ -255,7 +255,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                                   child: Center(
                                     child: PlatformAwareLoadingIndicator(),
                                   ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                                ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
                               }
                             },
                           ),
@@ -409,7 +409,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                                       child: Center(
                                         child: PlatformAwareLoadingIndicator(),
                                       ),
-                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
                                   }
                                 },
                               ),
@@ -465,7 +465,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                             width: 80,
                             height: 80,
                             child: PlatformAwareLoadingIndicator(),
-                          ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                          ) : ProfileImagePicker(this,_bloc.image,100);
                         }
                       },
                     ),
@@ -598,7 +598,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                           width: 80,
                           height: 80,
                           child: PlatformAwareLoadingIndicator(),
-                        ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                        ) : ProfileImagePicker(this,_bloc.image,100);
                       }
                     },
                   ),

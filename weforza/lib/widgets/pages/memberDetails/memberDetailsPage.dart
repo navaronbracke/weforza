@@ -91,7 +91,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                child: ProfileImage(image: member.profileImage),
               ),
               Expanded(
                 child: Column(
@@ -153,7 +153,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                    child: ProfileImage(image: member.profileImage),
                   ),
                   Expanded(
                     child: Column(
@@ -230,7 +230,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                  child: ProfileImage(image: member.profileImage),
                 ),
                 Expanded(
                   child: Column(
@@ -303,7 +303,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                      child: ProfileImage(image: member.profileImage),
                     ),
                     Expanded(
                       child: Column(

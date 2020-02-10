@@ -41,7 +41,6 @@
   "DeviceNameLabel": "Device Name",
   "DevicesHeader": "Devices",
   "AddDeviceError": "Could not add device",
-  "AddDeviceAlreadyExists": "This device already exists",
   "AddDeviceGenericError": "Something went wrong",
   "AddDeviceSubmit": "Add Device",
 
@@ -103,6 +102,7 @@
   "DeviceHeadset": "Headset",
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "A device name can't be longer than $maxLength characters",
+  "DeviceAlreadyExists": "This device already exists",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

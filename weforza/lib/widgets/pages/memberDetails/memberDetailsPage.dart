@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -12,9 +13,10 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceOverviewPage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDeviceItem.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
@@ -32,24 +34,12 @@ class MemberDetailsPage extends StatefulWidget {
 
 ///This is the [State] class for [MemberDetailsPage].
 class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
-  _MemberDetailsPageState(this._bloc): assert(_bloc != null){
-    _onReloadDevices = (){
-      if(DeviceProvider.reloadDevices){
-        DeviceProvider.reloadDevices = false;
-        setState(() {
-          devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
-        });
-      }
-    };
-  }
+  _MemberDetailsPageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC in charge of the content.
   final MemberDetailsBloc _bloc;
 
-  //TODO reload devices when returning from overview after initiating navigation in device list header button
   Future<List<Device>> devicesFuture;
-
-  VoidCallback _onReloadDevices;
 
   @override
   void initState() {
@@ -362,10 +352,21 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
               child: Text(S.of(context).MemberDetailsLoadDevicesError),
             );
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesEmpty(_onReloadDevices) :
-            ListView.builder(itemBuilder: (context,index){
-              return MemberDeviceItem(snapshot.data[index]);
-            },itemCount: snapshot.data.length);
+            //init the callback, either with an empty list or with devices.
+            final onPressed = (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                  DeviceOverviewPage(DeviceOverviewBloc(snapshot.data)),
+              )).then((_)=> (){
+                if(DeviceProvider.reloadDevices){
+                  DeviceProvider.reloadDevices = false;
+                  setState(() {
+                    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
+                  });
+                }
+              });
+            };
+            return snapshot.data.isEmpty ? MemberDevicesEmpty(onPressed: onPressed) :
+            MemberDevices(devices: snapshot.data,onEditPressed: onPressed);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

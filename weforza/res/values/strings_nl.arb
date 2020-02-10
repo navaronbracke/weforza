@@ -41,7 +41,6 @@
   "DeviceNameLabel": "Naam Toestel",
   "DevicesHeader": "Toestellen",
   "AddDeviceError": "Kon toestel niet toevoegen",
-  "AddDeviceAlreadyExists": "Dit toestel bestaat al",
   "AddDeviceGenericError": "Er liep iets fout",
   "AddDeviceSubmit": "Toestel Toevoegen",
 
@@ -103,6 +102,7 @@
   "DeviceHeadset": "Koptelefoon",
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "De naam van een toestel mag niet langer zijn dan $maxLength karakters",
+  "DeviceAlreadyExists": "Dit toestel bestaat al",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

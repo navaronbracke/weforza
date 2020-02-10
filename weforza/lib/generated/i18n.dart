@@ -21,7 +21,6 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get AddDeviceAlreadyExists => "This device already exists";
   String get AddDeviceError => "Could not add device";
   String get AddDeviceGenericError => "Something went wrong";
   String get AddDeviceSubmit => "Add Device";
@@ -38,6 +37,7 @@ class S implements WidgetsLocalizations {
   String get AddRideSubmit => "Add Selection";
   String get AddRideTitle => "New Ride";
   String get AppName => "WeForza";
+  String get DeviceAlreadyExists => "This device already exists";
   String get DeviceGPS => "GPS";
   String get DeviceHeadset => "Headset";
   String get DeviceNameLabel => "Device Name";
@@ -225,6 +225,8 @@ class $nl extends S {
   @override
   String get DevicesHeader => "Toestellen";
   @override
+  String get DeviceAlreadyExists => "Dit toestel bestaat al";
+  @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
   @override
   String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
@@ -264,8 +266,6 @@ class $nl extends S {
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
   String get DeviceOverviewTitle => "Toestellen Beheren";
-  @override
-  String get AddDeviceAlreadyExists => "Dit toestel bestaat al";
   @override
   String get EditRideDistancePositive => "Een afstand moet groter zijn dan nul";
   @override

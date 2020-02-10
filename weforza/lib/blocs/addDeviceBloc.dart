@@ -42,7 +42,8 @@ class AddDeviceBloc extends Bloc {
       if(!exists){
         final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: type);
         await _repository.addDevice(device).then((_){
-          onSuccess(device);
+          onSuccess(device);//TODO add device to list + set new text controller / reset type dropdown + autovalidate flag? + set device provider to reload true
+          _addDeviceController.add(AddDeviceSubmitState.IDLE);
         },onError: (error){
           _addDeviceController.add(AddDeviceSubmitState.ERROR);
         });
@@ -54,8 +55,10 @@ class AddDeviceBloc extends Bloc {
     });
   }
 
+  ///Dismiss [AddDeviceSubmitState.DEVICE_EXISTS] and return to [AddDeviceSubmitState.IDLE].
+  void onDeviceExistsDismissed() => _addDeviceController.add(AddDeviceSubmitState.IDLE);
+
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
-    _addDeviceController.add(AddDeviceSubmitState.IDLE);//clear the device exists error
     if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
     }else if(deviceNameMaxLength < value.length){

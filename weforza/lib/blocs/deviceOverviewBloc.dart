@@ -4,8 +4,9 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListHandler.dart';
 
-class DeviceOverviewBloc extends Bloc {
+class DeviceOverviewBloc extends Bloc implements DeviceListHandler {
   DeviceOverviewBloc(this.devices): assert(devices != null);
 
   final List<Device> devices;

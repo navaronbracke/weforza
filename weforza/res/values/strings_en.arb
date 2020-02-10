@@ -20,7 +20,7 @@
 
   "RideListRidesHeader": "Rides",
   "RideListNoRides": "There are no rides",
-  "RideListAddRideInstruction": "Add a ride with the +",
+  "RideListAddRideInstruction": "Add rides by using the menu above",
   "RideListLoadingRidesError": "Could not load rides",
 
   "RideDetailsLoadAttendeesError": "Could not load attendees",
@@ -43,6 +43,7 @@
   "AddDeviceError": "Could not add device",
   "AddDeviceAlreadyExists": "This device already exists",
   "AddDeviceGenericError": "Something went wrong",
+  "AddDeviceSubmit": "Add Device",
 
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",

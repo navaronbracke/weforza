@@ -20,7 +20,7 @@
 
   "RideListRidesHeader": "Ritten",
   "RideListNoRides": "Er zijn geen ritten",
-  "RideListAddRideInstruction": "Voeg een rit toe met de +",
+  "RideListAddRideInstruction": "Voeg ritten toe via het menu hierboven",
   "RideListLoadingRidesError": "Kon ritten niet laden",
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
@@ -43,6 +43,7 @@
   "AddDeviceError": "Kon toestel niet toevoegen",
   "AddDeviceAlreadyExists": "Dit toestel bestaat al",
   "AddDeviceGenericError": "Er liep iets fout",
+  "AddDeviceSubmit": "Toestel Toevoegen",
 
   "EditMemberTitle": "Lid Bewerken",
   "EditMemberError": "Kon de wijzigingen niet opslaan",

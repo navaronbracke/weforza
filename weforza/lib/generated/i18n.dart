@@ -24,6 +24,7 @@ class S implements WidgetsLocalizations {
   String get AddDeviceAlreadyExists => "This device already exists";
   String get AddDeviceError => "Could not add device";
   String get AddDeviceGenericError => "Something went wrong";
+  String get AddDeviceSubmit => "Add Device";
   String get AddMemberError => "Could not add member";
   String get AddMemberSubmit => "Create New Member";
   String get AddMemberTitle => "New Member";
@@ -104,7 +105,7 @@ class S implements WidgetsLocalizations {
   String get RideDestination => "Destination";
   String get RideDetailsLoadAttendeesError => "Could not load attendees";
   String get RideDetailsNoAttendees => "This ride has no attendees";
-  String get RideListAddRideInstruction => "Add a ride with the +";
+  String get RideListAddRideInstruction => "Add rides by using the menu above";
   String get RideListLoadingRidesError => "Could not load rides";
   String get RideListNoRides => "There are no rides";
   String get RideListRidesHeader => "Rides";
@@ -174,6 +175,8 @@ class $nl extends S {
   @override
   String get SundayPrefix => "Zo";
   @override
+  String get AddDeviceSubmit => "Toestel Toevoegen";
+  @override
   String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
   @override
   String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
@@ -182,7 +185,7 @@ class $nl extends S {
   @override
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
   @override
-  String get RideListAddRideInstruction => "Voeg een rit toe met de +";
+  String get RideListAddRideInstruction => "Voeg ritten toe via het menu hierboven";
   @override
   String get AddRideSubmit => "Selectie Toevoegen";
   @override

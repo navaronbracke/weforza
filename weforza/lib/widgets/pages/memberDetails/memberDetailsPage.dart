@@ -365,7 +365,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                 }
               });
             };
-            return snapshot.data.isEmpty ? MemberDevicesEmpty(onPressed: onPressed) :
+            return snapshot.data.isEmpty ? Center(child: MemberDevicesEmpty(onPressed: onPressed)) :
             MemberDevices(devices: snapshot.data,onEditPressed: onPressed);
           }
         }else{

@@ -12,9 +12,11 @@ class MemberDevicesEmpty extends StatelessWidget {
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
+  Widget build(BuildContext context) => SingleChildScrollView(
+    child: PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
+    ),
   );
 
   Widget _buildAndroidWidget(BuildContext context) {

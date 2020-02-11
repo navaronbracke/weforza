@@ -1,10 +1,17 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/device.dart';
+import 'package:weforza/provider/deviceProvider.dart';
+import 'package:weforza/provider/memberProvider.dart';
+import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceForm.dart';
+import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceHandler.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceOverviewDevicesList.dart';
-import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class DeviceOverviewPage extends StatefulWidget {
@@ -16,12 +23,19 @@ class DeviceOverviewPage extends StatefulWidget {
   _DeviceOverviewPageState createState() => _DeviceOverviewPageState();
 }
 
-class _DeviceOverviewPageState extends State<DeviceOverviewPage> {
+class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddDeviceHandler {
+  final _deviceListKey = GlobalKey<DeviceOverviewDevicesListState>();
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
+  Widget build(BuildContext context) => WillPopScope(
+    onWillPop: () {
+      FocusScope.of(context).unfocus();
+      return Future.value(true);
+    },
+    child: PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
+    ),
   );
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -48,51 +62,64 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> {
       initialData: DeviceOverviewDisplayMode.ADD,
       builder: (context,snapshot){
         switch(snapshot.data){
-          case DeviceOverviewDisplayMode.ADD: return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: null,//TODO addForm
+          case DeviceOverviewDisplayMode.ADD: return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(5),
+                child: AddDeviceForm(
+                    AddDeviceBloc(
+                        MemberProvider.selectedMember.uuid,
+                        InjectionContainer.get<DeviceRepository>()
+                    ),this
                 ),
-                Flexible(
-                  flex: 2,
-                  child: DeviceOverviewDevicesList(widget.bloc),
-                )
-              ],
-            ),
+              ),
+              Flexible(
+                child: DeviceOverviewDevicesList(
+                  devices: widget.bloc.devices,
+                  key: _deviceListKey,
+                ),
+              ),
+            ],
           );
-          case DeviceOverviewDisplayMode.EDIT: return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: null,//TODO editForm
+          case DeviceOverviewDisplayMode.EDIT: return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              null,//TODO editForm
+              Flexible(
+                child: DeviceOverviewDevicesList(
+                  devices: widget.bloc.devices,
+                  key: _deviceListKey,
                 ),
-                Flexible(
-                  flex: 2,
-                  child: DeviceOverviewDevicesList(widget.bloc),
-                )
-              ],
-            ),
+              ),
+            ],
           );
-          case DeviceOverviewDisplayMode.DELETE: return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  child: null,//TODO deleteForm
+          case DeviceOverviewDisplayMode.DELETE: return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              null,//TODO deleteForm
+              Flexible(
+                child: DeviceOverviewDevicesList(
+                  devices: widget.bloc.devices,
+                  key: _deviceListKey,
                 ),
-                Flexible(
-                  flex: 2,
-                  child: DeviceOverviewDevicesList(widget.bloc),
-                )
-              ],
-            ),
+              ),
+            ],
           );
           default: return Center();
         }
       }
     );
+  }
+
+  @override
+  void onDeviceAdded(Device device) {
+    DeviceProvider.reloadDevices = true;
+    widget.bloc.addDevice(device);
+    if(widget.bloc.devices.length == 1){
+      _deviceListKey.currentState.onFirstItemInserted();
+    }else{
+      _deviceListKey.currentState.onItemInserted(widget.bloc.devices.length);
+    }
   }
 }

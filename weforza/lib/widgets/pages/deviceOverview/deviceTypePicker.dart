@@ -58,7 +58,10 @@ class _DeviceTypePickerState extends State<DeviceTypePicker> {
           widget.onValueChanged(_dropdownValue);
         });
       },
-      items: DeviceType.values.map((DeviceType type)=> DropdownMenuItem<DeviceType>(child: Text(_itemMap[type]))).toList()
+      items: DeviceType.values.map((DeviceType type)=> DropdownMenuItem<DeviceType>(
+        child: Text(_itemMap[type]),
+        value: type,
+      )).toList()
     );
   }
 

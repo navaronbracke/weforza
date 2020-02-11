@@ -14,9 +14,7 @@ class OrientationAwareWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrientationBuilder(
-      builder: (context,orientation)
-      => orientation == Orientation.portrait ? portrait(): landscape(),
-    );
+      final orientation = MediaQuery.of(context).orientation;
+      return orientation == Orientation.portrait ? portrait(): landscape();
   }
 }

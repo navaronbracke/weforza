@@ -5,7 +5,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceSubmitState.dart';
 
 class AddDeviceBloc extends Bloc {
   AddDeviceBloc(this.ownerUuid,this._repository):
@@ -28,35 +27,42 @@ class AddDeviceBloc extends Bloc {
   ///Submit error message
   String addDeviceError;
 
-  final StreamController<AddDeviceSubmitState> _addDeviceController = BehaviorSubject();
-  Stream<AddDeviceSubmitState> get addDeviceStream => _addDeviceController.stream;
+  ///This controller manages the submit button/loading indicator.
+  final StreamController<bool> _submitButtonController = BehaviorSubject();
+  Stream<bool> get submitStream => _submitButtonController.stream;
+
+  ///This controller manages the error message for the submit.
+  final StreamController<String> _submitErrorController = BehaviorSubject();
+  Stream<String> get submitErrorStream => _submitErrorController.stream;
 
   @override
   void dispose() {
-    _addDeviceController.close();
+    _submitButtonController.close();
+    _submitErrorController.close();
   }
 
-  void addDevice(void Function(Device addedDevice) onSuccess) async {
-    _addDeviceController.add(AddDeviceSubmitState.SUBMIT);
+  void addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+    _submitButtonController.add(true);
+    _submitErrorController.add(" ");//remove the previous error.
     await _repository.deviceExists(_newDeviceName).then((exists) async {
       if(!exists){
         final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: type);
         await _repository.addDevice(device).then((_){
           onSuccess(device);//TODO add device to list + set new text controller / reset type dropdown + autovalidate flag? + set device provider to reload true
-          _addDeviceController.add(AddDeviceSubmitState.IDLE);
+          _submitButtonController.add(false);
         },onError: (error){
-          _addDeviceController.add(AddDeviceSubmitState.ERROR);
+          _submitButtonController.add(false);
+          _submitErrorController.add(genericErrorMessage);
         });
       }else{
-        _addDeviceController.add(AddDeviceSubmitState.DEVICE_EXISTS);
+        _submitButtonController.add(false);
+        _submitErrorController.add(deviceExistsMessage);
       }
     },onError: (error){
-      _addDeviceController.add(AddDeviceSubmitState.ERROR);
+      _submitButtonController.add(false);
+      _submitErrorController.add(genericErrorMessage);
     });
   }
-
-  ///Dismiss [AddDeviceSubmitState.DEVICE_EXISTS] and return to [AddDeviceSubmitState.IDLE].
-  void onDeviceExistsDismissed() => _addDeviceController.add(AddDeviceSubmitState.IDLE);
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
     if(value == null || value.isEmpty){

@@ -66,7 +66,10 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
-    _submitErrorController.add("");
+    if(value != _newDeviceName){
+      //Clear the 'device exists' error when a different input is given
+      _submitErrorController.add("");
+    }
     if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
     }else if(deviceNameMaxLength < value.length){

@@ -5,8 +5,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
 
-class AddDeviceBloc extends Bloc {
+class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   AddDeviceBloc(this.ownerUuid,this._repository):
         assert(ownerUuid != null && ownerUuid.isNotEmpty && _repository != null);
 
@@ -20,11 +21,11 @@ class AddDeviceBloc extends Bloc {
   int deviceNameMaxLength = 50;
 
   ///Device Name input backing field
-  String _newDeviceName;
+  String _newDeviceName = "";
   ///Device type backing field.
-  DeviceType type;
+  DeviceType _type = DeviceType.UNKNOWN;
 
-  ///Submit error message
+  ///Form Error message
   String addDeviceError;
 
   ///This controller manages the submit button/loading indicator.
@@ -41,14 +42,14 @@ class AddDeviceBloc extends Bloc {
     _submitErrorController.close();
   }
 
-  void addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
     await _repository.deviceExists(_newDeviceName).then((exists) async {
       if(!exists){
-        final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: type);
+        final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: _type);
         await _repository.addDevice(device).then((_){
-          onSuccess(device);//TODO add device to list + set new text controller / reset type dropdown + autovalidate flag? + set device provider to reload true
+          onSuccess(device);
           _submitButtonController.add(false);
         },onError: (error){
           _submitButtonController.add(false);
@@ -65,6 +66,7 @@ class AddDeviceBloc extends Bloc {
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
+    _submitErrorController.add("");
     if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
     }else if(deviceNameMaxLength < value.length){
@@ -74,5 +76,22 @@ class AddDeviceBloc extends Bloc {
       addDeviceError = null;
     }
     return addDeviceError;
+  }
+
+  @override
+  DeviceType get currentValue => _type;
+
+  @override
+  void onTypeBackPressed(){
+    if(_type.index == 0) return;
+
+    _type = DeviceType.values[_type.index - 1];
+  }
+
+  @override
+  void onTypeForwardPressed(){
+    if(_type.index == DeviceType.values.length-1) return;
+
+    _type = DeviceType.values[_type.index + 1];
   }
 }

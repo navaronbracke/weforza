@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceHandler.dart';
 import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceSubmit.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
@@ -9,9 +10,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 
 class AddDeviceForm extends StatefulWidget {
-  AddDeviceForm(this.bloc): assert(bloc != null);
+  AddDeviceForm(this.bloc,this.handler): assert(bloc != null && handler != null);
 
   final AddDeviceBloc bloc;
+  final AddDeviceHandler handler;
 
   @override
   _AddDeviceFormState createState() => _AddDeviceFormState();
@@ -64,19 +66,19 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
           padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
           child: Row(
             children: <Widget>[
-              Flexible(
+              Expanded(
                 child: Center(
-                  child: DeviceTypePicker(
-                      initialValue: DeviceType.UNKNOWN,
-                      onValueChanged: (value)=> widget.bloc.type = value
-                  ),
+                  child: DeviceTypePicker(valueChangedHandler: widget.bloc),
                 ),
               ),
-              Flexible(
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5),
                 child: Center(
-                  child: AddDeviceSubmit(onPressed: (){
+                  child: AddDeviceSubmit(onPressed: () async {
                     if(_formKey.currentState.validate()){
-                      //TODO add device, its valid here
+                      await widget.bloc.addDevice((Device device){
+                        widget.handler.onDeviceAdded(device);
+                      }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                     }
                   },stream: widget.bloc.submitStream)
                 )
@@ -102,12 +104,12 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Form(
             key: _formKey,
             child: Row(
               children: <Widget>[
-                Expanded(
+                Flexible(
                   child: TextFormField(
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
@@ -129,21 +131,22 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                     }),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 4, 0),
-                  child: Center(
-                    child: DeviceTypePicker(
-                        initialValue: DeviceType.UNKNOWN,
-                        onValueChanged: (value)=> widget.bloc.type = value
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 4, 0),
+                    child: Center(
+                      child: DeviceTypePicker(valueChangedHandler: widget.bloc),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Center(
-                      child: AddDeviceSubmit(onPressed: (){
+                      child: AddDeviceSubmit(onPressed: () async {
                         if(_formKey.currentState.validate()){
-                          //TODO add device, its valid here
+                          await widget.bloc.addDevice((Device device){
+                            widget.handler.onDeviceAdded(device);
+                          }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         }
                       },stream: widget.bloc.submitStream)
                   ),

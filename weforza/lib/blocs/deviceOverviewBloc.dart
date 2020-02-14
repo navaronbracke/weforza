@@ -4,9 +4,8 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListHandler.dart';
 
-class DeviceOverviewBloc extends Bloc implements DeviceListHandler {
+class DeviceOverviewBloc extends Bloc {
   DeviceOverviewBloc(this.devices): assert(devices != null);
 
   final List<Device> devices;
@@ -14,6 +13,10 @@ class DeviceOverviewBloc extends Bloc implements DeviceListHandler {
   final StreamController<DeviceOverviewDisplayMode> _overviewDisplayModeController = BehaviorSubject();
   Stream<DeviceOverviewDisplayMode> get displayMode => _overviewDisplayModeController.stream;
 
+  void addDevice(Device device){
+    devices.add(device);
+    _overviewDisplayModeController.add(DeviceOverviewDisplayMode.ADD);
+  }
 
   @override
   void dispose() {

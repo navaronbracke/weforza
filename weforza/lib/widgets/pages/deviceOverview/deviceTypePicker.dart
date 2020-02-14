@@ -7,11 +7,19 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class DeviceTypePicker extends StatefulWidget {
-  DeviceTypePicker({this.initialValue,@required this.onValueChanged}): assert(onValueChanged != null);
+///This interface defines a contract for handling the changes in [DeviceTypePicker].
+abstract class DeviceTypePickerHandler {
+  DeviceType get currentValue;
 
-  final void Function(DeviceType value) onValueChanged;
-  final DeviceType initialValue;
+  void onTypeForwardPressed();
+
+  void onTypeBackPressed();
+}
+
+class DeviceTypePicker extends StatefulWidget {
+  DeviceTypePicker({@required this.valueChangedHandler}): assert(valueChangedHandler != null);
+
+  final DeviceTypePickerHandler valueChangedHandler;
 
   @override
   _DeviceTypePickerState createState() => _DeviceTypePickerState();
@@ -19,26 +27,18 @@ class DeviceTypePicker extends StatefulWidget {
 
 class _DeviceTypePickerState extends State<DeviceTypePicker> {
 
-  List<String> _items;
-
-  DeviceType _value;
+  Map<DeviceType,String> _items;
 
   void _initializeItems(BuildContext context){
-    _items = <String>[
-      S.of(context).DeviceUnknown,
-      S.of(context).DevicePulseMonitor,
-      S.of(context).DeviceGPS,
-      S.of(context).DeviceHeadset,
-      S.of(context).DevicePhone,
-      S.of(context).DeviceTablet,
-      S.of(context).DeviceWatch,
-    ];
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _value = widget.initialValue;
+    _items = {
+      DeviceType.UNKNOWN: S.of(context).DeviceUnknown,
+      DeviceType.PULSE_MONITOR: S.of(context).DevicePulseMonitor,
+      DeviceType.GPS: S.of(context).DeviceGPS,
+      DeviceType.HEADSET: S.of(context).DeviceHeadset,
+      DeviceType.PHONE: S.of(context).DevicePhone,
+      DeviceType.TABLET: S.of(context).DeviceTablet,
+      DeviceType.WATCH: S.of(context).DeviceWatch
+    };
   }
 
   @override
@@ -51,37 +51,39 @@ class _DeviceTypePickerState extends State<DeviceTypePicker> {
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
+    final value = widget.valueChangedHandler.currentValue;
     return Column(
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Center(child: Text(S.of(context).DeviceSelectType)),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Center(child: Text("${S.of(context).DeviceTypeLabel}     (${value.index + 1} / ${DeviceType.values.length})")),
+              ),
+            ],
+          ),
         ),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  color: ApplicationTheme.choiceArrowIdleColor,
-                  splashColor: ApplicationTheme.choiceArrowOnPressedColor,
-                  onPressed: () => onTypeBackPressed(),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(_items[_value.index]),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_forward_ios),
-                  color: ApplicationTheme.choiceArrowIdleColor,
-                  splashColor: ApplicationTheme.choiceArrowOnPressedColor,
-                  onPressed: () => onTypeForwardPressed(),
-                ),
-              ],
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              color: ApplicationTheme.choiceArrowIdleColor,
+              splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => setState(() => widget.valueChangedHandler.onTypeBackPressed()),
             ),
-            SizedBox(width: 10),
-            Text("${_value.index + 1} / ${DeviceType.values.length}"),
+            Expanded(
+              child: Center(
+                child: Text(_items[value]),
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward_ios),
+              color: ApplicationTheme.choiceArrowIdleColor,
+              splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => setState(()=> widget.valueChangedHandler.onTypeForwardPressed()),
+            ),
           ],
         ),
       ],
@@ -89,49 +91,42 @@ class _DeviceTypePickerState extends State<DeviceTypePicker> {
   }
 
   Widget _buildIosWidget(BuildContext context) {
-    return Row(
+    final value = widget.valueChangedHandler.currentValue;
+    return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Center(child: Text("${S.of(context).DeviceTypeLabel}     (${value.index + 1} / ${DeviceType.values.length})")),
+              ),
+            ],
+          ),
+        ),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             CupertinoIconButton(
               icon: Icons.arrow_back_ios,
               idleColor: ApplicationTheme.choiceArrowIdleColor,
               onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
-              onPressed: () => onTypeBackPressed(),
+              onPressed: () => setState(() => widget.valueChangedHandler.onTypeBackPressed()),
             ),
             Expanded(
               child: Center(
-                child: Text(_items[_value.index]),
+                child: Text(_items[value]),
               ),
             ),
             CupertinoIconButton(
               icon: Icons.arrow_forward_ios,
               idleColor: ApplicationTheme.choiceArrowIdleColor,
               onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
-              onPressed: () => onTypeForwardPressed(),
+              onPressed: () => setState(()=> widget.valueChangedHandler.onTypeForwardPressed()),
             ),
           ],
         ),
-        SizedBox(width: 10),
-        Text("${_value.index + 1} / ${DeviceType.values.length}"),
       ],
     );
-  }
-
-  void onTypeForwardPressed(){
-    if(_value.index < DeviceType.values.length){
-      setState(() {
-        _value = DeviceType.values[_value.index + 1];
-      });
-      widget.onValueChanged(_value);
-    }
-  }
-
-  void onTypeBackPressed(){
-    if(_value.index == 0) return;
-    setState(() {
-      _value = DeviceType.values[_value.index - 1];
-    });
-    widget.onValueChanged(_value);
   }
 }

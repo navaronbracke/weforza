@@ -11,6 +11,7 @@ import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceForm.dart';
 import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceHandler.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListEmpty.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceOverviewDevicesList.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -40,6 +41,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(S.of(context).DeviceOverviewTitle),
       ),
@@ -63,7 +65,6 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
       builder: (context,snapshot){
         switch(snapshot.data){
           case DeviceOverviewDisplayMode.ADD: return Column(
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(5),
@@ -74,10 +75,12 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
                     ),this
                 ),
               ),
-              Flexible(
-                child: DeviceOverviewDevicesList(
-                  devices: widget.bloc.devices,
-                  key: _deviceListKey,
+              Expanded(
+                child: widget.bloc.devices.isEmpty ? Center(
+                    child: DeviceListEmpty()
+                ): DeviceOverviewDevicesList(
+                    devices: widget.bloc.devices,
+                    key: _deviceListKey
                 ),
               ),
             ],
@@ -86,11 +89,10 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               null,//TODO editForm
-              Flexible(
-                child: DeviceOverviewDevicesList(
-                  devices: widget.bloc.devices,
-                  key: _deviceListKey,
-                ),
+              widget.bloc.devices.isEmpty ? SingleChildScrollView(
+                child: Center(child: DeviceListEmpty()),
+              ) : DeviceOverviewDevicesList(
+                devices: widget.bloc.devices,key: _deviceListKey,
               ),
             ],
           );
@@ -98,11 +100,10 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               null,//TODO deleteForm
-              Flexible(
-                child: DeviceOverviewDevicesList(
-                  devices: widget.bloc.devices,
-                  key: _deviceListKey,
-                ),
+              widget.bloc.devices.isEmpty ? SingleChildScrollView(
+                child: Center(child: DeviceListEmpty()),
+              ) : DeviceOverviewDevicesList(
+                devices: widget.bloc.devices,key: _deviceListKey,
               ),
             ],
           );
@@ -117,9 +118,11 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
     DeviceProvider.reloadDevices = true;
     widget.bloc.addDevice(device);
     if(widget.bloc.devices.length == 1){
-      _deviceListKey.currentState.onFirstItemInserted();
+      setState(() {
+        //trigger a swap from empty list to animated list
+      });
     }else{
-      _deviceListKey.currentState.onItemInserted(widget.bloc.devices.length);
+      _deviceListKey.currentState.onItemInserted(widget.bloc.devices.length-1);
     }
   }
 }

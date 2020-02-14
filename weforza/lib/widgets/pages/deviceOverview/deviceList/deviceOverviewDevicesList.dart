@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -22,188 +22,67 @@ class DeviceOverviewDevicesList extends StatefulWidget {
 class DeviceOverviewDevicesListState extends State<DeviceOverviewDevicesList> {
   final _listKey = GlobalKey<AnimatedListState>();
 
-  ///This method triggers a redraw, once [widget.devices] has exactly one item.
-  ///This swaps the [AnimatedList] for an empty list widget.
-  void onFirstItemInserted() => setState(() {});
-
-  ///This method triggers a redraw, once [widget.devices] is empty.
-  ///This swaps the empty list widget for an [AnimatedList].
-  void onLastItemRemoved() => onFirstItemInserted();
 
   ///This method is called when an item is inserted and [widget.devices] is not empty.
-  void onItemInserted(int index)=> _listKey.currentState.insertItem(index);
-
-  ///This method is called when an item is removed and [widget.devices] still has items afterwards.
-  void onItemRemoved(int index){
-    _listKey.currentState.removeItem(index, (context,animation)=> SizedBox(width: 0,height: 0));
-  }
-
-
-  @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
-
-  Widget _buildAndroidWidget(BuildContext context){
-    return (widget.devices.isEmpty) ? Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Icon(
-              Icons.priority_high,
-              color: ApplicationTheme.deviceIconColor,
-              size: MediaQuery.of(context).size.shortestSide * .2,
-            ),
-            SizedBox(height: 5),
-            Text(S.of(context).DeviceOverviewNoDevices),
-          ],
-        ),
-      ),
-    ): Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(S.of(context).DevicesHeader),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: (){
-                //TODO change upper form to add
-              },
-            ),
-          ],
-        ),
-        Expanded(
-          child: AnimatedList(
-            initialItemCount: widget.devices.length,
-            itemBuilder: (context,index,animation){
-              return SizeTransition(
-                  sizeFactor: animation,
-                  child: DeviceOverviewDeviceListItem(widget.devices[index])
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context){
-    return (widget.devices.isEmpty) ? Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Icon(
-              Icons.priority_high,
-              color: ApplicationTheme.deviceIconColor,
-              size: MediaQuery.of(context).size.shortestSide * .2,
-            ),
-            SizedBox(height: 5),
-            Text(S.of(context).DeviceOverviewNoDevices),
-          ],
-        ),
-      ),
-    ): Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(S.of(context).DevicesHeader),
-            ),
-            CupertinoIconButton(
-              icon: Icons.add,
-              onPressed: (){
-                //TODO change upper form to add
-              }
-            ),
-          ],
-        ),
-        Expanded(
-          child: AnimatedList(
-            initialItemCount: widget.devices.length,
-            itemBuilder: (context,index,animation){
-              return SizeTransition(
-                  sizeFactor: animation,
-                  child: DeviceOverviewDeviceListItem(widget.devices[index])
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class DeviceOverviewDeviceListItem extends StatefulWidget {
-  DeviceOverviewDeviceListItem(this.device): assert(device != null);
-
-  final Device device;
-
-  @override
-  _DeviceOverviewDeviceListItemState createState() => _DeviceOverviewDeviceListItemState();
-}
-
-class _DeviceOverviewDeviceListItemState extends State<DeviceOverviewDeviceListItem> {
-
-  Widget _mapDeviceTypeToIcon(){
-    switch(widget.device.type){
-      case DeviceType.HEADSET: return Icon(Icons.headset,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.WATCH: return Icon(Icons.watch,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.TABLET: return Icon(Icons.tablet,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.PHONE: return Icon(Icons.smartphone,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.GPS: return Icon(Icons.gps_fixed,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.PULSE_MONITOR: return Icon(Icons.favorite_border,color: ApplicationTheme.deviceIconColor);
-      default: return Icon(Icons.device_unknown,color: ApplicationTheme.deviceIconColor);
+  void onItemInserted(int index){
+    if(_listKey.currentState != null){
+      _listKey.currentState.insertItem(index);
     }
   }
 
+  ///This method is called when an item is removed and [widget.devices] still has items afterwards.
+  void onItemRemoved(int index){
+    if(_listKey.currentState != null){
+      _listKey.currentState.removeItem(index, (context,animation)=> SizedBox(width: 0,height: 0));
+    }
+  }
+
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 4),
+                child: Text(S.of(context).DevicesHeader,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+              ),
+            ),
+            _buildAddDeviceButton(context),
+          ],
+        ),
+        Flexible(
+          child: AnimatedList(
+            key: _listKey,
+            initialItemCount: widget.devices.length,
+            itemBuilder: (context,index,animation){
+              return SizeTransition(
+                  sizeFactor: animation,
+                  child: DeviceOverviewDeviceListItem(widget.devices[index])
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAddDeviceButton(BuildContext context){
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
-    );
-  }
-
-  Widget _buildAndroidWidget(BuildContext context){
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(4),
-          child: _mapDeviceTypeToIcon(),
-        ),
-        Expanded(
-          child: Text(widget.device.name),
-        ),
-        IconButton(
-          icon: Icon(Icons.edit),
+      android: () => IconButton(
+        icon: Icon(Icons.add),
+        onPressed: (){
+          //TODO change upper form to add
+        },
+      ),
+      ios: () => CupertinoIconButton(
+          icon: Icons.add,
           onPressed: (){
-            //TODO on edit callback
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context){
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(4),
-          child: _mapDeviceTypeToIcon(),
-        ),
-        Expanded(
-          child: Text(widget.device.name),
-        ),
-        CupertinoIconButton(
-          icon: Icons.edit,
-          onPressed: (){
-            //TODO on edit callback
+            //TODO change upper form to add
           }
-        )
-      ],
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class DeviceTypePicker extends StatefulWidget {
@@ -88,7 +89,33 @@ class _DeviceTypePickerState extends State<DeviceTypePicker> {
   }
 
   Widget _buildIosWidget(BuildContext context) {
-    //TODO ios device picker
+    return Row(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            CupertinoIconButton(
+              icon: Icons.arrow_back_ios,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => onTypeBackPressed(),
+            ),
+            Expanded(
+              child: Center(
+                child: Text(_items[_value.index]),
+              ),
+            ),
+            CupertinoIconButton(
+              icon: Icons.arrow_forward_ios,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => onTypeForwardPressed(),
+            ),
+          ],
+        ),
+        SizedBox(width: 10),
+        Text("${_value.index + 1} / ${DeviceType.values.length}"),
+      ],
+    );
   }
 
   void onTypeForwardPressed(){

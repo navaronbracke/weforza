@@ -19,7 +19,10 @@ class MemberDevices extends StatelessWidget {
         Row(
           children: <Widget>[
             Expanded(
-              child: Text(S.of(context).DevicesHeader),
+              child: Padding(
+                padding: EdgeInsets.only(left: 4),
+                child: Text(S.of(context).DevicesHeader,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+              ),
             ),
             _buildButton()
           ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class DeviceTypePicker extends StatefulWidget {
@@ -17,32 +18,31 @@ class DeviceTypePicker extends StatefulWidget {
 
 class _DeviceTypePickerState extends State<DeviceTypePicker> {
 
-  ///A map that holds the information to build the items.
-  Map<DeviceType,String> _itemMap;
+  List<String> _items;
 
-  DeviceType _dropdownValue;
+  DeviceType _value;
 
-  void _initializeDropdownItems(BuildContext context){
-    _itemMap = {
-      DeviceType.UNKNOWN: S.of(context).DeviceUnknown,
-      DeviceType.PULSE_MONITOR: S.of(context).DevicePulseMonitor,
-      DeviceType.GPS: S.of(context).DeviceGPS,
-      DeviceType.HEADSET: S.of(context).DeviceHeadset,
-      DeviceType.PHONE: S.of(context).DevicePhone,
-      DeviceType.TABLET: S.of(context).DeviceTablet,
-      DeviceType.WATCH: S.of(context).DeviceWatch,
-    };
+  void _initializeItems(BuildContext context){
+    _items = <String>[
+      S.of(context).DeviceUnknown,
+      S.of(context).DevicePulseMonitor,
+      S.of(context).DeviceGPS,
+      S.of(context).DeviceHeadset,
+      S.of(context).DevicePhone,
+      S.of(context).DeviceTablet,
+      S.of(context).DeviceWatch,
+    ];
   }
 
   @override
   void initState() {
     super.initState();
-    _dropdownValue = widget.initialValue;
+    _value = widget.initialValue;
   }
 
   @override
   Widget build(BuildContext context){
-    _initializeDropdownItems(context);
+    _initializeItems(context);
     return PlatformAwareWidget(
       android: () => _buildAndroidWidget(context),
       ios: () => _buildIosWidget(context),
@@ -50,39 +50,61 @@ class _DeviceTypePickerState extends State<DeviceTypePicker> {
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
-    return DropdownButton<DeviceType>(
-      value: _dropdownValue,
-      onChanged: _dropdownValue == null ? null : (DeviceType newValue) {
-        setState(() {
-          _dropdownValue = newValue;
-          widget.onValueChanged(_dropdownValue);
-        });
-      },
-      items: DeviceType.values.map((DeviceType type)=> DropdownMenuItem<DeviceType>(
-        child: Text(_itemMap[type]),
-        value: type,
-      )).toList()
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Center(child: Text(S.of(context).DeviceSelectType)),
+        ),
+        Row(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  color: ApplicationTheme.choiceArrowIdleColor,
+                  splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+                  onPressed: () => onTypeBackPressed(),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(_items[_value.index]),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.arrow_forward_ios),
+                  color: ApplicationTheme.choiceArrowIdleColor,
+                  splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+                  onPressed: () => onTypeForwardPressed(),
+                ),
+              ],
+            ),
+            SizedBox(width: 10),
+            Text("${_value.index + 1} / ${DeviceType.values.length}"),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildIosWidget(BuildContext context) {
-    return (_dropdownValue == null) ?
-    CupertinoPicker.builder(
-      itemExtent: 4,
-      onSelectedItemChanged: null,
-      itemBuilder: (context,index)=> Text(_itemMap[DeviceType.values[index]]),
-      childCount: DeviceType.values.length,
-    ): CupertinoPicker.builder(
-        scrollController: FixedExtentScrollController(initialItem: _dropdownValue.index),
-        itemExtent: 4,
-        itemBuilder: (context,index)=> Text(_itemMap[DeviceType.values[index]]),
-        childCount: DeviceType.values.length,
-        onSelectedItemChanged: (index){
-          setState(() {
-            _dropdownValue = DeviceType.values[index];
-            widget.onValueChanged(_dropdownValue);
-          });
-      },
-    );
+    //TODO ios device picker
+  }
+
+  void onTypeForwardPressed(){
+    if(_value.index < DeviceType.values.length){
+      setState(() {
+        _value = DeviceType.values[_value.index + 1];
+      });
+      widget.onValueChanged(_value);
+    }
+  }
+
+  void onTypeBackPressed(){
+    if(_value.index == 0) return;
+    setState(() {
+      _value = DeviceType.values[_value.index - 1];
+    });
+    widget.onValueChanged(_value);
   }
 }

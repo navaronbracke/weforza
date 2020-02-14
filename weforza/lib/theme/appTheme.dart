@@ -31,11 +31,13 @@ abstract class ApplicationTheme {
   //Ride Calendar Header Font Color
   static final Color rideCalendarHeaderColor = Colors.black;
 
-  //Ride Calendar Header Button Color when not pressed
-  static final Color rideCalendarHeaderButtonIdleColor = Colors.black;
-
-  //Ride Calendar Header Button Color when pressed
-  static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
+  ///Colors for an arrow which dictates there is another choice before/ahead of the current item.
+  ///Example: < "Choice" >
+  ///
+  ///The idle color is shown when the button is not pressed.
+  ///The onPressed Color is shown otherwise.
+  static final Color choiceArrowIdleColor = Colors.black;
+  static final Color choiceArrowOnPressedColor = Colors.black45;
 
   ///The profile image placeholder's icon color.
   static const Color profileImagePlaceholderIconColor = Colors.white;

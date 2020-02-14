@@ -45,8 +45,9 @@ class S implements WidgetsLocalizations {
   String get DeviceOverviewTitle => "Manage Devices";
   String get DevicePhone => "Phone";
   String get DevicePulseMonitor => "Pulse Monitor";
+  String get DeviceSelectType => "Select Type";
   String get DeviceTablet => "Tablet";
-  String get DeviceUnknown => "Other";
+  String get DeviceUnknown => "Unknown";
   String get DeviceWatch => "Watch";
   String get DevicesHeader => "Devices";
   String get DialogCancel => "Cancel";
@@ -151,7 +152,7 @@ class $nl extends S {
   @override
   String get DeviceNameLabel => "Naam Toestel";
   @override
-  String get DeviceUnknown => "Overig";
+  String get DeviceUnknown => "Onbekend";
   @override
   String get AddMemberError => "Kon lid niet toevoegen";
   @override
@@ -194,6 +195,8 @@ class $nl extends S {
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
+  @override
+  String get DeviceSelectType => "Selecteer Type";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override

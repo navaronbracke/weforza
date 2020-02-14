@@ -94,7 +94,8 @@
   "RideStart": "Start",
   "RideDestination": "Destination",
 
-  "DeviceUnknown": "Other",
+  "DeviceSelectType": "Select Type",
+  "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",
   "DevicePhone": "Phone",
   "DeviceWatch": "Watch",

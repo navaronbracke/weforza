@@ -37,11 +37,11 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
   );
 
   Widget _buildAndroidPortraitLayout(BuildContext context){
-    return Column(
-      children: <Widget>[
-        Form(
-          key: _formKey,
-          child: TextFormField(
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          TextFormField(
             textInputAction: TextInputAction.done,
             keyboardType: TextInputType.text,
             autocorrect: false,
@@ -61,53 +61,53 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
               widget.bloc.autoValidateNewDeviceName = true;
             }),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: DeviceTypePicker(valueChangedHandler: widget.bloc),
+          Padding(
+            padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Center(
+                    child: DeviceTypePicker(valueChangedHandler: widget.bloc),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Center(
-                  child: AddDeviceSubmit(onPressed: () async {
-                    if(_formKey.currentState.validate()){
-                      await widget.bloc.addDevice((Device device){
-                        widget.handler.onDeviceAdded(device);
-                      }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
-                    }
-                  },stream: widget.bloc.submitStream)
-                )
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Center(
-            child: StreamBuilder<String>(
-              stream: widget.bloc.submitErrorStream,
-              initialData: "",
-              builder: (context,snapshot)=> Text(snapshot.data),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: Center(
+                        child: AddDeviceSubmit(onPressed: () async {
+                          if(_formKey.currentState.validate()){
+                            await widget.bloc.addDevice((Device device){
+                              widget.handler.onDeviceAdded(device);
+                            }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                          }
+                        },stream: widget.bloc.submitStream)
+                    )
+                ),
+              ],
             ),
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Center(
+              child: StreamBuilder<String>(
+                stream: widget.bloc.submitErrorStream,
+                initialData: "",
+                builder: (context,snapshot)=> Text(snapshot.data),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildAndroidLandscapeLayout(BuildContext context){
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Form(
-            key: _formKey,
-            child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            Row(
               children: <Widget>[
                 Flexible(
                   child: TextFormField(
@@ -153,19 +153,19 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                 )
               ],
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Center(
-            child: StreamBuilder<String>(
-              stream: widget.bloc.submitErrorStream,
-              initialData: "",
-              builder: (context,snapshot)=> Text(snapshot.data),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Center(
+                child: StreamBuilder<String>(
+                  stream: widget.bloc.submitErrorStream,
+                  initialData: "",
+                  builder: (context,snapshot)=> Text(snapshot.data),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 

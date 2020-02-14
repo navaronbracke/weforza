@@ -45,8 +45,8 @@ class S implements WidgetsLocalizations {
   String get DeviceOverviewTitle => "Manage Devices";
   String get DevicePhone => "Phone";
   String get DevicePulseMonitor => "Pulse Monitor";
-  String get DeviceSelectType => "Select Type";
   String get DeviceTablet => "Tablet";
+  String get DeviceTypeLabel => "Device Type";
   String get DeviceUnknown => "Unknown";
   String get DeviceWatch => "Watch";
   String get DevicesHeader => "Devices";
@@ -196,8 +196,6 @@ class $nl extends S {
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
   @override
-  String get DeviceSelectType => "Selecteer Type";
-  @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override
   String get MemberListAddMemberInstruction => "Voeg leden toe via het menu hierboven";
@@ -285,6 +283,8 @@ class $nl extends S {
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
+  @override
+  String get DeviceTypeLabel => "Type Toestel";
   @override
   String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override

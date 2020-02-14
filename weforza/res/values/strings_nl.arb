@@ -94,7 +94,7 @@
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
-  "DeviceSelectType": "Selecteer Type",
+  "DeviceTypeLabel": "Type Toestel",
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",
   "DevicePhone": "Telefoon",

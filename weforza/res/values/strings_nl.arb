@@ -94,7 +94,8 @@
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
-  "DeviceUnknown": "Overig",
+  "DeviceSelectType": "Selecteer Type",
+  "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",
   "DevicePhone": "Telefoon",
   "DeviceWatch": "Horloge",

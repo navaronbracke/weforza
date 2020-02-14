@@ -24,8 +24,8 @@ class AddRideCalendarHeader extends StatelessWidget {
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-          splashColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+          color: ApplicationTheme.choiceArrowIdleColor,
+          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
           onPressed: () => paginator.pageBack(),
         ),
         Expanded(
@@ -40,8 +40,8 @@ class AddRideCalendarHeader extends StatelessWidget {
         ),
         IconButton(
           icon: Icon(Icons.arrow_forward_ios),
-          color: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-          splashColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+          color: ApplicationTheme.choiceArrowIdleColor,
+          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
           onPressed: () => paginator.pageForward(),
         ),
       ],
@@ -55,8 +55,8 @@ class AddRideCalendarHeader extends StatelessWidget {
         children: <Widget>[
           CupertinoIconButton(
               icon: Icons.arrow_back_ios,
-              idleColor: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              onPressedColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
               onPressed: () => paginator.pageBack()
           ),
           Expanded(
@@ -71,8 +71,8 @@ class AddRideCalendarHeader extends StatelessWidget {
           ),
           CupertinoIconButton(
               icon: Icons.arrow_forward_ios,
-              idleColor: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              onPressedColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
               onPressed: () => paginator.pageForward()
           ),
         ],

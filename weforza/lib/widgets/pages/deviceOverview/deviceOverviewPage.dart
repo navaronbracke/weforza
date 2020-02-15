@@ -55,7 +55,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
         transitionBetweenRoutes: false,
         middle: Text(S.of(context).DeviceOverviewTitle),
       ),
-      child: _buildBody()
+      child: SafeArea(bottom: false,child: _buildBody())
     );
   }
 

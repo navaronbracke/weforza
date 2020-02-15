@@ -192,10 +192,14 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
               });
             },
           ),
-          Text(
-              CupertinoFormErrorFormatter.formatErrorMessage(
-                  widget.bloc.addDeviceError),
-              style: ApplicationTheme.iosFormErrorStyle),
+          Row(
+            children: <Widget>[
+              Text(
+                  CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
+                  style: ApplicationTheme.iosFormErrorStyle
+                ),
+            ],
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
             child: Row(
@@ -213,6 +217,10 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                             await widget.bloc.addDevice((Device device){
                               widget.handler.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                          }else {
+                            setState((){
+                              //trigger form error redraw on ios
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )
@@ -263,10 +271,14 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           });
                         },
                       ),
-                      Text(
-                          CupertinoFormErrorFormatter.formatErrorMessage(
-                              widget.bloc.addDeviceError),
-                          style: ApplicationTheme.iosFormErrorStyle),
+                  Row(
+                    children: <Widget>[
+                        Text(
+                            CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
+                            style: ApplicationTheme.iosFormErrorStyle
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -286,7 +298,11 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           await widget.bloc.addDevice((Device device){
                             widget.handler.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
-                        }
+                        } else {
+                            setState((){
+                              //trigger form error redraw on ios
+                            });
+                          }
                       },stream: widget.bloc.submitStream)
                   ),
                 )

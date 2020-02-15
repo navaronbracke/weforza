@@ -68,11 +68,14 @@ class _DeviceOverviewDeviceListItemState extends State<DeviceOverviewDeviceListI
         Expanded(
           child: Text(widget.device.name),
         ),
-        CupertinoIconButton(
-            icon: Icons.edit,
-            onPressed: (){
-              //TODO on edit callback
-            }
+        Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: CupertinoIconButton(
+              icon: Icons.edit,
+              onPressed: (){
+                //TODO on edit callback
+              }
+          ),
         )
       ],
     );

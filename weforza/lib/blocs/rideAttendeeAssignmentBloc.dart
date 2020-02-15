@@ -11,7 +11,6 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
-import 'package:weforza/model/rideAttendeeDisplayMode.dart';
 import 'package:weforza/model/rideAttendeeSelector.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -21,28 +20,44 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository):
         assert(ride != null && _memberRepository != null && _rideRepository != null);
 
+  ///The [Ride] for which to change the attendees.
   final Ride ride;
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
 
-  final StreamController<RideAttendeeDisplayMode> _displayModeController = BehaviorSubject();
-  Stream<RideAttendeeDisplayMode> get displayModeStream => _displayModeController.stream;
-
+  ///The items contain the fully loaded [MemberItem]s and their selection state.
+  ///They are stored here so the scanning widget won't have to reload the members during its init step.
+  ///This way it only needs to load the devices and put both the members and devices into their respective Map.
   List<RideAttendeeAssignmentItemBloc> items;
 
+  ///This [BehaviorSubject] controls whether the page actions should be shown.
+  final StreamController<bool> _actionsDisplayModeController = BehaviorSubject();
+  Stream<bool> get actionsDisplayModeStream => _actionsDisplayModeController.stream;
+
+  ///This [BehaviorSubject] controls what content page is shown.
+  final StreamController<RideAttendeeAssignmentContentDisplayMode> _contentDisplayModeController = BehaviorSubject();
+  Stream<RideAttendeeAssignmentContentDisplayMode> get contentDisplayModeStream => _contentDisplayModeController.stream;
+
+  //TODO scanning stream + scan state
+  //(init: load data + organize into Map)
+  //(scan: find devices)
+  //(process: do lookup for each result)
+
+
+  ///The UUID's of the [Member]s that should be saved as Attendees of [ride] on submit.
   List<String> _rideAttendees = List();
 
-  Future<void> submitFuture;
-
-  Future<void> get scanFuture => _scanCompleter?.future;
-  Completer<void> _scanCompleter;
-
-  Future<void> loadMembers() async {
+  Future<List<RideAttendeeAssignmentItemBloc>> loadMembers() async {
+    _actionsDisplayModeController.add(false);
     final members = await _memberRepository.getMembers();
-    final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
-    items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
-    _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.member.uuid).toList());
-    _displayModeController.add(RideAttendeeDisplayMode.IDLE);
+    if(members.isNotEmpty){
+      final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
+      items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
+      _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.member.uuid).toList());
+      _actionsDisplayModeController.add(true);
+      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
+    }
+    return items;
   }
 
   Future<RideAttendeeAssignmentItemBloc> _mapMemberToItem(Member member,bool selected) async {
@@ -54,14 +69,14 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   }
 
   Future<void> onSubmit() async {
-    _displayModeController.add(RideAttendeeDisplayMode.SAVING);
+    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SAVE);
+    _actionsDisplayModeController.add(false);
     await _rideRepository.updateAttendeesForRideWithDate(ride, _rideAttendees.map(
             (uuid)=> RideAttendee(ride.date,uuid)).toList()
     ).then((_){
       RideProvider.reloadRides = true;
       RideProvider.selectedRide = ride;
-    },onError: (error) => //errors are handled in the StreamBuilder that consumes this stream
-        _displayModeController.addError(error));
+    });
   }
 
   String getTitle(BuildContext context){
@@ -71,17 +86,17 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   }
 
   void startScan() {
-    //errors are handled by the FutureBuilder that consumes the scan future
-    _displayModeController.add(RideAttendeeDisplayMode.SCANNING);
+    _actionsDisplayModeController.add(false);
+    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
     //TODO if bluetooth is off -> throw error -> create dialog
     // TODO: start scan with flutter blue instance if not scanning
-    _scanCompleter = Completer();
+    //TODO when scan failed -> show widget which has a return button( onPressed = stopScan() )
   }
 
   void stopScan() {
     // TODO: stop scan with flutter blue instance if scanning
-    _scanCompleter.complete();
-    _displayModeController.add(RideAttendeeDisplayMode.IDLE);
+    _actionsDisplayModeController.add(true);
+    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
   }
 
   @override
@@ -102,6 +117,18 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
 
   @override
   void dispose() {
-    _displayModeController.close();
+    _contentDisplayModeController.close();
+    _actionsDisplayModeController.close();
   }
+}
+
+///[RideAttendeeAssignmentContentDisplayMode.LIST] The page is in List mode.
+///Here the attendees will be loaded. This can finish with an error or with data.
+///The list will use a [FutureBuilder] to show itself.
+///[RideAttendeeAssignmentContentDisplayMode.SCAN] The page is in Scan mode.
+///[RideAttendeeAssignmentContentDisplayMode.SAVE] The page is saving the selection.
+enum RideAttendeeAssignmentContentDisplayMode {
+  LIST,
+  SCAN,
+  SAVE,
 }

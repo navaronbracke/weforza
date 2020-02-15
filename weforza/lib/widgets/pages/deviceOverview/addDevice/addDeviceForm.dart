@@ -236,7 +236,6 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
   }
 
   Widget _buildIosLandscapeLayout(BuildContext context){
-    //TODO ios layout
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Form(

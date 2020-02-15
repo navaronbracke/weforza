@@ -9,10 +9,11 @@ import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListError.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/pages/rideList/rideListRidesEmpty.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
@@ -101,12 +102,10 @@ class _RideListPageState extends State<RideListPage> {
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return Center(
-              child: Text(S.of(context).RideListLoadingRidesError),
-            );
+            return RideListError();
           }else{
             if(snapshot.data == null || snapshot.data.isEmpty){
-              return RideListRidesEmpty();
+              return RideListEmpty();
             }else{
               return ListView.builder(
                   itemCount: snapshot.data.length,

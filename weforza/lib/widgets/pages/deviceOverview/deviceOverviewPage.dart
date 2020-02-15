@@ -76,9 +76,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
                 ),
               ),
               Expanded(
-                child: widget.bloc.devices.isEmpty ? Center(
-                    child: DeviceListEmpty()
-                ): DeviceOverviewDevicesList(
+                child: widget.bloc.devices.isEmpty ? DeviceListEmpty(): DeviceOverviewDevicesList(
                     handler: widget.bloc,
                     key: _deviceListKey
                 ),
@@ -90,7 +88,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
             children: <Widget>[
               null,//TODO editForm
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
-                child: Center(child: DeviceListEmpty()),
+                child: DeviceListEmpty(),
               ) : DeviceOverviewDevicesList(
                 handler: widget.bloc,key: _deviceListKey,
               ),
@@ -101,7 +99,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
             children: <Widget>[
               null,//TODO deleteForm
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
-                child: Center(child: DeviceListEmpty()),
+                child: DeviceListEmpty(),
               ) : DeviceOverviewDevicesList(
                 handler: widget.bloc,key: _deviceListKey,
               ),

@@ -15,6 +15,8 @@ import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
+import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
+import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -230,10 +232,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
       future: attendeesFuture,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return Center(child: Text(S.of(context).RideDetailsLoadAttendeesError));
+          return RideDetailsAttendeesError();
         }else{
           if(snapshot.data == null || snapshot.data.isEmpty){
-            return Center(child: Text(S.of(context).RideDetailsNoAttendees));
+            return RideDetailsAttendeesEmpty();
           }else{
             return ListView.builder(
                 itemBuilder: (context,index){

@@ -349,9 +349,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return Center(
-              child: MemberDevicesError(),
-            );
+            return MemberDevicesError();
           }else{
             //init the callback, either with an empty list or with devices.
             final onPressed = (){
@@ -366,7 +364,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                 }
               });
             };
-            return snapshot.data.isEmpty ? Center(child: MemberDevicesEmpty(onPressed: onPressed)) :
+            return snapshot.data.isEmpty ? MemberDevicesEmpty(onPressed: onPressed) :
             MemberDevices(devices: snapshot.data,onEditPressed: onPressed);
           }
         }else{

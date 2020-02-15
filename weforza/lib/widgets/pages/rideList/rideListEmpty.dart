@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class MemberDevicesError extends StatelessWidget {
+class RideListEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -11,12 +10,14 @@ class MemberDevicesError extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.warning,
+            Icons.directions_bike,
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           SizedBox(height: 5),
-          Text(S.of(context).MemberDetailsLoadDevicesError),
+          Text(S.of(context).RideListNoRides),
+          SizedBox(height: 5),
+          Text(S.of(context).RideListAddRideInstruction)
         ],
       ),
     );

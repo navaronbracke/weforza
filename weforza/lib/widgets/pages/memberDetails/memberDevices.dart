@@ -39,11 +39,11 @@ class MemberDevices extends StatelessWidget {
   Widget _buildButton(){
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: Icon(Icons.edit),
+        icon: Icon(Icons.border_color),
         onPressed: onEditPressed,
       ),
       ios: () => CupertinoIconButton(
-        icon: Icons.edit,
+        icon: Icons.border_color,
         onPressed: onEditPressed,
       ),
     );

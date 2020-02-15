@@ -69,10 +69,12 @@
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
   "RideAttendeeAssignmentTitle": "Aanwezigen $date",
+  "RideAttendeeAssignmentLoadingMembers": "Leden ophalen voor aanwezigheidslijst",
   "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
-  "RideAttendeeAssignmentConfirm": "Opslaan",
+  "RideAttendeeAssignmentSubmitting": "Aanwezigheden Opslaan",
+  "RideAttendeeAssignmentSubmitError": "Kon aanwezigen niet opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
 
   "EditRidePageTitle": "Rit Bewerken",

@@ -95,11 +95,13 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
-  String get RideAttendeeAssignmentConfirm => "Save";
   String get RideAttendeeAssignmentError => "Something went wrong";
+  String get RideAttendeeAssignmentLoadingMembers => "Loading members for assignment";
   String get RideAttendeeAssignmentReturnToList => "Return to the list";
   String get RideAttendeeAssignmentScanningFailed => "The scan failed";
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
+  String get RideAttendeeAssignmentSubmitError => "Could not save attendees";
+  String get RideAttendeeAssignmentSubmitting => "Saving Attendees";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -147,6 +149,8 @@ class $nl extends S {
   String get EditRideTitleLabel => "Titel";
   @override
   String get DeviceWatch => "Horloge";
+  @override
+  String get RideAttendeeAssignmentSubmitError => "Kon aanwezigen niet opslaan";
   @override
   String get DevicePhone => "Telefoon";
   @override
@@ -264,6 +268,8 @@ class $nl extends S {
   @override
   String get MemberDeleteDialogDescription => "Bent u zeker dat u dit lid wil verwijderen?";
   @override
+  String get RideAttendeeAssignmentSubmitting => "Aanwezigheden Opslaan";
+  @override
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
   String get DeviceOverviewTitle => "Toestellen Beheren";
@@ -296,6 +302,8 @@ class $nl extends S {
   @override
   String get MemberPickImageError => "Kon afbeelding niet laden";
   @override
+  String get RideAttendeeAssignmentLoadingMembers => "Leden ophalen voor aanwezigheidslijst";
+  @override
   String get AppName => "WeForza";
   @override
   String get RideDetailsLoadAttendeesError => "Kon de aanwezigen niet laden";
@@ -327,8 +335,6 @@ class $nl extends S {
   String get AddDeviceError => "Kon toestel niet toevoegen";
   @override
   String get MemberListLoadingFailed => "Kon leden niet laden";
-  @override
-  String get RideAttendeeAssignmentConfirm => "Opslaan";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
   @override

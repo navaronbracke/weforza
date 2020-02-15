@@ -192,10 +192,14 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
               });
             },
           ),
-          Text(
-              CupertinoFormErrorFormatter.formatErrorMessage(
-                  widget.bloc.addDeviceError),
-              style: ApplicationTheme.iosFormErrorStyle),
+          Row(
+            children: <Widget>[
+              Text(
+                  CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
+                  style: ApplicationTheme.iosFormErrorStyle
+                ),
+            ],
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
             child: Row(
@@ -236,7 +240,6 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
   }
 
   Widget _buildIosLandscapeLayout(BuildContext context){
-    //TODO ios layout
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Form(
@@ -264,10 +267,14 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           });
                         },
                       ),
-                      Text(
-                          CupertinoFormErrorFormatter.formatErrorMessage(
-                              widget.bloc.addDeviceError),
-                          style: ApplicationTheme.iosFormErrorStyle),
+                  Row(
+                    children: <Widget>[
+                        Text(
+                            CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
+                            style: ApplicationTheme.iosFormErrorStyle
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

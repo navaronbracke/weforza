@@ -117,7 +117,7 @@ class S implements WidgetsLocalizations {
   String get TuesdayPrefix => "Tue";
   String get UnknownDate => "Unknown Date";
   String get WednesdayPrefix => "Wed";
-  String DeviceNameMaxLength(String maxLength) => "A device name can't be longer than $maxLength characters";
+  String DeviceNameMaxLength(String maxLength) => "Device name is max. $maxLength characters";
   String EditRideAddressMaxLength(String maxLength) => "An address can't be longer than $maxLength characters";
   String EditRideDistanceMaximum(String maxDistance) => "A ride cannot have a distance that exceeds $maxDistance Km";
   String EditRideTitleMaxLength(String maxLength) => "A title can't be longer than $maxLength characters";
@@ -342,7 +342,7 @@ class $nl extends S {
   @override
   String EditRideDistanceMaximum(String maxDistance) => "De afstand van een rit mag niet groter zijn dan $maxDistance Km";
   @override
-  String DeviceNameMaxLength(String maxLength) => "De naam van een toestel mag niet langer zijn dan $maxLength karakters";
+  String DeviceNameMaxLength(String maxLength) => "Naam Toestel is max. $maxLength tekens";
   @override
   String ValueIsRequired(String value) => "$value is verplicht";
   @override

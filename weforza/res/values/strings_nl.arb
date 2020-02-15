@@ -102,7 +102,7 @@
   "DeviceTablet": "Tablet",
   "DeviceHeadset": "Koptelefoon",
   "DevicePulseMonitor": "Hartslagmeter",
-  "DeviceNameMaxLength": "De naam van een toestel mag niet langer zijn dan $maxLength karakters",
+  "DeviceNameMaxLength": "Naam Toestel is max. $maxLength tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
 
   "PersonFirstNameLabel": "Voornaam",

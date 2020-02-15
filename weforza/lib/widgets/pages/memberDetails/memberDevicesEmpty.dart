@@ -25,9 +25,10 @@ class MemberDevicesEmpty extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.devices_other,
-          color: ApplicationTheme.deviceIconColor,
+          color: ApplicationTheme.listInformationalIconColor,
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
+        SizedBox(height: 5),
         Text(S.of(context).MemberDetailsNoDevices),
         SizedBox(height: 5),
         FlatButton(
@@ -44,9 +45,10 @@ class MemberDevicesEmpty extends StatelessWidget {
       children: <Widget>[
         Icon(
           Icons.devices_other,
-          color: ApplicationTheme.deviceIconColor,
+          color: ApplicationTheme.listInformationalIconColor,
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
+        SizedBox(height: 5),
         Text(S.of(context).MemberDetailsNoDevices),
         SizedBox(height: 5),
         CupertinoButton(

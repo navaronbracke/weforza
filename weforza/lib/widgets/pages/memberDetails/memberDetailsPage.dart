@@ -18,6 +18,7 @@ import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -349,7 +350,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return Center(
-              child: Text(S.of(context).MemberDetailsLoadDevicesError),
+              child: MemberDevicesError(),
             );
           }else{
             //init the callback, either with an empty list or with devices.

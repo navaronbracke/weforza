@@ -70,6 +70,9 @@ abstract class ApplicationTheme {
 
   static final Color deviceIconColor = Colors.blue.shade200;
 
+  ///This color is used for Icons in lists that show some information when there is nothing to show.
+  static final Color listInformationalIconColor = primaryColor;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

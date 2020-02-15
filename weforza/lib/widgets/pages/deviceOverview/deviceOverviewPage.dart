@@ -79,7 +79,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
                 child: widget.bloc.devices.isEmpty ? Center(
                     child: DeviceListEmpty()
                 ): DeviceOverviewDevicesList(
-                    devices: widget.bloc.devices,
+                    handler: widget.bloc,
                     key: _deviceListKey
                 ),
               ),
@@ -92,7 +92,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
                 child: Center(child: DeviceListEmpty()),
               ) : DeviceOverviewDevicesList(
-                devices: widget.bloc.devices,key: _deviceListKey,
+                handler: widget.bloc,key: _deviceListKey,
               ),
             ],
           );
@@ -103,7 +103,7 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
                 child: Center(child: DeviceListEmpty()),
               ) : DeviceOverviewDevicesList(
-                devices: widget.bloc.devices,key: _deviceListKey,
+                handler: widget.bloc,key: _deviceListKey,
               ),
             ],
           );

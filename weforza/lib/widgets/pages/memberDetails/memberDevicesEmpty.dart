@@ -26,7 +26,7 @@ class MemberDevicesEmpty extends StatelessWidget {
         Icon(
           Icons.devices_other,
           color: ApplicationTheme.deviceIconColor,
-          size: MediaQuery.of(context).size.shortestSide * .2,
+          size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Text(S.of(context).MemberDetailsNoDevices),
         SizedBox(height: 5),
@@ -45,7 +45,7 @@ class MemberDevicesEmpty extends StatelessWidget {
         Icon(
           Icons.devices_other,
           color: ApplicationTheme.deviceIconColor,
-          size: MediaQuery.of(context).size.shortestSide * .2,
+          size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Text(S.of(context).MemberDetailsNoDevices),
         SizedBox(height: 5),

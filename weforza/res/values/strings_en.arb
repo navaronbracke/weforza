@@ -102,7 +102,7 @@
   "DeviceTablet": "Tablet",
   "DeviceHeadset": "Headset",
   "DevicePulseMonitor": "Pulse Monitor",
-  "DeviceNameMaxLength": "A device name can't be longer than $maxLength characters",
+  "DeviceNameMaxLength": "Device name is max. $maxLength characters",
   "DeviceAlreadyExists": "This device already exists",
 
   "PersonFirstNameLabel": "First Name",

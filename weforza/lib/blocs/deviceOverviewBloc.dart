@@ -5,7 +5,15 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 
-class DeviceOverviewBloc extends Bloc {
+abstract class DeviceOverviewHandler {
+  bool get isShowingAddDeviceForm;
+
+  List<Device> get devices;
+
+  void requestAddForm();
+}
+
+class DeviceOverviewBloc extends Bloc implements DeviceOverviewHandler {
   DeviceOverviewBloc(this.devices): assert(devices != null);
 
   final List<Device> devices;
@@ -13,14 +21,21 @@ class DeviceOverviewBloc extends Bloc {
   final StreamController<DeviceOverviewDisplayMode> _overviewDisplayModeController = BehaviorSubject();
   Stream<DeviceOverviewDisplayMode> get displayMode => _overviewDisplayModeController.stream;
 
+  bool isShowingAddDeviceForm = true;
+
   void addDevice(Device device){
     devices.add(device);
-    _overviewDisplayModeController.add(DeviceOverviewDisplayMode.ADD);
   }
 
   @override
   void dispose() {
     _overviewDisplayModeController.close();
+  }
+
+  @override
+  void requestAddForm() {
+    isShowingAddDeviceForm = true;
+    _overviewDisplayModeController.add(DeviceOverviewDisplayMode.ADD);
   }
 
 }

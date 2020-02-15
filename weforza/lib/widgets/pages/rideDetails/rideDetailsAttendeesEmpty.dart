@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class MemberDevicesError extends StatelessWidget {
+class RideDetailsAttendeesEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -11,12 +11,12 @@ class MemberDevicesError extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.warning,
+            Icons.people,
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           SizedBox(height: 5),
-          Text(S.of(context).MemberDetailsLoadDevicesError),
+          Text(S.of(context).RideDetailsNoAttendees),
         ],
       ),
     );

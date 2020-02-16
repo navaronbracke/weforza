@@ -59,6 +59,8 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
 
   ///This [BehaviorSubject] controls the scanning process.
   final StreamController<ScanStep> _scanController = BehaviorSubject();
+
+  @override
   Stream<ScanStep> get scanStream => _scanController.stream;
 
   ///The UUID's of the [Member]s that should be saved as Attendees of [ride] on submit.
@@ -174,7 +176,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
           if(value != null && value){
             onAlreadyScanning();
           }else{
-            final scanSubscription = bluetoothScanner.scanResults.listen((result){
+            bluetoothScanner.scanResults.listen((result){
               result.removeWhere((res) => devices[res.device.name] == null);
               onScanResultsReceived(result.length);
               scannedDevices.addAll(result.map((r)=>r.device.name).toList());
@@ -255,6 +257,9 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     _actionsDisplayModeController.close();
     _scanController.close();
   }
+
+  @override
+  void handleError(String message) => _scanController.addError(message);
 }
 
 ///[RideAttendeeAssignmentContentDisplayMode.LIST] The page is in List mode.

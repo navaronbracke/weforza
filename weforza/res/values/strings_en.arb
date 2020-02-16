@@ -125,6 +125,10 @@
   "PhoneMinLength": "A phone number is minimum $minLength digits long",
   "PhoneMaxLength": "A phone number is maximum $maxLength digits long",
 
+  "EnableBluetoothDialogTitle": "Enable Bluetooth",
+  "EnableBluetoothDialogDescription": "Bluetooth is required to start a scan. Do you want to go to Settings?",
+  "EnableBluetoothGoToSettings": "Go To Settings",
+
   "ValueIsRequired": "$value is required",
   "DialogCancel": "Cancel",
   "DialogDelete": "Delete",

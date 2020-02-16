@@ -125,6 +125,10 @@
   "PhoneMinLength": "Een telefoonnummer is minimum $minLength cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum $maxLength cijfers lang",
 
+  "EnableBluetoothDialogTitle": "Bluetooth Inschakelen",
+  "EnableBluetoothDialogDescription": "Bluetooth is verplicht om te scannen. Doorgaan naar instellingen?",
+  "EnableBluetoothGoToSettings": "Instellingen",
+
   "ValueIsRequired": "$value is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",

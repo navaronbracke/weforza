@@ -61,6 +61,9 @@ dependencies:
   # This package provides Bluetooth Low Energy functionality.
   flutter_blue: ^0.6.3+1
 
+  # This package provides easy access to app settings
+  app_settings: 3.0.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

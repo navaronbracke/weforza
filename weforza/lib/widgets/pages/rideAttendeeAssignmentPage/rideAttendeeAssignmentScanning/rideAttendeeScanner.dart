@@ -10,7 +10,6 @@ abstract class RideAttendeeScanner {
   ///Returns a [Stream], which can be listened to.
   ///The stream itself doesn't return any data. The actual data is delegated
   Stream<void> startScan(
-      VoidCallback onRequestEnableBLE,
       VoidCallback onAlreadyScanning,
       VoidCallback onGenericScanError,
       void Function(int numberOfResults) onScanResultsReceived,

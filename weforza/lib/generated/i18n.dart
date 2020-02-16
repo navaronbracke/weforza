@@ -99,6 +99,7 @@ class S implements WidgetsLocalizations {
   String get RideAttendeeAssignmentLoadingMembers => "Loading members for assignment";
   String get RideAttendeeAssignmentReturnToList => "Return to the list";
   String get RideAttendeeAssignmentScanningFailed => "The scan failed";
+  String get RideAttendeeAssignmentScanningTitle => "Scanning for attendees";
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideAttendeeAssignmentSubmitError => "Could not save attendees";
   String get RideAttendeeAssignmentSubmitting => "Saving Attendees";
@@ -233,6 +234,8 @@ class $nl extends S {
   String get DeviceAlreadyExists => "Dit toestel bestaat al";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
+  @override
+  String get RideAttendeeAssignmentScanningTitle => "Scannen naar aanwezigen";
   @override
   String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
   @override

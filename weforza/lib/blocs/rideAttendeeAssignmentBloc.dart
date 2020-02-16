@@ -118,14 +118,13 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   ///This way the scan can proceed without issues during config changes.
   @override
   Stream<void> startScan(
-      VoidCallback onRequestEnableBLE, VoidCallback onAlreadyScanning,
-      VoidCallback onGenericScanError, void Function(int numberOfResults) onScanResultsReceived, VoidCallback onScanStarted) async*
+      VoidCallback onAlreadyScanning, VoidCallback onGenericScanError,
+      void Function(int numberOfResults) onScanResultsReceived, VoidCallback onScanStarted) async*
   {
     for(ScanStep s in ScanStep.values){
       if(!isCanceled){
         _handleScanStep(
             s,
-            onRequestEnableBLE,
             onAlreadyScanning,
             onGenericScanError,
             onScanResultsReceived,
@@ -136,7 +135,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     }
   }
 
-  void _handleScanStep(ScanStep currentStep, VoidCallback onRequestEnableBLE, VoidCallback onAlreadyScanning,
+  void _handleScanStep(ScanStep currentStep, VoidCallback onAlreadyScanning,
       VoidCallback onGenericScanError, void Function(int numberOfResults) onScanResultsReceived, VoidCallback onScanStarted) async {
     _scanController.add(currentStep);
     if(currentStep == ScanStep.LOAD_DEVICES){
@@ -145,7 +144,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
       await _loadDevicesToScanFor().catchError((e)=> onGenericScanError());
     }else if(currentStep == ScanStep.DO_SCAN){
       //Start scan
-      await _startBluetoothScan(onRequestEnableBLE,onAlreadyScanning,onGenericScanError,onScanResultsReceived,onScanStarted).catchError((e)=> onGenericScanError());
+      await _startBluetoothScan(onAlreadyScanning,onGenericScanError,onScanResultsReceived,onScanStarted).catchError((e)=> onGenericScanError());
     }else if(currentStep == ScanStep.PROCESS){
       await _processResults(scannedDevices);
     }
@@ -165,13 +164,12 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   ///Start a bluetooth scan.
   ///This is the [ScanningState.SCANNING] step.
   Future<void> _startBluetoothScan(
-      VoidCallback onRequestEnableBLE,
       VoidCallback onAlreadyScanning,
       VoidCallback onGenericScanError,
       void Function(int numberOfResults) onScanResultsReceived, VoidCallback onScanStarted) async {
     await bluetoothScanner.isOn.then((value) async {
       if(!value){
-        onRequestEnableBLE();
+        onGenericScanError();
       }else{
         await bluetoothScanner.isScanning.first.then((value) async {
           if(value != null && value){
@@ -234,9 +232,15 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     });
   }
 
-  void onRequestScan(){
-    _actionsDisplayModeController.add(false);
-    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
+  void onRequestScan(VoidCallback onBluetoothDisabled) async {
+    await bluetoothScanner.isOn.then((isOn){
+      if(isOn){
+        _actionsDisplayModeController.add(false);
+        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
+      }else{
+        onBluetoothDisabled();
+      }
+    });
   }
 
   @override

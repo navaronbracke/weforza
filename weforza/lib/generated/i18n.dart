@@ -69,6 +69,9 @@ class S implements WidgetsLocalizations {
   String get EditRideSubmitError => "Failed to save the changes";
   String get EditRideTitleLabel => "Title";
   String get EditRideTitleWhitespace => "A title can't be only whitespace";
+  String get EnableBluetoothDialogDescription => "Bluetooth is required to start a scan. Do you want to go to Settings?";
+  String get EnableBluetoothDialogTitle => "Enable Bluetooth";
+  String get EnableBluetoothGoToSettings => "Go To Settings";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -190,6 +193,8 @@ class $nl extends S {
   @override
   String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
   @override
+  String get EnableBluetoothGoToSettings => "Instellingen";
+  @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
@@ -262,6 +267,8 @@ class $nl extends S {
   @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
   @override
+  String get EnableBluetoothDialogDescription => "Bluetooth is verplicht om te scannen. Doorgaan naar instellingen?";
+  @override
   String get DialogDelete => "Verwijderen";
   @override
   String get RideListRidesHeader => "Ritten";
@@ -299,6 +306,8 @@ class $nl extends S {
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
+  @override
+  String get EnableBluetoothDialogTitle => "Bluetooth Inschakelen";
   @override
   String get DeviceTypeLabel => "Type Toestel";
   @override

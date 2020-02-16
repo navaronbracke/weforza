@@ -73,6 +73,8 @@ abstract class ApplicationTheme {
   ///This color is used for Icons in lists that show some information when there is nothing to show.
   static final Color listInformationalIconColor = primaryColor;
 
+  static final Color scanProgressBarStrokeColor = primaryColor;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

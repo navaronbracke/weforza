@@ -77,6 +77,8 @@
   "RideAttendeeAssignmentSubmitting": "Aanwezigheden Opslaan",
   "RideAttendeeAssignmentSubmitError": "Kon aanwezigen niet opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
+  "RideAttendeeAssignmentLoadingDevices": "Bekende toestellen laden",
+  "RideAttendeeAssignmentProcessingScanResult": "Scanresultaten verwerken",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

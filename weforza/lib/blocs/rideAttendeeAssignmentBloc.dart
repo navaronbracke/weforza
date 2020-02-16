@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -13,22 +14,40 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/rideAttendeeSelector.dart';
 import 'package:weforza/provider/rideProvider.dart';
+import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanner.dart';
 
-class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
-  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository):
-        assert(ride != null && _memberRepository != null && _rideRepository != null);
+class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,RideAttendeeScanner {
+  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository,this._deviceRepository):
+        assert(ride != null && _memberRepository != null && _rideRepository != null && _deviceRepository != null);
 
   ///The [Ride] for which to change the attendees.
   final Ride ride;
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
+  final DeviceRepository _deviceRepository;
 
-  ///The items contain the fully loaded [MemberItem]s and their selection state.
+  ///The [FlutterBlue] instance that will handle the scanning.
+  final FlutterBlue bluetoothScanner = FlutterBlue.instance;
+
+  ///Whether the scan is cancelled
+  bool isCanceled = false;
+  
+  ///The list of devices that were scanned.
+  List<String> scannedDevices;
+
+  ///The members contain the fully loaded [MemberItem]s and their selection state.
   ///They are stored here so the scanning widget won't have to reload the members during its init step.
   ///This way it only needs to load the devices and put both the members and devices into their respective Map.
-  List<RideAttendeeAssignmentItemBloc> items;
+  ///The key is the member id.
+  Map<String,RideAttendeeAssignmentItemBloc> members;
+
+  ///The devices of all members are stored here.
+  ///The key is the device name.
+  ///The value is the ID of the member.
+  Map<String,String> devices;
 
   ///This [BehaviorSubject] controls whether the page actions should be shown.
   final StreamController<bool> _actionsDisplayModeController = BehaviorSubject();
@@ -38,34 +57,40 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   final StreamController<RideAttendeeAssignmentContentDisplayMode> _contentDisplayModeController = BehaviorSubject();
   Stream<RideAttendeeAssignmentContentDisplayMode> get contentDisplayModeStream => _contentDisplayModeController.stream;
 
-  //TODO scanning stream + scan state
-  //(init: load data + organize into Map)
-  //(scan: find devices)
-  //(process: do lookup for each result)
-
+  ///This [BehaviorSubject] controls the scanning process.
+  final StreamController<ScanStep> _scanController = BehaviorSubject();
+  Stream<ScanStep> get scanStream => _scanController.stream;
 
   ///The UUID's of the [Member]s that should be saved as Attendees of [ride] on submit.
-  List<String> _rideAttendees = List();
+  List<String> _rideAttendees;
 
   Future<List<RideAttendeeAssignmentItemBloc>> loadMembers() async {
     _actionsDisplayModeController.add(false);
-    final members = await _memberRepository.getMembers();
-    if(members.isNotEmpty){
+    final itemsFromDb = await _memberRepository.getMembers();
+    if(itemsFromDb.isNotEmpty){
+      members = {};
+      _rideAttendees = List();
+      //Load the attendee ID's of the current attendees
       final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
-      items = await Future.wait(members.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
-      _rideAttendees.addAll(items.where((item)=> item.selected).map((item)=>item.member.uuid).toList());
+      await Future.wait(itemsFromDb.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
+
       _actionsDisplayModeController.add(true);
       _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
     }
-    return items;
+    return members.values.toList();
   }
 
-  Future<RideAttendeeAssignmentItemBloc> _mapMemberToItem(Member member,bool selected) async {
-    return RideAttendeeAssignmentItemBloc(
+  Future<void> _mapMemberToItem(Member member,bool selected) async {
+    final item = RideAttendeeAssignmentItemBloc(
         MemberItem(member,await _memberRepository.loadProfileImageFromDisk(member.profileImageFilePath)),
         selected,
         this
     );
+    if(selected){
+      //if it was stored as an attendee, add to the list
+      _rideAttendees.add(item.member.uuid);
+    }
+    members.putIfAbsent(item.member.uuid, ()=> item);
   }
 
   Future<void> onSubmit() async {
@@ -85,18 +110,127 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
             .format(ride.date));
   }
 
-  void startScan() {
-    _actionsDisplayModeController.add(false);
-    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
-    //TODO if bluetooth is off -> throw error -> create dialog
-    // TODO: start scan with flutter blue instance if not scanning
-    //TODO when scan failed -> show widget which has a return button( onPressed = stopScan() )
+  ///Start a scan.
+  ///This stream yields null because it delegates its results to a [BehaviorSubject].
+  ///This subject holds on to the latest value.
+  ///This way the scan can proceed without issues during config changes.
+  @override
+  Stream<void> startScan(
+      VoidCallback onRequestEnableBLE, VoidCallback onAlreadyScanning,
+      VoidCallback onGenericScanError, void Function(int numberOfResults) onScanResultsReceived) async*
+  {
+    for(ScanStep s in ScanStep.values){
+      if(!isCanceled){
+        _handleScanStep(
+            s,
+            onRequestEnableBLE,
+            onAlreadyScanning,
+            onGenericScanError,
+            onScanResultsReceived
+        );
+        yield null;
+      }
+    }
   }
 
-  void stopScan() {
-    // TODO: stop scan with flutter blue instance if scanning
-    _actionsDisplayModeController.add(true);
-    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
+  void _handleScanStep(ScanStep currentStep, VoidCallback onRequestEnableBLE, VoidCallback onAlreadyScanning,
+      VoidCallback onGenericScanError, void Function(int numberOfResults) onScanResultsReceived) async {
+    _scanController.add(currentStep);
+    if(currentStep == ScanStep.LOAD_DEVICES){
+      //Load devices
+      scannedDevices = List();
+      await _loadDevicesToScanFor().catchError((e)=> onGenericScanError());
+    }else if(currentStep == ScanStep.DO_SCAN){
+      //Start scan
+      await _startScan(onRequestEnableBLE,onAlreadyScanning,onGenericScanError,onScanResultsReceived).catchError((e)=> onGenericScanError());
+    }else if(currentStep == ScanStep.PROCESS){
+      await _processResults(scannedDevices);
+    }
+  }
+
+
+  ///Load the devices to scan for when a scan is started.
+  ///This is the [ScanningState.INITIALIZING] step.
+  Future<void> _loadDevicesToScanFor() async {
+    devices = {};
+    final items = await _deviceRepository.getAllDevices();
+    items.forEach((device){
+      devices.putIfAbsent(device.name, () => device.ownerId);
+    });
+  }
+
+  ///Start a bluetooth scan.
+  ///This is the [ScanningState.SCANNING] step.
+  Future<void> _startScan(
+      VoidCallback onRequestEnableBLE,
+      VoidCallback onAlreadyScanning,
+      VoidCallback onGenericScanError,
+      void Function(int numberOfResults) onScanResultsReceived) async {
+    await bluetoothScanner.isOn.then((value) async {
+      if(!value){
+        onRequestEnableBLE();
+      }else{
+        await bluetoothScanner.isScanning.first.then((value) async {
+          if(value != null && value){
+            onAlreadyScanning();
+          }else{
+            final scanSubscription = bluetoothScanner.scanResults.listen((result){
+              result.removeWhere((res) => devices[res.device.name] == null);
+              onScanResultsReceived(result.length);
+              scannedDevices.addAll(result.map((r)=>r.device.name).toList());
+            }).onError((e){
+              //An error will not stop the stream, so we ignore any errors here
+              //In the next scan result, if it is successful, it will recover from the previous error
+            });
+
+            await bluetoothScanner.startScan(timeout: Duration(seconds: 20)).catchError((e){
+              onGenericScanError();
+            });
+          }
+        }).catchError((e){
+          onGenericScanError();
+        });
+      }
+    }).catchError((e){
+      onGenericScanError();
+    });
+  }
+
+  ///Process the [foundDevices].
+  ///Eliminate duplicates and notify the owners.
+  ///This is the [ScanStep.PROCESS] step.
+  Future<void> _processResults(List<String> foundDevices){
+    ///The processed devices, stored with a has duplicates flag.
+    ///The key is the device name, the value is whether it has duplicates.
+    final Map<String,bool> processedDevices = {};
+    foundDevices.forEach((deviceName){
+      //Lookup a possible value
+      final value = processedDevices[deviceName];
+      //if not found(no duplicates yet), add it with false otherwise set it to true
+      processedDevices[deviceName] = value == null ? false : true;
+    });
+    processedDevices.removeWhere((key,value)=> value == true);
+    processedDevices.keys.forEach((deviceName){
+      final owner = members[devices[deviceName]];
+      if(owner != null && owner.selected == false){
+        select(owner);
+      }
+    });
+    return null;
+  }
+
+  @override
+  void stopScan() async {
+    isCanceled = true;
+    await bluetoothScanner.stopScan().then((_){
+      _actionsDisplayModeController.add(true);
+      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
+    });
+  }
+
+  void onRequestScan(){
+    _actionsDisplayModeController.add(false);
+    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
   }
 
   @override
@@ -119,6 +253,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector {
   void dispose() {
     _contentDisplayModeController.close();
     _actionsDisplayModeController.close();
+    _scanController.close();
   }
 }
 
@@ -131,4 +266,11 @@ enum RideAttendeeAssignmentContentDisplayMode {
   LIST,
   SCAN,
   SAVE,
+}
+
+enum ScanStep {
+  LOAD_DEVICES,//-> show loading indicator in the middle + loading devices(in row)
+  DO_SCAN,//-> show pulse animation, loading bar and popups
+  PROCESS,//show processing + loading indicator in the middle
+  DONE//show processing + loading indicator in the middle(we navigate when done anyway)
 }

@@ -6,6 +6,7 @@ import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentGenericError.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentNavigationBarContent.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeAssignmentScanning.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentSubmit/rideAttendeeAssignmentSubmit.dart';
 
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -45,7 +46,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
         transitionBetweenRoutes: false,
         middle: RideAttendeeAssignmentNavigationBarContent(
           title: widget.bloc.getTitle(context),
-          onStartScan: () => widget.bloc.startScan(),//TODO wrap this with a bluetooth enabled check
+          onStartScan: () => widget.bloc.onRequestScan(),
           onSubmit: () => setState((){
             submitFuture = widget.bloc.onSubmit().then((_){
               Navigator.of(context).pop(true);
@@ -63,7 +64,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
       appBar: AppBar(
         title: RideAttendeeAssignmentNavigationBarContent(
           title: widget.bloc.getTitle(context),
-          onStartScan: () => widget.bloc.startScan(),
+          onStartScan: () => widget.bloc.onRequestScan(),
           onSubmit: () => setState((){
             submitFuture = widget.bloc.onSubmit().then((_){
               Navigator.of(context).pop(true);
@@ -86,7 +87,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
           case RideAttendeeAssignmentContentDisplayMode.SAVE:
             return RideAttendeeAssignmentSubmit(future: submitFuture);
           case RideAttendeeAssignmentContentDisplayMode.SCAN:
-            return null;//TODO put new scanning widget here that uses streambuilder
+            return RideAttendeeAssignmentScanning(scanner: widget.bloc);
           default: return RideAttendeeAssignmentGenericError();
         }
       },

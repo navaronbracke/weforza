@@ -72,6 +72,7 @@
   "RideAttendeeAssignmentLoadingMembers": "Loading members for assignment",
   "RideAttendeeAssignmentScanningFailed": "The scan failed",
   "RideAttendeeAssignmentReturnToList": "Return to the list",
+  "RideAttendeeAssignmentScanningTitle": "Scanning for attendees",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentSubmitting": "Saving Attendees",
   "RideAttendeeAssignmentSubmitError": "Could not save attendees",

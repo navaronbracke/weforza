@@ -72,6 +72,7 @@
   "RideAttendeeAssignmentLoadingMembers": "Leden ophalen voor aanwezigheidslijst",
   "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
+  "RideAttendeeAssignmentScanningTitle": "Scannen naar aanwezigen",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentSubmitting": "Aanwezigheden Opslaan",
   "RideAttendeeAssignmentSubmitError": "Kon aanwezigen niet opslaan",

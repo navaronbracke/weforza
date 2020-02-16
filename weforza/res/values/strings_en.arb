@@ -79,6 +79,7 @@
   "RideAttendeeAssignmentError": "Something went wrong",
   "RideAttendeeAssignmentLoadingDevices": "Loading all known devices",
   "RideAttendeeAssignmentProcessingScanResult": "Processing Scan Results",
+  "RideAttendeeAssignmentAlreadyScanning": "The previous scan wasn't finished",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

@@ -95,6 +95,7 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideAttendeeAssignmentAlreadyScanning => "The previous scan wasn't finished";
   String get RideAttendeeAssignmentError => "Something went wrong";
   String get RideAttendeeAssignmentLoadingDevices => "Loading all known devices";
   String get RideAttendeeAssignmentLoadingMembers => "Loading members for assignment";
@@ -280,6 +281,8 @@ class $nl extends S {
   String get AddRideColorLegendPastRide => "Gepasseerde Dag Met Rit";
   @override
   String get DeviceOverviewTitle => "Toestellen Beheren";
+  @override
+  String get RideAttendeeAssignmentAlreadyScanning => "Er is nog een scan bezig";
   @override
   String get EditRideDistancePositive => "Een afstand moet groter zijn dan nul";
   @override

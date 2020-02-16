@@ -79,6 +79,7 @@
   "RideAttendeeAssignmentError": "Er liep iets fout",
   "RideAttendeeAssignmentLoadingDevices": "Bekende toestellen laden",
   "RideAttendeeAssignmentProcessingScanResult": "Scanresultaten verwerken",
+  "RideAttendeeAssignmentAlreadyScanning": "Er is nog een scan bezig",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

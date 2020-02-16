@@ -8,6 +8,7 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/provider/rideProvider.dart';
+import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
@@ -67,7 +68,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                   RideAttendeeAssignmentBloc(
                       RideProvider.selectedRide,
                       InjectionContainer.get<RideRepository>(),
-                      InjectionContainer.get<MemberRepository>()
+                      InjectionContainer.get<MemberRepository>(),
+                      InjectionContainer.get<DeviceRepository>()
                   )
               ))).then((value){
                 if(value != null && value){
@@ -106,7 +108,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                   RideAttendeeAssignmentBloc(
                       RideProvider.selectedRide,
                       InjectionContainer.get<RideRepository>(),
-                      InjectionContainer.get<MemberRepository>()
+                      InjectionContainer.get<MemberRepository>(),
+                      InjectionContainer.get<DeviceRepository>()
                   )
               ))).then((value){
                 if(value != null && value){
@@ -151,7 +154,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) =>
                               RideAttendeeAssignmentPage(
-                                  RideAttendeeAssignmentBloc(RideProvider.selectedRide, InjectionContainer.get<RideRepository>(), InjectionContainer.get<MemberRepository>()
+                                  RideAttendeeAssignmentBloc(
+                                      RideProvider.selectedRide,
+                                      InjectionContainer.get<RideRepository>(),
+                                      InjectionContainer.get<MemberRepository>(),
+                                      InjectionContainer.get<DeviceRepository>()
                       )))).then((value){
                     if(value != null && value){
                       setState(() {
@@ -198,7 +205,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) =>
                               RideAttendeeAssignmentPage(
-                                  RideAttendeeAssignmentBloc(RideProvider.selectedRide, InjectionContainer.get<RideRepository>(), InjectionContainer.get<MemberRepository>()
+                                  RideAttendeeAssignmentBloc(
+                                      RideProvider.selectedRide,
+                                      InjectionContainer.get<RideRepository>(),
+                                      InjectionContainer.get<MemberRepository>(),
+                                      InjectionContainer.get<DeviceRepository>()
                                   )))).then((value){
                         if(value != null && value){
                           setState(() {

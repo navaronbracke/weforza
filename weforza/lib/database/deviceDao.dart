@@ -14,6 +14,8 @@ abstract class IDeviceDao {
   Future<void> updateDevice(String oldDeviceName,Device newDevice);
 
   Future<List<Device>> getOwnerDevices(String ownerId);
+
+  Future<List<Device>> getAllDevices();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -53,5 +55,11 @@ class DeviceDao implements IDeviceDao {
         await addDevice(newDevice);
       });
     }
+  }
+
+  @override
+  Future<List<Device>> getAllDevices() async {
+    final records = await _deviceStore.find(_database);
+    return records.map((record) => Device.of(record.key, record.value)).toList();
   }
 }

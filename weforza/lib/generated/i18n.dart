@@ -96,7 +96,9 @@ class S implements WidgetsLocalizations {
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
   String get RideAttendeeAssignmentError => "Something went wrong";
+  String get RideAttendeeAssignmentLoadingDevices => "Loading all known devices";
   String get RideAttendeeAssignmentLoadingMembers => "Loading members for assignment";
+  String get RideAttendeeAssignmentProcessingScanResult => "Processing Scan Results";
   String get RideAttendeeAssignmentReturnToList => "Return to the list";
   String get RideAttendeeAssignmentScanningFailed => "The scan failed";
   String get RideAttendeeAssignmentScanningTitle => "Scanning for attendees";
@@ -217,6 +219,8 @@ class $nl extends S {
   @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
+  String get RideAttendeeAssignmentLoadingDevices => "Bekende toestellen laden";
+  @override
   String get TuesdayPrefix => "Di";
   @override
   String get EditRideAddressWhitespace => "Een adres mag niet enkel witruimte zijn";
@@ -320,6 +324,8 @@ class $nl extends S {
   String get RideAttendeeAssignmentError => "Er liep iets fout";
   @override
   String get AddRideError => "Kon ritten niet toevoegen";
+  @override
+  String get RideAttendeeAssignmentProcessingScanResult => "Scanresultaten verwerken";
   @override
   String get EditRideDestinationLabel => "Bestemming";
   @override

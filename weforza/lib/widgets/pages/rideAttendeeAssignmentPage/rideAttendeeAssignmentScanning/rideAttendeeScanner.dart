@@ -13,7 +13,8 @@ abstract class RideAttendeeScanner {
       VoidCallback onRequestEnableBLE,
       VoidCallback onAlreadyScanning,
       VoidCallback onGenericScanError,
-      void Function(int numberOfResults) onScanResultsReceived);
+      void Function(int numberOfResults) onScanResultsReceived,
+      VoidCallback onScanStarted);
 
   void stopScan();
 

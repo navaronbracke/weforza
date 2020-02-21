@@ -24,7 +24,8 @@ class EnableBluetoothDialog extends StatelessWidget {
         ),
         FlatButton(
           child: Text(S.of(context).EnableBluetoothGoToSettings),
-          onPressed: () async => await AppSettings.openBluetoothSettings(),
+          onPressed: () async => await AppSettings.openBluetoothSettings()
+              .then((_) => Navigator.pop(context)),
         ),
       ],
     );
@@ -41,7 +42,8 @@ class EnableBluetoothDialog extends StatelessWidget {
         ),
         CupertinoButton(
           child: Text(S.of(context).EnableBluetoothGoToSettings),
-          onPressed: () async => await AppSettings.openBluetoothSettings(),
+          onPressed: () async => await AppSettings.openBluetoothSettings()
+              .then((_) => Navigator.pop(context)),
         ),
       ],
     );

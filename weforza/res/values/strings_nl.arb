@@ -68,7 +68,7 @@
   "AddRideColorLegendCurrentSelection": "Huidige Selectie",
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
-  "RideAttendeeAssignmentTitle": "Aanwezigen $date",
+  "RideAttendeeAssignmentTitle": "Aanwezigen",
   "RideAttendeeAssignmentLoadingMembers": "Leden ophalen voor aanwezigheidslijst",
   "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",

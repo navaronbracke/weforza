@@ -109,6 +109,7 @@ class S implements WidgetsLocalizations {
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideAttendeeAssignmentSubmitError => "Could not save attendees";
   String get RideAttendeeAssignmentSubmitting => "Saving Attendees";
+  String get RideAttendeeAssignmentTitle => "Attendees";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -134,7 +135,6 @@ class S implements WidgetsLocalizations {
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
   String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
-  String RideAttendeeAssignmentTitle(String date) => "Attendees $date";
   String ValueIsRequired(String value) => "$value is required";
 }
 
@@ -208,6 +208,8 @@ class $nl extends S {
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
+  @override
+  String get RideAttendeeAssignmentTitle => "Aanwezigen";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override
@@ -362,8 +364,6 @@ class $nl extends S {
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
-  @override
-  String RideAttendeeAssignmentTitle(String date) => "Aanwezigen $date";
   @override
   String EditRideAddressMaxLength(String maxLength) => "Een adres mag niet langer zijn dan $maxLength karakters";
   @override

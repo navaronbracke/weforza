@@ -68,7 +68,7 @@
   "AddRideColorLegendCurrentSelection": "Current Selection",
   "AddRideColorLegendFutureRide": "Future Ride",
 
-  "RideAttendeeAssignmentTitle": "Attendees $date",
+  "RideAttendeeAssignmentTitle": "Attendees",
   "RideAttendeeAssignmentLoadingMembers": "Loading members for assignment",
   "RideAttendeeAssignmentScanningFailed": "The scan failed",
   "RideAttendeeAssignmentReturnToList": "Return to the list",

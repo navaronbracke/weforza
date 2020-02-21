@@ -163,11 +163,14 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
           await for(ScanResult result in bluetoothScanner.scan(scanMode: ScanMode.balanced,timeout: Duration(seconds: scanDuration))){
             if(isCanceled) break;
             final deviceName = result.device.name;
-            //Lookup a possible value
-            //if not found(no duplicates yet), add it with false otherwise set it to true
-            scannedDevices[deviceName] = scannedDevices[deviceName] != null;
-            if(!scannedDevices[deviceName]){
-              _foundDevicesStream.add(deviceName);
+            //only allow known devices to be used
+            if(devices.keys.contains(deviceName)){
+              //Lookup a possible value
+              //if not found(no duplicates yet), add it with false otherwise set it to true
+              scannedDevices[deviceName] = scannedDevices[deviceName] != null;
+              if(!scannedDevices[deviceName]){
+                _foundDevicesStream.add(deviceName);
+              }
             }
           }
           _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);

@@ -20,8 +20,8 @@ class _RideAttendeeScanningProgressBarState extends State<RideAttendeeScanningPr
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this,duration: Duration(seconds: widget.duration));
     super.initState();
+    _controller = AnimationController(vsync: this,duration: Duration(seconds: widget.duration));
   }
   
   @override

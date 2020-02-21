@@ -8,6 +8,7 @@ class RideAttendeeAssignmentScanningLoadDevices extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 10),

@@ -7,17 +7,20 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class EditMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
-  EditMemberSubmit(this.stream,this.onPressed): assert(stream != null && onPressed != null);
+class EditMemberSubmit extends StatelessWidget {
+  EditMemberSubmit(this.stream,this.onPressed)
+      : assert(stream != null && onPressed != null);
 
   final Stream<EditMemberSubmitState> stream;
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context)=> PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return StreamBuilder<EditMemberSubmitState>(
       initialData: EditMemberSubmitState.IDLE,
       stream: stream,
@@ -59,8 +62,7 @@ class EditMemberSubmit extends StatelessWidget implements PlatformAwareWidget {
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return StreamBuilder<EditMemberSubmitState>(
       initialData: EditMemberSubmitState.IDLE,
       stream: stream,

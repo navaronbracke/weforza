@@ -1,19 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/provider/deviceProvider.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/pages/deviceOverview/deviceOverviewPage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -27,33 +34,33 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, DeleteMemberHandler {
+class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
   _MemberDetailsPageState(this._bloc): assert(_bloc != null);
 
   ///The BLoC in charge of the content.
   final MemberDetailsBloc _bloc;
 
-  @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  Future<List<Device>> devicesFuture;
 
   @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context)
-    );
+  void initState() {
+    super.initState();
+    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
   }
 
   @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context),
-        buildIOSLandscapeLayout(context)
-    );
-  }
+  Widget build(BuildContext context)=> PlatformAwareWidget(
+    android: () => OrientationAwareWidget(
+      portrait: () => _buildAndroidPortraitLayout(context),
+      landscape: () => _buildAndroidLandscapeLayout(context),
+    ),
+    ios: () => OrientationAwareWidget(
+      portrait: () => _buildIOSPortraitLayout(context),
+      landscape: () => _buildIOSLandscapeLayout(context),
+    ),
+  );
 
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +82,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                child: ProfileImage(image: member.profileImage),
               ),
               Expanded(
                 child: Column(
@@ -106,15 +113,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             ],
           ),
           Expanded(
-              child: _buildDevicesList(member.uuid)
+              child: _buildDevicesList()
           ),
         ],
       ),
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
@@ -138,7 +144,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                    child: ProfileImage(image: member.profileImage),
                   ),
                   Expanded(
                     child: Column(
@@ -176,15 +182,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             ],
           ),
           Expanded(
-              child: _buildDevicesList(member.uuid)
+              child: _buildDevicesList()
           ),
         ],
       ),
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -196,12 +201,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
-                }),
+                CupertinoIconButton(icon: Icons.edit,
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
+                CupertinoIconButton(
+                    icon: Icons.delete,
+                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                ),
               ],
             ),
           ],
@@ -216,7 +222,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                  child: ProfileImage(image: member.profileImage),
                 ),
                 Expanded(
                   child: Column(
@@ -247,7 +253,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               ],
             ),
             Expanded(
-                child: _buildDevicesList(member.uuid)
+                child: _buildDevicesList()
             ),
           ],
         ),
@@ -255,8 +261,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -268,12 +273,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(Icons.edit,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()));
-                }),
+                CupertinoIconButton(icon: Icons.edit,
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
                 SizedBox(width: 10),
-                CupertinoIconButton(Icons.delete,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,
-                        ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))),
+                CupertinoIconButton(
+                    icon: Icons.delete,
+                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                ),
               ],
             ),
           ],
@@ -290,7 +296,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: ProfileImage(member.profileImage,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor),
+                      child: ProfileImage(image: member.profileImage),
                     ),
                     Expanded(
                       child: Column(
@@ -328,7 +334,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
               ],
             ),
             Expanded(
-                child: _buildDevicesList(member.uuid)
+                child: _buildDevicesList()
             ),
           ],
         ),
@@ -336,25 +342,30 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Platfo
     );
   }
 
-  ///Build the list of devices for the member with the given ID.
-  Widget _buildDevicesList(String uuid){
-    return FutureBuilder<List<String>>(
-      future: _bloc.getMemberDevices(uuid),
+  ///Build the list of devices.
+  Widget _buildDevicesList(){
+    return FutureBuilder<List<Device>>(
+      future: devicesFuture,
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return Center(
-              child: Text(S.of(context).MemberDetailsLoadDevicesError),
-            );
+            return MemberDevicesError();
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesEmpty() :
-            ListView.builder(itemBuilder: (context,index){
-              //TODO device icon?
-              return Padding(
-                padding: const EdgeInsets.all(2),
-                child: Text(snapshot.data[index],softWrap: true),
-              );
-            },itemCount: snapshot.data.length);
+            //init the callback, either with an empty list or with devices.
+            final onPressed = (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                  DeviceOverviewPage(DeviceOverviewBloc(snapshot.data)),
+              )).then((_)=> (){
+                if(DeviceProvider.reloadDevices){
+                  DeviceProvider.reloadDevices = false;
+                  setState(() {
+                    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
+                  });
+                }
+              });
+            };
+            return snapshot.data.isEmpty ? MemberDevicesEmpty(onPressed: onPressed) :
+            MemberDevices(devices: snapshot.data,onEditPressed: onPressed);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

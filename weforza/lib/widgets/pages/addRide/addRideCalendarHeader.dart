@@ -8,22 +8,24 @@ import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] represents the header for the ride calendar in [AddRidePage].
-class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidget {
+class AddRideCalendarHeader extends StatelessWidget {
   AddRideCalendarHeader(this.paginator): assert(paginator != null);
 
   final IAddRideCalendarPaginator paginator;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Row(
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-          splashColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+          color: ApplicationTheme.choiceArrowIdleColor,
+          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
           onPressed: () => paginator.pageBack(),
         ),
         Expanded(
@@ -38,24 +40,25 @@ class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidg
         ),
         IconButton(
           icon: Icon(Icons.arrow_forward_ios),
-          color: ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-          splashColor: ApplicationTheme.rideCalendarHeaderButtonOnPressedColor,
+          color: ApplicationTheme.choiceArrowIdleColor,
+          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
           onPressed: () => paginator.pageForward(),
         ),
       ],
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return Padding(
       padding: MediaQuery.of(context).orientation == Orientation.portrait ?  const EdgeInsets.symmetric(vertical: 40,horizontal: 20): const EdgeInsets.all(20),
       child: Row(
         children: <Widget>[
           CupertinoIconButton(
-              Icons.arrow_back_ios,
-              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageBack()),
+              icon: Icons.arrow_back_ios,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => paginator.pageBack()
+          ),
           Expanded(
             child: Center(
               child: Text(DateFormat.MMMM(Localizations.localeOf(context)
@@ -67,9 +70,11 @@ class AddRideCalendarHeader extends StatelessWidget implements PlatformAwareWidg
             ),
           ),
           CupertinoIconButton(
-              Icons.arrow_forward_ios,
-              ApplicationTheme.rideCalendarHeaderButtonIdleColor,
-              ApplicationTheme.rideCalendarHeaderButtonOnPressedColor, () => paginator.pageForward()),
+              icon: Icons.arrow_forward_ios,
+              idleColor: ApplicationTheme.choiceArrowIdleColor,
+              onPressedColor: ApplicationTheme.choiceArrowOnPressedColor,
+              onPressed: () => paginator.pageForward()
+          ),
         ],
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,63 +24,39 @@ class RideAttendeeAssignmentScanning extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Flexible(
-          flex: 5,
-          child: _buildPulseAnimation(context),
-        ),
-        Flexible(
-          flex: 3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 70,
-                child: StreamBuilder<String>(
-                  initialData: "",
-                  stream: deviceStream,
-                  builder: (context,snapshot)=> snapshot.data.isEmpty ?
-                    Container():
-                    DeviceFoundPopup(
-                        deviceName: S.of(context).DeviceFound(snapshot.data)
-                    ),
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Center(),
-                  ),
-                  Flexible(
-                    child: RideAttendeeScanningProgressBar(
-                      duration: duration,
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Center(),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              _buildStopButton(S.of(context).RideAttendeeAssignmentStopScan)
-            ],
+        SizedBox(
+          height: 70,
+          child: StreamBuilder<String>(
+            initialData: "",
+            stream: deviceStream,
+            builder: (context,snapshot)=> snapshot.data.isEmpty ?
+            Container():
+            DeviceFoundPopup(
+                deviceName: S.of(context).DeviceFound(snapshot.data)
+            ),
           ),
         ),
-      ],
-    );
-  }
-
-  Widget _buildPulseAnimation(BuildContext context){
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        AspectRatio(
-          aspectRatio: 1,
-          child: FlareActor("assets/bluetooth_scanning.flr",animation: "scan"),
+        Row(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: Center(),
+            ),
+            Flexible(
+              child: RideAttendeeScanningProgressBar(
+                duration: duration,
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Center(),
+            ),
+          ],
         ),
-        Icon(Icons.bluetooth,size: MediaQuery.of(context).size.shortestSide * .1,color: Colors.blue),
+        SizedBox(height: 10),
+        _buildStopButton(S.of(context).RideAttendeeAssignmentStopScan)
       ],
     );
   }

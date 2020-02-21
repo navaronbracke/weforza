@@ -21,6 +21,7 @@ import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideDetailsPage extends StatefulWidget {
@@ -297,18 +298,22 @@ class _RideDetailsPageState extends State<RideDetailsPage>
     return FutureBuilder<List<MemberItem>>(
       future: attendeesFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return RideDetailsAttendeesError();
-        } else {
-          if (snapshot.data == null || snapshot.data.isEmpty) {
-            return RideDetailsAttendeesEmpty();
+        if(snapshot.connectionState == ConnectionState.done){
+          if (snapshot.hasError) {
+            return RideDetailsAttendeesError();
           } else {
-            return ListView.builder(
-                itemBuilder: (context, index) {
-                  return MemberWithPictureListItem(item: snapshot.data[index]);
-                },
-                itemCount: snapshot.data.length);
+            if (snapshot.data == null || snapshot.data.isEmpty) {
+              return RideDetailsAttendeesEmpty();
+            } else {
+              return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return MemberWithPictureListItem(item: snapshot.data[index]);
+                  },
+                  itemCount: snapshot.data.length);
+            }
           }
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );
@@ -438,15 +443,11 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                     style:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               ),
-              Flexible(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: _buildPropertiesPanel(ride),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: _buildPropertiesPanel(ride),
               ),
-              Flexible(
-                flex: 4,
+              Expanded(
                 child: _buildAttendeesList(),
               ),
             ],

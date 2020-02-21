@@ -139,16 +139,14 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
 
   @override
   void stopScan() async {
-    if(!isCanceled){
-      isCanceled = true;
-      scanFuture = null;
-      await bluetoothScanner.stopScan().then((_) async {
-        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
-        _processResults();
-        _returnToList();
-      });
-      isCanceled = false;
-    }
+    isCanceled = true;
+    scanFuture = null;
+    await bluetoothScanner.stopScan().then((_) async {
+      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
+      _processResults();
+      _returnToList();
+    }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
+    isCanceled = false;
   }
 
   @override

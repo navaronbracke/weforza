@@ -9,6 +9,9 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentNavigationBarContent.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeAssignmentScanning.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeAssignmentScanningError.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeAssignmentScanningLoadDevices.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeAssignmentScanningProcessingResult.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanningStartTrigger.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentSubmit/rideAttendeeAssignmentSubmit.dart';
 
@@ -48,16 +51,18 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: RideAttendeeAssignmentNavigationBarContent(
-          title: widget.bloc.getTitle(context),
-          onStartScan: () => widget.bloc.onRequestScan(
-              () => showCupertinoDialog(context: context, builder: (context) => EnableBluetoothDialog())
+          scanTitle: S.of(context).RideAttendeeAssignmentScanningTitle,
+          title: S.of(context).RideAttendeeAssignmentTitle,
+          onStartScan: () => widget.bloc.startScan(
+              () => showCupertinoDialog(context: context, builder: (context) => EnableBluetoothDialog()),
+                  ()=> RideAttendeeScanStartTrigger.of(context).isStarted.value = true
           ),
           onSubmit: () => setState((){
             submitFuture = widget.bloc.onSubmit().then((_){
               Navigator.of(context).pop(true);
             });
           }),
-          stream: widget.bloc.actionsDisplayModeStream,
+          stream: widget.bloc.navigationBarStream,
         ),
       ),
       child: _buildBody(context),
@@ -68,16 +73,18 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
     return Scaffold(
       appBar: AppBar(
         title: RideAttendeeAssignmentNavigationBarContent(
-          title: widget.bloc.getTitle(context),
-          onStartScan: () => widget.bloc.onRequestScan(
-                  () => showDialog(context: context, builder: (context) => EnableBluetoothDialog())
+          scanTitle: S.of(context).RideAttendeeAssignmentScanningTitle,
+          title: S.of(context).RideAttendeeAssignmentTitle,
+          onStartScan: () => widget.bloc.startScan(
+                  () => showDialog(context: context, builder: (context) => EnableBluetoothDialog()),
+                  ()=> RideAttendeeScanStartTrigger.of(context).isStarted.value = true
           ),
           onSubmit: () => setState((){
             submitFuture = widget.bloc.onSubmit().then((_){
               Navigator.of(context).pop(true);
             });
           }),
-          stream: widget.bloc.actionsDisplayModeStream,
+          stream: widget.bloc.navigationBarStream,
         ),
       ),
       body: _buildBody(context),
@@ -86,6 +93,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
 
   Widget _buildBody(BuildContext context){
     return StreamBuilder<RideAttendeeAssignmentContentDisplayMode>(
+      stream: widget.bloc.contentDisplayModeStream,
       initialData: RideAttendeeAssignmentContentDisplayMode.LIST,
       builder: (context,snapshot){
         switch(snapshot.data){
@@ -94,31 +102,22 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
           case RideAttendeeAssignmentContentDisplayMode.SAVE:
             return RideAttendeeAssignmentSubmit(future: submitFuture);
           case RideAttendeeAssignmentContentDisplayMode.SCAN:
-            return _buildScanWidget(context);
+            return RideAttendeeAssignmentScanning(
+              duration: widget.bloc.scanDuration,
+              onStopScan: () => widget.bloc.stopScan(),
+            );
+          case RideAttendeeAssignmentContentDisplayMode.PROCESS:
+            return RideAttendeeAssignmentScanningProcessingResult();
+          case RideAttendeeAssignmentContentDisplayMode.ERR_ALREADY_SCANNING:
+            return RideAttendeeAssignmentScanningError(
+              message: S.of(context).RideAttendeeAssignmentAlreadyScanning,
+              onPressed: () => widget.bloc.stopScan(),
+            );
+          case RideAttendeeAssignmentContentDisplayMode.LOAD_DEVICES:
+            return  RideAttendeeAssignmentScanningLoadDevices();
           default: return RideAttendeeAssignmentGenericError();
         }
       },
-    );
-  }
-
-  Widget _buildScanWidget(BuildContext context){
-    return PlatformAwareWidget(
-      android: () => RideAttendeeAssignmentScanning(
-        scanner: widget.bloc,
-        alreadyScanningMessage: S.of(context).RideAttendeeAssignmentAlreadyScanning,
-        genericScanErrorMessage: S.of(context).RideAttendeeAssignmentError,
-        onScanStarted: (){
-          RideAttendeeScanStartTrigger.of(context).isStarted.value = true;
-        },
-      ),
-      ios: () => RideAttendeeAssignmentScanning(
-        scanner: widget.bloc,
-        alreadyScanningMessage: S.of(context).RideAttendeeAssignmentAlreadyScanning,
-        genericScanErrorMessage: S.of(context).RideAttendeeAssignmentError,
-        onScanStarted: (){
-          RideAttendeeScanStartTrigger.of(context).isStarted.value = true;
-        },
-      ),
     );
   }
 }

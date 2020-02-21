@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
-import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/enableBluetoothDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentGenericError.dart';
@@ -28,21 +27,20 @@ class RideAttendeeAssignmentPage extends StatefulWidget {
 
 class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage> {
 
-  Future<List<RideAttendeeAssignmentItemBloc>> listFuture;
-
   Future<void> submitFuture;
 
   @override
-  void initState() {
-    super.initState();
-    listFuture = widget.bloc.loadMembers();
-  }
-
-  @override
   Widget build(BuildContext context){
-    return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIosLayout(context),
+    return WillPopScope(
+      onWillPop: () async {
+        //Stop the scan first
+        widget.bloc.stopScan();
+        return true;
+      },
+      child: PlatformAwareWidget(
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIosLayout(context),
+      ),
     );
   }
 
@@ -98,7 +96,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
       builder: (context,snapshot){
         switch(snapshot.data){
           case RideAttendeeAssignmentContentDisplayMode.LIST:
-            return RideAttendeeAssignmentList(future: listFuture);
+            return RideAttendeeAssignmentList(dataLoader: widget.bloc);
           case RideAttendeeAssignmentContentDisplayMode.SAVE:
             return RideAttendeeAssignmentSubmit(future: submitFuture);
           case RideAttendeeAssignmentContentDisplayMode.SCAN:

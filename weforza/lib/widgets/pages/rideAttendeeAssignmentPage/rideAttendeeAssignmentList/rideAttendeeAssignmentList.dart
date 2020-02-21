@@ -6,33 +6,46 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentLoadMembersError.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentNoMembers.dart';
 
-class RideAttendeeAssignmentList extends StatelessWidget {
-  RideAttendeeAssignmentList({@required this.future}): assert(future != null);
+abstract class RideAttendeeAssignmentInitializer {
+  bool get isMembersLoaded;
 
-  final Future<List<RideAttendeeAssignmentItemBloc>> future;
+  List<RideAttendeeAssignmentItemBloc> get loadedData;
+
+  Future<List<RideAttendeeAssignmentItemBloc>> get loadMembersFuture;
+}
+
+class RideAttendeeAssignmentList extends StatelessWidget {
+  RideAttendeeAssignmentList({@required this.dataLoader}):
+        assert(dataLoader != null);
+
+  final RideAttendeeAssignmentInitializer dataLoader;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<RideAttendeeAssignmentItemBloc>>(
-      future: future,
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return RideAttendeeAssignmentLoadMembersError();
-          }else{
-            final list = snapshot.data;
-            if(list.isEmpty){
-              return RideAttendeeAssignmentNoMembers();
+    if(dataLoader.isMembersLoaded){
+      return _buildList(dataLoader.loadedData);
+    }else{
+      return FutureBuilder<List<RideAttendeeAssignmentItemBloc>>(
+        future: dataLoader.loadMembersFuture,
+        builder: (context,snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            if(snapshot.hasError){
+              return RideAttendeeAssignmentLoadMembersError();
             }else{
-              return ListView.builder(itemBuilder: (context,index){
-                return RideAttendeeAssignmentListItem(bloc: snapshot.data[index]);
-              },itemCount: list.length);
+              final list = snapshot.data;
+              return list.isEmpty ? RideAttendeeAssignmentNoMembers(): _buildList(list);
             }
+          }else{
+            return RideAttendeeAssignmentListLoading();
           }
-        }else{
-          return RideAttendeeAssignmentListLoading();
-        }
-      },
-    );
+        },
+      );
+    }
+  }
+
+  Widget _buildList(List<RideAttendeeAssignmentItemBloc> data){
+    return ListView.builder(itemBuilder: (context,index){
+      return RideAttendeeAssignmentListItem(bloc: data[index]);
+    },itemCount: data.length);
   }
 }

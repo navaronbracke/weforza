@@ -59,7 +59,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
 
   ///This [BehaviorSubject] controls the found devices popup data.
   final StreamController<String> _foundDevicesStream = BehaviorSubject();
-  Stream<String> get numberOfFoundDevices => _foundDevicesStream.stream;
+  Stream<String> get foundDevices => _foundDevicesStream.stream;
 
   ///This [BehaviorSubject] controls what content page is shown.
   final StreamController<RideAttendeeAssignmentContentDisplayMode> _contentDisplayModeController = BehaviorSubject();
@@ -69,20 +69,22 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   List<String> scannedAttendees;
 
   Future<List<RideAttendeeAssignmentItemBloc>> loadMembers() async {
-    final itemsFromDb = await _memberRepository.getMembers();
-    members = {};
-    scannedAttendees = List();
-    scannedDevices = {};
-    if(itemsFromDb.isNotEmpty){
-      //Load the attendee ID's of the current attendees
-      final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
-      await Future.wait(itemsFromDb.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
+    if(members == null){
+      final itemsFromDb = await _memberRepository.getMembers();
+      members = {};
+      scannedAttendees = List();
+      scannedDevices = {};
+      if(itemsFromDb.isNotEmpty){
+        //Load the attendee ID's of the current attendees
+        final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
+        await Future.wait(itemsFromDb.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
 
-      if(members.keys.isNotEmpty){
-        _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.LIST_ACTIONS);
+        if(members.keys.isNotEmpty){
+          _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.LIST_ACTIONS);
+        }
+
+        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
       }
-
-      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
     }
     return members.values.toList();
   }

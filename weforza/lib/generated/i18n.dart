@@ -127,6 +127,7 @@ class S implements WidgetsLocalizations {
   String get TuesdayPrefix => "Tue";
   String get UnknownDate => "Unknown Date";
   String get WednesdayPrefix => "Wed";
+  String DeviceFound(String device) => "Found $device";
   String DeviceNameMaxLength(String maxLength) => "Device name is max. $maxLength characters";
   String EditRideAddressMaxLength(String maxLength) => "An address can't be longer than $maxLength characters";
   String EditRideDistanceMaximum(String maxDistance) => "A ride cannot have a distance that exceeds $maxDistance Km";
@@ -376,6 +377,8 @@ class $nl extends S {
   String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
   @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  @override
+  String DeviceFound(String device) => "$device gevonden";
   @override
   String EditRideTitleMaxLength(String maxLength) => "Een titel mag niet langer zijn dan $maxLength karakters";
 }

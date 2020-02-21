@@ -105,6 +105,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
             return RideAttendeeAssignmentScanning(
               duration: widget.bloc.scanDuration,
               onStopScan: () => widget.bloc.stopScan(),
+              deviceStream: widget.bloc.foundDevices,
             );
           case RideAttendeeAssignmentContentDisplayMode.PROCESS:
             return RideAttendeeAssignmentScanningProcessingResult();

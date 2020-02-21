@@ -69,6 +69,9 @@ class S implements WidgetsLocalizations {
   String get EditRideSubmitError => "Failed to save the changes";
   String get EditRideTitleLabel => "Title";
   String get EditRideTitleWhitespace => "A title can't be only whitespace";
+  String get EnableBluetoothDialogDescription => "Bluetooth is required to start a scan. Do you want to go to Settings?";
+  String get EnableBluetoothDialogTitle => "Enable Bluetooth";
+  String get EnableBluetoothGoToSettings => "Go To Settings";
   String get FirstNameBlank => "First Name can't be just whitespace";
   String get FirstNameIllegalCharacters => "First Name can only contain letters, spaces or ' -";
   String get FridayPrefix => "Fri";
@@ -95,13 +98,18 @@ class S implements WidgetsLocalizations {
   String get PersonLastNameLabel => "Last Name";
   String get PersonTelephoneLabel => "Telephone";
   String get PhoneIllegalCharacters => "A phone number can only contain digits";
+  String get RideAttendeeAssignmentAlreadyScanning => "The previous scan wasn't finished";
   String get RideAttendeeAssignmentError => "Something went wrong";
+  String get RideAttendeeAssignmentLoadingDevices => "Loading all known devices";
   String get RideAttendeeAssignmentLoadingMembers => "Loading members for assignment";
+  String get RideAttendeeAssignmentProcessingScanResult => "Processing Scan Results";
   String get RideAttendeeAssignmentReturnToList => "Return to the list";
   String get RideAttendeeAssignmentScanningFailed => "The scan failed";
+  String get RideAttendeeAssignmentScanningTitle => "Scanning for attendees";
   String get RideAttendeeAssignmentStopScan => "Stop Scan";
   String get RideAttendeeAssignmentSubmitError => "Could not save attendees";
   String get RideAttendeeAssignmentSubmitting => "Saving Attendees";
+  String get RideAttendeeAssignmentTitle => "Attendees";
   String get RideDeleteDialogDescription => "Are you sure that you want to delete this ride?";
   String get RideDeleteDialogErrorDescription => "Could not delete ride";
   String get RideDeleteDialogTitle => "Delete Ride";
@@ -119,6 +127,7 @@ class S implements WidgetsLocalizations {
   String get TuesdayPrefix => "Tue";
   String get UnknownDate => "Unknown Date";
   String get WednesdayPrefix => "Wed";
+  String DeviceFound(String device) => "Found $device";
   String DeviceNameMaxLength(String maxLength) => "Device name is max. $maxLength characters";
   String EditRideAddressMaxLength(String maxLength) => "An address can't be longer than $maxLength characters";
   String EditRideDistanceMaximum(String maxDistance) => "A ride cannot have a distance that exceeds $maxDistance Km";
@@ -127,7 +136,6 @@ class S implements WidgetsLocalizations {
   String LastNameMaxLength(String maxLength) => "Last Name can't be longer than $maxLength characters";
   String PhoneMaxLength(String maxLength) => "A phone number is maximum $maxLength digits long";
   String PhoneMinLength(String minLength) => "A phone number is minimum $minLength digits long";
-  String RideAttendeeAssignmentTitle(String date) => "Attendees $date";
   String ValueIsRequired(String value) => "$value is required";
 }
 
@@ -186,6 +194,8 @@ class $nl extends S {
   @override
   String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
   @override
+  String get EnableBluetoothGoToSettings => "Instellingen";
+  @override
   String get PersonFirstNameLabel => "Voornaam";
   @override
   String get RideDeleteDialogErrorDescription => "Kon rit niet verwijderen";
@@ -199,6 +209,8 @@ class $nl extends S {
   String get AddMemberSubmit => "Voeg nieuw lid toe";
   @override
   String get AddRideColorLegendCurrentSelection => "Huidige Selectie";
+  @override
+  String get RideAttendeeAssignmentTitle => "Aanwezigen";
   @override
   String get FirstNameBlank => "Voornaam mag niet enkel witruimte zijn";
   @override
@@ -215,6 +227,8 @@ class $nl extends S {
   String get MemberDetailsNoDevicesAddDevice => "Voeg een toestel toe";
   @override
   String get PersonTelephoneLabel => "Telefoon";
+  @override
+  String get RideAttendeeAssignmentLoadingDevices => "Bekende toestellen laden";
   @override
   String get TuesdayPrefix => "Di";
   @override
@@ -233,6 +247,8 @@ class $nl extends S {
   String get DeviceAlreadyExists => "Dit toestel bestaat al";
   @override
   String get LastNameIllegalCharacters => "Familienaam mag enkel letters,spaties of ' - bevatten";
+  @override
+  String get RideAttendeeAssignmentScanningTitle => "Scannen naar aanwezigen";
   @override
   String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
   @override
@@ -254,6 +270,8 @@ class $nl extends S {
   @override
   String get MemberDetailsLoadPictureError => "Kon profielfoto niet laden";
   @override
+  String get EnableBluetoothDialogDescription => "Bluetooth is verplicht om te scannen. Doorgaan naar instellingen?";
+  @override
   String get DialogDelete => "Verwijderen";
   @override
   String get RideListRidesHeader => "Ritten";
@@ -274,6 +292,8 @@ class $nl extends S {
   @override
   String get DeviceOverviewTitle => "Toestellen Beheren";
   @override
+  String get RideAttendeeAssignmentAlreadyScanning => "Er is nog een scan bezig";
+  @override
   String get EditRideDistancePositive => "Een afstand moet groter zijn dan nul";
   @override
   String get DeviceGPS => "GPS";
@@ -289,6 +309,8 @@ class $nl extends S {
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
+  @override
+  String get EnableBluetoothDialogTitle => "Bluetooth Inschakelen";
   @override
   String get DeviceTypeLabel => "Type Toestel";
   @override
@@ -318,6 +340,8 @@ class $nl extends S {
   @override
   String get AddRideError => "Kon ritten niet toevoegen";
   @override
+  String get RideAttendeeAssignmentProcessingScanResult => "Scanresultaten verwerken";
+  @override
   String get EditRideDestinationLabel => "Bestemming";
   @override
   String get LastNameBlank => "Familienaam mag niet enkel witruimte zijn";
@@ -342,8 +366,6 @@ class $nl extends S {
   @override
   String FirstNameMaxLength(String maxLength) => "Voornaam kan niet langer zijn dan $maxLength letters";
   @override
-  String RideAttendeeAssignmentTitle(String date) => "Aanwezigen $date";
-  @override
   String EditRideAddressMaxLength(String maxLength) => "Een adres mag niet langer zijn dan $maxLength karakters";
   @override
   String EditRideDistanceMaximum(String maxDistance) => "De afstand van een rit mag niet groter zijn dan $maxDistance Km";
@@ -355,6 +377,8 @@ class $nl extends S {
   String LastNameMaxLength(String maxLength) => "Familienaam kan niet langer zijn dan $maxLength letters";
   @override
   String PhoneMaxLength(String maxLength) => "Een telefoonnummer is maximum $maxLength cijfers lang";
+  @override
+  String DeviceFound(String device) => "$device gevonden";
   @override
   String EditRideTitleMaxLength(String maxLength) => "Een titel mag niet langer zijn dan $maxLength karakters";
 }

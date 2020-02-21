@@ -68,14 +68,18 @@
   "AddRideColorLegendCurrentSelection": "Huidige Selectie",
   "AddRideColorLegendFutureRide": "Toekomstige Rit",
 
-  "RideAttendeeAssignmentTitle": "Aanwezigen $date",
+  "RideAttendeeAssignmentTitle": "Aanwezigen",
   "RideAttendeeAssignmentLoadingMembers": "Leden ophalen voor aanwezigheidslijst",
   "RideAttendeeAssignmentScanningFailed": "De scan is mislukt",
   "RideAttendeeAssignmentReturnToList": "Terug naar de lijst",
+  "RideAttendeeAssignmentScanningTitle": "Scannen naar aanwezigen",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentSubmitting": "Aanwezigheden Opslaan",
   "RideAttendeeAssignmentSubmitError": "Kon aanwezigen niet opslaan",
   "RideAttendeeAssignmentError": "Er liep iets fout",
+  "RideAttendeeAssignmentLoadingDevices": "Bekende toestellen laden",
+  "RideAttendeeAssignmentProcessingScanResult": "Scanresultaten verwerken",
+  "RideAttendeeAssignmentAlreadyScanning": "Er is nog een scan bezig",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",
@@ -106,6 +110,7 @@
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. $maxLength tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
+  "DeviceFound": "$device gevonden",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
@@ -120,6 +125,10 @@
   "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
   "PhoneMinLength": "Een telefoonnummer is minimum $minLength cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum $maxLength cijfers lang",
+
+  "EnableBluetoothDialogTitle": "Bluetooth Inschakelen",
+  "EnableBluetoothDialogDescription": "Bluetooth is verplicht om te scannen. Doorgaan naar instellingen?",
+  "EnableBluetoothGoToSettings": "Instellingen",
 
   "ValueIsRequired": "$value is verplicht",
   "DialogCancel": "Annuleren",

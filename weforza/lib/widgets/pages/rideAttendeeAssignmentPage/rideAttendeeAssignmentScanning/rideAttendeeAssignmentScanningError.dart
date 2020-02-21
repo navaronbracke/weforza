@@ -7,9 +7,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeAssignmentScanningError extends StatelessWidget {
   RideAttendeeAssignmentScanningError({
-    @required this.onPressed
-  }):assert(onPressed != null);
+    @required this.onPressed, @required this.message
+  }):assert(onPressed != null && message != null);
 
+  final String message;
   final VoidCallback onPressed;
 
   @override
@@ -24,7 +25,7 @@ class RideAttendeeAssignmentScanningError extends StatelessWidget {
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           SizedBox(height: 5),
-          Text(S.of(context).RideAttendeeAssignmentScanningFailed,style: TextStyle(color: Colors.red)),
+          Text(message,style: TextStyle(color: Colors.red)),
           SizedBox(height: 5),
           PlatformAwareWidget(
             android: () => FlatButton(

@@ -55,8 +55,11 @@ dependencies:
   # This package provides platform independent file picking.
   file_picker: ^1.4.2
 
-  # Flare provides animation support with flr files and FlareActor.
-  flare_flutter: ^1.8.3
+  # This package provides Bluetooth Low Energy functionality.
+  flutter_blue: ^0.6.3+1
+
+  # This package provides easy access to app settings
+  app_settings: 3.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -82,9 +85,6 @@ flutter:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
-
-  assets:
-    - assets/bluetooth_scanning.flr
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

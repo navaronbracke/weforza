@@ -2,6 +2,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/deviceFoundPopUp.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanningProgressBar.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
@@ -10,11 +11,16 @@ import 'package:weforza/generated/i18n.dart';
 class RideAttendeeAssignmentScanning extends StatelessWidget {
   RideAttendeeAssignmentScanning({
     @required this.duration,
-    @required this.onStopScan
-  }): assert(onStopScan != null && duration != null && duration > 0);
+    @required this.onStopScan,
+    @required this.deviceStream,
+  }): assert(
+    onStopScan != null && deviceStream != null && duration != null
+        && duration > 0
+  );
 
   final int duration;
   final VoidCallback onStopScan;
+  final Stream<String> deviceStream;
 
   @override
   Widget build(BuildContext context){
@@ -29,8 +35,18 @@ class RideAttendeeAssignmentScanning extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              //TODO popup here
-              SizedBox(height: 10),
+              SizedBox(
+                height: 70,
+                child: StreamBuilder<String>(
+                  initialData: "",
+                  stream: deviceStream,
+                  builder: (context,snapshot)=> snapshot.data.isEmpty ?
+                    Container():
+                    DeviceFoundPopup(
+                        deviceName: S.of(context).DeviceFound(snapshot.data)
+                    ),
+                ),
+              ),
               Row(
                 children: <Widget>[
                   Flexible(

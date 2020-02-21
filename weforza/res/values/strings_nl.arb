@@ -110,6 +110,7 @@
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. $maxLength tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
+  "DeviceFound": "$device gevonden",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

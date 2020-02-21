@@ -110,6 +110,7 @@
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. $maxLength characters",
   "DeviceAlreadyExists": "This device already exists",
+  "DeviceFound": "Found $device",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

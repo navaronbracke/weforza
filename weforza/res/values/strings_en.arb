@@ -68,14 +68,18 @@
   "AddRideColorLegendCurrentSelection": "Current Selection",
   "AddRideColorLegendFutureRide": "Future Ride",
 
-  "RideAttendeeAssignmentTitle": "Attendees $date",
+  "RideAttendeeAssignmentTitle": "Attendees",
   "RideAttendeeAssignmentLoadingMembers": "Loading members for assignment",
   "RideAttendeeAssignmentScanningFailed": "The scan failed",
   "RideAttendeeAssignmentReturnToList": "Return to the list",
+  "RideAttendeeAssignmentScanningTitle": "Scanning for attendees",
   "RideAttendeeAssignmentStopScan": "Stop Scan",
   "RideAttendeeAssignmentSubmitting": "Saving Attendees",
   "RideAttendeeAssignmentSubmitError": "Could not save attendees",
   "RideAttendeeAssignmentError": "Something went wrong",
+  "RideAttendeeAssignmentLoadingDevices": "Loading all known devices",
+  "RideAttendeeAssignmentProcessingScanResult": "Processing Scan Results",
+  "RideAttendeeAssignmentAlreadyScanning": "The previous scan wasn't finished",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",
@@ -106,6 +110,7 @@
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. $maxLength characters",
   "DeviceAlreadyExists": "This device already exists",
+  "DeviceFound": "Found $device",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
@@ -120,6 +125,10 @@
   "PhoneIllegalCharacters": "A phone number can only contain digits",
   "PhoneMinLength": "A phone number is minimum $minLength digits long",
   "PhoneMaxLength": "A phone number is maximum $maxLength digits long",
+
+  "EnableBluetoothDialogTitle": "Enable Bluetooth",
+  "EnableBluetoothDialogDescription": "Bluetooth is required to start a scan. Do you want to go to Settings?",
+  "EnableBluetoothGoToSettings": "Go To Settings",
 
   "ValueIsRequired": "$value is required",
   "DialogCancel": "Cancel",

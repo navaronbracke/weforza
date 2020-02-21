@@ -16,4 +16,6 @@ class DeviceRepository {
   Future<void> updateDevice(String oldDevice,Device newDevice) => _dao.updateDevice(oldDevice, newDevice);
 
   Future<List<Device>> getOwnerDevices(String uuid) => _dao.getOwnerDevices(uuid);
+
+  Future<List<Device>> getAllDevices() => _dao.getAllDevices();
 }

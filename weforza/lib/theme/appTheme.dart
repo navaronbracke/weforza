@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 abstract class ApplicationTheme {
 
   ///Primary/Accent Theme colors.
-  static final Color _primaryColor = Colors.blue;
-  static final Color _accentColor = Colors.blue.shade300;
+  static const Color primaryColor = Colors.blue;
+  static const Color accentColor = Color(0xFF64B5F6);
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -31,16 +31,18 @@ abstract class ApplicationTheme {
   //Ride Calendar Header Font Color
   static final Color rideCalendarHeaderColor = Colors.black;
 
-  //Ride Calendar Header Button Color when not pressed
-  static final Color rideCalendarHeaderButtonIdleColor = Colors.black;
-
-  //Ride Calendar Header Button Color when pressed
-  static final Color rideCalendarHeaderButtonOnPressedColor = Colors.black45;
+  ///Colors for an arrow which dictates there is another choice before/ahead of the current item.
+  ///Example: < "Choice" >
+  ///
+  ///The idle color is shown when the button is not pressed.
+  ///The onPressed Color is shown otherwise.
+  static final Color choiceArrowIdleColor = Colors.black;
+  static final Color choiceArrowOnPressedColor = Colors.black45;
 
   ///The profile image placeholder's icon color.
-  static final Color profileImagePlaceholderIconColor = Colors.white;
+  static const Color profileImagePlaceholderIconColor = Colors.white;
   ///The profile image placeholder icon's background color.
-  static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
+  static const Color profileImagePlaceholderIconBackgroundColor = Color(0xFF1976D2);
 
   ///The font color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedFontColor = Colors.black;
@@ -66,20 +68,27 @@ abstract class ApplicationTheme {
 
   static final Color rideAttendeeCounterIconColor = Colors.black87;
 
+  static final Color deviceIconColor = Colors.blue.shade200;
+
+  ///This color is used for Icons in lists that show some information when there is nothing to show.
+  static final Color listInformationalIconColor = primaryColor;
+
+  static final Color scanProgressBarStrokeColor = primaryColor;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
-       primaryColor: _primaryColor,
-       accentColor: _accentColor,
-       splashColor: _accentColor.withAlpha(150)
+       primaryColor: primaryColor,
+       accentColor: accentColor,
+       splashColor: accentColor.withAlpha(150)
      );
   }
 
   ///Provide the IOS theme.
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
-      primaryColor: _primaryColor,
-      primaryContrastingColor: _accentColor
+      primaryColor: primaryColor,
+      primaryContrastingColor: accentColor
     );
   }
 }

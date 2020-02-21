@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class RideAttendeeCounter extends StatelessWidget {
-  RideAttendeeCounter(this.count,{this.iconSize,this.counterStyle}): assert(count != null);
+  RideAttendeeCounter({this.count,this.iconSize,this.counterStyle}): assert(count != null);
 
   final double iconSize;
   final TextStyle counterStyle;

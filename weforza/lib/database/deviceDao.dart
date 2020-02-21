@@ -1,18 +1,21 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/model/device.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
 
-  Future<bool> deviceExists(String device);
+  Future<bool> deviceExists(String deviceName);
 
-  Future<void> addDevice(String ownerId,String device);
+  Future<void> addDevice(Device device);
 
-  Future<void> removeDevice(String device);
+  Future<void> removeDevice(String deviceName);
 
-  Future<void> updateDevice(String ownerId,String oldDevice,String newDevice);
+  Future<void> updateDevice(String oldDeviceName,Device newDevice);
 
-  Future<List<String>> getOwnerDevices(String ownerId);
+  Future<List<Device>> getOwnerDevices(String ownerId);
+
+  Future<List<Device>> getAllDevices();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -24,10 +27,8 @@ class DeviceDao implements IDeviceDao {
   final _deviceStore = DatabaseProvider.deviceStore;
 
   @override
-  Future<void> addDevice(String ownerId, String device) async {
-    if(!await deviceExists(device)){
-      await _deviceStore.record(device).add(_database, { "ownerId": ownerId });
-    }
+  Future<void> addDevice(Device device) async {
+    await _deviceStore.record(device.name).add(_database, device.toMap());
   }
 
   @override
@@ -36,8 +37,9 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<List<String>> getOwnerDevices(String ownerId) {
-    return _deviceStore.findKeys(_database,finder: Finder(filter: Filter.equals("ownerId", ownerId)));
+  Future<List<Device>> getOwnerDevices(String ownerId) async {
+    final records = await _deviceStore.find(_database,finder: Finder(filter: Filter.equals("owner", ownerId)));
+    return records.map((record) => Device.of(record.key, record.value)).toList();
   }
 
   @override
@@ -46,12 +48,18 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<void> updateDevice(String ownerId, String oldDevice, String newDevice) async {
-    if(!await deviceExists(newDevice)){
+  Future<void> updateDevice(String oldDeviceName, Device newDevice) async {
+    if(!await deviceExists(newDevice.name)){
       await _database.transaction((txn) async {
-        await removeDevice(oldDevice);
-        await addDevice(ownerId, newDevice);
+        await removeDevice(oldDeviceName);
+        await addDevice(newDevice);
       });
     }
+  }
+
+  @override
+  Future<List<Device>> getAllDevices() async {
+    final records = await _deviceStore.find(_database);
+    return records.map((record) => Device.of(record.key, record.value)).toList();
   }
 }

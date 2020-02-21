@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
@@ -6,22 +5,24 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class RideAttendeeAssignmentItem extends StatefulWidget {
-  RideAttendeeAssignmentItem(this.bloc): assert(bloc != null);
+class RideAttendeeAssignmentListItem extends StatefulWidget {
+  RideAttendeeAssignmentListItem({@required this.bloc}): assert(bloc != null);
 
   final RideAttendeeAssignmentItemBloc bloc;
 
   @override
-  _RideAttendeeAssignmentItemState createState() => _RideAttendeeAssignmentItemState();
+  _RideAttendeeAssignmentListItemState createState() => _RideAttendeeAssignmentListItemState();
 }
 
-class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem> implements PlatformAwareWidget {
+class _RideAttendeeAssignmentListItemState extends State<RideAttendeeAssignmentListItem> {
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
         setState(() {
@@ -37,11 +38,10 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
             child: Row(
               children: <Widget>[
                 ProfileImage(
-                    widget.bloc.image,
-                    ApplicationTheme.profileImagePlaceholderIconColor,
-                    widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
-                    Icons.person,
-                    40
+                    image: widget.bloc.image,
+                    backgroundColor: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
+                    icon: Icons.person,
+                    size: 40
                 ),
                 SizedBox(width: 5),
                 Column(
@@ -69,8 +69,8 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+
+  Widget _buildIosWidget(BuildContext context) {
     return GestureDetector(
       onTap: (){
         setState(() {
@@ -88,11 +88,10 @@ class _RideAttendeeAssignmentItemState extends State<RideAttendeeAssignmentItem>
             child: Row(
               children: <Widget>[
                 ProfileImage(
-                    widget.bloc.image,
-                    ApplicationTheme.profileImagePlaceholderIconColor,
-                    widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
-                    Icons.person,
-                    40
+                    image: widget.bloc.image,
+                    backgroundColor: widget.bloc.selected ? ApplicationTheme.rideAttendeeSelectedPlaceholderBackgroundColor : ApplicationTheme.rideAttendeeUnselectedPlaceholderBackgroundColor,
+                    icon: Icons.person,
+                    size: 40
                 ),
                 SizedBox(width: 5),
                 Column(

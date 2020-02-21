@@ -14,6 +14,7 @@ import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
+import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -24,7 +25,7 @@ class EditMemberPage extends StatefulWidget {
   );
 }
 
-class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwareWidget, PlatformAndOrientationAwareWidget, IProfileImagePicker {
+class _EditMemberPageState extends State<EditMemberPage> implements IProfileImagePicker {
   _EditMemberPageState(this._bloc): assert(_bloc != null){
     _firstNameController = TextEditingController(text: _bloc.firstName);
     _lastNameController = TextEditingController(text: _bloc.lastName);
@@ -120,25 +121,19 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
   @override
   Widget build(BuildContext context) {
     _initStrings(context);
-    return PlatformAwareWidgetBuilder.build(context, this);
+    return PlatformAwareWidget(
+      android: () => OrientationAwareWidget(
+        portrait: () => _buildAndroidPortraitLayout(context),
+        landscape: () => _buildAndroidLandscapeLayout(context),
+      ),
+      ios: () => OrientationAwareWidget(
+        portrait: () => _buildIOSPortraitLayout(context),
+        landscape: () => _buildIOSLandscapeLayout(context),
+      ),
+    );
   }
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(
-        context,
-        buildAndroidPortraitLayout(context),
-        buildAndroidLandscapeLayout(context));
-  }
-
-  @override
-  Widget buildIosWidget(BuildContext context) {
-    return OrientationAwareWidgetBuilder.build(context,
-        buildIOSPortraitLayout(context), buildIOSLandscapeLayout(context));
-  }
-
-  @override
-  Widget buildAndroidLandscapeLayout(BuildContext context) {
+  Widget _buildAndroidLandscapeLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditMemberTitle),
@@ -260,7 +255,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
                                   child: Center(
                                     child: PlatformAwareLoadingIndicator(),
                                   ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                                ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
                               }
                             },
                           ),
@@ -287,8 +282,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
     );
   }
 
-  @override
-  Widget buildIOSLandscapeLayout(BuildContext context) {
+  Widget _buildIOSLandscapeLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).EditMemberTitle),
@@ -415,7 +409,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
                                       child: Center(
                                         child: PlatformAwareLoadingIndicator(),
                                       ),
-                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100));
+                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
                                   }
                                 },
                               ),
@@ -444,8 +438,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
     );
   }
 
-  @override
-  Widget buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).AddMemberTitle),
@@ -472,7 +465,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
                             width: 80,
                             height: 80,
                             child: PlatformAwareLoadingIndicator(),
-                          ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                          ) : ProfileImagePicker(this,_bloc.image,100);
                         }
                       },
                     ),
@@ -581,8 +574,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
     );
   }
 
-  @override
-  Widget buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddMemberTitle),
@@ -606,7 +598,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements PlatformAwar
                           width: 80,
                           height: 80,
                           child: PlatformAwareLoadingIndicator(),
-                        ) : ProfileImagePicker(this,_bloc.image,ApplicationTheme.profileImagePlaceholderIconColor,ApplicationTheme.profileImagePlaceholderIconBackgroundColor,100);
+                        ) : ProfileImagePicker(this,_bloc.image,100);
                       }
                     },
                   ),

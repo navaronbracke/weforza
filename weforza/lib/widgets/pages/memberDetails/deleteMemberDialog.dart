@@ -23,14 +23,16 @@ class DeleteMemberDialog extends StatefulWidget {
 
 }
 
-class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements PlatformAwareWidget {
+class _DeleteMemberDialogState extends State<DeleteMemberDialog> {
   Future<void> deleteMemberFuture;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: deleteMemberFuture,
       builder: (context,snapshot){
@@ -94,8 +96,7 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> implements Plat
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: deleteMemberFuture,
       builder: (context,snapshot){

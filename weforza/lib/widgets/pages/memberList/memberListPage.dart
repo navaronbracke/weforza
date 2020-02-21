@@ -22,7 +22,7 @@ class MemberListPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberListPage].
-class _MemberListPageState extends State<MemberListPage> implements PlatformAwareWidget {
+class _MemberListPageState extends State<MemberListPage> {
   _MemberListPageState(this._bloc): assert(_bloc != null){
     _onReload = (){
       if(MemberProvider.reloadMembers){
@@ -42,13 +42,18 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
   VoidCallback _onReload;
 
   @override
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
+
+  @override
   void initState() {
     super.initState();
     membersFuture = _bloc.loadMembers();
   }
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberListTitle),
@@ -64,18 +69,18 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
             Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
-            CupertinoIconButton(Icons.person_add,CupertinoTheme.of(context).primaryColor,CupertinoTheme.of(context).primaryContrastingColor,(){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()))
-                  .then((_)=>_onReload());
-            }),
+            CupertinoIconButton(
+                icon: Icons.person_add,
+                onPressed: ()=> Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=> AddMemberPage())
+                ).then((_)=>_onReload())),
           ],
         ),
       ),
@@ -85,9 +90,6 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
 
   Widget _listBuilder(Future<List<MemberItem>> future) {
     return FutureBuilder<List<MemberItem>>(
@@ -101,7 +103,8 @@ class _MemberListPageState extends State<MemberListPage> implements PlatformAwar
             return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
-                    MemberWithPictureListItem(data[index],(){
+                    MemberWithPictureListItem(
+                      item: data[index], onTap:(){
                       MemberProvider.selectedMember = data[index];
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())).then((_)=> _onReload());
                     }));

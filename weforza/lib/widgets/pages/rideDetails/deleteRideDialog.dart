@@ -19,14 +19,16 @@ class DeleteRideDialog extends StatefulWidget {
   _DeleteRideDialogState createState() => _DeleteRideDialogState();
 }
 
-class _DeleteRideDialogState extends State<DeleteRideDialog> implements PlatformAwareWidget {
+class _DeleteRideDialogState extends State<DeleteRideDialog> {
   Future<void> deleteRideFuture;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: deleteRideFuture,
       builder: (context,snapshot){
@@ -90,8 +92,7 @@ class _DeleteRideDialogState extends State<DeleteRideDialog> implements Platform
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return FutureBuilder<void>(
       future: deleteRideFuture,
       builder: (context,snapshot){

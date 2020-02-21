@@ -9,10 +9,11 @@ import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
+import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
+import 'package:weforza/widgets/pages/rideList/rideListError.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/pages/rideList/rideListRidesEmpty.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This [Widget] shows the list of Rides.
@@ -23,7 +24,7 @@ class RideListPage extends StatefulWidget {
 }
 
 ///This class is the [State] for [RideListPage].
-class _RideListPageState extends State<RideListPage> implements PlatformAwareWidget {
+class _RideListPageState extends State<RideListPage> {
   _RideListPageState(this._bloc): assert(_bloc != null){
     _onReload = (){
       if(RideProvider.reloadRides){
@@ -49,10 +50,12 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
   }
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidgetBuilder.build(context, this);
+  Widget build(BuildContext context)=> PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
 
-  @override
-  Widget buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(S.of(context).RideListRidesHeader),
@@ -69,8 +72,7 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
     );
   }
 
-  @override
-  Widget buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -80,10 +82,8 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
               child: Center(child: Text(S.of(context).RideListRidesHeader)),
             ),
             CupertinoIconButton(
-              Icons.add,
-              CupertinoTheme.of(context).primaryColor,
-              CupertinoTheme.of(context).primaryContrastingColor,
-              () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))
+              icon: Icons.add,
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))
                   .then((_) => _onReload()),
             ),
           ],
@@ -102,12 +102,10 @@ class _RideListPageState extends State<RideListPage> implements PlatformAwareWid
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return Center(
-              child: Text(S.of(context).RideListLoadingRidesError),
-            );
+            return RideListError();
           }else{
             if(snapshot.data == null || snapshot.data.isEmpty){
-              return RideListRidesEmpty();
+              return RideListEmpty();
             }else{
               return ListView.builder(
                   itemCount: snapshot.data.length,

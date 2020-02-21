@@ -1,66 +1,68 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
-import 'dart:io' show Platform;
 
-///This class will build platform specific variants of [Widget]s.
-abstract class PlatformAwareWidgetBuilder {
+///This [Widget] checks the [Platform] and returns an appropriate [Widget].
+///The functions for [android] and [ios] must not be null.
+///The [platformHandler] must not be null.
+///
+///Only supports Android and IOS for now.
+///This may change when support for the web and or desktop enters stable.
+class PlatformAwareWidget extends StatelessWidget {
+  PlatformAwareWidget({
+    @required this.android,
+    @required this.ios,
+    this.platformHandler = const PlatformAwareWidgetPlatformChecker(),
+    Key key,
+  }): assert(android != null && ios != null && platformHandler != null), super(key: key);
 
-  ///Build a [Widget] that is tailored to the platform.
+  ///The [Widget] builder for Android.
+  final Widget Function() android;
+  ///The [Widget] builder for IOS.
+  final Widget Function() ios;
+
+  ///The [PlatformAwareWidgetPlatformChecker] that will handle the [Platform] checks.
+  final PlatformAwareWidgetPlatformChecker platformHandler;
+
+
+  ///Build the [Widget].
+  ///Returns the result of calling [android] when [platformHandler.isAndroid] is true.
+  ///Returns the result of calling [ios] when [platformHandler.isIOS] is true.
   ///
-  ///The [builder] will construct the requested [Widget].
-  ///
-  ///Returns a platform tailored [Widget] if the platform is Android or IOS.
-  ///Otherwise returns null.
-  static Widget build(BuildContext context, PlatformAwareWidget builder){
-    if (Platform.isAndroid) {
-      return builder.buildAndroidWidget(context);
-    } else if (Platform.isIOS) {
-      return builder.buildIosWidget(context);
+  ///Using this method on unsupported [Platform]s results in a [FlutterError].
+  @override
+  Widget build(BuildContext context) {
+    if(platformHandler.isAndroid){
+      return android();
     }
-    return null;
-  }
-
-}
-
-///This class will build orientation specific variants of [Widget]s.
-abstract class OrientationAwareWidgetBuilder {
-
-  ///Build an orientation adaptive [Widget].
-  ///Returns [portrait] when in [Orientation.portrait].
-  ///Returns [landscape] otherwise.
-  static Widget build(BuildContext context,Widget portrait,Widget landscape){
-    assert(portrait != null && landscape != null);
-    return OrientationBuilder(
-      builder: (context,orientation){
-        if(orientation == Orientation.portrait){
-          return portrait;
-        }else {
-          return landscape;
-        }
-      },
-    );
+    if(platformHandler.isIOS){
+      return ios();
+    }
+    throw FlutterError("Tried to build for an unsupported Platform");
   }
 }
 
-///This class represents an interface for platform specific [Widget] building.
-abstract class PlatformAwareWidget {
+///This class will perform the [Platform] checks for [PlatformAwareWidget].
+///If it is desired to mock the [Platform],
+///this class can be subclassed and injected into [PlatformAwareWidget].
+class PlatformAwareWidgetPlatformChecker {
+  const PlatformAwareWidgetPlatformChecker();
 
-  ///Build a [Widget] that is tailored to Android.
-  Widget buildAndroidWidget(BuildContext context);
+  ///Check if the [Platform] is Android.
+  bool get isAndroid => Platform.isAndroid;
 
-  ///Build a [Widget] that is tailored to IOS.
-  Widget buildIosWidget(BuildContext context);
-}
+  ///Check if the [Platform] is IOS.
+  bool get isIOS => Platform.isIOS;
 
-///This class defines a contract for [Widget]s,
-///that build differently per platform and orientation at the same time.
-abstract class PlatformAndOrientationAwareWidget {
+  ///Check if the [Platform] is Windows.
+  bool get isWindows => Platform.isWindows;
 
-  ///Build a portrait layout for Android.
-  Widget buildAndroidPortraitLayout(BuildContext context);
-  ///Build a landscape layout for Android.
-  Widget buildAndroidLandscapeLayout(BuildContext context);
-  ///Build a portrait layout for IOS.
-  Widget buildIOSPortraitLayout(BuildContext context);
-  ///Build a landscape layout for IOS.
-  Widget buildIOSLandscapeLayout(BuildContext context);
+  ///Check if the [Platform] is Mac OSX.
+  bool get isMacOS => Platform.isMacOS;
+
+  ///Check if the [Platform] is Linux.
+  bool get isLinux => Platform.isLinux;
+
+  ///Check if the [Platform] is Fuchsia.
+  bool get isFuchsia => Platform.isFuchsia;
 }

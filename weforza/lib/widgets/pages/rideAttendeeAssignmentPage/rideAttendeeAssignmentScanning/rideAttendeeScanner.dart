@@ -1,21 +1,15 @@
 
 import 'package:flutter/foundation.dart';
-import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 
 ///This contract defines behaviour for scanning with Bluetooth.
 abstract class RideAttendeeScanner {
-  Stream<ScanStep> get scanStream;
 
   ///Start a scan.
-  ///Returns a [Stream], which can be listened to.
-  ///The stream itself doesn't return any data. The actual data is delegated
-  Stream<void> startScan(
-      VoidCallback onAlreadyScanning,
-      VoidCallback onGenericScanError,
-      void Function(int numberOfResults) onScanResultsReceived,
-      VoidCallback onScanStarted);
+  ///Takes an [onScanStarted] callback to notify when the scan started.
+  ///Takes an [onBluetoothDisabled] callback to request the user to turn on Bluetooth.
+  void startScan(VoidCallback onBluetoothDisabled, VoidCallback onScanStarted);
+
+  int scanDuration;
 
   void stopScan();
-
-  void handleError(String message);
 }

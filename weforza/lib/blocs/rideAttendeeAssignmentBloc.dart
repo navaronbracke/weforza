@@ -15,10 +15,11 @@ import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanner.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeNavigationBarDisplayMode.dart';
 
-class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,RideAttendeeScanner {
+class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,RideAttendeeScanner, RideAttendeeAssignmentInitializer {
   RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository,this._deviceRepository):
         assert(ride != null && _memberRepository != null && _rideRepository != null && _deviceRepository != null);
 
@@ -27,6 +28,9 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
   final DeviceRepository _deviceRepository;
+
+  bool _membersLoaded = false;
+  Future<List<RideAttendeeAssignmentItemBloc>> _loadMembersFuture;
 
   ///The [FlutterBlue] instance that will handle the scanning.
   final FlutterBlue bluetoothScanner = FlutterBlue.instance;
@@ -68,23 +72,21 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   ///The UUID's of the [Member]s that should be saved as Attendees of [ride] on submit.
   List<String> scannedAttendees;
 
-  Future<List<RideAttendeeAssignmentItemBloc>> loadMembers() async {
-    if(members == null){
-      final itemsFromDb = await _memberRepository.getMembers();
-      members = {};
-      scannedAttendees = List();
-      scannedDevices = {};
-      if(itemsFromDb.isNotEmpty){
-        //Load the attendee ID's of the current attendees
-        final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
-        await Future.wait(itemsFromDb.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
+  Future<List<RideAttendeeAssignmentItemBloc>> _loadMembers() async {
+    final itemsFromDb = await _memberRepository.getMembers();
+    members = {};
+    scannedAttendees = List();
+    scannedDevices = {};
+    if(itemsFromDb.isNotEmpty){
+      //Load the attendee ID's of the current attendees
+      final attendees = await _memberRepository.getRideAttendeeIds(ride.date);
+      await Future.wait(itemsFromDb.map((member)=> _mapMemberToItem(member,attendees.contains(member.uuid))));
 
-        if(members.keys.isNotEmpty){
-          _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.LIST_ACTIONS);
-        }
-
-        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
+      if(members.keys.isNotEmpty){
+        _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.LIST_ACTIONS);
       }
+      _membersLoaded = true;
+      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
     }
     return members.values.toList();
   }
@@ -141,14 +143,16 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
 
   @override
   void stopScan() async {
-    isCanceled = true;
-    scanFuture = null;
-    await bluetoothScanner.stopScan().then((_) async {
-      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
-      _processResults();
-      _returnToList();
-    }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
-    isCanceled = false;
+    if(await bluetoothScanner.isScanning.first){
+      isCanceled = true;
+      scanFuture = null;
+      await bluetoothScanner.stopScan().then((_) async {
+        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
+        _processResults();
+        _returnToList();
+      }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
+      isCanceled = false;
+    }
   }
 
   @override
@@ -216,6 +220,20 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     _foundDevicesStream.close();
     scanFuture = null;
   }
+
+  @override
+  bool get isMembersLoaded => _membersLoaded;
+
+  @override
+  Future<List<RideAttendeeAssignmentItemBloc>> get loadMembersFuture {
+    if(_loadMembersFuture == null){
+      _loadMembersFuture = _loadMembers();
+    }
+    return _loadMembersFuture;
+  }
+
+  @override
+  List<RideAttendeeAssignmentItemBloc> get loadedData => members.values.toList();
 }
 
 enum RideAttendeeAssignmentContentDisplayMode {

@@ -5,7 +5,7 @@ import 'package:weforza/model/device.dart';
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
 
-  Future<bool> deviceExists(String deviceName,[String ownerId]);
+  Future<bool> deviceExists(String deviceName);
 
   Future<void> addDevice(Device device);
 
@@ -32,17 +32,8 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<bool> deviceExists(String device,[String ownerId]) async {
-    Finder finder;
-    if(ownerId != null && ownerId.isNotEmpty){
-      finder = Finder(filter: Filter.and([
-        Filter.byKey(device),
-        Filter.notEquals("owner", ownerId),
-      ]));
-    }else{
-      finder = Finder(filter: Filter.byKey(device));
-    }
-    return await _deviceStore.findFirst(_database,finder: finder) != null;
+  Future<bool> deviceExists(String device) async {
+    return await _deviceStore.findFirst(_database,finder: Finder(filter: Filter.byKey(device))) != null;
   }
 
   @override

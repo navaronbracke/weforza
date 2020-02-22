@@ -18,7 +18,7 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   ///Auto validate flag for device name.
   bool autoValidateNewDeviceName = false;
   ///Device Name max length
-  int deviceNameMaxLength = 50;
+  int deviceNameMaxLength = 40;
 
   ///Device Name input backing field
   String _newDeviceName = "";
@@ -96,5 +96,11 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     if(_type.index == DeviceType.values.length-1) return;
 
     _type = DeviceType.values[_type.index + 1];
+  }
+
+  void resetInput(){
+    autoValidateNewDeviceName = false;
+    _newDeviceName = "";
+    addDeviceError = null;
   }
 }

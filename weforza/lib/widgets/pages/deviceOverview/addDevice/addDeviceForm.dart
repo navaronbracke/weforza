@@ -23,8 +23,14 @@ class AddDeviceForm extends StatefulWidget {
 
 class _AddDeviceFormState extends State<AddDeviceForm> {
 
-  final TextEditingController _addDeviceController = TextEditingController();
+  TextEditingController _addDeviceController;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    resetTextController();
+  }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
@@ -78,6 +84,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                         child: AddDeviceSubmit(onPressed: () async {
                           if(_formKey.currentState.validate()){
                             await widget.bloc.addDevice((Device device){
+                              setState(() => resetTextController());
                               widget.handler.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                           }
@@ -147,6 +154,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                       child: AddDeviceSubmit(onPressed: () async {
                         if(_formKey.currentState.validate()){
                           await widget.bloc.addDevice((Device device){
+                            setState(() => resetTextController());
                             widget.handler.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         }
@@ -215,6 +223,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                         child: AddDeviceSubmit(onPressed: () async {
                           if(iosValidateAddDevice()){
                             await widget.bloc.addDevice((Device device){
+                              setState(() => resetTextController());
                               widget.handler.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                           }else {
@@ -296,6 +305,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                       child: AddDeviceSubmit(onPressed: () async {
                         if(iosValidateAddDevice()){
                           await widget.bloc.addDevice((Device device){
+                            setState(() => resetTextController());
                             widget.handler.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         } else {
@@ -329,5 +339,10 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
         _addDeviceController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
         S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())) == null;
+  }
+
+  void resetTextController(){
+    widget.bloc.resetInput();
+    _addDeviceController = TextEditingController();
   }
 }

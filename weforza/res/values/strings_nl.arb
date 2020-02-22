@@ -111,6 +111,7 @@
   "DeviceNameMaxLength": "Naam Toestel is max. $maxLength tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
   "DeviceFound": "$device gevonden",
+  "EditDeviceSubmit": "Toestel Bewerken",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

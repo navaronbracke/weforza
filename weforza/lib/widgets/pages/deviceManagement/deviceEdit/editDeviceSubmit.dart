@@ -5,8 +5,8 @@ import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class AddDeviceSubmit extends StatelessWidget {
-  AddDeviceSubmit({@required this.stream,@required this.onPressed}):
+class EditDeviceSubmit extends StatelessWidget {
+  EditDeviceSubmit({@required this.stream,@required this.onPressed}):
         assert(stream != null && onPressed != null);
 
   final Stream<bool> stream;
@@ -19,11 +19,11 @@ class AddDeviceSubmit extends StatelessWidget {
       builder: (context,snapshot){
         return (snapshot.data) ? PlatformAwareLoadingIndicator() : PlatformAwareWidget(
           android: () => FlatButton(
-              child: Text(S.of(context).AddDeviceSubmit),
-              onPressed: onPressed,
-            ),
+            child: Text(S.of(context).EditDeviceSubmit),
+            onPressed: onPressed,
+          ),
           ios: () => CupertinoButton(
-            child: Text(S.of(context).AddDeviceSubmit),
+            child: Text(S.of(context).EditDeviceSubmit),
             onPressed: onPressed,
           ),
         );

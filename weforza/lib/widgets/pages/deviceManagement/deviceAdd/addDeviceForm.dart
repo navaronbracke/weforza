@@ -3,19 +3,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceHandler.dart';
-import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceSubmit.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceAdd/addDeviceSubmit.dart';
+import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 
 class AddDeviceForm extends StatefulWidget {
-  AddDeviceForm(this.bloc,this.handler): assert(bloc != null && handler != null);
+  AddDeviceForm({
+    @required ValueKey<bool> key,
+    @required this.bloc,
+    @required this.deviceManager,
+  }): assert(key != null && bloc != null), super(key: key);
 
   final AddDeviceBloc bloc;
-  final AddDeviceHandler handler;
+  final IDeviceManager deviceManager;
 
   @override
   _AddDeviceFormState createState() => _AddDeviceFormState();
@@ -78,7 +82,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                         child: AddDeviceSubmit(onPressed: () async {
                           if(_formKey.currentState.validate()){
                             await widget.bloc.addDevice((Device device){
-                              widget.handler.onDeviceAdded(device);
+                              widget.deviceManager.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                           }
                         },stream: widget.bloc.submitStream)
@@ -147,7 +151,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                       child: AddDeviceSubmit(onPressed: () async {
                         if(_formKey.currentState.validate()){
                           await widget.bloc.addDevice((Device device){
-                            widget.handler.onDeviceAdded(device);
+                            widget.deviceManager.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         }
                       },stream: widget.bloc.submitStream)
@@ -197,7 +201,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
               Text(
                   CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
                   style: ApplicationTheme.iosFormErrorStyle
-                ),
+              ),
             ],
           ),
           Padding(
@@ -215,7 +219,7 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                         child: AddDeviceSubmit(onPressed: () async {
                           if(iosValidateAddDevice()){
                             await widget.bloc.addDevice((Device device){
-                              widget.handler.onDeviceAdded(device);
+                              widget.deviceManager.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                           }else {
                             setState((){
@@ -271,11 +275,11 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           });
                         },
                       ),
-                  Row(
-                    children: <Widget>[
-                        Text(
-                            CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
-                            style: ApplicationTheme.iosFormErrorStyle
+                      Row(
+                        children: <Widget>[
+                          Text(
+                              CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
+                              style: ApplicationTheme.iosFormErrorStyle
                           ),
                         ],
                       ),
@@ -296,13 +300,13 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                       child: AddDeviceSubmit(onPressed: () async {
                         if(iosValidateAddDevice()){
                           await widget.bloc.addDevice((Device device){
-                            widget.handler.onDeviceAdded(device);
+                            widget.deviceManager.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         } else {
-                            setState((){
-                              //trigger form error redraw on ios
-                            });
-                          }
+                          setState((){
+                            //trigger form error redraw on ios
+                          });
+                        }
                       },stream: widget.bloc.submitStream)
                   ),
                 )

@@ -4,29 +4,34 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
-class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
-  AddDeviceBloc(this._repository): assert(_repository != null);
+class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
+  EditDeviceBloc(Device device,this._repository):
+        assert(device != null && _repository != null){
+    _creationDate = device.creationDate;
+    newDeviceName = device.name;
+    _ownerId = device.ownerId;
+    _type = device.type;
+  }
 
-  ///The id of the owner to add the device for.
-  final String ownerUuid = MemberProvider.selectedMember.uuid;
+  DateTime _creationDate;
+  String _ownerId;
   final DeviceRepository _repository;
 
   ///Auto validate flag for device name.
-  bool autoValidateNewDeviceName = false;
+  bool autoValidateDeviceName = false;
   ///Device Name max length
   int deviceNameMaxLength = 40;
 
   ///Device Name input backing field
-  String _newDeviceName = "";
+  String newDeviceName;
   ///Device type backing field.
-  DeviceType _type = DeviceType.UNKNOWN;
+  DeviceType _type;
 
   ///Form Error message
-  String addDeviceError;
+  String editDeviceError;
 
   ///This controller manages the submit button/loading indicator.
   final StreamController<bool> _submitButtonController = BehaviorSubject();
@@ -42,14 +47,14 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
-  Future<void> addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> editDevice(void Function(Device editedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: _type,creationDate: DateTime.now());
-    await _repository.deviceExists(device).then((exists) async {
+    final editedDevice = Device(ownerId: _ownerId,name: newDeviceName,type: _type,creationDate: _creationDate);
+    await _repository.deviceExists(editedDevice,_ownerId).then((exists) async {
       if(!exists){
-        await _repository.addDevice(device).then((_){
-          onSuccess(device);
+        await _repository.updateDevice(editedDevice).then((_){
+          onSuccess(editedDevice);
           _submitButtonController.add(false);
         },onError: (error){
           _submitButtonController.add(false);
@@ -65,20 +70,20 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     });
   }
 
-  String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
-    if(value != _newDeviceName){
+  String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
+    if(value != newDeviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
     }
     if(value == null || value.isEmpty){
-      addDeviceError = deviceNameIsRequired;
+      editDeviceError = deviceNameIsRequired;
     }else if(deviceNameMaxLength < value.length){
-      addDeviceError = deviceNameMaxLengthMessage;
+      editDeviceError = deviceNameMaxLengthMessage;
     }else{
-      _newDeviceName = value;
-      addDeviceError = null;
+      newDeviceName = value;
+      editDeviceError = null;
     }
-    return addDeviceError;
+    return editDeviceError;
   }
 
   @override

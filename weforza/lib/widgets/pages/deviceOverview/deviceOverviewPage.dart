@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/blocs/deviceOverviewBloc.dart';
+import 'package:weforza/blocs/editDeviceBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/device.dart';
@@ -13,6 +14,7 @@ import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceForm.dar
 import 'package:weforza/widgets/pages/deviceOverview/addDevice/addDeviceHandler.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListEmpty.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceOverviewDevicesList.dart';
+import 'package:weforza/widgets/pages/deviceOverview/editDevice/editDeviceForm.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class DeviceOverviewPage extends StatefulWidget {
@@ -77,7 +79,8 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
               ),
               Expanded(
                 child: widget.bloc.devices.isEmpty ? DeviceListEmpty(): DeviceOverviewDevicesList(
-                    handler: widget.bloc,
+                    onEditRequested: widget.bloc.onEditDeviceRequested,
+                    overviewHandler: widget.bloc,
                     key: _deviceListKey
                 ),
               ),
@@ -86,11 +89,19 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
           case DeviceOverviewDisplayMode.EDIT: return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              null,//TODO editForm
+              EditDeviceForm(
+                  EditDeviceBloc(
+                      widget.bloc.deviceToEdit,
+                      InjectionContainer.get<DeviceRepository>()
+                  ),
+                widget.bloc.onEditSuccess
+              ),
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
                 child: DeviceListEmpty(),
               ) : DeviceOverviewDevicesList(
-                handler: widget.bloc,key: _deviceListKey,
+                  onEditRequested: widget.bloc.onEditDeviceRequested,
+                  overviewHandler: widget.bloc,
+                  key: _deviceListKey
               ),
             ],
           );
@@ -101,7 +112,9 @@ class _DeviceOverviewPageState extends State<DeviceOverviewPage> implements AddD
               widget.bloc.devices.isEmpty ? SingleChildScrollView(
                 child: DeviceListEmpty(),
               ) : DeviceOverviewDevicesList(
-                handler: widget.bloc,key: _deviceListKey,
+                  onEditRequested: widget.bloc.onEditDeviceRequested,
+                  overviewHandler: widget.bloc,
+                  key: _deviceListKey
               ),
             ],
           );

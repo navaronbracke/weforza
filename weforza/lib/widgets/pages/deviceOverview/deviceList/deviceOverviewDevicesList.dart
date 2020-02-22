@@ -1,16 +1,24 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:weforza/blocs/deviceListItemBloc.dart';
 import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/widgets/pages/deviceOverview/deviceList/deviceListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/blocs/deviceOverviewBloc.dart';
 
 class DeviceOverviewDevicesList extends StatefulWidget {
-  DeviceOverviewDevicesList({@required this.handler, @required Key key}): assert(handler != null), super(key: key);
+  DeviceOverviewDevicesList({
+    @required this.overviewHandler,
+    @required this.onEditRequested,
+    @required Key key
+  }): assert(overviewHandler != null && onEditRequested != null && key != null),
+        super(key: key);
 
-  final DeviceOverviewHandler handler;
+  final DeviceOverviewHandler overviewHandler;
+  final void Function(Device item, void Function(Device editedDevice) onEditPressed) onEditRequested;
 
   @override
   DeviceOverviewDevicesListState createState() => DeviceOverviewDevicesListState();
@@ -40,7 +48,7 @@ class DeviceOverviewDevicesListState extends State<DeviceOverviewDevicesList> {
 
   @override
   Widget build(BuildContext context){
-    final devices = widget.handler.devices;
+    final devices = widget.overviewHandler.devices;
     return Column(
       children: <Widget>[
         Row(
@@ -52,7 +60,7 @@ class DeviceOverviewDevicesListState extends State<DeviceOverviewDevicesList> {
               ),
             ),
             Visibility(
-              visible: !widget.handler.isShowingAddDeviceForm,
+              visible: !widget.overviewHandler.isShowingAddDeviceForm,
               child: _buildAddDeviceButton(context),
             ),
           ],
@@ -64,7 +72,10 @@ class DeviceOverviewDevicesListState extends State<DeviceOverviewDevicesList> {
             itemBuilder: (context,index,animation){
               return SizeTransition(
                   sizeFactor: animation,
-                  child: DeviceOverviewDeviceListItem(devices[index])
+                  child: DeviceOverviewDeviceListItem(
+                    DeviceListItemBloc(device: devices[index]),
+                    widget.onEditRequested
+                  )
               );
             },
           ),
@@ -77,11 +88,11 @@ class DeviceOverviewDevicesListState extends State<DeviceOverviewDevicesList> {
     return PlatformAwareWidget(
       android: () => IconButton(
         icon: Icon(Icons.add),
-        onPressed: ()=> widget.handler.requestAddForm(),
+        onPressed: ()=> widget.overviewHandler.requestAddForm(),
       ),
       ios: () => CupertinoIconButton(
           icon: Icons.add,
-          onPressed: ()=> widget.handler.requestAddForm()
+          onPressed: ()=> widget.overviewHandler.requestAddForm()
       ),
     );
   }

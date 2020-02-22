@@ -4,15 +4,15 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
 class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
-  AddDeviceBloc(this.ownerUuid,this._repository):
-        assert(ownerUuid != null && ownerUuid.isNotEmpty && _repository != null);
+  AddDeviceBloc(this._repository): assert(_repository != null);
 
   ///The id of the owner to add the device for.
-  final String ownerUuid;
+  final String ownerUuid = MemberProvider.selectedMember.uuid;
   final DeviceRepository _repository;
 
   ///Auto validate flag for device name.
@@ -45,9 +45,9 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   Future<void> addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    await _repository.deviceExists(_newDeviceName).then((exists) async {
+    final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: _type,creationDate: DateTime.now());
+    await _repository.deviceExists(device).then((exists) async {
       if(!exists){
-        final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: _type);
         await _repository.addDevice(device).then((_){
           onSuccess(device);
           _submitButtonController.add(false);
@@ -96,11 +96,5 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     if(_type.index == DeviceType.values.length-1) return;
 
     _type = DeviceType.values[_type.index + 1];
-  }
-
-  void resetInput(){
-    autoValidateNewDeviceName = false;
-    _newDeviceName = "";
-    addDeviceError = null;
   }
 }

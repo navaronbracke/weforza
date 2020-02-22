@@ -19,9 +19,9 @@ class AddDeviceSubmit extends StatelessWidget {
       builder: (context,snapshot){
         return (snapshot.data) ? PlatformAwareLoadingIndicator() : PlatformAwareWidget(
           android: () => FlatButton(
-              child: Text(S.of(context).AddDeviceSubmit),
-              onPressed: onPressed,
-            ),
+            child: Text(S.of(context).AddDeviceSubmit),
+            onPressed: onPressed,
+          ),
           ios: () => CupertinoButton(
             child: Text(S.of(context).AddDeviceSubmit),
             onPressed: onPressed,

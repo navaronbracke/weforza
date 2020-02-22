@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:weforza/blocs/editDeviceBloc.dart';
+import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
-import 'package:weforza/widgets/pages/deviceOverview/editDevice/editDeviceSubmit.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceAdd/addDeviceSubmit.dart';
+import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 
-class EditDeviceForm extends StatefulWidget {
-  EditDeviceForm(this.bloc,this.onDeviceEdited):
-        assert(bloc != null && onDeviceEdited != null);
+class AddDeviceForm extends StatefulWidget {
+  AddDeviceForm({
+    @required ValueKey<bool> key,
+    @required this.bloc,
+    @required this.deviceManager,
+  }): assert(key != null && bloc != null), super(key: key);
 
-  final EditDeviceBloc bloc;
-  final void Function(Device editedDevice) onDeviceEdited;
+  final AddDeviceBloc bloc;
+  final IDeviceManager deviceManager;
 
   @override
-  _EditDeviceFormState createState() => _EditDeviceFormState();
+  _AddDeviceFormState createState() => _AddDeviceFormState();
 }
 
-class _EditDeviceFormState extends State<EditDeviceForm> {
+class _AddDeviceFormState extends State<AddDeviceForm> {
 
-  TextEditingController _editDeviceController;
+  final TextEditingController _addDeviceController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _editDeviceController = TextEditingController(text: widget.bloc.newDeviceName);
-  }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
@@ -53,8 +51,8 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
             textInputAction: TextInputAction.done,
             keyboardType: TextInputType.text,
             autocorrect: false,
-            controller: _editDeviceController,
-            validator: (value) => widget.bloc.validateDeviceNameInput(
+            controller: _addDeviceController,
+            validator: (value) => widget.bloc.validateNewDeviceInput(
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                 S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
@@ -64,9 +62,9 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
               labelText: S.of(context).DeviceNameLabel,
               helperText: " ",
             ),
-            autovalidate: widget.bloc.autoValidateDeviceName,
+            autovalidate: widget.bloc.autoValidateNewDeviceName,
             onChanged: (value) => setState((){
-              widget.bloc.autoValidateDeviceName = true;
+              widget.bloc.autoValidateNewDeviceName = true;
             }),
           ),
           Padding(
@@ -81,10 +79,10 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     child: Center(
-                        child: EditDeviceSubmit(onPressed: () async {
+                        child: AddDeviceSubmit(onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await widget.bloc.editDevice((Device device){
-                              widget.onDeviceEdited(device);
+                            await widget.bloc.addDevice((Device device){
+                              widget.deviceManager.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                           }
                         },stream: widget.bloc.submitStream)
@@ -122,8 +120,8 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
                     autocorrect: false,
-                    controller: _editDeviceController,
-                    validator: (value) => widget.bloc.validateDeviceNameInput(
+                    controller: _addDeviceController,
+                    validator: (value) => widget.bloc.validateNewDeviceInput(
                         value,
                         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                         S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
@@ -133,9 +131,9 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                       labelText: S.of(context).DeviceNameLabel,
                       helperText: " ",
                     ),
-                    autovalidate: widget.bloc.autoValidateDeviceName,
+                    autovalidate: widget.bloc.autoValidateNewDeviceName,
                     onChanged: (value) => setState((){
-                      widget.bloc.autoValidateDeviceName = true;
+                      widget.bloc.autoValidateNewDeviceName = true;
                     }),
                   ),
                 ),
@@ -150,10 +148,10 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Center(
-                      child: EditDeviceSubmit(onPressed: () async {
+                      child: AddDeviceSubmit(onPressed: () async {
                         if(_formKey.currentState.validate()){
-                          await widget.bloc.editDevice((Device device){
-                            widget.onDeviceEdited(device);
+                          await widget.bloc.addDevice((Device device){
+                            widget.deviceManager.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
                         }
                       },stream: widget.bloc.submitStream)
@@ -184,13 +182,13 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
         children: <Widget>[
           CupertinoTextField(
             textInputAction: TextInputAction.done,
-            controller: _editDeviceController,
+            controller: _addDeviceController,
             placeholder: S.of(context).DeviceNameLabel,
             autocorrect: false,
             keyboardType: TextInputType.text,
             onChanged: (value) {
               setState(() {
-                widget.bloc.validateDeviceNameInput(
+                widget.bloc.validateNewDeviceInput(
                     value,
                     S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                     S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
@@ -201,7 +199,7 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
           Row(
             children: <Widget>[
               Text(
-                  CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.editDeviceError),
+                  CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
                   style: ApplicationTheme.iosFormErrorStyle
               ),
             ],
@@ -218,11 +216,15 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                 Padding(
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     child: Center(
-                        child: EditDeviceSubmit(onPressed: () async {
-                          if(iosValidateEditDevice()){
-                            await widget.bloc.editDevice((Device device){
-                              widget.onDeviceEdited(device);
+                        child: AddDeviceSubmit(onPressed: () async {
+                          if(iosValidateAddDevice()){
+                            await widget.bloc.addDevice((Device device){
+                              widget.deviceManager.onDeviceAdded(device);
                             }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                          }else {
+                            setState((){
+                              //trigger form error redraw on ios
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )
@@ -259,13 +261,13 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                     children: <Widget>[
                       CupertinoTextField(
                         textInputAction: TextInputAction.done,
-                        controller: _editDeviceController,
+                        controller: _addDeviceController,
                         placeholder: S.of(context).DeviceNameLabel,
                         autocorrect: false,
                         keyboardType: TextInputType.text,
                         onChanged: (value) {
                           setState(() {
-                            widget.bloc.validateDeviceNameInput(
+                            widget.bloc.validateNewDeviceInput(
                                 value,
                                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                                 S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
@@ -276,7 +278,7 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                       Row(
                         children: <Widget>[
                           Text(
-                              CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.editDeviceError),
+                              CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.addDeviceError),
                               style: ApplicationTheme.iosFormErrorStyle
                           ),
                         ],
@@ -295,11 +297,15 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Center(
-                      child: EditDeviceSubmit(onPressed: () async {
-                        if(iosValidateEditDevice()){
-                          await widget.bloc.editDevice((Device device){
-                            widget.onDeviceEdited(device);
+                      child: AddDeviceSubmit(onPressed: () async {
+                        if(iosValidateAddDevice()){
+                          await widget.bloc.addDevice((Device device){
+                            widget.deviceManager.onDeviceAdded(device);
                           }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                        } else {
+                          setState((){
+                            //trigger form error redraw on ios
+                          });
                         }
                       },stream: widget.bloc.submitStream)
                   ),
@@ -322,9 +328,9 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
     );
   }
 
-  bool iosValidateEditDevice(){
-    return widget.bloc.validateDeviceNameInput(
-        _editDeviceController.text,
+  bool iosValidateAddDevice(){
+    return widget.bloc.validateNewDeviceInput(
+        _addDeviceController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
         S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())) == null;
   }

@@ -18,6 +18,16 @@ class DeviceOverviewBloc extends Bloc implements DeviceOverviewHandler {
 
   final List<Device> devices;
 
+  Device deviceToEdit;
+  void Function(Device editedDevice) onEditSuccess;
+
+  void onEditDeviceRequested(Device device, void Function(Device editedDevice) onSucessCallback){
+    assert(device != null && onSucessCallback != null);
+    deviceToEdit = device;
+    onEditSuccess = onSucessCallback;
+    _overviewDisplayModeController.add(DeviceOverviewDisplayMode.EDIT);
+  }
+
   final StreamController<DeviceOverviewDisplayMode> _overviewDisplayModeController = BehaviorSubject();
   Stream<DeviceOverviewDisplayMode> get displayMode => _overviewDisplayModeController.stream;
 

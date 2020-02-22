@@ -54,6 +54,7 @@ class S implements WidgetsLocalizations {
   String get DialogDelete => "Delete";
   String get DialogOk => "Ok";
   String get DistanceKm => "Km";
+  String get EditDeviceSubmit => "Edit Device";
   String get EditMemberError => "Failed to save the changes";
   String get EditMemberSubmit => "Save Changes";
   String get EditMemberTitle => "Edit Member";
@@ -265,6 +266,8 @@ class $nl extends S {
   String get EditRideTitleWhitespace => "Een titel mag niet enkel witruimte zijn";
   @override
   String get EditRideDistanceInvalid => "Gelieve een geldige afstand in te geven";
+  @override
+  String get EditDeviceSubmit => "Toestel Bewerken";
   @override
   String get DistanceKm => "Km";
   @override

@@ -8,27 +8,31 @@ class Device {
   Device({
     @required this.ownerId,
     @required this.name,
+    @required this.creationDate,
     this.type = DeviceType.UNKNOWN
   }): assert(ownerId != null && ownerId.isNotEmpty && name != null
-      && name.isNotEmpty && type != null);
+      && name.isNotEmpty && type != null && creationDate != null);
 
   final String ownerId;
+  final DateTime creationDate;
   String name;
   DeviceType type;
 
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
+      "deviceName": name,
       "owner": ownerId,
       "type": type.index
     };
   }
 
   ///Create a device from a Map and a given key.
-  static Device of(String deviceName,Map<String,dynamic> values){
-    assert(deviceName != null && deviceName.isNotEmpty && values != null);
+  static Device of(String key, Map<String,dynamic> values){
+    assert(values != null &&  key != null && key.isNotEmpty);
     return Device(
-      name: deviceName,
+      creationDate: DateTime.parse(key),
+      name: values["deviceName"],
       ownerId: values["owner"],
       type: DeviceType.values[values["type"]]
     );
@@ -36,10 +40,10 @@ class Device {
 
   @override
   bool operator ==(Object other) => other is Device && ownerId == other.ownerId
-      && name == other.name && type == other.type;
+      && name == other.name && type == other.type && creationDate == other.creationDate;
 
   @override
-  int get hashCode => hashValues(ownerId,name,type);
+  int get hashCode => hashValues(ownerId,name,type,creationDate);
 }
 
 ///This enum declares the different device types.

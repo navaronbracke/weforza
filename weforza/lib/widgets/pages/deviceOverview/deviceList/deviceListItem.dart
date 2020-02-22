@@ -2,15 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/deviceListItemBloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class DeviceOverviewDeviceListItem extends StatefulWidget {
-  DeviceOverviewDeviceListItem(this.device): assert(device != null);
+  DeviceOverviewDeviceListItem(this.bloc,this.onEditRequested)
+      : assert(bloc != null && onEditRequested != null);
 
-  final Device device;
+  final DeviceListItemBloc bloc;
+  final void Function(Device item, void Function(Device editedDevice) onEditPressed) onEditRequested;
 
   @override
   _DeviceOverviewDeviceListItemState createState() => _DeviceOverviewDeviceListItemState();
@@ -19,7 +22,7 @@ class DeviceOverviewDeviceListItem extends StatefulWidget {
 class _DeviceOverviewDeviceListItemState extends State<DeviceOverviewDeviceListItem> {
 
   Widget _mapDeviceTypeToIcon(){
-    switch(widget.device.type){
+    switch(widget.bloc.device.type){
       case DeviceType.HEADSET: return Icon(Icons.headset,color: ApplicationTheme.deviceIconColor);
       case DeviceType.WATCH: return Icon(Icons.watch,color: ApplicationTheme.deviceIconColor);
       case DeviceType.TABLET: return Icon(Icons.tablet,color: ApplicationTheme.deviceIconColor);
@@ -46,12 +49,14 @@ class _DeviceOverviewDeviceListItemState extends State<DeviceOverviewDeviceListI
           child: _mapDeviceTypeToIcon(),
         ),
         Expanded(
-          child: Text(widget.device.name),
+          child: Text(widget.bloc.device.name),
         ),
         IconButton(
           icon: Icon(Icons.edit),
           onPressed: (){
-            //TODO on edit callback
+            widget.onEditRequested(widget.bloc.device,(Device newDevice) => setState((){
+              widget.bloc.device = newDevice;
+            }));
           },
         ),
       ],
@@ -66,15 +71,17 @@ class _DeviceOverviewDeviceListItemState extends State<DeviceOverviewDeviceListI
           child: _mapDeviceTypeToIcon(),
         ),
         Expanded(
-          child: Text(widget.device.name),
+          child: Text(widget.bloc.device.name),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: CupertinoIconButton(
               icon: Icons.edit,
               onPressed: (){
-                //TODO on edit callback
-              }
+                widget.onEditRequested(widget.bloc.device,(Device newDevice) => setState((){
+                widget.bloc.device = newDevice;
+              }));
+            },
           ),
         )
       ],

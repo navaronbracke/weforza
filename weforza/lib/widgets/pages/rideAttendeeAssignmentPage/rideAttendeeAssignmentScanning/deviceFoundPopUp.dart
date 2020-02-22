@@ -1,5 +1,6 @@
 
 import 'package:flutter/widgets.dart';
+import 'package:weforza/generated/i18n.dart';
 
 class DeviceFoundPopup extends StatefulWidget {
   DeviceFoundPopup({@required String deviceName}):
@@ -26,6 +27,7 @@ class _DeviceFoundPopupState extends State<DeviceFoundPopup> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final text = S.of(context).DeviceFound((widget.key as ValueKey<String>).value);
     return Center(
       child: AnimatedBuilder(
         animation: _controller,
@@ -34,7 +36,7 @@ class _DeviceFoundPopupState extends State<DeviceFoundPopup> with TickerProvider
             padding: position.value,
             child: Opacity(
               opacity: fadeInAndOut.value,
-              child: Text((widget.key as ValueKey<String>).value),
+              child: Text(text),
             ),
           );
         },

@@ -111,6 +111,7 @@
   "DeviceNameMaxLength": "Device name is max. $maxLength characters",
   "DeviceAlreadyExists": "This device already exists",
   "DeviceFound": "Found $device",
+  "EditDeviceSubmit": "Edit Device",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

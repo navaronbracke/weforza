@@ -7,7 +7,7 @@ class DeviceRepository {
   
   final IDeviceDao _dao;
 
-  Future<bool> deviceExists(String device) => _dao.deviceExists(device);
+  Future<bool> deviceExists(String device,[String ownerId]) => _dao.deviceExists(device,ownerId);
 
   Future<void> addDevice(Device device) => _dao.addDevice(device);
 

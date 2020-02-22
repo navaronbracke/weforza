@@ -5,19 +5,18 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceTypePicker.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
 class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   EditDeviceBloc(Device device,this._repository):
         assert(device != null && _repository != null){
+    _creationDate = device.creationDate;
     newDeviceName = device.name;
-    _oldDeviceName = newDeviceName;
     _ownerId = device.ownerId;
     _type = device.type;
   }
 
-  ///This field is needed so we can find the old device to delete it.
-  String _oldDeviceName;
+  DateTime _creationDate;
   String _ownerId;
   final DeviceRepository _repository;
 
@@ -51,11 +50,10 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   Future<void> editDevice(void Function(Device editedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    await _repository.deviceExists(newDeviceName,_ownerId).then((exists) async {
+    final editedDevice = Device(ownerId: _ownerId,name: newDeviceName,type: _type,creationDate: _creationDate);
+    await _repository.deviceExists(editedDevice,_ownerId).then((exists) async {
       if(!exists){
-        final editedDevice = Device(ownerId: _ownerId,name: newDeviceName,type: _type);
-        await _repository.updateDevice(_oldDeviceName, editedDevice).then((_){
-          _oldDeviceName = newDeviceName;
+        await _repository.updateDevice(editedDevice).then((_){
           onSuccess(editedDevice);
           _submitButtonController.add(false);
         },onError: (error){

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/deviceOverviewBloc.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -13,7 +12,7 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
-import 'package:weforza/widgets/pages/deviceOverview/deviceOverviewPage.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deviceManagementPage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
@@ -45,6 +44,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   @override
   void initState() {
     super.initState();
+    //TODO future void and ask the bloc for the list, it checks the reload flag
     devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
   }
 
@@ -354,7 +354,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             //init the callback, either with an empty list or with devices.
             final onPressed = (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  DeviceOverviewPage(DeviceOverviewBloc(snapshot.data)),
+                  DeviceManagementPage(devices: snapshot.data),
               )).then((_)=> (){
                 if(DeviceProvider.reloadDevices){
                   DeviceProvider.reloadDevices = false;

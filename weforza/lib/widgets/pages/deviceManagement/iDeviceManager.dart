@@ -22,7 +22,9 @@ abstract class IDeviceManager {
   ///Show the + Button for switching to AddDeviceForm.
   void showAddDeviceButton();
 
-  //TODO requestDeleteForm(String deviceName, int itemIndex)
+  void onDeviceRemoved(Device device,int index);
+
+  void requestDeleteForm(Device device,int index);
 
   ///Get the list of loaded devices.
   List<Device> get devices;

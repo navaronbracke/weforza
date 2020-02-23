@@ -112,6 +112,8 @@
   "DeviceAlreadyExists": "Dit toestel bestaat al",
   "DeviceFound": "$device gevonden",
   "EditDeviceSubmit": "Toestel Bewerken",
+  "DeleteDeviceDescription": "Weet u zeker dat u $device wil verwijderen?",
+  "DeleteDeviceError": "Kon $device niet verwijderen",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

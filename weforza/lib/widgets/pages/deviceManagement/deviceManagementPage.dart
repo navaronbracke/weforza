@@ -104,6 +104,18 @@ class _DeviceManagementPageState extends State<DeviceManagementPage> implements 
     devices[index] = device;
     list.currentState.setState((){});
   }
+
+  @override
+  void onDeviceRemoved(Device device, int index) {
+    devices.removeAt(index);
+    list.currentState.removeItem(index);
+    requestAddForm();
+  }
+
+  @override
+  void requestDeleteForm(Device device, int index) {
+    input.currentState.requestDeleteForm(device, index);
+  }
 }
 
 

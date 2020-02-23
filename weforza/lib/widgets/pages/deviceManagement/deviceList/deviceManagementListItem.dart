@@ -42,20 +42,21 @@ class _DeviceManagementListItemState extends State<DeviceManagementListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: (){
-        //TODO request delete form from manager
-      },
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(4),
-            child: _mapDeviceTypeToIcon(),
-          ),
-          Expanded(
-            child: Text(widget.device.name),
-          ),
-          _buildButton()
-        ],
+      onLongPress: ()=> widget.deviceManager.requestDeleteForm(widget.device, widget.index),
+      child: Container(
+        decoration: BoxDecoration(),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(4),
+              child: _mapDeviceTypeToIcon(),
+            ),
+            Expanded(
+              child: Text(widget.device.name),
+            ),
+            _buildButton()
+          ],
+        ),
       ),
     );
   }

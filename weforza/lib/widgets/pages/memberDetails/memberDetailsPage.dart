@@ -44,7 +44,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   @override
   void initState() {
     super.initState();
-    //TODO future void and ask the bloc for the list, it checks the reload flag
     devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
   }
 

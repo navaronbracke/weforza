@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
+import 'package:weforza/blocs/deleteDeviceBloc.dart';
 import 'package:weforza/blocs/editDeviceBloc.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/widgets/pages/deviceManagement/deleteDevice/deleteDeviceForm.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceAdd/addDeviceForm.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceEdit/editDeviceForm.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
@@ -69,10 +71,13 @@ class DeviceManagementInputState extends State<DeviceManagementInput> {
     });
   }
 
-  void requestDeleteForm(){
+  void requestDeleteForm(Device device, int index){
     widget.deviceManager.showAddDeviceButton();
     setState(() {
-      inputWidget = null;//TODO put a delete widget here, pass the index and store it there
+      inputWidget = DeleteDeviceForm(
+          deviceManager: widget.deviceManager,
+          bloc: DeleteDeviceBloc(device,index,InjectionContainer.get<DeviceRepository>())
+      );
     });
   }
 }

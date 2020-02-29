@@ -75,7 +75,7 @@ abstract class ApplicationTheme {
 
   static final Color scanProgressBarStrokeColor = primaryColor;
 
-  static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 16);
+  static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
 
   ///Provide the Android theme.

@@ -120,6 +120,8 @@
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
   "SettingsLoadingError": "Could not load settings",
+  "SettingsShowAllDevicesOptionLabel": "Show All Scanned Devices",
+  "SettingsShowAllDevicesOptionDescription": "Show all scanned devices, regardless if they belong to a known person or not.",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

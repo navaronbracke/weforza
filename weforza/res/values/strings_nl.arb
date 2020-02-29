@@ -120,6 +120,8 @@
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
   "SettingsLoadingError": "Kon de instellingen niet laden",
+  "SettingsShowAllDevicesOptionLabel": "Toon Alle Gescande Toestellen",
+  "SettingsShowAllDevicesOptionDescription": "Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet.",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

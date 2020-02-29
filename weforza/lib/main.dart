@@ -28,9 +28,17 @@ class _WeForzaAppState extends State<WeForzaApp> {
   final String _appName = "WeForza";
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(),
-    ios: () => _buildIosWidget(),
+  Widget build(BuildContext context) => GestureDetector(
+    child: PlatformAwareWidget(
+      android: () => _buildAndroidWidget(),
+      ios: () => _buildIosWidget(),
+    ),
+    onTap: (){
+      final FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+    },
   );
 
   Widget _buildAndroidWidget() {

@@ -24,13 +24,15 @@ class LoadingSettings extends StatelessWidget {
   );
 
   Widget _buildBody(BuildContext context){
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        PlatformAwareLoadingIndicator(),
-        SizedBox(height: 10),
-        Text(S.of(context).SettingsLoading),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          PlatformAwareLoadingIndicator(),
+          SizedBox(height: 10),
+          Text(S.of(context).SettingsLoading),
+        ],
+      ),
     );
   }
 }

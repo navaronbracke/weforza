@@ -33,7 +33,9 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     if(bloc.shouldLoadSettings){
-      settingsFuture = bloc.loadSettingsFromDatabase();
+      //We put an artificial delay here to decrease the feeling of popping in.
+      //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
+      settingsFuture = Future.delayed(Duration(seconds: 1),() => bloc.loadSettingsFromDatabase());
     }else{
       bloc.loadSettingsFromMemory();
     }

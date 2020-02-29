@@ -117,6 +117,9 @@
   "DeleteDeviceError": "Could not delete $device",
 
   "SettingsTitle": "Settings",
+  "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
+  "SettingsLoading": "Loading Settings",
+  "SettingsLoadingError": "Could not load settings",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

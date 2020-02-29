@@ -124,6 +124,9 @@ class S implements WidgetsLocalizations {
   String get RideListRidesHeader => "Rides";
   String get RideStart => "Start";
   String get SaturdayPrefix => "Sat";
+  String get SettingsLoading => "Loading Settings";
+  String get SettingsLoadingError => "Could not load settings";
+  String get SettingsScanSliderHeader => "Duration of a scan (in seconds)";
   String get SettingsTitle => "Settings";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
@@ -259,6 +262,8 @@ class $nl extends S {
   @override
   String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
   @override
+  String get SettingsLoadingError => "Kon de instellingen niet laden";
+  @override
   String get DeviceHeadset => "Koptelefoon";
   @override
   String get HomePageMembersTab => "Leden";
@@ -313,11 +318,15 @@ class $nl extends S {
   @override
   String get MemberAlreadyExists => "Dit lid bestaat al";
   @override
+  String get SettingsLoading => "Instellingen Laden";
+  @override
   String get AddMemberTitle => "Nieuw lid";
   @override
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
+  @override
+  String get SettingsScanSliderHeader => "Duur van een scan (in seconden)";
   @override
   String get EnableBluetoothDialogTitle => "Bluetooth Inschakelen";
   @override

@@ -12,26 +12,35 @@ import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/rideAttendeeSelector.dart';
+import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanner.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeNavigationBarDisplayMode.dart';
 
 class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,RideAttendeeScanner, RideAttendeeAssignmentInitializer {
-  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository,this._deviceRepository,this.bluetoothScanner):
+  RideAttendeeAssignmentBloc(
+      this.ride,
+      this._rideRepository,
+      this._memberRepository,
+      this._deviceRepository,
+      this._settingsRepository,
+      this.bluetoothScanner):
         assert(ride != null && _memberRepository != null
             && _rideRepository != null && _deviceRepository != null
-            && bluetoothScanner != null
-        );
+            && _settingsRepository != null && bluetoothScanner != null
+      );
 
   ///The [Ride] for which to change the attendees.
   final Ride ride;
   final RideRepository _rideRepository;
   final MemberRepository _memberRepository;
   final DeviceRepository _deviceRepository;
+  final SettingsRepository _settingsRepository;
 
   bool _membersLoaded = false;
   Future<List<RideAttendeeAssignmentItemBloc>> _loadMembersFuture;
@@ -42,7 +51,9 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   Future<void> scanFuture;
 
   @override
-  int scanDuration = 20;
+  int scanDuration;
+
+  bool showAllScannedDevices;
 
   ///A Map containing the device names that were found and whether they have duplicates
   Map<String,bool> scannedDevices;
@@ -120,7 +131,9 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   ///Load the devices to scan for when a scan is started.
   Future<void> _loadDevicesToScanFor() async {
     if(devices == null){
-      //TODO load the scan settings from sembast, showAll + scanDuration
+      await _settingsRepository.loadApplicationSettings();
+      scanDuration = Settings.instance.scanDuration;
+      showAllScannedDevices = Settings.instance.showAllScannedDevices;
       devices = {};
       final items = await _deviceRepository.getAllDevices();
       items.forEach((device){
@@ -162,11 +175,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
           _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
           onScanStarted();
           await for(String deviceName in bluetoothScanner.startScan(ScanMode.balanced, Duration(seconds: scanDuration))){
-            //TODO add extra boolean that overrides this setting, showAll
-            //if(showAll || devices.keys.contains(deviceName))
-
-            //only allow known devices to be used
-            if(devices.keys.contains(deviceName)){
+            if(showAllScannedDevices || devices.keys.contains(deviceName)){
               //Lookup a possible value
               //if not found(no duplicates yet), add it with false otherwise set it to true
               scannedDevices[deviceName] = scannedDevices[deviceName] != null;

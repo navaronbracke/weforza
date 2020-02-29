@@ -128,7 +128,7 @@ class S implements WidgetsLocalizations {
   String get TuesdayPrefix => "Tue";
   String get UnknownDate => "Unknown Date";
   String get WednesdayPrefix => "Wed";
-  String DeleteDeviceDescription(String device) => "Are you sure you want to delete $device?";
+  String DeleteDeviceDescription(String device) => "Delete $device?";
   String DeleteDeviceError(String device) => "Could not delete $device";
   String DeviceFound(String device) => "Found $device";
   String DeviceNameMaxLength(String maxLength) => "Device name is max. $maxLength characters";
@@ -367,7 +367,7 @@ class $nl extends S {
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
   @override
-  String DeleteDeviceDescription(String device) => "Weet u zeker dat u $device wil verwijderen?";
+  String DeleteDeviceDescription(String device) => "$device verwijderen?";
   @override
   String PhoneMinLength(String minLength) => "Een telefoonnummer is minimum $minLength cijfers lang";
   @override

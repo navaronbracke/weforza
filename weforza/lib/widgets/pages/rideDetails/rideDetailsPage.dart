@@ -12,6 +12,7 @@ import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanningStartTrigger.dart';
@@ -77,6 +78,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     InjectionContainer.get<RideRepository>(),
                                     InjectionContainer.get<MemberRepository>(),
                                     InjectionContainer.get<DeviceRepository>(),
+                                    InjectionContainer.get<SettingsRepository>(),
                                     InjectionContainer.get<IBluetoothScanner>())),
                           )))
                   .then((value) {
@@ -129,6 +131,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     InjectionContainer.get<RideRepository>(),
                                     InjectionContainer.get<MemberRepository>(),
                                     InjectionContainer.get<DeviceRepository>(),
+                                    InjectionContainer.get<SettingsRepository>(),
                                     InjectionContainer.get<IBluetoothScanner>())),
                           )))
                   .then((value) {
@@ -190,6 +193,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                             InjectionContainer.get<RideRepository>(),
                                             InjectionContainer.get<MemberRepository>(),
                                             InjectionContainer.get<DeviceRepository>(),
+                                            InjectionContainer.get<SettingsRepository>(),
                                             InjectionContainer.get<IBluetoothScanner>()
                                         )
                                     ),
@@ -256,6 +260,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                             InjectionContainer.get<RideRepository>(),
                                             InjectionContainer.get<MemberRepository>(),
                                             InjectionContainer.get<DeviceRepository>(),
+                                            InjectionContainer.get<SettingsRepository>(),
                                             InjectionContainer.get<IBluetoothScanner>()
                                         )
                                     ),

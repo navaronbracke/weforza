@@ -10,6 +10,7 @@ import 'package:weforza/model/bluetooth/bluetoothScannerImpl.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {
@@ -32,6 +33,7 @@ class InjectionContainer {
     _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
     _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
     _injector.map<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
+    _injector.map<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);
     //file handler
     _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
     //bluetooth scanner

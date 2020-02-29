@@ -20,6 +20,8 @@ class DatabaseProvider {
   static final rideAttendeeStore = stringMapStoreFactory.store("rideAttendee");
   ///The data store for the member devices.
   static final deviceStore = stringMapStoreFactory.store("device");
+  ///The data store for general application settings.
+  static final settingsStore = stringMapStoreFactory.store("settings");
 
   ///Get the database instance.
   static Database getDatabase() => _database;

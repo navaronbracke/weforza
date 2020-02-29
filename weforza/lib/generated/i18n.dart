@@ -78,6 +78,7 @@ class S implements WidgetsLocalizations {
   String get FridayPrefix => "Fri";
   String get HomePageMembersTab => "Members";
   String get HomePageRidesTab => "Rides";
+  String get HomePageSettingsTab => "Settings";
   String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberAlreadyExists => "This member already exists";
@@ -123,6 +124,14 @@ class S implements WidgetsLocalizations {
   String get RideListRidesHeader => "Rides";
   String get RideStart => "Start";
   String get SaturdayPrefix => "Sat";
+  String get SettingsGenericError => "Something went wrong";
+  String get SettingsLoading => "Loading Settings";
+  String get SettingsLoadingError => "Could not load the settings";
+  String get SettingsScanSliderHeader => "Duration of a scan (in seconds)";
+  String get SettingsShowAllDevicesOptionDescription => "Show all scanned devices, regardless if they belong to a known person or not.";
+  String get SettingsShowAllDevicesOptionLabel => "Show All Scanned Devices";
+  String get SettingsSubmitError => "Could not save the settings";
+  String get SettingsTitle => "Settings";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
   String get TuesdayPrefix => "Tue";
@@ -197,6 +206,8 @@ class $nl extends S {
   @override
   String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
   @override
+  String get SettingsTitle => "Instellingen";
+  @override
   String get EnableBluetoothGoToSettings => "Instellingen";
   @override
   String get PersonFirstNameLabel => "Voornaam";
@@ -229,6 +240,10 @@ class $nl extends S {
   @override
   String get MemberDetailsNoDevicesAddDevice => "Voeg een toestel toe";
   @override
+  String get SettingsSubmitError => "Kon de instellingen niet opslaan";
+  @override
+  String get SettingsShowAllDevicesOptionLabel => "Toon Alle Gescande Toestellen";
+  @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
   String get RideAttendeeAssignmentLoadingDevices => "Bekende toestellen laden";
@@ -243,6 +258,8 @@ class $nl extends S {
   @override
   String get RideDestination => "Bestemming";
   @override
+  String get SettingsShowAllDevicesOptionDescription => "Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet.";
+  @override
   String get EditRideDepartureLabel => "Vertrek";
   @override
   String get DevicesHeader => "Toestellen";
@@ -254,6 +271,8 @@ class $nl extends S {
   String get RideAttendeeAssignmentScanningTitle => "Scannen naar aanwezigen";
   @override
   String get EditRideSubmitError => "Kon de wijzigingen niet opslaan";
+  @override
+  String get SettingsLoadingError => "Kon de instellingen niet laden";
   @override
   String get DeviceHeadset => "Koptelefoon";
   @override
@@ -309,15 +328,21 @@ class $nl extends S {
   @override
   String get MemberAlreadyExists => "Dit lid bestaat al";
   @override
+  String get SettingsLoading => "Instellingen Laden";
+  @override
   String get AddMemberTitle => "Nieuw lid";
   @override
   String get EditRideAddressInvalid => "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten";
   @override
   String get MemberListNoItems => "Er zijn geen leden om te tonen";
   @override
+  String get SettingsScanSliderHeader => "Duur van een scan (in seconden)";
+  @override
   String get EnableBluetoothDialogTitle => "Bluetooth Inschakelen";
   @override
   String get DeviceTypeLabel => "Type Toestel";
+  @override
+  String get HomePageSettingsTab => "Instellingen";
   @override
   String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override
@@ -366,6 +391,8 @@ class $nl extends S {
   String get MemberListLoadingFailed => "Kon leden niet laden";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
+  @override
+  String get SettingsGenericError => "Er liep iets fout";
   @override
   String DeleteDeviceDescription(String device) => "$device verwijderen?";
   @override

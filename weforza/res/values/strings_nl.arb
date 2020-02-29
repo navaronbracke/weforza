@@ -12,6 +12,7 @@
 
   "HomePageRidesTab": "Ritten",
   "HomePageMembersTab": "Leden",
+  "HomePageSettingsTab": "Instellingen",
 
   "MemberListTitle": "Leden",
   "MemberListLoadingFailed": "Kon leden niet laden",
@@ -114,6 +115,15 @@
   "EditDeviceSubmit": "Toestel Bewerken",
   "DeleteDeviceDescription": "$device verwijderen?",
   "DeleteDeviceError": "Kon $device niet verwijderen",
+
+  "SettingsTitle": "Instellingen",
+  "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
+  "SettingsLoading": "Instellingen Laden",
+  "SettingsLoadingError": "Kon de instellingen niet laden",
+  "SettingsGenericError": "Er liep iets fout",
+  "SettingsSubmitError": "Kon de instellingen niet opslaan",
+  "SettingsShowAllDevicesOptionLabel": "Toon Alle Gescande Toestellen",
+  "SettingsShowAllDevicesOptionDescription": "Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet.",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

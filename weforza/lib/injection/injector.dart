@@ -3,12 +3,14 @@ import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/database/deviceDao.dart';
 import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/database/rideDao.dart';
+import 'package:weforza/database/settingsDao.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
 import 'package:weforza/model/bluetooth/bluetoothScannerImpl.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {
@@ -26,10 +28,12 @@ class InjectionContainer {
     _injector.map<IMemberDao>((i) => MemberDao(DatabaseProvider.getDatabase()),isSingleton: true);
     _injector.map<IRideDao>((i) => RideDao(DatabaseProvider.getDatabase()),isSingleton: true);
     _injector.map<IDeviceDao>((i)=> DeviceDao(DatabaseProvider.getDatabase()),isSingleton: true);
+    _injector.map<ISettingsDao>((i) => SettingsDao(DatabaseProvider.getDatabase()),isSingleton: true);
     //repositories
     _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
     _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
     _injector.map<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
+    _injector.map<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);
     //file handler
     _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
     //bluetooth scanner

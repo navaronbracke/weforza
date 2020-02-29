@@ -22,6 +22,7 @@ class ShowAllScanDevicesOption extends StatefulWidget {
 class _ShowAllScanDevicesOptionState extends State<ShowAllScanDevicesOption> {
   @override
   Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Row(
         children: <Widget>[
@@ -38,12 +39,9 @@ class _ShowAllScanDevicesOptionState extends State<ShowAllScanDevicesOption> {
           ),
         ],
       ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: Text(S.of(context).SettingsShowAllDevicesOptionDescription,
-            softWrap: true,
-            style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 11)
-        ),
+      Text(S.of(context).SettingsShowAllDevicesOptionDescription,
+          softWrap: true,
+          style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 11)
       ),
     ],
   );

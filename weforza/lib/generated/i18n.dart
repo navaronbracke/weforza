@@ -127,6 +127,8 @@ class S implements WidgetsLocalizations {
   String get SettingsLoading => "Loading Settings";
   String get SettingsLoadingError => "Could not load settings";
   String get SettingsScanSliderHeader => "Duration of a scan (in seconds)";
+  String get SettingsShowAllDevicesOptionDescription => "Show all scanned devices, regardless if they belong to a known person or not.";
+  String get SettingsShowAllDevicesOptionLabel => "Show All Scanned Devices";
   String get SettingsTitle => "Settings";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
@@ -236,6 +238,8 @@ class $nl extends S {
   @override
   String get MemberDetailsNoDevicesAddDevice => "Voeg een toestel toe";
   @override
+  String get SettingsShowAllDevicesOptionLabel => "Toon Alle Gescande Toestellen";
+  @override
   String get PersonTelephoneLabel => "Telefoon";
   @override
   String get RideAttendeeAssignmentLoadingDevices => "Bekende toestellen laden";
@@ -249,6 +253,8 @@ class $nl extends S {
   String get AddRideEmptySelection => "Gelieve minimum één datum te kiezen";
   @override
   String get RideDestination => "Bestemming";
+  @override
+  String get SettingsShowAllDevicesOptionDescription => "Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet.";
   @override
   String get EditRideDepartureLabel => "Vertrek";
   @override

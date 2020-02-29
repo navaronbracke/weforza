@@ -6,6 +6,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentItemBloc.dart';
+import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
@@ -20,8 +21,11 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeNavigationBarDisplayMode.dart';
 
 class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,RideAttendeeScanner, RideAttendeeAssignmentInitializer {
-  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository,this._deviceRepository):
-        assert(ride != null && _memberRepository != null && _rideRepository != null && _deviceRepository != null);
+  RideAttendeeAssignmentBloc(this.ride,this._rideRepository,this._memberRepository,this._deviceRepository,this.bluetoothScanner):
+        assert(ride != null && _memberRepository != null
+            && _rideRepository != null && _deviceRepository != null
+            && bluetoothScanner != null
+        );
 
   ///The [Ride] for which to change the attendees.
   final Ride ride;
@@ -33,10 +37,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   Future<List<RideAttendeeAssignmentItemBloc>> _loadMembersFuture;
 
   ///The [FlutterBlue] instance that will handle the scanning.
-  final FlutterBlue bluetoothScanner = FlutterBlue.instance;
-
-  ///Whether the scan is cancelled
-  bool isCanceled = false;
+  final IBluetoothScanner bluetoothScanner;
 
   Future<void> scanFuture;
 
@@ -119,7 +120,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
   ///Load the devices to scan for when a scan is started.
   Future<void> _loadDevicesToScanFor() async {
     if(devices == null){
-      //TODO load the scan duration from sembast, set the default to zero
+      //TODO load the scan settings from sembast, showAll + scanDuration
       devices = {};
       final items = await _deviceRepository.getAllDevices();
       items.forEach((device){
@@ -135,7 +136,7 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     scannedDevices.removeWhere((key,value)=> value == true);
     scannedDevices.keys.forEach((deviceName){
       final owner = members[devices[deviceName]];
-      if(owner != null && owner.selected == false){
+      if(owner != null && !owner.selected){
         select(owner);
       }
     });
@@ -143,30 +144,27 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
 
   @override
   void stopScan() async {
-    if(await bluetoothScanner.isScanning.first){
-      isCanceled = true;
-      scanFuture = null;
-      await bluetoothScanner.stopScan().then((_) async {
-        _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
-        _processResults();
-        _returnToList();
-      }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
-      isCanceled = false;
-    }
+    scanFuture = null;
+    await bluetoothScanner.stopScan().then((_) async {
+      _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
+      _processResults();
+      _returnToList();
+    }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
   }
 
   @override
   void startScan(VoidCallback onBluetoothDisabled, VoidCallback onScanStarted) async {
-    await bluetoothScanner.isOn.then((isOn){
+    await bluetoothScanner.isBluetoothOn().then((isOn){
       if(isOn){
         _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.SCAN);
         _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LOAD_DEVICES);
         scanFuture = _loadDevicesToScanFor().then((_) async {
           _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.SCAN);
           onScanStarted();
-          await for(ScanResult result in bluetoothScanner.scan(scanMode: ScanMode.balanced,timeout: Duration(seconds: scanDuration))){
-            if(isCanceled) break;
-            final deviceName = result.device.name;
+          await for(String deviceName in bluetoothScanner.startScan(ScanMode.balanced, Duration(seconds: scanDuration))){
+            //TODO add extra boolean that overrides this setting, showAll
+            //if(showAll || devices.keys.contains(deviceName))
+
             //only allow known devices to be used
             if(devices.keys.contains(deviceName)){
               //Lookup a possible value

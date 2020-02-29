@@ -119,7 +119,9 @@
   "SettingsTitle": "Settings",
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
-  "SettingsLoadingError": "Could not load settings",
+  "SettingsLoadingError": "Could not load the settings",
+  "SettingsGenericError": "Something went wrong",
+  "SettingsSubmitError": "Could not save the settings",
   "SettingsShowAllDevicesOptionLabel": "Show All Scanned Devices",
   "SettingsShowAllDevicesOptionDescription": "Show all scanned devices, regardless if they belong to a known person or not.",
 

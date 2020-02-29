@@ -124,11 +124,13 @@ class S implements WidgetsLocalizations {
   String get RideListRidesHeader => "Rides";
   String get RideStart => "Start";
   String get SaturdayPrefix => "Sat";
+  String get SettingsGenericError => "Something went wrong";
   String get SettingsLoading => "Loading Settings";
-  String get SettingsLoadingError => "Could not load settings";
+  String get SettingsLoadingError => "Could not load the settings";
   String get SettingsScanSliderHeader => "Duration of a scan (in seconds)";
   String get SettingsShowAllDevicesOptionDescription => "Show all scanned devices, regardless if they belong to a known person or not.";
   String get SettingsShowAllDevicesOptionLabel => "Show All Scanned Devices";
+  String get SettingsSubmitError => "Could not save the settings";
   String get SettingsTitle => "Settings";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
@@ -237,6 +239,8 @@ class $nl extends S {
   String get AddRideColorLegendPastDay => "Gepasseerde Dag Zonder Rit";
   @override
   String get MemberDetailsNoDevicesAddDevice => "Voeg een toestel toe";
+  @override
+  String get SettingsSubmitError => "Kon de instellingen niet opslaan";
   @override
   String get SettingsShowAllDevicesOptionLabel => "Toon Alle Gescande Toestellen";
   @override
@@ -387,6 +391,8 @@ class $nl extends S {
   String get MemberListLoadingFailed => "Kon leden niet laden";
   @override
   String get MemberDeleteDialogTitle => "Verwijder Lid";
+  @override
+  String get SettingsGenericError => "Er liep iets fout";
   @override
   String DeleteDeviceDescription(String device) => "$device verwijderen?";
   @override

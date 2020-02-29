@@ -8,7 +8,9 @@ class SettingsRepository {
   final ISettingsDao _dao;
 
   Future<void> loadApplicationSettings() async {
-    Settings.updateSettings(await _dao.readApplicationSettings());
+    if(Settings.instance == null){
+      Settings.updateSettings(await _dao.readApplicationSettings());
+    }
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {

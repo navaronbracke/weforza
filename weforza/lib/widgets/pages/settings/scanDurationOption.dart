@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 abstract class ScanDurationHandler {
   double get maxScanValue;

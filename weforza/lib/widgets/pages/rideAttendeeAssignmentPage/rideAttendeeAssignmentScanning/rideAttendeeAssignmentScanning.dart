@@ -33,9 +33,7 @@ class RideAttendeeAssignmentScanning extends StatelessWidget {
             stream: deviceStream,
             builder: (context,snapshot)=> snapshot.data.isEmpty ?
             Container():
-            DeviceFoundPopup(
-                deviceName: S.of(context).DeviceFound(snapshot.data)
-            ),
+            DeviceFoundPopup(deviceName: snapshot.data),
           ),
         ),
         Row(

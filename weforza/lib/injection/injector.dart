@@ -4,6 +4,8 @@ import 'package:weforza/database/deviceDao.dart';
 import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
+import 'package:weforza/model/bluetooth/bluetoothScannerImpl.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -30,10 +32,14 @@ class InjectionContainer {
     _injector.map<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
     //file handler
     _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
+    //bluetooth scanner
+    _injector.map<IBluetoothScanner>((i) => BluetoothScannerImpl(),isSingleton: true);
+
     //other
   }
 
   ///Initialize an [Injector] for testing.
+  ///This one doesn't add anything, so we can add stuff on demand during tests.
   static void initTestInjector(){
     _injector = Injector.getInjector();
   }

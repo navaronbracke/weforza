@@ -17,7 +17,7 @@ class MockBluetoothScanner implements IBluetoothScanner {
   bool _canceled = false;
 
   ///Some mock results that will be randomly emitted.
-  final List<String> _mockResults = List<String>.generate(5, (index) => "Device Name $index");
+  List<String> _mockResults;
 
   ///Returns a fake true.
   @override
@@ -26,10 +26,11 @@ class MockBluetoothScanner implements IBluetoothScanner {
   @override
   Stream<String> startScan(ScanMode scanMode, Duration duration) async* {
     _canceled = false;
+    _mockResults = List<String>.generate(5, (index) => "Device Name $index");
     _timer = Stopwatch()..start();
     while(!_canceled || _timer.elapsed.inMilliseconds < duration.inMilliseconds){
       if(_mockResults.isEmpty) break;
-
+      await Future.delayed(Duration(seconds: 2));
       yield _mockResults.removeAt(_rng.nextInt(_mockResults.length));
     }
   }

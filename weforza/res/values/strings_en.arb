@@ -12,6 +12,7 @@
 
   "HomePageRidesTab": "Rides",
   "HomePageMembersTab": "Members",
+  "HomePageSettingsTab": "Settings",
 
   "MemberListTitle": "Members",
   "MemberListLoadingFailed": "Could not load members",
@@ -114,6 +115,8 @@
   "EditDeviceSubmit": "Edit Device",
   "DeleteDeviceDescription": "Delete $device?",
   "DeleteDeviceError": "Could not delete $device",
+
+  "SettingsTitle": "Settings",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

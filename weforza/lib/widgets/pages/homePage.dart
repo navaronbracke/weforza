@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
+import 'package:weforza/widgets/pages/settings/settingsPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 
@@ -19,6 +20,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   int _selectedIndex = 0;
   
   PageController _pageController;
+
+  final _pages = [RideListPage(),MemberListPage(),SettingsPage()];
 
   @override
   void initState() {
@@ -38,15 +41,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     ios: () => _buildIosWidget(context),
   );
 
+  Widget _buildPageView(){
+    return PageView(
+      children: _pages,
+      controller: _pageController,
+      onPageChanged: (page){
+        setState(() {_selectedIndex = page; });
+      },
+    );
+  }
+
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        children: [RideListPage(),MemberListPage()],
-        controller: _pageController,
-        onPageChanged: (page){
-          setState(() {_selectedIndex = page; });
-        },
-      ),
+      body: _buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index){
@@ -61,6 +68,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             title: Text(S.of(context).HomePageMembersTab),
             icon: Icon(Icons.people),
           ),
+          BottomNavigationBarItem(
+            title: Text(S.of(context).HomePageSettingsTab),
+            icon: Icon(Icons.settings),
+          ),
         ],
       ),
     );
@@ -71,19 +82,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       child: Column(
         children: <Widget>[
           Expanded(
-            child: PageView(
-              children: [RideListPage(),MemberListPage()],
-              controller: _pageController,
-              onPageChanged: (page){
-                setState(() {_selectedIndex = page; });
-              },
-            ),
+            child: _buildPageView(),
           ),
           CupertinoTabBar(
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.directions_bike)),
               BottomNavigationBarItem(icon: Icon(Icons.people)),
+              BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings)),
             ],
             onTap: (index){
               _pageController.animateToPage(index, duration: const Duration(milliseconds: 300),curve: Curves.easeInOut);

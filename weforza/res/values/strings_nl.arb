@@ -12,6 +12,7 @@
 
   "HomePageRidesTab": "Ritten",
   "HomePageMembersTab": "Leden",
+  "HomePageSettingsTab": "Instellingen",
 
   "MemberListTitle": "Leden",
   "MemberListLoadingFailed": "Kon leden niet laden",
@@ -114,6 +115,8 @@
   "EditDeviceSubmit": "Toestel Bewerken",
   "DeleteDeviceDescription": "$device verwijderen?",
   "DeleteDeviceError": "Kon $device niet verwijderen",
+
+  "SettingsTitle": "Instellingen",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

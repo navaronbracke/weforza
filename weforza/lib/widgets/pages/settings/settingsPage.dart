@@ -8,6 +8,9 @@ import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettingsError.dart';
 import 'package:weforza/widgets/pages/settings/scanDurationOption.dart';
+import 'package:weforza/widgets/pages/settings/settingsPageGenericError.dart';
+import 'package:weforza/widgets/pages/settings/settingsSubmit.dart';
+import 'package:weforza/widgets/pages/settings/settingsSubmitError.dart';
 import 'package:weforza/widgets/pages/settings/showAllScanDevicesOption.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -30,49 +33,58 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     if(bloc.shouldLoadSettings){
-      settingsFuture = bloc.loadSettings();
+      settingsFuture = bloc.loadSettingsFromDatabase();
+    }else{
+      bloc.loadSettingsFromMemory();
     }
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
+  Widget build(BuildContext context){
+    return StreamBuilder<SettingsDisplayMode>(
+      initialData: settingsFuture == null ? SettingsDisplayMode.IDLE: SettingsDisplayMode.LOADING,
+      stream: bloc.displayMode,
+      builder: (context,snapshot){
+        switch(snapshot.data){
+          case SettingsDisplayMode.LOADING: return LoadingSettings();
+          case SettingsDisplayMode.IDLE: return PlatformAwareWidget(
+            android: () => _buildAndroidWidget(context),
+            ios: () => _buildIosWidget(context),
+          );
+          case SettingsDisplayMode.SUBMIT_ERROR: return SettingsSubmitError();
+          case SettingsDisplayMode.LOADING_ERROR: return LoadingSettingsError();
+          default: return SettingsPageGenericError();
+        }
+      },
+    );
+  }
 
   Widget _buildAndroidWidget(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).SettingsTitle),
+        actions: <Widget>[
+          SettingsSubmit(handler: bloc),
+        ],
       ),
-      body: bloc.shouldLoadSettings ? _buildSettingsLoader(): _buildBody(context),
-    );
-  }
-
-  Widget _buildSettingsLoader(){
-    return FutureBuilder<void>(
-      future: settingsFuture,
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return LoadingSettingsError();
-          }else{
-            return _buildBody(context);
-          }
-        }else{
-          return LoadingSettings();
-        }
-      },
+      body: _buildBody(context),
     );
   }
 
   Widget _buildIosWidget(BuildContext context){
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).SettingsTitle),
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(child: Text(S.of(context).SettingsTitle)),
+            ),
+            SettingsSubmit(handler: bloc),
+          ],
+        ),
         transitionBetweenRoutes: false,
       ),
-      child: bloc.shouldLoadSettings ? _buildSettingsLoader(): _buildBody(context),
+      child: _buildBody(context),
     );
   }
 

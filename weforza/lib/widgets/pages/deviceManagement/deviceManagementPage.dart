@@ -85,6 +85,7 @@ class _DeviceManagementPageState extends State<DeviceManagementPage> implements 
   void onDeviceAdded(Device device) {
     widget.devices.add(device);
     list.currentState.insertItem(0);
+    input.currentState.requestAddForm();
   }
 
   @override

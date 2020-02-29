@@ -112,7 +112,7 @@
   "DeviceAlreadyExists": "This device already exists",
   "DeviceFound": "Found $device",
   "EditDeviceSubmit": "Edit Device",
-  "DeleteDeviceDescription": "Are you sure you want to delete $device?",
+  "DeleteDeviceDescription": "Delete $device?",
   "DeleteDeviceError": "Could not delete $device",
 
   "PersonFirstNameLabel": "First Name",

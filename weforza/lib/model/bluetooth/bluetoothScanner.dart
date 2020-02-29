@@ -11,8 +11,8 @@ abstract class IBluetoothScanner {
   ///Stop a scan.
   Future<void> stopScan();
 
-  ///Start a scan. Returns a [Stream] of [ScanResult]s found while scanning.
+  ///Start a scan. Returns a [Stream] of device names found while scanning.
   ///Uses [scanMode] to determine the type of scan, e.g. [ScanMode.lowPower].
   ///The scan will stop after [duration].
-  Stream<ScanResult> startScan(ScanMode scanMode, Duration duration);
+  Stream<String> startScan(ScanMode scanMode, Duration duration);
 }

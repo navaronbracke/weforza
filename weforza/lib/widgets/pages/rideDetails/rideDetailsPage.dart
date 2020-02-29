@@ -5,6 +5,7 @@ import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/provider/rideProvider.dart';
@@ -75,8 +76,8 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     RideProvider.selectedRide,
                                     InjectionContainer.get<RideRepository>(),
                                     InjectionContainer.get<MemberRepository>(),
-                                    InjectionContainer.get<
-                                        DeviceRepository>())),
+                                    InjectionContainer.get<DeviceRepository>(),
+                                    InjectionContainer.get<IBluetoothScanner>())),
                           )))
                   .then((value) {
                 if (value != null && value) {
@@ -127,8 +128,8 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     RideProvider.selectedRide,
                                     InjectionContainer.get<RideRepository>(),
                                     InjectionContainer.get<MemberRepository>(),
-                                    InjectionContainer.get<
-                                        DeviceRepository>())),
+                                    InjectionContainer.get<DeviceRepository>(),
+                                    InjectionContainer.get<IBluetoothScanner>())),
                           )))
                   .then((value) {
                 if (value != null && value) {
@@ -186,12 +187,12 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     child: RideAttendeeAssignmentPage(
                                         RideAttendeeAssignmentBloc(
                                             RideProvider.selectedRide,
-                                            InjectionContainer.get<
-                                                RideRepository>(),
-                                            InjectionContainer.get<
-                                                MemberRepository>(),
-                                            InjectionContainer.get<
-                                                DeviceRepository>())),
+                                            InjectionContainer.get<RideRepository>(),
+                                            InjectionContainer.get<MemberRepository>(),
+                                            InjectionContainer.get<DeviceRepository>(),
+                                            InjectionContainer.get<IBluetoothScanner>()
+                                        )
+                                    ),
                                   )))
                           .then((value) {
                         if (value != null && value) {
@@ -252,12 +253,12 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                                     child: RideAttendeeAssignmentPage(
                                         RideAttendeeAssignmentBloc(
                                             RideProvider.selectedRide,
-                                            InjectionContainer.get<
-                                                RideRepository>(),
-                                            InjectionContainer.get<
-                                                MemberRepository>(),
-                                            InjectionContainer.get<
-                                                DeviceRepository>())),
+                                            InjectionContainer.get<RideRepository>(),
+                                            InjectionContainer.get<MemberRepository>(),
+                                            InjectionContainer.get<DeviceRepository>(),
+                                            InjectionContainer.get<IBluetoothScanner>()
+                                        )
+                                    ),
                                   )))
                           .then((value) {
                         if (value != null && value) {

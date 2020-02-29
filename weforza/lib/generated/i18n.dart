@@ -78,6 +78,7 @@ class S implements WidgetsLocalizations {
   String get FridayPrefix => "Fri";
   String get HomePageMembersTab => "Members";
   String get HomePageRidesTab => "Rides";
+  String get HomePageSettingsTab => "Settings";
   String get LastNameBlank => "Last Name can't be just whitespace";
   String get LastNameIllegalCharacters => "Last Name can only contain letters, spaces or ' -";
   String get MemberAlreadyExists => "This member already exists";
@@ -123,6 +124,7 @@ class S implements WidgetsLocalizations {
   String get RideListRidesHeader => "Rides";
   String get RideStart => "Start";
   String get SaturdayPrefix => "Sat";
+  String get SettingsTitle => "Settings";
   String get SundayPrefix => "Sun";
   String get ThursdayPrefix => "Thu";
   String get TuesdayPrefix => "Tue";
@@ -196,6 +198,8 @@ class $nl extends S {
   String get RideDetailsNoAttendees => "Deze rit heeft geen aanwezigen";
   @override
   String get RideAttendeeAssignmentScanningFailed => "De scan is mislukt";
+  @override
+  String get SettingsTitle => "Instellingen";
   @override
   String get EnableBluetoothGoToSettings => "Instellingen";
   @override
@@ -318,6 +322,8 @@ class $nl extends S {
   String get EnableBluetoothDialogTitle => "Bluetooth Inschakelen";
   @override
   String get DeviceTypeLabel => "Type Toestel";
+  @override
+  String get HomePageSettingsTab => "Instellingen";
   @override
   String get RideDeleteDialogDescription => "Bent u zeker dat u deze rit wil verwijderen?";
   @override

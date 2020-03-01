@@ -204,6 +204,26 @@ class RideAttendeeAssignmentBloc extends Bloc implements RideAttendeeSelector,Ri
     _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.LIST);
   }
 
+  ///Stop a scan and process the results.
+  ///Then return a boolean for the WillPopScope widget.
+  Future<bool> stopScanAndProcessResults() async {
+    _navigationBarDisplayMode.add(RideAttendeeNavigationBarDisplayMode.LIST_NO_ACTIONS);
+    _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.PROCESS);
+    bool result = false;
+    scanFuture = null;
+    await bluetoothScanner.stopScan().then((_) async {
+      _processResults();
+      await _rideRepository.updateAttendeesForRideWithDate(ride, scannedAttendees.map(
+              (uuid)=> RideAttendee(ride.date,uuid)).toList()
+      ).then((_){
+        RideProvider.reloadRides = true;
+        RideProvider.selectedRide = ride;
+        result = true;
+      });
+    }).catchError((e) => _contentDisplayModeController.add(RideAttendeeAssignmentContentDisplayMode.ERR_GENERIC));
+    return result;
+  }
+
   @override
   void select(RideAttendeeAssignmentItemBloc item) {
     if(!scannedAttendees.contains(item.member.uuid)){

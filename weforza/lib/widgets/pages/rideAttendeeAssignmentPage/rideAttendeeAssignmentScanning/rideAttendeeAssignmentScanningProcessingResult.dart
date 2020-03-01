@@ -7,16 +7,12 @@ class RideAttendeeAssignmentScanningProcessingResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 10),
-            child: PlatformAwareLoadingIndicator(),
-          ),
-          Expanded(
-            child: Text(S.of(context).RideAttendeeAssignmentProcessingScanResult),
-          ),
+          PlatformAwareLoadingIndicator(),
+          SizedBox(height: 5),
+          Text(S.of(context).RideAttendeeAssignmentProcessingScanResult),
         ],
       ),
     );

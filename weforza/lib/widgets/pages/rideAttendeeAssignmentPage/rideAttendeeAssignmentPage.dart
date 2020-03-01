@@ -32,11 +32,7 @@ class _RideAttendeeAssignmentPageState extends State<RideAttendeeAssignmentPage>
   @override
   Widget build(BuildContext context){
     return WillPopScope(
-      onWillPop: () async {
-        //Stop the scan first
-        widget.bloc.stopScan();
-        return true;
-      },
+      onWillPop: () async => await widget.bloc.stopScanAndProcessResults(),
       child: PlatformAwareWidget(
         android: () => _buildAndroidLayout(context),
         ios: () => _buildIosLayout(context),

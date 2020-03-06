@@ -154,11 +154,22 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   void pickProfileImage() async {
     _imagePickingController.add(ProfileImagePickingState.LOADING);
     await _repository.chooseProfileImageFromGallery().then((img){
-      _selectedImage = img;
+      if(img != null){
+        _selectedImage = img;
+      }
       _imagePickingController.add(ProfileImagePickingState.IDLE);
     },onError: (error){
       _imagePickingController.addError(Exception("Could not pick a profile image"));
     });
+  }
+
+  @override
+  void clearSelectedImage() {
+    if(_selectedImage != null){
+      _imagePickingController.add(ProfileImagePickingState.LOADING);
+      _selectedImage = null;
+      _imagePickingController.add(ProfileImagePickingState.IDLE);
+    }
   }
 
   ///Dispose of this object.

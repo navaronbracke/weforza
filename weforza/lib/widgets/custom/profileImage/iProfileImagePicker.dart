@@ -11,4 +11,7 @@ abstract class IProfileImagePicker {
   File get selectedImage;
   ///Pick a profile image.
   void pickProfileImage();
+
+  ///Clear the selected image.
+  void clearSelectedImage();
 }

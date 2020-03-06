@@ -414,7 +414,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
   Widget _buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddMemberTitle),
+        middle: Text(S.of(context).EditMemberTitle),
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
@@ -540,7 +540,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
   Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).AddMemberTitle),
+        title: Text(S.of(context).EditMemberTitle),
       ),
       body: SingleChildScrollView(
         child: Form(

@@ -9,13 +9,10 @@ import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class EditMemberPage extends StatefulWidget {
@@ -25,7 +22,7 @@ class EditMemberPage extends StatefulWidget {
   );
 }
 
-class _EditMemberPageState extends State<EditMemberPage> implements IProfileImagePicker {
+class _EditMemberPageState extends State<EditMemberPage> {
   _EditMemberPageState(this._bloc): assert(_bloc != null){
     _firstNameController = TextEditingController(text: _bloc.firstName);
     _lastNameController = TextEditingController(text: _bloc.lastName);
@@ -242,22 +239,10 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          StreamBuilder<ProfileImagePickingState>(
-                            initialData: ProfileImagePickingState.IDLE,
-                            stream: _bloc.imagePickingStream,
-                            builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Center(child: Text(S.of(context).MemberPickImageError,softWrap: true));
-                              }else{
-                                return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                  width: 80,
-                                  height: 80,
-                                  child: Center(
-                                    child: PlatformAwareLoadingIndicator(),
-                                  ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
-                              }
-                            },
+                          ProfileImagePicker(
+                            imageHandler: _bloc,
+                            errorMessage: S.of(context).MemberPickImageError,
+                            size: 100,
                           ),
                           SizedBox(height: 20),
                           EditMemberSubmit(_bloc.submitStream,() async {
@@ -396,22 +381,10 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              StreamBuilder<ProfileImagePickingState>(
-                                initialData: ProfileImagePickingState.IDLE,
-                                stream: _bloc.imagePickingStream,
-                                builder: (context,snapshot){
-                                  if(snapshot.hasError){
-                                    return Center(child: Text(S.of(context).MemberPickImageError,softWrap: true));
-                                  }else{
-                                    return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                      width: 80,
-                                      height: 80,
-                                      child: Center(
-                                        child: PlatformAwareLoadingIndicator(),
-                                      ),
-                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
-                                  }
-                                },
+                              ProfileImagePicker(
+                                imageHandler: _bloc,
+                                errorMessage: S.of(context).MemberPickImageError,
+                                size: 100,
                               ),
                               SizedBox(height: 20),
                               EditMemberSubmit(_bloc.submitStream,() async {
@@ -441,7 +414,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
   Widget _buildIOSPortraitLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddMemberTitle),
+        middle: Text(S.of(context).EditMemberTitle),
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
@@ -454,20 +427,10 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: StreamBuilder<ProfileImagePickingState>(
-                      initialData: ProfileImagePickingState.IDLE,
-                      stream: _bloc.imagePickingStream,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError){
-                          return Text(S.of(context).MemberPickImageError,softWrap: true);
-                        }else{
-                          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                            width: 80,
-                            height: 80,
-                            child: PlatformAwareLoadingIndicator(),
-                          ) : ProfileImagePicker(this,_bloc.image,100);
-                        }
-                      },
+                    child: ProfileImagePicker(
+                      imageHandler: _bloc,
+                      errorMessage: S.of(context).MemberPickImageError,
+                      size: 100,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -577,7 +540,7 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
   Widget _buildAndroidPortraitLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).AddMemberTitle),
+        title: Text(S.of(context).EditMemberTitle),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -587,20 +550,10 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
             child: Column(
               children: <Widget>[
                 Center(
-                  child: StreamBuilder<ProfileImagePickingState>(
-                    initialData: ProfileImagePickingState.IDLE,
-                    stream: _bloc.imagePickingStream,
-                    builder: (context,snapshot){
-                      if(snapshot.hasError){
-                        return Text(S.of(context).MemberPickImageError,softWrap: true);
-                      }else{
-                        return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: PlatformAwareLoadingIndicator(),
-                        ) : ProfileImagePicker(this,_bloc.image,100);
-                      }
-                    },
+                  child: ProfileImagePicker(
+                    imageHandler: _bloc,
+                    errorMessage: S.of(context).MemberPickImageError,
+                    size: 100,
                   ),
                 ),
                 SizedBox(height: 10),
@@ -703,11 +656,6 @@ class _EditMemberPageState extends State<EditMemberPage> implements IProfileImag
       ),
     );
   }
-
-  ///See [IProfileImagePicker].
-  @override
-  Future<void> pickProfileImage() async => await _bloc.pickImage();
-
 
   void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();

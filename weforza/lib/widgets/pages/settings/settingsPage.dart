@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         transitionBetweenRoutes: false,
       ),
-      child: _buildBody(context),
+      child: SafeArea(child: _buildBody(context)),
     );
   }
 

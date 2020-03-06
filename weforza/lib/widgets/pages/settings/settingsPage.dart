@@ -86,7 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         transitionBetweenRoutes: false,
       ),
-      child: _buildBody(context),
+      child: SafeArea(child: _buildBody(context)),
     );
   }
 
@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
         child: Column(
           children: <Widget>[
             ScanDurationOption(bloc.scanDurationHandler),
-            SizedBox(height: 5),
+            SizedBox(height: 20),
             ShowAllScanDevicesOption(bloc.showAllDevicesHandler),
           ],
         ),

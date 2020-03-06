@@ -63,7 +63,10 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(S.of(context).SettingsScanSliderHeader,style: ApplicationTheme.settingsOptionHeaderStyle),
+        Text(
+          S.of(context).SettingsScanSliderHeader,
+          style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 16)
+        ),
         SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),

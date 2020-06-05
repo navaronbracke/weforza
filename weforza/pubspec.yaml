@@ -14,7 +14,7 @@ description: The WeForza Flutter App
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,41 +25,38 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^0.1.3
 
   # This package allows the use of Dependency Injection.
-  flutter_simple_dependency_injection: ^1.0.1
+  flutter_simple_dependency_injection: ^1.0.2+1
 
   # The following dependency provides local persistence
-  sembast: ^2.1.0
+  sembast: ^2.4.4+1
 
   # For OS-specific directory paths
-  path_provider: ^1.3.1
+  path_provider: ^1.6.10
   path: ^1.6.4
 
   # UUID generator for globally unique ids
   uuid: 2.0.4
 
   # The intl package provides translation utilities
-  intl: ^0.16.0
+  intl: ^0.16.1
 
   # Jiffy provides better support for manipulating dates than the current Dart spec
-  jiffy: ^2.1.1
+  jiffy: ^3.0.1
 
   # RxDart provides extensions to Dart Streams
-  rxdart: ^0.22.6
-
-  # This package provides a Tuple class.
-  tuple: ^1.0.3
+  rxdart: ^0.24.1
 
   # This package provides platform independent file picking.
-  file_picker: ^1.4.2
+  file_picker: ^1.10.0
 
   # This package provides Bluetooth Low Energy functionality.
-  flutter_blue: ^0.6.3+1
+  flutter_blue: ^0.7.2
 
   # This package provides easy access to app settings
-  app_settings: 3.0.0+1
+  app_settings: 4.0.0
 
 dev_dependencies:
   flutter_test:

@@ -73,6 +73,8 @@ class _DeviceManagementListItemState extends State<DeviceManagementListItem> {
 
       ),
       ios: () => CupertinoIconButton(
+        onPressedColor: ApplicationTheme.primaryColor,
+        idleColor: ApplicationTheme.accentColor,
         icon: Icons.edit,
         onPressed: (){
           widget.deviceManager.requestEditForm(

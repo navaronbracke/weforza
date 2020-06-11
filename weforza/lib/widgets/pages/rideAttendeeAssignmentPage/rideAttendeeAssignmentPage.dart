@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/generated/i18n.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/enableBluetoothDialog.dart';
+import 'file:///E:/Documenten/WeForza/weforza/weforza/lib/widgets/custom/enableBluetoothDialog/enableBluetoothDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentGenericError.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentList/rideAttendeeAssignmentList.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentNavigationBarContent.dart';

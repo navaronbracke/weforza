@@ -8,7 +8,7 @@ import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 
 class EditDeviceForm extends StatefulWidget {
   EditDeviceForm({

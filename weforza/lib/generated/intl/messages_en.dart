@@ -147,6 +147,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeAssignmentSubmitError" : MessageLookupByLibrary.simpleMessage("Could not save attendees"),
     "RideAttendeeAssignmentSubmitting" : MessageLookupByLibrary.simpleMessage("Saving Attendees"),
     "RideAttendeeAssignmentTitle" : MessageLookupByLibrary.simpleMessage("Attendees"),
+    "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("Add Members"),
+    "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),

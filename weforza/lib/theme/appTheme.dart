@@ -78,8 +78,10 @@ abstract class ApplicationTheme {
   static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
 
-  static final Color rideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
-  static final Color rideAttendeeScanProcessOtherStepColor = Colors.white;
+  static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
+  static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
+  static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

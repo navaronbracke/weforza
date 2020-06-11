@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
 
 // Set up a Production injector and run the app.

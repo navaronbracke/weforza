@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeNavigationBarDisplayMode.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -65,11 +66,15 @@ class RideAttendeeAssignmentNavigationBarContent extends StatelessWidget {
             child: Center(child: Text(title,overflow: TextOverflow.ellipsis)),
           ),
           CupertinoIconButton(
+              onPressedColor: ApplicationTheme.primaryColor,
+              idleColor: ApplicationTheme.accentColor,
               icon: Icons.bluetooth,
               onPressed: () => onStartScan()
           ),
           SizedBox(width: 10),
           CupertinoIconButton(
+            onPressedColor: ApplicationTheme.primaryColor,
+            idleColor: ApplicationTheme.accentColor,
             icon: Icons.check,
             onPressed: () => onSubmit(),
           ),

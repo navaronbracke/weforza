@@ -1,13 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/theme/appTheme.dart';
 
 ///This [Widget] represents a custom ios icon button.
 class CupertinoIconButton extends StatefulWidget {
   CupertinoIconButton({
   @required this.icon,
   @required this.onPressed,
-  this.onPressedColor = ApplicationTheme.primaryColor,
-  this.idleColor = ApplicationTheme.accentColor,
+  @required this.onPressedColor,
+  @required this.idleColor,
   }): assert(
     icon != null && onPressed != null
         && idleColor != null && onPressedColor != null

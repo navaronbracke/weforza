@@ -1,24 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/provider/rideProvider.dart';
-import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentScanning/rideAttendeeScanningStartTrigger.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
-import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAssignmentPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -62,26 +58,9 @@ class _RideDetailsPageState extends State<RideDetailsPage>
           IconButton(
             icon: Icon(Icons.person_pin),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(
-                      builder: (context) => RideAttendeeScanStartTrigger(
-                            child: RideAttendeeAssignmentPage(
-                                RideAttendeeAssignmentBloc(
-                                    RideProvider.selectedRide,
-                                    InjectionContainer.get<RideRepository>(),
-                                    InjectionContainer.get<MemberRepository>(),
-                                    InjectionContainer.get<DeviceRepository>(),
-                                    InjectionContainer.get<SettingsRepository>(),
-                                    InjectionContainer.get<IBluetoothScanner>())),
-                          )))
-                  .then((value) {
-                if (value != null && value) {
-                  setState(() {
-                    attendeesFuture =
-                        _bloc.loadRideAttendees(RideProvider.selectedRide.date);
-                  });
-                }
-              });
+              Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RideAttendeeScanningPage())
+              );
             },
           ),
           IconButton(
@@ -121,34 +100,18 @@ class _RideDetailsPageState extends State<RideDetailsPage>
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton(
+                    onPressedColor: ApplicationTheme.primaryColor,
+                    idleColor: ApplicationTheme.accentColor,
                     icon: Icons.person_pin,
                     onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(
-                              builder: (context) =>
-                                  RideAttendeeScanStartTrigger(
-                                    child: RideAttendeeAssignmentPage(
-                                        RideAttendeeAssignmentBloc(
-                                            RideProvider.selectedRide,
-                                            InjectionContainer.get<RideRepository>(),
-                                            InjectionContainer.get<MemberRepository>(),
-                                            InjectionContainer.get<DeviceRepository>(),
-                                            InjectionContainer.get<SettingsRepository>(),
-                                            InjectionContainer.get<IBluetoothScanner>()
-                                        )
-                                    ),
-                                  )))
-                          .then((value) {
-                        if (value != null && value) {
-                          setState(() {
-                            attendeesFuture = _bloc.loadRideAttendees(
-                                RideProvider.selectedRide.date);
-                          });
-                        }
-                      });
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RideAttendeeScanningPage())
+                      );
                     }),
                 SizedBox(width: 10),
                 CupertinoIconButton(
+                    onPressedColor: ApplicationTheme.primaryColor,
+                    idleColor: ApplicationTheme.accentColor,
                     icon: Icons.edit,
                     onPressed: () => Navigator.push(
                         context,
@@ -156,6 +119,8 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                             builder: (context) => EditRidePage()))),
                 SizedBox(width: 10),
                 CupertinoIconButton(
+                    onPressedColor: ApplicationTheme.primaryColor,
+                    idleColor: ApplicationTheme.accentColor,
                     icon: Icons.delete,
                     onPressed: () => showCupertinoDialog(
                         context: context,

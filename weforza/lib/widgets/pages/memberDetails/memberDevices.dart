@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDeviceItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -43,6 +44,8 @@ class MemberDevices extends StatelessWidget {
         onPressed: onEditPressed,
       ),
       ios: () => CupertinoIconButton(
+        onPressedColor: ApplicationTheme.primaryColor,
+        idleColor: ApplicationTheme.accentColor,
         icon: Icons.border_color,
         onPressed: onEditPressed,
       ),

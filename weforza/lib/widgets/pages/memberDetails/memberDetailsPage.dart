@@ -133,10 +133,15 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(icon: Icons.edit,
+                CupertinoIconButton(
+                    onPressedColor: ApplicationTheme.primaryColor,
+                    idleColor: ApplicationTheme.accentColor,
+                    icon: Icons.edit,
                     onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
                 SizedBox(width: 10),
                 CupertinoIconButton(
+                    onPressedColor: ApplicationTheme.primaryColor,
+                    idleColor: ApplicationTheme.accentColor,
                     icon: Icons.delete,
                     onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
                 ),

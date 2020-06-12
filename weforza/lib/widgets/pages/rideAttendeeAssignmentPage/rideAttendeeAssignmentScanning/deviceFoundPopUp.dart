@@ -31,12 +31,13 @@ class _DeviceFoundPopupState extends State<DeviceFoundPopup> with TickerProvider
     return Center(
       child: AnimatedBuilder(
         animation: _controller,
+        child: Text(text),
         builder: (context,child){
           return Container(
             padding: position.value,
             child: Opacity(
               opacity: fadeInAndOut.value,
-              child: Text(text),
+              child: child,
             ),
           );
         },

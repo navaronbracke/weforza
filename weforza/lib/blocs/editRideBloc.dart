@@ -136,7 +136,6 @@ class EditRideBloc extends Bloc {
     final newRide = Ride(
       date: ride.date,
       title: titleInput == "" ? null : titleInput,
-      numberOfAttendees: ride.numberOfAttendees,
       destinationAddress: destinationInput == "" ? null : destinationInput,
       startAddress: departureInput == "" ? null : departureInput,
       distance: distanceInput

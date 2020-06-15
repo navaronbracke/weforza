@@ -693,6 +693,26 @@ class S {
     );
   }
 
+  /// `Skip Scan`
+  String get RideAttendeeScanningSkipScan {
+    return Intl.message(
+      'Skip Scan',
+      name: 'RideAttendeeScanningSkipScan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Scan Results`
+  String get RideAttendeeScanningSaveScanResults {
+    return Intl.message(
+      'Save Scan Results',
+      name: 'RideAttendeeScanningSaveScanResults',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

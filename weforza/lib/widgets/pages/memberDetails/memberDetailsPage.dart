@@ -40,10 +40,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
 
   Future<List<Device>> devicesFuture;
 
+  Future<int> attendingCountFuture;
+
   @override
   void initState() {
     super.initState();
     devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
+    attendingCountFuture = _bloc.getAttendingCount(MemberProvider.selectedMember.uuid);
   }
 
   @override
@@ -105,7 +108,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                   ),
                   Expanded(
                     child: Center(
-                      child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                      child: _buildAttendingCountWidget(),
                     ),
                   ),
                   //tel/count
@@ -190,7 +193,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     ),
                     Expanded(
                       child: Center(
-                        child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                        child: _buildAttendingCountWidget(),
                       ),
                     ),
                     //tel/count
@@ -240,14 +243,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   ///Build the attending count widget.
-  Widget _buildAttendingCountWidget(Future<int> future){
+  Widget _buildAttendingCountWidget(){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(Icons.location_on),
         SizedBox(width: 5),
         FutureBuilder<int>(
-          future: future,
+          future: attendingCountFuture,
           builder: (context,snapshot){
             if(snapshot.connectionState == ConnectionState.done){
               if(snapshot.hasError){

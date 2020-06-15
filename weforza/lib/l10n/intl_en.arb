@@ -74,6 +74,7 @@
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
   "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members.",
   "RideAttendeeScanningGoBack": "Return to detail page",
+  "RideAttendeeScanningGenericError": "Something went wrong.",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

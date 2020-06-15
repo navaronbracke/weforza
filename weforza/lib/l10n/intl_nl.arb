@@ -74,6 +74,7 @@
   "RideAttendeeScanningPreparingScan": "Scan Voorbereiden",
   "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
   "RideAttendeeScanningGoBack": "Terug naar detailpagina",
+  "RideAttendeeScanningGenericError": "Er liep iets fout.",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

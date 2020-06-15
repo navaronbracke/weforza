@@ -623,121 +623,31 @@ class S {
     );
   }
 
-  /// `Attendees`
-  String get RideAttendeeAssignmentTitle {
+  /// `Preparing Scan`
+  String get RideAttendeeScanningPreparingScan {
     return Intl.message(
-      'Attendees',
-      name: 'RideAttendeeAssignmentTitle',
+      'Preparing Scan',
+      name: 'RideAttendeeScanningPreparingScan',
       desc: '',
       args: [],
     );
   }
 
-  /// `Loading members for assignment`
-  String get RideAttendeeAssignmentLoadingMembers {
+  /// `Cannot start a scan, there are no members.`
+  String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Loading members for assignment',
-      name: 'RideAttendeeAssignmentLoadingMembers',
+      'Cannot start a scan, there are no members.',
+      name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
     );
   }
 
-  /// `The scan failed`
-  String get RideAttendeeAssignmentScanningFailed {
+  /// `Return to detail page`
+  String get RideAttendeeScanningGoBack {
     return Intl.message(
-      'The scan failed',
-      name: 'RideAttendeeAssignmentScanningFailed',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Return to the list`
-  String get RideAttendeeAssignmentReturnToList {
-    return Intl.message(
-      'Return to the list',
-      name: 'RideAttendeeAssignmentReturnToList',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Scanning for attendees`
-  String get RideAttendeeAssignmentScanningTitle {
-    return Intl.message(
-      'Scanning for attendees',
-      name: 'RideAttendeeAssignmentScanningTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Stop Scan`
-  String get RideAttendeeAssignmentStopScan {
-    return Intl.message(
-      'Stop Scan',
-      name: 'RideAttendeeAssignmentStopScan',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Saving Attendees`
-  String get RideAttendeeAssignmentSubmitting {
-    return Intl.message(
-      'Saving Attendees',
-      name: 'RideAttendeeAssignmentSubmitting',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not save attendees`
-  String get RideAttendeeAssignmentSubmitError {
-    return Intl.message(
-      'Could not save attendees',
-      name: 'RideAttendeeAssignmentSubmitError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong`
-  String get RideAttendeeAssignmentError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'RideAttendeeAssignmentError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Loading all known devices`
-  String get RideAttendeeAssignmentLoadingDevices {
-    return Intl.message(
-      'Loading all known devices',
-      name: 'RideAttendeeAssignmentLoadingDevices',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Processing Scan Results`
-  String get RideAttendeeAssignmentProcessingScanResult {
-    return Intl.message(
-      'Processing Scan Results',
-      name: 'RideAttendeeAssignmentProcessingScanResult',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The previous scan wasn't finished`
-  String get RideAttendeeAssignmentAlreadyScanning {
-    return Intl.message(
-      'The previous scan wasn\'t finished',
-      name: 'RideAttendeeAssignmentAlreadyScanning',
+      'Return to detail page',
+      name: 'RideAttendeeScanningGoBack',
       desc: '',
       args: [],
     );

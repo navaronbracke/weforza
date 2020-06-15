@@ -75,6 +75,9 @@
   "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
   "RideAttendeeScanningGoBack": "Terug naar detailpagina",
   "RideAttendeeScanningGenericError": "Er liep iets fout.",
+  "RideAttendeeScanningBluetoothDisabled": "Kan niet scannen, Bluetooth staat uit.",
+  "RideAttendeeScanningGoToBluetoothSettings": "Naar Instellingen",
+  "RideAttendeeScanningRetryScan": "Opnieuw Scannen",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",
@@ -132,10 +135,6 @@
   "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
   "PhoneMinLength": "Een telefoonnummer is minimum {minLength} cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum {maxLength} cijfers lang",
-
-  "EnableBluetoothDialogTitle": "Bluetooth Inschakelen",
-  "EnableBluetoothDialogDescription": "Bluetooth is verplicht om te scannen. Doorgaan naar instellingen?",
-  "EnableBluetoothGoToSettings": "Instellingen",
 
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",

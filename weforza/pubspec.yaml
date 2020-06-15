@@ -33,9 +33,6 @@ dependencies:
   # The following dependency provides local persistence
   sembast: ^2.4.4+1
 
-  # This package provides a locking mechanism for concurrent access
-  synchronized: ^2.2.0
-
   # For OS-specific directory paths
   path_provider: ^1.6.10
   path: ^1.6.4

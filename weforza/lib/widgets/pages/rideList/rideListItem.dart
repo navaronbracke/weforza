@@ -4,14 +4,16 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-//TODO create a ride attendee futurebuilder for the count property
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget {
-  RideListItem(this.ride, this._onTap): assert(ride != null && _onTap != null);
+  RideListItem({@required this.ride, this.onPressed, this.rideAttendeeFuture}):
+        assert(ride != null && rideAttendeeFuture != null && onPressed != null);
 
   final Ride ride;
 
-  final VoidCallback _onTap;
+  final void Function(Future<int> attendeeFuture, Ride ride) onPressed;
+
+  final Future<int> rideAttendeeFuture;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -19,7 +21,8 @@ class RideListItem extends StatelessWidget {
           android: () => _buildAndroidLayout(context),
           ios: () => _buildIOSLayout(context),
         ),
-    onTap: _onTap,
+    //Pass the still running future to the on tap, so we can wait for it to finish in the detail page.
+    onTap: () => onPressed(rideAttendeeFuture, ride),
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -29,7 +32,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(future: rideAttendeeFuture),
               ],
             ),
           )
@@ -43,7 +46,7 @@ class RideListItem extends StatelessWidget {
               children: <Widget>[
                 Text(ride.getFormattedDate(context, false)),
                 Expanded(child: Center()),
-                RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
+                RideAttendeeCounter(future: rideAttendeeFuture),
               ],
             ));
   }
@@ -58,7 +61,7 @@ class RideListItem extends StatelessWidget {
                 children: <Widget>[
                   Text(ride.getFormattedDate(context, false)),
                   Expanded(child: Center()),
-                  RideAttendeeCounter(count: ride.numberOfAttendees.toString()),
+                  RideAttendeeCounter(future: rideAttendeeFuture),
                 ],
               ),
             ),
@@ -81,7 +84,7 @@ class RideListItem extends StatelessWidget {
                     children: <Widget>[
                       Text(ride.getFormattedDate(context, false)),
                       Expanded(child: Center()),
-                      RideAttendeeCounter(count: ride.numberOfAttendees.toString())
+                      RideAttendeeCounter(future: rideAttendeeFuture)
                     ],
                   )
                 ],

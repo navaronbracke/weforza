@@ -191,16 +191,10 @@ class _RideDetailsPageState extends State<RideDetailsPage>
               ],
             ),
             Expanded(child: Center()),
-            StreamBuilder<String>(
-              initialData: "",
-              stream: _bloc.attendeesCount,
-              builder: (context, snapshot) {
-                if (snapshot.hasError || snapshot.data == "") {
-                  return Center();
-                } else {
-                  return RideAttendeeCounter(count: snapshot.data);
-                }
-              },
+            RideAttendeeCounter(
+              //We need the attendee names + images for displaying in the list.
+              //But we need the total of people for the counter, thus we map to the length when its done loading.
+              future: attendeesFuture.then((attendees) => attendees.length)
             ),
           ],
         ),
@@ -227,12 +221,13 @@ class _RideDetailsPageState extends State<RideDetailsPage>
           : <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(ride.title,
+                child: Text(
+                    ride.title,
                     softWrap: true,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),

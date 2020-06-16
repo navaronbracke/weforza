@@ -32,6 +32,9 @@ abstract class IRideDao {
 
   ///Get the [Member]s of a given ride.
   Future<List<Member>> getRideAttendees(DateTime date);
+
+  ///Get the amount of attendees for a given ride.
+  Future<int> getAmountOfRideAttendees(DateTime rideDate);
 }
 
 class RideDao implements IRideDao {
@@ -120,5 +123,15 @@ class RideDao implements IRideDao {
             sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
     //map the record snapshots
     return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
+  }
+
+  @override
+  Future<int> getAmountOfRideAttendees(DateTime rideDate) async {
+    assert(rideDate != null);
+    //fetch the attendees of the ride
+    final attendees = await _rideAttendeeStore.find(_database,
+        finder: Finder(filter: Filter.equals("date", rideDate.toIso8601String())));
+
+    return attendees.length;
   }
 }

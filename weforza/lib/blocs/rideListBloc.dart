@@ -11,6 +11,8 @@ class RideListBloc extends Bloc {
 
   Future<List<Ride>> loadRides() => _repository.getRides();
 
+  Future<int> getAmountOfRideAttendees(DateTime rideDate) => _repository.getAmountOfRideAttendees(rideDate);
+
   @override
   void dispose() {}
 }

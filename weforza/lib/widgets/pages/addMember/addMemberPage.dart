@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -12,6 +11,7 @@ import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents the form for adding a member.
 class AddMemberPage extends StatefulWidget {
@@ -228,7 +228,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       child: AddMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
                           await _bloc.addMember((){
-                            MemberProvider.reloadMembers = true;
+                            ReloadDataProvider.of(context).reloadMembers.value = true;
                             Navigator.pop(context);
                           });
                         }else {
@@ -350,7 +350,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     child: AddMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
                         await _bloc.addMember((){
-                          MemberProvider.reloadMembers = true;
+                          ReloadDataProvider.of(context).reloadMembers.value = true;
                           Navigator.pop(context);
                         });
                       }

@@ -6,33 +6,27 @@ import 'package:weforza/blocs/editMemberBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditMemberPage extends StatefulWidget {
   @override
-  _EditMemberPageState createState() => _EditMemberPageState(
-      EditMemberBloc(InjectionContainer.get<MemberRepository>(), MemberProvider.selectedMember)
-  );
+  _EditMemberPageState createState() => _EditMemberPageState();
 }
 
 class _EditMemberPageState extends State<EditMemberPage> {
-  _EditMemberPageState(this._bloc): assert(_bloc != null){
-    _firstNameController = TextEditingController(text: _bloc.firstName);
-    _lastNameController = TextEditingController(text: _bloc.lastName);
-    _phoneController = TextEditingController(text: _bloc.phone);
-  }
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
   ///The BLoC in charge of the form.
-  final EditMemberBloc _bloc;
+  EditMemberBloc _bloc;
 
   TextEditingController _firstNameController;
   TextEditingController _lastNameController;
@@ -115,8 +109,25 @@ class _EditMemberPageState extends State<EditMemberPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _initStrings(context);
+    final MemberItem member = SelectedItemProvider.of(context).selectedMember.value;
+    _bloc = EditMemberBloc(
+      repository: InjectionContainer.get<MemberRepository>(),
+      firstName: member.firstName,
+      lastName: member.lastName,
+      phone: member.phone,
+      profileImage: member.profileImage,
+      id: member.uuid,
+    );
+    _firstNameController = TextEditingController(text: _bloc.firstName);
+    _lastNameController = TextEditingController(text: _bloc.lastName);
+    _phoneController = TextEditingController(text: _bloc.phone);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: () => _buildAndroidLayout(context),
       ios: () => _buildIOSLayout(context),
@@ -232,8 +243,8 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       child: EditMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
                           await _bloc.editMember((MemberItem updatedMember){
-                            MemberProvider.reloadMembers = true;
-                            MemberProvider.selectedMember = updatedMember;
+                            ReloadDataProvider.of(context).reloadMembers.value = true;
+                            SelectedItemProvider.of(context).selectedMember.value = updatedMember;
                             Navigator.pop(context);
                           });
                         }
@@ -353,8 +364,8 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     child: EditMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
                         await _bloc.editMember((MemberItem updatedMember){
-                          MemberProvider.reloadMembers = true;
-                          MemberProvider.selectedMember = updatedMember;
+                          ReloadDataProvider.of(context).reloadMembers.value = true;
+                          SelectedItemProvider.of(context).selectedMember.value = updatedMember;
                           Navigator.pop(context);
                         });
                       }

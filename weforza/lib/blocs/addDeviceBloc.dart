@@ -4,15 +4,12 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
 class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   AddDeviceBloc(this._repository): assert(_repository != null);
 
-  ///The id of the owner to add the device for.
-  final String ownerUuid = MemberProvider.selectedMember.uuid;
   final DeviceRepository _repository;
 
   ///Auto validate flag for device name.
@@ -42,10 +39,10 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
-  Future<void> addDevice(void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> addDevice(String ownerId, void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    final device = Device(ownerId: ownerUuid,name: _newDeviceName,type: _type,creationDate: DateTime.now());
+    final device = Device(ownerId: ownerId, name: _newDeviceName,type: _type,creationDate: DateTime.now());
     await _repository.deviceExists(device).then((exists) async {
       if(!exists){
         await _repository.addDevice(device).then((_){

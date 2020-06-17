@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
@@ -11,16 +12,20 @@ import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 
 class EditMemberBloc extends Bloc implements IProfileImagePicker {
-  EditMemberBloc(this._repository,this.member): assert(_repository != null && member != null){
-    _selectedImage = member.profileImage;
-    firstName = member.firstName;
-    lastName = member.lastName;
-    phone = member.phone;
-  }
+  EditMemberBloc({
+    @required this.repository,
+    @required this.profileImage,
+    @required this.firstName,
+    @required this.lastName,
+    @required this.phone,
+    @required this.id,
+  }): assert(
+    repository != null && firstName != null && lastName != null
+        && phone != null && id != null
+  );
 
-  final MemberItem member;
   ///The [IMemberRepository] that handles the submit.
-  final MemberRepository _repository;
+  final MemberRepository repository;
 
   StreamController<EditMemberSubmitState> _submitStateController = BehaviorSubject();
   Stream<EditMemberSubmitState> get submitStream => _submitStateController.stream;
@@ -34,10 +39,11 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
   String firstName;
   String lastName;
   String phone;
-  File _selectedImage;
+  final String id;
+  File profileImage;
 
   @override
-  File get selectedImage => _selectedImage;
+  File get selectedImage => profileImage;
 
   ///The actual errors.
   String firstNameError;
@@ -141,18 +147,18 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
   Future<void> editMember(void Function(MemberItem updatedMember) onSuccess) async {
     _submitStateController.add(EditMemberSubmitState.SUBMIT);
     final Member newMember = Member(
-      member.uuid,
+      id,
       firstName,
       lastName,
       phone,
-      (_selectedImage == null) ? null : _selectedImage.path,
+      profileImage?.path,
     );
-    await _repository.memberExists(firstName, lastName, phone,member.uuid).then((exists) async {
+    await repository.memberExists(firstName, lastName, phone,id).then((exists) async {
       if(exists){
         _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       }else{
-        await _repository.updateMember(newMember).then((_){
-          onSuccess(MemberItem(newMember,_selectedImage));
+        await repository.updateMember(newMember).then((_){
+          onSuccess(MemberItem(newMember,profileImage));
         },onError: (error){
           _submitStateController.add(EditMemberSubmitState.ERROR);
         });
@@ -165,9 +171,9 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
   @override
   void pickProfileImage() async {
     _imagePickingController.add(ProfileImagePickingState.LOADING);
-    await _repository.chooseProfileImageFromGallery().then((img){
+    await repository.chooseProfileImageFromGallery().then((img){
       if(img != null){
-        _selectedImage = img;
+        profileImage = img;
       }
       _imagePickingController.add(ProfileImagePickingState.IDLE);
     },onError: (error){
@@ -183,9 +189,9 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
 
   @override
   void clearSelectedImage() {
-    if(_selectedImage != null){
+    if(profileImage != null){
       _imagePickingController.add(ProfileImagePickingState.LOADING);
-      _selectedImage = null;
+      profileImage = null;
       _imagePickingController.add(ProfileImagePickingState.IDLE);
     }
   }

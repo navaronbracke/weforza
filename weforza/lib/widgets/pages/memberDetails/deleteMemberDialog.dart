@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This interface provides a contract to trigger a member delete.
 abstract class DeleteMemberHandler {
@@ -52,7 +52,7 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> {
                 onPressed: () {
                   setState(() {
                     deleteMemberFuture = widget.deleteHandler.deleteMember().then((_){
-                      MemberProvider.reloadMembers = true;
+                      ReloadDataProvider.of(context).reloadMembers.value = true;
                       final navigator = Navigator.of(context);
                       //Pop both the dialog and the detail screen
                       navigator.pop();
@@ -116,7 +116,7 @@ class _DeleteMemberDialogState extends State<DeleteMemberDialog> {
                 onPressed: () {
                   setState(() {
                     deleteMemberFuture = widget.deleteHandler.deleteMember().then((_){
-                      MemberProvider.reloadMembers = true;
+                      ReloadDataProvider.of(context).reloadMembers.value = true;
                       final navigator = Navigator.of(context);
                       //Pop both the dialog and the detail screen
                       navigator.pop();

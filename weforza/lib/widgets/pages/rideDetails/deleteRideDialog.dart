@@ -6,6 +6,7 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
+//TODO remove this interface
 abstract class DeleteRideHandler {
   Future<void> deleteRide();
 }

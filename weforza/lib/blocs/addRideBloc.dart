@@ -27,13 +27,11 @@ class AddRideBloc extends Bloc {
   ///The already persistent rides.
   List<DateTime> _existingRides;
 
+  ///This future holds the loading process for initializing [_existingRides].
+  Future<void> loadExistingRidesFuture;
+
   ///The rides to add on a submit.
   List<DateTime> _ridesToAdd = List();
-
-  ///A callback function that is fired when a selection clear is requested.
-  VoidCallback _onSelectionCleared;
-
-  set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
 
   //Intercept a day pressed event.
   bool onDayPressed(DateTime date){
@@ -54,25 +52,34 @@ class AddRideBloc extends Bloc {
       return true;
     }
   }
-
+  
   ///This function clears the current ride dates selection.
   void onRequestClear(){
-    if(_ridesToAdd.isNotEmpty && _onSelectionCleared != null){
-      _onSelectionCleared();
+    if(_ridesToAdd.isNotEmpty){
       _ridesToAdd.clear();
       _submitController.add(AddRideSubmitState.IDLE);
     }
   }
 
+  ///Load [_existingRides] if not initialized.
+  ///This also populates loadExistingRidesFuture, which is used for the calendar.
+  void loadRideDatesIfNotLoaded(){
+    if(_existingRides == null){
+      loadExistingRidesFuture = loadRideDates();
+    }
+  }
+
   ///Load the existing ride dates.
-  Future<List<DateTime>> loadRideDates() async => _existingRides = await repository.getRideDates();
+  Future<void> loadRideDates() async {
+    _existingRides = await repository.getRideDates();
+  }
 
   ///Whether a day, has or had a ride planned beforehand.
   bool dayHasRidePlanned(DateTime date){
     assert(date != null);
     return _existingRides.contains(date) || _ridesToAdd.contains(date);
   }
-  
+
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
   bool dayIsNewlyScheduledRide(DateTime date){
     assert(date != null);
@@ -107,6 +114,7 @@ class AddRideBloc extends Bloc {
     daysInMonth = newDate.daysInMonth;
   }
 
+  //TODO could we remove the on success callback here?
   ///Add the selected rides.
   Future<void> addRides(VoidCallback onSuccess) async {
     if(_ridesToAdd.isNotEmpty){

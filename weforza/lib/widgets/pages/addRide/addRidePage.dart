@@ -5,12 +5,13 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
-import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
@@ -21,7 +22,6 @@ class AddRidePage extends StatefulWidget {
   );
 }
 
-//TODO redo the calendar code
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
   _AddRidePageState({@required this.bloc}): assert(bloc != null);
@@ -64,14 +64,16 @@ class _AddRidePageState extends State<AddRidePage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: RideCalendarColorLegend(),
+                  child: AddRideCalendarColorLegend(),
                 ),
                 Expanded(
                   child: Center(
                     child: AddRideSubmit(bloc.submitStream,() async {
-                      await bloc.addRides((){
+                      await bloc.addRides().then((_){
                         ReloadDataProvider.of(context).reloadRides.value = true;
                         Navigator.pop(context);
+                      }).catchError((e){
+                        //do nothing with the error
                       });
                     }),
                   ),
@@ -115,14 +117,16 @@ class _AddRidePageState extends State<AddRidePage> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: RideCalendarColorLegend(),
+                      child: AddRideCalendarColorLegend(),
                     ),
                     Expanded(
                       child: Center(
                         child: AddRideSubmit(bloc.submitStream,() async {
-                          await bloc.addRides((){
+                          await bloc.addRides().then((_){
                             ReloadDataProvider.of(context).reloadRides.value = true;
                             Navigator.pop(context);
+                          }).catchError((e){
+                            //do nothing with the error
                           });
                         }),
                       ),
@@ -139,7 +143,6 @@ class _AddRidePageState extends State<AddRidePage> {
 
   ///Build the calendar.
   Widget _buildCalendar(){
-    //TODO the calendar should use an inherited widget to get the bloc
     return FutureBuilder<void>(
       future: bloc.loadExistingRidesFuture,
         builder: (context,snapshot){
@@ -150,7 +153,9 @@ class _AddRidePageState extends State<AddRidePage> {
               );
             }
             else{
-              return AddRideCalendar();
+              return AddRideBlocProvider(
+                bloc: bloc, child: AddRideCalendar()
+              );
             }
           }else {
             return Center(

@@ -20,7 +20,6 @@ void main() async {
   runApp(WeForzaApp());
 }
 
-//TODO check all usage of didChangeDependencies
 ///This class represents the application.
 class WeForzaApp extends StatefulWidget {
 

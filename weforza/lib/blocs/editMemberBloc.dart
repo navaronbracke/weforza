@@ -144,6 +144,7 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     return phoneError;
   }
 
+  //TODO remove the callback
   Future<void> editMember(void Function(MemberItem updatedMember) onSuccess) async {
     _submitStateController.add(EditMemberSubmitState.SUBMIT);
     final Member newMember = Member(

@@ -1,13 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/addRideCalendarItemBloc.dart';
+import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
-  AddRideCalendarItem(this.bloc): assert(bloc != null);
+  AddRideCalendarItem({@required this.date}): assert(date != null);
 
-  final AddRideCalendarItemBloc bloc;
+  final DateTime date;
 
   @override
   _AddRideCalendarItemState createState() => _AddRideCalendarItemState();
@@ -19,26 +20,21 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
   Color _fontColor;
 
   @override
-  void initState() {
-    super.initState();
-    widget.bloc.onReset = (){
-      if(widget.bloc.isNewlyScheduledRide()){
-        setState(() {
-          _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
-          _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
-        });
-      }
-    };
-    _setColors();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bloc = AddRideBlocProvider.of(context).bloc;
+    _setColors(bloc);
+    bloc.registerResetCallback(() => _onReset(bloc));
   }
 
   @override
   Widget build(BuildContext context) {
+    final bloc = AddRideBlocProvider.of(context).bloc;
     return GestureDetector(
       onTap: (){
         //Update the widget if allowed
-        if(widget.bloc.onDayPressed()){
-          setState(() { _setColors(); });
+        if(mounted && bloc.onDayPressed(widget.date)){
+          setState(() { _setColors(bloc); });
         }
       },
       child: Container(
@@ -46,16 +42,16 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         height: 40,
         decoration: BoxDecoration(color: _backgroundColor,borderRadius: BorderRadius.all(Radius.circular(5))),
         child: Center(
-          child: Text("${widget.bloc.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),
+          child: Text("${widget.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),
         ),
       ),
     );
   }
 
   ///Update the colors for the widget.
-  void _setColors(){
-    if(widget.bloc.isBeforeToday()){
-      if(widget.bloc.hasRidePlanned()){
+  void _setColors(AddRideBloc bloc){
+    if(bloc.isBeforeToday(widget.date)){
+      if(bloc.dayIsNewlyScheduledRide(widget.date)){
         //Past day with ride
         _backgroundColor = ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarPastDayWithRideFontColor;
@@ -65,8 +61,8 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         _fontColor = ApplicationTheme.rideCalendarPastDayWithoutRideFontColor;
       }
     }else{
-      if(widget.bloc.hasRidePlanned()){
-        if(widget.bloc.isNewlyScheduledRide()){
+      if(bloc.dayHasRidePlanned(widget.date)){
+        if(bloc.dayIsNewlyScheduledRide(widget.date)){
           //new selected date
           _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarSelectedDayFontColor;
@@ -80,6 +76,16 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
       }
+    }
+  }
+
+  ///Reset the colors for the items of the current selection.
+  void _onReset(AddRideBloc bloc){
+    if(mounted && bloc.dayIsNewlyScheduledRide(widget.date)){
+      setState(() {
+        _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
+        _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
+      });
     }
   }
 }

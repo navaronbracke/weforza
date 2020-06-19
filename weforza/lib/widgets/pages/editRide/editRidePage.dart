@@ -5,7 +5,6 @@ import 'package:weforza/blocs/editRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/editRide/editRideSubmit.dart';
@@ -16,21 +15,12 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditRidePage extends StatefulWidget {
   @override
-  _EditRidePageState createState() => _EditRidePageState(EditRideBloc(
-      InjectionContainer.get<RideRepository>(), RideProvider.selectedRide));
+  _EditRidePageState createState() => _EditRidePageState();
 }
 
 class _EditRidePageState extends State<EditRidePage> {
-  _EditRidePageState(this._bloc) : assert(_bloc != null) {
-    _titleController = TextEditingController(text: _bloc.titleInput);
-    _departureController = TextEditingController(text: _bloc.departureInput);
-    _destinationController =
-        TextEditingController(text: _bloc.destinationInput);
-    _distanceController = TextEditingController(
-        text: _bloc.distanceInput == 0.0 ? "" : "${_bloc.distanceInput}");
-  }
 
-  final EditRideBloc _bloc;
+  EditRideBloc bloc;
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
@@ -68,30 +58,46 @@ class _EditRidePageState extends State<EditRidePage> {
     _destinationLabel = translator.EditRideDestinationLabel;
     _distanceLabel = translator.EditRideDistanceLabel;
     _titleMaxLengthMessage =
-        translator.EditRideTitleMaxLength("${_bloc.titleMaxLength}");
+        translator.EditRideTitleMaxLength("${bloc.titleMaxLength}");
     _titleWhitespaceMessage = translator.EditRideTitleWhitespace;
     _distanceInvalidMessage = translator.EditRideDistanceInvalid;
     _distancePositiveMessage = translator.EditRideDistancePositive;
     _distanceMaximumMessage =
-        translator.EditRideDistanceMaximum("${_bloc.maxDistanceInKm}");
+        translator.EditRideDistanceMaximum("${bloc.maxDistanceInKm}");
     _addressWhitespaceMessage = translator.EditRideAddressWhitespace;
     _addressMaxLengthMessage =
-        translator.EditRideAddressMaxLength("${_bloc.addressMaxLength}");
+        translator.EditRideAddressMaxLength("${bloc.addressMaxLength}");
     _addressInvalidMessage = translator.EditRideAddressInvalid;
   }
 
   @override
   Widget build(BuildContext context) {
-    _initStrings(context);
+    final ride = SelectedItemProvider.of(context).selectedRide.value;
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIOSLayout(context),
+      android: () => _buildAndroidLayout(context,ride),
+      ios: () => _buildIOSLayout(context,ride),
     );
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc = EditRideBloc(
+      ride: SelectedItemProvider.of(context).selectedRide.value,
+      repository: InjectionContainer.get<RideRepository>()
+    );
+    _titleController = TextEditingController(text: bloc.titleInput);
+    _departureController = TextEditingController(text: bloc.departureInput);
+    _destinationController = TextEditingController(text: bloc.destinationInput);
+    _distanceController = TextEditingController(
+        text: bloc.distanceInput == 0.0 ? "" : "${bloc.distanceInput}"
+    );
+    _initStrings(context);
+  }
+
+  @override
   void dispose() {
-    _bloc.dispose();
+    bloc.dispose();
     _titleController.dispose();
     _destinationController.dispose();
     _departureController.dispose();
@@ -110,18 +116,18 @@ class _EditRidePageState extends State<EditRidePage> {
 
   ///Validate all current form input for IOS.
   bool iosAllFormInputValidator(){
-    final titleValid = _bloc.validateTitle(_titleController.text, _titleWhitespaceMessage, _titleMaxLengthMessage) == null;
-    final departureValid = _bloc.validateDepartureAddress(
+    final titleValid = bloc.validateTitle(_titleController.text, _titleWhitespaceMessage, _titleMaxLengthMessage) == null;
+    final departureValid = bloc.validateDepartureAddress(
         _departureController.text,
         _addressWhitespaceMessage,
         _addressMaxLengthMessage,
         _addressInvalidMessage) == null;
-    final destinationValid = _bloc.validateDestinationAddress(
+    final destinationValid = bloc.validateDestinationAddress(
         _destinationController.text,
         _addressWhitespaceMessage,
         _addressMaxLengthMessage,
         _addressInvalidMessage) == null;
-    final distanceValid = _bloc.validateDistance(
+    final distanceValid = bloc.validateDistance(
       _distanceController.text,
       _distanceInvalidMessage,
       _distancePositiveMessage,
@@ -129,8 +135,7 @@ class _EditRidePageState extends State<EditRidePage> {
     return titleValid && departureValid && destinationValid && distanceValid;
   }
 
-  Widget _buildAndroidLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildAndroidLayout(BuildContext context, Ride ride) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditRidePageTitle),
@@ -151,7 +156,9 @@ class _EditRidePageState extends State<EditRidePage> {
                       SizedBox(width: 4),
                       Text(ride.getFormattedDate(context, false),
                           style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
+                              fontWeight: FontWeight.w500, fontSize: 16
+                          )
+                      ),
                     ],
                   ),
                 ),
@@ -167,14 +174,19 @@ class _EditRidePageState extends State<EditRidePage> {
                   controller: _titleController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateTitle(
-                      value, _titleWhitespaceMessage, _titleMaxLengthMessage),
-                  autovalidate: _bloc.autoValidateTitle,
+                  validator: (value) => bloc.validateTitle(
+                      value, _titleWhitespaceMessage, _titleMaxLengthMessage
+                  ),
+                  autovalidate: bloc.autoValidateTitle,
                   onChanged: (value) => setState(() {
-                    _bloc.autoValidateTitle = true;
+                    bloc.autoValidateTitle = true;
                   }),
                   onFieldSubmitted: (value) {
-                    _focusChange(context, _titleFocusNode, _departureFocusNode);
+                    _focusChange(
+                        context,
+                        _titleFocusNode,
+                        _departureFocusNode
+                    );
                   },
                 ),
                 SizedBox(height: 5),
@@ -190,18 +202,22 @@ class _EditRidePageState extends State<EditRidePage> {
                   controller: _departureController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateDepartureAddress(
+                  validator: (value) => bloc.validateDepartureAddress(
                       value,
                       _addressWhitespaceMessage,
                       _addressMaxLengthMessage,
-                      _addressInvalidMessage),
-                  autovalidate: _bloc.autoValidateDepartureAddress,
+                      _addressInvalidMessage
+                  ),
+                  autovalidate: bloc.autoValidateDepartureAddress,
                   onChanged: (value) => setState(() {
-                    _bloc.autoValidateDepartureAddress = true;
+                    bloc.autoValidateDepartureAddress = true;
                   }),
                   onFieldSubmitted: (value) {
                     _focusChange(
-                        context, _departureFocusNode, _destinationFocusNode);
+                        context,
+                        _departureFocusNode,
+                        _destinationFocusNode
+                    );
                   },
                 ),
                 SizedBox(height: 5),
@@ -217,18 +233,22 @@ class _EditRidePageState extends State<EditRidePage> {
                   controller: _destinationController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateDestinationAddress(
+                  validator: (value) => bloc.validateDestinationAddress(
                       value,
                       _addressWhitespaceMessage,
                       _addressMaxLengthMessage,
-                      _addressInvalidMessage),
-                  autovalidate: _bloc.autoValidateDestinationAddress,
+                      _addressInvalidMessage
+                  ),
+                  autovalidate: bloc.autoValidateDestinationAddress,
                   onChanged: (value) => setState(() {
-                    _bloc.autoValidateDestinationAddress = true;
+                    bloc.autoValidateDestinationAddress = true;
                   }),
                   onFieldSubmitted: (value) {
                     _focusChange(
-                        context, _destinationFocusNode, _distanceFocusNode);
+                        context,
+                        _destinationFocusNode,
+                        _distanceFocusNode
+                    );
                   },
                 ),
                 SizedBox(height: 5),
@@ -245,15 +265,15 @@ class _EditRidePageState extends State<EditRidePage> {
                   controller: _distanceController,
                   autocorrect: false,
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) => _bloc.validateDistance(
+                  validator: (value) => bloc.validateDistance(
                     value,
                     _distanceInvalidMessage,
                     _distancePositiveMessage,
                     _distanceMaximumMessage,
                   ),
-                  autovalidate: _bloc.autoValidateDistance,
+                  autovalidate: bloc.autoValidateDistance,
                   onChanged: (value) => setState(() {
-                    _bloc.autoValidateDistance = true;
+                    bloc.autoValidateDistance = true;
                   }),
                   onFieldSubmitted: (value) {
                     _distanceFocusNode.unfocus();
@@ -262,12 +282,14 @@ class _EditRidePageState extends State<EditRidePage> {
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child: Center(
-                    child: EditRideSubmit(_bloc.stream, () async {
+                    child: EditRideSubmit(bloc.stream, () async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.editRide((Ride updatedRide) {
+                        await bloc.editRide().then((updatedRide){
                           ReloadDataProvider.of(context).reloadRides.value = true;
                           SelectedItemProvider.of(context).selectedRide.value = updatedRide;
                           Navigator.pop(context);
+                        },onError: (error){
+                          //the submit will handle the 'actual' error
                         });
                       }
                     }),
@@ -281,8 +303,7 @@ class _EditRidePageState extends State<EditRidePage> {
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildIOSLayout(BuildContext context, Ride ride) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -322,8 +343,11 @@ class _EditRidePageState extends State<EditRidePage> {
                         keyboardType: TextInputType.text,
                         onChanged: (value) {
                           setState(() {
-                            _bloc.validateTitle(value, _titleWhitespaceMessage,
-                                _titleMaxLengthMessage);
+                            bloc.validateTitle(
+                                value,
+                                _titleWhitespaceMessage,
+                                _titleMaxLengthMessage
+                            );
                           });
                         },
                         onSubmitted: (value) {
@@ -333,7 +357,8 @@ class _EditRidePageState extends State<EditRidePage> {
                       ),
                       Text(
                           CupertinoFormErrorFormatter.formatErrorMessage(
-                              _bloc.titleError),
+                              bloc.titleError
+                          ),
                           style: ApplicationTheme.iosFormErrorStyle),
                       SizedBox(height: 5),
                       CupertinoTextField(
@@ -345,7 +370,7 @@ class _EditRidePageState extends State<EditRidePage> {
                         placeholder: _departureLabel,
                         onChanged: (value) {
                           setState(() {
-                            _bloc.validateDepartureAddress(
+                            bloc.validateDepartureAddress(
                                 value,
                                 _addressWhitespaceMessage,
                                 _addressMaxLengthMessage,
@@ -354,12 +379,16 @@ class _EditRidePageState extends State<EditRidePage> {
                         },
                         onSubmitted: (value) {
                           _focusChange(
-                              context, _departureFocusNode, _destinationFocusNode);
+                              context,
+                              _departureFocusNode,
+                              _destinationFocusNode
+                          );
                         },
                       ),
                       Text(
                           CupertinoFormErrorFormatter.formatErrorMessage(
-                              _bloc.departureError),
+                              bloc.departureError
+                          ),
                           style: ApplicationTheme.iosFormErrorStyle),
                       SizedBox(height: 5),
                       CupertinoTextField(
@@ -371,7 +400,7 @@ class _EditRidePageState extends State<EditRidePage> {
                         keyboardType: TextInputType.text,
                         onChanged: (value) {
                           setState(() {
-                            _bloc.validateDestinationAddress(
+                            bloc.validateDestinationAddress(
                                 value,
                                 _addressWhitespaceMessage,
                                 _addressMaxLengthMessage,
@@ -385,7 +414,8 @@ class _EditRidePageState extends State<EditRidePage> {
                       ),
                       Text(
                           CupertinoFormErrorFormatter.formatErrorMessage(
-                              _bloc.destinationError),
+                              bloc.destinationError
+                          ),
                           style: ApplicationTheme.iosFormErrorStyle),
                       SizedBox(height: 5),
                       CupertinoTextField(
@@ -399,7 +429,7 @@ class _EditRidePageState extends State<EditRidePage> {
                         TextInputType.numberWithOptions(decimal: true),
                         onChanged: (value) {
                           setState(() {
-                            _bloc.validateDistance(
+                            bloc.validateDistance(
                               value,
                               _distanceInvalidMessage,
                               _distancePositiveMessage,
@@ -413,7 +443,8 @@ class _EditRidePageState extends State<EditRidePage> {
                       ),
                       Text(
                           CupertinoFormErrorFormatter.formatErrorMessage(
-                              _bloc.distanceError),
+                              bloc.distanceError
+                          ),
                           style: ApplicationTheme.iosFormErrorStyle),
                     ],
                   ),
@@ -422,12 +453,14 @@ class _EditRidePageState extends State<EditRidePage> {
             ),
             Flexible(
               child: Center(
-                child: EditRideSubmit(_bloc.stream,() async {
+                child: EditRideSubmit(bloc.stream,() async {
                   if(iosAllFormInputValidator()){
-                    await _bloc.editRide((Ride updatedRide) {
+                    await bloc.editRide().then((updatedRide){
                       ReloadDataProvider.of(context).reloadRides.value = true;
                       SelectedItemProvider.of(context).selectedRide.value = updatedRide;
                       Navigator.pop(context);
+                    },onError: (error){
+                      //the submit will handle the 'actual' error
                     });
                   }
                 }),

@@ -7,7 +7,6 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/model/settings/settings.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -16,39 +15,42 @@ import 'package:weforza/widgets/pages/rideAttendeeScanningPage/SaveScanOrSkipBut
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/ScanResultListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/bluetoothDisabled.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/noMembersForScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/preparingScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningProgressIndicator.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningStepper.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
-//TODO when the contents were saved (after scan of after manual)
-//trigger a reload of the members for this ride in the detail page + set reload rides to true (so the list gets updated)
-//we need an attendees container
 class RideAttendeeScanningPage extends StatefulWidget {
+  RideAttendeeScanningPage({
+    @required this.onRefreshAttendees
+  }): assert(onRefreshAttendees != null);
+
+  final void Function() onRefreshAttendees;
+
   @override
-  _RideAttendeeScanningPageState createState() => _RideAttendeeScanningPageState(
-    AttendeeScanningBloc(
-      rideDate: RideProvider.selectedRide.date,
+  _RideAttendeeScanningPageState createState() => _RideAttendeeScanningPageState();
+}
+
+class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
+
+  AttendeeScanningBloc bloc;
+
+  final GlobalKey<AnimatedListState> deviceListKey = GlobalKey();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc = AttendeeScanningBloc(
+      rideDate: SelectedItemProvider.of(context).selectedRide.value.date,
       settingsRepo: InjectionContainer.get<SettingsRepository>(),
       deviceRepo: InjectionContainer.get<DeviceRepository>(),
       memberRepo: InjectionContainer.get<MemberRepository>(),
       scanner: InjectionContainer.get<BluetoothDeviceScanner>(),
       ridesRepo: InjectionContainer.get<RideRepository>(),
-    )
-  );
-}
-
-class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
-  _RideAttendeeScanningPageState(this.bloc): assert(bloc != null);
-
-  final AttendeeScanningBloc bloc;
-
-  final GlobalKey<AnimatedListState> deviceListKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
+    );
     bloc.scanFuture = bloc.doInitialDeviceScan(_onDeviceFound);
   }
 
@@ -130,23 +132,25 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Center(
                               child: SaveScanOrSkipButton(
+                                isSaving: bloc.isSaving,
                                 isScanning: bloc.isScanning,
                                 onSkip: () => bloc.skipScan(),
-                                onSave: () => bloc.saveScanResults(),
+                                //TODO put this call in manual selection but w/ false as argument in the optional arg
+                                onSave: () async => await bloc.saveScanResults().then((_){
+                                  widget.onRefreshAttendees();
+                                }, onError: (error){
+                                  //do nothing
+                                }),
                               ),
                             ),
                           ),
                         ],
                       ),
                     );
-                    break;
                   case ScanProcessStep.MANUAL:
-                    //TODO manual selection list -> paged list
-                    //TODO save manual selection
-
-                  //present a list + save button (items need to be selectable and have selected state)
-                    break;
+                    return RideAttendeeManualSelection();
                   case ScanProcessStep.NO_MEMBERS: return NoMembersForScanWidget();
+                  default: return GenericScanErrorWidget();
                 }
               }
             },

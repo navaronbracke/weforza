@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -249,11 +250,19 @@ class AttendeeScanningBloc extends Bloc {
       },
     );
   }
+  
+  Future<File> loadProfileImage(String path) => memberRepo.loadProfileImageFromDisk(path);
 
   @override
   void dispose() {
     _scanStepController.close();
   }
+
+  bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
+
+  void addMember(Member item) => rideAttendees.add(item.uuid);
+
+  loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
 }
 
 enum ScanProcessStep {

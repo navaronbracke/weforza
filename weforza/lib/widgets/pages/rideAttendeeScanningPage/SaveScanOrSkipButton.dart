@@ -4,48 +4,49 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class SaveScanOrSkipButton extends StatefulWidget {
+class SaveScanOrSkipButton extends StatelessWidget {
   SaveScanOrSkipButton({
     @required this.isScanning,
+    @required this.isSaving,
     @required this.onSave,
     @required this.onSkip,
-  }): assert(isScanning != null && onSave != null && onSkip != null);
+  }): assert(
+    isScanning != null && isSaving != null && onSave != null && onSkip != null
+  );
 
   final ValueNotifier<bool> isScanning;
+  final ValueNotifier<bool> isSaving;
   final VoidCallback onSave;
   final VoidCallback onSkip;
 
   @override
-  _SaveScanOrSkipButtonState createState() => _SaveScanOrSkipButtonState();
-}
-
-class _SaveScanOrSkipButtonState extends State<SaveScanOrSkipButton> {
-
-  bool isSaving = false;
-
-  @override
   Widget build(BuildContext context) {
-    if(isSaving){
-      return PlatformAwareLoadingIndicator();
-    }else{
-      return ValueListenableBuilder<bool>(
-        valueListenable: widget.isScanning,
-        builder: (context, isScanning, child){
-          return isScanning ? _buildSkipScanButton(context) : _buildSaveButton(context);
-        },
-      );
-    }
+    return ValueListenableBuilder<bool>(
+      valueListenable: isSaving,
+      builder: (context, isSaving, child){
+        if(isSaving){
+          return PlatformAwareLoadingIndicator();
+        }else{
+          return ValueListenableBuilder<bool>(
+            valueListenable: isScanning,
+            builder: (context, isScanning, child){
+              return isScanning ? _buildSkipScanButton(context) : _buildSaveButton(context);
+            },
+          );
+        }
+      },
+    );
   }
 
   Widget _buildSkipScanButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => FlatButton(
         child: Text(S.of(context).RideAttendeeScanningSkipScan),
-        onPressed: widget.onSkip,
+        onPressed: onSkip,
       ),
       ios: () => CupertinoButton(
         child: Text(S.of(context).RideAttendeeScanningSkipScan),
-        onPressed: widget.onSkip,
+        onPressed: onSkip,
       ),
     );
   }
@@ -54,22 +55,13 @@ class _SaveScanOrSkipButtonState extends State<SaveScanOrSkipButton> {
     return PlatformAwareWidget(
       android: () => FlatButton(
         child: Text(S.of(context).RideAttendeeScanningSaveScanResults),
-        onPressed: (){
-          setState(() {
-            isSaving = true;
-            widget.onSave();
-          });
-        },
+        onPressed: onSave,
       ),
       ios: () => CupertinoButton(
         child: Text(S.of(context).RideAttendeeScanningSaveScanResults),
-        onPressed: (){
-          setState(() {
-            isSaving = true;
-            widget.onSave();
-          });
-        },
+        onPressed: onSave,
       ),
     );
   }
 }
+

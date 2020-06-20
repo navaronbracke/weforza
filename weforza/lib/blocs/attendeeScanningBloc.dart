@@ -34,8 +34,13 @@ class AttendeeScanningBloc extends Bloc {
 
   ///A value notifier for the scanning boolean.
   ///We use it to check if we can pop the widget scope
-  ///and what button to show (skip, stop scan OR save, continue to manual)
+  ///and what button to show (skip or save scan).
+  ///It also manages the visibility of the scan progress indicator.
   final ValueNotifier<bool> isScanning = ValueNotifier<bool>(false);
+
+  ///A value notifier for the saving boolean.
+  ///We use it to show a loading indicator or show scan related buttons.
+  final ValueNotifier<bool> isSaving = ValueNotifier<bool>(false);
 
   ///This value notifier manages the state for the selected label in the UI.
   ///It gets updated after the scan save step.
@@ -206,33 +211,43 @@ class AttendeeScanningBloc extends Bloc {
   ///Stop a running scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
+    if(!isScanning.value) return true;
+
     bool result = true;
-    await scanner.stopScan().then((_) => isScanning.value = false,
-        onError: (error){
-          result = false;//if it failed, prevent pop & show error first
-          _scanStepController.addError(error);
-          isScanning.value = false;
-        }
-    );
-    rideAttendees.clear();
+    await scanner.stopScan().then((_){
+      isScanning.value = false;
+      rideAttendees.clear();
+    }, onError: (error){
+      result = false;//if it failed, prevent pop & show error first
+      _scanStepController.addError(error);
+      isScanning.value = false;
+    });
+
     return result;
   }
 
   ///Cancel a running scan and continue to the manual assignment step.
   void skipScan() async {
-    await stopScan();
-    _scanStepController.add(ScanProcessStep.MANUAL);
+    await stopScan().then(
+            (_) => _scanStepController.add(ScanProcessStep.MANUAL)
+    );
   }
 
-  void saveScanResults() async {
+  Future<void> saveScanResults([bool continueToManualAssignment = true]) async {
+    isSaving.value = true;
     final List<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toList();
-
-
-    //TODO implement save scan results
-    //save hash set (create rideAttendee objects with the ride date and save in sembast)
-    //go to manual assignment
-    //on error -> push generic error to the stream
-    //set attendees container new value
+    await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
+        isSaving.value = false;
+        if(continueToManualAssignment){
+          _scanStepController.add(ScanProcessStep.MANUAL);
+        }
+      },
+      onError: (error){
+        _scanStepController.addError(error);
+        isSaving.value = false;
+        return Future.error(error);
+      },
+    );
   }
 
   @override

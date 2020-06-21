@@ -238,10 +238,13 @@ class AttendeeScanningBloc extends Bloc {
     isSaving.value = true;
     final List<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toList();
     await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
-        isSaving.value = false;
         if(continueToManualAssignment){
+          isSaving.value = false;
           _scanStepController.add(ScanProcessStep.MANUAL);
         }
+      //The manual assignment step will pop when submitted.
+      //To make it look smoother, we show the loading indicator during the pop in manual submit.
+      //That's why we don't set isSaving to false if continueToManualAssignment is true.
       },
       onError: (error){
         _scanStepController.addError(error);

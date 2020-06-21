@@ -141,6 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("Add Members"),
     "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scan"),
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Retry Scan"),
+    "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Save Selection"),
     "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Save Scan Results"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Skip Scan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),

@@ -7,7 +7,7 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 class PlatformAwareLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => CircularProgressIndicator(value: null),
+    android: () => CircularProgressIndicator(),
     ios: () => CupertinoActivityIndicator(),
   );
 }

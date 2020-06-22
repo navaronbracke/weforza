@@ -8,6 +8,9 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 // Set up a Production injector and run the app.
 void main() async {
@@ -30,22 +33,30 @@ class _WeForzaAppState extends State<WeForzaApp> {
 
   @override
   Widget build(BuildContext context){
+    //force portrait
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return GestureDetector(
-      child: PlatformAwareWidget(
-        android: () => _buildAndroidWidget(),
-        ios: () => _buildIosWidget(),
+
+    return SelectedItemProvider(
+      child: ReloadDataProvider(
+        child: RideAttendeeFutureProvider(
+          child: GestureDetector(
+            child: PlatformAwareWidget(
+              android: () => _buildAndroidWidget(),
+              ios: () => _buildIosWidget(),
+            ),
+            onTap: (){
+              //enable tap to dismiss keyboard
+              final FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
+          ),
+        ),
       ),
-      onTap: (){
-        //enable tap to dismiss keyboard
-        final FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
     );
   }
 

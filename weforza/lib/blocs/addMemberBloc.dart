@@ -133,6 +133,7 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     return phoneError;
   }
 
+  //TODO remove the callback
   Future<void> addMember(VoidCallback onSuccess) async {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
     await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {

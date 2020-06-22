@@ -17,8 +17,7 @@ void main(){
       }
     });
 
-    group("HomePage", (){
-      //TODO write tests for HomePage
-    });
+    //group()
+    //  test1, test2,...
   });
 }

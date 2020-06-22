@@ -24,6 +24,7 @@ class DeleteDeviceBloc extends Bloc {
   final StreamController<bool> _deviceDeletingStream = BehaviorSubject();
   Stream<bool> get isDeletedStream => _deviceDeletingStream.stream;
 
+  //TODO remove the callback
   Future<void> deleteDevice(String deleteDeviceError, VoidCallback onSuccess) async {
     _deviceDeletingStream.add(true);
     await _repository.removeDevice(device.name).then((_) => onSuccess(),

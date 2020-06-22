@@ -6,7 +6,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -20,36 +19,37 @@ import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideDetailsPage extends StatefulWidget {
   @override
-  _RideDetailsPageState createState() => _RideDetailsPageState(RideDetailsBloc(
-      InjectionContainer.get<MemberRepository>(),
-      InjectionContainer.get<RideRepository>()));
+  _RideDetailsPageState createState() => _RideDetailsPageState();
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage>
-    implements DeleteRideHandler {
-  _RideDetailsPageState(this._bloc) : assert(_bloc != null);
+class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRideHandler {
 
-  final RideDetailsBloc _bloc;
-
-  Future<List<MemberItem>> attendeesFuture;
+  RideDetailsBloc bloc;
 
   @override
-  void initState() {
-    super.initState();
-    attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc = RideDetailsBloc(
+      memberRepo: InjectionContainer.get<MemberRepository>(),
+      rideRepo: InjectionContainer.get<RideRepository>(),
+      ride: SelectedItemProvider.of(context).selectedRide.value
+    );
+    bloc.loadAttendeesIfNotLoaded();
   }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidLayout(context),
-        ios: () => _buildIOSLayout(context),
-      );
+    android: () => _buildAndroidLayout(context,bloc.ride),
+    ios: () => _buildIOSLayout(context,bloc.ride),
+  );
 
-  Widget _buildAndroidLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildAndroidLayout(BuildContext context, Ride ride) {
     return Scaffold(
       appBar: AppBar(
         title: Text(ride.getFormattedDate(context),
@@ -57,17 +57,15 @@ class _RideDetailsPageState extends State<RideDetailsPage>
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_pin),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RideAttendeeScanningPage())
-              );
-            },
+            onPressed: () => goToScanningPage(context),
           ),
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditRidePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditRidePage())
+              );
             },
           ),
           IconButton(
@@ -84,8 +82,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildIOSLayout(BuildContext context, Ride ride) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -103,11 +100,8 @@ class _RideDetailsPageState extends State<RideDetailsPage>
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.person_pin,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RideAttendeeScanningPage())
-                      );
-                    }),
+                    onPressed: () => goToScanningPage(context),
+                ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
@@ -140,7 +134,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
   ///Build the ride attendees list.
   Widget _buildAttendeesList() {
     return FutureBuilder<List<MemberItem>>(
-      future: attendeesFuture,
+      future: bloc.attendeesFuture,
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
@@ -191,16 +185,10 @@ class _RideDetailsPageState extends State<RideDetailsPage>
               ],
             ),
             Expanded(child: Center()),
-            StreamBuilder<String>(
-              initialData: "",
-              stream: _bloc.attendeesCount,
-              builder: (context, snapshot) {
-                if (snapshot.hasError || snapshot.data == "") {
-                  return Center();
-                } else {
-                  return RideAttendeeCounter(count: snapshot.data);
-                }
-              },
+            RideAttendeeCounter(
+              //We need the attendee names + images for displaying in the list.
+              //But we need the total of people for the counter, thus we map to the length when its done loading.
+              future: bloc.attendeesFuture.then((attendees) => attendees.length)
             ),
           ],
         ),
@@ -227,12 +215,13 @@ class _RideDetailsPageState extends State<RideDetailsPage>
           : <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(ride.title,
+                child: Text(
+                    ride.title,
                     softWrap: true,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -245,6 +234,21 @@ class _RideDetailsPageState extends State<RideDetailsPage>
     );
   }
 
+  void goToScanningPage(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RideAttendeeScanningPage(
+          onRefreshAttendees: () => RideAttendeeFutureProvider.of(context).rideAttendeeFuture.value = bloc.loadRideAttendees(),
+        ))
+    ).then((_){
+      final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
+      if(attendeeProvider.value != null){
+        ReloadDataProvider.of(context).reloadRides.value = true;
+        setState(() => bloc.attendeesFuture = attendeeProvider.value);
+        attendeeProvider.value = null;
+      }
+    });
+  }
+
   @override
-  Future<void> deleteRide() => _bloc.deleteRide(RideProvider.selectedRide.date);
+  Future<void> deleteRide() => bloc.deleteRide();
 }

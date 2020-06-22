@@ -11,9 +11,7 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
-///The on item reset callback signature.
-typedef OnReset = void Function();
-
+//TODO test item selection -> check future rides/past day w/ ride
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
   AddRideBloc({@required this.repository}): assert(repository != null);
@@ -26,7 +24,7 @@ class AddRideBloc extends Bloc {
   final int calendarItemCount = 72000;
 
   //We start in the middle
-  int currentPage = 36000;
+  int _currentPage = 36000;
 
   final StreamController<AddRideSubmitState> _submitController = BehaviorSubject();
   Stream<AddRideSubmitState> get submitStream => _submitController.stream;
@@ -55,35 +53,49 @@ class AddRideBloc extends Bloc {
   ///The rides to add on a submit.
   HashSet<DateTime> _ridesToAdd = HashSet();
 
-  final List<OnReset> resetCallbacks = List();
+  final List<VoidCallback> _resetFunctions = [];
 
   //Intercept a day pressed event.
   //Returns true if the item state should be refreshed.
   bool onDayPressed(DateTime date){
-    if(_currentSubmitState != AddRideSubmitState.IDLE) return false;
+    if(_currentSubmitState == AddRideSubmitState.IDLE || _currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
+      //if we had a no selection error, clear it.
+      if(_currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
+        _currentSubmitState = AddRideSubmitState.IDLE;
+        _submitController.add(_currentSubmitState);
+      }
 
-    //This date is in the past OR there is a ride with this date.
-    if(isBeforeToday(date) || _existingRides.contains(date)){
-      return false;
-    }
+      //This date is in the past OR there is a ride with this date.
+      if(isBeforeToday(date) || _existingRides.contains(date)){
+        return false;
+      }
 
-    //This is a selected ride, unselect it.
-    if(_ridesToAdd.contains(date)){
-      _ridesToAdd.remove(date);
-    }else{
-      _ridesToAdd.add(date);
+      //This is a selected ride, unselect it.
+      if(_ridesToAdd.contains(date)){
+        _ridesToAdd.remove(date);
+      }else{
+        _ridesToAdd.add(date);
+      }
+      return true;
     }
-    return true;
+    return false;
   }
   
   ///This function clears the current ride dates selection.
   void onRequestClear(){
-    if(_currentSubmitState == AddRideSubmitState.IDLE && _ridesToAdd.isNotEmpty){
+    if(_currentSubmitState == AddRideSubmitState.IDLE){
       _ridesToAdd.clear();
-      //Notify all items to reset themselves.
-      resetCallbacks.forEach((onReset) => onReset());
+      _resetFunctions.forEach((method) => method());
+
+      //unset the error -> the submit widget will show an empty string with IDLE
+      _currentSubmitState = AddRideSubmitState.IDLE;
+      _submitController.add(_currentSubmitState);
     }
   }
+
+  void registerResetFunction(VoidCallback function) => _resetFunctions.add(function);
+
+  void unregisterResetFunction(VoidCallback function)=> _resetFunctions.remove(function);
 
   ///Load [_existingRides] if not initialized.
   ///This also populates loadExistingRidesFuture, which is used for the calendar.
@@ -117,77 +129,51 @@ class AddRideBloc extends Bloc {
     final jiffyDate = Jiffy([today.year,today.month,1]);
     pageDate = jiffyDate.dateTime;
     daysInMonth = jiffyDate.daysInMonth;
-    pageController = PageController(initialPage: currentPage);
+    pageController = PageController(initialPage: _currentPage);
     _calendarHeaderController.add(pageDate);
-  }
-
-  bool _canGoForward() => currentPage + 1 <= calendarItemCount - 1;
-
-  bool _canGoBackward() => currentPage - 1 >= 0;
-
-  //The header wants to go one month forward.
-  //Update the header and let the pageview go forward.
-  void onHeaderForward(){
-    if(_canGoForward()){
-      _addMonth();
-      _calendarHeaderController.add(pageDate);
-      pageController.nextPage(duration: _pageDuration, curve: _pageCurve);
-    }
-  }
-
-  //The header wants to go one month backward.
-  //Update the header and let the pageview go backward.
-  void onHeaderBackward(){
-    if(_canGoBackward()){
-      _subtractMonth();
-      _calendarHeaderController.add(pageDate);
-      pageController.nextPage(duration: _pageDuration, curve: _pageCurve);
-    }
-  }
-
-  //The pageview wants to go forward.
-  //Update the header. The pageview will update by itself.
-  //The pageview doesn't go beyond it's item count or under zero,
-  //thus we don't need to check the bounds.
-  void onPageViewForward(){
-    _addMonth();
-    _calendarHeaderController.add(pageDate);
-  }
-
-  //The pageview wants to go backward.
-  //Update the header. The pageview will update by itself.
-  //The pageview doesn't go beyond it's item count or under zero,
-  //thus we don't need to check the bounds.
-  void onPageViewBackward(){
-    _subtractMonth();
-    _calendarHeaderController.add(pageDate);
+    _currentSubmitState = AddRideSubmitState.IDLE;
   }
 
   ///Add a month to [pageDate].
   void _addMonth(){
-    //Prevent months changing when we are sumbitting
-    if(_currentSubmitState == AddRideSubmitState.IDLE){
-      //Always take first day of month as reference
-      final newDate = Jiffy([pageDate.year,pageDate.month,1])
-        ..add(months: 1);
-      pageDate = newDate.dateTime;
-      daysInMonth = newDate.daysInMonth;
-      currentPage++;
-      resetCallbacks.clear();//Remove the old callbacks
-    }
+    //Always take first day of month as reference
+    final newDate = Jiffy([pageDate.year,pageDate.month,1])
+      ..add(months: 1);
+    pageDate = newDate.dateTime;
+    daysInMonth = newDate.daysInMonth;
+    _currentPage++;
+    _calendarHeaderController.add(pageDate);
   }
 
   ///Subtract a month from [pageDate].
   void _subtractMonth(){
-    //Prevent months changing when we are sumbitting
-    if(_currentSubmitState == AddRideSubmitState.IDLE){
-      //Always take first day of month as reference
-      final newDate = Jiffy([pageDate.year,pageDate.month,1])
-        ..subtract(months: 1);
-      pageDate = newDate.dateTime;
-      daysInMonth = newDate.daysInMonth;
-      currentPage--;
-      resetCallbacks.clear();//Remove the old callbacks
+    //Always take first day of month as reference
+    final newDate = Jiffy([pageDate.year,pageDate.month,1])
+      ..subtract(months: 1);
+    pageDate = newDate.dateTime;
+    daysInMonth = newDate.daysInMonth;
+    _currentPage--;
+    _calendarHeaderController.add(pageDate);
+  }
+
+  ///This method handles pressing forward in the header.
+  void onPageForward(){
+    _addMonth();
+    pageController.nextPage(duration: _pageDuration, curve: _pageCurve);
+  }
+
+  ///This method handles pressing backward in the header.
+  void onPageBackward(){
+    _subtractMonth();
+    pageController.previousPage(duration: _pageDuration, curve: _pageCurve);
+  }
+
+  ///This method handles swiping the calendar.
+  void onDragCalendar(DragEndDetails details){
+    if(details.velocity.pixelsPerSecond.dx < 0){
+      onPageForward();
+    }else if(details.velocity.pixelsPerSecond.dx > 0){
+      onPageBackward();
     }
   }
 
@@ -215,10 +201,6 @@ class AddRideBloc extends Bloc {
     return date.isBefore(DateTime(today.year,today.month,today.day));
   }
 
-  ///Register an item's reset function.
-  ///Each registered item will be reset when we call onRequestClear.
-  void registerResetCallback(OnReset callback) => resetCallbacks.add(callback);
-
   @override
   int get hashCode {
     final setEquality = SetEquality();
@@ -236,11 +218,11 @@ class AddRideBloc extends Bloc {
   
   @override
   void dispose() {
+    _resetFunctions.clear();
     _submitController.close();
     _calendarHeaderController.close();
+    pageController.dispose();
   }
-
-  void onPageChanged(int page) => page > pageController.page ? onPageViewForward() : onPageViewBackward();
 }
 
 ///This enum declares the different states for the ride submit process.

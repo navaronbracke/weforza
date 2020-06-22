@@ -3,33 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
-import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendar.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
-  _AddRidePageState createState() => _AddRidePageState(AddRideBloc(InjectionContainer.get<RideRepository>()));
+  _AddRidePageState createState() => _AddRidePageState(
+      bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>())
+  );
 }
 
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
-  _AddRidePageState(this._bloc): assert(_bloc != null);
+  _AddRidePageState({@required this.bloc}): assert(bloc != null);
 
   ///The BLoC for this page.
-  final AddRideBloc _bloc;
+  final AddRideBloc bloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc.initCalendarDate();
+    bloc.initCalendarDate();
+    bloc.loadRideDatesIfNotLoaded();
   }
 
   @override
@@ -45,7 +49,7 @@ class _AddRidePageState extends State<AddRidePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_sweep),
-            onPressed: () => _bloc.onRequestClear(),
+            onPressed: () => bloc.onRequestClear(),
           ),
         ],
       ),
@@ -60,14 +64,18 @@ class _AddRidePageState extends State<AddRidePage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: AddRideColorLegend(),
+                  child: AddRideCalendarColorLegend(),
                 ),
                 Expanded(
                   child: Center(
-                    child: AddRideSubmit(_bloc.submitStream,() async {
-                      await _bloc.addRides((){
-                        RideProvider.reloadRides = true;
+                    child: AddRideSubmit(bloc.submitStream,() async {
+                      await bloc.addRides().then((_){
+                        ReloadDataProvider.of(context).reloadRides.value = true;
                         Navigator.pop(context);
+                      }).catchError((e){
+                        //do nothing with the error
+                        //we throw the error to prevent the onSuccess being called
+                        //the submit handles the 'actual' error in its streambuilder
                       });
                     }),
                   ),
@@ -93,7 +101,7 @@ class _AddRidePageState extends State<AddRidePage> {
               onPressedColor: ApplicationTheme.primaryColor,
               idleColor: ApplicationTheme.accentColor,
               icon: Icons.delete_sweep,
-              onPressed: () => _bloc.onRequestClear(),
+              onPressed: () => bloc.onRequestClear(),
             ),
           ],
         ),
@@ -111,14 +119,16 @@ class _AddRidePageState extends State<AddRidePage> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: AddRideColorLegend(),
+                      child: AddRideCalendarColorLegend(),
                     ),
                     Expanded(
                       child: Center(
-                        child: AddRideSubmit(_bloc.submitStream,() async {
-                          await _bloc.addRides((){
-                            RideProvider.reloadRides = true;
+                        child: AddRideSubmit(bloc.submitStream,() async {
+                          await bloc.addRides().then((_){
+                            ReloadDataProvider.of(context).reloadRides.value = true;
                             Navigator.pop(context);
+                          }).catchError((e){
+                            //do nothing with the error
                           });
                         }),
                       ),
@@ -135,8 +145,8 @@ class _AddRidePageState extends State<AddRidePage> {
 
   ///Build the calendar.
   Widget _buildCalendar(){
-    return FutureBuilder(
-      future: _bloc.loadRideDates(),
+    return FutureBuilder<void>(
+      future: bloc.loadExistingRidesFuture,
         builder: (context,snapshot){
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
@@ -145,7 +155,9 @@ class _AddRidePageState extends State<AddRidePage> {
               );
             }
             else{
-              return AddRideCalendar(_bloc);
+              return AddRideBlocProvider(
+                bloc: bloc, child: AddRideCalendar()
+              );
             }
           }else {
             return Center(
@@ -158,7 +170,7 @@ class _AddRidePageState extends State<AddRidePage> {
 
   @override
   void dispose() {
-    _bloc.dispose();
+    bloc.dispose();
     super.dispose();
   }
 }

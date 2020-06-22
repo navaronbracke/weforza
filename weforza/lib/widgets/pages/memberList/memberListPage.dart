@@ -4,7 +4,6 @@ import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
@@ -15,32 +14,22 @@ import 'package:weforza/widgets/pages/memberList/memberListError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This [Widget] will display a list of members.
 class MemberListPage extends StatefulWidget {
   @override
-  _MemberListPageState createState() => _MemberListPageState(MemberListBloc(InjectionContainer.get<MemberRepository>()));
+  _MemberListPageState createState() => _MemberListPageState(
+     bloc: MemberListBloc(InjectionContainer.get<MemberRepository>())
+  );
 }
 
 ///This is the [State] class for [MemberListPage].
 class _MemberListPageState extends State<MemberListPage> {
-  _MemberListPageState(this._bloc): assert(_bloc != null){
-    _onReload = (){
-      if(MemberProvider.reloadMembers){
-        MemberProvider.reloadMembers = false;
-        setState(() {
-          membersFuture = _bloc.loadMembers();
-        });
-      }
-    };
-  }
+  _MemberListPageState({@required this.bloc}): assert(bloc != null);
 
-  final MemberListBloc _bloc;
-
-  Future<List<MemberItem>> membersFuture;
-
-  ///This callback triggers a reload.
-  VoidCallback _onReload;
+  final MemberListBloc bloc;
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
@@ -51,7 +40,7 @@ class _MemberListPageState extends State<MemberListPage> {
   @override
   void initState() {
     super.initState();
-    membersFuture = _bloc.loadMembers();
+    bloc.loadMembersIfNotLoaded();
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -61,12 +50,15 @@ class _MemberListPageState extends State<MemberListPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage()))
-                .then((_)=>_onReload()),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
+              if(ReloadDataProvider.of(context).reloadMembers.value){
+                //TODO reload members
+              }
+            }),
           ),
         ],
       ),
-      body: _listBuilder(membersFuture),
+      body: _buildList(context),
     );
   }
 
@@ -81,21 +73,39 @@ class _MemberListPageState extends State<MemberListPage> {
                 onPressedColor: ApplicationTheme.primaryColor,
                 idleColor: ApplicationTheme.accentColor,
                 icon: Icons.person_add,
-                onPressed: ()=> Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context)=> AddMemberPage())
-                ).then((_)=>_onReload())
+                onPressed: ()=> Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
+                      if(ReloadDataProvider.of(context).reloadMembers.value){
+                        //TODO reload members
+                      }
+                    })
             ),
           ],
         ),
       ),
       child: SafeArea(
         bottom: false,
-        child: _listBuilder(membersFuture),
+        child: _buildList(context),
       ),
     );
   }
 
-  Widget _listBuilder(Future<List<MemberItem>> future) {
+  Widget _buildList(BuildContext context){
+    final listenable = ReloadDataProvider.of(context).reloadMembers;
+    return ValueListenableBuilder<bool>(
+      valueListenable: listenable,
+      child: _listFutureBuilder(bloc.membersFuture),
+      builder: (context, reload, child){
+        if(reload){
+          listenable.value = false;
+          bloc.membersFuture = bloc.loadMembers();
+        }
+        return child;
+      },
+    );
+  }
+
+  Widget _listFutureBuilder(Future<List<MemberItem>> future) {
     return FutureBuilder<List<MemberItem>>(
       future: future,
       builder: (context, snapshot) {
@@ -108,9 +118,9 @@ class _MemberListPageState extends State<MemberListPage> {
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
                     MemberWithPictureListItem(
-                      item: data[index], onTap:(){
-                      MemberProvider.selectedMember = data[index];
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MemberDetailsPage())).then((_)=> _onReload());
+                      item: data[index], onTap: (){
+                        SelectedItemProvider.of(context).selectedMember.value = data[index];
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MemberDetailsPage()));
                     }));
           }
         } else {

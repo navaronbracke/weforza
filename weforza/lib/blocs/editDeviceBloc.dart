@@ -47,6 +47,7 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
+  //TODO remove the callback
   Future<void> editDevice(void Function(Device editedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.

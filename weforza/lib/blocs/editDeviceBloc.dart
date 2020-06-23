@@ -56,27 +56,27 @@ class EditDeviceBloc extends Bloc {
         type: deviceType,
         creationDate: deviceCreationDate
     );
-    await repository.deviceExists(editedDevice,deviceOwnerId).then((exists) async {
-      if(!exists){
-        await repository.updateDevice(editedDevice).then((_){
-          _submitButtonController.add(false);
-          return editedDevice;
-        },onError: (error){
-          _submitButtonController.add(false);
-          _submitErrorController.add(genericErrorMessage);
-          return Future.error(genericErrorMessage);
-        });
-      }else{
-        _submitButtonController.add(false);
-        _submitErrorController.add(deviceExistsMessage);
-        return Future.error(deviceExistsMessage);
-      }
-    },onError: (error){
+
+    bool exists = await repository.deviceExists(editedDevice,deviceOwnerId).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
-    return Future.error(genericErrorMessage);
+
+    if(!exists){
+      return await repository.updateDevice(editedDevice).then((_){
+        _submitButtonController.add(false);
+        return editedDevice;
+      },onError: (error){
+        _submitButtonController.add(false);
+        _submitErrorController.add(genericErrorMessage);
+        return Future.error(genericErrorMessage);
+      });
+    }else{
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }
   }
 
   String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){

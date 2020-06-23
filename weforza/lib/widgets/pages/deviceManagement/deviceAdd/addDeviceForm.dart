@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
-import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceAdd/addDeviceSubmit.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
@@ -9,6 +8,7 @@ import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class AddDeviceForm extends StatefulWidget {
@@ -77,8 +77,13 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           if(_formKey.currentState.validate()){
                             await widget.bloc.addDevice(
                                 SelectedItemProvider.of(context).selectedMember.value.uuid,
-                                    (Device device)=> widget.deviceManager.onDeviceAdded(device),
-                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device){
+                              widget.deviceManager.onDeviceAdded(device);
+                              ReloadDataProvider.of(context).reloadDevices.value = true;
+                            }).catchError((e){
+                              //do nothing, the stream catches it
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )
@@ -146,8 +151,13 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           if(iosValidateAddDevice()){
                             await widget.bloc.addDevice(
                                 SelectedItemProvider.of(context).selectedMember.value.uuid,
-                                    (Device device)=> widget.deviceManager.onDeviceAdded(device),
-                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device){
+                              widget.deviceManager.onDeviceAdded(device);
+                              ReloadDataProvider.of(context).reloadDevices.value = true;
+                            }).catchError((e){
+                              //do nothing, the stream catches it
+                            });
                           }else {
                             setState((){
                               //trigger form error redraw on ios

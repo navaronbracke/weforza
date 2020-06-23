@@ -45,14 +45,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context,bloc.ride),
-    ios: () => _buildIOSLayout(context,bloc.ride),
+    android: () => _buildAndroidLayout(context),
+    ios: () => _buildIOSLayout(context),
   );
 
-  Widget _buildAndroidLayout(BuildContext context, Ride ride) {
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ride.getFormattedDate(context),
+        title: Text(bloc.ride.getFormattedDate(context),
             style: TextStyle(fontSize: 16)),
         actions: <Widget>[
           IconButton(
@@ -64,8 +64,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
             onPressed: () {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EditRidePage())
-              );
+                  MaterialPageRoute(builder: (context) => EditRidePage())).then((_){
+                    setState(() {
+                      bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
+                    });
+              });
             },
           ),
           IconButton(
@@ -78,11 +81,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
               }),
         ],
       ),
-      body: _buildBody(ride),
+      body: _buildBody(bloc.ride),
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context, Ride ride) {
+  Widget _buildIOSLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -90,7 +93,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
           children: <Widget>[
             Expanded(
               child: Center(
-                  child: Text(ride.getFormattedDate(context),
+                  child: Text(bloc.ride.getFormattedDate(context),
                       style: TextStyle(fontSize: 16))),
             ),
             Row(
@@ -110,7 +113,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                     onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EditRidePage()))),
+                            builder: (context) => EditRidePage()
+                        )
+                    ).then((_){
+                      setState(() {
+                        bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
+                      });
+                    })
+                ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
@@ -126,7 +136,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildBody(ride),
+        child: _buildBody(bloc.ride),
       ),
     );
   }
@@ -241,7 +251,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
         ))
     ).then((_){
       final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
+      //When its not null, a new future has been submitted.
       if(attendeeProvider.value != null){
+        //Also set reload for the rides, the counters need to refresh.
         ReloadDataProvider.of(context).reloadRides.value = true;
         setState(() => bloc.attendeesFuture = attendeeProvider.value);
         attendeeProvider.value = null;

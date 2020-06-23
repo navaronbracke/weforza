@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/editRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/editRide/editRideSubmit.dart';
@@ -72,10 +71,9 @@ class _EditRidePageState extends State<EditRidePage> {
 
   @override
   Widget build(BuildContext context) {
-    final ride = SelectedItemProvider.of(context).selectedRide.value;
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context,ride),
-      ios: () => _buildIOSLayout(context,ride),
+      android: () => _buildAndroidLayout(context),
+      ios: () => _buildIOSLayout(context),
     );
   }
 
@@ -135,7 +133,7 @@ class _EditRidePageState extends State<EditRidePage> {
     return titleValid && departureValid && destinationValid && distanceValid;
   }
 
-  Widget _buildAndroidLayout(BuildContext context, Ride ride) {
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).EditRidePageTitle),
@@ -154,7 +152,7 @@ class _EditRidePageState extends State<EditRidePage> {
                     children: <Widget>[
                       Icon(Icons.calendar_today, size: 30),
                       SizedBox(width: 4),
-                      Text(ride.getFormattedDate(context, false),
+                      Text(bloc.ride.getFormattedDate(context, false),
                           style: TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 16
                           )
@@ -303,7 +301,7 @@ class _EditRidePageState extends State<EditRidePage> {
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context, Ride ride) {
+  Widget _buildIOSLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -328,7 +326,7 @@ class _EditRidePageState extends State<EditRidePage> {
                           children: <Widget>[
                             Icon(Icons.calendar_today, size: 30),
                             SizedBox(width: 4),
-                            Text(ride.getFormattedDate(context, false),
+                            Text(bloc.ride.getFormattedDate(context, false),
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500, fontSize: 16)),
                           ],

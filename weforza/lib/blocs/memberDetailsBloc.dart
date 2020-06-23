@@ -32,6 +32,10 @@ class MemberDetailsBloc extends Bloc {
     }
   }
 
+  void reloadDevices(){
+    devicesFuture = getMemberDevices();
+  }
+
   @override
   void dispose() {}
 

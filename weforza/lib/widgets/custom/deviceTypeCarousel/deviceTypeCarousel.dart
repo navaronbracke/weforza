@@ -21,28 +21,31 @@ class DeviceTypeCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Expanded(
-            child: PageView.builder(
-              itemCount: DeviceType.values.length,
-              itemBuilder: _buildIcon,
-              onPageChanged: onPageChanged,
-              controller: controller,
+        Flexible(
+          flex: 2,
+          child: PageView.builder(
+            itemCount: DeviceType.values.length,
+            itemBuilder: _buildIcon,
+            onPageChanged: onPageChanged,
+            controller: controller,
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: StreamBuilder<int>(
-            stream: currentPageStream,
-            builder: (context, snapshot){
-              final children = <Widget>[];
-              for(int i = 0; i< DeviceType.values.length; i++){
-                children.add(_buildPageDot(i == snapshot.data));
-              }
-              return Row(
-                children: children,
-                mainAxisAlignment: MainAxisAlignment.center,
-              );
-            },
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: StreamBuilder<int>(
+              stream: currentPageStream,
+              builder: (context, snapshot){
+                final children = <Widget>[];
+                for(int i = 0; i< DeviceType.values.length; i++){
+                  children.add(_buildPageDot(i == snapshot.data));
+                }
+                return Row(
+                  children: children,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -64,20 +67,20 @@ class DeviceTypeCarousel extends StatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context, int index){
-    final iconSize = MediaQuery.of(context).size.shortestSide * 0.75;
     return Column(
       children: <Widget>[
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Center(
             child: Icon(
               _getIcon(index),
               color: ApplicationTheme.deviceTypePickerCurrentDotColor,
-              size: iconSize,
+              size: MediaQuery.of(context).size.shortestSide * 0.25,
             ),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: Center(
               child: Text(
                 _getLabel(context, index),

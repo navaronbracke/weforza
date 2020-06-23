@@ -37,13 +37,14 @@
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
 
-  "DeviceOverviewTitle" : "Manage Devices",
-  "DeviceOverviewNoDevices": "No Devices",
+  "DevicesListHeader": "Devices",
+  "DevicesListNoDevices": "No devices to show",
   "DeviceNameLabel": "Device Name",
-  "DevicesHeader": "Devices",
+
+  "AddDeviceTitle": "Add Device",
   "AddDeviceError": "Could not add device",
   "AddDeviceGenericError": "Something went wrong",
-  "AddDeviceSubmit": "Add Device",
+  "AddDeviceSubmit": "Create Device",
 
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",

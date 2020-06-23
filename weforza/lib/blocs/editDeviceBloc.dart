@@ -1,34 +1,34 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
-class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
-  EditDeviceBloc(Device device,this._repository):
-        assert(device != null && _repository != null){
-    _creationDate = device.creationDate;
-    newDeviceName = device.name;
-    _ownerId = device.ownerId;
-    _type = device.type;
-  }
+class EditDeviceBloc extends Bloc {
+  EditDeviceBloc({
+    @required this.repository,
+    @required this.deviceType,
+    @required this.deviceOwnerId,
+    @required this.deviceCreationDate,
+    @required this.deviceName,
+  }): assert(
+    repository != null && deviceOwnerId != null && deviceOwnerId.isNotEmpty &&
+    deviceCreationDate != null && deviceName != null && deviceType != null
+  );
 
-  DateTime _creationDate;
-  String _ownerId;
-  final DeviceRepository _repository;
+  final DeviceRepository repository;
+  final String deviceOwnerId;
+  final DateTime deviceCreationDate;
+  String deviceName;
+  DeviceType deviceType;
 
   ///Auto validate flag for device name.
   bool autoValidateDeviceName = false;
   ///Device Name max length
   int deviceNameMaxLength = 40;
-
-  ///Device Name input backing field
-  String newDeviceName;
-  ///Device type backing field.
-  DeviceType _type;
 
   ///Form Error message
   String editDeviceError;
@@ -50,10 +50,15 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   Future<Device> editDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    final editedDevice = Device(ownerId: _ownerId,name: newDeviceName,type: _type,creationDate: _creationDate);
-    await _repository.deviceExists(editedDevice,_ownerId).then((exists) async {
+    final editedDevice = Device(
+        ownerId: deviceOwnerId,
+        name: deviceName,
+        type: deviceType,
+        creationDate: deviceCreationDate
+    );
+    await repository.deviceExists(editedDevice,deviceOwnerId).then((exists) async {
       if(!exists){
-        await _repository.updateDevice(editedDevice).then((_){
+        await repository.updateDevice(editedDevice).then((_){
           _submitButtonController.add(false);
           return editedDevice;
         },onError: (error){
@@ -75,7 +80,7 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   }
 
   String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
-    if(value != newDeviceName){
+    if(value != deviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
     }
@@ -84,26 +89,9 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     }else if(deviceNameMaxLength < value.length){
       editDeviceError = deviceNameMaxLengthMessage;
     }else{
-      newDeviceName = value;
+      deviceName = value;
       editDeviceError = null;
     }
     return editDeviceError;
-  }
-
-  @override
-  DeviceType get currentValue => _type;
-
-  @override
-  void onTypeBackPressed(){
-    if(_type.index == 0) return;
-
-    _type = DeviceType.values[_type.index - 1];
-  }
-
-  @override
-  void onTypeForwardPressed(){
-    if(_type.index == DeviceType.values.length-1) return;
-
-    _type = DeviceType.values[_type.index + 1];
   }
 }

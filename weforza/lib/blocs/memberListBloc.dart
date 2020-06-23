@@ -14,11 +14,13 @@ class MemberListBloc extends Bloc {
 
   void loadMembersIfNotLoaded(){
     if(membersFuture == null){
-      membersFuture = loadMembers();
+      membersFuture = _loadMembers();
     }
   }
 
-  Future<List<MemberItem>> loadMembers() async {
+  void reloadMembers() => membersFuture = _loadMembers();
+
+  Future<List<MemberItem>> _loadMembers() async {
     List<Member> members = await _repository.getMembers();
     List<Future<MemberItem>> items = members.map(
             (member) async => MemberItem(member,await _repository.loadProfileImageFromDisk(member.profileImageFilePath))).toList();

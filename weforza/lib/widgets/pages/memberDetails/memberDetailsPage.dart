@@ -42,7 +42,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
     bloc = MemberDetailsBloc(
       memberRepository: InjectionContainer.get<MemberRepository>(),
       deviceRepository: InjectionContainer.get<DeviceRepository>(),
-      memberUuid: SelectedItemProvider.of(context).selectedMember.value.uuid
+      member: SelectedItemProvider.of(context).selectedMember.value
     );
     bloc.loadDevicesAndAttendingCount();
   }
@@ -54,14 +54,17 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
-    final member = SelectedItemProvider.of(context).selectedMember.value;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())),
+            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
+              setState(() {
+                bloc.member = SelectedItemProvider.of(context).selectedMember.value;
+              });
+            }),
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -77,14 +80,26 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ProfileImage(image: member.profileImage),
+                    child: ProfileImage(image: bloc.member.profileImage),
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                        Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                        Text(
+                            bloc.member.firstName,
+                            style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w500
+                            ),
+                            overflow: TextOverflow.ellipsis),
+                        Text(
+                            bloc.member.lastName,
+                            style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                                fontSize: 20
+                            ),
+                            overflow: TextOverflow.ellipsis
+                        ),
                       ],
                     ),
                   ),
@@ -98,7 +113,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                         children: <Widget>[
                           Icon(Icons.phone),
                           SizedBox(width: 5),
-                          Text(member.phone),
+                          Text(bloc.member.phone),
                         ],
                         mainAxisAlignment: MainAxisAlignment.center,
                       ),
@@ -123,7 +138,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   Widget _buildIOSLayout(BuildContext context) {
-    final member = SelectedItemProvider.of(context).selectedMember.value;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -138,7 +152,12 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.edit,
-                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
+                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
+                      setState(() {
+                        bloc.member = SelectedItemProvider.of(context).selectedMember.value;
+                      });
+                    })
+                ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
@@ -162,14 +181,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: ProfileImage(image: member.profileImage),
+                      child: ProfileImage(image: bloc.member.profileImage),
                     ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                          Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
+                          Text(bloc.member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
+                          Text(bloc.member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
                         ],
                       ),
                     ),
@@ -183,7 +202,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                           children: <Widget>[
                             Icon(Icons.phone),
                             SizedBox(width: 5),
-                            Text(member.phone),
+                            Text(bloc.member.phone),
                           ],
                           mainAxisAlignment: MainAxisAlignment.center,
                         ),
@@ -264,5 +283,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   @override
-  Future<void> deleteMember() => bloc.deleteMember();
+  Future<void> deleteMember() => bloc.deleteMember()
+      .then((_) => ReloadDataProvider.of(context).reloadMembers.value = true);
 }

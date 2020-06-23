@@ -81,9 +81,11 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                     child: Center(
                         child: EditDeviceSubmit(onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await widget.bloc.editDevice((Device device){
-                              widget.onSuccess(device);
-                            }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                            await widget.bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device) => widget.onSuccess(device))
+                                .catchError((e){
+                              //the stream catches it
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )
@@ -149,9 +151,11 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
                     child: Center(
                         child: EditDeviceSubmit(onPressed: () async {
                           if(iosValidateEditDevice()){
-                            await widget.bloc.editDevice((Device device){
-                              widget.onSuccess(device);
-                            }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                            await widget.bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device) => widget.onSuccess(device))
+                                .catchError((e){
+                              //the stream catches it
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )

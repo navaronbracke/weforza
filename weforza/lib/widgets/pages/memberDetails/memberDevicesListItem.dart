@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class MemberDeviceItem extends StatelessWidget {
-  MemberDeviceItem(this.device): assert(device != null);
+class MemberDevicesListItem extends StatelessWidget {
+  MemberDevicesListItem({@required this.device}): assert(device != null);
 
   final Device device;
 

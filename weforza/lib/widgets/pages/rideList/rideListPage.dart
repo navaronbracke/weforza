@@ -55,7 +55,15 @@ class _RideListPageState extends State<RideListPage> {
               color: Colors.white,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ),
+              ).then((_){
+                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
+                if(reloadNotifier.value){
+                  reloadNotifier.value = false;
+                  setState(() {
+                    bloc.reloadRides();
+                  });
+                }
+              }),
             ),
           ],
         ),
@@ -78,7 +86,15 @@ class _RideListPageState extends State<RideListPage> {
               icon: Icons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ),
+              ).then((_){
+                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
+                if(reloadNotifier.value){
+                  reloadNotifier.value = false;
+                  setState(() {
+                    bloc.reloadRides();
+                  });
+                }
+              }),
             ),
           ],
         ),
@@ -91,23 +107,8 @@ class _RideListPageState extends State<RideListPage> {
   }
 
   Widget _buildList(BuildContext context){
-    final listenable = ReloadDataProvider.of(context).reloadRides;
-    return ValueListenableBuilder<bool>(
-      valueListenable: listenable,
-      child: _listFutureBuilder(bloc.ridesFuture),
-      builder: (context, reload, child){
-        if(reload){
-          listenable.value = false;
-          bloc.ridesFuture = bloc.loadRides();
-        }
-        return child;
-      },
-    );
-  }
-
-  Widget _listFutureBuilder(Future<List<Ride>> future){
     return FutureBuilder<List<Ride>>(
-      future: future,
+      future: bloc.ridesFuture,
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
@@ -125,10 +126,19 @@ class _RideListPageState extends State<RideListPage> {
                       rideAttendeeFuture: bloc.getAmountOfRideAttendees(ride.date),
                       onPressed: (future,ride){
                         SelectedItemProvider.of(context).selectedRide.value = ride;
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (context) => RideDetailsPage(),
                           ),
-                        );
+                        ).then((_){
+                          final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
+                          if(reloadNotifier.value){
+                            reloadNotifier.value = false;
+                            setState(() {
+                              bloc.reloadRides();
+                            });
+                          }
+                        });
                       },
                     );
                   });

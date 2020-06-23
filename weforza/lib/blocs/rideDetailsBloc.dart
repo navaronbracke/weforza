@@ -19,7 +19,7 @@ class RideDetailsBloc extends Bloc {
 
   final MemberRepository memberRepo;
   final RideRepository rideRepo;
-  final Ride ride;
+  Ride ride;
 
   Future<List<MemberItem>> attendeesFuture;
 

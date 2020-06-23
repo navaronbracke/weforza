@@ -70,9 +70,11 @@ class DeleteDeviceForm extends StatelessWidget {
           FlatButton(
             child: Text(delete,style: TextStyle(color: Colors.red)),
             onPressed: () async {
-              await bloc.deleteDevice(
-                  deleteError, () => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex)
-              );
+              await bloc.deleteDevice(deleteError)
+                  .then((_) => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex))
+                  .catchError((error){
+                //the error is caught by the stream.
+              });
             },
           ),
         ],
@@ -88,9 +90,11 @@ class DeleteDeviceForm extends StatelessWidget {
           CupertinoButton(
             child: Text(delete,style: TextStyle(color: Colors.red)),
             onPressed: () async {
-              await bloc.deleteDevice(
-                  deleteError, () => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex)
-              );
+              await bloc.deleteDevice(deleteError)
+                  .then((_) => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex))
+                  .catchError((error){
+                //the error is caught by the stream.
+              });
             },
           ),
         ],

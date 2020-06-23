@@ -47,28 +47,31 @@ class EditDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
-  //TODO remove the callback
-  Future<void> editDevice(void Function(Device editedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<Device> editDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
     final editedDevice = Device(ownerId: _ownerId,name: newDeviceName,type: _type,creationDate: _creationDate);
     await _repository.deviceExists(editedDevice,_ownerId).then((exists) async {
       if(!exists){
         await _repository.updateDevice(editedDevice).then((_){
-          onSuccess(editedDevice);
           _submitButtonController.add(false);
+          return editedDevice;
         },onError: (error){
           _submitButtonController.add(false);
           _submitErrorController.add(genericErrorMessage);
+          return Future.error(genericErrorMessage);
         });
       }else{
         _submitButtonController.add(false);
         _submitErrorController.add(deviceExistsMessage);
+        return Future.error(deviceExistsMessage);
       }
     },onError: (error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
+      return Future.error(genericErrorMessage);
     });
+    return Future.error(genericErrorMessage);
   }
 
   String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){

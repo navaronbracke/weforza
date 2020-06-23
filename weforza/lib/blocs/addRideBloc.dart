@@ -11,7 +11,6 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
-//TODO test item selection -> check future rides/past day w/ ride
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
   AddRideBloc({@required this.repository}): assert(repository != null);

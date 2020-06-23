@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
@@ -26,6 +27,10 @@ class AddDeviceBloc extends Bloc {
   ///Device type backing field.
   DeviceType type = DeviceType.UNKNOWN;
 
+  final PageController pageController = PageController(
+      initialPage: DeviceType.UNKNOWN.index
+  );
+
   ///Form Error message
   String addDeviceError;
 
@@ -37,10 +42,21 @@ class AddDeviceBloc extends Bloc {
   final StreamController<String> _submitErrorController = BehaviorSubject();
   Stream<String> get submitErrorStream => _submitErrorController.stream;
 
+  ///This controller manages the current page for the type carousel.
+  final StreamController<int> _typeController = BehaviorSubject.seeded(DeviceType.UNKNOWN.index);
+  Stream<int> get currentTypeStream => _typeController.stream;
+
+  void onDeviceTypeChanged(int page){
+    type = DeviceType.values[page];
+    _typeController.add(page);
+  }
+
   @override
   void dispose() {
     _submitButtonController.close();
     _submitErrorController.close();
+    _typeController.close();
+    pageController.dispose();
   }
 
   Future<Device> addDevice(String deviceExistsMessage, String genericErrorMessage) async {

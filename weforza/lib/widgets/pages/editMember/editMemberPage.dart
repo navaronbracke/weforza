@@ -242,10 +242,12 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     child: Center(
                       child: EditMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
-                          await _bloc.editMember((MemberItem updatedMember){
+                          await _bloc.editMember().then((member){
                             ReloadDataProvider.of(context).reloadMembers.value = true;
-                            SelectedItemProvider.of(context).selectedMember.value = updatedMember;
+                            SelectedItemProvider.of(context).selectedMember.value = member;
                             Navigator.pop(context);
+                          }).catchError((e){
+                            //the stream catches it
                           });
                         }
                       }),
@@ -363,10 +365,12 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   child: Center(
                     child: EditMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.editMember((MemberItem updatedMember){
+                        await _bloc.editMember().then((member){
                           ReloadDataProvider.of(context).reloadMembers.value = true;
-                          SelectedItemProvider.of(context).selectedMember.value = updatedMember;
+                          SelectedItemProvider.of(context).selectedMember.value = member;
                           Navigator.pop(context);
+                        }).catchError((e){
+                          //the stream catches it
                         });
                       }
                     }),

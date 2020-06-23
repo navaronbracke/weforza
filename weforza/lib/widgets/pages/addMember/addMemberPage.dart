@@ -227,9 +227,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     child: Center(
                       child: AddMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
-                          await _bloc.addMember((){
+                          await _bloc.addMember().then((_){
                             ReloadDataProvider.of(context).reloadMembers.value = true;
                             Navigator.pop(context);
+                          }).catchError((error){
+                            //do nothing
                           });
                         }else {
                           setState(() {});
@@ -349,9 +351,11 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   child: Center(
                     child: AddMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.addMember((){
+                        await _bloc.addMember().then((_){
                           ReloadDataProvider.of(context).reloadMembers.value = true;
                           Navigator.pop(context);
+                        }).catchError((error){
+                          //do nothing
                         });
                       }
                     }),

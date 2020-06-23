@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
-import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceAdd/addDeviceSubmit.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
@@ -77,8 +76,11 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           if(_formKey.currentState.validate()){
                             await widget.bloc.addDevice(
                                 SelectedItemProvider.of(context).selectedMember.value.uuid,
-                                    (Device device)=> widget.deviceManager.onDeviceAdded(device),
-                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device) => widget.deviceManager.onDeviceAdded(device))
+                                .catchError((e){
+                                  //do nothing, the stream catches it
+                            });
                           }
                         },stream: widget.bloc.submitStream)
                     )
@@ -146,8 +148,11 @@ class _AddDeviceFormState extends State<AddDeviceForm> {
                           if(iosValidateAddDevice()){
                             await widget.bloc.addDevice(
                                 SelectedItemProvider.of(context).selectedMember.value.uuid,
-                                    (Device device)=> widget.deviceManager.onDeviceAdded(device),
-                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
+                                S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError)
+                                .then((device) => widget.deviceManager.onDeviceAdded(device))
+                                .catchError((e){
+                              //do nothing, the stream catches it
+                            });
                           }else {
                             setState((){
                               //trigger form error redraw on ios

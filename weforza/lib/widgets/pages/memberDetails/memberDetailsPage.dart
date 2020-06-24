@@ -251,7 +251,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
             MemberDevicesListEmpty(onPressed: goToAddDevicePage) :
             MemberDevicesList(onAddButtonPressed: goToAddDevicePage, devices: snapshot.data);
             //TODO onDevice long pressed (delete)
-            //TODO onEditDevice (edit -> press button in item)
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 
@@ -11,11 +12,13 @@ class SelectedItemProvider extends InheritedWidget {
 
   final ValueNotifier<Ride> selectedRide = ValueNotifier(null);
   final ValueNotifier<MemberItem> selectedMember = ValueNotifier(null);
+  final ValueNotifier<Device> selectedDevice = ValueNotifier(null);
 
   static SelectedItemProvider of(BuildContext context)
    => context.dependOnInheritedWidgetOfExactType<SelectedItemProvider>();
 
   @override
   bool updateShouldNotify(SelectedItemProvider old)
-   => selectedRide != old.selectedRide && selectedMember != old.selectedMember;
+   => selectedRide != old.selectedRide && selectedMember != old.selectedMember
+       && selectedDevice != old.selectedDevice;
 }

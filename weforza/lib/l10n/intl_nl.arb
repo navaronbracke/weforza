@@ -46,6 +46,11 @@
   "AddDeviceGenericError": "Er liep iets fout",
   "AddDeviceSubmit": "Toestel Aanmaken",
 
+  "EditDeviceTitle": "Toestel Bewerken",
+  "EditDeviceError": "Kon toestel niet bewerken",
+  "EditDeviceGenericError": "Er liep iets fout",
+  "EditDeviceSubmit": "Wijzigingen Opslaan",
+
   "EditMemberTitle": "Lid Bewerken",
   "EditMemberError": "Kon de wijzigingen niet opslaan",
   "EditMemberSubmit" : "Wijzigingen Opslaan",
@@ -102,7 +107,6 @@
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
-  "DeviceTypeLabel": "Type Toestel",
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",
   "DevicePhone": "Telefoon",
@@ -112,10 +116,6 @@
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
-  "DeviceFound": "{device} gevonden",
-  "EditDeviceSubmit": "Toestel Bewerken",
-  "DeleteDeviceDescription": "{device} verwijderen?",
-  "DeleteDeviceError": "Kon {device} niet verwijderen",
 
   "SettingsTitle": "Instellingen",
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",

@@ -6,8 +6,8 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget is shown as replacement of a [Member]'s devices, if it has none.
-class MemberDevicesEmpty extends StatelessWidget {
-  MemberDevicesEmpty({@required this.onPressed}): assert(onPressed != null);
+class MemberDevicesListEmpty extends StatelessWidget {
+  MemberDevicesListEmpty({@required this.onPressed}): assert(onPressed != null);
 
   final VoidCallback onPressed;
 

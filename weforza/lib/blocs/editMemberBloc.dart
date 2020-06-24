@@ -153,23 +153,23 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
       phone,
       profileImage?.path,
     );
-    await repository.memberExists(firstName, lastName, phone,id).then((exists) async {
-      if(exists){
-        _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
-        return Future.error(EditMemberSubmitState.MEMBER_EXISTS);
-      }else{
-        await repository.updateMember(newMember).then((_){
-          return MemberItem(newMember,profileImage);
-        },onError: (error){
-          _submitStateController.add(EditMemberSubmitState.ERROR);
-          return Future.error(EditMemberSubmitState.ERROR);
-        });
-      }
-    },onError: (error){
+
+    bool exists = await repository.memberExists(firstName, lastName, phone,id).catchError((error){
       _submitStateController.add(EditMemberSubmitState.ERROR);
       return Future.error(EditMemberSubmitState.ERROR);
     });
-    return Future.error(EditMemberSubmitState.ERROR);
+
+    if(exists){
+      _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
+      return Future.error(EditMemberSubmitState.MEMBER_EXISTS);
+    }else{
+      return await repository.updateMember(newMember).then((_){
+        return MemberItem(newMember,profileImage);
+      },onError: (error){
+        _submitStateController.add(EditMemberSubmitState.ERROR);
+        return Future.error(EditMemberSubmitState.ERROR);
+      });
+    }
   }
 
   @override

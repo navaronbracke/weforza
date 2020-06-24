@@ -1,26 +1,37 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
-class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
-  AddDeviceBloc(this._repository): assert(_repository != null);
+class AddDeviceBloc extends Bloc {
+  AddDeviceBloc({
+    @required this.repository,
+    @required this.ownerId,
+  }): assert(repository != null && ownerId != null && ownerId.isNotEmpty);
 
-  final DeviceRepository _repository;
+  final DeviceRepository repository;
+  final String ownerId;
 
   ///Auto validate flag for device name.
   bool autoValidateNewDeviceName = false;
   ///Device Name max length
   int deviceNameMaxLength = 40;
 
+  TextEditingController deviceNameController = TextEditingController(text: "");
+
   ///Device Name input backing field
   String _newDeviceName = "";
   ///Device type backing field.
-  DeviceType _type = DeviceType.UNKNOWN;
+  DeviceType type = DeviceType.UNKNOWN;
+
+  final PageController pageController = PageController(
+      initialPage: DeviceType.UNKNOWN.index
+  );
 
   ///Form Error message
   String addDeviceError;
@@ -33,22 +44,34 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   final StreamController<String> _submitErrorController = BehaviorSubject();
   Stream<String> get submitErrorStream => _submitErrorController.stream;
 
+  ///This controller manages the current page dot for the type carousel.
+  final StreamController<int> _typeController = BehaviorSubject.seeded(DeviceType.UNKNOWN.index);
+  Stream<int> get currentTypeStream => _typeController.stream;
+
+  void onDeviceTypeChanged(int page){
+    type = DeviceType.values[page];
+    _typeController.add(page);
+  }
+
   @override
   void dispose() {
     _submitButtonController.close();
     _submitErrorController.close();
+    _typeController.close();
+    pageController.dispose();
+    deviceNameController.dispose();
   }
 
-  Future<Device> addDevice(String ownerId,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
-    _submitErrorController.add(" ");//remove the previous error.
-    final device = Device(ownerId: ownerId, name: _newDeviceName,type: _type,creationDate: DateTime.now());
-    await _repository.deviceExists(device).then((exists) async {
+    _submitErrorController.add("");//remove the previous error.
+    final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
+    await repository.deviceExists(device).then((exists) async {
       if(!exists){
-        await _repository.addDevice(device).then((_){
+        await repository.addDevice(device).then((_){
           _submitButtonController.add(false);
-          return device;
         },onError: (error){
+          print(error);
           _submitButtonController.add(false);
           _submitErrorController.add(genericErrorMessage);
           return Future.error(genericErrorMessage);
@@ -59,11 +82,11 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
         return Future.error(deviceExistsMessage);
       }
     },onError: (error){
+      print(error);
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
-    return Future.error(genericErrorMessage);
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
@@ -82,20 +105,11 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     return addDeviceError;
   }
 
-  @override
-  DeviceType get currentValue => _type;
-
-  @override
-  void onTypeBackPressed(){
-    if(_type.index == 0) return;
-
-    _type = DeviceType.values[_type.index - 1];
-  }
-
-  @override
-  void onTypeForwardPressed(){
-    if(_type.index == DeviceType.values.length-1) return;
-
-    _type = DeviceType.values[_type.index + 1];
+  void resetInputs(){
+    autoValidateNewDeviceName = false;
+    _newDeviceName = "";
+    deviceNameController.clear();
+    type = DeviceType.UNKNOWN;
+    pageController.jumpToPage(0);
   }
 }

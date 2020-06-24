@@ -35,12 +35,15 @@ class MemberDevicesList extends StatelessWidget {
             ),
             PlatformAwareWidget(
               android: () => IconButton(
-                icon: Icon(Icons.add,color: ApplicationTheme.accentColor),
+                icon: Icon(
+                    Icons.add,
+                    color: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonColor
+                ),
                 onPressed: onAddButtonPressed,
               ),
               ios: () => CupertinoIconButton(
-                onPressedColor: ApplicationTheme.primaryColor,
-                idleColor: ApplicationTheme.accentColor,
+                onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
+                idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
                 icon: Icons.add,
                 onPressed: onAddButtonPressed,
               ),

@@ -41,7 +41,7 @@ class AddDeviceBloc extends Bloc {
   Stream<bool> get submitStream => _submitButtonController.stream;
 
   ///This controller manages the error message for the submit.
-  final StreamController<String> _submitErrorController = BehaviorSubject();
+  final BehaviorSubject<String> _submitErrorController = BehaviorSubject();
   Stream<String> get submitErrorStream => _submitErrorController.stream;
 
   ///This controller manages the current page dot for the type carousel.
@@ -66,27 +66,24 @@ class AddDeviceBloc extends Bloc {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
     final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
-    await repository.deviceExists(device).then((exists) async {
-      if(!exists){
-        await repository.addDevice(device).then((_){
-          _submitButtonController.add(false);
-        },onError: (error){
-          print(error);
-          _submitButtonController.add(false);
-          _submitErrorController.add(genericErrorMessage);
-          return Future.error(genericErrorMessage);
-        });
-      }else{
-        _submitButtonController.add(false);
-        _submitErrorController.add(deviceExistsMessage);
-        return Future.error(deviceExistsMessage);
-      }
-    },onError: (error){
-      print(error);
+
+    final exists = await repository.deviceExists(device).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
+
+    if(!exists){
+      await repository.addDevice(device).catchError((error){
+        _submitButtonController.add(false);
+        _submitErrorController.add(genericErrorMessage);
+        return Future.error(genericErrorMessage);
+      });
+    }else{
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
@@ -103,13 +100,5 @@ class AddDeviceBloc extends Bloc {
       addDeviceError = null;
     }
     return addDeviceError;
-  }
-
-  void resetInputs(){
-    autoValidateNewDeviceName = false;
-    _newDeviceName = "";
-    deviceNameController.clear();
-    type = DeviceType.UNKNOWN;
-    pageController.jumpToPage(0);
   }
 }

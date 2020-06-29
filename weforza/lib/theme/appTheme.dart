@@ -111,6 +111,8 @@ abstract class ApplicationTheme {
 
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 
+  static final Color deleteItemButtonTextColor = Colors.red;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

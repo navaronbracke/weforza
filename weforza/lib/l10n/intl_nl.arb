@@ -143,7 +143,7 @@
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
-  "DialogOk": "Ok",
+  "DialogDismiss": "Ok",
 
   "DistanceKm": "Km"
 }

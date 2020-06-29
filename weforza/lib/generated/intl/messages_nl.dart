@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DevicesListNoDevices" : MessageLookupByLibrary.simpleMessage("Geen toestellen om te tonen"),
     "DialogCancel" : MessageLookupByLibrary.simpleMessage("Annuleren"),
     "DialogDelete" : MessageLookupByLibrary.simpleMessage("Verwijderen"),
-    "DialogOk" : MessageLookupByLibrary.simpleMessage("Ok"),
+    "DialogDismiss" : MessageLookupByLibrary.simpleMessage("Ok"),
     "DistanceKm" : MessageLookupByLibrary.simpleMessage("Km"),
     "EditDeviceError" : MessageLookupByLibrary.simpleMessage("Kon toestel niet bewerken"),
     "EditDeviceGenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout"),

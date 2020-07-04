@@ -184,19 +184,15 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                         builder: (context) => DeleteItemDialog(
                           title: S.of(context).MemberDeleteDialogTitle,
                           description: S.of(context).MemberDeleteDialogDescription,
-                        errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
-                          onDelete: () => Future.delayed(Duration(seconds: 3), () => Future.error("some error")),
-                        //TODO ios dialog implementation
-                        /*
-                        *                         onDelete: () => bloc.deleteMember().then((_){
-                          //trigger the reload of members
-                          ReloadDataProvider.of(context).reloadMembers.value = true;
-                          final navigator = Navigator.of(context);
-                          //Pop both the dialog and the detail screen
-                          navigator.pop();
-                          navigator.pop();
-                      }),
-                        * */
+                          errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                          onDelete: () => bloc.deleteMember().then((_){
+                            //trigger the reload of members
+                            ReloadDataProvider.of(context).reloadMembers.value = true;
+                            final navigator = Navigator.of(context);
+                            //Pop both the dialog and the detail screen
+                            navigator.pop();
+                            navigator.pop();
+                          }),
                         ),
                     ),
                 ),

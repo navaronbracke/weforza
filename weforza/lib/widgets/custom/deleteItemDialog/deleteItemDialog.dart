@@ -24,9 +24,6 @@ class DeleteItemDialog extends StatefulWidget {
   final String description;
   final String errorDescription;
 
-  //TODO ios: text is white -> should be black
-  //TODO ios: adjust the padding
-
   @override
   _DeleteItemDialogState createState() => _DeleteItemDialogState();
 }
@@ -165,7 +162,6 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     return Dialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        //TODO cross axis stretch?
         children: <Widget>[
           SizedBox(
             width: 280,//280 is the minimum for a material Dialog

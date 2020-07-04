@@ -181,10 +181,11 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     final content = Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20, bottom: 5),
           child: Text(
             widget.title,
             style: TextStyle(
+              color: Colors.black,
               fontFamily: '.SF UI Display',
               inherit: false,
               fontSize: 18.0,
@@ -200,6 +201,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             child: Text(
               widget.description,
               style: TextStyle(
+                color: Colors.black,
                 fontFamily: '.SF UI Text',
                 inherit: false,
                 fontSize: 13.4,
@@ -249,10 +251,11 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     final content = Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 10),
+          padding: const EdgeInsets.only(top: 20, bottom: 5),
           child: Text(
             widget.title,
             style: TextStyle(
+              color: Colors.black,
               fontFamily: '.SF UI Display',
               inherit: false,
               fontSize: 18.0,
@@ -279,6 +282,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
                   widget.errorDescription,
                   softWrap: true,
                   style: TextStyle(
+                    color: Colors.black,
                     fontFamily: '.SF UI Text',
                     inherit: false,
                     fontSize: 13.4,
@@ -317,10 +321,11 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     final content = Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 10),
+          padding: const EdgeInsets.only(top: 20, bottom: 5),
           child: Text(
             widget.title,
             style: TextStyle(
+              color: Colors.black,
               fontFamily: '.SF UI Display',
               inherit: false,
               fontSize: 18.0,

@@ -8,12 +8,19 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesList extends StatelessWidget {
   MemberDevicesList({
+    @required this.listKey,
     @required this.devices,
-    @required this.onAddButtonPressed
-  }): assert(devices != null && onAddButtonPressed != null);
+    @required this.onAddButtonPressed,
+    @required this.onDeleteDevice,
+  }): assert(
+    devices != null && onAddButtonPressed != null &&
+        onDeleteDevice != null && listKey != null
+  );
 
+  final GlobalKey<AnimatedListState> listKey;
   final List<Device> devices;
   final VoidCallback onAddButtonPressed;
+  final Future<void> Function(String deviceName, int index) onDeleteDevice;
 
   @override
   Widget build(BuildContext context){
@@ -51,11 +58,14 @@ class MemberDevicesList extends StatelessWidget {
           ],
         ),
         Expanded(
-          child: ListView.builder(
-              itemBuilder: (context,index) => MemberDevicesListItem(
-                device: devices[index]
-              ),
-              itemCount: devices.length
+          child: AnimatedList(
+            key: listKey,
+            initialItemCount: devices.length,
+            itemBuilder: (context,index, animation) => MemberDevicesListItem(
+              device: devices[index],
+              index: index,
+              onDelete: onDeleteDevice,
+            ),
           ),
         ),
       ],

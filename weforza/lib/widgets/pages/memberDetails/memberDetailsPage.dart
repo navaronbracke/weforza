@@ -137,7 +137,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       ),
                     ),
                   ),
-                  //tel/count
                 ],
               ),
             ],
@@ -245,7 +244,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                         ),
                       ),
                     ),
-                    //tel/count
                   ],
                 ),
               ],

@@ -61,6 +61,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
+        bottom: false,
         child: _buildBody(context),
       ),
     );

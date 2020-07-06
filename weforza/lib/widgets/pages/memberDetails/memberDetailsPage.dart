@@ -4,20 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
-import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
-import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesListEmpty.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDetailsAttendingCounter.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
@@ -30,8 +26,7 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
-
+class _MemberDetailsPageState extends State<MemberDetailsPage> {
 
   ///The BLoC in charge of the content.
   MemberDetailsBloc bloc;
@@ -68,7 +63,23 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: ()=> showDialog(context: context,barrierDismissible: false, builder: (context)=> DeleteMemberDialog(this)),
+            onPressed: () => showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => DeleteItemDialog(
+                  title: S.of(context).MemberDeleteDialogTitle,
+                  description: S.of(context).MemberDeleteDialogDescription,
+                  errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                  onDelete: () => bloc.deleteMember().then((_){
+                    //trigger the reload of members
+                    ReloadDataProvider.of(context).reloadMembers.value = true;
+                    final navigator = Navigator.of(context);
+                    //Pop both the dialog and the detail screen
+                    navigator.pop();
+                    navigator.pop();
+                  }),
+                ),
+            ),
           ),
         ],
       ),
@@ -121,16 +132,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                   ),
                   Expanded(
                     child: Center(
-                      child: _buildAttendingCountWidget(),
+                      child: MemberDetailsAttendingCounter(
+                        future: bloc.attendingCountFuture,
+                      ),
                     ),
                   ),
-                  //tel/count
                 ],
               ),
             ],
           ),
           Expanded(
-              child: _buildDevicesList()
+              child: MemberDevicesList(
+                bloc: bloc,
+              ),
           ),
         ],
       ),
@@ -163,7 +177,22 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.delete,
-                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                    onPressed: ()=> showCupertinoDialog(
+                        context: context,
+                        builder: (context) => DeleteItemDialog(
+                          title: S.of(context).MemberDeleteDialogTitle,
+                          description: S.of(context).MemberDeleteDialogDescription,
+                          errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                          onDelete: () => bloc.deleteMember().then((_){
+                            //trigger the reload of members
+                            ReloadDataProvider.of(context).reloadMembers.value = true;
+                            final navigator = Navigator.of(context);
+                            //Pop both the dialog and the detail screen
+                            navigator.pop();
+                            navigator.pop();
+                          }),
+                        ),
+                    ),
                 ),
               ],
             ),
@@ -210,80 +239,23 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     ),
                     Expanded(
                       child: Center(
-                        child: _buildAttendingCountWidget(),
+                        child: MemberDetailsAttendingCounter(
+                          future: bloc.attendingCountFuture,
+                        ),
                       ),
                     ),
-                    //tel/count
                   ],
                 ),
               ],
             ),
             Expanded(
-                child: _buildDevicesList()
+                child: MemberDevicesList(
+                  bloc: bloc,
+                ),
             ),
           ],
         ),
       ),
     );
   }
-
-  ///Build the list of devices.
-  Widget _buildDevicesList(){
-    return FutureBuilder<List<Device>>(
-      future: bloc.devicesFuture,
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return MemberDevicesError();
-          }else{
-            final goToAddDevicePage = (){
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> AddDevicePage()))
-                  .then((_){
-                    final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
-                    if(reloadDevicesNotifier.value){
-                      reloadDevicesNotifier.value = false;
-                      setState(() => bloc.reloadDevices());
-                    }
-              });
-            };
-            return snapshot.data.isEmpty ?
-            MemberDevicesListEmpty(onPressed: goToAddDevicePage) :
-            MemberDevicesList(onAddButtonPressed: goToAddDevicePage, devices: snapshot.data);
-            //TODO onDevice long pressed (delete)
-          }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
-    );
-  }
-
-  ///Build the attending count widget.
-  Widget _buildAttendingCountWidget(){
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(Icons.location_on),
-        SizedBox(width: 5),
-        FutureBuilder<int>(
-          future: bloc.attendingCountFuture,
-          builder: (context,snapshot){
-            if(snapshot.connectionState == ConnectionState.done){
-              if(snapshot.hasError){
-                return Text("?");
-              }
-              return Text("${snapshot.data}");
-            }else{
-              return PlatformAwareLoadingIndicator();
-            }
-          },
-        )
-      ],
-    );
-  }
-
-  @override
-  Future<void> deleteMember() => bloc.deleteMember()
-      .then((_) => ReloadDataProvider.of(context).reloadMembers.value = true);
 }

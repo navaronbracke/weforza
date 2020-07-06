@@ -1023,6 +1023,36 @@ class S {
     );
   }
 
+  /// `Delete Device`
+  String get DeleteDeviceTitle {
+    return Intl.message(
+      'Delete Device',
+      name: 'DeleteDeviceTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this device?`
+  String get DeleteDeviceDescription {
+    return Intl.message(
+      'Are you sure you want to delete this device?',
+      name: 'DeleteDeviceDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not delete the device`
+  String get DeleteDeviceErrorDescription {
+    return Intl.message(
+      'Could not delete the device',
+      name: 'DeleteDeviceErrorDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Settings`
   String get SettingsTitle {
     return Intl.message(
@@ -1254,10 +1284,10 @@ class S {
   }
 
   /// `Ok`
-  String get DialogOk {
+  String get DialogDismiss {
     return Intl.message(
       'Ok',
-      name: 'DialogOk',
+      name: 'DialogDismiss',
       desc: '',
       args: [],
     );

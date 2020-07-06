@@ -21,7 +21,7 @@ class MemberDevicesListHeader extends StatelessWidget {
               S.of(context).DevicesListHeader,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16
+                  fontSize: 20
               ),
             ),
           ),
@@ -30,7 +30,8 @@ class MemberDevicesListHeader extends StatelessWidget {
           android: () => IconButton(
             icon: Icon(
                 Icons.add,
-                color: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonColor
+                color: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonColor,
+                size: 30,
             ),
             onPressed: onPressed,
           ),
@@ -39,6 +40,7 @@ class MemberDevicesListHeader extends StatelessWidget {
             idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
             icon: Icons.add,
             onPressed: onPressed,
+            size: 30,
           ),
         )
       ],

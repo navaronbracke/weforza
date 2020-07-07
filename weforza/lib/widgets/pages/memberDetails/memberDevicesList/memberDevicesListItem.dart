@@ -63,31 +63,41 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           onDelete: () => widget.onDelete(device.name, widget.index),
         ),
       ),
-      child: _buildItem(context),
+      child: Container(
+        decoration: BoxDecoration(),
+        child: PlatformAwareWidget(
+          android: () => Padding(
+            padding: const EdgeInsets.fromLTRB(0,0,10,5),
+            child: _buildItem(context),
+          ), 
+          ios: () => Padding(
+            padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+            child: _buildItem(context),
+          ),
+        ),
+      ),
     ),
   );
 
   Widget _buildItem(BuildContext context){
-    return Container(
-      decoration: BoxDecoration(),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 5),
-              child: _mapDeviceTypeToIcon(),
-            ),
-            Expanded(
-                child: Text(device.name, overflow: TextOverflow.ellipsis)
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: _buildEditDeviceButton(context),
-            ),
-          ],
+    return Row(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: _mapDeviceTypeToIcon(),
         ),
-      ),
+        Expanded(
+            child: Text(
+              device.name,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 18)
+            )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: _buildEditDeviceButton(context),
+        ),
+      ],
     );
   }
 
@@ -108,7 +118,8 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
       android: () => IconButton(
         icon: Icon(
             Icons.edit,
-            color: ApplicationTheme.memberDevicesListEditDeviceColor
+            color: ApplicationTheme.memberDevicesListEditDeviceColor,
+            size: 30,
         ),
         onPressed: (){
           SelectedItemProvider.of(context).selectedDevice.value = device;
@@ -135,6 +146,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           });
         },
         icon: Icons.edit,
+        size: 30,
       ),
     );
   }

@@ -51,7 +51,13 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             onDelete: () => widget.onDelete(device.name, widget.index),
           ),
       ),
-      child: _buildItem(context),
+      child: Container(
+        decoration: BoxDecoration(),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10,0,5,5),
+          child: _buildItem(context),
+        ),
+      ),
     ),
     ios: () => GestureDetector(
       onLongPress: () => showCupertinoDialog(
@@ -65,15 +71,9 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
       ),
       child: Container(
         decoration: BoxDecoration(),
-        child: PlatformAwareWidget(
-          android: () => Padding(
-            padding: const EdgeInsets.fromLTRB(0,0,10,5),
-            child: _buildItem(context),
-          ), 
-          ios: () => Padding(
-            padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
-            child: _buildItem(context),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+          child: _buildItem(context),
         ),
       ),
     ),
@@ -90,7 +90,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             child: Text(
               device.name,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 18)
+              style: TextStyle(fontSize: 15)
             )
         ),
         Padding(
@@ -119,7 +119,6 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
         icon: Icon(
             Icons.edit,
             color: ApplicationTheme.memberDevicesListEditDeviceColor,
-            size: 30,
         ),
         onPressed: (){
           SelectedItemProvider.of(context).selectedDevice.value = device;
@@ -146,7 +145,6 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           });
         },
         icon: Icons.edit,
-        size: 30,
       ),
     );
   }

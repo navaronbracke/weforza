@@ -48,11 +48,8 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
   Widget _buildDevicesList(BuildContext context, List<Device> devices){
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: MemberDevicesListHeader(
-            onPressed: () => goToAddDevicePage(context),
-          ),
+        MemberDevicesListHeader(
+          onPressed: () => goToAddDevicePage(context),
         ),
         Expanded(
           child: AnimatedList(

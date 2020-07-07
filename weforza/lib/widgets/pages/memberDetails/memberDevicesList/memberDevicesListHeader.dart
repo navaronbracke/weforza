@@ -11,7 +11,42 @@ class MemberDevicesListHeader extends StatelessWidget {
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context),
+  );
+
+  Widget _buildAndroidWidget(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 4),
+              child: Text(
+                S.of(context).DevicesListHeader,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                ),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonColor,
+              size: 26,
+            ),
+            onPressed: onPressed,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIosWidget(BuildContext context){
     return Row(
       children: <Widget>[
         Expanded(
@@ -26,22 +61,12 @@ class MemberDevicesListHeader extends StatelessWidget {
             ),
           ),
         ),
-        PlatformAwareWidget(
-          android: () => IconButton(
-            icon: Icon(
-                Icons.add,
-                color: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonColor,
-                size: 30,
-            ),
-            onPressed: onPressed,
-          ),
-          ios: () => CupertinoIconButton(
-            onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
-            idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
-            icon: Icons.add,
-            onPressed: onPressed,
-            size: 30,
-          ),
+        CupertinoIconButton(
+          onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
+          idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
+          icon: Icons.add,
+          onPressed: onPressed,
+          size: 26
         )
       ],
     );

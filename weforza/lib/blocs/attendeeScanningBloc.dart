@@ -199,7 +199,7 @@ class AttendeeScanningBloc extends Bloc {
 
   ScanResultItem getScanResultAt(int index) => _scanResults[index];
 
-  void addScanResult(ScanResultItem item) => _scanResults.add(item);
+  void addScanResult(ScanResultItem item) => _scanResults.insert(0, item);
 
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).

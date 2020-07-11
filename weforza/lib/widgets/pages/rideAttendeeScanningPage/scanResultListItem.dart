@@ -7,9 +7,8 @@ import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultListItem extends StatelessWidget {
   ScanResultListItem({
-    @required this.item,
-    @required Key key
-  }): assert(item != null), super(key: key);
+    @required this.item
+  }): assert(item != null);
 
   final ScanResultItem item;
 
@@ -18,10 +17,8 @@ class ScanResultListItem extends StatelessWidget {
     return Material(
       child: Card(
         child: SizedBox(
-          height: 200,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder<Member>(
+          height: 25,
+          child: FutureBuilder<Member>(
               future: item.memberLookup,
               builder: (context, snapshot){
                 if(snapshot.connectionState == ConnectionState.done){
@@ -84,7 +81,6 @@ class ScanResultListItem extends StatelessWidget {
                   );
                 }
               },
-            ),
           ),
         ),
       ),

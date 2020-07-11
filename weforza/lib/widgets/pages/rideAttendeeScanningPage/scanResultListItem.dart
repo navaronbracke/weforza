@@ -6,8 +6,10 @@ import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultListItem extends StatelessWidget {
-  ScanResultListItem({@required this.item}):
-        assert(item != null);
+  ScanResultListItem({
+    @required this.item,
+    @required Key key
+  }): assert(item != null), super(key: key);
 
   final ScanResultItem item;
 

@@ -204,6 +204,7 @@ class AttendeeScanningBloc extends Bloc {
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
+    _scanStepController.add(ScanProcessStep.STOPPING_SCAN);
     if(!isScanning.value) return true;
 
     bool result = true;
@@ -268,4 +269,5 @@ enum ScanProcessStep {
   SCAN,//scanning
   MANUAL,//scanning results were confirmed and we are in the manual assignment step
   BLUETOOTH_DISABLED,//bluetooth is off
+  STOPPING_SCAN,//the scan is stopping
 }

@@ -125,7 +125,10 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                               itemBuilder: (BuildContext context, int index, Animation<double> animation){
                                 return SizeTransition(
                                   sizeFactor: animation,
-                                  child: ScanResultListItem(item: bloc.getScanResultAt(index)),
+                                  child: ScanResultListItem(
+                                      item: bloc.getScanResultAt(index),
+                                      key: ValueKey(index)
+                                  ),
                                 );
                               },
                             ),

@@ -132,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningGenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong."),
     "RideAttendeeScanningGoBack" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToBluetoothSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
+    "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("There are no members to choose from"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Cannot start a scan, there are no members."),
     "RideAttendeeScanningPreparingScan" : MessageLookupByLibrary.simpleMessage("Preparing Scan"),
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("By Hand"),

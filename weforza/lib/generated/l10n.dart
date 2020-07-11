@@ -763,6 +763,16 @@ class S {
     );
   }
 
+  /// `There are no members to choose from`
+  String get RideAttendeeScanningManualSelectionEmptyList {
+    return Intl.message(
+      'There are no members to choose from',
+      name: 'RideAttendeeScanningManualSelectionEmptyList',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

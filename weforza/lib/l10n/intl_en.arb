@@ -87,6 +87,7 @@
   "RideAttendeeScanningSkipScan": "Skip Scan",
   "RideAttendeeScanningSaveScanResults": "Save Scan Results",
   "RideAttendeeScanningSaveManualResults": "Save Selection",
+  "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

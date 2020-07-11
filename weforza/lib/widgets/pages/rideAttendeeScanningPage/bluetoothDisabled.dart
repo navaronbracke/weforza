@@ -61,6 +61,10 @@ class BluetoothDisabledWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CupertinoButton.filled(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14.0,
+            horizontal: 24.0,
+          ),
           child: Text(
             S.of(context).RideAttendeeScanningGoToBluetoothSettings,
             style: TextStyle(color: Colors.white),

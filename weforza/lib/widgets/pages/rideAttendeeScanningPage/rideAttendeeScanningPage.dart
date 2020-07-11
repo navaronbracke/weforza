@@ -11,12 +11,11 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelection.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/saveScanOrSkipButton.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/bluetoothDisabled.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/noMembersForScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/preparingScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningProgressIndicator.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningStepper.dart';
@@ -137,7 +136,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                                 isSaving: bloc.isSaving,
                                 isScanning: bloc.isScanning,
                                 onSkip: () => bloc.skipScan(),
-                                onSave: () async => await bloc.saveScanResults().then((_){
+                                onSave: () async => await bloc.saveRideAttendees().then((_){
                                   widget.onRefreshAttendees();
                                 }, onError: (error){
                                   //do nothing
@@ -153,7 +152,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         bloc: bloc,
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
-                  case ScanProcessStep.NO_MEMBERS: return Center(child: NoMembersForScanWidget());
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }

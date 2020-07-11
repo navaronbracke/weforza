@@ -184,6 +184,9 @@ class AttendeeScanningBloc extends Bloc {
   Future<Member> _findOwnerOfDevice(String deviceName) async {
     //Find the device owner ID
     final device = await deviceRepo.getDeviceWithName(deviceName);
+    if(device == null){
+      return null;
+    }
     //Find the owner by id
     final owner = await memberRepo.getMemberByUuid(device.ownerId);
     if(owner == null){

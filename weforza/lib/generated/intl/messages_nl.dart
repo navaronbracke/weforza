@@ -128,7 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een telefoonnummer bestaat enkel uit cijfers"),
     "PhoneMaxLength" : m6,
     "PhoneMinLength" : m7,
-    "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Kan niet scannen, Bluetooth staat uit."),
+    "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
     "RideAttendeeScanningGenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout."),
     "RideAttendeeScanningGoBack" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToBluetoothSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),

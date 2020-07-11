@@ -100,31 +100,12 @@ class AttendeeScanningBloc extends Bloc {
   ///This function takes a lambda that gets the device name of a found device and the lookup future for getting the member.
   Future<void> doInitialDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
     ///Check if bluetooth is on.
-    await scanner.isBluetoothEnabled().then((value) async {
-      if(value){
+    await scanner.isBluetoothEnabled().then((enabled) async {
+      if(enabled){
         ///Wait for both the settings and the existing attendees/ first page of members.
         ///Fail fast when either fails.
         await Future.wait([_loadSettings(), _loadRideAttendees(rideDate), _loadMembers(pageSize, page: memberListPageNr)]).then((_) async {
-          if(currentMembersList == null || currentMembersList.isEmpty){
-            _scanStepController.add(ScanProcessStep.NO_MEMBERS);
-          }else{
-            //Start scan if not scanning
-            if(!isScanning.value){
-              isScanning.value = true;
-              _scanStepController.add(ScanProcessStep.SCAN);
-              scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
-                //Start the lookup for the member, giving the device name as placeholder.
-                onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
-              }, onError: (error){
-                //ignore scan errors
-              }, onDone: (){
-                //Set is scanning to false
-                //so the value listenable builder for the button updates.
-                //At this point the user can also switch pages.
-                isScanning.value = false;
-              });
-            }
-          }
+          _startDeviceScan(onDeviceFound);
         }, onError: (error){
           //Catch the settings/member load errors.
           //This is a generic error and is thus caught by the StreamBuilder.
@@ -146,24 +127,9 @@ class AttendeeScanningBloc extends Bloc {
     //Reset the UI to show the initial loading indicator again.
     _scanStepController.add(ScanProcessStep.INIT);
     ///Check if bluetooth is on.
-    await scanner.isBluetoothEnabled().then((value) async {
-      if(value){
-        //Start scan if not scanning
-        if(!isScanning.value){
-          isScanning.value = true;
-          _scanStepController.add(ScanProcessStep.SCAN);
-          scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
-            //Start the lookup for the member, giving the device name as placeholder.
-            onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
-          }, onError: (error){
-            //ignore scan errors
-          }, onDone: (){
-            //Set is scanning to false
-            //so the value listenable builder for the button updates.
-            //At this point the user can also switch pages.
-            isScanning.value = false;
-          });
-        }
+    await scanner.isBluetoothEnabled().then((enabled) async {
+      if(enabled){
+        _startDeviceScan(onDeviceFound);
       }else{
         _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
       }
@@ -172,6 +138,26 @@ class AttendeeScanningBloc extends Bloc {
       //This is a generic error and is thus caught by the StreamBuilder.
       _scanStepController.addError(error);
     });
+  }
+
+  //Perform the actual bluetooth device scan
+  void _startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound){
+    //Start scan if not scanning
+    if(!isScanning.value){
+      isScanning.value = true;
+      _scanStepController.add(ScanProcessStep.SCAN);
+      scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
+        //Start the lookup for the member, giving the device name as placeholder.
+        onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
+      }, onError: (error){
+        //ignore scan errors
+      }, onDone: (){
+        //Set is scanning to false
+        //so the value listenable builder for the button updates.
+        //At this point the user can also switch pages.
+        isScanning.value = false;
+      });
+    }
   }
 
   ///Load the application settings.
@@ -238,7 +224,7 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
-  Future<void> saveScanResults([bool continueToManualAssignment = true]) async {
+  Future<void> saveRideAttendees([bool continueToManualAssignment = true]) async {
     isSaving.value = true;
     final List<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toList();
     await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
@@ -278,5 +264,4 @@ enum ScanProcessStep {
   SCAN,//scanning
   MANUAL,//scanning results were confirmed and we are in the manual assignment step
   BLUETOOTH_DISABLED,//bluetooth is off
-  NO_MEMBERS,//there are no members to pick from
 }

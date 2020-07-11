@@ -53,8 +53,8 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() {
-    //Fake impl that waits 1 second
-    return Future.delayed(Duration(seconds: 1), (){});
+    //Fake impl
+    return Future.value(null);
   }
 
 }

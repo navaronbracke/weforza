@@ -99,7 +99,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
         child: PlatformAwareWidget(
           android: () => TextFormField(
             textInputAction: TextInputAction.done,

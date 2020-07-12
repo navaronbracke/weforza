@@ -15,7 +15,11 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
       await Future.delayed(Duration(seconds: 2), (){
         //wait 2 seconds
       });
-      yield "Device $i";
+      if(i == 2){
+        throw Exception("some error");
+      }else{
+        yield "Device $i";
+      }
     }
   }
 

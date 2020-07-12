@@ -232,7 +232,9 @@ class AttendeeScanningBloc extends Bloc {
 
   Future<void> saveRideAttendees([bool continueToManualAssignment = true]) async {
     isSaving.value = true;
-    final List<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toList();
+    //We use a HashSet here, to flatten the results.
+    //For example: A person of whom 2 devices were found, should only be added once.
+    final HashSet<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toSet();
     await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
         if(continueToManualAssignment){
           isSaving.value = false;

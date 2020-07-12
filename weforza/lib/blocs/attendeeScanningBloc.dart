@@ -17,6 +17,7 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
 ///TODO use page nr with pagesize in _loadMembers(pageSize,pageNr)
+///TODO scanning stream cancel on error = false doesn't work
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
     @required this.rideDate,
@@ -45,6 +46,9 @@ class AttendeeScanningBloc extends Bloc {
 
   ///This value notifier manages the state for the selected label in the UI.
   ///It gets updated after the scan save step.
+  ///We keep track of this separately,
+  ///since the step chance shouldn't prevent
+  ///the user from going back to the details screen.
   final ValueNotifier<bool> isScanStep = ValueNotifier<bool>(true);
 
   ///The repositories connect the bloc with the database.
@@ -97,31 +101,12 @@ class AttendeeScanningBloc extends Bloc {
   ///This function takes a lambda that gets the device name of a found device and the lookup future for getting the member.
   Future<void> doInitialDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
     ///Check if bluetooth is on.
-    await scanner.isBluetoothEnabled().then((value) async {
-      if(value){
+    await scanner.isBluetoothEnabled().then((enabled) async {
+      if(enabled){
         ///Wait for both the settings and the existing attendees/ first page of members.
         ///Fail fast when either fails.
         await Future.wait([_loadSettings(), _loadRideAttendees(rideDate), _loadMembers(pageSize, page: memberListPageNr)]).then((_) async {
-          if(currentMembersList == null || currentMembersList.isEmpty){
-            _scanStepController.add(ScanProcessStep.NO_MEMBERS);
-          }else{
-            //Start scan if not scanning
-            if(!isScanning.value){
-              isScanning.value = true;
-              _scanStepController.add(ScanProcessStep.SCAN);
-              scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
-                //Start the lookup for the member, giving the device name as placeholder.
-                onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
-              }, onError: (error){
-                //ignore scan errors
-              }, onDone: (){
-                //Set is scanning to false
-                //so the value listenable builder for the button updates.
-                //At this point the user can also switch pages.
-                isScanning.value = false;
-              });
-            }
-          }
+          _startDeviceScan(onDeviceFound);
         }, onError: (error){
           //Catch the settings/member load errors.
           //This is a generic error and is thus caught by the StreamBuilder.
@@ -143,24 +128,9 @@ class AttendeeScanningBloc extends Bloc {
     //Reset the UI to show the initial loading indicator again.
     _scanStepController.add(ScanProcessStep.INIT);
     ///Check if bluetooth is on.
-    await scanner.isBluetoothEnabled().then((value) async {
-      if(value){
-        //Start scan if not scanning
-        if(!isScanning.value){
-          isScanning.value = true;
-          _scanStepController.add(ScanProcessStep.SCAN);
-          scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
-            //Start the lookup for the member, giving the device name as placeholder.
-            onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
-          }, onError: (error){
-            //ignore scan errors
-          }, onDone: (){
-            //Set is scanning to false
-            //so the value listenable builder for the button updates.
-            //At this point the user can also switch pages.
-            isScanning.value = false;
-          });
-        }
+    await scanner.isBluetoothEnabled().then((enabled) async {
+      if(enabled){
+        _startDeviceScan(onDeviceFound);
       }else{
         _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
       }
@@ -169,6 +139,26 @@ class AttendeeScanningBloc extends Bloc {
       //This is a generic error and is thus caught by the StreamBuilder.
       _scanStepController.addError(error);
     });
+  }
+
+  //Perform the actual bluetooth device scan
+  void _startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound){
+    //Start scan if not scanning
+    if(!isScanning.value){
+      isScanning.value = true;
+      _scanStepController.add(ScanProcessStep.SCAN);
+      scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
+        //Start the lookup for the member, giving the device name as placeholder.
+        onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
+      }, onError: (error){
+        //skip the error
+      }, onDone: (){
+        //Set is scanning to false
+        //so the value listenable builder for the button updates.
+        //At this point the user can also switch pages.
+        isScanning.value = false;
+      }, cancelOnError: false);
+    }
   }
 
   ///Load the application settings.
@@ -195,6 +185,9 @@ class AttendeeScanningBloc extends Bloc {
   Future<Member> _findOwnerOfDevice(String deviceName) async {
     //Find the device owner ID
     final device = await deviceRepo.getDeviceWithName(deviceName);
+    if(device == null){
+      return null;
+    }
     //Find the owner by id
     final owner = await memberRepo.getMemberByUuid(device.ownerId);
     if(owner == null){
@@ -207,17 +200,17 @@ class AttendeeScanningBloc extends Bloc {
 
   ScanResultItem getScanResultAt(int index) => _scanResults[index];
 
-  void addScanResult(ScanResultItem item) => _scanResults.add(item);
+  void addScanResult(ScanResultItem item) => _scanResults.insert(0, item);
 
-  ///Stop a running scan.
+  ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
+    _scanStepController.add(ScanProcessStep.STOPPING_SCAN);
     if(!isScanning.value) return true;
 
     bool result = true;
     await scanner.stopScan().then((_){
       isScanning.value = false;
-      rideAttendees.clear();
     }, onError: (error){
       result = false;//if it failed, prevent pop & show error first
       _scanStepController.addError(error);
@@ -229,17 +222,30 @@ class AttendeeScanningBloc extends Bloc {
 
   ///Cancel a running scan and continue to the manual assignment step.
   void skipScan() async {
-    await stopScan().then(
-            (_) => _scanStepController.add(ScanProcessStep.MANUAL)
-    );
+    await stopScan().then((scanStopped){
+      if(scanStopped){
+        _scanStepController.add(ScanProcessStep.MANUAL);
+        isScanStep.value = false;
+      }
+    });
   }
 
-  Future<void> saveScanResults([bool continueToManualAssignment = true]) async {
+  ///Save the current contents of [rideAttendees] to the database.
+  ///[mergeResults] dictates if the contents of [rideAttendees] should be merged in with the existing data.
+  ///This preserves old results.
+  ///[mergeResults] should only be true during the Scan step.
+  ///If [continueToManualAssignment] is true, the manual assignment screen will show up after saving is done.
+  ///[continueToManualAssignment] should only be true during the Scan step.
+  Future<void> saveRideAttendees(bool mergeResults, bool continueToManualAssignment) async {
     isSaving.value = true;
-    final List<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toList();
-    await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
+    await ridesRepo.updateAttendeesForRideWithDate(
+        rideDate,
+        rideAttendees.map((element) => RideAttendee(rideDate, element)),
+        mergeResults
+    ).then((_){
         if(continueToManualAssignment){
           isSaving.value = false;
+          isScanStep.value = false;
           _scanStepController.add(ScanProcessStep.MANUAL);
         }
       //The manual assignment step will pop when submitted.
@@ -263,7 +269,13 @@ class AttendeeScanningBloc extends Bloc {
 
   bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
 
-  void addMember(Member item) => rideAttendees.add(item.uuid);
+  void onMemberSelected(Member item){
+    if(rideAttendees.contains(item.uuid)){
+      rideAttendees.remove(item.uuid);
+    }else{
+      rideAttendees.add(item.uuid);
+    }
+  }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
 }
@@ -273,5 +285,5 @@ enum ScanProcessStep {
   SCAN,//scanning
   MANUAL,//scanning results were confirmed and we are in the manual assignment step
   BLUETOOTH_DISABLED,//bluetooth is off
-  NO_MEMBERS,//there are no members to pick from
+  STOPPING_SCAN,//the scan is stopping
 }

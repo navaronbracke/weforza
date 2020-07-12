@@ -69,13 +69,16 @@ class DeviceTypeCarousel extends StatelessWidget {
   Widget _buildIcon(BuildContext context, int index){
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
+        Expanded(
           child: Center(
-            child: Icon(
-              _getIcon(index),
-              color: ApplicationTheme.deviceTypePickerCurrentDotColor,
-              size: MediaQuery.of(context).size.shortestSide * 0.25,
+            child: LayoutBuilder(
+              builder: (context, constraints){
+                return Icon(
+                  _getIcon(index),
+                  color: ApplicationTheme.deviceTypePickerCurrentDotColor,
+                  size: constraints.biggest.shortestSide * .9
+                );
+              },
             ),
           ),
         ),

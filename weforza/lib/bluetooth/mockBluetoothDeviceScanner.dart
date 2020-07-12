@@ -8,6 +8,7 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
     return Future.value(true);
   }
 
+  //TODO test with throwing errors (Dart issue needs to be fixed first though)
   @override
   Stream<String> scanForDevices(int scanDurationInSeconds) async* {
     //fake impl that returns some elements
@@ -15,11 +16,14 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
       await Future.delayed(Duration(seconds: 2), (){
         //wait 2 seconds
       });
-      if(i == 2){
+      /*
+      *       if(i == 2){
         throw Exception("some error");
       }else{
         yield "Device $i";
       }
+      * */
+      yield "Device $i";
     }
   }
 

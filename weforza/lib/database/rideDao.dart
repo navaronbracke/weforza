@@ -92,7 +92,7 @@ class RideDao implements IRideDao {
     await _database.transaction((txn) async {
       //The keys are the date + uuid of the person.
       //We merge the existing ones too, since those are just date + id and nothing special.
-      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
+      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}"))
           .put(txn, attendees.map((a)=> a.toMap()).toList(), merge: true);
     });
   }

@@ -64,7 +64,11 @@ class ScanResultListItem extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: PlatformAwareLoadingIndicator(),
+            child: SizedBox(
+              width: 30,
+              height: 30,
+              child: Center(child: PlatformAwareLoadingIndicator()),
+            ),
           ),
         ],
       ),
@@ -77,7 +81,7 @@ class ScanResultListItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(item.deviceName),
+          Text(item.deviceName, overflow: TextOverflow.ellipsis),
           SizedBox(height: 2),
           Row(
             children: <Widget>[

@@ -653,10 +653,10 @@ class S {
     );
   }
 
-  /// `Add Members`
+  /// `By Hand`
   String get RideAttendeeScanningProcessAddMembersLabel {
     return Intl.message(
-      'Add Members',
+      'By Hand',
       name: 'RideAttendeeScanningProcessAddMembersLabel',
       desc: '',
       args: [],
@@ -703,20 +703,20 @@ class S {
     );
   }
 
-  /// `Cannot start scanning, Bluetooth is disabled.`
+  /// `Scan aborted, Bluetooth is disabled`
   String get RideAttendeeScanningBluetoothDisabled {
     return Intl.message(
-      'Cannot start scanning, Bluetooth is disabled.',
+      'Scan aborted, Bluetooth is disabled',
       name: 'RideAttendeeScanningBluetoothDisabled',
       desc: '',
       args: [],
     );
   }
 
-  /// `Go to settings`
+  /// `Go to Settings`
   String get RideAttendeeScanningGoToBluetoothSettings {
     return Intl.message(
-      'Go to settings',
+      'Go to Settings',
       name: 'RideAttendeeScanningGoToBluetoothSettings',
       desc: '',
       args: [],
@@ -758,6 +758,36 @@ class S {
     return Intl.message(
       'Save Selection',
       name: 'RideAttendeeScanningSaveManualResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are no members to choose from`
+  String get RideAttendeeScanningManualSelectionEmptyList {
+    return Intl.message(
+      'There are no members to choose from',
+      name: 'RideAttendeeScanningManualSelectionEmptyList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Owned By:`
+  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
+    return Intl.message(
+      'Owned By:',
+      name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `tel: `
+  String get RideAttendeeScanningScanResultOwnerTelephoneLabel {
+    return Intl.message(
+      'tel: ',
+      name: 'RideAttendeeScanningScanResultOwnerTelephoneLabel',
       desc: '',
       args: [],
     );

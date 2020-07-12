@@ -281,7 +281,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       if(attendeeProvider.value != null){
         //Also set reload for the rides, the counters need to refresh.
         ReloadDataProvider.of(context).reloadRides.value = true;
-        setState(() => bloc.attendeesFuture = attendeeProvider.value);
+        bloc.attendeesFuture = attendeeProvider.value;
+        setState((){});
         attendeeProvider.value = null;
       }
     });

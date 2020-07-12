@@ -167,7 +167,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   ///Trigger an insertion for a new item in the AnimatedList.
   void _onDeviceFound(String deviceName, Future<Member> memberLookup){
-    if(deviceListKey.currentState != null){
+    if(deviceListKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
       bloc.addScanResult(ScanResultItem(deviceName: deviceName, memberLookup: memberLookup));
       deviceListKey.currentState.insertItem(0);
     }

@@ -23,7 +23,11 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
         yield "Device $i";
       }
       * */
-      yield "Device $i";
+      if(i == 2){
+        yield "test";
+      }else{
+        yield "Device $i";
+      }
     }
   }
 

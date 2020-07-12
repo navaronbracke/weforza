@@ -41,8 +41,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
           ),
           ManualSelectionSubmit(
             isSaving: bloc.isSaving,
-            //TODO save with overriding! merge is only during the scan
-            onSave: () async => await bloc.saveRideAttendees(false).then((_){
+            onSave: () async => await bloc.saveRideAttendees(false,false).then((_){
               onRefreshAttendees();
               Navigator.of(context).pop();
             }, onError: (error){

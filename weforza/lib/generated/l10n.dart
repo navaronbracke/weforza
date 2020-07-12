@@ -773,6 +773,26 @@ class S {
     );
   }
 
+  /// `Owned By:`
+  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
+    return Intl.message(
+      'Owned By:',
+      name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `tel: `
+  String get RideAttendeeScanningScanResultOwnerTelephoneLabel {
+    return Intl.message(
+      'tel: ',
+      name: 'RideAttendeeScanningScanResultOwnerTelephoneLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

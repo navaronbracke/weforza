@@ -232,10 +232,10 @@ class AttendeeScanningBloc extends Bloc {
 
   Future<void> saveRideAttendees([bool continueToManualAssignment = true]) async {
     isSaving.value = true;
-    //We use a HashSet here, to flatten the results.
-    //For example: A person of whom 2 devices were found, should only be added once.
-    final HashSet<RideAttendee> attendeesToSave = rideAttendees.map((element) => RideAttendee(rideDate, element)).toSet();
-    await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
+    await ridesRepo.updateAttendeesForRideWithDate(
+        rideDate,
+        rideAttendees.map((element) => RideAttendee(rideDate, element))
+    ).then((_){
         if(continueToManualAssignment){
           isSaving.value = false;
           isScanStep.value = false;
@@ -262,7 +262,13 @@ class AttendeeScanningBloc extends Bloc {
 
   bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
 
-  void addMember(Member item) => rideAttendees.add(item.uuid);
+  void onMemberSelected(Member item){
+    if(rideAttendees.contains(item.uuid)){
+      rideAttendees.remove(item.uuid);
+    }else{
+      rideAttendees.add(item.uuid);
+    }
+  }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
 }

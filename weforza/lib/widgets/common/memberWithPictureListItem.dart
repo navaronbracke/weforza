@@ -33,7 +33,12 @@ class MemberWithPictureListItem extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
-          ProfileImage(image: item.profileImage,icon: Icons.person,size: 40),
+          ProfileImage(
+            image: item.profileImage,
+            icon: Icons.person,
+            size: 40,
+            personInitials: item.firstName[0] + item.lastName[0],
+          ),
           SizedBox(width: 5),
           Expanded(
             child: Container(

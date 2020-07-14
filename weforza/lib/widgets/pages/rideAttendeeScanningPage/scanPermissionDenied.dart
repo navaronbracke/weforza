@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+
+class ScanPermissionDenied extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Icon(
+        Icons.warning,
+        color: ApplicationTheme.listInformationalIconColor,
+        size: MediaQuery.of(context).size.shortestSide * .1,
+      ),
+      SizedBox(height: 5),
+      Text(S.of(context).RideAttendeeScanningPermissionDenied, softWrap: true),
+      Text(S.of(context).RideAttendeeScanningPermissionDescription, softWrap: true),
+      SizedBox(height: 20),
+      PlatformAwareWidget(
+        android: () => _buildAndroidButtons(context),
+        ios: () => _buildIosButtons(context),
+      )
+    ],
+  );
+
+  Widget _buildAndroidButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RaisedButton(
+          color: ApplicationTheme.primaryColor,
+          child: Text(
+            S.of(context).RideAttendeeScanningGoToSettings,
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async => await openAppSettings(),
+        ),
+        SizedBox(width: 20),
+        FlatButton(
+          child: Text(
+            S.of(context).RideAttendeeScanningGoBack,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIosButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CupertinoButton.filled(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14.0,
+            horizontal: 24.0,
+          ),
+          child: Text(
+            S.of(context).RideAttendeeScanningGoToSettings,
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async => await openAppSettings(),
+        ),
+        SizedBox(width: 20),
+        CupertinoButton(
+          child: Text(
+            S.of(context).RideAttendeeScanningGoBack,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+  }
+}

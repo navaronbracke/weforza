@@ -39,7 +39,7 @@ class BluetoothDisabledWidget extends StatelessWidget {
         RaisedButton(
           color: ApplicationTheme.primaryColor,
           child: Text(
-            S.of(context).RideAttendeeScanningGoToBluetoothSettings,
+            S.of(context).RideAttendeeScanningGoToSettings,
             style: TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
@@ -66,7 +66,7 @@ class BluetoothDisabledWidget extends StatelessWidget {
             horizontal: 24.0,
           ),
           child: Text(
-            S.of(context).RideAttendeeScanningGoToBluetoothSettings,
+            S.of(context).RideAttendeeScanningGoToSettings,
             style: TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,

@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
@@ -17,7 +18,6 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
 ///TODO use page nr with pagesize in _loadMembers(pageSize,pageNr)
-///TODO scanning stream cancel on error = false doesn't work
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
     @required this.rideDate,
@@ -99,38 +99,26 @@ class AttendeeScanningBloc extends Bloc {
   ///Finally it starts the device scan.
   ///Any 'generic' errors are caught and pushed to [scanStepStream].
   ///This function takes a lambda that gets the device name of a found device and the lookup future for getting the member.
-  Future<void> doInitialDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
+  Future<void> startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
     ///Check if bluetooth is on.
     await scanner.isBluetoothEnabled().then((enabled) async {
       if(enabled){
-        ///Wait for both the settings and the existing attendees/ first page of members.
-        ///Fail fast when either fails.
-        await Future.wait([_loadSettings(), _loadRideAttendees(rideDate), _loadMembers(pageSize, page: memberListPageNr)]).then((_) async {
-          _startDeviceScan(onDeviceFound);
-        }, onError: (error){
-          //Catch the settings/member load errors.
-          //This is a generic error and is thus caught by the StreamBuilder.
-          _scanStepController.addError(error);
-        });
-      }else{
-        _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
-      }
-    }, onError: (error){
-      //Catch the check bluetooth error.
-      //This is a generic error and is thus caught by the StreamBuilder.
-      _scanStepController.addError(error);
-    });
-  }
-
-  ///Retry the device scan.
-  ///This function is essentially [doInitialDeviceScan] but without the data loading.
-  Future<void> retryDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
-    //Reset the UI to show the initial loading indicator again.
-    _scanStepController.add(ScanProcessStep.INIT);
-    ///Check if bluetooth is on.
-    await scanner.isBluetoothEnabled().then((enabled) async {
-      if(enabled){
-        _startDeviceScan(onDeviceFound);
+        requestScanPermission(
+          onDenied: () => _scanStepController.add(ScanProcessStep.PERMISSION_DENIED),
+          onGranted: () async {
+            ///Wait for both the settings and the existing attendees/ first page of members.
+            ///Fail fast when either fails.
+            await Future.wait([
+              _loadSettings(),
+              _loadRideAttendees(rideDate),
+              _loadMembers(pageSize, page: memberListPageNr)
+            ]).then((_) async => _startDeviceScan(onDeviceFound), onError: (error){
+              //Catch the settings/member load errors.
+              //This is a generic error and is thus caught by the StreamBuilder.
+              _scanStepController.addError(error);
+            });
+          },
+        );
       }else{
         _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
       }
@@ -259,6 +247,22 @@ class AttendeeScanningBloc extends Bloc {
       },
     );
   }
+
+  ///Check the required permission for starting a scan.
+  ///When the permission is unknown, it is requested first.
+  ///After requesting the permission, the proper callback is called.
+  ///When the permission was granted before [onGranted] gets called.
+  ///When the permission is denied, [onDenied] gets called.
+  void requestScanPermission({
+    void Function() onGranted,
+    void Function() onDenied,
+  }) async {
+    if(await Permission.locationWhenInUse.request().isGranted){
+      onGranted();
+    }else{
+      onDenied();
+    }
+  }
   
   Future<File> loadProfileImage(String path) => memberRepo.loadProfileImageFromDisk(path);
 
@@ -286,4 +290,5 @@ enum ScanProcessStep {
   MANUAL,//scanning results were confirmed and we are in the manual assignment step
   BLUETOOTH_DISABLED,//bluetooth is off
   STOPPING_SCAN,//the scan is stopping
+  PERMISSION_DENIED,//the app didn't have the required permission to start scanning.
 }

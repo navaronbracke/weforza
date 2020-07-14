@@ -38,7 +38,7 @@ dependencies:
   path: ^1.6.4
 
   # UUID generator for globally unique ids
-  uuid: 2.0.4
+  uuid: ^2.0.4
 
   # The intl package provides translation utilities
   intl: ^0.16.1
@@ -56,7 +56,9 @@ dependencies:
   flutter_blue: ^0.7.2
 
   # This package provides easy access to app settings
-  app_settings: 4.0.0
+  app_settings: ^4.0.0
+
+  permission_handler: ^5.0.1+1
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
-import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/model/settings.dart';
 
 ///This class defines a contract for managing application settings.
 abstract class ISettingsDao {

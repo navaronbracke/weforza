@@ -133,8 +133,6 @@
   "SettingsLoadingError": "Kon de instellingen niet laden",
   "SettingsGenericError": "Er liep iets fout",
   "SettingsSubmitError": "Kon de instellingen niet opslaan",
-  "SettingsShowAllDevicesOptionLabel": "Toon Alle Gescande Toestellen",
-  "SettingsShowAllDevicesOptionDescription": "Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet.",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

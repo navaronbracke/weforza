@@ -32,12 +32,14 @@ class SettingsBloc extends Bloc {
 
   Future<void> saveSettings() async {
     _submitController.add(true);
-    await _repository.writeApplicationSettings(Settings(
+    await Future.delayed(Duration(milliseconds: 400), () async {
+      await _repository.writeApplicationSettings(Settings(
         scanDuration: _scanDuration.floor(),
-    )).then((_){
-      _submitController.add(false);
-    },onError: (e){
-      _submitController.addError(e);
+      )).then((_){
+        _submitController.add(false);
+      },onError: (e){
+        _submitController.addError(e);
+      });
     });
   }
 

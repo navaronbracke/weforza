@@ -14,7 +14,7 @@ class SettingsBloc extends Bloc {
   StreamController<bool> _submitController = BehaviorSubject();
   Stream<bool> get submitStream => _submitController.stream;
 
-  Future<Settings> settingsFuture;
+  Future<void> settingsFuture;
 
   double _scanDuration;
 
@@ -27,9 +27,12 @@ class SettingsBloc extends Bloc {
   void loadSettings(){
     //We put an artificial delay here to decrease the feeling of popping in.
     //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
-    settingsFuture = Future.delayed(Duration(seconds: 1),() => _repository.loadApplicationSettings());
+    settingsFuture = Future.delayed(Duration(seconds: 1),() async {
+      final settings = await _repository.loadApplicationSettings();
+      _scanDuration = settings.scanDuration.toDouble();
+    });
   }
-
+  
   Future<void> saveSettings() async {
     _submitController.add(true);
     await Future.delayed(Duration(milliseconds: 400), () async {
@@ -39,6 +42,7 @@ class SettingsBloc extends Bloc {
         _submitController.add(false);
       },onError: (e){
         _submitController.addError(e);
+        settingsFuture = Future.error(e);
       });
     });
   }

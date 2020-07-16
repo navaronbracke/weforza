@@ -1,18 +1,12 @@
 ///This class defines a wrapper for application settings.
 class Settings {
   Settings({
-    this.scanDuration = 20,
-    this.showAllScannedDevices = true
-  }): assert(scanDuration != null && scanDuration > 0
-      && showAllScannedDevices != null
-  );
+    this.scanDuration = 20
+  }): assert(scanDuration != null && scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
   ///Defaults to 20 seconds
   final int scanDuration;
-  ///Whether we should show all the scanned devices or only the ones we know of.
-  ///Defaults to true.
-  final bool showAllScannedDevices;
 
   ///The private settings object
   static Settings _instance;
@@ -26,8 +20,7 @@ class Settings {
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "scanDuration": scanDuration,
-      "showAllScannedDevices": showAllScannedDevices,
+      "scanDuration": scanDuration
     };
   }
 
@@ -36,7 +29,6 @@ class Settings {
     assert(values != null);
     return Settings(
         scanDuration: values["scanDuration"],
-        showAllScannedDevices: values["showAllScannedDevices"]
     );
   }
 }

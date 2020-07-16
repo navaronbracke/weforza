@@ -8,15 +8,6 @@ class Settings {
   ///Defaults to 20 seconds
   final int scanDuration;
 
-  ///The private settings object
-  static Settings _instance;
-
-  ///Get the current [Settings].
-  static Settings get instance => _instance;
-
-  ///Update the current [Settings].
-  static void updateSettings(Settings newSettings) => _instance = newSettings;
-
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {

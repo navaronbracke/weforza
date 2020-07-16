@@ -7,17 +7,17 @@ class SettingsRepository {
 
   final ISettingsDao _dao;
 
-  Settings _instance;
+  Settings instance;
 
   Future<Settings> loadApplicationSettings() async {
-    if(_instance == null){
-      _instance = await _dao.readApplicationSettings();
+    if(instance == null){
+      instance = await _dao.readApplicationSettings();
     }
-    return _instance;
+    return instance;
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {
     await _dao.writeApplicationSettings(settings);
-    _instance = settings;
+    instance = settings;
   }
 }

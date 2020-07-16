@@ -6,7 +6,6 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/scanResultItem.dart';
-import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -93,7 +92,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       children: <Widget>[
         RideAttendeeScanningProgressIndicator(
           valueNotifier: bloc.isScanning,
-          getDuration: () => Settings.instance.scanDuration,
+          getDuration: () => bloc.scanDuration,
         ),
         Expanded(
           child: StreamBuilder<ScanProcessStep>(

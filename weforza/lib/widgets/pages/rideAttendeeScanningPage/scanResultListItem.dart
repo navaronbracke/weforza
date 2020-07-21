@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultListItem extends StatelessWidget {
   ScanResultListItem({
@@ -116,9 +117,14 @@ class ScanResultListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 45,
-      child: FutureBuilder<Member>(
+    return PlatformAwareWidget(
+      android: () => SizedBox(height: 45, child: _buildItem()),
+      ios: () => SizedBox(height: 50, child: _buildItem()),
+    );
+  }
+
+  Widget _buildItem(){
+    return FutureBuilder<Member>(
         future: item.memberLookup,
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
@@ -135,7 +141,6 @@ class ScanResultListItem extends StatelessWidget {
             return _buildLoadingItem();
           }
         },
-      ),
-    );
+      );
   }
 }

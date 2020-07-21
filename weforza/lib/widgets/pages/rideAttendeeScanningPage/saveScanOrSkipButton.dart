@@ -53,7 +53,7 @@ class SaveScanOrSkipButton extends StatelessWidget {
         ),
       ),
       ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 15, top: 10),
+        padding: const EdgeInsets.only(bottom: 20, top: 10),
         child: CupertinoButton(
           child: Text(
             S.of(context).RideAttendeeScanningSkipScan,
@@ -78,7 +78,7 @@ class SaveScanOrSkipButton extends StatelessWidget {
         ),
       ),
       ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 15, top: 10),
+        padding: const EdgeInsets.only(bottom: 20, top: 10),
         child: CupertinoButton(
           child: Text(
             S.of(context).RideAttendeeScanningSaveScanResults,

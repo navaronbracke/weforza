@@ -87,9 +87,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           CupertinoTabBar(
             currentIndex: _selectedIndex,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.directions_bike)),
-              BottomNavigationBarItem(icon: Icon(Icons.people)),
-              BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings)),
+              BottomNavigationBarItem(
+                title: Text(S.of(context).HomePageRidesTab),
+                icon: Icon(Icons.directions_bike),
+              ),
+              BottomNavigationBarItem(
+                title: Text(S.of(context).HomePageMembersTab),
+                icon: Icon(Icons.people),
+              ),
+              BottomNavigationBarItem(
+                title: Text(S.of(context).HomePageSettingsTab),
+                icon: Icon(CupertinoIcons.settings),
+              ),
             ],
             onTap: (index){
               _pageController.animateToPage(index, duration: const Duration(milliseconds: 300),curve: Curves.easeInOut);

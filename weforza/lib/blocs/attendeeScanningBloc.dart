@@ -73,6 +73,7 @@ class AttendeeScanningBloc extends Bloc {
   ///Saving happens after scanning and after manual assignment.
   HashSet<String> rideAttendees;
 
+  //The backing list for the scan results UI. 
   final List<ScanResultItem> _scanResults = [];
   int scanDuration;
 
@@ -133,11 +134,17 @@ class AttendeeScanningBloc extends Bloc {
   void _startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound){
     //Start scan if not scanning
     if(!isScanning.value){
+      final Set<String> scannedDevices = HashSet();
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
+      
       scanner.scanForDevices(scanDuration).listen((deviceName) {
-        //Start the lookup for the member, giving the device name as placeholder.
-        onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
+        if(!scannedDevices.contains(deviceName)){
+          scannedDevices.add(deviceName);
+          //Start the lookup for the member, giving the device name as placeholder.
+          onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
+        }
+
       }, onError: (error){
         //skip the error
       }, onDone: (){

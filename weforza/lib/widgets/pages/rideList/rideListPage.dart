@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/importAndExportBloc.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/importExport/importAndExportPage.dart';
@@ -62,7 +64,9 @@ class _RideListPageState extends State<RideListPage> {
               icon: Icon(Icons.import_export),
               color: Colors.white,
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage())
+                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
+                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
+                  ))
               ).then((_)=> onReturnToRideListPage(context)),
             ),
           ],
@@ -94,7 +98,9 @@ class _RideListPageState extends State<RideListPage> {
               idleColor: ApplicationTheme.accentColor,
               icon: Icons.import_export,
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage())
+                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
+                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
+                  ))
               ).then((_) => onReturnToRideListPage(context)),
             ),
           ],

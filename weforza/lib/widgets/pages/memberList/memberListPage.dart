@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/blocs/importAndExportBloc.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
@@ -59,7 +61,9 @@ class _MemberListPageState extends State<MemberListPage> {
             icon: Icon(Icons.import_export),
             color: Colors.white,
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=> ImportAndExportPage())
+                MaterialPageRoute(builder: (context)=> ImportAndExportPage(
+                  bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
+                ))
             ).then((_)=> onReturnToMemberListPage(context)),
           ),
         ],
@@ -89,7 +93,9 @@ class _MemberListPageState extends State<MemberListPage> {
               idleColor: ApplicationTheme.accentColor,
               icon: Icons.import_export,
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage())
+                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
+                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
+                  ))
               ).then((_) => onReturnToMemberListPage(context)),
             ),
           ],

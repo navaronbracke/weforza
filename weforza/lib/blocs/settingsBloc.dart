@@ -29,8 +29,8 @@ class SettingsBloc extends Bloc {
       //We put an artificial delay here to decrease the feeling of popping in.
       //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
       settingsFuture = Future.delayed(Duration(seconds: 1),() async {
-        final settings = await _repository.loadApplicationSettings();
-        _scanDuration = settings.scanDuration.toDouble();
+        await _repository.loadApplicationSettings();
+        _scanDuration = _repository.instance.scanDuration.toDouble();
       });
     } else {
       _scanDuration = _repository.instance.scanDuration.toDouble();

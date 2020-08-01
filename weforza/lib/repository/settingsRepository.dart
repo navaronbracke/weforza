@@ -9,11 +9,12 @@ class SettingsRepository {
 
   Settings instance;
 
-  Future<Settings> loadApplicationSettings() async {
-    if(instance == null){
+  bool get shouldLoadSettings => instance == null;
+
+  Future<void> loadApplicationSettings() async {
+    if(shouldLoadSettings){
       instance = await _dao.readApplicationSettings();
     }
-    return instance;
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {

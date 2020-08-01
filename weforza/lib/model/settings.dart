@@ -1,17 +1,24 @@
 ///This class defines a wrapper for application settings.
 class Settings {
   Settings({
-    this.scanDuration = 20
+    this.scanDuration = 20,
+    this.exportUrl = "",
+    this.importUrl = "",
   }): assert(scanDuration != null && scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
   ///Defaults to 20 seconds
   final int scanDuration;
 
+  final String exportUrl;
+  final String importUrl;
+
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "scanDuration": scanDuration
+      "scanDuration": scanDuration,
+      "exportUrl": exportUrl,
+      "importUrl": importUrl,
     };
   }
 
@@ -19,7 +26,9 @@ class Settings {
   static Settings of(Map<String,dynamic> values){
     assert(values != null);
     return Settings(
-        scanDuration: values["scanDuration"],
+      scanDuration: values["scanDuration"] ?? 20,
+      exportUrl: values["exportUrl"] ?? "",
+      importUrl: values["importUrl"] ?? "",
     );
   }
 }

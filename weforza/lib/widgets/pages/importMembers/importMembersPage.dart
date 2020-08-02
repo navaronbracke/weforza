@@ -4,7 +4,7 @@ import 'package:weforza/blocs/importMembersBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/custom/checkmarkPainter/checkmarkPainter.dart';
+import 'package:weforza/widgets/pages/importMembers/importMembersComplete.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
@@ -65,13 +65,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                 Flexible(
                   flex: 3,
                   child: Center(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => CheckmarkPainter(
-                        strokeWidth: 4.0,
-                        color: ApplicationTheme.primaryColor,
-                        canvasSize: Size.square(constraints.biggest.shortestSide * .4),
-                        duration: Duration(milliseconds: 1500),
-                      ),
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: ImportMembersComplete(),
                     ),
                   ),
                 ),

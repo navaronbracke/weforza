@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/blocs/importAndExportBloc.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
-import 'package:weforza/widgets/pages/importExport/importAndExportPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
@@ -60,15 +57,6 @@ class _RideListPageState extends State<RideListPage> {
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_)=> onReturnToRideListPage(context)),
             ),
-            IconButton(
-              icon: Icon(Icons.import_export),
-              color: Colors.white,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
-                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
-                  ))
-              ).then((_)=> onReturnToRideListPage(context)),
-            ),
           ],
         ),
         body: _buildList(context)
@@ -91,18 +79,7 @@ class _RideListPageState extends State<RideListPage> {
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_) => onReturnToRideListPage(context)),
-            ),
-            SizedBox(width: 10),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
-              icon: Icons.import_export,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
-                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
-                  ))
-              ).then((_) => onReturnToRideListPage(context)),
-            ),
+            )
           ],
         ),
       ),

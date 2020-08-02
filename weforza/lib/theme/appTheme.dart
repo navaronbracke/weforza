@@ -116,6 +116,8 @@ abstract class ApplicationTheme {
 
   static final TextStyle importExportChoiceTextStyle = TextStyle(fontSize: 14, color: primaryColor);
 
+  static final Color importMembersDoneIconColor = Colors.green;
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

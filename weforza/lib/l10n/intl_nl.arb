@@ -78,7 +78,6 @@
   "RideAttendeeScanningPreparingScan": "Scan Voorbereiden",
   "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden",
   "RideAttendeeScanningGoBackToDetailPage": "Terug naar detailpagina",
-  "RideAttendeeScanningGoBack": "Keer Terug",
   "RideAttendeeScanningPermissionDenied": "Scan geannuleerd, toestemming werd geweigerd",
   "RideAttendeeScanningPermissionDescription": "Scannen vereist toegang tot je locatie",
   "RideAttendeeScanningBluetoothDisabled": "Scan geannuleerd, Bluetooth staat uit",
@@ -109,6 +108,8 @@
 
   "ImportMembersPageTitle": "Importeer Leden",
   "ImportMembersPickFile": "Kies Bestand",
+  "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
+  "ImportMembersImporting": "Leden Importeren",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
@@ -152,6 +153,7 @@
   "DialogDelete": "Verwijderen",
   "DialogDismiss": "Ok",
   "GenericError": "Er liep iets fout",
+  "GoBack": "Keer Terug",
 
   "DistanceKm": "Km"
 }

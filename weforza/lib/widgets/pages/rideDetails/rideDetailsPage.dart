@@ -9,13 +9,13 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -174,7 +174,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
-            return RideDetailsAttendeesError();
+            return GenericError(
+                text: S.of(context).RideDetailsLoadAttendeesError
+            );
           } else {
             if (snapshot.data == null || snapshot.data.isEmpty) {
               return RideDetailsAttendeesEmpty();

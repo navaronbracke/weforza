@@ -673,16 +673,6 @@ class S {
     );
   }
 
-  /// `Go Back`
-  String get RideAttendeeScanningGoBack {
-    return Intl.message(
-      'Go Back',
-      name: 'RideAttendeeScanningGoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Scan aborted, permission was denied`
   String get RideAttendeeScanningPermissionDenied {
     return Intl.message(
@@ -958,6 +948,26 @@ class S {
     return Intl.message(
       'Choose File',
       name: 'ImportMembersPickFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose a file to import members`
+  String get ImportMembersPickFileWarning {
+    return Intl.message(
+      'Please choose a file to import members',
+      name: 'ImportMembersPickFileWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importing Members`
+  String get ImportMembersImporting {
+    return Intl.message(
+      'Importing Members',
+      name: 'ImportMembersImporting',
       desc: '',
       args: [],
     );
@@ -1318,6 +1328,16 @@ class S {
     return Intl.message(
       'Something went wrong',
       name: 'GenericError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back`
+  String get GoBack {
+    return Intl.message(
+      'Go Back',
+      name: 'GoBack',
       desc: '',
       args: [],
     );

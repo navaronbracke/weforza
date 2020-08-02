@@ -943,51 +943,21 @@ class S {
     );
   }
 
-  /// `Import & Export`
-  String get ImportExportPageTitle {
+  /// `Import Members`
+  String get ImportMembersPageTitle {
     return Intl.message(
-      'Import & Export',
-      name: 'ImportExportPageTitle',
+      'Import Members',
+      name: 'ImportMembersPageTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Import members from file`
-  String get ImportMembersFromFile {
+  /// `Choose File`
+  String get ImportMembersPickFile {
     return Intl.message(
-      'Import members from file',
-      name: 'ImportMembersFromFile',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Import data`
-  String get ImportDataFromNetwork {
-    return Intl.message(
-      'Import data',
-      name: 'ImportDataFromNetwork',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Export attendees to file`
-  String get ExportAttendeesToFile {
-    return Intl.message(
-      'Export attendees to file',
-      name: 'ExportAttendeesToFile',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Export data`
-  String get ExportDataToNetwork {
-    return Intl.message(
-      'Export data',
-      name: 'ExportDataToNetwork',
+      'Choose File',
+      name: 'ImportMembersPickFile',
       desc: '',
       args: [],
     );

@@ -2,8 +2,7 @@
 class Settings {
   Settings({
     this.scanDuration = 20,
-    this.exportUrl = "",
-    this.importUrl = "",
+    this.exportUrl = ""
   }): assert(scanDuration != null && scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
@@ -11,14 +10,12 @@ class Settings {
   final int scanDuration;
 
   final String exportUrl;
-  final String importUrl;
 
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
       "scanDuration": scanDuration,
-      "exportUrl": exportUrl,
-      "importUrl": importUrl,
+      "exportUrl": exportUrl
     };
   }
 
@@ -27,8 +24,7 @@ class Settings {
     assert(values != null);
     return Settings(
       scanDuration: values["scanDuration"] ?? 20,
-      exportUrl: values["exportUrl"] ?? "",
-      importUrl: values["importUrl"] ?? "",
+      exportUrl: values["exportUrl"] ?? ""
     );
   }
 }

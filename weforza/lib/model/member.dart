@@ -60,11 +60,14 @@ class Member  implements Exportable{
   int get hashCode => hashValues(firstname, lastname,uuid,phone,profileImageFilePath);
 
   @override
-  Map<String, String> export() {
+  Map<String, String> exportToJson() {
     return {
       "firstname": firstname,
       "lastname": lastname,
       "phone": phone
     };
   }
+
+  @override
+  String exportToCsv() => "$firstname,$lastname,$phone";
 }

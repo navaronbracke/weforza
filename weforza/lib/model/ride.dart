@@ -96,7 +96,7 @@ class Ride implements Exportable {
   int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
 
   @override
-  Map<String, String> export() {
+  Map<String, String> exportToJson() {
     final Map<String, String> value = {
       "date": "${date.day}-${date.month}-${date.year}"
     };
@@ -107,7 +107,24 @@ class Ride implements Exportable {
       value["destination"] = destinationAddress;
     }
     if(startAddress != null && startAddress.isNotEmpty){
-      value["destination"] = startAddress;
+      value["start"] = startAddress;
+    }
+    if(distance != null && distance > 0.0){
+      value["distance"] = "$distance Km";
+    }
+
+    return value;
+  }
+
+  @override
+  String exportToCsv() {
+    String value = "${date.day}-${date.month}-${date.year}";
+    value = "$value,${title != null ? title : ""},";
+    value = "$value${startAddress != null ? startAddress : ""},";
+    value = "$value${destinationAddress != null ? destinationAddress : ""},";
+
+    if(distance != null && distance > 0.0){
+      value = "$value$distance Km";
     }
 
     return value;

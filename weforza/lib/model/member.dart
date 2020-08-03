@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:weforza/file/exportable.dart';
+
 ///This class represents a 'Member.'
-class Member {
+class Member  implements Exportable{
   Member(this.uuid,this.firstname,this.lastname,this.phone,[this.profileImageFilePath]):
         assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null);
 
@@ -56,4 +58,13 @@ class Member {
 
   @override
   int get hashCode => hashValues(firstname, lastname,uuid,phone,profileImageFilePath);
+
+  @override
+  Map<String, String> export() {
+    return {
+      "firstname": firstname,
+      "lastname": lastname,
+      "phone": phone
+    };
+  }
 }

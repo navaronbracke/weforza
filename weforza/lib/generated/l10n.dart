@@ -973,6 +973,16 @@ class S {
     );
   }
 
+  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)`
+  String get ImportMembersCsvHeaderRegex {
+    return Intl.message(
+      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)',
+      name: 'ImportMembersCsvHeaderRegex',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(
@@ -1070,6 +1080,16 @@ class S {
       name: 'DeviceNameMaxLength',
       desc: '',
       args: [maxLength],
+    );
+  }
+
+  /// `A device name cannot contain a ,`
+  String get DeviceNameCannotContainComma {
+    return Intl.message(
+      'A device name cannot contain a ,',
+      name: 'DeviceNameCannotContainComma',
+      desc: '',
+      args: [],
     );
   }
 

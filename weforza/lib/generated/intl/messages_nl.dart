@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Instellingen"),
     "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)"),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Leden Importeren"),
+    "ImportMembersInvalidFileFormat" : MessageLookupByLibrary.simpleMessage("Enkel CSV bestanden zijn toegelaten"),
     "ImportMembersPageTitle" : MessageLookupByLibrary.simpleMessage("Importeer Leden"),
     "ImportMembersPickFile" : MessageLookupByLibrary.simpleMessage("Kies Bestand"),
     "ImportMembersPickFileWarning" : MessageLookupByLibrary.simpleMessage("Een bestand is vereist om leden te importeren"),

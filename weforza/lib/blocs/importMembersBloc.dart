@@ -9,7 +9,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 
 enum ImportMembersState {
-  IDLE, IMPORTING, DONE
+  IDLE, IMPORTING, DONE, PICKING_FILE
 }
 
 class ImportMembersBloc extends Bloc {
@@ -22,19 +22,21 @@ class ImportMembersBloc extends Bloc {
 
   //Pick a file through a file picker and save the members that were read from the returned file.
   void pickFileAndImportMembers(String headerRegex, ValueNotifier<bool> reloadMembers) async {
-    _importStreamController.add(ImportMembersState.IMPORTING);
+    _importStreamController.add(ImportMembersState.PICKING_FILE);
 
     await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
-      final List<Map<String,String>> data = await _readMemberDataFromFile(file, headerRegex);
+      _importStreamController.add(ImportMembersState.IMPORTING);
+      final List<Map<String,dynamic>> data = await _readMemberDataFromFile(file, headerRegex);
 
       await _saveMemberData(data);
       reloadMembers.value = true;
       _importStreamController.add(ImportMembersState.DONE);
-    }).catchError((error) => _importStreamController.addError(error));
+    }).catchError((error){
+      _importStreamController.addError(error);
+    });
   }
 
-  //TODO mention that the csv needs a header in the UI (we could use a dialog for this, users could tap it)
-  Future<List<Map<String, String>>> _readMemberDataFromFile(File file, String headerRegex) async {
+  Future<List<Map<String, dynamic>>> _readMemberDataFromFile(File file, String headerRegex) async {
     List<String> lines = await file.readAsLines();
 
     //Remove all the spaces and turn into lower case
@@ -76,8 +78,16 @@ class ImportMembersBloc extends Bloc {
     return memberData;
   }
 
-  Future<void> _saveMemberData(List<Map<String,String>> data){
+  Future<void> _saveMemberData(List<Map<String,dynamic>> data){
     //TODO save the list of maps to the database
+    //TODO for each member
+    //check if exists
+    //if it does -> skip
+    //else add to collection
+    //save members -> after saving map the devices to pairs (member uuid / device name)
+    //find all the device names
+
+    //for each device/uuid
   }
 
   @override

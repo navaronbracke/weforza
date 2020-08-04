@@ -7,15 +7,20 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/repository/importMembersRepository.dart';
 
 enum ImportMembersState {
   IDLE, IMPORTING, DONE, PICKING_FILE
 }
 
 class ImportMembersBloc extends Bloc {
-  ImportMembersBloc({@required this.fileHandler}): assert(fileHandler != null);
+  ImportMembersBloc({
+    @required this.fileHandler,
+    @required this.repository,
+  }): assert(fileHandler != null && repository != null);
 
-  IFileHandler fileHandler;
+  final IFileHandler fileHandler;
+  final ImportMembersRepository repository;
 
   final StreamController<ImportMembersState> _importStreamController = BehaviorSubject.seeded(ImportMembersState.IDLE);
   Stream<ImportMembersState> get importStream => _importStreamController.stream;
@@ -78,17 +83,8 @@ class ImportMembersBloc extends Bloc {
     return memberData;
   }
 
-  Future<void> _saveMemberData(List<Map<String,dynamic>> data){
-    //TODO save the list of maps to the database
-    //TODO for each member
-    //check if exists
-    //if it does -> skip
-    //else add to collection
-    //save members -> after saving map the devices to pairs (member uuid / device name)
-    //find all the device names
-
-    //for each device/uuid
-  }
+  Future<void> _saveMemberData(List<Map<String,dynamic>> data)
+    => repository.saveMembersWithDevices(data);
 
   @override
   void dispose(){

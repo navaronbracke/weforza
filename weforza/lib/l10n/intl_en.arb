@@ -111,6 +111,7 @@
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
   "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)",
+  "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

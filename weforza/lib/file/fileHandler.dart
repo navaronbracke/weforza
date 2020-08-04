@@ -11,6 +11,14 @@ enum FileExtension {
   JSON, CSV
 }
 
+class NoFileChosenError extends ArgumentError {
+  NoFileChosenError(): super.notNull("file");
+}
+
+class InvalidFileFormatError extends ArgumentError {
+  InvalidFileFormatError(): super("file format is invalid");
+}
+
 extension ToFileTypeExtension on FileExtension {
   String toFileExtension(){
     switch(this){
@@ -32,7 +40,7 @@ abstract class IFileHandler {
   ///Returns the [File] if it exists, or null otherwise.
   Future<File> loadProfileImageFromDisk(String path);
 
-  Future<File> chooseImportMemberDatasourceFile(List<String> allowedFileExtensions);
+  Future<File> chooseImportMemberDatasourceFile();
 
   Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees);
 }
@@ -55,8 +63,19 @@ class FileHandler implements IFileHandler {
   }
 
   @override
-  Future<File> chooseImportMemberDatasourceFile(List<String> allowedFileExtensions)
-    => FilePicker.getFile(type: FileType.custom, allowedExtensions: allowedFileExtensions);
+  Future<File> chooseImportMemberDatasourceFile() async {
+    final file = await FilePicker.getFile(type: FileType.custom, allowedExtensions: <String>['csv']);
+
+    if(file == null){
+      return Future.error(NoFileChosenError());
+    }else {
+      if(!file.path.endsWith('csv')){
+        return Future.error(InvalidFileFormatError());
+      }
+    }
+
+    return file;
+  }
 
   @override
   Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees) async {

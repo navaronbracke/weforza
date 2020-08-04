@@ -21,8 +21,6 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
 
   final ImportMembersBloc bloc = ImportMembersBloc(fileHandler: InjectionContainer.get<IFileHandler>());
 
-  Future<void> importMembersFuture;
-
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
@@ -50,80 +48,69 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
   }
 
   Widget _buildBody(BuildContext context){
-    return FutureBuilder<void>(
-      initialData: importMembersFuture,
+    return StreamBuilder<ImportMembersState>(
+      stream: bloc.importStream,
       builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return !bloc.fileChosen ? Column(
+        if(snapshot.hasError){
+          if(snapshot.error is NoFileChosenError){
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(S.of(context).ImportMembersPickFileWarning),
                 SizedBox(height: 10),
                 _buildButton(context),
               ],
-            ): GenericError(text: S.of(context).GenericError);
-          }else{
+            );
+          }else if(snapshot.error is InvalidFileFormatError){
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Flexible(
-                  flex: 3,
-                  child: Center(
-                    child: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: ImportMembersComplete(),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: Center(
-                    child: PlatformAwareWidget(
-                      android: () => RaisedButton(
-                          color: ApplicationTheme.primaryColor,
-                          child: Text(S.of(context).GoBack, style: TextStyle(color: Colors.white)),
-                          onPressed: () => Navigator.of(context).pop()
-                      ),
-                      ios: () => CupertinoButton.filled(
-                          child: Text(S.of(context).GoBack, style: TextStyle(color: Colors.white)),
-                          onPressed: () => Navigator.of(context).pop()
-                      ),
-                    ),
-                  ),
-                ),
+                Text(S.of(context).ImportMembersInvalidFileFormat),
+                SizedBox(height: 10),
+                _buildButton(context),
               ],
             );
+          }else{
+            return GenericError(text: S.of(context).GenericError);
           }
-        }else if(snapshot.connectionState == ConnectionState.waiting){
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(""),
-              SizedBox(height: 10),
-              _buildButton(context),
-            ],
-          );
-        }else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              PlatformAwareLoadingIndicator(),
-              SizedBox(height: 10),
-              Text(S.of(context).ImportMembersImporting),
-            ],
-          );
+        }else{
+          switch(snapshot.data){
+            case ImportMembersState.IDLE: return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(""),
+                SizedBox(height: 10),
+                _buildButton(context),
+              ],
+            );
+            case ImportMembersState.IMPORTING: return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                PlatformAwareLoadingIndicator(),
+                SizedBox(height: 10),
+                Text(S.of(context).ImportMembersImporting),
+              ],
+            );
+            case ImportMembersState.DONE: return Center(
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: ImportMembersComplete(),
+              ),
+            );
+
+            default: return GenericError(text: S.of(context).GenericError);
+          }
         }
       },
     );
   }
 
   void onImportMembers(BuildContext context){
-    importMembersFuture = bloc.pickFileAndImportMembers(
-        S.of(context).ImportMembersCsvHeaderRegex
-    ).then((_)=> ReloadDataProvider.of(context).reloadMembers.value = true);
-
-    setState(() {});
+    bloc.pickFileAndImportMembers(
+        S.of(context).ImportMembersCsvHeaderRegex,
+        ReloadDataProvider.of(context).reloadMembers
+    );
   }
 
   Widget _buildButton(BuildContext context){

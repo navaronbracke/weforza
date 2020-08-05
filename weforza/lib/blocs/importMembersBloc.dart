@@ -42,7 +42,7 @@ class ImportMembersBloc extends Bloc {
   }
 
   Future<List<Map<String, dynamic>>> _readMemberDataFromFile(File file, String headerRegex) async {
-    List<String> lines = await file.readAsLines();
+    List<String> lines = await fileHandler.readCsvFile(file);
 
     //Remove all the spaces and turn into lower case
     //The first line might be a header

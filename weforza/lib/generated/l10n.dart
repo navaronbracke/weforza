@@ -1323,6 +1323,16 @@ class S {
     );
   }
 
+  /// `A device name can't be empty`
+  String get DeviceNameBlank {
+    return Intl.message(
+      'A device name can\'t be empty',
+      name: 'DeviceNameBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{value} is required`
   String ValueIsRequired(Object value) {
     return Intl.message(

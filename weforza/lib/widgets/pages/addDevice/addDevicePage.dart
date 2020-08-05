@@ -93,7 +93,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                 S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
-                S.of(context).DeviceNameCannotContainComma
+                S.of(context).DeviceNameCannotContainComma,
+                S.of(context).DeviceNameBlank
             ),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 5),
@@ -120,6 +121,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                       S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
                       S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
                       S.of(context).DeviceNameCannotContainComma,
+                      S.of(context).DeviceNameBlank,
                     );
                   });
                 },
@@ -198,6 +200,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     return bloc.validateNewDeviceInput(bloc.deviceNameController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
         S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
-        S.of(context).DeviceNameCannotContainComma) == null;
+        S.of(context).DeviceNameCannotContainComma,
+        S.of(context).DeviceNameBlank) == null;
   }
 }

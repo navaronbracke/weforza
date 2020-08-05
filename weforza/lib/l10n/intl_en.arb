@@ -151,6 +151,7 @@
   "PhoneIllegalCharacters": "A phone number can only contain digits",
   "PhoneMinLength": "A phone number is minimum {minLength} digits long",
   "PhoneMaxLength": "A phone number is maximum {maxLength} digits long",
+  "DeviceNameBlank": "A device name can't be empty",
 
   "ValueIsRequired": "{value} is required",
   "DialogCancel": "Cancel",

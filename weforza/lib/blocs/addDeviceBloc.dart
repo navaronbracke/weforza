@@ -86,13 +86,20 @@ class AddDeviceBloc extends Bloc {
     }
   }
 
-  String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage, String commaIsIllegalCharacterMessage){
+  String validateNewDeviceInput(
+      String value,
+      String deviceNameIsRequired,
+      String deviceNameMaxLengthMessage,
+      String commaIsIllegalCharacterMessage,
+      String isWhitespaceMessage)
+  {
     if(value != _newDeviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
-    }
-    if(value == null || value.isEmpty){
+    }else if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
+    }else if(value.trim().isEmpty){
+      addDeviceError = isWhitespaceMessage;
     }else if(deviceNameMaxLength < value.length){
       addDeviceError = deviceNameMaxLengthMessage;
     }else if(value.contains(",")){

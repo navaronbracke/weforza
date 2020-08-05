@@ -61,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("This device already exists"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Headset"),
+    "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("A device name can\'t be empty"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("A device name cannot contain a ,"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Device Name"),
     "DeviceNameMaxLength" : m0,

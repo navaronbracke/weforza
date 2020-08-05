@@ -43,10 +43,15 @@ abstract class IFileHandler {
   Future<File> chooseImportMemberDatasourceFile();
 
   Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees);
+
+  Future<List<String>> readCsvFile(File file);
 }
 
 ///This class is an implementation of [IFileHandler].
 class FileHandler implements IFileHandler {
+  @override
+  Future<List<String>> readCsvFile(File file)
+    => file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
 
   @override
   Future<File> chooseProfileImageFromGallery() => FilePicker.getFile(type: FileType.image);

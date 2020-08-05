@@ -43,24 +43,35 @@ class ImportMembersBloc extends Bloc {
 
   Future<List<Map<String, dynamic>>> _readMemberDataFromFile(File file, String headerRegex) async {
     List<String> lines = await fileHandler.readCsvFile(file);
+    //Return fast when there are no lines.
+    if(lines.isEmpty) return [];
 
-    //Remove all the spaces and turn into lower case
-    //The first line might be a header
+    //Remove all the spaces in the possible and turn into lower case.
+    //This way we can do a regex check for the header presence.
     final possibleHeader = lines[0].replaceAll(" ", "").toLowerCase();
 
     //Remove the header if it exists
     if(RegExp("^$headerRegex\$").hasMatch(possibleHeader)){
       lines = lines.sublist(1);
     }
-
+    //This list will store the values we collected after processing.
     final memberData = <Map<String,dynamic>>[];
 
     for (String data in lines){
-      //Get the individual cell values from the CSV line and remove the leading/trailing spaces but keep the spaces inside the cell.
+      //Get the individual cell values from the CSV line
+      //and remove the leading/trailing spaces
+      //but keep the spaces inside the cells.
       final List<String> values = data.split(',').map((cellValue) => cellValue.trim()).toList();
-      if(values.length < 3){//First Name, Last Name, Phone
+      //If the line doesn't have enough cells to fill the required fields
+      // (first name, last name and phone, in that order), skip it
+      if(values.length < 3){
         continue;
       }
+      //If the last cell is empty after performing the trim step, remove it
+      if(values[values.length -1].isEmpty){
+        values.removeLast();
+      }
+      //Invalid data lines are skipped
       if(!Member.personNameRegex.hasMatch(values[0]) || !Member.personNameRegex.hasMatch(values[1]) || !Member.phoneNumberRegex.hasMatch(values[2])){
         continue;
       }
@@ -73,6 +84,7 @@ class ImportMembersBloc extends Bloc {
           continue;
         }
       }
+
       memberData.add({
         "firstName": values[0],
         "lastName": values[1],

@@ -85,9 +85,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                   builder: (context, constraints){
                     return SizedBox(
                       width: constraints.biggest.shortestSide * .8,
-                      child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
-                          style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                          softWrap: true, maxLines: 2
+                      child: Center(
+                        child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
+                            style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                            softWrap: true, maxLines: 2
+                        ),
                       ),
                     );
                   },
@@ -110,9 +112,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                   builder: (context, constraints){
                     return SizedBox(
                       width: constraints.biggest.shortestSide * .8,
-                      child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
-                          style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                          softWrap: true, maxLines: 2
+                      child: Center(
+                        child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
+                            style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                            softWrap: true, maxLines: 2
+                        ),
                       ),
                     );
                   },

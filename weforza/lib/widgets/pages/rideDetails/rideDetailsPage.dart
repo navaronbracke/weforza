@@ -50,6 +50,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
+    //TODO ride actions responsive menu
+    //TODO export ride button
     return Scaffold(
       appBar: AppBar(
         title: Text(bloc.ride.getFormattedDate(context),
@@ -98,6 +100,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   }
 
   Widget _buildIOSLayout(BuildContext context) {
+    //TODO ride actions responsive menu
+    //TODO export ride button
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

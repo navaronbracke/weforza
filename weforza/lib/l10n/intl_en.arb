@@ -43,12 +43,10 @@
 
   "AddDeviceTitle": "Add Device",
   "AddDeviceError": "Could not add device",
-  "AddDeviceGenericError": "Something went wrong",
   "AddDeviceSubmit": "Create Device",
 
   "EditDeviceTitle": "Edit Device",
   "EditDeviceError": "Could not edit device",
-  "EditDeviceGenericError": "Something went wrong",
   "EditDeviceSubmit": "Save Changes",
 
   "EditMemberTitle": "Edit Member",
@@ -78,10 +76,8 @@
   "RideAttendeeScanningProcessScanLabel": "Scan",
   "RideAttendeeScanningProcessAddMembersLabel": "By Hand",
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
-  "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members.",
+  "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members",
   "RideAttendeeScanningGoBackToDetailPage": "Return to detail page",
-  "RideAttendeeScanningGoBack": "Go Back",
-  "RideAttendeeScanningGenericError": "Something went wrong.",
   "RideAttendeeScanningPermissionDenied": "Scan aborted, permission was denied",
   "RideAttendeeScanningPermissionDescription": "Scanning requires permission to use your location",
   "RideAttendeeScanningBluetoothDisabled": "Scan aborted, Bluetooth is disabled",
@@ -110,6 +106,14 @@
   "EditRideSubmit": "Save Changes",
   "EditRideSubmitError": "Failed to save the changes",
 
+  "ImportMembersPageTitle": "Import Members",
+  "ImportMembersPickFile": "Choose File",
+  "ImportMembersPickFileWarning": "Please choose a file to import members",
+  "ImportMembersImporting": "Importing Members",
+  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)",
+  "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
+  "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
+
   "RideStart": "Start",
   "RideDestination": "Destination",
 
@@ -121,6 +125,7 @@
   "DeviceHeadset": "Headset",
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
+  "DeviceNameCannotContainComma": "A device name cannot contain a ,",
   "DeviceAlreadyExists": "This device already exists",
 
   "DeleteDeviceTitle": "Delete Device",
@@ -131,7 +136,6 @@
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
   "SettingsLoadingError": "Could not load the settings",
-  "SettingsGenericError": "Something went wrong",
   "SettingsSubmitError": "Could not save the settings",
 
   "PersonFirstNameLabel": "First Name",
@@ -147,11 +151,14 @@
   "PhoneIllegalCharacters": "A phone number can only contain digits",
   "PhoneMinLength": "A phone number is minimum {minLength} digits long",
   "PhoneMaxLength": "A phone number is maximum {maxLength} digits long",
+  "DeviceNameBlank": "A device name can't be empty",
 
   "ValueIsRequired": "{value} is required",
   "DialogCancel": "Cancel",
   "DialogDelete": "Delete",
   "DialogDismiss": "Ok",
+  "GenericError": "Something went wrong",
+  "GoBack": "Go Back",
 
   "DistanceKm": "Km"
 }

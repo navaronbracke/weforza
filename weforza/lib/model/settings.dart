@@ -11,7 +11,7 @@ class Settings {
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "scanDuration": scanDuration
+      "scanDuration": scanDuration,
     };
   }
 
@@ -19,7 +19,7 @@ class Settings {
   static Settings of(Map<String,dynamic> values){
     assert(values != null);
     return Settings(
-        scanDuration: values["scanDuration"],
+      scanDuration: values["scanDuration"] ?? 20
     );
   }
 }

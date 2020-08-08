@@ -41,7 +41,7 @@ class ScanPermissionDenied extends StatelessWidget {
         SizedBox(width: 20),
         FlatButton(
           child: Text(
-            S.of(context).RideAttendeeScanningGoBack,
+            S.of(context).GoBack,
             style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: () => Navigator.of(context).pop(),
@@ -68,7 +68,7 @@ class ScanPermissionDenied extends StatelessWidget {
         SizedBox(width: 20),
         CupertinoButton(
           child: Text(
-            S.of(context).RideAttendeeScanningGoBack,
+            S.of(context).GoBack,
             style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: () => Navigator.of(context).pop(),

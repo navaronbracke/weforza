@@ -49,11 +49,6 @@ abstract class ApplicationTheme {
       color: Colors.white,
   );
 
-  ///The background color for an unselected ride attendee.
-  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
-  ///The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
-
   static final TextStyle rideAttendeeFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 16.0
@@ -113,6 +108,14 @@ abstract class ApplicationTheme {
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 
   static final Color deleteItemButtonTextColor = Colors.red;
+
+  static final TextStyle importMembersHeaderRemovalMessageTextStyle = TextStyle(
+      fontSize: 12,fontStyle: FontStyle.italic, color: Colors.grey.shade600
+  );
+
+  static final TextStyle importWarningTextStyle = TextStyle(color: Colors.red);
+
+  static final Color importMembersDoneIconColor = Colors.green;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

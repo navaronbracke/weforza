@@ -109,7 +109,9 @@ class _EditDevicePageState extends State<EditDevicePage> {
             validator: (value) => bloc.validateDeviceNameInput(
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                S.of(context).DeviceNameCannotContainComma,
+                S.of(context).DeviceNameBlank
             ),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 5),
@@ -134,7 +136,9 @@ class _EditDevicePageState extends State<EditDevicePage> {
                     bloc.validateDeviceNameInput(
                         value,
                         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                        S.of(context).DeviceNameCannotContainComma,
+                        S.of(context).DeviceNameBlank
                     );
                   });
                 },
@@ -161,7 +165,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
               Navigator.of(context).pop(editedDevice);
             }).catchError((e){
@@ -175,7 +179,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
               Navigator.of(context).pop(editedDevice);
             }).catchError((e){
@@ -199,6 +203,8 @@ class _EditDevicePageState extends State<EditDevicePage> {
   bool iosValidateAddDevice(BuildContext context) {
     return bloc.validateDeviceNameInput(bloc.deviceNameController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")) == null;
+        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+        S.of(context).DeviceNameCannotContainComma,
+        S.of(context).DeviceNameBlank) == null;
   }
 }

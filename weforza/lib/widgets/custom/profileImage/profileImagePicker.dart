@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
@@ -20,14 +19,14 @@ class ProfileImagePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProfileImagePickingState>(
-      initialData: ProfileImagePickingState.IDLE,
+    return StreamBuilder<bool>(
+      initialData: false,
       stream: imageHandler.stream,
       builder: (context,snapshot){
         if(snapshot.hasError){
           return Center(child: Text(errorMessage,softWrap: true));
         }else{
-          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+          return snapshot.data ? SizedBox(
             width: size,
             height: size,
             child: Center(

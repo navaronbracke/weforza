@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
@@ -17,6 +16,8 @@ class Device {
   final DateTime creationDate;
   String name;
   DeviceType type;
+
+  static final RegExp deviceNameRegex = RegExp(r"^[^,]{1,40}$");
 
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
@@ -38,12 +39,15 @@ class Device {
     );
   }
 
+  //Devices are unique by name.
+  //The type is never unique by itself.
+  //The owner ID on its own is not unique either.
+  //An owner ID + name is a pointless comparison, since names have to be unique.
   @override
-  bool operator ==(Object other) => other is Device && ownerId == other.ownerId
-      && name == other.name && type == other.type && creationDate == other.creationDate;
+  bool operator ==(Object other) => other is Device && name == other.name;
 
   @override
-  int get hashCode => hashValues(ownerId,name,type,creationDate);
+  int get hashCode => name.hashCode;
 }
 
 ///This enum declares the different device types.

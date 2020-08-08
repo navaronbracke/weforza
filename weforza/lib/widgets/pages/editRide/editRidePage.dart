@@ -189,6 +189,7 @@ class _EditRidePageState extends State<EditRidePage> {
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   focusNode: _departureFocusNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -220,6 +221,7 @@ class _EditRidePageState extends State<EditRidePage> {
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   focusNode: _destinationFocusNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -361,6 +363,7 @@ class _EditRidePageState extends State<EditRidePage> {
                           style: ApplicationTheme.iosFormErrorStyle),
                       SizedBox(height: 5),
                       CupertinoTextField(
+                        textCapitalization: TextCapitalization.words,
                         focusNode: _departureFocusNode,
                         textInputAction: TextInputAction.next,
                         controller: _departureController,
@@ -391,6 +394,7 @@ class _EditRidePageState extends State<EditRidePage> {
                           style: ApplicationTheme.iosFormErrorStyle),
                       SizedBox(height: 5),
                       CupertinoTextField(
+                        textCapitalization: TextCapitalization.words,
                         focusNode: _destinationFocusNode,
                         textInputAction: TextInputAction.next,
                         controller: _destinationController,

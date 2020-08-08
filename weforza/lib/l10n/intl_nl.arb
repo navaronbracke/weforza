@@ -43,12 +43,10 @@
 
   "AddDeviceTitle": "Toestel Toevoegen",
   "AddDeviceError": "Kon toestel niet toevoegen",
-  "AddDeviceGenericError": "Er liep iets fout",
   "AddDeviceSubmit": "Toestel Aanmaken",
 
   "EditDeviceTitle": "Toestel Bewerken",
   "EditDeviceError": "Kon toestel niet bewerken",
-  "EditDeviceGenericError": "Er liep iets fout",
   "EditDeviceSubmit": "Wijzigingen Opslaan",
 
   "EditMemberTitle": "Lid Bewerken",
@@ -78,10 +76,8 @@
   "RideAttendeeScanningProcessScanLabel": "Scannen",
   "RideAttendeeScanningProcessAddMembersLabel": "Manueel",
   "RideAttendeeScanningPreparingScan": "Scan Voorbereiden",
-  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
+  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden",
   "RideAttendeeScanningGoBackToDetailPage": "Terug naar detailpagina",
-  "RideAttendeeScanningGoBack": "Keer Terug",
-  "RideAttendeeScanningGenericError": "Er liep iets fout.",
   "RideAttendeeScanningPermissionDenied": "Scan geannuleerd, toestemming werd geweigerd",
   "RideAttendeeScanningPermissionDescription": "Scannen vereist toegang tot je locatie",
   "RideAttendeeScanningBluetoothDisabled": "Scan geannuleerd, Bluetooth staat uit",
@@ -110,6 +106,14 @@
   "EditRideSubmit": "Wijzigingen Opslaan",
   "EditRideSubmitError": "Kon de wijzigingen niet opslaan",
 
+  "ImportMembersPageTitle": "Importeer Leden",
+  "ImportMembersPickFile": "Kies Bestand",
+  "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
+  "ImportMembersImporting": "Leden Importeren",
+  "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)",
+  "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
+  "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
+
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
@@ -121,6 +125,7 @@
   "DeviceHeadset": "Koptelefoon",
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
+  "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
 
   "DeleteDeviceTitle": "Verwijder Toestel",
@@ -131,7 +136,6 @@
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
   "SettingsLoadingError": "Kon de instellingen niet laden",
-  "SettingsGenericError": "Er liep iets fout",
   "SettingsSubmitError": "Kon de instellingen niet opslaan",
 
   "PersonFirstNameLabel": "Voornaam",
@@ -147,11 +151,14 @@
   "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
   "PhoneMinLength": "Een telefoonnummer is minimum {minLength} cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum {maxLength} cijfers lang",
+  "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
 
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
   "DialogDismiss": "Ok",
+  "GenericError": "Er liep iets fout",
+  "GoBack": "Keer Terug",
 
   "DistanceKm": "Km"
 }

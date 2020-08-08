@@ -26,14 +26,19 @@ class RideAttendeeManualSelection extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (context, index){
                 final item = bloc.currentMembersList[index];
+                final isSelected = ValueNotifier<bool>(bloc.isItemSelected(item));
                 return ManualSelectionListItem(
                   profileImageFuture: bloc.loadProfileImageFromDisk(item.profileImageFilePath),
-                  canSelect: () => !bloc.isSaving.value,
                   firstName: item.firstname,
                   lastName: item.lastname,
                   phone: item.phone,
-                  isSelected: () => bloc.isItemSelected(item),
-                  onTap: () => bloc.onMemberSelected(item),
+                  isSelected: isSelected,
+                  onTap: (){
+                    if(!bloc.isSaving.value){
+                      bloc.onMemberSelected(item);
+                      isSelected.value = bloc.isItemSelected(item);
+                    }
+                  },
                 );
               },
               itemCount: bloc.currentMembersList.length,

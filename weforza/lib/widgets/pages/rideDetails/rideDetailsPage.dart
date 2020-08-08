@@ -230,7 +230,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             RideAttendeeCounter(
               //We need the attendee names + images for displaying in the list.
               //But we need the total of people for the counter, thus we map to the length when its done loading.
-              future: bloc.attendeesFuture.then((attendees) => attendees.length)
+              future: bloc.attendeesFuture.then((attendees) => attendees.length),
+              invisibleWhenLoadingOrError: true,
             ),
           ],
         ),

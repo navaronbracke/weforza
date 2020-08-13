@@ -4,20 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
+import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
@@ -140,34 +136,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     );
   }
 
-  ///Build the ride attendees list.
-  Widget _buildAttendeesList() {
-    return FutureBuilder<List<MemberItem>>(
-      future: bloc.attendeesFuture,
-      builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.done){
-          if (snapshot.hasError) {
-            return GenericError(
-                text: S.of(context).RideDetailsLoadAttendeesError
-            );
-          } else {
-            if (snapshot.data == null || snapshot.data.isEmpty) {
-              return RideDetailsAttendeesEmpty();
-            } else {
-              return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return MemberWithPictureListItem(item: snapshot.data[index]);
-                  },
-                  itemCount: snapshot.data.length);
-            }
-          }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
-    );
-  }
-
   ///Build the panel that displays Start/Destination , Distance and Attendees count.
   Widget _buildPropertiesPanel(Ride ride) {
     return Column(
@@ -221,7 +189,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: _buildPropertiesPanel(ride),
               ),
               Expanded(
-                child: _buildAttendeesList(),
+                child: RideDetailsAttendeesList(future: bloc.attendeesFuture),
               ),
             ]
           : <Widget>[
@@ -240,7 +208,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: _buildPropertiesPanel(ride),
               ),
               Expanded(
-                child: _buildAttendeesList(),
+                child: RideDetailsAttendeesList(future: bloc.attendeesFuture),
               ),
             ],
     );

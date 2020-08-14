@@ -92,19 +92,11 @@ class _AddRidePageState extends State<AddRidePage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Center(child: Text(S.of(context).AddRideTitle)),
-            ),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
-              icon: Icons.delete_sweep,
-              onPressed: () => bloc.onRequestClear(),
-            ),
-          ],
+        trailing: CupertinoIconButton.fromAppTheme(
+          icon: Icons.delete_sweep,
+          onPressed: () => bloc.onRequestClear(),
         ),
+        middle: Text(S.of(context).AddRideTitle),
       ),
       child: SafeArea(
         child: Column(

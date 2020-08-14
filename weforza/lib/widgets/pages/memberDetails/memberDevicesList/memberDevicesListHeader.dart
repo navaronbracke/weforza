@@ -63,9 +63,7 @@ class MemberDevicesListHeader extends StatelessWidget {
               ),
             ),
           ),
-          CupertinoIconButton(
-            onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
-            idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
+          CupertinoIconButton.fromAppTheme(
             icon: Icons.add,
             onPressed: onPressed,
             size: 30

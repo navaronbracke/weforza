@@ -72,19 +72,13 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildIosWidget(BuildContext context){
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Center(child: Text(S.of(context).SettingsTitle)),
-            ),
-            SettingsSubmit(
-              submitStream: bloc.submitStream,
-              onSubmit: () async {
-                await bloc.saveSettings();
-                setState(() {});
-              },
-            ),
-          ],
+        middle: Text(S.of(context).SettingsTitle),
+        trailing: SettingsSubmit(
+          submitStream: bloc.submitStream,
+          onSubmit: () async {
+            await bloc.saveSettings();
+            setState(() {});
+          },
         ),
         transitionBetweenRoutes: false,
       ),

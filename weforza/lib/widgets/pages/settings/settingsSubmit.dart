@@ -39,9 +39,7 @@ class SettingsSubmit extends StatelessWidget {
             ),
             ios: () => Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: CupertinoIconButton(
-                onPressedColor: ApplicationTheme.primaryColor,
-                idleColor: ApplicationTheme.accentColor,
+              child: CupertinoIconButton.fromAppTheme(
                 icon: Icons.done,
                 onPressed: onSubmit,
               ),

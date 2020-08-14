@@ -46,8 +46,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
-    //TODO ride actions responsive menu
-    //TODO export ride button
     return Scaffold(
       appBar: AppBar(
         title: Text(bloc.ride.getFormattedDate(context),
@@ -57,22 +55,57 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             icon: Icon(Icons.bluetooth_searching),
             onPressed: () => goToScanningPage(context),
           ),
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () => goToEditPage(context),
-          ),
-          IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () => showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => DeleteItemDialog(
-                  title: S.of(context).RideDeleteDialogTitle,
-                  description: S.of(context).RideDeleteDialogDescription,
-                  errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                  onDelete: () => showDeleteRideDialog(context),
+          PopupMenuButton<RideDetailsPageOptions>(
+            icon: Icon(Icons.more_vert, color: Colors.white),
+            itemBuilder: (context) => <PopupMenuEntry<RideDetailsPageOptions>>[
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text(S.of(context).RideDetailsEditOption),
+                ),
+                value: RideDetailsPageOptions.EDIT,
               ),
-            ),
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.publish),
+                  title: Text(S.of(context).RideDetailsExportOption),
+                ),
+                value: RideDetailsPageOptions.EXPORT,
+              ),
+              PopupMenuDivider(),
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.delete, color: Colors.red),
+                  title: Text(
+                      S.of(context).RideDetailsDeleteOption,
+                      style: TextStyle(color: Colors.red)
+                  ),
+                ),
+                value: RideDetailsPageOptions.DELETE,
+              ),
+            ],
+            onSelected: (RideDetailsPageOptions option){
+              switch(option){
+                case RideDetailsPageOptions.EDIT:
+                  goToEditPage(context);
+                  break;
+                case RideDetailsPageOptions.EXPORT:
+                  goToExportPage(context);
+                  break;
+                case RideDetailsPageOptions.DELETE:
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => DeleteItemDialog(
+                      title: S.of(context).RideDeleteDialogTitle,
+                      description: S.of(context).RideDeleteDialogDescription,
+                      errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+                      onDelete: () => showDeleteRideDialog(context),
+                    ),
+                  );
+                  break;
+              }
+            },
           ),
         ],
       ),
@@ -251,5 +284,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       navigator.pop();
       navigator.pop();
     });
+  }
+
+  void goToExportPage(BuildContext context){
+    //TODO navigate to export page
   }
 }

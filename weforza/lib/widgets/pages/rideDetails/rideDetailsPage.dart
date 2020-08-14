@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -83,28 +85,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 value: RideDetailsPageOptions.DELETE,
               ),
             ],
-            onSelected: (RideDetailsPageOptions option){
-              switch(option){
-                case RideDetailsPageOptions.EDIT:
-                  goToEditPage(context);
-                  break;
-                case RideDetailsPageOptions.EXPORT:
-                  goToExportPage(context);
-                  break;
-                case RideDetailsPageOptions.DELETE:
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => DeleteItemDialog(
-                      title: S.of(context).RideDeleteDialogTitle,
-                      description: S.of(context).RideDeleteDialogDescription,
-                      errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                      onDelete: () => deleteRide(context),
-                    ),
-                  );
-                  break;
-              }
-            },
+            onSelected: (RideDetailsPageOptions option) => onSelectMenuOption(context, option),
           ),
         ],
       ),
@@ -133,46 +114,33 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 SizedBox(width: 15),
                 CupertinoIconButton.fromAppTheme(
                     icon: Icons.more_vert,
-                    onPressed: () => showCupertinoModalPopup(context: context, builder: (context){
-                      return CupertinoActionSheet(
-                        actions: [
-                          CupertinoActionSheetAction(
-                            child: Text(S.of(context).RideDetailsEditOption),
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              goToEditPage(context);
-                            },
+                    onPressed: () async {
+                      final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
+                        return CupertinoActionSheet(
+                          actions: [
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsEditOption),
+                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EDIT),
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsExportOption),
+                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsDeleteOption),
+                              isDestructiveAction: true,
+                              onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
+                            ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            child: Text(S.of(context).DialogCancel),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
-                          CupertinoActionSheetAction(
-                            child: Text(S.of(context).RideDetailsExportOption),
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              goToExportPage(context);
-                            },
-                          ),
-                          CupertinoActionSheetAction(
-                            child: Text(S.of(context).RideDetailsDeleteOption),
-                            isDestructiveAction: true,
-                            onPressed: (){
-                              Navigator.of(context).pop();
-                              showCupertinoDialog(
-                                context: context,
-                                builder: (context) => DeleteItemDialog(
-                                  title: S.of(context).RideDeleteDialogTitle,
-                                  description: S.of(context).RideDeleteDialogDescription,
-                                  errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                                  onDelete: () => deleteRide(context),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                        cancelButton: CupertinoActionSheetAction(
-                          child: Text(S.of(context).DialogCancel),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      );
-                    })
+                        );
+                      });
+
+                      onSelectMenuOption(context, option);
+                    }
                 ),
               ],
             ),
@@ -305,5 +273,31 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   void goToExportPage(BuildContext context){
     //TODO navigate to export page
+  }
+
+  void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option){
+    switch(option){
+      case RideDetailsPageOptions.EDIT:
+        goToEditPage(context);
+        break;
+      case RideDetailsPageOptions.EXPORT:
+        goToExportPage(context);
+        break;
+      case RideDetailsPageOptions.DELETE:
+        final Widget Function(BuildContext) builder = (context) => DeleteItemDialog(
+          title: S.of(context).RideDeleteDialogTitle,
+          description: S.of(context).RideDeleteDialogDescription,
+          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+          onDelete: () => deleteRide(context),
+        );
+        if(Platform.isAndroid){
+          showDialog(context: context, builder: builder);
+        }else if(Platform.isIOS){
+          showCupertinoDialog(context: context, builder: builder);
+        }
+        break;
+
+      default: break;//null is ignored
+    }
   }
 }

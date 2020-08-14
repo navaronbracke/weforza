@@ -100,7 +100,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                       title: S.of(context).RideDeleteDialogTitle,
                       description: S.of(context).RideDeleteDialogDescription,
                       errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                      onDelete: () => showDeleteRideDialog(context),
+                      onDelete: () => deleteRide(context),
                     ),
                   );
                   break;
@@ -114,8 +114,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   }
 
   Widget _buildIOSLayout(BuildContext context) {
-    //TODO ride actions responsive menu
-    //TODO export ride button
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -139,8 +137,47 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
-                    icon: Icons.edit,
-                    onPressed: () => goToEditPage(context)
+                    icon: Icons.more_vert,
+                    onPressed: () => showCupertinoModalPopup(context: context, builder: (context){
+                      return CupertinoActionSheet(
+                        actions: [
+                          CupertinoActionSheetAction(
+                            child: Text(S.of(context).RideDetailsEditOption),
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                              goToEditPage(context);
+                            },
+                          ),
+                          CupertinoActionSheetAction(
+                            child: Text(S.of(context).RideDetailsExportOption),
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                              goToExportPage(context);
+                            },
+                          ),
+                          CupertinoActionSheetAction(
+                            child: Text(S.of(context).RideDetailsDeleteOption),
+                            isDestructiveAction: true,
+                            onPressed: (){
+                              Navigator.of(context).pop();
+                              showCupertinoDialog(
+                                context: context,
+                                builder: (context) => DeleteItemDialog(
+                                  title: S.of(context).RideDeleteDialogTitle,
+                                  description: S.of(context).RideDeleteDialogDescription,
+                                  errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+                                  onDelete: () => deleteRide(context),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                        cancelButton: CupertinoActionSheetAction(
+                          child: Text(S.of(context).DialogCancel),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      );
+                    })
                 ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
@@ -153,7 +190,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           title: S.of(context).RideDeleteDialogTitle,
                           description: S.of(context).RideDeleteDialogDescription,
                           errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                          onDelete: () => showDeleteRideDialog(context),
+                          onDelete: () => deleteRide(context),
                         ),
                     ),
                 ),
@@ -275,7 +312,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     });
   }
 
-  Future<void> showDeleteRideDialog(BuildContext context){
+  Future<void> deleteRide(BuildContext context){
     return bloc.deleteRide().then((_){
       //trigger the reload of rides
       ReloadDataProvider.of(context).reloadRides.value = true;

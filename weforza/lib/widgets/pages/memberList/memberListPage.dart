@@ -75,18 +75,14 @@ class _MemberListPageState extends State<MemberListPage> {
         middle: Row(
           children: <Widget>[
             Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
-            CupertinoIconButton(
-                onPressedColor: ApplicationTheme.primaryColor,
-                idleColor: ApplicationTheme.accentColor,
+            CupertinoIconButton.fromAppTheme(
                 icon: Icons.person_add,
                 onPressed: ()=> Navigator.of(context).push(
                     MaterialPageRoute(builder: (context)=> AddMemberPage())
                 ).then((_)=> onReturnToMemberListPage(context))
             ),
-            SizedBox(width: 10),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
+            SizedBox(width: 15),
+            CupertinoIconButton.fromAppTheme(
               icon: Icons.file_download,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> ImportMembersPage())

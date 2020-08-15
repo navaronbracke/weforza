@@ -1033,6 +1033,76 @@ class S {
     );
   }
 
+  /// `Export Ride`
+  String get ExportRideTitle {
+    return Intl.message(
+      'Export Ride',
+      name: 'ExportRideTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filename`
+  String get ExportRideFileNameLabel {
+    return Intl.message(
+      'Filename',
+      name: 'ExportRideFileNameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ride_{date}`
+  String ExportRideFileNamePlaceholder(Object date) {
+    return Intl.message(
+      'ride_$date',
+      name: 'ExportRideFileNamePlaceholder',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `csv`
+  String get ExportRideCsvExtension {
+    return Intl.message(
+      'csv',
+      name: 'ExportRideCsvExtension',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `json`
+  String get ExportRideJsonExtension {
+    return Intl.message(
+      'json',
+      name: 'ExportRideJsonExtension',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ride saved at {path}`
+  String ExportRideExportedToPathMessage(Object path) {
+    return Intl.message(
+      'Ride saved at $path',
+      name: 'ExportRideExportedToPathMessage',
+      desc: '',
+      args: [path],
+    );
+  }
+
+  /// `Exporting ride to file`
+  String get ExportRideExportingToFile {
+    return Intl.message(
+      'Exporting ride to file',
+      name: 'ExportRideExportingToFile',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(

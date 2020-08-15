@@ -117,6 +117,14 @@
   "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
   "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
 
+  "ExportRideTitle": "Export Ride",
+  "ExportRideFileNameLabel": "Filename",
+  "ExportRideFileNamePlaceholder": "ride_{date}",
+  "ExportRideCsvExtension": "csv",
+  "ExportRideJsonExtension": "json",
+  "ExportRideExportedToPathMessage": "Ride saved at {path}",
+  "ExportRideExportingToFile": "Exporting ride to file",
+
   "RideStart": "Start",
   "RideDestination": "Destination",
 

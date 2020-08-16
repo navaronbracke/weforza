@@ -99,11 +99,11 @@
   "EditRideDestinationLabel": "Destination",
   "EditRideDistanceLabel": "Distance",
   "EditRideTitleMaxLength": "A title can't be longer than {maxLength} characters",
-  "EditRideTitleWhitespace": "A title can't be only whitespace",
+  "EditRideTitleWhitespace": "A title can't be blank",
   "EditRideDistanceInvalid": "Please enter a valid distance",
   "EditRideDistancePositive": "Distance must be greater than zero",
   "EditRideDistanceMaximum": "A ride cannot have a distance that exceeds {maxDistance} Km",
-  "EditRideAddressWhitespace": "An address cannot be only whitespace",
+  "EditRideAddressWhitespace": "An address can't be blank",
   "EditRideAddressMaxLength": "An address can't be longer than {maxLength} characters",
   "EditRideAddressInvalid": "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -",
   "EditRideSubmit": "Save Changes",
@@ -118,12 +118,12 @@
   "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
 
   "ExportRideTitle": "Export Ride",
-  "ExportRideFileNameLabel": "Filename",
   "ExportRideFileNamePlaceholder": "ride_{date}",
   "ExportRideCsvExtension": "csv",
   "ExportRideJsonExtension": "json",
   "ExportRideExportedToPathMessage": "Ride saved at {path}",
   "ExportRideExportingToFile": "Exporting ride to file",
+  "ExportRideFilenameMaxLength": "A filename can't be longer than {maxLength} characters",
 
   "RideStart": "Start",
   "RideDestination": "Destination",
@@ -155,8 +155,8 @@
 
   "FirstNameMaxLength": "First Name can't be longer than {maxLength} characters",
   "LastNameMaxLength": "Last Name can't be longer than {maxLength} characters",
-  "FirstNameBlank" : "First Name can't be just whitespace",
-  "LastNameBlank" : "Last Name can't be just whitespace",
+  "FirstNameBlank" : "First Name can't be blank",
+  "LastNameBlank" : "Last Name can't be blank",
   "FirstNameIllegalCharacters": "First Name can only contain letters, spaces or ' -",
   "LastNameIllegalCharacters": "Last Name can only contain letters, spaces or ' -",
   "PhoneIllegalCharacters": "A phone number can only contain digits",
@@ -171,5 +171,8 @@
   "GenericError": "Something went wrong",
   "GoBack": "Go Back",
 
-  "DistanceKm": "Km"
+  "DistanceKm": "Km",
+  "Filename": "Filename",
+  "InvalidFilename": "Invalid filename",
+  "FilenameWhitespace": "A filename can't be blank"
 }

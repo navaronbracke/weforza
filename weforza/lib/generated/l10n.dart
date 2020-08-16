@@ -873,10 +873,10 @@ class S {
     );
   }
 
-  /// `A title can't be only whitespace`
+  /// `A title can't be blank`
   String get EditRideTitleWhitespace {
     return Intl.message(
-      'A title can\'t be only whitespace',
+      'A title can\'t be blank',
       name: 'EditRideTitleWhitespace',
       desc: '',
       args: [],
@@ -913,10 +913,10 @@ class S {
     );
   }
 
-  /// `An address cannot be only whitespace`
+  /// `An address can't be blank`
   String get EditRideAddressWhitespace {
     return Intl.message(
-      'An address cannot be only whitespace',
+      'An address can\'t be blank',
       name: 'EditRideAddressWhitespace',
       desc: '',
       args: [],
@@ -1043,16 +1043,6 @@ class S {
     );
   }
 
-  /// `Filename`
-  String get ExportRideFileNameLabel {
-    return Intl.message(
-      'Filename',
-      name: 'ExportRideFileNameLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `ride_{date}`
   String ExportRideFileNamePlaceholder(Object date) {
     return Intl.message(
@@ -1100,6 +1090,16 @@ class S {
       name: 'ExportRideExportingToFile',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `A filename can't be longer than {maxLength} characters`
+  String ExportRideFilenameMaxLength(Object maxLength) {
+    return Intl.message(
+      'A filename can\'t be longer than $maxLength characters',
+      name: 'ExportRideFilenameMaxLength',
+      desc: '',
+      args: [maxLength],
     );
   }
 
@@ -1353,20 +1353,20 @@ class S {
     );
   }
 
-  /// `First Name can't be just whitespace`
+  /// `First Name can't be blank`
   String get FirstNameBlank {
     return Intl.message(
-      'First Name can\'t be just whitespace',
+      'First Name can\'t be blank',
       name: 'FirstNameBlank',
       desc: '',
       args: [],
     );
   }
 
-  /// `Last Name can't be just whitespace`
+  /// `Last Name can't be blank`
   String get LastNameBlank {
     return Intl.message(
-      'Last Name can\'t be just whitespace',
+      'Last Name can\'t be blank',
       name: 'LastNameBlank',
       desc: '',
       args: [],
@@ -1498,6 +1498,36 @@ class S {
     return Intl.message(
       'Km',
       name: 'DistanceKm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filename`
+  String get Filename {
+    return Intl.message(
+      'Filename',
+      name: 'Filename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid filename`
+  String get InvalidFilename {
+    return Intl.message(
+      'Invalid filename',
+      name: 'InvalidFilename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A filename can't be blank`
+  String get FilenameWhitespace {
+    return Intl.message(
+      'A filename can\'t be blank',
+      name: 'FilenameWhitespace',
       desc: '',
       args: [],
     );

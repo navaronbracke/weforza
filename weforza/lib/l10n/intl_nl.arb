@@ -118,12 +118,12 @@
   "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 
   "ExportRideTitle": "Rit Exporteren",
-  "ExportRideFileNameLabel": "Bestandsnaam",
   "ExportRideFileNamePlaceholder": "rit_{date}",
   "ExportRideCsvExtension": "csv",
   "ExportRideJsonExtension": "json",
   "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
   "ExportRideExportingToFile": "Rit exporteren naar bestand",
+  "ExportRideFilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
@@ -171,5 +171,8 @@
   "GenericError": "Er liep iets fout",
   "GoBack": "Keer Terug",
 
-  "DistanceKm": "Km"
+  "DistanceKm": "Km",
+  "Filename": "Bestandsnaam",
+  "InvalidFilename": "Ongeldige bestandsnaam",
+  "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn"
 }

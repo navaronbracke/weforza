@@ -35,6 +35,9 @@ class ExportRideBloc extends Bloc {
   final StreamController<RideExportState> _streamController = BehaviorSubject();
   Stream<RideExportState> get stream => _streamController.stream;
 
+  final StreamController<bool> _fileExistsController = BehaviorSubject();
+  Stream<bool> get fileExistsStream => _fileExistsController.stream;
+
   List<Member> rideAttendees;
 
   bool autoValidateFileName = false;
@@ -79,20 +82,23 @@ class ExportRideBloc extends Bloc {
     return filenameError;
   }
 
-  //TODO catch file exists error
   void exportRide() async {
-    _streamController.add(RideExportState.EXPORTING);
-    await fileHandler.saveRideAndAttendeesToFile(_filename, _fileExtension, ride, rideAttendees).then((_){
-      _streamController.add(RideExportState.DONE);
-    }).catchError((e){
-      print(e);
-      _streamController.addError(e);
-    });
+    await fileHandler.fileExists(_filename + _fileExtension.toFileExtension()).then((exists) async {
+      if(exists){
+        _fileExistsController.add(true);
+      }else{
+        _fileExistsController.add(false);
+        _streamController.add(RideExportState.EXPORTING);
+        await fileHandler.saveRideAndAttendeesToFile(_filename, _fileExtension, ride, rideAttendees);
+        _streamController.add(RideExportState.DONE);
+      }
+    }).catchError((e) => _streamController.addError(e));
   }
 
   @override
   void dispose() {
     _streamController.close();
+    _fileExistsController.close();
   }
 }
 

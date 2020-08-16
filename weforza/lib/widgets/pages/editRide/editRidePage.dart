@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/editRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/editRide/editRideSubmit.dart';
@@ -57,7 +58,7 @@ class _EditRidePageState extends State<EditRidePage> {
     _destinationLabel = translator.EditRideDestinationLabel;
     _distanceLabel = translator.EditRideDistanceLabel;
     _titleMaxLengthMessage =
-        translator.EditRideTitleMaxLength("${bloc.titleMaxLength}");
+        translator.EditRideTitleMaxLength("${Ride.titleMaxLength}");
     _titleWhitespaceMessage = translator.EditRideTitleWhitespace;
     _distanceInvalidMessage = translator.EditRideDistanceInvalid;
     _distancePositiveMessage = translator.EditRideDistancePositive;

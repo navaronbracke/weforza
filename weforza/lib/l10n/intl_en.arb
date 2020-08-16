@@ -124,6 +124,7 @@
   "ExportRideExportedToPathMessage": "Ride saved at {path}",
   "ExportRideExportingToFile": "Exporting ride to file",
   "ExportRideFilenameMaxLength": "A filename can't be longer than {maxLength} characters",
+  "Export": "Export",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

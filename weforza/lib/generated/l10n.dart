@@ -1103,6 +1103,16 @@ class S {
     );
   }
 
+  /// `Export`
+  String get Export {
+    return Intl.message(
+      'Export',
+      name: 'Export',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(

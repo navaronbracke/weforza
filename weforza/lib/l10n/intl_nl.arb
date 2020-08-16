@@ -124,6 +124,7 @@
   "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
   "ExportRideExportingToFile": "Rit exporteren naar bestand",
   "ExportRideFilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
+  "Export": "Exporteren",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",

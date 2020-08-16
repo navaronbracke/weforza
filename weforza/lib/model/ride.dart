@@ -18,6 +18,8 @@ class Ride implements Exportable {
   static final String longDatePattern = "EEEE d MMMM yyyy";
   static final String shortDatePattern = "EEE d MMM yyyy";
 
+  static final int titleMaxLength = 80;
+
   ///Address regex for departure/destination addresses.
   ///Between 1 and 80 letters, digits, spaces or characters that are included in the regex.
   ///The first group in the regex OR are the regex pattern classes for digits, whitespace and letters.

@@ -6,7 +6,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
@@ -72,9 +71,7 @@ class _RideListPageState extends State<RideListPage> {
             Expanded(
               child: Center(child: Text(S.of(context).RideListRidesHeader)),
             ),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
+            CupertinoIconButton.fromAppTheme(
               icon: Icons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())

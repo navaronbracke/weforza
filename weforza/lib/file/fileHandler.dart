@@ -49,6 +49,8 @@ abstract class IFileHandler {
 
   //Read the given CSV file and return the lines that were read.
   Future<List<String>> readCsvFile(File file);
+
+  Future<bool> fileExists(String filename);
 }
 
 ///This class is an implementation of [IFileHandler].
@@ -88,19 +90,21 @@ class FileHandler implements IFileHandler {
 
   @override
   Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees) async {
-    String filePath;
+    Directory directory;
 
     if(Platform.isAndroid){
-      filePath = "${await getExternalStorageDirectory()}/$fileName${extension.toFileExtension()}";
+      directory = await getExternalStorageDirectory();
     }else if(Platform.isIOS){
-      filePath = "${await getApplicationDocumentsDirectory()}/$fileName${extension.toFileExtension()}";
+      directory = await getApplicationDocumentsDirectory();
     }else{
       throw Exception("Only Android and IOS are supported");
     }
 
-    if(filePath == null){
+    if(directory == null){
       throw Exception("Could not create file path");
     }
+
+    final String filePath = "${directory.path}/$fileName${extension.toFileExtension()}";
 
     await _writeRideToFile(ride, attendees, File(filePath), extension);
   }
@@ -127,6 +131,25 @@ class FileHandler implements IFileHandler {
       }
       break;
     }
+  }
+
+  @override
+  Future<bool> fileExists(String filename) async {
+    Directory directory;
+
+    if(Platform.isAndroid){
+      directory = await getExternalStorageDirectory();
+    }else if(Platform.isIOS){
+      directory = await getApplicationDocumentsDirectory();
+    }else{
+      throw Exception("Only Android and IOS are supported");
+    }
+
+    if(directory == null){
+      throw Exception("Could not create file path");
+    }
+
+    return File("${directory.path}/$filename").exists();
   }
 
 }

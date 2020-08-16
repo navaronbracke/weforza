@@ -145,19 +145,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                         child: Center(
                           child: AnimatedCheckmark(
                             color: ApplicationTheme.accentColor,
-                            duration: Duration(milliseconds: 400),
                             size: Size.square(paintSize),
-                            strokeCap: StrokeCap.round,
-                            strokeJoin: StrokeJoin.round,
-                            strokeWidth: 4.0,
-                            createPath: (Size size){
-                              final xOffset = size.width *.1;
-                              final yOffset = -(size.height *.1);
-                              return Path()
-                                ..moveTo((size.width *.8) + xOffset, (size.height *.2) + yOffset)
-                                ..lineTo((size.width *.3) + xOffset, size.height + yOffset)
-                                ..lineTo(xOffset, (size.height *.8) + yOffset);
-                            },
                           ),
                         ),
                       )

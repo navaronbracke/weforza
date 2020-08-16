@@ -18,6 +18,8 @@ class Ride implements Exportable {
   static final String longDatePattern = "EEEE d MMMM yyyy";
   static final String shortDatePattern = "EEE d MMM yyyy";
 
+  static final int titleMaxLength = 80;
+
   ///Address regex for departure/destination addresses.
   ///Between 1 and 80 letters, digits, spaces or characters that are included in the regex.
   ///The first group in the regex OR are the regex pattern classes for digits, whitespace and letters.
@@ -95,36 +97,30 @@ class Ride implements Exportable {
   @override
   int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
 
+  String dateToDDMMYYY() => "${date.day}-${date.month}-${date.year}";
+
   @override
   Map<String, String> exportToJson() {
-    final Map<String, String> value = {
-      "date": "${date.day}-${date.month}-${date.year}"
+    return {
+      "date": dateToDDMMYYY(),
+      "title": title,
+      "destination": destinationAddress,
+      "start": startAddress,
+      "distance": distance == null || distance == 0.0 ? "0 Km" : "$distance Km"
     };
-    if(title != null && title.isNotEmpty){
-      value["title"] = title;
-    }
-    if(destinationAddress != null && destinationAddress.isNotEmpty){
-      value["destination"] = destinationAddress;
-    }
-    if(startAddress != null && startAddress.isNotEmpty){
-      value["start"] = startAddress;
-    }
-    if(distance != null && distance > 0.0){
-      value["distance"] = "$distance Km";
-    }
-
-    return value;
   }
 
   @override
   String exportToCsv() {
-    String value = "${date.day}-${date.month}-${date.year}";
-    value = "$value,${title != null ? title : ""},";
-    value = "$value${startAddress != null ? startAddress : ""},";
-    value = "$value${destinationAddress != null ? destinationAddress : ""},";
+    String value = dateToDDMMYYY();
+    value = "$value,${title ?? ""},";
+    value = "$value${startAddress ?? ""},";
+    value = "$value${destinationAddress ?? ""},";
 
-    if(distance != null && distance > 0.0){
-      value = "$value$distance Km";
+    if(distance == null || distance == 0.0){
+      value = value + "0 Km";
+    }else{
+      value = value + "$distance Km";
     }
 
     return value;

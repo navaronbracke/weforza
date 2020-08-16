@@ -23,8 +23,6 @@ class EditRideBloc extends Bloc {
   final Ride ride;
   final RideRepository repository;
 
-  ///Max values for input
-  final int titleMaxLength = 80;
   final int maxDistanceInKm = 300;
   final int addressMaxLength = 80;
 
@@ -57,7 +55,7 @@ class EditRideBloc extends Bloc {
       //Whitespace
       if(value.trim().isEmpty){
         titleError = isWhitespaceMessage;
-      }else if(value.length > titleMaxLength){
+      }else if(value.length > Ride.titleMaxLength){
         //Max Length
         titleError = maxLengthMessage;
       }else {

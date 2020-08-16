@@ -26,6 +26,9 @@
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsEditOption": "Bewerken",
+  "RideDetailsExportOption": "Exporteren",
+  "RideDetailsDeleteOption": "Verwijderen",
 
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
@@ -114,6 +117,15 @@
   "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
   "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 
+  "ExportRideTitle": "Rit Exporteren",
+  "ExportRideFileNamePlaceholder": "rit_{date}",
+  "ExportRideCsvExtension": "csv",
+  "ExportRideJsonExtension": "json",
+  "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
+  "ExportRideExportingToFile": "Rit exporteren naar bestand",
+  "ExportRideFilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
+  "Export": "Exporteren",
+
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
@@ -160,5 +172,9 @@
   "GenericError": "Er liep iets fout",
   "GoBack": "Keer Terug",
 
-  "DistanceKm": "Km"
+  "DistanceKm": "Km",
+  "Filename": "Bestandsnaam",
+  "InvalidFilename": "Ongeldige bestandsnaam",
+  "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn",
+  "FileExists": "Dit bestand bestaat al"
 }

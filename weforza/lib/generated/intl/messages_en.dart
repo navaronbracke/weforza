@@ -27,15 +27,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m3(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m4(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m4(path) => "Ride saved at ${path}";
 
-  static m5(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m5(date) => "ride_${date}";
 
-  static m6(maxLength) => "A phone number is maximum ${maxLength} digits long";
+  static m6(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m7(minLength) => "A phone number is minimum ${minLength} digits long";
+  static m7(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m8(value) => "${value} is required";
+  static m8(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+
+  static m9(maxLength) => "A phone number is maximum ${maxLength} digits long";
+
+  static m10(minLength) => "A phone number is minimum ${minLength} digits long";
+
+  static m11(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -84,7 +90,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Edit Member"),
     "EditRideAddressInvalid" : MessageLookupByLibrary.simpleMessage("An address can only contain letters, numbers, spaces and # , ; : \' & / ° . ( ) -"),
     "EditRideAddressMaxLength" : m1,
-    "EditRideAddressWhitespace" : MessageLookupByLibrary.simpleMessage("An address cannot be only whitespace"),
+    "EditRideAddressWhitespace" : MessageLookupByLibrary.simpleMessage("An address can\'t be blank"),
     "EditRideDepartureLabel" : MessageLookupByLibrary.simpleMessage("Departure"),
     "EditRideDestinationLabel" : MessageLookupByLibrary.simpleMessage("Destination"),
     "EditRideDistanceInvalid" : MessageLookupByLibrary.simpleMessage("Please enter a valid distance"),
@@ -96,10 +102,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditRideSubmitError" : MessageLookupByLibrary.simpleMessage("Failed to save the changes"),
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Title"),
     "EditRideTitleMaxLength" : m3,
-    "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("A title can\'t be only whitespace"),
-    "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be just whitespace"),
+    "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("A title can\'t be blank"),
+    "Export" : MessageLookupByLibrary.simpleMessage("Export"),
+    "ExportRideCsvExtension" : MessageLookupByLibrary.simpleMessage("csv"),
+    "ExportRideExportedToPathMessage" : m4,
+    "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Exporting ride to file"),
+    "ExportRideFileNamePlaceholder" : m5,
+    "ExportRideFilenameMaxLength" : m6,
+    "ExportRideJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
+    "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Export Ride"),
+    "FileExists" : MessageLookupByLibrary.simpleMessage("This file already exists"),
+    "Filename" : MessageLookupByLibrary.simpleMessage("Filename"),
+    "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("A filename can\'t be blank"),
+    "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be blank"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("First Name can only contain letters, spaces or \' -"),
-    "FirstNameMaxLength" : m4,
+    "FirstNameMaxLength" : m7,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Fri"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Go Back"),
@@ -113,9 +130,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "ImportMembersPageTitle" : MessageLookupByLibrary.simpleMessage("Import Members"),
     "ImportMembersPickFile" : MessageLookupByLibrary.simpleMessage("Choose File"),
     "ImportMembersPickFileWarning" : MessageLookupByLibrary.simpleMessage("Please choose a file to import members"),
-    "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be just whitespace"),
+    "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Invalid filename"),
+    "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be blank"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Last Name can only contain letters, spaces or \' -"),
-    "LastNameMaxLength" : m5,
+    "LastNameMaxLength" : m8,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("This member already exists"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this member?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete member"),
@@ -135,8 +153,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telephone"),
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("A phone number can only contain digits"),
-    "PhoneMaxLength" : m6,
-    "PhoneMinLength" : m7,
+    "PhoneMaxLength" : m9,
+    "PhoneMinLength" : m10,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
@@ -157,6 +175,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),
     "RideDestination" : MessageLookupByLibrary.simpleMessage("Destination"),
+    "RideDetailsDeleteOption" : MessageLookupByLibrary.simpleMessage("Delete"),
+    "RideDetailsEditOption" : MessageLookupByLibrary.simpleMessage("Edit"),
+    "RideDetailsExportOption" : MessageLookupByLibrary.simpleMessage("Export"),
     "RideDetailsLoadAttendeesError" : MessageLookupByLibrary.simpleMessage("Could not load attendees"),
     "RideDetailsNoAttendees" : MessageLookupByLibrary.simpleMessage("This ride has no attendees"),
     "RideListAddRideInstruction" : MessageLookupByLibrary.simpleMessage("Add rides by using the menu above"),
@@ -174,7 +195,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m8,
+    "ValueIsRequired" : m11,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

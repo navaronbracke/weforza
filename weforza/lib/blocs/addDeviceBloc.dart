@@ -65,6 +65,7 @@ class AddDeviceBloc extends Bloc {
   Future<void> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
+
     final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
 
     final exists = await repository.deviceExists(device).catchError((error){
@@ -73,16 +74,16 @@ class AddDeviceBloc extends Bloc {
       return Future.error(genericErrorMessage);
     });
 
-    if(!exists){
+    if(exists){
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }else{
       await repository.addDevice(device).catchError((error){
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
         return Future.error(genericErrorMessage);
       });
-    }else{
-      _submitButtonController.add(false);
-      _submitErrorController.add(deviceExistsMessage);
-      return Future.error(deviceExistsMessage);
     }
   }
 
@@ -96,7 +97,9 @@ class AddDeviceBloc extends Bloc {
     if(value != _newDeviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
-    }else if(value == null || value.isEmpty){
+    }
+
+    if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
     }else if(value.trim().isEmpty){
       addDeviceError = isWhitespaceMessage;

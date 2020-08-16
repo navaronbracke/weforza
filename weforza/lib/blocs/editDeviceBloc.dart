@@ -88,7 +88,7 @@ class EditDeviceBloc extends Bloc {
       return await repository.updateDevice(editedDevice).then((_){
         _submitButtonController.add(false);
         return editedDevice;
-      },onError: (error){
+      }).catchError((error){
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
         return Future.error(genericErrorMessage);

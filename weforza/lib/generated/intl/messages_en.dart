@@ -111,6 +111,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExportRideFilenameMaxLength" : m6,
     "ExportRideJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Export Ride"),
+    "FileExists" : MessageLookupByLibrary.simpleMessage("This file already exists"),
     "Filename" : MessageLookupByLibrary.simpleMessage("Filename"),
     "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("A filename can\'t be blank"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be blank"),

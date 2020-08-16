@@ -175,5 +175,6 @@
   "DistanceKm": "Km",
   "Filename": "Bestandsnaam",
   "InvalidFilename": "Ongeldige bestandsnaam",
-  "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn"
+  "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn",
+  "FileExists": "Dit bestand bestaat al"
 }

@@ -1003,11 +1003,31 @@ class S {
     );
   }
 
-  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)`
+  /// `(firstname)\,(surname|familyname|lastname)\,(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)`
   String get ImportMembersCsvHeaderRegex {
     return Intl.message(
-      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)',
+      '(firstname)\,(surname|familyname|lastname)\,(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)',
       name: 'ImportMembersCsvHeaderRegex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A csv header might look like:`
+  String get ImportMembersCsvHeaderExampleDescription {
+    return Intl.message(
+      'A csv header might look like:',
+      name: 'ImportMembersCsvHeaderExampleDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,surname,cellphone,devices`
+  String get ImportMembersCsvHeaderExample {
+    return Intl.message(
+      'firstname,surname,cellphone,devices',
+      name: 'ImportMembersCsvHeaderExample',
       desc: '',
       args: [],
     );

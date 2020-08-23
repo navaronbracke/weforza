@@ -2,10 +2,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:weforza/file/exportable.dart';
 
 ///This class represents a Ride.
-class Ride implements Exportable {
+class Ride {
   Ride({
     @required this.date,
     this.title,
@@ -98,8 +97,7 @@ class Ride implements Exportable {
   int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
 
   String dateToDDMMYYY() => "${date.day}-${date.month}-${date.year}";
-
-  @override
+  
   Map<String, String> exportToJson() {
     return {
       "date": dateToDDMMYYY(),
@@ -110,7 +108,6 @@ class Ride implements Exportable {
     };
   }
 
-  @override
   String exportToCsv() {
     String value = dateToDDMMYYY();
     value = "$value,${title ?? ""},";

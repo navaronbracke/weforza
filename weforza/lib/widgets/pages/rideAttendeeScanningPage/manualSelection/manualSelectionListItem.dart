@@ -4,11 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/profileImage/loadableProfileImage.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/selectableProfileImage.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
-class ManualSelectionListItem extends StatelessWidget {
+class ManualSelectionListItem extends StatefulWidget {
   ManualSelectionListItem({
     @required this.isSelected,
     @required this.onTap,
@@ -19,10 +18,9 @@ class ManualSelectionListItem extends StatelessWidget {
   }): assert(
     isSelected != null && profileImageFuture != null &&
         onTap != null && firstName != null && lastName != null && phone != null
-    && isSelected != null
   );
 
-  final ValueNotifier<bool> isSelected;
+  final bool Function() isSelected;
   final VoidCallback onTap;
   final Future<File> profileImageFuture;
   final String firstName;
@@ -30,44 +28,60 @@ class ManualSelectionListItem extends StatelessWidget {
   final String phone;
 
   @override
+  _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
+}
+
+class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
+
+  Color itemDecorationBackgroundColor;
+  TextStyle firstNameStyle;
+  TextStyle lastNameStyle;
+  TextStyle phoneTextStyle;
+  Color phoneLabelIconColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _setColors();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: (){
+        if(mounted){
+          widget.onTap();
+          setState(() => _setColors());
+        }
+      },
       child: Container(
-        decoration: BoxDecoration(),
+        decoration: BoxDecoration(
+            color: itemDecorationBackgroundColor
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: Row(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: SelectableProfileImage(
+                child: LoadableProfileImage(
+                  image: widget.profileImageFuture,
                   size: 40,
-                  future: profileImageFuture,
-                  onSelectedChanged: isSelected,
-                  errorBuilder: (double size) => ProfileImage(
-                    icon: Icons.person,
-                    size: size,
-                    personInitials: firstName[0] + lastName[0],
-                  ),
-                  imageBuilder: (double size, File image) => ProfileImage(
-                    image: image,
-                    icon: Icons.person,
-                    size: size,
-                    personInitials: firstName[0] + lastName[0],
-                  ),
-                  loadingBuilder: (double size) => SizedBox.expand(
-                    child: SizedBox(
-                      width: size,
-                      height: size,
-                      child: Padding(
-                        padding: EdgeInsets.all(size * .1),
-                        child: Center(
-                          child: PlatformAwareLoadingIndicator(),
-                        ),
-                      ),
-                    ),
-                  ),
+                  onDone: (size, image){
+                    return ProfileImage(
+                      image: image,
+                      icon: Icons.person,
+                      size: size,
+                      personInitials: widget.firstName[0] + widget.lastName[0],
+                    );
+                  },
+                  onError: (size){
+                    return ProfileImage(
+                      icon: Icons.person,
+                      size: size,
+                      personInitials: widget.firstName[0] + widget.lastName[0],
+                    );
+                  },
                 ),
               ),
               Expanded(
@@ -75,8 +89,8 @@ class ManualSelectionListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      firstName,
-                      style: ApplicationTheme.rideAttendeeFirstNameTextStyle,
+                      widget.firstName,
+                      style: firstNameStyle,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 5),
@@ -84,26 +98,23 @@ class ManualSelectionListItem extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            lastName,
-                            style: ApplicationTheme.rideAttendeeLastNameTextStyle,
+                            widget.lastName,
+                            style: lastNameStyle,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.phone,
-                              size: 15,
-                              color: ApplicationTheme.primaryColor,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Text(
-                                  "$phone",
-                                  style: ApplicationTheme.rideAttendeePhoneTextStyle
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.phone,
+                                size: 15,
+                                color: phoneLabelIconColor,
                               ),
-                            ),
-                          ],
+                              Text(" ${widget.phone}", style: phoneTextStyle),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -115,5 +126,21 @@ class ManualSelectionListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _setColors(){
+    if(widget.isSelected()){
+      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
+      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle.copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle.copyWith(color: Colors.white);
+      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle.copyWith(color: Colors.white);
+      phoneLabelIconColor = Colors.white;
+    }else{
+      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
+      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle;
+      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle;
+      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle;
+      phoneLabelIconColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
+    }
   }
 }

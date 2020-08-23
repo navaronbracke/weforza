@@ -1003,10 +1003,10 @@ class S {
     );
   }
 
-  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(\,?)(.*)`
+  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(.*)`
   String get ImportMembersCsvHeaderRegex {
     return Intl.message(
-      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(\,?)(.*)',
+      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(.*)',
       name: 'ImportMembersCsvHeaderRegex',
       desc: '',
       args: [],

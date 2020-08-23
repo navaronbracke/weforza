@@ -51,7 +51,7 @@ class ImportMembersBloc extends Bloc {
 
     //Remove all the spaces in the possible and turn into lower case.
     //This way we can do a regex check for the header presence.
-    final possibleHeader = lines[0].replaceAll(" ", "").toLowerCase();
+    final possibleHeader = lines[0].toLowerCase();
 
     //Remove the header if it exists
     if(RegExp("^$headerRegex\$").hasMatch(possibleHeader)){

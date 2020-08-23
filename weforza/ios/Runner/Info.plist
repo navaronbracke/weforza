@@ -27,6 +27,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>The application needs Bluetooth permissions to be able to scan for peripherals</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
@@ -35,10 +37,8 @@
 	<string>The application needs Location permissions to be able to scan for peripherals</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The application needs access to the photo library, to allow users to select profile images.</string>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-    <true/>
-    <key>UIFileSharingEnabled</key>
-    <true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -16,37 +16,33 @@ class ManualSelectionSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Center(
-          child: ValueListenableBuilder<bool>(
-            valueListenable: isSaving,
-            builder: (context, value, child)=> value ? PlatformAwareLoadingIndicator():
-            FlatButton(
+    return Center(
+      child: ValueListenableBuilder<bool>(
+        valueListenable: isSaving,
+        builder: (context, isSaving, child){
+          return PlatformAwareWidget(
+            android: () => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: isSaving ? PlatformAwareLoadingIndicator() : FlatButton(
                 child: Text(
                     S.of(context).RideAttendeeScanningSaveManualResults,
-                    style: TextStyle(color: ApplicationTheme.primaryColor)),
-              onPressed: onSave,
-            ),
-          ),
-        ),
-      ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: Center(
-          child: ValueListenableBuilder<bool>(
-            valueListenable: isSaving,
-            builder: (context, value, child)=> value ?
-            PlatformAwareLoadingIndicator(): CupertinoButton(
-              child: Text(
-                  S.of(context).RideAttendeeScanningSaveManualResults,
-                  style: TextStyle(color: ApplicationTheme.primaryColor)
+                    style: TextStyle(color: ApplicationTheme.primaryColor)
+                ),
+                onPressed: onSave,
               ),
-              onPressed: onSave,
             ),
-          ),
-        ),
+            ios: () => Padding(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              child: isSaving ? PlatformAwareLoadingIndicator() : CupertinoButton(
+                child: Text(
+                    S.of(context).RideAttendeeScanningSaveManualResults,
+                    style: TextStyle(color: ApplicationTheme.primaryColor)
+                ),
+                onPressed: onSave,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

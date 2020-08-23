@@ -114,6 +114,8 @@
   "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
   "ImportMembersImporting": "Leden Importeren",
   "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)(\\,?)(.*)",
+  "ImportMembersCsvHeaderExampleDescription": "Een mogelijke csv hoofding ziet er zo uit:",
+  "ImportMembersCsvHeaderExample": "voornaam,familienaam,telefoon,toestellen",
   "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
   "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 

@@ -125,6 +125,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageRidesTab" : MessageLookupByLibrary.simpleMessage("Ritten"),
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Instellingen"),
     "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)(\\,?)(.*)"),
+    "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,telefoon,toestellen"),
+    "ImportMembersCsvHeaderExampleDescription" : MessageLookupByLibrary.simpleMessage("Een mogelijke csv hoofding ziet er zo uit:"),
     "ImportMembersHeaderStrippedMessage" : MessageLookupByLibrary.simpleMessage("Als er een hoofding aanwezig is wordt deze verwijderd"),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Leden Importeren"),
     "ImportMembersInvalidFileFormat" : MessageLookupByLibrary.simpleMessage("Enkel CSV bestanden zijn toegelaten"),

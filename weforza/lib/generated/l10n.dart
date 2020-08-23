@@ -1013,6 +1013,26 @@ class S {
     );
   }
 
+  /// `A csv header might look like:`
+  String get ImportMembersCsvHeaderExampleDescription {
+    return Intl.message(
+      'A csv header might look like:',
+      name: 'ImportMembersCsvHeaderExampleDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,surname,cellphone,devices`
+  String get ImportMembersCsvHeaderExample {
+    return Intl.message(
+      'firstname,surname,cellphone,devices',
+      name: 'ImportMembersCsvHeaderExample',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Only CSV files are allowed`
   String get ImportMembersInvalidFileFormat {
     return Intl.message(

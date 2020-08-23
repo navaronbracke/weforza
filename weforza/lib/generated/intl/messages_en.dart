@@ -125,6 +125,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageRidesTab" : MessageLookupByLibrary.simpleMessage("Rides"),
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Settings"),
     "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)(\\,?)(.*)"),
+    "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("firstname,surname,cellphone,devices"),
+    "ImportMembersCsvHeaderExampleDescription" : MessageLookupByLibrary.simpleMessage("A csv header might look like:"),
     "ImportMembersHeaderStrippedMessage" : MessageLookupByLibrary.simpleMessage("If a header exists, it will be removed"),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Importing Members"),
     "ImportMembersInvalidFileFormat" : MessageLookupByLibrary.simpleMessage("Only CSV files are allowed"),

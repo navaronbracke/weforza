@@ -55,11 +55,11 @@ class Member {
     return other is Member
         && firstname == other.firstname
         && lastname == other.lastname
-        && phone == other.phone;
+        && phone == other.phone && uuid == other.uuid;
   }
 
   @override
-  int get hashCode => hashValues(firstname, lastname, phone);
+  int get hashCode => hashValues(firstname, lastname, phone, uuid);
 
   Map<String, String> exportToJson() {
     return {

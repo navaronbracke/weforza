@@ -113,7 +113,7 @@
   "ImportMembersPickFile": "Choose File",
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
-  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)(\\,?)(.*)",
+  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)(.*)",
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
   "ImportMembersCsvHeaderExample": "firstname,surname,cellphone,devices",
   "ImportMembersInvalidFileFormat": "Only CSV files are allowed",

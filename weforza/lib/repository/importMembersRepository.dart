@@ -8,6 +8,6 @@ class ImportMembersRepository {
 
   final IImportMembersDao dao;
 
-  Future<void> saveMembersWithDevices(List<Member> members, List<Device> devices)
+  Future<void> saveMembersWithDevices(Set<Member> members, Set<Device> devices)
     => dao.saveMembersWithDevices(members, devices);
 }

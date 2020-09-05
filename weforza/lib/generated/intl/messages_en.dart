@@ -19,29 +19,33 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(maxLength) => "Device name is max. ${maxLength} characters";
+  static m0(buildNumber) => "Build Number: ${buildNumber}";
 
-  static m1(maxLength) => "An address can\'t be longer than ${maxLength} characters";
+  static m1(version) => "Version: ${version}";
 
-  static m2(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
+  static m2(maxLength) => "Device name is max. ${maxLength} characters";
 
-  static m3(maxLength) => "A title can\'t be longer than ${maxLength} characters";
+  static m3(maxLength) => "An address can\'t be longer than ${maxLength} characters";
 
-  static m4(path) => "Ride saved at ${path}";
+  static m4(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
 
-  static m5(date) => "ride_${date}";
+  static m5(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m6(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
+  static m6(path) => "Ride saved at ${path}";
 
-  static m7(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m7(date) => "ride_${date}";
 
-  static m8(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m8(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m9(maxLength) => "A phone number is maximum ${maxLength} digits long";
+  static m9(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m10(minLength) => "A phone number is minimum ${minLength} digits long";
+  static m10(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m11(value) => "${value} is required";
+  static m11(maxLength) => "A phone number is maximum ${maxLength} digits long";
+
+  static m12(minLength) => "A phone number is minimum ${minLength} digits long";
+
+  static m13(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -61,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "AddRideSubmit" : MessageLookupByLibrary.simpleMessage("Add Selection"),
     "AddRideTitle" : MessageLookupByLibrary.simpleMessage("New Ride"),
     "AppName" : MessageLookupByLibrary.simpleMessage("WeForza"),
+    "AppVersionBuildNumber" : m0,
+    "AppVersionNumber" : m1,
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Are you sure you want to delete this device?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete the device"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Delete Device"),
@@ -71,7 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("A device name can\'t be empty"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("A device name cannot contain a ,"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Device Name"),
-    "DeviceNameMaxLength" : m0,
+    "DeviceNameMaxLength" : m2,
     "DevicePhone" : MessageLookupByLibrary.simpleMessage("Phone"),
     "DevicePowerMeter" : MessageLookupByLibrary.simpleMessage("Power meter"),
     "DevicePulseMonitor" : MessageLookupByLibrary.simpleMessage("Pulse Monitor"),
@@ -90,26 +96,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Edit Member"),
     "EditRideAddressInvalid" : MessageLookupByLibrary.simpleMessage("An address can only contain letters, numbers, spaces and # , ; : \' & / ° . ( ) -"),
-    "EditRideAddressMaxLength" : m1,
+    "EditRideAddressMaxLength" : m3,
     "EditRideAddressWhitespace" : MessageLookupByLibrary.simpleMessage("An address can\'t be blank"),
     "EditRideDepartureLabel" : MessageLookupByLibrary.simpleMessage("Departure"),
     "EditRideDestinationLabel" : MessageLookupByLibrary.simpleMessage("Destination"),
     "EditRideDistanceInvalid" : MessageLookupByLibrary.simpleMessage("Please enter a valid distance"),
     "EditRideDistanceLabel" : MessageLookupByLibrary.simpleMessage("Distance"),
-    "EditRideDistanceMaximum" : m2,
+    "EditRideDistanceMaximum" : m4,
     "EditRideDistancePositive" : MessageLookupByLibrary.simpleMessage("Distance must be greater than zero"),
     "EditRidePageTitle" : MessageLookupByLibrary.simpleMessage("Edit Ride"),
     "EditRideSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
     "EditRideSubmitError" : MessageLookupByLibrary.simpleMessage("Failed to save the changes"),
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Title"),
-    "EditRideTitleMaxLength" : m3,
+    "EditRideTitleMaxLength" : m5,
     "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("A title can\'t be blank"),
     "Export" : MessageLookupByLibrary.simpleMessage("Export"),
     "ExportRideCsvExtension" : MessageLookupByLibrary.simpleMessage("csv"),
-    "ExportRideExportedToPathMessage" : m4,
+    "ExportRideExportedToPathMessage" : m6,
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Exporting ride to file"),
-    "ExportRideFileNamePlaceholder" : m5,
-    "ExportRideFilenameMaxLength" : m6,
+    "ExportRideFileNamePlaceholder" : m7,
+    "ExportRideFilenameMaxLength" : m8,
     "ExportRideJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Export Ride"),
     "FileExists" : MessageLookupByLibrary.simpleMessage("This file already exists"),
@@ -117,7 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("A filename can\'t be blank"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be blank"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("First Name can only contain letters, spaces or \' -"),
-    "FirstNameMaxLength" : m7,
+    "FirstNameMaxLength" : m9,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Fri"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Go Back"),
@@ -136,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Invalid filename"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be blank"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Last Name can only contain letters, spaces or \' -"),
-    "LastNameMaxLength" : m8,
+    "LastNameMaxLength" : m10,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("This member already exists"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this member?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete member"),
@@ -156,8 +162,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telephone"),
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("A phone number can only contain digits"),
-    "PhoneMaxLength" : m9,
-    "PhoneMinLength" : m10,
+    "PhoneMaxLength" : m11,
+    "PhoneMinLength" : m12,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
@@ -198,7 +204,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m11,
+    "ValueIsRequired" : m13,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

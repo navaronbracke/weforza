@@ -43,6 +43,26 @@ class S {
     );
   }
 
+  /// `Version: {version}`
+  String AppVersionNumber(Object version) {
+    return Intl.message(
+      'Version: $version',
+      name: 'AppVersionNumber',
+      desc: '',
+      args: [version],
+    );
+  }
+
+  /// `Build Number: {buildNumber}`
+  String AppVersionBuildNumber(Object buildNumber) {
+    return Intl.message(
+      'Build Number: $buildNumber',
+      name: 'AppVersionBuildNumber',
+      desc: '',
+      args: [buildNumber],
+    );
+  }
+
   /// `Mon`
   String get MondayPrefix {
     return Intl.message(

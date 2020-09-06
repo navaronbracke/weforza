@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/exportableRide.dart';
+import 'package:weforza/model/rideExportState.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';
 
 class ExportRidesBloc extends Bloc {
@@ -19,8 +20,8 @@ class ExportRidesBloc extends Bloc {
   final TextEditingController fileNameController = TextEditingController();
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
 
-  final StreamController<bool> _submitController = BehaviorSubject();
-  Stream<bool> get submitStream => _submitController.stream;
+  final StreamController<RideExportState> _submitController = BehaviorSubject();
+  Stream<RideExportState> get submitStream => _submitController.stream;
 
   final StreamController<bool> _fileExistsController = BehaviorSubject();
   Stream<bool> get fileExistsStream => _fileExistsController.stream;
@@ -69,11 +70,11 @@ class ExportRidesBloc extends Bloc {
         _fileExistsController.add(true);
       }else{
         _fileExistsController.add(false);
-        _submitController.add(true);
+        _submitController.add(RideExportState.EXPORTING);
         await fileHandler.saveRidesToFile(_filename, _fileExtension.extension(), rides);
-        _submitController.add(false);
+        _submitController.add(RideExportState.DONE);
       }
-    });
+    }).catchError((e) => _submitController.addError(e));
   }
 
   @override

@@ -29,13 +29,13 @@ class InjectionContainer {
     _injector.map<ApplicationDatabase>((i) => ApplicationDatabase(),isSingleton: true);
     //We need a reference to the database provider for passing the database/stores to the Dao instances.
     final ApplicationDatabase applicationDatabase = _injector.get<ApplicationDatabase>();
-    
-    _injector.map<IMemberDao>((i) => MemberDao.withProvider(i.get<ApplicationDatabase>()),isSingleton: true);
-    _injector.map<IRideDao>((i) => RideDao.withProvider(i.get<ApplicationDatabase>()),isSingleton: true);
-    _injector.map<IDeviceDao>((i)=> DeviceDao.withProvider(i.get<ApplicationDatabase>()),isSingleton: true);
-    _injector.map<ISettingsDao>((i) => SettingsDao.withProvider(i.get<ApplicationDatabase>()),isSingleton: true);
-    _injector.map<IImportMembersDao>((i) => ImportMembersDao.withProvider(i.get<ApplicationDatabase>()),isSingleton: true);
-    _injector.map<IExportRidesDao>((i) => ExportRidesDao.withProvider(i.get<ApplicationDatabase>()), isSingleton: true);
+
+    _injector.map<IMemberDao>((i) => MemberDao.withProvider(applicationDatabase),isSingleton: true);
+    _injector.map<IRideDao>((i) => RideDao.withProvider(applicationDatabase),isSingleton: true);
+    _injector.map<IDeviceDao>((i)=> DeviceDao.withProvider(applicationDatabase),isSingleton: true);
+    _injector.map<ISettingsDao>((i) => SettingsDao.withProvider(applicationDatabase),isSingleton: true);
+    _injector.map<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase),isSingleton: true);
+    _injector.map<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase), isSingleton: true);
     //repositories
     _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
     _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);

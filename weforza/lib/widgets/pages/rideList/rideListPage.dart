@@ -133,4 +133,10 @@ class _RideListPageState extends State<RideListPage> {
       });
     }
   }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 }

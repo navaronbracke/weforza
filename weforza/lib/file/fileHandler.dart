@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 
@@ -20,7 +21,7 @@ class InvalidFileFormatError extends ArgumentError {
 }
 
 extension ToFileTypeExtension on FileExtension {
-  String toFileExtension(){
+  String extension(){
     switch(this){
       case FileExtension.JSON: return ".json";
       case FileExtension.CSV: return ".csv";
@@ -45,12 +46,16 @@ abstract class IFileHandler {
   Future<File> chooseImportMemberDatasourceFile();
 
   ///Save the given ride and attendees to a file with the given filename.
-  Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees);
+  Future<void> saveRideAndAttendeesToFile(String fileName, String extension, Ride ride, List<Member> attendees);
+
+  ///Save the given [ExportableRide]s to a file with the given filename and extension.
+  Future<void> saveRidesToFile(String fileName, String extension, Iterable<ExportableRide> rides);
 
   //Read the given CSV file and return the lines that were read.
   Future<List<String>> readCsvFile(File file);
 
-  Future<bool> fileExists(String filename);
+  //Create a file with the given name and extension.
+  Future<File> createFile(String fileName, String extension);
 }
 
 ///This class is an implementation of [IFileHandler].
@@ -89,52 +94,33 @@ class FileHandler implements IFileHandler {
   }
 
   @override
-  Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees) async {
-    Directory directory;
+  Future<void> saveRideAndAttendeesToFile(String fileName, String extension, Ride ride, List<Member> attendees) async {
+    final File  file = await createFile(fileName, extension);
 
-    if(Platform.isAndroid){
-      directory = await getExternalStorageDirectory();
-    }else if(Platform.isIOS){
-      directory = await getApplicationDocumentsDirectory();
-    }else{
-      throw Exception("Only Android and IOS are supported");
-    }
-
-    if(directory == null){
-      throw Exception("Could not create file path");
-    }
-
-    final String filePath = "${directory.path}/$fileName${extension.toFileExtension()}";
-
-    await _writeRideToFile(ride, attendees, File(filePath), extension);
+    await _writeRideToFile(ride, attendees, file, extension);
   }
 
-  Future<void> _writeRideToFile(Ride ride, List<Member> attendees, File file, FileExtension fileExtension) async {
-    switch(fileExtension){
-      case FileExtension.JSON: {
-        //Ride details as JSON
-        //Attendees as array of JSOn objects
-        final data = {
-          "details": ride.exportToJson(),
-          "attendees": attendees.map((a) => a.exportToJson()).toList()
-        };
-        await file.writeAsString(jsonEncode(data));
+  Future<void> _writeRideToFile(Ride ride, List<Member> attendees, File file, String fileExtension) async {
+    if(fileExtension == FileExtension.CSV.extension()){
+      final buffer = StringBuffer();
+      buffer.writeln(ride.toCsv());
+      for(Member m in attendees){
+        buffer.writeln(m.toCsv());
       }
-      break;
-      case FileExtension.CSV: {
-        final buffer = StringBuffer();
-        buffer.writeln(ride.exportToCsv());
-        for(Member m in attendees){
-          buffer.writeln(m.exportToCsv());
-        }
-        await file.writeAsString(buffer.toString());
-      }
-      break;
+      await file.writeAsString(buffer.toString());
+    }else if(fileExtension == FileExtension.JSON.extension()){
+      final data = {
+        "details": ride.toJson(),
+        "attendees": attendees.map((a) => a.toJson()).toList()
+      };
+      await file.writeAsString(jsonEncode(data));
+    }else{
+      return Future.error(InvalidFileFormatError());
     }
   }
 
   @override
-  Future<bool> fileExists(String filename) async {
+  Future<File> createFile(String fileName, String extension) async {
     Directory directory;
 
     if(Platform.isAndroid){
@@ -149,7 +135,15 @@ class FileHandler implements IFileHandler {
       throw Exception("Could not create file path");
     }
 
-    return File("${directory.path}/$filename").exists();
+    final String path = directory.path + Platform.pathSeparator + fileName + extension;
+
+    return File(path);
+  }
+
+  @override
+  Future<void> saveRidesToFile(String fileName, String extension, Iterable<ExportableRide> rides) {
+    // TODO: implement saveRidesToFile
+    throw UnimplementedError("writing rides to a file isn't implemented yet; check the implementation of file handler");
   }
 
 }

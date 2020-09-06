@@ -45,11 +45,13 @@ abstract class IFileHandler {
   ///from which to import members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
 
-  ///Save the given ride and attendees to a file with the given filename.
-  Future<void> saveRideAndAttendeesToFile(String fileName, String extension, Ride ride, List<Member> attendees);
+  ///Save the given ride and attendees to the given file.
+  ///The extension determines how the data is structured inside the file.
+  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees);
 
-  ///Save the given [ExportableRide]s to a file with the given filename and extension.
-  Future<void> saveRidesToFile(String fileName, String extension, Iterable<ExportableRide> rides);
+  ///Save the given [ExportableRide]s to the given file.
+  ///The extension determines how the data is structured inside the file.
+  Future<void> saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides);
 
   //Read the given CSV file and return the lines that were read.
   Future<List<String>> readCsvFile(File file);
@@ -94,9 +96,7 @@ class FileHandler implements IFileHandler {
   }
 
   @override
-  Future<void> saveRideAndAttendeesToFile(String fileName, String extension, Ride ride, List<Member> attendees) async {
-    final File  file = await createFile(fileName, extension);
-
+  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees) async {
     await _writeRideToFile(ride, attendees, file, extension);
   }
 
@@ -141,9 +141,32 @@ class FileHandler implements IFileHandler {
   }
 
   @override
-  Future<void> saveRidesToFile(String fileName, String extension, Iterable<ExportableRide> rides) {
-    // TODO: implement saveRidesToFile
-    throw UnimplementedError("writing rides to a file isn't implemented yet; check the implementation of file handler");
+  Future<void> saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides) async {
+    if(extension == FileExtension.CSV.extension()){
+      final buffer = StringBuffer();
+
+      rides.forEach((exportedRide) {
+        buffer.writeln(exportedRide.ride.toCsv());
+        buffer.writeln();
+        for(ExportableRideAttendee attendee in exportedRide.attendees){
+          buffer.writeln(attendee.toCsv());
+        }
+        buffer.writeln();
+      });
+
+      await file.writeAsString(buffer.toString());
+    }else if(extension == FileExtension.JSON.extension()){
+      final Map<String, dynamic> data = {
+        "rides": rides.map((ExportableRide exportableRide) => {
+          "ride": exportableRide.ride.toJson(),
+          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson())
+        })
+      };
+
+      await file.writeAsString(jsonEncode(data));
+    }else{
+      return Future.error(InvalidFileFormatError());
+    }
   }
 
 }

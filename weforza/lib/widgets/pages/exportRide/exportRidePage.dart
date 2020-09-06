@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/rideExportState.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';
@@ -81,21 +82,27 @@ class _ExportRidePageState extends State<ExportRidePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildFilenameInputField(context),
-                  SizedBox(height: 5),
-                  FileExtensionSelection(
-                    onExtensionSelected: (ext) => widget.bloc.onSelectFileExtension(ext),
-                    initialValue: FileExtension.CSV,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _buildFilenameInputField(context),
                   ),
-                  SizedBox(height: 10),
-                  StreamBuilder<bool>(
-                    initialData: false,
-                    stream: widget.bloc.fileExistsStream,
-                    builder: (context, snapshot){
-                      return Text(snapshot.data ? S.of(context).FileExists : "");
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: FileExtensionSelection(
+                      onExtensionSelected: (ext) => widget.bloc.onSelectFileExtension(ext),
+                      initialValue: FileExtension.CSV,
+                    ),
                   ),
-                  SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: StreamBuilder<bool>(
+                      initialData: false,
+                      stream: widget.bloc.fileExistsStream,
+                      builder: (context, snapshot){
+                        return Text(snapshot.data ? S.of(context).FileExists : "");
+                      },
+                    ),
+                  ),
                   PlatformAwareWidget(
                     android: () => RaisedButton(
                       textColor: Colors.white,
@@ -110,7 +117,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     ios: () => CupertinoButton(
                       child: Text(S.of(context).Export),
                       onPressed: (){
-                        if (_iosValidateAddDevice(context)) {
+                        if (_iosValidateFilename(context)) {
                           widget.bloc.exportRide();
                         }else {
                           setState(() {});
@@ -206,7 +213,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
     );
   }
 
-  bool _iosValidateAddDevice(BuildContext context) {
+  bool _iosValidateFilename(BuildContext context) {
     return widget.bloc.validateFileName(
         widget.bloc.fileNameController.text,
         S.of(context).ValueIsRequired(S.of(context).Filename),

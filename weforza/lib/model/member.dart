@@ -61,7 +61,7 @@ class Member {
   @override
   int get hashCode => hashValues(firstname, lastname, phone);
 
-  Map<String, String> exportToJson() {
+  Map<String, String> toJson() {
     return {
       "firstname": firstname,
       "lastname": lastname,
@@ -69,5 +69,5 @@ class Member {
     };
   }
 
-  String exportToCsv() => "$firstname,$lastname,$phone";
+  String toCsv() => "$firstname,$lastname,$phone";
 }

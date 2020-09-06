@@ -123,12 +123,12 @@
 
   "ExportRideTitle": "Export Ride",
   "ExportRideFileNamePlaceholder": "ride_{date}",
-  "ExportRideCsvExtension": "csv",
-  "ExportRideJsonExtension": "json",
   "ExportRideExportedToPathMessage": "Ride saved at {path}",
   "ExportRideExportingToFile": "Exporting ride to file",
-  "ExportRideFilenameMaxLength": "A filename can't be longer than {maxLength} characters",
   "Export": "Export",
+
+  "ExportRidesTitle": "Export Rides",
+  "ExportingRidesDescription": "Exporting rides and attendees",
 
   "RideStart": "Start",
   "RideDestination": "Destination",
@@ -181,5 +181,8 @@
   "Filename": "Filename",
   "InvalidFilename": "Invalid filename",
   "FilenameWhitespace": "A filename can't be blank",
-  "FileExists": "This file already exists"
+  "FileExists": "This file already exists",
+  "FilenameMaxLength": "A filename can't be longer than {maxLength} characters",
+  "FileCsvExtension": "csv",
+  "FileJsonExtension": "json"
 }

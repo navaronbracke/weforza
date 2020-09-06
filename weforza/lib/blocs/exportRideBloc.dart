@@ -90,7 +90,7 @@ class ExportRideBloc extends Bloc {
       }else{
         _fileExistsController.add(false);
         _streamController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRideAndAttendeesToFile(_filename, _fileExtension.extension(), ride, rideAttendees);
+        await fileHandler.saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
         _streamController.add(RideExportState.DONE);
       }
     }).catchError((e) => _streamController.addError(e));

@@ -71,7 +71,7 @@ class ExportRidesBloc extends Bloc {
       }else{
         _fileExistsController.add(false);
         _submitController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRidesToFile(_filename, _fileExtension.extension(), rides);
+        await fileHandler.saveRidesToFile(file, _fileExtension.extension(), rides);
         _submitController.add(RideExportState.DONE);
       }
     }).catchError((e) => _submitController.addError(e));

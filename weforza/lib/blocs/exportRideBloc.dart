@@ -83,13 +83,13 @@ class ExportRideBloc extends Bloc {
   }
 
   void exportRide() async {
-    await fileHandler.fileExists(_filename + _fileExtension.toFileExtension()).then((exists) async {
-      if(exists){
+    await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
+      if(await file.exists()){
         _fileExistsController.add(true);
       }else{
         _fileExistsController.add(false);
         _streamController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRideAndAttendeesToFile(_filename, _fileExtension, ride, rideAttendees);
+        await fileHandler.saveRideAndAttendeesToFile(_filename, _fileExtension.extension(), ride, rideAttendees);
         _streamController.add(RideExportState.DONE);
       }
     }).catchError((e) => _streamController.addError(e));

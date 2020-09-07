@@ -8,6 +8,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
+import 'package:weforza/widgets/pages/exportRides/exportRidesPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
@@ -56,6 +57,13 @@ class _RideListPageState extends State<RideListPage> {
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_)=> onReturnToRideListPage(context)),
             ),
+            IconButton(
+              icon: Icon(Icons.file_upload),
+              color: Colors.white,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ExportRidesPage())
+              ),
+            ),
           ],
         ),
         body: _buildList(context)
@@ -76,6 +84,13 @@ class _RideListPageState extends State<RideListPage> {
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_) => onReturnToRideListPage(context)),
+            ),
+            SizedBox(width: 15),
+            CupertinoIconButton.fromAppTheme(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ExportRidesPage())
+              ),
+              icon: Icons.file_upload,
             )
           ],
         ),

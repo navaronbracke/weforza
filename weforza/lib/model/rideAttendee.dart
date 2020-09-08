@@ -11,7 +11,7 @@ class RideAttendee {
 
   static RideAttendee of(Map<String,dynamic> values){
     assert(values != null);
-    return RideAttendee(values["date"],values["attendee"]);
+    return RideAttendee(DateTime.parse(values["date"]),values["attendee"]);
   }
 
   Map<String,dynamic> toMap(){

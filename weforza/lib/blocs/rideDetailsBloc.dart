@@ -33,8 +33,7 @@ class RideDetailsBloc extends Bloc {
     List<Member> attendees = await rideRepo.getRideAttendees(ride.date);
     List<Future<MemberItem>> items = attendees.map((attendee) async =>
         MemberItem(attendee,await memberRepo.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
-    final list = await Future.wait(items);
-    return list;
+    return Future.wait(items);
   }
 
   Future<void> deleteRide() => rideRepo.deleteRide(ride.date);

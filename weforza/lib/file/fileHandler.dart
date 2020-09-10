@@ -159,8 +159,8 @@ class FileHandler implements IFileHandler {
       final Map<String, dynamic> data = {
         "rides": rides.map((ExportableRide exportableRide) => {
           "ride": exportableRide.ride.toJson(),
-          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson())
-        })
+          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson()).toList()
+        }).toList()
       };
 
       await file.writeAsString(jsonEncode(data));

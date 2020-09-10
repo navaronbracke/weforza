@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 
@@ -35,16 +35,30 @@ abstract class IMemberDao {
 
 ///This class is an implementation of [IMemberDao].
 class MemberDao implements IMemberDao {
-  MemberDao(this._database): assert(_database != null);
+  MemberDao(
+      this._database,
+      this._memberStore,
+      this._rideAttendeeStore,
+      this._deviceStore): assert(
+        _database != null && _memberStore != null && _rideAttendeeStore != null
+            && _deviceStore != null
+  );
 
-  ///A reference to the database, which is needed by the Store.
+  MemberDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.memberStore,
+    provider.rideAttendeeStore,
+    provider.deviceStore
+  );
+
+  ///A reference to the application database.
   final Database _database;
   ///A reference to the [Member] store.
-  final _memberStore = DatabaseProvider.memberStore;
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
   ///A reference to the [RideAttendee] store.
-  final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
   ///A reference to the [Device] store.
-  final _deviceStore = DatabaseProvider.deviceStore;
+  final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
   @override
   Future<void> addMember(Member member) async  {

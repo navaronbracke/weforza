@@ -321,4 +321,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       default: break;//null is ignored
     }
   }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 }

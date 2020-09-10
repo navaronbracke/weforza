@@ -209,4 +209,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
 }

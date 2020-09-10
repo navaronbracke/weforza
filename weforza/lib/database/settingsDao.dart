@@ -1,6 +1,6 @@
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/settings.dart';
 
 ///This class defines a contract for managing application settings.
@@ -14,7 +14,11 @@ abstract class ISettingsDao {
 }
 
 class SettingsDao implements ISettingsDao {
-  SettingsDao(this._database): assert(_database != null);
+  SettingsDao(this._database, this._settingsStore):
+        assert(_database != null && _settingsStore != null);
+
+  SettingsDao.withProvider(ApplicationDatabase provider):
+        this(provider.getDatabase(), provider.settingsStore);
 
   ///The key for the settings record.
   final _settingsKey = "APPLICATION_SETTINGS";
@@ -22,7 +26,7 @@ class SettingsDao implements ISettingsDao {
   ///A reference to the database.
   final Database _database;
   ///A reference to the [Settings] store.
-  final _settingsStore = DatabaseProvider.settingsStore;
+  final StoreRef<String, Map<String, dynamic>> _settingsStore;
 
   @override
   Future<Settings> readApplicationSettings() async {

@@ -1093,26 +1093,6 @@ class S {
     );
   }
 
-  /// `csv`
-  String get ExportRideCsvExtension {
-    return Intl.message(
-      'csv',
-      name: 'ExportRideCsvExtension',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `json`
-  String get ExportRideJsonExtension {
-    return Intl.message(
-      'json',
-      name: 'ExportRideJsonExtension',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Ride saved at {path}`
   String ExportRideExportedToPathMessage(Object path) {
     return Intl.message(
@@ -1133,21 +1113,31 @@ class S {
     );
   }
 
-  /// `A filename can't be longer than {maxLength} characters`
-  String ExportRideFilenameMaxLength(Object maxLength) {
-    return Intl.message(
-      'A filename can\'t be longer than $maxLength characters',
-      name: 'ExportRideFilenameMaxLength',
-      desc: '',
-      args: [maxLength],
-    );
-  }
-
   /// `Export`
   String get Export {
     return Intl.message(
       'Export',
       name: 'Export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Rides`
+  String get ExportRidesTitle {
+    return Intl.message(
+      'Export Rides',
+      name: 'ExportRidesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exporting rides and attendees`
+  String get ExportingRidesDescription {
+    return Intl.message(
+      'Exporting rides and attendees',
+      name: 'ExportingRidesDescription',
       desc: '',
       args: [],
     );
@@ -1598,6 +1588,36 @@ class S {
     return Intl.message(
       'This file already exists',
       name: 'FileExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A filename can't be longer than {maxLength} characters`
+  String FilenameMaxLength(Object maxLength) {
+    return Intl.message(
+      'A filename can\'t be longer than $maxLength characters',
+      name: 'FilenameMaxLength',
+      desc: '',
+      args: [maxLength],
+    );
+  }
+
+  /// `csv`
+  String get FileCsvExtension {
+    return Intl.message(
+      'csv',
+      name: 'FileCsvExtension',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `json`
+  String get FileJsonExtension {
+    return Intl.message(
+      'json',
+      name: 'FileJsonExtension',
       desc: '',
       args: [],
     );

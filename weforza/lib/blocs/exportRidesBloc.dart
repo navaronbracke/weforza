@@ -1,47 +1,33 @@
-
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileHandler.dart';
-import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
-import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/rideExportState.dart';
+import 'package:weforza/repository/exportRidesRepository.dart';
 
-class ExportRideBloc extends Bloc {
-  ExportRideBloc({
-    @required this.ride,
-    @required this.loadedAttendees,
+class ExportRidesBloc extends Bloc {
+  ExportRidesBloc({
+    @required this.repository,
     @required this.fileHandler,
-    @required this.resolveInitialFilename,
-  }): assert(ride != null && loadedAttendees != null
-      && fileHandler != null
-      && resolveInitialFilename != null)
-  {
-    final String text = resolveInitialFilename();
-    _filename = text;
-    fileNameController = TextEditingController(text: text);
-  }
+  });
 
-  final String Function() resolveInitialFilename;
+  final ExportRidesRepository repository;
   final IFileHandler fileHandler;
-  final Ride ride;
-  final Future<List<MemberItem>> loadedAttendees;
+  final TextEditingController fileNameController = TextEditingController();
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
-  TextEditingController fileNameController;
 
-  final StreamController<RideExportState> _streamController = BehaviorSubject();
-  Stream<RideExportState> get stream => _streamController.stream;
+  final StreamController<RideExportState> _submitController = BehaviorSubject();
+  Stream<RideExportState> get submitStream => _submitController.stream;
 
   final StreamController<bool> _fileExistsController = BehaviorSubject();
   Stream<bool> get fileExistsStream => _fileExistsController.stream;
 
-  List<Member> rideAttendees;
-
   bool autoValidateFileName = false;
+  final int filenameMaxLength = 80;
 
   String _filename;
 
@@ -51,13 +37,6 @@ class ExportRideBloc extends Bloc {
 
   ///Form Error message
   String filenameError;
-
-  void loadRideAttendees() async {
-    _streamController.add(RideExportState.INIT);
-    final attendees = await loadedAttendees;//These are already loaded!
-    rideAttendees = attendees.map((a) => a.member).toList();
-    _streamController.add(RideExportState.IDLE);
-  }
 
   String validateFileName(
       String filename,
@@ -70,7 +49,7 @@ class ExportRideBloc extends Bloc {
       filenameError = fileNameIsRequired;
     }else if(filename.trim().isEmpty){
       filenameError = isWhitespaceMessage;
-    }else if(Ride.titleMaxLength < filename.length){
+    }else if(filenameMaxLength < filename.length){
       //The full title is the biggest thing we allow
       filenameError = filenameNameMaxLengthMessage;
     }else if(!filenamePattern.hasMatch(filename)){
@@ -83,22 +62,25 @@ class ExportRideBloc extends Bloc {
     return filenameError;
   }
 
-  void exportRide() async {
+  Future<void> exportRidesWithAttendees() async {
+    final Iterable<ExportableRide> rides = await repository.getRides();
+
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
         _fileExistsController.add(true);
       }else{
         _fileExistsController.add(false);
-        _streamController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
-        _streamController.add(RideExportState.DONE);
+        _submitController.add(RideExportState.EXPORTING);
+        await fileHandler.saveRidesToFile(file, _fileExtension.extension(), rides);
+        _submitController.add(RideExportState.DONE);
       }
-    }).catchError((e) => _streamController.addError(e));
+    }).catchError((e)=> _submitController.addError(e));
   }
 
   @override
   void dispose() {
-    _streamController.close();
+    _submitController.close();
     _fileExistsController.close();
   }
+
 }

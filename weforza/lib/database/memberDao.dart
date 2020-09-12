@@ -23,7 +23,7 @@ abstract class IMemberDao {
   ///If [uuid] isn't null or empty it checks if there is a member with the values and a uuid that is different from [uuid].
   ///A member with the same values and uuid means it's the owner of said values.
   ///This would merely overwrite the old one with a copy of itself and is thus harmless.
-  Future<bool> memberExists(String firstname, String lastname, String phone,[String uuid]);
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
@@ -88,7 +88,7 @@ class MemberDao implements IMemberDao {
   @override
   Future<List<Member>> getMembers() async {
     final finder = Finder(
-        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("phone")]
+        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("alias")]
     );
 
     final records = await _memberStore.find(_database,finder: finder);
@@ -107,11 +107,11 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<bool> memberExists(String firstname, String lastname, String phone, [String uuid]) async {
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]) async {
     final List<Filter> filters = [
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
-      Filter.equals("phone", phone),
+      Filter.equals("alias", alias),
     ];
     if(uuid != null && uuid.isNotEmpty){
       filters.add(Filter.notEquals(Field.key, uuid));
@@ -135,11 +135,6 @@ class MemberDao implements IMemberDao {
   Future<Member> getMemberByUuid(String uuid) async {
     final record = await _memberStore.record(uuid).getSnapshot(_database);
 
-    if(record == null){
-      return null;
-    }else{
-      //need record snapshot
-      return Member.of(uuid, record.value);
-    }
+    return record == null ? null : Member.of(uuid, record.value);
   }
 }

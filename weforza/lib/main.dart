@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -19,25 +18,8 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
-  //TODO delete when done after iphone testing
-  //await migrateMembersDropPhoneAndInsertAlias();
 
   runApp(WeForzaApp());
-}
-
-//Delete 'phone' and insert an empty 'alias'
-Future<void> migrateMembersDropPhoneAndInsertAlias() async {
-  final ApplicationDatabase db = InjectionContainer.get<ApplicationDatabase>();
-  final StoreRef<String, Map<String, dynamic>> memberStore = db.memberStore;
-
-  await db.getDatabase().transaction((Transaction txn) async {
-    final List<String> keys = await memberStore.findKeys(txn);
-    final records = memberStore.records(keys);
-    await records.update(txn, List.generate(keys.length, (index) => {
-      "phone": FieldValue.delete,
-      "alias": ""
-    }));
-  });
 }
 
 ///This class represents the application.

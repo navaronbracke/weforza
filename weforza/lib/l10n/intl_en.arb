@@ -92,8 +92,7 @@
   "RideAttendeeScanningSaveScanResults": "Save Scan Results",
   "RideAttendeeScanningSaveManualResults": "Save Selection",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Owned By:",
-  "RideAttendeeScanningScanResultOwnerTelephoneLabel": "tel: ",
+  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Owned by: {firstName} '{alias}' {lastName}",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",
@@ -115,9 +114,9 @@
   "ImportMembersPickFile": "Choose File",
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
-  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)(.*)",
+  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(alias|nickname)\\,(devices)(.*)",
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
-  "ImportMembersCsvHeaderExample": "firstname,surname,cellphone,devices",
+  "ImportMembersCsvHeaderExample": "firstname,surname,alias,devices",
   "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
   "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
 
@@ -144,6 +143,7 @@
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
   "DeviceNameCannotContainComma": "A device name cannot contain a ,",
   "DeviceAlreadyExists": "This device already exists",
+  "DeviceNameBlank": "A device name can't be empty",
 
   "DeleteDeviceTitle": "Delete Device",
   "DeleteDeviceDescription": "Are you sure you want to delete this device?",
@@ -157,7 +157,7 @@
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",
-  "PersonTelephoneLabel": "Telephone",
+  "PersonAliasLabel": "Alias",
 
   "FirstNameMaxLength": "First Name can't be longer than {maxLength} characters",
   "LastNameMaxLength": "Last Name can't be longer than {maxLength} characters",
@@ -165,10 +165,9 @@
   "LastNameBlank" : "Last Name can't be blank",
   "FirstNameIllegalCharacters": "First Name can only contain letters, spaces or ' -",
   "LastNameIllegalCharacters": "Last Name can only contain letters, spaces or ' -",
-  "PhoneIllegalCharacters": "A phone number can only contain digits",
-  "PhoneMinLength": "A phone number is minimum {minLength} digits long",
-  "PhoneMaxLength": "A phone number is maximum {maxLength} digits long",
-  "DeviceNameBlank": "A device name can't be empty",
+  "AliasMaxLength": "An alias can't be longer than {maxLength} characters",
+  "AliasBlank" : "An alias can't be blank",
+  "AliasIllegalCharacters": "An alias can only contain letters, spaces or ' -",
 
   "ValueIsRequired": "{value} is required",
   "DialogCancel": "Cancel",

@@ -19,31 +19,31 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'nl';
 
-  static m0(buildNumber) => "Build Nummer: ${buildNumber}";
+  static m0(maxLength) => "Een alias is maximum ${maxLength} letters";
 
-  static m1(version) => "Versie: ${version}";
+  static m1(buildNumber) => "Build Nummer: ${buildNumber}";
 
-  static m2(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
+  static m2(version) => "Versie: ${version}";
 
-  static m3(maxLength) => "Een adres mag niet langer zijn dan ${maxLength} karakters";
+  static m3(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
 
-  static m4(maxDistance) => "De afstand van een rit mag niet groter zijn dan ${maxDistance} Km";
+  static m4(maxLength) => "Een adres mag niet langer zijn dan ${maxLength} karakters";
 
-  static m5(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
+  static m5(maxDistance) => "De afstand van een rit mag niet groter zijn dan ${maxDistance} Km";
 
-  static m6(path) => "Rit opgeslagen op ${path}";
+  static m6(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
 
-  static m7(date) => "rit_${date}";
+  static m7(path) => "Rit opgeslagen op ${path}";
 
-  static m8(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m8(date) => "rit_${date}";
 
-  static m9(maxLength) => "Voornaam kan niet langer zijn dan ${maxLength} letters";
+  static m9(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m10(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m10(maxLength) => "Een voornaam is maximum ${maxLength} letters";
 
-  static m11(maxLength) => "Een telefoonnummer is maximum ${maxLength} cijfers lang";
+  static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m12(minLength) => "Een telefoonnummer is minimum ${minLength} cijfers lang";
+  static m12(firstName, alias, lastName) => "Eigendom van:  ${firstName} \'${alias}\' ${lastName}";
 
   static m13(value) => "${value} is verplicht";
 
@@ -64,9 +64,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "AddRideLoadingFailed" : MessageLookupByLibrary.simpleMessage("Kon de kalender niet laden"),
     "AddRideSubmit" : MessageLookupByLibrary.simpleMessage("Selectie Toevoegen"),
     "AddRideTitle" : MessageLookupByLibrary.simpleMessage("Nieuwe Rit"),
+    "AliasBlank" : MessageLookupByLibrary.simpleMessage("Een alias mag niet enkel witruimte zijn"),
+    "AliasIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een alias mag enkel letters, spaties of \' - bevatten"),
+    "AliasMaxLength" : m0,
     "AppName" : MessageLookupByLibrary.simpleMessage("WeForza"),
-    "AppVersionBuildNumber" : m0,
-    "AppVersionNumber" : m1,
+    "AppVersionBuildNumber" : m1,
+    "AppVersionNumber" : m2,
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit toestel wil verwijderen?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon toestel niet verwijderen"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Toestel"),
@@ -77,7 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag niet leeg zijn"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag geen , bevatten"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Naam Toestel"),
-    "DeviceNameMaxLength" : m2,
+    "DeviceNameMaxLength" : m3,
     "DevicePhone" : MessageLookupByLibrary.simpleMessage("Telefoon"),
     "DevicePowerMeter" : MessageLookupByLibrary.simpleMessage("Krachtmeter"),
     "DevicePulseMonitor" : MessageLookupByLibrary.simpleMessage("Hartslagmeter"),
@@ -96,24 +99,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen Opslaan"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Lid Bewerken"),
     "EditRideAddressInvalid" : MessageLookupByLibrary.simpleMessage("Een adres mag enkel letters, nummers, spaties of # , ; : \' & / ° . ( ) - bevatten"),
-    "EditRideAddressMaxLength" : m3,
+    "EditRideAddressMaxLength" : m4,
     "EditRideAddressWhitespace" : MessageLookupByLibrary.simpleMessage("Een adres mag niet enkel witruimte zijn"),
     "EditRideDepartureLabel" : MessageLookupByLibrary.simpleMessage("Vertrek"),
     "EditRideDestinationLabel" : MessageLookupByLibrary.simpleMessage("Bestemming"),
     "EditRideDistanceInvalid" : MessageLookupByLibrary.simpleMessage("Gelieve een geldige afstand in te geven"),
     "EditRideDistanceLabel" : MessageLookupByLibrary.simpleMessage("Afstand"),
-    "EditRideDistanceMaximum" : m4,
+    "EditRideDistanceMaximum" : m5,
     "EditRideDistancePositive" : MessageLookupByLibrary.simpleMessage("Een afstand moet groter zijn dan nul"),
     "EditRidePageTitle" : MessageLookupByLibrary.simpleMessage("Rit Bewerken"),
     "EditRideSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen Opslaan"),
     "EditRideSubmitError" : MessageLookupByLibrary.simpleMessage("Kon de wijzigingen niet opslaan"),
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Titel"),
-    "EditRideTitleMaxLength" : m5,
+    "EditRideTitleMaxLength" : m6,
     "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("Een titel mag niet enkel witruimte zijn"),
     "Export" : MessageLookupByLibrary.simpleMessage("Exporteren"),
-    "ExportRideExportedToPathMessage" : m6,
+    "ExportRideExportedToPathMessage" : m7,
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Rit exporteren naar bestand"),
-    "ExportRideFileNamePlaceholder" : m7,
+    "ExportRideFileNamePlaceholder" : m8,
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Rit Exporteren"),
     "ExportRidesTitle" : MessageLookupByLibrary.simpleMessage("Ritten Exporteren"),
     "ExportingRidesDescription" : MessageLookupByLibrary.simpleMessage("Ritten en aanwezigen exporteren"),
@@ -121,20 +124,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "FileExists" : MessageLookupByLibrary.simpleMessage("Dit bestand bestaat al"),
     "FileJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "Filename" : MessageLookupByLibrary.simpleMessage("Bestandsnaam"),
-    "FilenameMaxLength" : m8,
+    "FilenameMaxLength" : m9,
     "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("Een bestandsnaam mag niet enkel witruimte zijn"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("Voornaam mag niet enkel witruimte zijn"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Voornaam mag enkel letters, spaties of \' - bevatten"),
-    "FirstNameMaxLength" : m9,
+    "FirstNameMaxLength" : m10,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Vr"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Keer Terug"),
     "HomePageMembersTab" : MessageLookupByLibrary.simpleMessage("Leden"),
     "HomePageRidesTab" : MessageLookupByLibrary.simpleMessage("Ritten"),
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Instellingen"),
-    "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,telefoon,toestellen"),
+    "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,toestellen"),
     "ImportMembersCsvHeaderExampleDescription" : MessageLookupByLibrary.simpleMessage("Een mogelijke csv hoofding ziet er zo uit:"),
-    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)(.*)"),
+    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam)\\,(achternaam|familienaam),(alias|bijnaam)\\,(toestellen|apparaten)(.*)"),
     "ImportMembersHeaderStrippedMessage" : MessageLookupByLibrary.simpleMessage("Als er een hoofding aanwezig is wordt deze verwijderd"),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Leden Importeren"),
     "ImportMembersInvalidFileFormat" : MessageLookupByLibrary.simpleMessage("Enkel CSV bestanden zijn toegelaten"),
@@ -144,7 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Ongeldige bestandsnaam"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Familienaam mag niet enkel witruimte zijn"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Familienaam mag enkel letters,spaties of \' - bevatten"),
-    "LastNameMaxLength" : m10,
+    "LastNameMaxLength" : m11,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("Dit lid bestaat al"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit lid wil verwijderen?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon lid niet verwijderen"),
@@ -160,12 +163,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "MemberListTitle" : MessageLookupByLibrary.simpleMessage("Leden"),
     "MemberPickImageError" : MessageLookupByLibrary.simpleMessage("Kon afbeelding niet laden"),
     "MondayPrefix" : MessageLookupByLibrary.simpleMessage("Ma"),
+    "PersonAliasLabel" : MessageLookupByLibrary.simpleMessage("Alias"),
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("Voornaam"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
-    "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telefoon"),
-    "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een telefoonnummer bestaat enkel uit cijfers"),
-    "PhoneMaxLength" : m11,
-    "PhoneMinLength" : m12,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
@@ -179,8 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
     "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Selectie Opslaan"),
     "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Scan Resultaten Opslaan"),
-    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : MessageLookupByLibrary.simpleMessage("Eigendom Van:"),
-    "RideAttendeeScanningScanResultOwnerTelephoneLabel" : MessageLookupByLibrary.simpleMessage("tel: "),
+    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : m12,
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),

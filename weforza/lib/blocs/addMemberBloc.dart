@@ -108,7 +108,7 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(AddMemberSubmitState.IDLE);
     }
-    if(value.trim().isEmpty){
+    if(value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
     }
     else if(nameAndAliasMaxLength < value.length){

@@ -111,15 +111,12 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     return lastNameError;
   }
 
-  String validateAlias(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String validateAlias(String value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(EditMemberSubmitState.IDLE);
     }
-    if(value == null || value.isEmpty)
-    {
-      aliasError = isRequiredMessage;
-    }else if(value.trim().isEmpty){
+    if(value.trim().isEmpty){
       aliasError = isBlankMessage;
     }
     else if(nameAndAliasMaxLength < value.length){

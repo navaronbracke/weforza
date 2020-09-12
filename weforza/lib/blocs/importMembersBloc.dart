@@ -91,7 +91,7 @@ class ImportMembersBloc extends Bloc {
     }
 
     //Invalid data lines are skipped
-    if(!Member.personNameAndAliasRegex.hasMatch(values[0]) || !Member.personNameAndAliasRegex.hasMatch(values[1]) || !Member.personNameAndAliasRegex.hasMatch(values[2])){
+    if(!Member.personNameAndAliasRegex.hasMatch(values[0]) || !Member.personNameAndAliasRegex.hasMatch(values[1]) || (values[2].isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(values[2]))){
       return null;
     }
 

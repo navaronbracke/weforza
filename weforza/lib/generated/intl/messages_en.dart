@@ -43,9 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m12(firstName, alias, lastName) => "Owned by: ${firstName} \'${alias}\' ${lastName}";
-
-  static m13(value) => "${value} is required";
+  static m12(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -179,7 +177,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Retry Scan"),
     "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Save Selection"),
     "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Save Scan Results"),
-    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : m12,
+    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : MessageLookupByLibrary.simpleMessage("Owned by: "),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Skip Scan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
@@ -205,7 +203,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m13,
+    "ValueIsRequired" : m12,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

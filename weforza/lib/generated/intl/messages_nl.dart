@@ -43,9 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m12(firstName, alias, lastName) => "Eigendom van:  ${firstName} \'${alias}\' ${lastName}";
-
-  static m13(value) => "${value} is verplicht";
+  static m12(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -179,7 +177,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
     "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Selectie Opslaan"),
     "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Scan Resultaten Opslaan"),
-    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : m12,
+    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : MessageLookupByLibrary.simpleMessage("Eigendom van: "),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
@@ -205,7 +203,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Onbekende Datum"),
-    "ValueIsRequired" : m13,
+    "ValueIsRequired" : m12,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

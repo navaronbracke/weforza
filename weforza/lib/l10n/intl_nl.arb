@@ -92,7 +92,7 @@
   "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
   "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom van:  {firstName} '{alias}' {lastName}",
+  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom van: ",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

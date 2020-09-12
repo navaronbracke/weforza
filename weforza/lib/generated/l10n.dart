@@ -813,13 +813,13 @@ class S {
     );
   }
 
-  /// `Owned by: {firstName} '{alias}' {lastName}`
-  String RideAttendeeScanningScanResultDeviceOwnedByLabel(Object firstName, Object alias, Object lastName) {
+  /// `Owned by: `
+  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
     return Intl.message(
-      'Owned by: $firstName \'$alias\' $lastName',
+      'Owned by: ',
       name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
       desc: '',
-      args: [firstName, alias, lastName],
+      args: [],
     );
   }
 

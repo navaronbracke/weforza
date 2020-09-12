@@ -153,34 +153,19 @@ class ScanResultOwnerFound extends StatelessWidget {
         children: <Widget>[
           SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
           SizedBox(height: 2),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  _formatDeviceOwnerNameLabel(context,owner.firstname,owner.lastname),
-                  style: ApplicationTheme.rideAttendeeScanResultOwnerLabelTextStyle,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Text(
-                  _formatDeviceOwnerTelephoneLabel(context, owner.phone),
-                  style: ApplicationTheme.rideAttendeeScanResultOwnerLabelTextStyle,
-                ),
-              ),
-            ],
-          ),
+          Text(
+            _formatDeviceOwnerNameLabel(context,owner.firstname,owner.lastname,owner.alias),
+            style: ApplicationTheme.rideAttendeeScanResultOwnerLabelTextStyle,
+            overflow: TextOverflow.ellipsis,
+          )
         ],
       ),
     );
   }
 
-  String _formatDeviceOwnerNameLabel(BuildContext context, String firstName, String lastName){
-    return "${S.of(context).RideAttendeeScanningScanResultDeviceOwnedByLabel}   $firstName $lastName";
-  }
+  String _formatDeviceOwnerNameLabel(BuildContext context, String firstName, String lastName, String alias){
+    final String text = alias == null || alias.isEmpty ? "$firstName $lastName" : "$firstName '$alias' $lastName";
 
-  String _formatDeviceOwnerTelephoneLabel(BuildContext context, String telephone){
-    return "(${S.of(context).RideAttendeeScanningScanResultOwnerTelephoneLabel}$telephone)";
+    return S.of(context).RideAttendeeScanningScanResultDeviceOwnedByLabel + text;
   }
 }

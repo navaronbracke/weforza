@@ -813,23 +813,13 @@ class S {
     );
   }
 
-  /// `Owned By:`
-  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
+  /// `Owned by: {firstName} '{alias}' {lastName}`
+  String RideAttendeeScanningScanResultDeviceOwnedByLabel(Object firstName, Object alias, Object lastName) {
     return Intl.message(
-      'Owned By:',
+      'Owned by: $firstName \'$alias\' $lastName',
       name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
       desc: '',
-      args: [],
-    );
-  }
-
-  /// `tel: `
-  String get RideAttendeeScanningScanResultOwnerTelephoneLabel {
-    return Intl.message(
-      'tel: ',
-      name: 'RideAttendeeScanningScanResultOwnerTelephoneLabel',
-      desc: '',
-      args: [],
+      args: [firstName, alias, lastName],
     );
   }
 
@@ -1023,10 +1013,10 @@ class S {
     );
   }
 
-  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(.*)`
+  /// `(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)`
   String get ImportMembersCsvHeaderRegex {
     return Intl.message(
-      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(.*)',
+      '(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)',
       name: 'ImportMembersCsvHeaderRegex',
       desc: '',
       args: [],
@@ -1043,10 +1033,10 @@ class S {
     );
   }
 
-  /// `firstname,surname,cellphone,devices`
+  /// `firstname,surname,alias,devices`
   String get ImportMembersCsvHeaderExample {
     return Intl.message(
-      'firstname,surname,cellphone,devices',
+      'firstname,surname,alias,devices',
       name: 'ImportMembersCsvHeaderExample',
       desc: '',
       args: [],
@@ -1273,6 +1263,16 @@ class S {
     );
   }
 
+  /// `A device name can't be empty`
+  String get DeviceNameBlank {
+    return Intl.message(
+      'A device name can\'t be empty',
+      name: 'DeviceNameBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete Device`
   String get DeleteDeviceTitle {
     return Intl.message(
@@ -1373,11 +1373,11 @@ class S {
     );
   }
 
-  /// `Telephone`
-  String get PersonTelephoneLabel {
+  /// `Alias`
+  String get PersonAliasLabel {
     return Intl.message(
-      'Telephone',
-      name: 'PersonTelephoneLabel',
+      'Alias',
+      name: 'PersonAliasLabel',
       desc: '',
       args: [],
     );
@@ -1443,41 +1443,31 @@ class S {
     );
   }
 
-  /// `A phone number can only contain digits`
-  String get PhoneIllegalCharacters {
+  /// `An alias can't be longer than {maxLength} characters`
+  String AliasMaxLength(Object maxLength) {
     return Intl.message(
-      'A phone number can only contain digits',
-      name: 'PhoneIllegalCharacters',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `A phone number is minimum {minLength} digits long`
-  String PhoneMinLength(Object minLength) {
-    return Intl.message(
-      'A phone number is minimum $minLength digits long',
-      name: 'PhoneMinLength',
-      desc: '',
-      args: [minLength],
-    );
-  }
-
-  /// `A phone number is maximum {maxLength} digits long`
-  String PhoneMaxLength(Object maxLength) {
-    return Intl.message(
-      'A phone number is maximum $maxLength digits long',
-      name: 'PhoneMaxLength',
+      'An alias can\'t be longer than $maxLength characters',
+      name: 'AliasMaxLength',
       desc: '',
       args: [maxLength],
     );
   }
 
-  /// `A device name can't be empty`
-  String get DeviceNameBlank {
+  /// `An alias can't be blank`
+  String get AliasBlank {
     return Intl.message(
-      'A device name can\'t be empty',
-      name: 'DeviceNameBlank',
+      'An alias can\'t be blank',
+      name: 'AliasBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An alias can only contain letters, spaces or ' -`
+  String get AliasIllegalCharacters {
+    return Intl.message(
+      'An alias can only contain letters, spaces or \' -',
+      name: 'AliasIllegalCharacters',
       desc: '',
       args: [],
     );

@@ -30,31 +30,31 @@ class _EditMemberPageState extends State<EditMemberPage> {
 
   TextEditingController _firstNameController;
   TextEditingController _lastNameController;
-  TextEditingController _phoneController;
+  TextEditingController _aliasController;
 
   ///The input labels.
   String _firstNameLabel;
   String _lastNameLabel;
-  String _phoneLabel;
+  String _aliasLabel;
 
   ///Error messages.
   String _firstNameRequiredMessage;
   String _lastNameRequiredMessage;
-  String _phoneRequiredMessage;
+  String _aliasRequiredMessage;
   String _firstNameMaxLengthMessage;
   String _firstNameIllegalCharactersMessage;
   String _firstNameBlankMessage;
   String _lastNameMaxLengthMessage;
   String _lastNameIllegalCharactersMessage;
   String _lastNameBlankMessage;
-  String _phoneIllegalCharactersMessage;
-  String _phoneMinLengthMessage;
-  String _phoneMaxLengthMessage;
+  String _aliasMaxLengthMessage;
+  String _aliasIllegalCharactersMessage;
+  String _aliasBlankMessage;
 
   ///The [FocusNode]s for the inputs
   FocusNode _firstNameFocusNode = FocusNode();
   FocusNode _lastNameFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
+  FocusNode _aliasFocusNode = FocusNode();
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -62,27 +62,26 @@ class _EditMemberPageState extends State<EditMemberPage> {
     final S translator = S.of(context);
     _firstNameLabel = translator.PersonFirstNameLabel;
     _lastNameLabel = translator.PersonLastNameLabel;
-    _phoneLabel = translator.PersonTelephoneLabel;
+    _aliasLabel = translator.PersonAliasLabel;
 
     _firstNameRequiredMessage = translator.ValueIsRequired(_firstNameLabel);
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
-    _phoneRequiredMessage = translator.ValueIsRequired(_phoneLabel);
+    _aliasRequiredMessage = translator.ValueIsRequired(_aliasLabel);
 
     _firstNameMaxLengthMessage =
-        translator.FirstNameMaxLength("${_bloc.firstNameMaxLength}");
+        translator.FirstNameMaxLength("${_bloc.nameAndAliasMaxLength}");
     _firstNameIllegalCharactersMessage = translator.FirstNameIllegalCharacters;
     _firstNameBlankMessage = translator.FirstNameBlank;
 
     _lastNameMaxLengthMessage =
-        translator.LastNameMaxLength("${_bloc.lastNameMaxLength}");
+        translator.LastNameMaxLength("${_bloc.nameAndAliasMaxLength}");
     _lastNameIllegalCharactersMessage = translator.LastNameIllegalCharacters;
     _lastNameBlankMessage = translator.LastNameBlank;
 
-    _phoneIllegalCharactersMessage = translator.PhoneIllegalCharacters;
-    _phoneMinLengthMessage =
-        translator.PhoneMinLength("${_bloc.phoneMinLength}");
-    _phoneMaxLengthMessage =
-        translator.PhoneMaxLength("${_bloc.phoneMaxLength}");
+    _aliasMaxLengthMessage =
+        translator.AliasMaxLength("${_bloc.nameAndAliasMaxLength}");
+    _aliasIllegalCharactersMessage = translator.AliasIllegalCharacters;
+    _aliasBlankMessage = translator.AliasBlank;
   }
 
   ///Validate all current form input for IOS.
@@ -99,13 +98,13 @@ class _EditMemberPageState extends State<EditMemberPage> {
         _lastNameMaxLengthMessage,
         _lastNameIllegalCharactersMessage,
         _lastNameBlankMessage) == null;
-    final phoneValid = _bloc.validatePhone(
-        _phoneController.text,
-        _phoneRequiredMessage,
-        _phoneIllegalCharactersMessage,
-        _phoneMinLengthMessage,
-        _phoneMaxLengthMessage) == null;
-    return firstNameValid && lastNameValid && phoneValid;
+    final aliasValid = _bloc.validateAlias(
+        _aliasController.text,
+        _aliasRequiredMessage,
+        _aliasMaxLengthMessage,
+        _aliasIllegalCharactersMessage,
+        _aliasBlankMessage) == null;
+    return firstNameValid && lastNameValid && aliasValid;
   }
 
   @override
@@ -116,13 +115,13 @@ class _EditMemberPageState extends State<EditMemberPage> {
       repository: InjectionContainer.get<MemberRepository>(),
       firstName: member.firstName,
       lastName: member.lastName,
-      phone: member.phone,
+      alias: member.alias,
       profileImage: member.profileImage,
       id: member.uuid,
     );
     _firstNameController = TextEditingController(text: _bloc.firstName);
     _lastNameController = TextEditingController(text: _bloc.lastName);
-    _phoneController = TextEditingController(text: _bloc.phone);
+    _aliasController = TextEditingController(text: _bloc.alias);
     _initStrings(context);
   }
 
@@ -203,7 +202,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       });
                     },
                     onSubmitted: (value){
-                      _focusChange(context, _lastNameFocusNode, _phoneFocusNode);
+                      _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
                     },
                   ),
                   Text(
@@ -212,32 +211,32 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       style: ApplicationTheme.iosFormErrorStyle),
                   SizedBox(height: 5),
                   CupertinoTextField(
-                    focusNode: _phoneFocusNode,
+                    focusNode: _aliasFocusNode,
                     textInputAction: TextInputAction.done,
-                    controller: _phoneController,
+                    controller: _aliasController,
                     autocorrect: false,
-                    keyboardType: TextInputType.number,
-                    placeholder: _phoneLabel,
+                    keyboardType: TextInputType.text,
+                    placeholder: _aliasLabel,
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
                     ],
                     onChanged: (value) {
                       setState(() {
-                        _bloc.validatePhone(
-                            value,
-                            _phoneRequiredMessage,
-                            _phoneIllegalCharactersMessage,
-                            _phoneMinLengthMessage,
-                            _phoneMaxLengthMessage);
+                        _bloc.validateAlias(
+                            _aliasController.text,
+                            _aliasRequiredMessage,
+                            _aliasMaxLengthMessage,
+                            _aliasIllegalCharactersMessage,
+                            _aliasBlankMessage);
                       });
                     },
                     onSubmitted: (value){
-                      _phoneFocusNode.unfocus();
+                      _aliasFocusNode.unfocus();
                     },
                   ),
                   Text(
                       CupertinoFormErrorFormatter.formatErrorMessage(
-                          _bloc.phoneError),
+                          _bloc.aliasError),
                       style: ApplicationTheme.iosFormErrorStyle),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
@@ -334,34 +333,34 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     _bloc.autoValidateLastName = true;
                   }),
                   onFieldSubmitted: (value){
-                    _focusChange(context, _lastNameFocusNode, _phoneFocusNode);
+                    _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
                   },
                 ),
                 SizedBox(height: 5),
                 TextFormField(
-                  focusNode: _phoneFocusNode,
+                  focusNode: _aliasFocusNode,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10),
-                    labelText: _phoneLabel,
+                    labelText: _aliasLabel,
                     helperText: " ",//Prevent popping up and down after validation
                   ),
-                  controller: _phoneController,
+                  controller: _aliasController,
                   autocorrect: false,
                   keyboardType: TextInputType.phone,
-                  validator: (value) => _bloc.validatePhone(
-                      value,
-                      _phoneRequiredMessage,
-                      _phoneIllegalCharactersMessage,
-                      _phoneMinLengthMessage,
-                      _phoneMaxLengthMessage),
-                  autovalidate: _bloc.autoValidatePhone,
+                  validator: (value) => _bloc.validateAlias(
+                      _aliasController.text,
+                      _aliasRequiredMessage,
+                      _aliasMaxLengthMessage,
+                      _aliasIllegalCharactersMessage,
+                      _aliasBlankMessage),
+                  autovalidate: _bloc.autoValidateAlias,
                   onChanged: (value)=> setState(() {
-                    _bloc.autoValidatePhone = true;
+                    _bloc.autoValidateAlias = true;
                   }),
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   onFieldSubmitted: (value){
-                    _phoneFocusNode.unfocus();
+                    _aliasFocusNode.unfocus();
                   },
                 ),
                 Padding(
@@ -399,10 +398,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _bloc.dispose();
     _firstNameFocusNode.dispose();
     _lastNameFocusNode.dispose();
-    _phoneFocusNode.dispose();
+    _aliasFocusNode.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _phoneController.dispose();
+    _aliasController.dispose();
     super.dispose();
   }
 }

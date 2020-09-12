@@ -383,6 +383,16 @@ class S {
     );
   }
 
+  /// `Alias:`
+  String get MemberDetailsAlias {
+    return Intl.message(
+      'Alias:',
+      name: 'MemberDetailsAlias',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Devices`
   String get DevicesListHeader {
     return Intl.message(

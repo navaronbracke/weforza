@@ -125,21 +125,17 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       );
     }
 
-    // Firstname 'alias' Lastname
-    return RichText(
-      text: TextSpan(
-        text: widget.firstName,
-        style: firstNameStyle,
-        children: [
-          TextSpan(
-            text: " ${widget.alias} ",
-            style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
-          ),
-          TextSpan(
-            text: widget.lastName,
-            style: firstNameStyle,
-          ),
-        ]
+    // Firstname 'alias'
+    return Text.rich(
+      TextSpan(
+          text: widget.firstName,
+          style: firstNameStyle,
+          children: [
+            TextSpan(
+              text: " " + widget.alias,
+              style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
+            ),
+          ]
       ),
       softWrap: true,
       overflow: TextOverflow.ellipsis,

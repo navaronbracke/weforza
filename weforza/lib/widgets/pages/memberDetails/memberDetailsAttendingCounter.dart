@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class MemberDetailsAttendingCounter extends StatelessWidget {
@@ -14,7 +15,7 @@ class MemberDetailsAttendingCounter extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Icon(Icons.location_on),
+        Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
         SizedBox(width: 5),
         FutureBuilder<int>(
           future: future,

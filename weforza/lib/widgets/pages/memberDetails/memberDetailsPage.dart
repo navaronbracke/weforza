@@ -83,74 +83,16 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ProfileImage(
-                      image: bloc.member.profileImage,
-                      personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                            bloc.member.firstName,
-                            style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w500
-                            ),
-                            overflow: TextOverflow.ellipsis),
-                        Text(
-                            bloc.member.lastName,
-                            style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-                                fontSize: 20
-                            ),
-                            overflow: TextOverflow.ellipsis
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Center(
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.phone),
-                          SizedBox(width: 5),
-                          Text(bloc.member.phone),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.center,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: MemberDetailsAttendingCounter(
-                        future: bloc.attendingCountFuture,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Expanded(
-              child: MemberDevicesList(
-                bloc: bloc,
-              ),
-          ),
-        ],
-      ),
+      body: _buildBody(context),
+    );
+  }
+
+  Widget _buildBody(BuildContext context){
+    return Column(
+      children: <Widget>[
+        _buildMemberInfoSection(context),
+        Expanded(child: MemberDevicesList(bloc: bloc)),
+      ],
     );
   }
 
@@ -201,63 +143,69 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
+        child: _buildBody(context),
+      ),
+    );
+  }
+
+  Widget _buildMemberInfoSection(BuildContext context){
+    return Column(
+      children: <Widget>[
+        Row(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ProfileImage(
-                        image: bloc.member.profileImage,
-                        personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(bloc.member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                          Text(bloc.member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Center(
-                        child: Row(
-                          children: <Widget>[
-                            Icon(Icons.phone),
-                            SizedBox(width: 5),
-                            Text(bloc.member.phone),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: MemberDetailsAttendingCounter(
-                          future: bloc.attendingCountFuture,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: ProfileImage(
+                image: bloc.member.profileImage,
+                personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
+              ),
             ),
             Expanded(
-                child: MemberDevicesList(
-                  bloc: bloc,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                      bloc.member.firstName,
+                      style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500
+                      ),
+                      overflow: TextOverflow.ellipsis),
+                  Text(
+                      bloc.member.lastName,
+                      style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                          fontSize: 20
+                      ),
+                      overflow: TextOverflow.ellipsis
+                  ),
+                  if(bloc.member.alias.isNotEmpty)
+                    Text.rich(
+                      TextSpan(
+                          text: S.of(context).MemberDetailsAlias,
+                          style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15),
+                          children: [
+                            TextSpan(
+                              text: " " + bloc.member.alias,
+                              style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15, fontStyle: FontStyle.italic),
+                            ),
+                          ]
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                ],
+              ),
             ),
           ],
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Center(
+            child: MemberDetailsAttendingCounter(
+              future: bloc.attendingCountFuture,
+            ),
+          ),
+        )
+      ],
     );
   }
 

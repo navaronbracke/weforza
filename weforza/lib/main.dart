@@ -19,8 +19,8 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
-  //TODO delete when done
-  await migrateMembersDropPhoneAndInsertAlias();
+  //TODO delete when done after iphone testing
+  //await migrateMembersDropPhoneAndInsertAlias();
 
   runApp(WeForzaApp());
 }

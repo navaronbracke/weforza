@@ -14,10 +14,10 @@ class ManualSelectionListItem extends StatefulWidget {
     @required this.profileImageFuture,
     @required this.firstName,
     @required this.lastName,
-    @required this.phone
+    @required this.alias
   }): assert(
     isSelected != null && profileImageFuture != null &&
-        onTap != null && firstName != null && lastName != null && phone != null
+        onTap != null && firstName != null && lastName != null && alias != null
   );
 
   final bool Function() isSelected;
@@ -25,7 +25,7 @@ class ManualSelectionListItem extends StatefulWidget {
   final Future<File> profileImageFuture;
   final String firstName;
   final String lastName;
-  final String phone;
+  final String alias;
 
   @override
   _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
@@ -36,8 +36,6 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   Color itemDecorationBackgroundColor;
   TextStyle firstNameStyle;
   TextStyle lastNameStyle;
-  TextStyle phoneTextStyle;
-  Color phoneLabelIconColor;
 
   @override
   void initState() {
@@ -88,36 +86,13 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      widget.firstName,
-                      style: firstNameStyle,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    _combineFirstNameAndAlias(),
                     SizedBox(height: 5),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            widget.lastName,
-                            style: lastNameStyle,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.phone,
-                                size: 15,
-                                color: phoneLabelIconColor,
-                              ),
-                              Text(" ${widget.phone}", style: phoneTextStyle),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    Text(
+                      widget.lastName,
+                      style: lastNameStyle,
+                      overflow: TextOverflow.ellipsis,
+                    )
                   ],
                 ),
               ),
@@ -133,14 +108,36 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle.copyWith(color: Colors.white);
       lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle.copyWith(color: Colors.white);
-      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle.copyWith(color: Colors.white);
-      phoneLabelIconColor = Colors.white;
     }else{
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle;
       lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle;
-      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle;
-      phoneLabelIconColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
     }
+  }
+
+  //Combine the first name with the alias.
+  Widget _combineFirstNameAndAlias(){
+    if(widget.alias.isEmpty){
+      return Text(
+        widget.firstName,
+        style: firstNameStyle,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    // Firstname 'alias'
+    return Text.rich(
+      TextSpan(
+          text: widget.firstName,
+          style: firstNameStyle,
+          children: [
+            TextSpan(
+              text: " " + widget.alias,
+              style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
+            ),
+          ]
+      ),
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }

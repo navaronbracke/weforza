@@ -18,6 +18,7 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
+
   runApp(WeForzaApp());
 }
 

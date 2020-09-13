@@ -13,6 +13,6 @@ class MemberItem {
   String get firstName => _member.firstname;
   String get lastName => _member.lastname;
   String get uuid => _member.uuid;
-  String get phone => _member.phone;
+  String get alias => _member.alias;
   Member get member => _member;
 }

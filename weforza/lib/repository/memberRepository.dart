@@ -20,7 +20,7 @@ class MemberRepository {
 
   Future<Member> getMemberByUuid(String uuid) => _dao.getMemberByUuid(uuid);
 
-  Future<bool> memberExists(String firstname, String lastname, String phone,[String uuid]) => _dao.memberExists(firstname, lastname, phone,uuid);
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]) => _dao.memberExists(firstname, lastname, alias, uuid);
 
   Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 

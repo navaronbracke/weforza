@@ -14,8 +14,8 @@ abstract class IMemberDao {
   ///Update a [Member].
   Future<void> updateMember(Member member);
 
-  ///Get all [Member]s.
-  Future<List<Member>> getMembers();
+  ///Get all [Member]s or filtered by uuid if [uuids] is given.
+  Future<List<Member>> getMembers({Set<String> uuids});
 
   ///Check if a [Member] with the given values exists.
   ///If [uuid] is null or empty, it checks whether there is a member with the given values.
@@ -86,14 +86,20 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<List<Member>> getMembers() async {
-    final finder = Finder(
+  Future<List<Member>> getMembers({Set<String> uuids}) async {
+    final Finder finder = Finder(
         sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("alias")]
     );
 
-    final records = await _memberStore.find(_database,finder: finder);
+    final Iterable<Member> members = await _memberStore.find(_database,finder: finder).then((records){
+      return records.map((record)=> Member.of(record.key, record.value));
+    });
 
-    return records.map((record)=> Member.of(record.key, record.value)).toList();
+    if(uuids != null && uuids.isNotEmpty){
+      return members.where((Member m) => uuids.contains(m.uuid)).toList();
+    }
+
+    return members.toList();
   }
 
   @override

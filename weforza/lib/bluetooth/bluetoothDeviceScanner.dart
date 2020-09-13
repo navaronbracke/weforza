@@ -1,5 +1,6 @@
 
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 
 ///This class defines behaviour to scan for bluetooth devices.
 abstract class BluetoothDeviceScanner {
@@ -15,9 +16,9 @@ abstract class BluetoothDeviceScanner {
   ///Has a required scan duration (in seconds).
   ///
   ///Returns a Stream of results.
-  ///Each result represents a device name of a device that was found.
+  ///Each result represents a device that was found with an id + name.
   ///Any devices that don't expose their device name are not sent through the stream.
-  Stream<String> scanForDevices(int scanDurationInSeconds);
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds);
 
   ///Stop a running scan.
   ///Throws an error if the scan couldn't be stopped.
@@ -32,12 +33,15 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   Future<bool> isBluetoothEnabled() => _fBlInstance.isOn;
 
   @override
-  Stream<String> scanForDevices(int scanDurationInSeconds) =>
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) =>
       _fBlInstance.scan(
           allowDuplicates: false,
           scanMode: ScanMode.balanced,
           timeout: Duration(seconds: scanDurationInSeconds)
-      ).where((result) => result?.device?.name != null).map((result) => result.device.name);
+      ).where((ScanResult result) => result?.device?.name != null).map((result) => BluetoothPeripheral(
+        id: result.device.id.id,//result.device.id = DeviceIdentifier
+        deviceName: result.device.name
+      ));
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();

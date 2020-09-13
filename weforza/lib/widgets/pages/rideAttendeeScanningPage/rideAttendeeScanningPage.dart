@@ -135,8 +135,9 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                             isSaving: bloc.isSaving,
                             isScanning: bloc.isScanning,
                             onSkip: () => bloc.skipScan(),
-                            onSave: () async => await bloc.saveRideAttendees(true,true).then((_){
+                            onSave: () async => await bloc.saveRideAttendees(true).then((_){
                               widget.onRefreshAttendees();
+                              bloc.advanceScanProcessStepToManualSelection();
                             }, onError: (error){
                               //do nothing
                             }),
@@ -162,9 +163,9 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   }
 
   ///Trigger an insertion for a new item in the AnimatedList.
-  void _onDeviceFound(String deviceName, Future<Member> memberLookup){
+  void _onDeviceFound(String deviceName, Future<List<Member>> ownersLookup){
     if(deviceListKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
-      bloc.addScanResult(ScanResultItem(deviceName: deviceName, memberLookup: memberLookup));
+      bloc.addScanResult(ScanResultItem(deviceName: deviceName, findDeviceOwners: ownersLookup));
       deviceListKey.currentState.insertItem(0);
     }
   }

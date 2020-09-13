@@ -4,9 +4,6 @@ import 'package:weforza/model/device.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
-
-  Future<bool> deviceExists(Device device,[String ownerId]);
-
   Future<void> addDevice(Device device);
 
   Future<void> removeDevice(String deviceName);
@@ -35,29 +32,6 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<void> addDevice(Device device) async {
     await _deviceStore.record(device.creationDate.toIso8601String()).add(_database, device.toMap());
-  }
-
-  @override
-  Future<bool> deviceExists(Device device,[String ownerId]) async {
-    final record = await _deviceStore.findFirst(
-        _database,
-        finder: Finder(
-            filter: Filter.equals("deviceName", device.name)
-        ),
-    );
-
-    if(record == null) return false;//No device with this name
-
-    //If an owner ID is given and the device we found has the same owner ID,
-    //then it doesn't exist. This only happens when we are editing a device and
-    //the device name was unchanged.
-    if(ownerId != null && ownerId.isNotEmpty){
-      final device = Device.of(record.key, record.value);
-      return device.ownerId != ownerId;
-    }
-
-    //The device record was found and we are not editing, thus the owner is never the same person.
-    return true;
   }
 
   @override

@@ -62,29 +62,22 @@ class AddDeviceBloc extends Bloc {
     deviceNameController.dispose();
   }
 
-  Future<void> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> addDevice(String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
 
-    final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
+    final device = Device(
+        ownerId: ownerId,
+        name: _newDeviceName,
+        type: type,
+        creationDate: DateTime.now()
+    );
 
-    final exists = await repository.deviceExists(device).catchError((error){
+    await repository.addDevice(device).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
-
-    if(exists){
-      _submitButtonController.add(false);
-      _submitErrorController.add(deviceExistsMessage);
-      return Future.error(deviceExistsMessage);
-    }else{
-      await repository.addDevice(device).catchError((error){
-        _submitButtonController.add(false);
-        _submitErrorController.add(genericErrorMessage);
-        return Future.error(genericErrorMessage);
-      });
-    }
   }
 
   String validateNewDeviceInput(

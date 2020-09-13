@@ -30,25 +30,21 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   ///The actual inputs.
   String _firstName;
   String _lastName;
-  String _phone;
+  String _alias;
   File _selectedImage;
 
   ///The actual errors.
   String firstNameError;
   String lastNameError;
-  String phoneError;
+  String aliasError;
 
-  ///Length ranges for input.
-  final int firstNameMaxLength = 50;
-  final int lastNameMaxLength = 50;
-  final int phoneMaxLength = 15;
-  final int phoneMinLength = 8;
+  final int nameAndAliasMaxLength = 50;
 
   ///Auto validation flags per input.
   ///Validation should start once an input came into focus at least once.
   bool autoValidateFirstName = false;
   bool autoValidateLastName = false;
-  bool autoValidatePhone = false;
+  bool autoValidateAlias = false;
 
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
@@ -64,10 +60,10 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     }else if(value.trim().isEmpty){
       firstNameError = isBlankMessage;
     }
-    else if(firstNameMaxLength < value.length){
+    else if(nameAndAliasMaxLength < value.length){
       firstNameError = maxLengthMessage;
     }
-    else if(Member.personNameRegex.hasMatch(value)){
+    else if(Member.personNameAndAliasRegex.hasMatch(value)){
       _firstName = value;
       firstNameError = null;
     }
@@ -91,10 +87,10 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     }else if(value.trim().isEmpty){
       lastNameError = isBlankMessage;
     }
-    else if(lastNameMaxLength < value.length){
+    else if(nameAndAliasMaxLength < value.length){
       lastNameError = maxLengthMessage;
     }
-    else if(Member.personNameRegex.hasMatch(value)){
+    else if(Member.personNameAndAliasRegex.hasMatch(value)){
       _lastName = value;
       lastNameError = null;
     }
@@ -104,41 +100,38 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     return lastNameError;
   }
 
-  ///Validate [value] according to the phone rule.
+  ///Validate [value] according to the alias rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
-    if(value != _phone){
+  String validateAlias(String value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+    if(value != _alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(AddMemberSubmitState.IDLE);
     }
-    if(value == null || value.isEmpty)
-    {
-      phoneError = isRequiredMessage;
+    if(value.isNotEmpty && value.trim().isEmpty){
+      aliasError = isBlankMessage;
     }
-    else if(value.length < phoneMinLength){
-      phoneError = minLengthMessage;
-    }else if(phoneMaxLength < value.length){
-      phoneError = maxLengthMessage;
+    else if(nameAndAliasMaxLength < value.length){
+      aliasError = maxLengthMessage;
     }
-    else if(Member.phoneNumberRegex.hasMatch(value)){
-      _phone = value;
-      phoneError = null;
+    else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
+      _alias = value;
+      aliasError = null;
     }
     else{
-      phoneError = illegalCharacterMessage;
+      aliasError = illegalCharacterMessage;
     }
-    return phoneError;
+    return aliasError;
   }
 
   Future<void> addMember() async {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
-    await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
+    await _repository.memberExists(_firstName, _lastName, _alias).then((exists) async {
       if(exists){
         _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
         return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
       }else{
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(_selectedImage == null) ? null : _selectedImage.path)).then((_){
+        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_alias,(_selectedImage == null) ? null : _selectedImage.path)).then((_){
               //the then call will be executed in the submit widget
         },onError: (error){
           _submitStateController.add(AddMemberSubmitState.ERROR);

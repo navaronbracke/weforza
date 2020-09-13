@@ -41,6 +41,7 @@
   "MemberDetailsNoDevicesAddDevice": "Voeg een toestel toe",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsAlias": "Alias:",
 
   "DevicesListHeader": "Toestellen",
   "DevicesListNoDevices": "Geen toestellen om te tonen",
@@ -92,8 +93,7 @@
   "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
   "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom Van:",
-  "RideAttendeeScanningScanResultOwnerTelephoneLabel": "tel: ",
+  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom van: ",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",
@@ -115,9 +115,9 @@
   "ImportMembersPickFile": "Kies Bestand",
   "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
   "ImportMembersImporting": "Leden Importeren",
-  "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)(.*)",
+  "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(alias|bijnaam)\\,(toestellen|apparaten)(.*)",
   "ImportMembersCsvHeaderExampleDescription": "Een mogelijke csv hoofding ziet er zo uit:",
-  "ImportMembersCsvHeaderExample": "voornaam,familienaam,telefoon,toestellen",
+  "ImportMembersCsvHeaderExample": "voornaam,familienaam,alias,toestellen",
   "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
   "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 
@@ -144,6 +144,7 @@
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
   "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
+  "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
 
   "DeleteDeviceTitle": "Verwijder Toestel",
   "DeleteDeviceDescription": "Bent u zeker dat u dit toestel wil verwijderen?",
@@ -157,18 +158,17 @@
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
-  "PersonTelephoneLabel": "Telefoon",
+  "PersonAliasLabel": "Alias",
 
-  "FirstNameMaxLength": "Voornaam kan niet langer zijn dan {maxLength} letters",
+  "FirstNameMaxLength": "Een voornaam is maximum {maxLength} letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan {maxLength} letters",
   "FirstNameBlank" : "Voornaam mag niet enkel witruimte zijn",
   "LastNameBlank" : "Familienaam mag niet enkel witruimte zijn",
   "FirstNameIllegalCharacters": "Voornaam mag enkel letters, spaties of ' - bevatten",
   "LastNameIllegalCharacters": "Familienaam mag enkel letters,spaties of ' - bevatten",
-  "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
-  "PhoneMinLength": "Een telefoonnummer is minimum {minLength} cijfers lang",
-  "PhoneMaxLength": "Een telefoonnummer is maximum {maxLength} cijfers lang",
-  "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
+  "AliasMaxLength": "Een alias is maximum {maxLength} letters",
+  "AliasBlank" : "Een alias mag niet enkel witruimte zijn",
+  "AliasIllegalCharacters": "Een alias mag enkel letters, spaties of ' - bevatten",
 
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",

@@ -24,8 +24,8 @@ class ScanResultListItem extends StatelessWidget {
   }
 
   Widget _buildItem(){
-    return FutureBuilder<Member>(
-        future: item.memberLookup,
+    return FutureBuilder<List<Member>>(
+        future: item.findDeviceOwners,
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){

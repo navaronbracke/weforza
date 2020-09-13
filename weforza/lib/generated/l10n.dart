@@ -1263,16 +1263,6 @@ class S {
     );
   }
 
-  /// `This device already exists`
-  String get DeviceAlreadyExists {
-    return Intl.message(
-      'This device already exists',
-      name: 'DeviceAlreadyExists',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `A device name can't be empty`
   String get DeviceNameBlank {
     return Intl.message(

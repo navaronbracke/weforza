@@ -14,7 +14,7 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getAllDevices();
 
-  Future<Device> getDeviceWithName(String deviceName);
+  Future<Set<String>> getOwnersOfDevicesWithName(String deviceName);
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -59,9 +59,13 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<Device> getDeviceWithName(String deviceName) async {
-    final finder = Finder(filter: Filter.equals("deviceName", deviceName));
-    final record = await _deviceStore.findFirst(_database, finder: finder);
-    return record == null ? null : Device.of(record.key,record.value);
+  Future<Set<String>> getOwnersOfDevicesWithName(String deviceName) async {
+    final records = await _deviceStore.find(
+        _database,
+        finder: Finder(filter: Filter.equals("deviceName", deviceName))
+    );
+
+    //Get the owner directly from the snapshot
+    return records.map((RecordSnapshot record) => record["owner"]).toSet();
   }
 }

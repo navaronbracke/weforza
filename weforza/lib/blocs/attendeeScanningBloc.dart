@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
+import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/scanResultItem.dart';
@@ -73,7 +74,7 @@ class AttendeeScanningBloc extends Bloc {
   ///Saving happens after scanning and after manual assignment.
   HashSet<String> rideAttendees;
 
-  //The backing list for the scan results UI. 
+  //This list contains the scanned bluetooth device names.
   final List<ScanResultItem> _scanResults = [];
   int scanDuration;
 
@@ -99,8 +100,8 @@ class AttendeeScanningBloc extends Bloc {
   ///Then it loads the settings and the members / ride attendees.
   ///Finally it starts the device scan.
   ///Any 'generic' errors are caught and pushed to [scanStepStream].
-  ///This function takes a lambda that gets the device name of a found device and the lookup future for getting the member.
-  Future<void> startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
+  ///[deviceOwnerLookup] is a callback that takes the scanned device name and a [Future] that looks for owners of devices with this name.
+  Future<void> startDeviceScan(void Function(String deviceName, Future<List<Member>> deviceOwnerLookup) onDeviceFound) async {
     ///Check if bluetooth is on.
     await scanner.isBluetoothEnabled().then((enabled) async {
       if(enabled){
@@ -113,7 +114,7 @@ class AttendeeScanningBloc extends Bloc {
               _loadSettings(),
               _loadRideAttendees(rideDate),
               _loadMembers(pageSize, page: memberListPageNr)
-            ]).then((_) async => _startDeviceScan(onDeviceFound), onError: (error){
+            ]).then((_) => _startDeviceScan(onDeviceFound), onError: (error){
               //Catch the settings/member load errors.
               //This is a generic error and is thus caught by the StreamBuilder.
               _scanStepController.addError(error);
@@ -131,20 +132,19 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   //Perform the actual bluetooth device scan
-  void _startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound){
+  void _startDeviceScan(void Function(String deviceName, Future<List<Member>> deviceOwnerLookup) onDeviceFound){
     //Start scan if not scanning
     if(!isScanning.value){
-      final Set<String> scannedDevices = HashSet();
+      final Set<BluetoothPeripheral> scannedDevices = HashSet();
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
       
-      scanner.scanForDevices(scanDuration).listen((deviceName) {
-        if(!scannedDevices.contains(deviceName)){
-          scannedDevices.add(deviceName);
-          //Start the lookup for the member, giving the device name as placeholder.
-          onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
+      scanner.scanForDevices(scanDuration).listen((BluetoothPeripheral device) {
+        if(!scannedDevices.contains(device)){
+          scannedDevices.add(device);
+          //Start the lookup for the owners, giving the device name as placeholder.
+          onDeviceFound(device.deviceName, _findDeviceOwners(device.deviceName));
         }
-
       }, onError: (error){
         //skip the error
       }, onDone: (){
@@ -180,20 +180,22 @@ class AttendeeScanningBloc extends Bloc {
   ///If the owner is found, it is stored in [rideAttendees].
   ///Everything in [rideAttendees] gets saved when the user confirms.
   ///Returns the [Member] that is the owner or null if not found.
-  Future<Member> _findOwnerOfDevice(String deviceName) async {
-    //Find the device owner ID
-    final device = await deviceRepo.getDeviceWithName(deviceName);
-    if(device == null){
-      return null;
+  Future<List<Member>> _findDeviceOwners(String deviceName) async {
+    //Get the ID's of the owners of devices with the given name.
+    //Can be none, exactly one or multiple.
+    final Set<String> ownerIds = await deviceRepo.getOwnersOfDevicesWithName(deviceName);
+
+    if(ownerIds.isEmpty) return [];
+
+    //This device name has exactly one owner.
+    //Retrieve the owner and also mark it as an attendee, since there is only one.
+    if(ownerIds.length == 1){
+      final Member deviceOwner = await memberRepo.getMemberByUuid(ownerIds.first);
+      rideAttendees.add(deviceOwner.uuid);
+      return [deviceOwner];
     }
-    //Find the owner by id
-    final owner = await memberRepo.getMemberByUuid(device.ownerId);
-    if(owner == null){
-      return null;
-    }else{
-      rideAttendees.add(device.ownerId);
-      return owner;
-    }
+
+    return memberRepo.getMembers(uuids: ownerIds);
   }
 
   ScanResultItem getScanResultAt(int index) => _scanResults[index];
@@ -234,28 +236,23 @@ class AttendeeScanningBloc extends Bloc {
   ///[mergeResults] should only be true during the Scan step.
   ///If [continueToManualAssignment] is true, the manual assignment screen will show up after saving is done.
   ///[continueToManualAssignment] should only be true during the Scan step.
-  Future<void> saveRideAttendees(bool mergeResults, bool continueToManualAssignment) async {
+  Future<void> saveRideAttendees(bool mergeResults) async {
     isSaving.value = true;
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
         rideAttendees.map((element) => RideAttendee(rideDate, element)),
         mergeResults
-    ).then((_){
-        if(continueToManualAssignment){
-          isSaving.value = false;
-          isScanStep.value = false;
-          _scanStepController.add(ScanProcessStep.MANUAL);
-        }
-      //The manual assignment step will pop when submitted.
-      //To make it look smoother, we show the loading indicator during the pop in manual submit.
-      //That's why we don't set isSaving to false if continueToManualAssignment is true.
-      },
-      onError: (error){
-        _scanStepController.addError(error);
-        isSaving.value = false;
-        return Future.error(error);
-      },
-    );
+    ).catchError((error){
+      _scanStepController.addError(error);
+      isSaving.value = false;
+      return Future.error(error);
+    });
+  }
+
+  void advanceScanProcessStepToManualSelection(){
+    isSaving.value = false;
+    isScanStep.value = false;
+    _scanStepController.add(ScanProcessStep.MANUAL);
   }
 
   ///Check the required permission for starting a scan.

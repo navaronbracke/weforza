@@ -67,7 +67,13 @@ class FileHandler implements IFileHandler {
     => file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
 
   @override
-  Future<File> chooseProfileImageFromGallery() => FilePicker.getFile(type: FileType.image);
+  Future<File> chooseProfileImageFromGallery() async {
+    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if(result == null || result.files == null || result.files.isEmpty) return null;
+
+    return File(result.files.first.path);
+  }
 
   @override
   Future<File> loadProfileImageFromDisk(String path) async {
@@ -82,17 +88,15 @@ class FileHandler implements IFileHandler {
 
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
-    final file = await FilePicker.getFile(type: FileType.custom, allowedExtensions: <String>['csv']);
+    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv']);
 
-    if(file == null){
-      return Future.error(NoFileChosenError());
-    }else {
-      if(!file.path.endsWith('csv')){
-        return Future.error(InvalidFileFormatError());
-      }
+    if(result == null || result.files == null || result.files.isEmpty) return Future.error(NoFileChosenError());
+
+    if(!result.files.first.extension.endsWith('csv')){
+      return Future.error(InvalidFileFormatError());
     }
 
-    return file;
+    return File(result.files.first.path);
   }
 
   @override

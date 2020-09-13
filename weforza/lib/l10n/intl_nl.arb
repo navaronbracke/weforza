@@ -143,7 +143,6 @@
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
   "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
-  "DeviceAlreadyExists": "Dit toestel bestaat al",
   "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
 
   "DeleteDeviceTitle": "Verwijder Toestel",

@@ -143,7 +143,6 @@
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
   "DeviceNameCannotContainComma": "A device name cannot contain a ,",
-  "DeviceAlreadyExists": "This device already exists",
   "DeviceNameBlank": "A device name can't be empty",
 
   "DeleteDeviceTitle": "Delete Device",

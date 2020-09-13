@@ -71,7 +71,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit toestel wil verwijderen?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon toestel niet verwijderen"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Toestel"),
-    "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("Dit toestel bestaat al"),
     "DeviceCadenceMeter" : MessageLookupByLibrary.simpleMessage("Cadansmeter"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Koptelefoon"),

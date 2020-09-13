@@ -71,7 +71,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Are you sure you want to delete this device?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete the device"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Delete Device"),
-    "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("This device already exists"),
     "DeviceCadenceMeter" : MessageLookupByLibrary.simpleMessage("Cadence meter"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Headset"),

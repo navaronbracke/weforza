@@ -66,6 +66,6 @@ class DeviceDao implements IDeviceDao {
     );
 
     //Get the owner directly from the snapshot
-    return records.map((RecordSnapshot record) => record["owner"]).toSet();
+    return records.map((RecordSnapshot record) => record["owner"] as String).toSet();
   }
 }

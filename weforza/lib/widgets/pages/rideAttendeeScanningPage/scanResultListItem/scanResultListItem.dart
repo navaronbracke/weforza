@@ -2,35 +2,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/member.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultListItemWithDeviceNameAndIconSlot.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultMultipleOwnerListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultSingleOwnerListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultListItem extends StatelessWidget {
-  ScanResultListItem({ @required this.item }): assert(item != null);
+  ScanResultListItem({
+    @required this.deviceName,
+    @required this.findDeviceOwners,
+    @required this.multipleOwnersBuilder,
+  }): assert(
+    findDeviceOwners != null && deviceName != null && deviceName.isNotEmpty
+        && multipleOwnersBuilder != null
+  );
 
-  final ScanResultItem item;
+  /// A [Future] that returns the owners for a device with [deviceName] as name.
+  final Future<List<Member>> findDeviceOwners;
+
+  /// The device name to display in the widget.
+  final String deviceName;
+
+  /// This builder function builds a scan result item
+  /// for a device name with multiple possible owners.
+  final Widget Function(String deviceName, List<Member> owners) multipleOwnersBuilder;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: () => SizedBox(height: 45, child: _buildItem()),
-      ios: () => SizedBox(height: 50, child: _buildItem()),
-    );
-  }
-
-  Widget _buildItem(){
     return FutureBuilder<List<Member>>(
-        future: item.findDeviceOwners,
+        future: findDeviceOwners,
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
               return ScanResultListItemWithDeviceNameAndIconSlot(
-                deviceName: item.deviceName,
+                deviceName: deviceName,
                 iconBuilder: () => Icon(
                   Icons.error_outline,
                   color: ApplicationTheme.rideAttendeeScanResultWarningColor,
@@ -39,26 +44,22 @@ class ScanResultListItem extends StatelessWidget {
             }else{
               if(snapshot.data == null || snapshot.data.isEmpty){
                 return ScanResultListItemWithDeviceNameAndIconSlot(
-                  deviceName: item.deviceName,
+                  deviceName: deviceName,
                   iconBuilder: () => Icon(
                     Icons.help_outline,
                     color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor,
                   ),
                 );
               }else{
-                if(snapshot.data.length == 1){
-                  return ScanResultSingleOwnerListItem(
-                    deviceName: item.deviceName,
-                    owner: snapshot.data.first,
-                  );
-                }
-
-                return ScanResultMultipleOwnerListItem();
+                return snapshot.data.length == 1 ? ScanResultSingleOwnerListItem(
+                  deviceName: deviceName,
+                  owner: snapshot.data.first,
+                ): multipleOwnersBuilder(deviceName, snapshot.data);
               }
             }
           }else{
             return ScanResultListItemWithDeviceNameAndIconSlot(
-              deviceName: item.deviceName,
+              deviceName: deviceName,
               iconBuilder: () => PlatformAwareLoadingIndicator(),
             );
           }

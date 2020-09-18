@@ -289,6 +289,11 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
+
+  void replaceAttendee(String previousSelectedOwner, String newSelectedOwner) {
+    rideAttendees.remove(previousSelectedOwner);//null can't be in here anyway.
+    rideAttendees.add(newSelectedOwner);//it's a Set so duplicates do nothing.
+  }
 }
 
 enum ScanProcessStep {

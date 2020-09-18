@@ -290,9 +290,10 @@ class AttendeeScanningBloc extends Bloc {
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
 
-  void replaceAttendee(String previousSelectedOwner, String newSelectedOwner) {
-    rideAttendees.remove(previousSelectedOwner);//null can't be in here anyway.
-    rideAttendees.add(newSelectedOwner);//it's a Set so duplicates do nothing.
+  /// Remove [oldOwner] from the list of attendees and add [newOwner] instead.
+  void replaceDeviceOwner(String oldOwner, String newOwner) {
+    rideAttendees.remove(oldOwner);//null can't be in here anyway.
+    rideAttendees.add(newOwner);//it's a Set so duplicates do nothing.
   }
 }
 

@@ -17,7 +17,6 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
-///TODO use page nr with pagesize in _loadMembers(pageSize,pageNr)
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
     @required this.rideDate,
@@ -83,16 +82,7 @@ class AttendeeScanningBloc extends Bloc {
   /// The scan duration in seconds.
   int scanDuration;
 
-  ///The page number for the members that should get loaded.
-  ///This number starts at 0 but changes over time
-  ///(when scrolling in the manual step)
-  int memberListPageNr = 0;
-  ///The amount of elements in a single page.
-  int pageSize = 40;
-
-  ///A subset of the total members is stored here.
-  ///Currently it's not a subset but the full list.
-  List<Member> currentMembersList;
+  HashMap<String, Member> membersList;
 
   ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   ///For each step it will trigger a rebuild of the UI accordingly.
@@ -123,7 +113,7 @@ class AttendeeScanningBloc extends Bloc {
             await Future.wait([
               _loadSettings(),
               _loadRideAttendees(rideDate),
-              _loadMembers(pageSize, page: memberListPageNr),
+              _loadMembers(),
               _loadDeviceOwners(),
             ]).then((_) => _startDeviceScan(onDeviceFound), onError: (error){
               //Catch the settings/member load errors.
@@ -174,14 +164,19 @@ class AttendeeScanningBloc extends Bloc {
     scanDuration = settingsRepo.instance.scanDuration;
   }
 
+  /// Load the device owners.
   Future<void> _loadDeviceOwners() async {
     deviceOwners = await deviceRepo.getDeviceOwners();
   }
 
-  ///Load the members subset (is better for memory usage).
-  ///Has a page parameter (ignored for now).
-  Future<void> _loadMembers(int pageSize, {int page = 0}) async {
-    currentMembersList = await memberRepo.getMembers();
+  /// Load the members. Returns a HashMap for easy lookup later.
+  Future<void> _loadMembers() async {
+    membersList = await memberRepo.getMembers().then((List<Member> list){
+      final HashMap<String,Member> collection = HashMap();
+      list.forEach((Member member) => collection[member.uuid] = member);
+
+      return collection;
+    });
   }
 
   ///Load the ride attendees and put them in a set.
@@ -195,6 +190,14 @@ class AttendeeScanningBloc extends Bloc {
   String getScanResultAt(int index) => _scanResults[index];
 
   void addScanResult(String item) => _scanResults.insert(0, item);
+
+  List<Member> getDeviceOwners(String deviceName) {
+    if(deviceOwners.containsKey(deviceName)){
+      return deviceOwners[deviceName].map((String uuid) => membersList[uuid]).toList();
+    }else{
+      return [];
+    }
+  }
 
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).

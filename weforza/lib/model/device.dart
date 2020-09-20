@@ -50,11 +50,10 @@ class Device {
 
   @override
   bool operator ==(Object other) => other is Device && name == other.name
-      && ownerId == other.ownerId
-      && creationDate == other.creationDate;
+      && ownerId == other.ownerId;
 
   @override
-  int get hashCode => hashValues(name, creationDate, ownerId);
+  int get hashCode => hashValues(name, ownerId);
 }
 
 ///This enum declares the different device types.

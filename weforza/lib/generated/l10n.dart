@@ -823,20 +823,10 @@ class S {
     );
   }
 
-  /// `Owned by: `
-  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
-    return Intl.message(
-      'Owned by: ',
-      name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Choose an owner from the list`
+  /// `Choose an owner`
   String get RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel {
     return Intl.message(
-      'Choose an owner from the list',
+      'Choose an owner',
       name: 'RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel',
       desc: '',
       args: [],

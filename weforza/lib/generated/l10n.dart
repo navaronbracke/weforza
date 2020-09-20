@@ -833,6 +833,16 @@ class S {
     );
   }
 
+  /// `Still busy scanning`
+  String get RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip {
+    return Intl.message(
+      'Still busy scanning',
+      name: 'RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

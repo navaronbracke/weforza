@@ -178,6 +178,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
     "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Selectie Opslaan"),
     "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Scan Resultaten Opslaan"),
+    "RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip" : MessageLookupByLibrary.simpleMessage("Nog aan het scannen"),
     "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel" : MessageLookupByLibrary.simpleMessage("Kies een eigenaar"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),

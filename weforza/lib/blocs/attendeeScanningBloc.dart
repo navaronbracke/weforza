@@ -11,7 +11,6 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendee.dart';
-import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -74,8 +73,13 @@ class AttendeeScanningBloc extends Bloc {
   ///Saving happens after scanning and after manual assignment.
   HashSet<String> rideAttendees;
 
-  //This list contains the scanned bluetooth device names.
-  final List<ScanResultItem> _scanResults = [];
+  /// This collection will group the Member uuids of the owners of devices with a given name.
+  /// The keys are the device names, while the values are lists of uuid's of Members with a device with the given name.
+  HashMap<String, List<String>> deviceOwners;
+
+  /// This list contains the scanned bluetooth device names.
+  final List<String> _scanResults = [];
+  /// The scan duration in seconds.
   int scanDuration;
 
   ///The page number for the members that should get loaded.
@@ -94,14 +98,19 @@ class AttendeeScanningBloc extends Bloc {
   StreamController<ScanProcessStep> _scanStepController = BehaviorSubject();
   Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
 
+  /// Returns true if the given [deviceName] has a single owner, that is not present in [rideAttendees].
+  /// In other words, this filters out devices, of which the single owner was already scanned.
+  bool _filterDeviceWhenSingleOwnerAndOwnerIsAlreadyAttending(String deviceName){
+    //Single owner & not attending already
+    return deviceOwners[deviceName].length == 1 && !rideAttendees.contains(deviceOwners[deviceName].first);
+  }
+
   ///Start the initial device scan.
-  ///This is invoked when the scanning page is first loaded.
   ///It starts with checking the bluetooth state.
   ///Then it loads the settings and the members / ride attendees.
   ///Finally it starts the device scan.
   ///Any 'generic' errors are caught and pushed to [scanStepStream].
-  ///[deviceOwnerLookup] is a callback that takes the scanned device name and a [Future] that looks for owners of devices with this name.
-  Future<void> startDeviceScan(void Function(String deviceName, Future<List<Member>> deviceOwnerLookup) onDeviceFound) async {
+  Future<void> startDeviceScan(void Function(String deviceName) onDeviceFound) async {
     ///Check if bluetooth is on.
     await scanner.isBluetoothEnabled().then((enabled) async {
       if(enabled){
@@ -113,7 +122,8 @@ class AttendeeScanningBloc extends Bloc {
             await Future.wait([
               _loadSettings(),
               _loadRideAttendees(rideDate),
-              _loadMembers(pageSize, page: memberListPageNr)
+              _loadMembers(pageSize, page: memberListPageNr),
+              _loadDeviceOwners(),
             ]).then((_) => _startDeviceScan(onDeviceFound), onError: (error){
               //Catch the settings/member load errors.
               //This is a generic error and is thus caught by the StreamBuilder.
@@ -132,18 +142,19 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   //Perform the actual bluetooth device scan
-  void _startDeviceScan(void Function(String deviceName, Future<List<Member>> deviceOwnerLookup) onDeviceFound){
+  void _startDeviceScan(void Function(String deviceName) onDeviceFound){
     //Start scan if not scanning
     if(!isScanning.value){
       final Set<BluetoothPeripheral> scannedDevices = HashSet();
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
 
-      scanner.scanForDevices(scanDuration).listen((BluetoothPeripheral device) {
+      scanner.scanForDevices(scanDuration).where(
+              (BluetoothPeripheral device) => _filterDeviceWhenSingleOwnerAndOwnerIsAlreadyAttending(device.deviceName)
+      ).listen((BluetoothPeripheral device) {
         if(!scannedDevices.contains(device)){
           scannedDevices.add(device);
-          //Start the lookup for the owners, giving the device name as placeholder.
-          onDeviceFound(device.deviceName, _findDeviceOwners(device.deviceName));
+          onDeviceFound(device.deviceName);
         }
       }, onError: (error){
         //skip the error
@@ -162,6 +173,10 @@ class AttendeeScanningBloc extends Bloc {
     scanDuration = settingsRepo.instance.scanDuration;
   }
 
+  Future<void> _loadDeviceOwners() async {
+    deviceOwners = await deviceRepo.getDeviceOwners();
+  }
+
   ///Load the members subset (is better for memory usage).
   ///Has a page parameter (ignored for now).
   Future<void> _loadMembers(int pageSize, {int page = 0}) async {
@@ -176,31 +191,9 @@ class AttendeeScanningBloc extends Bloc {
     rideAttendees = HashSet.from(members.map((member) => member.uuid).toList());
   }
 
-  ///Find the owner of the given device.
-  ///If the owner is found, it is stored in [rideAttendees].
-  ///Everything in [rideAttendees] gets saved when the user confirms.
-  ///Returns the [Member] that is the owner or null if not found.
-  Future<List<Member>> _findDeviceOwners(String deviceName) async {
-    //Get the ID's of the owners of devices with the given name.
-    //Can be none, exactly one or multiple.
-    final Set<String> ownerIds = await deviceRepo.getOwnersOfDevicesWithName(deviceName);
+  String getScanResultAt(int index) => _scanResults[index];
 
-    if(ownerIds.isEmpty) return [];
-
-    //This device name has exactly one owner.
-    //Retrieve the owner and also mark it as an attendee, since there is only one.
-    if(ownerIds.length == 1){
-      final Member deviceOwner = await memberRepo.getMemberByUuid(ownerIds.first);
-      rideAttendees.add(deviceOwner.uuid);
-      return [deviceOwner];
-    }
-
-    return memberRepo.getMembers(uuids: ownerIds);
-  }
-
-  ScanResultItem getScanResultAt(int index) => _scanResults[index];
-
-  void addScanResult(ScanResultItem item) => _scanResults.insert(0, item);
+  void addScanResult(String item) => _scanResults.insert(0, item);
 
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
@@ -232,10 +225,7 @@ class AttendeeScanningBloc extends Bloc {
 
   ///Save the current contents of [rideAttendees] to the database.
   ///[mergeResults] dictates if the contents of [rideAttendees] should be merged in with the existing data.
-  ///This preserves old results.
   ///[mergeResults] should only be true during the Scan step.
-  ///If [continueToManualAssignment] is true, the manual assignment screen will show up after saving is done.
-  ///[continueToManualAssignment] should only be true during the Scan step.
   Future<void> saveRideAttendees(bool mergeResults) async {
     isSaving.value = true;
     await ridesRepo.updateAttendeesForRideWithDate(
@@ -260,10 +250,7 @@ class AttendeeScanningBloc extends Bloc {
   ///After requesting the permission, the proper callback is called.
   ///When the permission was granted before [onGranted] gets called.
   ///When the permission is denied, [onDenied] gets called.
-  void requestScanPermission({
-    void Function() onGranted,
-    void Function() onDenied,
-  }) async {
+  void requestScanPermission({void Function() onGranted, void Function() onDenied}) async {
     if(await Permission.locationWhenInUse.request().isGranted){
       onGranted();
     }else{

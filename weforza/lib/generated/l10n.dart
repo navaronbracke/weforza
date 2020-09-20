@@ -1283,6 +1283,16 @@ class S {
     );
   }
 
+  /// `This person already has a device with this name`
+  String get DeviceExists {
+    return Intl.message(
+      'This person already has a device with this name',
+      name: 'DeviceExists',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete Device`
   String get DeleteDeviceTitle {
     return Intl.message(

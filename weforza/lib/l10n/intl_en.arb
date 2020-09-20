@@ -93,8 +93,7 @@
   "RideAttendeeScanningSaveScanResults": "Save Scan Results",
   "RideAttendeeScanningSaveManualResults": "Save Selection",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Owned by: ",
-  "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Choose an owner from the list",
+  "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Choose an owner",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

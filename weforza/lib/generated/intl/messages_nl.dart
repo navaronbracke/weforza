@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon toestel niet verwijderen"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Toestel"),
     "DeviceCadenceMeter" : MessageLookupByLibrary.simpleMessage("Cadansmeter"),
+    "DeviceExists" : MessageLookupByLibrary.simpleMessage("Deze persoon heeft reeds een toestel met deze naam"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Koptelefoon"),
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag niet leeg zijn"),

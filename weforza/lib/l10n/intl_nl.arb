@@ -145,6 +145,7 @@
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
   "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
   "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
+  "DeviceExists": "Deze persoon heeft reeds een toestel met deze naam",
 
   "DeleteDeviceTitle": "Verwijder Toestel",
   "DeleteDeviceDescription": "Bent u zeker dat u dit toestel wil verwijderen?",

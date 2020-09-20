@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
@@ -15,6 +17,9 @@ abstract class IDeviceDao {
   Future<List<Device>> getAllDevices();
 
   Future<bool> deviceExists(String deviceName, String ownerUuid);
+
+  ///Get all the device names with their owner UUID's, grouped by device name.
+  Future<HashMap<String,List<String>>> getDeviceOwners();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -69,5 +74,25 @@ class DeviceDao implements IDeviceDao {
           ]),
         ),
     ) != null;
+  }
+
+  @override
+  Future<HashMap<String,List<String>>> getDeviceOwners() async {
+    final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
+
+    final HashMap<String,List<String>> collection = HashMap();
+
+    devices.forEach((record) {
+      final String device = record["deviceName"] as String;
+      final String ownerUuid = record["owner"] as String;
+
+      if(collection.containsKey(device)){
+        collection[record["deviceName"]].add(ownerUuid);
+      }else{
+        collection[record["deviceName"]] = <String>[ownerUuid];
+      }
+    });
+
+    return collection;
   }
 }

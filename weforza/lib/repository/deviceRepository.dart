@@ -1,4 +1,6 @@
 
+import 'dart:collection';
+
 import 'package:weforza/database/deviceDao.dart';
 import 'package:weforza/model/device.dart';
 
@@ -18,4 +20,6 @@ class DeviceRepository {
   Future<List<Device>> getAllDevices() => _dao.getAllDevices();
 
   Future<bool> deviceExists(String deviceName, String ownerUuid) => _dao.deviceExists(deviceName, ownerUuid);
+
+  Future<HashMap<String,List<String>>> getDeviceOwners() => _dao.getDeviceOwners();
 }

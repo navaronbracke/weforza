@@ -11,6 +11,7 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -282,13 +283,4 @@ class AttendeeScanningBloc extends Bloc {
     rideAttendees.remove(oldOwner);//null can't be in here anyway.
     rideAttendees.add(newOwner);//it's a Set so duplicates do nothing.
   }
-}
-
-enum ScanProcessStep {
-  INIT,//Check bluetooth on, then load settings and members
-  SCAN,//scanning
-  MANUAL,//scanning results were confirmed and we are in the manual assignment step
-  BLUETOOTH_DISABLED,//bluetooth is off
-  STOPPING_SCAN,//the scan is stopping
-  PERMISSION_DENIED,//the app didn't have the required permission to start scanning.
 }

@@ -16,4 +16,6 @@ class DeviceRepository {
   Future<List<Device>> getOwnerDevices(String uuid) => _dao.getOwnerDevices(uuid);
 
   Future<List<Device>> getAllDevices() => _dao.getAllDevices();
+
+  Future<bool> deviceExists(String deviceName, String ownerUuid) => _dao.deviceExists(deviceName, ownerUuid);
 }

@@ -16,7 +16,7 @@ class UnresolvedOwnersList extends StatelessWidget {
   );
 
   final List<Member> items;
-  final Widget Function(BuildContext context, Member member) itemBuilder;
+  final Widget Function(Member member) itemBuilder;
   final void Function() onButtonPressed;
 
   @override
@@ -25,7 +25,7 @@ class UnresolvedOwnersList extends StatelessWidget {
       children: [
         Expanded(
           child: ListView.builder(
-            itemBuilder: (context, index) => itemBuilder(context, items[index]),
+            itemBuilder: (context, index) => itemBuilder(items[index]),
             itemCount: items.length,
           ),
         ),

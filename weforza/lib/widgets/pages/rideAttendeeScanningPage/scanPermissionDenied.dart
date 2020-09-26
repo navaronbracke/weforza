@@ -17,7 +17,6 @@ class ScanPermissionDenied extends StatelessWidget {
       ),
       SizedBox(height: 5),
       Text(S.of(context).RideAttendeeScanningPermissionDenied, softWrap: true),
-      Text(S.of(context).RideAttendeeScanningPermissionDescription, softWrap: true),
       SizedBox(height: 20),
       PlatformAwareWidget(
         android: () => _buildAndroidButtons(context),

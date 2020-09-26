@@ -1,4 +1,6 @@
 {
+  "@@locale": "en",
+
   "AppName": "WeForza",
   "AppVersionNumber": "Version: {version}",
   "AppVersionBuildNumber": "Build Number: {buildNumber}",
@@ -84,8 +86,7 @@
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
   "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members",
   "RideAttendeeScanningGoBackToDetailPage": "Return to detail page",
-  "RideAttendeeScanningPermissionDenied": "Scan aborted, permission was denied",
-  "RideAttendeeScanningPermissionDescription": "Scanning requires permission to use your location",
+  "RideAttendeeScanningPermissionDenied": "Scan aborted, permission was denied. Scanning requires permission to use your location.",
   "RideAttendeeScanningBluetoothDisabled": "Scan aborted, Bluetooth is disabled",
   "RideAttendeeScanningGoToSettings": "Go to Settings",
   "RideAttendeeScanningRetryScan": "Retry Scan",

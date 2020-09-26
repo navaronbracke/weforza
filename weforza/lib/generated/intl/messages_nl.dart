@@ -43,7 +43,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m12(value) => "${value} is verplicht";
+  static m12(amount) => "${amount} personen hebben een toestel met deze naam";
+
+  static m13(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -166,6 +168,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("Voornaam"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
+    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Doorgaan naar volgende stap"),
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m12,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("Er zijn geen leden om uit te kiezen"),
@@ -176,10 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("Manueel"),
     "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scannen"),
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
-    "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Selectie Opslaan"),
-    "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Scan Resultaten Opslaan"),
-    "RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip" : MessageLookupByLibrary.simpleMessage("Nog aan het scannen"),
-    "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel" : MessageLookupByLibrary.simpleMessage("Kies een eigenaar"),
+    "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Opslaan"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
@@ -205,7 +206,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Onbekende Datum"),
-    "ValueIsRequired" : m12,
+    "ValueIsRequired" : m13,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

@@ -793,21 +793,21 @@ class S {
     );
   }
 
-  /// `Save Scan Results`
-  String get RideAttendeeScanningSaveScanResults {
+  /// `Proceed to next step`
+  String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Save Scan Results',
-      name: 'RideAttendeeScanningSaveScanResults',
+      'Proceed to next step',
+      name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],
     );
   }
 
-  /// `Save Selection`
-  String get RideAttendeeScanningSaveManualResults {
+  /// `Save`
+  String get RideAttendeeScanningSaveResults {
     return Intl.message(
-      'Save Selection',
-      name: 'RideAttendeeScanningSaveManualResults',
+      'Save',
+      name: 'RideAttendeeScanningSaveResults',
       desc: '',
       args: [],
     );
@@ -823,23 +823,13 @@ class S {
     );
   }
 
-  /// `Choose an owner`
-  String get RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel {
+  /// `{amount} people have a device with this name`
+  String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
-      'Choose an owner',
-      name: 'RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel',
+      '$amount people have a device with this name',
+      name: 'RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel',
       desc: '',
-      args: [],
-    );
-  }
-
-  /// `Still busy scanning`
-  String get RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip {
-    return Intl.message(
-      'Still busy scanning',
-      name: 'RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip',
-      desc: '',
-      args: [],
+      args: [amount],
     );
   }
 

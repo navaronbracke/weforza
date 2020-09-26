@@ -21,7 +21,7 @@ class MemberDevicesListItem extends StatefulWidget {
   //Initial value from the list builder
   final Device device;
   final int index;
-  final Future<void> Function(String deviceName, int index) onDelete;
+  final Future<void> Function(Device device, int index) onDelete;
 
   @override
   _MemberDevicesListItemState createState() => _MemberDevicesListItemState();
@@ -48,7 +48,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             title: S.of(context).DeleteDeviceTitle,
             description: S.of(context).DeleteDeviceDescription,
             errorDescription: S.of(context).DeleteDeviceErrorDescription,
-            onDelete: () => widget.onDelete(device.name, widget.index),
+            onDelete: () => widget.onDelete(device, widget.index),
           ),
       ),
       child: Container(
@@ -66,7 +66,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           title: S.of(context).DeleteDeviceTitle,
           description: S.of(context).DeleteDeviceDescription,
           errorDescription: S.of(context).DeleteDeviceErrorDescription,
-          onDelete: () => widget.onDelete(device.name, widget.index),
+          onDelete: () => widget.onDelete(device, widget.index),
         ),
       ),
       child: Container(

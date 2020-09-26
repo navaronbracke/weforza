@@ -8,7 +8,7 @@ import 'package:weforza/model/device.dart';
 abstract class IDeviceDao {
   Future<void> addDevice(Device device);
 
-  Future<void> removeDevice(String deviceName);
+  Future<void> removeDevice(Device device);
 
   Future<void> updateDevice(Device newDevice);
 
@@ -46,8 +46,16 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<void> removeDevice(String device) async {
-    await _deviceStore.delete(_database,finder: Finder(filter: Filter.equals("deviceName",device)));
+  Future<void> removeDevice(Device device) async {
+    await _deviceStore.delete(
+        _database,
+        finder: Finder(
+          filter: Filter.and(<Filter>[
+            Filter.equals("deviceName",device.name),
+            Filter.equals("owner",device.ownerId),
+          ]),
+        ),
+    );
   }
 
   @override

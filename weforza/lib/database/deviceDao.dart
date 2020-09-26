@@ -16,7 +16,7 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getAllDevices();
 
-  Future<bool> deviceExists(String deviceName, String ownerUuid);
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]);
 
   ///Get all the device names with their owner UUID's, grouped by device name.
   Future<HashMap<String,List<String>>> getDeviceOwners();
@@ -72,15 +72,19 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<bool> deviceExists(String deviceName, String ownerUuid) async {
-    return await _deviceStore.find(
-        _database,
-        finder: Finder(
-          filter: Filter.and([
-            Filter.equals("deviceName", deviceName),
-            Filter.equals("owner", ownerUuid),
-          ]),
-        ),
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]) async {
+    final List<Filter> filters = [
+      Filter.equals("deviceName", deviceName),
+      Filter.equals("owner", ownerUuid),
+      if(creationDate != null)
+        Filter.notEquals(Field.key, creationDate.toIso8601String())
+    ];
+
+    return await _deviceStore.findFirst(
+      _database,
+      finder: Finder(
+        filter: Filter.and(filters),
+      ),
     ) != null;
   }
 

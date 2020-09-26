@@ -43,7 +43,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m12(value) => "${value} is required";
+  static m12(amount) => "${amount} people have a device with this name";
+
+  static m13(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -166,6 +168,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("First Name"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
+    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Proceed to next step"),
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m12,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("There are no members to choose from"),
@@ -176,10 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("By Hand"),
     "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scan"),
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Retry Scan"),
-    "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Save Selection"),
-    "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Save Scan Results"),
-    "RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip" : MessageLookupByLibrary.simpleMessage("Still busy scanning"),
-    "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel" : MessageLookupByLibrary.simpleMessage("Choose an owner"),
+    "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Save"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Skip Scan"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
@@ -205,7 +206,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m12,
+    "ValueIsRequired" : m13,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

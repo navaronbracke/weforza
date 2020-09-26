@@ -5,20 +5,24 @@ import 'package:weforza/blocs/attendeeScanningBloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/scanResultItem.dart';
+import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelection.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/saveScanOrSkipButton.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionSubmit.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanPermissionDenied.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/bluetoothDisabled.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/preparingScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningProgressIndicator.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningStepper.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultMultiplePossibleOwnersListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultSingleOwnerListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultUnknownDeviceListItem.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/skipScanButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
@@ -38,7 +42,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   AttendeeScanningBloc bloc;
 
-  final GlobalKey<AnimatedListState> deviceListKey = GlobalKey();
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
   @override
   void didChangeDependencies() {
@@ -120,38 +124,35 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         children: <Widget>[
                           Expanded(
                             child: AnimatedList(
-                              key: deviceListKey,
-                              itemBuilder: (BuildContext context, int index, Animation<double> animation){
+                              key: _listKey,
+                              itemBuilder: (context, index, animation) {
+                                final String deviceName = bloc.getScanResultAt(index);
+                                final List<Member> owners = bloc.getDeviceOwners(deviceName);
+
                                 return SizeTransition(
                                   sizeFactor: animation,
-                                  child: ScanResultListItem(
-                                      item: bloc.getScanResultAt(index),
-                                  ),
+                                  child: _buildScanResultListItem(deviceName, owners),
                                 );
                               },
                             ),
                           ),
-                          SaveScanOrSkipButton(
-                            isSaving: bloc.isSaving,
+                          SkipScanButton(
                             isScanning: bloc.isScanning,
                             onSkip: () => bloc.skipScan(),
-                            onSave: () async => await bloc.saveRideAttendees(true).then((_){
-                              widget.onRefreshAttendees();
-                              bloc.advanceScanProcessStepToManualSelection();
-                            }, onError: (error){
-                              //do nothing
-                            }),
+                            onPressed: () => bloc.tryAdvanceToManualSelection(),
                           ),
                         ],
                       ),
                     );
                   case ScanProcessStep.MANUAL:
                     return RideAttendeeManualSelection(
-                        bloc: bloc,
-                        onRefreshAttendees: widget.onRefreshAttendees
+                      items: bloc.members.values.toList(),
+                      itemBuilder: _buildManualSelectionListItem,
+                      saveButtonBuilder: _buildSaveButton,
                     );
                   case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
                   case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
+                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return null;//TODO new list selection widget, listview builder w/ button
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }
@@ -163,11 +164,56 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   }
 
   ///Trigger an insertion for a new item in the AnimatedList.
-  void _onDeviceFound(String deviceName, Future<List<Member>> ownersLookup){
-    if(deviceListKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
-      bloc.addScanResult(ScanResultItem(deviceName: deviceName, findDeviceOwners: ownersLookup));
-      deviceListKey.currentState.insertItem(0);
+  void _onDeviceFound(String deviceName){
+    if(_listKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
+      bloc.addScanResult(deviceName);
+      _listKey.currentState.insertItem(0);
     }
+  }
+
+  void _onSaveScanResults(BuildContext context) async {
+    await bloc.saveRideAttendees().then((_){
+      widget.onRefreshAttendees();
+      Navigator.of(context).pop();
+    }).catchError((error){
+      //do nothing
+    });
+  }
+
+  Widget _buildSaveButton(BuildContext context){
+    return ManualSelectionSubmit(
+      isSaving: bloc.isSaving,
+      onSave: () => _onSaveScanResults(context),
+    );
+  }
+
+  Widget _buildManualSelectionListItem(Member item){
+    return ManualSelectionListItem(
+      profileImageFuture: bloc.loadProfileImageFromDisk(item.profileImageFilePath),
+      firstName: item.firstname,
+      lastName: item.lastname,
+      alias: item.alias,
+      isSelected: () => bloc.isItemSelected(item),
+      onTap: (){
+        if(!bloc.isSaving.value){
+          bloc.onMemberSelected(item);
+        }
+      },
+    );
+  }
+
+  Widget _buildScanResultListItem(String deviceName, List<Member> owners){
+    if(owners.isEmpty){
+      return ScanResultUnknownDeviceListItem(deviceName: deviceName);
+    }
+    if(owners.length == 1){
+      return ScanResultSingleOwnerListItem(owner: owners.first);
+    }
+
+    return ScanResultMultiplePossibleOwnersListItem(
+      deviceName: deviceName,
+      amountOfPossibleOwners: owners.length,
+    );
   }
 
   @override

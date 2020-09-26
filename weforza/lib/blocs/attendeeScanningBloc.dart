@@ -230,7 +230,7 @@ class AttendeeScanningBloc extends Bloc {
     bool result = true;
     await scanner.stopScan().then((_){
       isScanning.value = false;
-    }, onError: (error){
+    }).catchError((error){
       result = false;//if it failed, prevent pop & show error first
       _scanStepController.addError(error);
       isScanning.value = false;

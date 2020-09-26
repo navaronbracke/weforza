@@ -4,7 +4,6 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
@@ -50,15 +49,6 @@ class AttendeeScanningBloc extends Bloc {
   ///the user from going back to the details screen.
   final ValueNotifier<bool> isScanStep = ValueNotifier<bool>(true);
 
-  final StreamController<bool> _choiceRequiredStreamController = BehaviorSubject.seeded(false);
-  Stream<bool> get choiceRequiredStream => _choiceRequiredStreamController.stream;
-
-  final StreamController<bool> _menuEnabledStreamController = BehaviorSubject.seeded(false);
-  Stream<bool> get menuEnabledStream => _menuEnabledStreamController.stream;
-
-  final StreamController<String> _lastSelectedOwnerStreamController = BehaviorSubject.seeded(null);
-  Stream<String> get lastSelectedOwnerStream => _lastSelectedOwnerStreamController.stream;
-
   ///The repositories connect the bloc with the database.
   final SettingsRepository settingsRepo;
   final MemberRepository memberRepo;
@@ -91,7 +81,20 @@ class AttendeeScanningBloc extends Bloc {
   /// The scan duration in seconds.
   int scanDuration;
 
-  HashMap<String, Member> membersList;
+  /// This HashMap holds the members that were loaded from the database.
+  /// Each member is mapped to it's uuid.
+  /// This way we can easily map scanned device names to it.
+  HashMap<String, Member> members;
+
+  /// This collection keeps track of a specific set of owners.
+  /// If a device with multiple possible owners is scanned,
+  /// the owners that aren't scanned yet (by finding a device only they own)
+  /// are added to this list.
+  ///
+  /// This list effectively collects the owners
+  /// that are passed to the multiple possible owners resolution screen.
+  /// On this screen the user can select the members from this list that weren't automatically resolved.
+  Set<Member> ownersOfScannedDevicesWithMultiplePossibleOwners = HashSet();//TODO add items
 
   ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   ///For each step it will trigger a rebuild of the UI accordingly.
@@ -114,7 +117,7 @@ class AttendeeScanningBloc extends Bloc {
     ///Check if bluetooth is on.
     await scanner.isBluetoothEnabled().then((enabled) async {
       if(enabled){
-        requestScanPermission(
+        scanner.requestScanPermission(
           onDenied: () => _scanStepController.add(ScanProcessStep.PERMISSION_DENIED),
           onGranted: () async {
             ///Wait for both the settings and the existing attendees/ first page of members.
@@ -163,7 +166,6 @@ class AttendeeScanningBloc extends Bloc {
         //so the value listenable builder for the button updates.
         //At this point the user can also switch pages.
         isScanning.value = false;
-        _menuEnabledStreamController.add(true);
       }, cancelOnError: false);
     }
   }
@@ -181,7 +183,7 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Load the members. Returns a HashMap for easy lookup later.
   Future<void> _loadMembers() async {
-    membersList = await memberRepo.getMembers().then((List<Member> list){
+    members = await memberRepo.getMembers().then((List<Member> list){
       final HashMap<String,Member> collection = HashMap();
       list.forEach((Member member) => collection[member.uuid] = member);
 
@@ -203,7 +205,7 @@ class AttendeeScanningBloc extends Bloc {
 
   List<Member> getDeviceOwners(String deviceName) {
     if(deviceOwners.containsKey(deviceName)){
-      return deviceOwners[deviceName].map((String uuid) => membersList[uuid]).toList();
+      return deviceOwners[deviceName].map((String uuid) => members[uuid]).toList();
     }else{
       return [];
     }
@@ -227,12 +229,12 @@ class AttendeeScanningBloc extends Bloc {
     return result;
   }
 
-  ///Cancel a running scan and continue to the manual assignment step.
+  ///Cancel a running scan and continue to the next step.
+  ///This can lead to either manual selection or owner resolution.
   void skipScan() async {
     await stopScan().then((scanStopped){
       if(scanStopped){
-        _scanStepController.add(ScanProcessStep.MANUAL);
-        isScanStep.value = false;
+        tryAdvanceToManualSelection();
       }
     });
   }
@@ -250,22 +252,22 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
-  void advanceScanProcessStepToManualSelection(){
-    isSaving.value = false;
-    isScanStep.value = false;
-    _scanStepController.add(ScanProcessStep.MANUAL);
-  }
-
-  ///Check the required permission for starting a scan.
-  ///When the permission is unknown, it is requested first.
-  ///After requesting the permission, the proper callback is called.
-  ///When the permission was granted before [onGranted] gets called.
-  ///When the permission is denied, [onDenied] gets called.
-  void requestScanPermission({void Function() onGranted, void Function() onDenied}) async {
-    if(await Permission.locationWhenInUse.request().isGranted){
-      onGranted();
+  /// Try to go to the manual selection screen.
+  /// If we have items in [ownersOfScannedDevicesWithMultiplePossibleOwners],
+  /// we go to the multiple owners resolution screen and [isScanStep] stays true.
+  /// Otherwise we go to the manual selection screen and [isScanStep] becomes false.
+  ///
+  /// If [override] is true, we go to manual selection anyway.
+  void tryAdvanceToManualSelection({bool override = false}){
+    if(override || ownersOfScannedDevicesWithMultiplePossibleOwners.isEmpty){
+      //Multiple invocations of this method, cannot alter isScanning.
+      if(isScanStep.value){
+        isScanStep.value = false;
+      }
+      _scanStepController.add(ScanProcessStep.MANUAL);
     }else{
-      onDenied();
+      // There are owners that we cannot resolve ourselves, scan step stays unmodified.
+      _scanStepController.add(ScanProcessStep.RESOLVE_MULTIPLE_OWNERS);
     }
   }
   
@@ -274,9 +276,6 @@ class AttendeeScanningBloc extends Bloc {
   @override
   void dispose() {
     _scanStepController.close();
-    _choiceRequiredStreamController.close();
-    _menuEnabledStreamController.close();
-    _lastSelectedOwnerStreamController.close();
   }
 
   bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
@@ -290,10 +289,4 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
-
-  /// Remove [oldOwner] from the list of attendees and add [newOwner] instead.
-  void replaceDeviceOwner(String oldOwner, String newOwner) {
-    rideAttendees.remove(oldOwner);//null can't be in here anyway.
-    rideAttendees.add(newOwner);//it's a Set so duplicates do nothing.
-  }
 }

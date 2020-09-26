@@ -2,41 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class SaveScanOrSkipButton extends StatelessWidget {
-  SaveScanOrSkipButton({
+/// This widget provides a button that advances the scan process step.
+/// When the scan is still running it gets skipped.
+class SkipScanButton extends StatelessWidget {
+  SkipScanButton({
     @required this.isScanning,
-    @required this.isSaving,
-    @required this.onSave,
+    @required this.onPressed,
     @required this.onSkip,
-  }): assert(
-    isScanning != null && isSaving != null && onSave != null && onSkip != null
-  );
+  }): assert(isScanning != null && onPressed != null && onSkip != null);
 
   final ValueNotifier<bool> isScanning;
-  final ValueNotifier<bool> isSaving;
-  final VoidCallback onSave;
+  final VoidCallback onPressed;
   final VoidCallback onSkip;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: isSaving,
-      builder: (context, isSaving, child){
-        if(isSaving){
-          return PlatformAwareLoadingIndicator();
-        }else{
-          return ValueListenableBuilder<bool>(
-            valueListenable: isScanning,
-            builder: (context, isScanning, child){
-              return isScanning ? Center(child: _buildSkipScanButton(context)) :
-               Center(child: _buildSaveButton(context));
-            },
-          );
-        }
-      },
+      valueListenable: isScanning,
+      builder: (context, isScanning, child) => Center(
+          child: isScanning ? _buildSkipScanButton(context): _buildContinueButton(context),
+      ),
     );
   }
 
@@ -46,8 +33,8 @@ class SaveScanOrSkipButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: FlatButton(
           child: Text(
-              S.of(context).RideAttendeeScanningSkipScan,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
+            S.of(context).RideAttendeeScanningSkipScan,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: onSkip,
         ),
@@ -65,29 +52,28 @@ class SaveScanOrSkipButton extends StatelessWidget {
     );
   }
 
-  Widget _buildSaveButton(BuildContext context){
+  Widget _buildContinueButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: FlatButton(
           child: Text(
-            S.of(context).RideAttendeeScanningSaveScanResults,
+            S.of(context).RideAttendeeScanningContinue,
             style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
-          onPressed: onSave,
+          onPressed: onPressed,
         ),
       ),
       ios: () => Padding(
         padding: const EdgeInsets.only(bottom: 20, top: 10),
         child: CupertinoButton(
           child: Text(
-            S.of(context).RideAttendeeScanningSaveScanResults,
+            S.of(context).RideAttendeeScanningContinue,
             style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
-          onPressed: onSave,
+          onPressed: onPressed,
         ),
       ),
     );
   }
 }
-

@@ -733,11 +733,21 @@ class S {
     );
   }
 
-  /// `Scan aborted, permission was denied. Scanning requires permission to use your location.`
+  /// `Scan aborted, permission was denied.`
   String get RideAttendeeScanningPermissionDenied {
     return Intl.message(
-      'Scan aborted, permission was denied. Scanning requires permission to use your location.',
+      'Scan aborted, permission was denied.',
       name: 'RideAttendeeScanningPermissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanning requires permission to use your location.`
+  String get RideAttendeeScanningPermissionDeniedDescription {
+    return Intl.message(
+      'Scanning requires permission to use your location.',
+      name: 'RideAttendeeScanningPermissionDeniedDescription',
       desc: '',
       args: [],
     );

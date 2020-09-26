@@ -105,8 +105,7 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
-  static final TextStyle rideAttendeeScanResultMultipleOwnerChoiceLabelStyle = TextStyle(fontStyle: FontStyle.italic);
-  static final Color rideAttendeeScanResultMultipleOwnerChoiceLabelDisabledColor = Colors.grey.shade500;
+  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 

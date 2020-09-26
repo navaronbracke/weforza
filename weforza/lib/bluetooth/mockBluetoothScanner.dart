@@ -6,7 +6,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   /// This flag handles the internal for requesting the scan permission.
   /// This value can be changed for testing.
-  bool isPermissionGranted = false;
+  bool isPermissionGranted = true;
 
   @override
   Future<bool> isBluetoothEnabled() {
@@ -22,7 +22,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       }
 
       if(i == 3){
-        yield BluetoothPeripheral(id: "$i", deviceName: "Device Test");
+        yield BluetoothPeripheral(id: "$i", deviceName: "t2");
       }
 
       yield BluetoothPeripheral(id: "$i", deviceName: "Device $i");
@@ -30,9 +30,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  Future<void> stopScan() {
-    return null;
-  }
+  Future<void> stopScan() => Future<void>.value(null);
 
   @override
   void requestScanPermission({void Function() onGranted, void Function() onDenied}) {

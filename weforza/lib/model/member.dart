@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 ///This class represents a 'Member.'
-class Member {
+class Member implements Comparable<Member> {
   Member(this.uuid,this.firstname,this.lastname, this.alias,[this.profileImageFilePath]):
         assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && alias != null);
 
@@ -65,4 +65,25 @@ class Member {
   }
 
   String toCsv() => "$firstname,$lastname,$alias";
+
+  ///Compare two members for use in sorting.
+  ///Returns zero if both are considered equal.
+  ///Returns a negative number if this object is regarded to be before [other] in a sorted list.
+  ///Returns a positive number otherwise.
+  @override
+  int compareTo(Member other) {
+    final int deltaFirstName = firstname.compareTo(other.firstname);
+
+    if(deltaFirstName != 0){
+      return deltaFirstName;
+    }
+
+    final int deltaLastName = lastname.compareTo(other.lastname);
+
+    if(deltaLastName != 0){
+      return deltaLastName;
+    }
+
+    return alias.compareTo(other.alias);
+  }
 }

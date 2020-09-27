@@ -155,7 +155,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
                   case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
                   case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return UnresolvedOwnersList(
-                    items: bloc.ownersOfScannedDevicesWithMultiplePossibleOwners.toList(),
+                    future: bloc.filterAndSortMultipleOwnersList(),
                     itemBuilder: (Member member) => UnresolvedOwnersListItem(
                       firstName: member.firstname,
                       lastName: member.lastname,
@@ -177,7 +177,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   ///Trigger an insertion for a new item in the AnimatedList.
   void _onDeviceFound(String deviceName){
-    if(_listKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
+    if(_listKey.currentState != null){
       bloc.addScanResult(deviceName);
       _listKey.currentState.insertItem(0);
     }

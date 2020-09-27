@@ -15,16 +15,30 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
-    for(int i = 0; i< 5; i++){
+    final BluetoothPeripheral duplicateOwner = BluetoothPeripheral(id: "66", deviceName: "rudy1");
+    final BluetoothPeripheral duplicateDevice = BluetoothPeripheral(id: "99", deviceName: "duplicate_device");
+    final BluetoothPeripheral ownedByMultiple = BluetoothPeripheral(id: "100", deviceName: "shared1");
+
+    for(int i = 0; i< 10; i++){
       await Future.delayed(Duration(seconds: 2),(){});
+
       if(i == 4){
         yield* Stream.error(Exception("some error"), StackTrace.current);
       }
 
-      if(i == 3){
-        yield BluetoothPeripheral(id: "$i", deviceName: "t2");
+      if(i == 2 || i == 9){
+        yield duplicateDevice;
       }
 
+      if(i == 5 || i == 7){
+        yield duplicateOwner;
+      }
+
+      if(i == 3){
+        yield ownedByMultiple;
+      }
+
+      // Emit unknown devices as fallback.
       yield BluetoothPeripheral(id: "$i", deviceName: "Device $i");
     }
   }
@@ -40,5 +54,4 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       onDenied();
     }
   }
-
 }

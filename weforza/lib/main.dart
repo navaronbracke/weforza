@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -18,6 +18,7 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
+
   runApp(WeForzaApp());
 }
 
@@ -91,7 +92,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
 
   @override
   void dispose() {
-    DatabaseProvider.dispose();
+    InjectionContainer.get<ApplicationDatabase>().dispose();
     super.dispose();
   }
 }

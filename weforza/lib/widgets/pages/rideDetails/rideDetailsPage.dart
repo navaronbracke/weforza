@@ -1,23 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
+import 'package:weforza/widgets/pages/exportRide/exportRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
+import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
@@ -59,37 +59,36 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             icon: Icon(Icons.bluetooth_searching),
             onPressed: () => goToScanningPage(context),
           ),
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EditRidePage())).then((_){
-                    setState(() {
-                      bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
-                    });
-              });
-            },
-          ),
-          IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () => showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => DeleteItemDialog(
-                  title: S.of(context).RideDeleteDialogTitle,
-                  description: S.of(context).RideDeleteDialogDescription,
-                  errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                  onDelete: () => bloc.deleteRide().then((_){
-                    //trigger the reload of rides
-                    ReloadDataProvider.of(context).reloadRides.value = true;
-                    final navigator = Navigator.of(context);
-                    //Pop both the dialog and the detail screen
-                    navigator.pop();
-                    navigator.pop();
-                  }),
+          PopupMenuButton<RideDetailsPageOptions>(
+            icon: Icon(Icons.more_vert, color: Colors.white),
+            itemBuilder: (context) => <PopupMenuEntry<RideDetailsPageOptions>>[
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text(S.of(context).RideDetailsEditOption),
+                ),
+                value: RideDetailsPageOptions.EDIT,
               ),
-            ),
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.publish),
+                  title: Text(S.of(context).RideDetailsExportOption),
+                ),
+                value: RideDetailsPageOptions.EXPORT,
+              ),
+              PopupMenuDivider(),
+              PopupMenuItem<RideDetailsPageOptions>(
+                child: ListTile(
+                  leading: Icon(Icons.delete, color: Colors.red),
+                  title: Text(
+                      S.of(context).RideDetailsDeleteOption,
+                      style: TextStyle(color: Colors.red)
+                  ),
+                ),
+                value: RideDetailsPageOptions.DELETE,
+              ),
+            ],
+            onSelected: (RideDetailsPageOptions option) => onSelectMenuOption(context, option),
           ),
         ],
       ),
@@ -111,49 +110,40 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
+                CupertinoIconButton.fromAppTheme(
                     icon: Icons.bluetooth_searching,
                     onPressed: () => goToScanningPage(context),
                 ),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
-                    icon: Icons.edit,
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditRidePage()
-                        )
-                    ).then((_){
-                      setState(() {
-                        bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
+                SizedBox(width: 15),
+                CupertinoIconButton.fromAppTheme(
+                    icon: Icons.more_vert,
+                    onPressed: () async {
+                      final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
+                        return CupertinoActionSheet(
+                          actions: [
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsEditOption),
+                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EDIT),
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsExportOption),
+                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                            ),
+                            CupertinoActionSheetAction(
+                              child: Text(S.of(context).RideDetailsDeleteOption),
+                              isDestructiveAction: true,
+                              onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
+                            ),
+                          ],
+                          cancelButton: CupertinoActionSheetAction(
+                            child: Text(S.of(context).DialogCancel),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        );
                       });
-                    })
-                ),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
-                    icon: Icons.delete,
-                    onPressed: () => showCupertinoDialog(
-                        context: context,
-                        builder: (context) => DeleteItemDialog(
-                          title: S.of(context).RideDeleteDialogTitle,
-                          description: S.of(context).RideDeleteDialogDescription,
-                          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                          onDelete: () => bloc.deleteRide().then((_){
-                            //trigger the reload of rides
-                            ReloadDataProvider.of(context).reloadRides.value = true;
-                            final navigator = Navigator.of(context);
-                            //Pop both the dialog and the detail screen
-                            navigator.pop();
-                            navigator.pop();
-                          }),
-                        ),
-                    ),
+
+                      onSelectMenuOption(context, option);
+                    }
                 ),
               ],
             ),
@@ -164,32 +154,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         bottom: false,
         child: _buildBody(bloc.ride),
       ),
-    );
-  }
-
-  ///Build the ride attendees list.
-  Widget _buildAttendeesList() {
-    return FutureBuilder<List<MemberItem>>(
-      future: bloc.attendeesFuture,
-      builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.done){
-          if (snapshot.hasError) {
-            return RideDetailsAttendeesError();
-          } else {
-            if (snapshot.data == null || snapshot.data.isEmpty) {
-              return RideDetailsAttendeesEmpty();
-            } else {
-              return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return MemberWithPictureListItem(item: snapshot.data[index]);
-                  },
-                  itemCount: snapshot.data.length);
-            }
-          }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
     );
   }
 
@@ -224,7 +188,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             RideAttendeeCounter(
               //We need the attendee names + images for displaying in the list.
               //But we need the total of people for the counter, thus we map to the length when its done loading.
-              future: bloc.attendeesFuture.then((attendees) => attendees.length)
+              future: bloc.attendeesFuture.then((attendees) => attendees.length),
+              invisibleWhenLoadingOrError: true,
             ),
           ],
         ),
@@ -245,7 +210,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: _buildPropertiesPanel(ride),
               ),
               Expanded(
-                child: _buildAttendeesList(),
+                child: RideDetailsAttendeesList(future: bloc.attendeesFuture),
               ),
             ]
           : <Widget>[
@@ -264,7 +229,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: _buildPropertiesPanel(ride),
               ),
               Expanded(
-                child: _buildAttendeesList(),
+                child: RideDetailsAttendeesList(future: bloc.attendeesFuture),
               ),
             ],
     );
@@ -286,5 +251,80 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         attendeeProvider.value = null;
       }
     });
+  }
+
+  void goToEditPage(BuildContext context){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EditRidePage())).then((_){
+      setState(() {
+        bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
+      });
+    });
+  }
+
+  Future<void> deleteRide(BuildContext context){
+    return bloc.deleteRide().then((_){
+      //trigger the reload of rides
+      ReloadDataProvider.of(context).reloadRides.value = true;
+      final navigator = Navigator.of(context);
+      //Pop both the dialog and the detail screen
+      navigator.pop();
+      navigator.pop();
+    });
+  }
+
+  void goToExportPage(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => ExportRidePage(
+              bloc: ExportRideBloc(
+                fileHandler: InjectionContainer.get<IFileHandler>(),
+                resolveInitialFilename: (){
+                  final ride = bloc.ride;
+                  if(ride.title == null || ride.title.isEmpty){
+                    return S.of(context).ExportRideFileNamePlaceholder(ride.dateToDDMMYYY());
+                  }
+
+                  return ride.title;
+                },
+                ride: bloc.ride,
+                loadedAttendees: bloc.attendeesFuture,
+              ),
+            ),
+        ),
+    );
+  }
+
+  void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option){
+    switch(option){
+      case RideDetailsPageOptions.EDIT:
+        goToEditPage(context);
+        break;
+      case RideDetailsPageOptions.EXPORT:
+        goToExportPage(context);
+        break;
+      case RideDetailsPageOptions.DELETE:
+        final Widget Function(BuildContext) builder = (context) => DeleteItemDialog(
+          title: S.of(context).RideDeleteDialogTitle,
+          description: S.of(context).RideDeleteDialogDescription,
+          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+          onDelete: () => deleteRide(context),
+        );
+        if(Platform.isAndroid){
+          showDialog(context: context, builder: builder);
+        }else if(Platform.isIOS){
+          showCupertinoDialog(context: context, builder: builder);
+        }
+        break;
+
+      default: break;//null is ignored
+    }
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
   }
 }

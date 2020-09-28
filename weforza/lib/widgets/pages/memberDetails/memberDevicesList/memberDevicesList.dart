@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListDisabledItem.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListEmpty.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListError.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListHeader.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -32,7 +33,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return MemberDevicesListError();
+            return GenericError(
+                text: S.of(context).MemberDetailsLoadDevicesError
+            );
           }else{
             return snapshot.data.isEmpty ?
             MemberDevicesListEmpty(onPressed: () => goToAddDevicePage(context)):
@@ -58,7 +61,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             itemBuilder: (context,index, animation) => MemberDevicesListItem(
               device: devices[index],
               index: index,
-              onDelete: (deviceName, index) => onDeleteDevice(context,deviceName,index,devices),
+              onDelete: (device, index) => onDeleteDevice(context,device,index,devices),
             ),
           ),
         ),
@@ -78,9 +81,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
     );
   }
 
-  Future<void> onDeleteDevice(BuildContext context, String deviceName, int index, List<Device> devices){
+  Future<void> onDeleteDevice(BuildContext context, Device device, int index, List<Device> devices){
     //delete it from the database
-    return widget.bloc.deleteDevice(deviceName).then((_){
+    return widget.bloc.deleteDevice(device).then((_){
       Navigator.of(context).pop();//get rid of the dialog
       if(_listKey.currentState != null){
         final device = devices.removeAt(index);//remove it from memory

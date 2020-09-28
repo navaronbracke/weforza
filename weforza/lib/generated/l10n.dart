@@ -43,6 +43,26 @@ class S {
     );
   }
 
+  /// `Version: {version}`
+  String AppVersionNumber(Object version) {
+    return Intl.message(
+      'Version: $version',
+      name: 'AppVersionNumber',
+      desc: '',
+      args: [version],
+    );
+  }
+
+  /// `Build Number: {buildNumber}`
+  String AppVersionBuildNumber(Object buildNumber) {
+    return Intl.message(
+      'Build Number: $buildNumber',
+      name: 'AppVersionBuildNumber',
+      desc: '',
+      args: [buildNumber],
+    );
+  }
+
   /// `Mon`
   String get MondayPrefix {
     return Intl.message(
@@ -253,6 +273,36 @@ class S {
     );
   }
 
+  /// `Edit`
+  String get RideDetailsEditOption {
+    return Intl.message(
+      'Edit',
+      name: 'RideDetailsEditOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get RideDetailsExportOption {
+    return Intl.message(
+      'Export',
+      name: 'RideDetailsExportOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get RideDetailsDeleteOption {
+    return Intl.message(
+      'Delete',
+      name: 'RideDetailsDeleteOption',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete Ride`
   String get RideDeleteDialogTitle {
     return Intl.message(
@@ -333,6 +383,16 @@ class S {
     );
   }
 
+  /// `Alias:`
+  String get MemberDetailsAlias {
+    return Intl.message(
+      'Alias:',
+      name: 'MemberDetailsAlias',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Devices`
   String get DevicesListHeader {
     return Intl.message(
@@ -383,16 +443,6 @@ class S {
     );
   }
 
-  /// `Something went wrong`
-  String get AddDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'AddDeviceGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Create Device`
   String get AddDeviceSubmit {
     return Intl.message(
@@ -418,16 +468,6 @@ class S {
     return Intl.message(
       'Could not edit device',
       name: 'EditDeviceError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong`
-  String get EditDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'EditDeviceGenericError',
       desc: '',
       args: [],
     );
@@ -673,10 +713,10 @@ class S {
     );
   }
 
-  /// `Cannot start a scan, there are no members.`
+  /// `Cannot start a scan, there are no members`
   String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Cannot start a scan, there are no members.',
+      'Cannot start a scan, there are no members',
       name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
@@ -693,41 +733,21 @@ class S {
     );
   }
 
-  /// `Go Back`
-  String get RideAttendeeScanningGoBack {
-    return Intl.message(
-      'Go Back',
-      name: 'RideAttendeeScanningGoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong.`
-  String get RideAttendeeScanningGenericError {
-    return Intl.message(
-      'Something went wrong.',
-      name: 'RideAttendeeScanningGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Scan aborted, permission was denied`
+  /// `Scan aborted, permission was denied.`
   String get RideAttendeeScanningPermissionDenied {
     return Intl.message(
-      'Scan aborted, permission was denied',
+      'Scan aborted, permission was denied.',
       name: 'RideAttendeeScanningPermissionDenied',
       desc: '',
       args: [],
     );
   }
 
-  /// `Scanning requires permission to use your location`
-  String get RideAttendeeScanningPermissionDescription {
+  /// `Scanning requires permission to use your location.`
+  String get RideAttendeeScanningPermissionDeniedDescription {
     return Intl.message(
-      'Scanning requires permission to use your location',
-      name: 'RideAttendeeScanningPermissionDescription',
+      'Scanning requires permission to use your location.',
+      name: 'RideAttendeeScanningPermissionDeniedDescription',
       desc: '',
       args: [],
     );
@@ -773,21 +793,21 @@ class S {
     );
   }
 
-  /// `Save Scan Results`
-  String get RideAttendeeScanningSaveScanResults {
+  /// `Proceed to next step`
+  String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Save Scan Results',
-      name: 'RideAttendeeScanningSaveScanResults',
+      'Proceed to next step',
+      name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],
     );
   }
 
-  /// `Save Selection`
-  String get RideAttendeeScanningSaveManualResults {
+  /// `Save`
+  String get RideAttendeeScanningSaveResults {
     return Intl.message(
-      'Save Selection',
-      name: 'RideAttendeeScanningSaveManualResults',
+      'Save',
+      name: 'RideAttendeeScanningSaveResults',
       desc: '',
       args: [],
     );
@@ -803,21 +823,21 @@ class S {
     );
   }
 
-  /// `Owned By:`
-  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
+  /// `{amount} people have a device with this name`
+  String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
-      'Owned By:',
-      name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
+      '$amount people have a device with this name',
+      name: 'RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel',
       desc: '',
-      args: [],
+      args: [amount],
     );
   }
 
-  /// `tel: `
-  String get RideAttendeeScanningScanResultOwnerTelephoneLabel {
+  /// `Some scanned devices have multiple possible owners. You can select the attending owners here.`
+  String get RideAttendeeScanningUnresolvedOwnersListTooltip {
     return Intl.message(
-      'tel: ',
-      name: 'RideAttendeeScanningScanResultOwnerTelephoneLabel',
+      'Some scanned devices have multiple possible owners. You can select the attending owners here.',
+      name: 'RideAttendeeScanningUnresolvedOwnersListTooltip',
       desc: '',
       args: [],
     );
@@ -883,10 +903,10 @@ class S {
     );
   }
 
-  /// `A title can't be only whitespace`
+  /// `A title can't be blank`
   String get EditRideTitleWhitespace {
     return Intl.message(
-      'A title can\'t be only whitespace',
+      'A title can\'t be blank',
       name: 'EditRideTitleWhitespace',
       desc: '',
       args: [],
@@ -923,10 +943,10 @@ class S {
     );
   }
 
-  /// `An address cannot be only whitespace`
+  /// `An address can't be blank`
   String get EditRideAddressWhitespace {
     return Intl.message(
-      'An address cannot be only whitespace',
+      'An address can\'t be blank',
       name: 'EditRideAddressWhitespace',
       desc: '',
       args: [],
@@ -968,6 +988,166 @@ class S {
     return Intl.message(
       'Failed to save the changes',
       name: 'EditRideSubmitError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import Members`
+  String get ImportMembersPageTitle {
+    return Intl.message(
+      'Import Members',
+      name: 'ImportMembersPageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose File`
+  String get ImportMembersPickFile {
+    return Intl.message(
+      'Choose File',
+      name: 'ImportMembersPickFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose a file to import members`
+  String get ImportMembersPickFileWarning {
+    return Intl.message(
+      'Please choose a file to import members',
+      name: 'ImportMembersPickFileWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importing Members`
+  String get ImportMembersImporting {
+    return Intl.message(
+      'Importing Members',
+      name: 'ImportMembersImporting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)`
+  String get ImportMembersCsvHeaderRegex {
+    return Intl.message(
+      '(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)',
+      name: 'ImportMembersCsvHeaderRegex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A csv header might look like:`
+  String get ImportMembersCsvHeaderExampleDescription {
+    return Intl.message(
+      'A csv header might look like:',
+      name: 'ImportMembersCsvHeaderExampleDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,surname,alias,devices`
+  String get ImportMembersCsvHeaderExample {
+    return Intl.message(
+      'firstname,surname,alias,devices',
+      name: 'ImportMembersCsvHeaderExample',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only CSV files are allowed`
+  String get ImportMembersInvalidFileFormat {
+    return Intl.message(
+      'Only CSV files are allowed',
+      name: 'ImportMembersInvalidFileFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If a header exists, it will be removed`
+  String get ImportMembersHeaderStrippedMessage {
+    return Intl.message(
+      'If a header exists, it will be removed',
+      name: 'ImportMembersHeaderStrippedMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Ride`
+  String get ExportRideTitle {
+    return Intl.message(
+      'Export Ride',
+      name: 'ExportRideTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ride_{date}`
+  String ExportRideFileNamePlaceholder(Object date) {
+    return Intl.message(
+      'ride_$date',
+      name: 'ExportRideFileNamePlaceholder',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Ride saved at {path}`
+  String ExportRideExportedToPathMessage(Object path) {
+    return Intl.message(
+      'Ride saved at $path',
+      name: 'ExportRideExportedToPathMessage',
+      desc: '',
+      args: [path],
+    );
+  }
+
+  /// `Exporting ride to file`
+  String get ExportRideExportingToFile {
+    return Intl.message(
+      'Exporting ride to file',
+      name: 'ExportRideExportingToFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get Export {
+    return Intl.message(
+      'Export',
+      name: 'Export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Rides`
+  String get ExportRidesTitle {
+    return Intl.message(
+      'Export Rides',
+      name: 'ExportRidesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exporting rides and attendees`
+  String get ExportingRidesDescription {
+    return Intl.message(
+      'Exporting rides and attendees',
+      name: 'ExportingRidesDescription',
       desc: '',
       args: [],
     );
@@ -1033,11 +1213,21 @@ class S {
     );
   }
 
-  /// `Tablet`
-  String get DeviceTablet {
+  /// `Power meter`
+  String get DevicePowerMeter {
     return Intl.message(
-      'Tablet',
-      name: 'DeviceTablet',
+      'Power meter',
+      name: 'DevicePowerMeter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cadence meter`
+  String get DeviceCadenceMeter {
+    return Intl.message(
+      'Cadence meter',
+      name: 'DeviceCadenceMeter',
       desc: '',
       args: [],
     );
@@ -1073,11 +1263,31 @@ class S {
     );
   }
 
-  /// `This device already exists`
-  String get DeviceAlreadyExists {
+  /// `A device name cannot contain a ,`
+  String get DeviceNameCannotContainComma {
     return Intl.message(
-      'This device already exists',
-      name: 'DeviceAlreadyExists',
+      'A device name cannot contain a ,',
+      name: 'DeviceNameCannotContainComma',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A device name can't be empty`
+  String get DeviceNameBlank {
+    return Intl.message(
+      'A device name can\'t be empty',
+      name: 'DeviceNameBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This person already has a device with this name`
+  String get DeviceExists {
+    return Intl.message(
+      'This person already has a device with this name',
+      name: 'DeviceExists',
       desc: '',
       args: [],
     );
@@ -1153,16 +1363,6 @@ class S {
     );
   }
 
-  /// `Something went wrong`
-  String get SettingsGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'SettingsGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Could not save the settings`
   String get SettingsSubmitError {
     return Intl.message(
@@ -1193,11 +1393,11 @@ class S {
     );
   }
 
-  /// `Telephone`
-  String get PersonTelephoneLabel {
+  /// `Alias`
+  String get PersonAliasLabel {
     return Intl.message(
-      'Telephone',
-      name: 'PersonTelephoneLabel',
+      'Alias',
+      name: 'PersonAliasLabel',
       desc: '',
       args: [],
     );
@@ -1223,20 +1423,20 @@ class S {
     );
   }
 
-  /// `First Name can't be just whitespace`
+  /// `First Name can't be blank`
   String get FirstNameBlank {
     return Intl.message(
-      'First Name can\'t be just whitespace',
+      'First Name can\'t be blank',
       name: 'FirstNameBlank',
       desc: '',
       args: [],
     );
   }
 
-  /// `Last Name can't be just whitespace`
+  /// `Last Name can't be blank`
   String get LastNameBlank {
     return Intl.message(
-      'Last Name can\'t be just whitespace',
+      'Last Name can\'t be blank',
       name: 'LastNameBlank',
       desc: '',
       args: [],
@@ -1263,33 +1463,33 @@ class S {
     );
   }
 
-  /// `A phone number can only contain digits`
-  String get PhoneIllegalCharacters {
+  /// `An alias can't be longer than {maxLength} characters`
+  String AliasMaxLength(Object maxLength) {
     return Intl.message(
-      'A phone number can only contain digits',
-      name: 'PhoneIllegalCharacters',
+      'An alias can\'t be longer than $maxLength characters',
+      name: 'AliasMaxLength',
+      desc: '',
+      args: [maxLength],
+    );
+  }
+
+  /// `An alias can't be blank`
+  String get AliasBlank {
+    return Intl.message(
+      'An alias can\'t be blank',
+      name: 'AliasBlank',
       desc: '',
       args: [],
     );
   }
 
-  /// `A phone number is minimum {minLength} digits long`
-  String PhoneMinLength(Object minLength) {
+  /// `An alias can only contain letters, spaces or ' -`
+  String get AliasIllegalCharacters {
     return Intl.message(
-      'A phone number is minimum $minLength digits long',
-      name: 'PhoneMinLength',
+      'An alias can only contain letters, spaces or \' -',
+      name: 'AliasIllegalCharacters',
       desc: '',
-      args: [minLength],
-    );
-  }
-
-  /// `A phone number is maximum {maxLength} digits long`
-  String PhoneMaxLength(Object maxLength) {
-    return Intl.message(
-      'A phone number is maximum $maxLength digits long',
-      name: 'PhoneMaxLength',
-      desc: '',
-      args: [maxLength],
+      args: [],
     );
   }
 
@@ -1333,11 +1533,101 @@ class S {
     );
   }
 
+  /// `Something went wrong`
+  String get GenericError {
+    return Intl.message(
+      'Something went wrong',
+      name: 'GenericError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back`
+  String get GoBack {
+    return Intl.message(
+      'Go Back',
+      name: 'GoBack',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Km`
   String get DistanceKm {
     return Intl.message(
       'Km',
       name: 'DistanceKm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filename`
+  String get Filename {
+    return Intl.message(
+      'Filename',
+      name: 'Filename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid filename`
+  String get InvalidFilename {
+    return Intl.message(
+      'Invalid filename',
+      name: 'InvalidFilename',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A filename can't be blank`
+  String get FilenameWhitespace {
+    return Intl.message(
+      'A filename can\'t be blank',
+      name: 'FilenameWhitespace',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This file already exists`
+  String get FileExists {
+    return Intl.message(
+      'This file already exists',
+      name: 'FileExists',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A filename can't be longer than {maxLength} characters`
+  String FilenameMaxLength(Object maxLength) {
+    return Intl.message(
+      'A filename can\'t be longer than $maxLength characters',
+      name: 'FilenameMaxLength',
+      desc: '',
+      args: [maxLength],
+    );
+  }
+
+  /// `csv`
+  String get FileCsvExtension {
+    return Intl.message(
+      'csv',
+      name: 'FileCsvExtension',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `json`
+  String get FileJsonExtension {
+    return Intl.message(
+      'json',
+      name: 'FileJsonExtension',
       desc: '',
       args: [],
     );

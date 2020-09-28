@@ -46,7 +46,8 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
     switch(device.type){
       case DeviceType.HEADSET: return Icon(Icons.headset,color: ApplicationTheme.deviceIconColor);
       case DeviceType.WATCH: return Icon(Icons.watch,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.TABLET: return Icon(Icons.tablet,color: ApplicationTheme.deviceIconColor);
+      case DeviceType.POWER_METER: return Icon(Icons.flash_on,color: ApplicationTheme.deviceIconColor);
+      case DeviceType.CADENCE_METER: return Icon(Icons.fitness_center,color: ApplicationTheme.deviceIconColor);
       case DeviceType.PHONE: return Icon(Icons.smartphone,color: ApplicationTheme.deviceIconColor);
       case DeviceType.GPS: return Icon(Icons.gps_fixed,color: ApplicationTheme.deviceIconColor);
       case DeviceType.PULSE_MONITOR: return Icon(Icons.favorite_border,color: ApplicationTheme.deviceIconColor);

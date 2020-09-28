@@ -24,13 +24,17 @@ class SettingsBloc extends Bloc {
 
   double get minScanValue => 10;
 
+  String get appVersion => _repository.instance.packageInfo.version;
+
+  String get appBuildNumber => _repository.instance.packageInfo.buildNumber;
+
   void loadSettings(){
     if(_repository.instance == null){
       //We put an artificial delay here to decrease the feeling of popping in.
       //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
       settingsFuture = Future.delayed(Duration(seconds: 1),() async {
-        final settings = await _repository.loadApplicationSettings();
-        _scanDuration = settings.scanDuration.toDouble();
+        await _repository.loadApplicationSettings();
+        _scanDuration = _repository.instance.scanDuration.toDouble();
       });
     } else {
       _scanDuration = _repository.instance.scanDuration.toDouble();

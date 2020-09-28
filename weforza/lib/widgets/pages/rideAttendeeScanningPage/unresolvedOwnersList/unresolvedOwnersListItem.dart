@@ -1,37 +1,29 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/custom/profileImage/loadableProfileImage.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 
-class ManualSelectionListItem extends StatefulWidget {
-  ManualSelectionListItem({
+class UnresolvedOwnersListItem extends StatefulWidget {
+  UnresolvedOwnersListItem({
     @required this.isSelected,
     @required this.onTap,
-    @required this.profileImageFuture,
     @required this.firstName,
     @required this.lastName,
     @required this.alias
   }): assert(
-    isSelected != null && profileImageFuture != null &&
-        onTap != null && firstName != null && lastName != null && alias != null
+    isSelected != null && onTap != null && firstName != null
+        && lastName != null && alias != null
   );
 
   final bool Function() isSelected;
   final VoidCallback onTap;
-  final Future<File> profileImageFuture;
   final String firstName;
   final String lastName;
   final String alias;
 
   @override
-  _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
+  _UnresolvedOwnerListItemState createState() => _UnresolvedOwnerListItemState();
 }
 
-class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
+class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
 
   Color itemDecorationBackgroundColor;
   TextStyle firstNameStyle;
@@ -58,44 +50,18 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: LoadableProfileImage(
-                  image: widget.profileImageFuture,
-                  size: 40,
-                  onDone: (size, image){
-                    return ProfileImage(
-                      image: image,
-                      icon: Icons.person,
-                      size: size,
-                      personInitials: widget.firstName[0] + widget.lastName[0],
-                    );
-                  },
-                  onError: (size){
-                    return ProfileImage(
-                      icon: Icons.person,
-                      size: size,
-                      personInitials: widget.firstName[0] + widget.lastName[0],
-                    );
-                  },
-                ),
+                padding: const EdgeInsets.only(bottom: 5),
+                child: _combineFirstNameAndAlias(),
               ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _combineFirstNameAndAlias(),
-                    SizedBox(height: 5),
-                    Text(
-                      widget.lastName,
-                      style: lastNameStyle,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
-                ),
-              ),
+              Text(
+                widget.lastName,
+                style: lastNameStyle,
+                overflow: TextOverflow.ellipsis,
+              )
             ],
           ),
         ),
@@ -141,3 +107,4 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     );
   }
 }
+

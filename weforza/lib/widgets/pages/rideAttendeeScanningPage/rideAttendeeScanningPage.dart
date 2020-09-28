@@ -97,83 +97,77 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   }
 
   Widget _buildBody() {
-    return Column(
-      children: <Widget>[
-        RideAttendeeScanningProgressIndicator(
-          valueNotifier: bloc.isScanning,
-          getDuration: () => bloc.scanDuration,
-        ),
-        Expanded(
-          child: StreamBuilder<ScanProcessStep>(
-            initialData: ScanProcessStep.INIT,
-            stream: bloc.scanStepStream,
-            builder: (context, snapshot){
-              if(snapshot.hasError){
-                return Center(child: GenericScanErrorWidget());
-              }else{
-                switch(snapshot.data){
-                  case ScanProcessStep.INIT: return Center(child: PreparingScanWidget());
-                  case ScanProcessStep.BLUETOOTH_DISABLED: return Center(
-                    child: BluetoothDisabledWidget(
-                      onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
-                      onRetryScan: () => bloc.scanFuture = bloc.startDeviceScan(_onDeviceFound),
+    return StreamBuilder<ScanProcessStep>(
+      initialData: ScanProcessStep.INIT,
+      stream: bloc.scanStepStream,
+      builder: (context, snapshot){
+        if(snapshot.hasError){
+          return Center(child: GenericScanErrorWidget());
+        }else{
+          switch(snapshot.data){
+            case ScanProcessStep.INIT: return Center(child: PreparingScanWidget());
+            case ScanProcessStep.BLUETOOTH_DISABLED: return Center(
+              child: BluetoothDisabledWidget(
+                onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
+                onRetryScan: () => bloc.scanFuture = bloc.startDeviceScan(_onDeviceFound),
+              ),
+            );
+            case ScanProcessStep.SCAN:
+              return WillPopScope(
+                onWillPop: () => bloc.stopScan(),
+                child: Column(
+                  children: <Widget>[
+                    RideAttendeeScanningProgressIndicator(
+                      valueNotifier: bloc.isScanning,
+                      getDuration: () => bloc.scanDuration,
                     ),
-                  );
-                  case ScanProcessStep.SCAN:
-                    return WillPopScope(
-                      onWillPop: () => bloc.stopScan(),
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: AnimatedList(
-                              key: _listKey,
-                              itemBuilder: (context, index, animation) {
-                                final String deviceName = bloc.getScanResultAt(index);
-                                final List<Member> owners = bloc.getDeviceOwners(deviceName);
+                    Expanded(
+                      child: AnimatedList(
+                        key: _listKey,
+                        itemBuilder: (context, index, animation) {
+                          final String deviceName = bloc.getScanResultAt(index);
+                          final List<Member> owners = bloc.getDeviceOwners(deviceName);
 
-                                return SizeTransition(
-                                  sizeFactor: animation,
-                                  child: _buildScanResultListItem(deviceName, owners),
-                                );
-                              },
-                            ),
-                          ),
-                          SkipScanButton(
-                            isScanning: bloc.isScanning,
-                            onSkip: () => bloc.skipScan(),
-                            onPressed: () => bloc.tryAdvanceToManualSelection(),
-                          ),
-                        ],
+                          return SizeTransition(
+                            sizeFactor: animation,
+                            child: _buildScanResultListItem(deviceName, owners),
+                          );
+                        },
                       ),
-                    );
-                  case ScanProcessStep.MANUAL:
-                    return RideAttendeeManualSelection(
-                      items: bloc.members.values.toList(),
-                      itemBuilder: _buildManualSelectionListItem,
-                      saveButtonBuilder: _buildSaveButton,
-                    );
-                  case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
-                  case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
-                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return Center(
-                    child: UnresolvedOwnersList(
-                      future: bloc.filterAndSortMultipleOwnersList(),
-                      itemBuilder: (Member member) => UnresolvedOwnersListItem(
-                        firstName: member.firstname,
-                        lastName: member.lastname,
-                        alias: member.alias,
-                        isSelected: () => bloc.isItemSelected(member.uuid),
-                        onTap: () => bloc.onMemberSelected(member.uuid),
-                      ),
-                      onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
                     ),
-                  );
-                  default: return Center(child: GenericScanErrorWidget());
-                }
-              }
-            },
-          )
-        ),
-      ],
+                    SkipScanButton(
+                      isScanning: bloc.isScanning,
+                      onSkip: () => bloc.skipScan(),
+                      onPressed: () => bloc.tryAdvanceToManualSelection(),
+                    ),
+                  ],
+                ),
+              );
+            case ScanProcessStep.MANUAL:
+              return RideAttendeeManualSelection(
+                items: bloc.members.values.toList(),
+                itemBuilder: _buildManualSelectionListItem,
+                saveButtonBuilder: _buildSaveButton,
+              );
+            case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
+            case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
+            case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return Center(
+              child: UnresolvedOwnersList(
+                future: bloc.filterAndSortMultipleOwnersList(),
+                itemBuilder: (Member member) => UnresolvedOwnersListItem(
+                  firstName: member.firstname,
+                  lastName: member.lastname,
+                  alias: member.alias,
+                  isSelected: () => bloc.isItemSelected(member.uuid),
+                  onTap: () => bloc.onMemberSelected(member.uuid),
+                ),
+                onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
+              ),
+            );
+            default: return Center(child: GenericScanErrorWidget());
+          }
+        }
+      },
     );
   }
 

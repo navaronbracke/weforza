@@ -78,37 +78,47 @@ class EditDeviceBloc extends Bloc {
         creationDate: deviceCreationDate
     );
 
-    bool exists = await repository.deviceExists(editedDevice,deviceOwnerId).catchError((error){
+    final bool exists = await repository.deviceExists(deviceName, deviceOwnerId, deviceCreationDate).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
 
-    if(!exists){
+    if(exists){
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }else{
       return await repository.updateDevice(editedDevice).then((_){
         _submitButtonController.add(false);
         return editedDevice;
-      },onError: (error){
+      }).catchError((error){
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
         return Future.error(genericErrorMessage);
       });
-    }else{
-      _submitButtonController.add(false);
-      _submitErrorController.add(deviceExistsMessage);
-      return Future.error(deviceExistsMessage);
     }
   }
 
-  String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
+  String validateDeviceNameInput(
+      String value,
+      String deviceNameIsRequired,
+      String deviceNameMaxLengthMessage,
+      String commaIsIllegalCharacterMessage,
+      String isWhitespaceMessage)
+  {
     if(value != deviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
     }
     if(value == null || value.isEmpty){
       editDeviceError = deviceNameIsRequired;
+    }else if(value.trim().isEmpty){
+      editDeviceError = isWhitespaceMessage;
     }else if(deviceNameMaxLength < value.length){
       editDeviceError = deviceNameMaxLengthMessage;
+    }else if(value.contains(",")){
+      editDeviceError = commaIsIllegalCharacterMessage;
     }else{
       deviceName = value;
       editDeviceError = null;

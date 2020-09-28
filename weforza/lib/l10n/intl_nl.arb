@@ -1,5 +1,9 @@
 {
+  "@@locale": "nl",
+
   "AppName": "WeForza",
+  "AppVersionNumber": "Versie: {version}",
+  "AppVersionBuildNumber": "Build Nummer: {buildNumber}",
 
   "MondayPrefix": "Ma",
   "TuesdayPrefix": "Di",
@@ -26,6 +30,9 @@
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsEditOption": "Bewerken",
+  "RideDetailsExportOption": "Exporteren",
+  "RideDetailsDeleteOption": "Verwijderen",
 
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
@@ -36,6 +43,7 @@
   "MemberDetailsNoDevicesAddDevice": "Voeg een toestel toe",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsAlias": "Alias:",
 
   "DevicesListHeader": "Toestellen",
   "DevicesListNoDevices": "Geen toestellen om te tonen",
@@ -43,12 +51,10 @@
 
   "AddDeviceTitle": "Toestel Toevoegen",
   "AddDeviceError": "Kon toestel niet toevoegen",
-  "AddDeviceGenericError": "Er liep iets fout",
   "AddDeviceSubmit": "Toestel Aanmaken",
 
   "EditDeviceTitle": "Toestel Bewerken",
   "EditDeviceError": "Kon toestel niet bewerken",
-  "EditDeviceGenericError": "Er liep iets fout",
   "EditDeviceSubmit": "Wijzigingen Opslaan",
 
   "EditMemberTitle": "Lid Bewerken",
@@ -78,21 +84,19 @@
   "RideAttendeeScanningProcessScanLabel": "Scannen",
   "RideAttendeeScanningProcessAddMembersLabel": "Manueel",
   "RideAttendeeScanningPreparingScan": "Scan Voorbereiden",
-  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
+  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden",
   "RideAttendeeScanningGoBackToDetailPage": "Terug naar detailpagina",
-  "RideAttendeeScanningGoBack": "Keer Terug",
-  "RideAttendeeScanningGenericError": "Er liep iets fout.",
-  "RideAttendeeScanningPermissionDenied": "Scan geannuleerd, toestemming werd geweigerd",
-  "RideAttendeeScanningPermissionDescription": "Scannen vereist toegang tot je locatie",
+  "RideAttendeeScanningPermissionDenied": "Scan geannuleerd, toestemming werd geweigerd.",
+  "RideAttendeeScanningPermissionDeniedDescription": "Scannen vereist toegang tot je locatie.",
   "RideAttendeeScanningBluetoothDisabled": "Scan geannuleerd, Bluetooth staat uit",
   "RideAttendeeScanningGoToSettings": "Naar Instellingen",
   "RideAttendeeScanningRetryScan": "Opnieuw Scannen",
   "RideAttendeeScanningSkipScan": "Scan Overslaan",
-  "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
-  "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
+  "RideAttendeeScanningContinue": "Doorgaan naar volgende stap",
+  "RideAttendeeScanningSaveResults": "Opslaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom Van:",
-  "RideAttendeeScanningScanResultOwnerTelephoneLabel": "tel: ",
+  "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} personen hebben een toestel met deze naam",
+  "RideAttendeeScanningUnresolvedOwnersListTooltip": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren.",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",
@@ -110,6 +114,25 @@
   "EditRideSubmit": "Wijzigingen Opslaan",
   "EditRideSubmitError": "Kon de wijzigingen niet opslaan",
 
+  "ImportMembersPageTitle": "Importeer Leden",
+  "ImportMembersPickFile": "Kies Bestand",
+  "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
+  "ImportMembersImporting": "Leden Importeren",
+  "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(alias|bijnaam)\\,(toestellen|apparaten)(.*)",
+  "ImportMembersCsvHeaderExampleDescription": "Een mogelijke csv hoofding ziet er zo uit:",
+  "ImportMembersCsvHeaderExample": "voornaam,familienaam,alias,toestellen",
+  "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
+  "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
+
+  "ExportRideTitle": "Rit Exporteren",
+  "ExportRideFileNamePlaceholder": "rit_{date}",
+  "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
+  "ExportRideExportingToFile": "Rit exporteren naar bestand",
+  "Export": "Exporteren",
+
+  "ExportRidesTitle": "Ritten Exporteren",
+  "ExportingRidesDescription": "Ritten en aanwezigen exporteren",
+
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 
@@ -117,11 +140,14 @@
   "DeviceGPS": "GPS",
   "DevicePhone": "Telefoon",
   "DeviceWatch": "Horloge",
-  "DeviceTablet": "Tablet",
+  "DevicePowerMeter": "Krachtmeter",
+  "DeviceCadenceMeter": "Cadansmeter",
   "DeviceHeadset": "Koptelefoon",
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
-  "DeviceAlreadyExists": "Dit toestel bestaat al",
+  "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
+  "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
+  "DeviceExists": "Deze persoon heeft reeds een toestel met deze naam",
 
   "DeleteDeviceTitle": "Verwijder Toestel",
   "DeleteDeviceDescription": "Bent u zeker dat u dit toestel wil verwijderen?",
@@ -131,27 +157,35 @@
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
   "SettingsLoadingError": "Kon de instellingen niet laden",
-  "SettingsGenericError": "Er liep iets fout",
   "SettingsSubmitError": "Kon de instellingen niet opslaan",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",
-  "PersonTelephoneLabel": "Telefoon",
+  "PersonAliasLabel": "Alias",
 
-  "FirstNameMaxLength": "Voornaam kan niet langer zijn dan {maxLength} letters",
+  "FirstNameMaxLength": "Een voornaam is maximum {maxLength} letters",
   "LastNameMaxLength": "Familienaam kan niet langer zijn dan {maxLength} letters",
   "FirstNameBlank" : "Voornaam mag niet enkel witruimte zijn",
   "LastNameBlank" : "Familienaam mag niet enkel witruimte zijn",
   "FirstNameIllegalCharacters": "Voornaam mag enkel letters, spaties of ' - bevatten",
   "LastNameIllegalCharacters": "Familienaam mag enkel letters,spaties of ' - bevatten",
-  "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
-  "PhoneMinLength": "Een telefoonnummer is minimum {minLength} cijfers lang",
-  "PhoneMaxLength": "Een telefoonnummer is maximum {maxLength} cijfers lang",
+  "AliasMaxLength": "Een alias is maximum {maxLength} letters",
+  "AliasBlank" : "Een alias mag niet enkel witruimte zijn",
+  "AliasIllegalCharacters": "Een alias mag enkel letters, spaties of ' - bevatten",
 
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
   "DialogDismiss": "Ok",
+  "GenericError": "Er liep iets fout",
+  "GoBack": "Keer Terug",
 
-  "DistanceKm": "Km"
+  "DistanceKm": "Km",
+  "Filename": "Bestandsnaam",
+  "InvalidFilename": "Ongeldige bestandsnaam",
+  "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn",
+  "FileExists": "Dit bestand bestaat al",
+  "FilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
+  "FileCsvExtension": "csv",
+  "FileJsonExtension": "json"
 }

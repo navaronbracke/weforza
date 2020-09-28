@@ -65,36 +65,53 @@ class AddDeviceBloc extends Bloc {
   Future<void> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
-    final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
 
-    final exists = await repository.deviceExists(device).catchError((error){
+    final device = Device(
+        ownerId: ownerId,
+        name: _newDeviceName,
+        type: type,
+        creationDate: DateTime.now()
+    );
+
+    final bool exists = await repository.deviceExists(_newDeviceName, ownerId).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
 
-    if(!exists){
+    if(exists){
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }else{
       await repository.addDevice(device).catchError((error){
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
         return Future.error(genericErrorMessage);
       });
-    }else{
-      _submitButtonController.add(false);
-      _submitErrorController.add(deviceExistsMessage);
-      return Future.error(deviceExistsMessage);
     }
   }
 
-  String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
+  String validateNewDeviceInput(
+      String value,
+      String deviceNameIsRequired,
+      String deviceNameMaxLengthMessage,
+      String commaIsIllegalCharacterMessage,
+      String isWhitespaceMessage)
+  {
     if(value != _newDeviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
     }
+
     if(value == null || value.isEmpty){
       addDeviceError = deviceNameIsRequired;
+    }else if(value.trim().isEmpty){
+      addDeviceError = isWhitespaceMessage;
     }else if(deviceNameMaxLength < value.length){
       addDeviceError = deviceNameMaxLengthMessage;
+    }else if(value.contains(",")){
+      addDeviceError = commaIsIllegalCharacterMessage;
     }else{
       _newDeviceName = value;
       addDeviceError = null;

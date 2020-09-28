@@ -6,11 +6,11 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
+import 'package:weforza/widgets/pages/exportRides/exportRidesPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
-import 'package:weforza/widgets/pages/rideList/rideListError.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -55,15 +55,14 @@ class _RideListPageState extends State<RideListPage> {
               color: Colors.white,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_){
-                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                if(reloadNotifier.value){
-                  reloadNotifier.value = false;
-                  setState(() {
-                    bloc.reloadRides();
-                  });
-                }
-              }),
+              ).then((_)=> onReturnToRideListPage(context)),
+            ),
+            IconButton(
+              icon: Icon(Icons.file_upload),
+              color: Colors.white,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ExportRidesPage())
+              ),
             ),
           ],
         ),
@@ -80,22 +79,19 @@ class _RideListPageState extends State<RideListPage> {
             Expanded(
               child: Center(child: Text(S.of(context).RideListRidesHeader)),
             ),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
+            CupertinoIconButton.fromAppTheme(
               icon: Icons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_){
-                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                if(reloadNotifier.value){
-                  reloadNotifier.value = false;
-                  setState(() {
-                    bloc.reloadRides();
-                  });
-                }
-              }),
+              ).then((_) => onReturnToRideListPage(context)),
             ),
+            SizedBox(width: 15),
+            CupertinoIconButton.fromAppTheme(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ExportRidesPage())
+              ),
+              icon: Icons.file_upload,
+            )
           ],
         ),
       ),
@@ -112,7 +108,7 @@ class _RideListPageState extends State<RideListPage> {
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return RideListError();
+            return GenericError(text: S.of(context).RideListLoadingRidesError);
           }else{
             if(snapshot.data == null || snapshot.data.isEmpty){
               return RideListEmpty();
@@ -130,15 +126,7 @@ class _RideListPageState extends State<RideListPage> {
                           MaterialPageRoute(
                             builder: (context) => RideDetailsPage(),
                           ),
-                        ).then((_){
-                          final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                          if(reloadNotifier.value){
-                            reloadNotifier.value = false;
-                            setState(() {
-                              bloc.reloadRides();
-                            });
-                          }
-                        });
+                        ).then((_) => onReturnToRideListPage(context));
                       },
                     );
                   });
@@ -149,5 +137,21 @@ class _RideListPageState extends State<RideListPage> {
         }
       },
     );
+  }
+
+  void onReturnToRideListPage(BuildContext context){
+    final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
+    if(reloadNotifier.value){
+      reloadNotifier.value = false;
+      setState(() {
+        bloc.reloadRides();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
   }
 }

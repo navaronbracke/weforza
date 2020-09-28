@@ -50,7 +50,7 @@ abstract class ApplicationTheme {
   );
 
   ///The background color for an unselected ride attendee.
-  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
+  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
   ///The background color for a selected ride attendee.
   static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
 
@@ -105,9 +105,9 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
-  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
-
+  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
+  static final TextStyle rideAttendeeMultipleOwnersListTooltipStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
 
   static final Color deleteItemButtonTextColor = Colors.red;
 

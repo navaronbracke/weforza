@@ -833,6 +833,16 @@ class S {
     );
   }
 
+  /// `Some scanned devices have multiple possible owners. You can select the attending owners here.`
+  String get RideAttendeeScanningUnresolvedOwnersListTooltip {
+    return Intl.message(
+      'Some scanned devices have multiple possible owners. You can select the attending owners here.',
+      name: 'RideAttendeeScanningUnresolvedOwnersListTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

@@ -96,6 +96,7 @@
   "RideAttendeeScanningSaveResults": "Save",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} people have a device with this name",
+  "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

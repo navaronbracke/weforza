@@ -182,6 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Retry Scan"),
     "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Save"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Skip Scan"),
+    "RideAttendeeScanningUnresolvedOwnersListTooltip" : MessageLookupByLibrary.simpleMessage("Some scanned devices have multiple possible owners. You can select the attending owners here."),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),

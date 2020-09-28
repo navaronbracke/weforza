@@ -182,6 +182,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
     "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Opslaan"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
+    "RideAttendeeScanningUnresolvedOwnersListTooltip" : MessageLookupByLibrary.simpleMessage("Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren."),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),

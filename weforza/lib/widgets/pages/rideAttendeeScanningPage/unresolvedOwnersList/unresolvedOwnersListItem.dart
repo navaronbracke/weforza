@@ -98,7 +98,7 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
           style: firstNameStyle,
           children: [
             TextSpan(
-              text: " " + widget.alias,
+              text: " '${widget.alias}'",
               style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
             ),
           ]

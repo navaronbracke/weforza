@@ -30,23 +30,23 @@ dependencies:
   # This package allows the use of Dependency Injection.
   flutter_simple_dependency_injection: ^1.0.2+1
 
-  # The following dependency provides local persistence
+  # The following dependency provides local persistence.
   sembast: ^2.4.4+1
 
-  # For OS-specific directory paths
+  # For OS-specific directory paths.
   path_provider: ^1.6.10
   path: ^1.6.4
 
-  # UUID generator for globally unique ids
+  # UUID generator for globally unique ids.
   uuid: ^2.0.4
 
-  # The intl package provides translation utilities
+  # The intl package provides translation utilities.
   intl: ^0.16.1
 
-  # Jiffy provides better support for manipulating dates than the current Dart spec
+  # Jiffy provides better support for manipulating dates than the current Dart spec.
   jiffy: ^3.0.1
 
-  # RxDart provides extensions to Dart Streams
+  # RxDart provides extensions to Dart Streams.
   rxdart: ^0.24.1
 
   # This package provides platform independent file picking.
@@ -55,11 +55,13 @@ dependencies:
   # This package provides Bluetooth Low Energy functionality.
   flutter_blue: ^0.7.2
 
-  # This package provides easy access to app settings
+  # This package provides easy access to app settings.
   app_settings: ^4.0.0
 
+  # The permission_handler packages provides utilities for requesting permissions.
   permission_handler: ^5.0.1+1
 
+  # package_info provides access to app specific information such as build number & version.
   package_info: ^0.4.3
 
 dev_dependencies:

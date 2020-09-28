@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
   ScanResultSingleOwnerListItem({
@@ -12,14 +13,43 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(5),
-      child: Text(
-        _formatDeviceOwnerNameLabel(context,owner.firstname,owner.lastname,owner.alias),
-        overflow: TextOverflow.ellipsis,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: Icon(
+                Icons.person,
+                color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
+            ),
+          ),
+          _combineFirstNameAndAlias(),
+        ],
       ),
     );
   }
 
-  String _formatDeviceOwnerNameLabel(BuildContext context, String firstName, String lastName, String alias){
-    return alias == null || alias.trim().isEmpty ? "$firstName $lastName" : "$firstName '$alias' $lastName";
+  //Combine the first name with the alias.
+  Widget _combineFirstNameAndAlias(){
+    if(owner.alias.isEmpty){
+      return Text(
+        "${owner.firstname} ${owner.lastname}",
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    // Firstname 'alias'
+    return Text.rich(
+      TextSpan(
+          text: owner.firstname,
+          children: [
+            TextSpan(
+              text: " '${owner.alias}' ",
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+            TextSpan(text: owner.lastname),
+          ]
+      ),
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }

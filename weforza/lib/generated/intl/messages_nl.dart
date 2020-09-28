@@ -43,7 +43,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m12(value) => "${value} is verplicht";
+  static m12(amount) => "${amount} personen hebben een toestel met deze naam";
+
+  static m13(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -71,8 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit toestel wil verwijderen?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon toestel niet verwijderen"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Toestel"),
-    "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("Dit toestel bestaat al"),
     "DeviceCadenceMeter" : MessageLookupByLibrary.simpleMessage("Cadansmeter"),
+    "DeviceExists" : MessageLookupByLibrary.simpleMessage("Deze persoon heeft reeds een toestel met deze naam"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Koptelefoon"),
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag niet leeg zijn"),
@@ -166,20 +168,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("Voornaam"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
+    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Doorgaan naar volgende stap"),
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m12,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("Er zijn geen leden om uit te kiezen"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Kan niet beginnen scannen, er zijn geen leden"),
-    "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, toestemming werd geweigerd"),
-    "RideAttendeeScanningPermissionDescription" : MessageLookupByLibrary.simpleMessage("Scannen vereist toegang tot je locatie"),
+    "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, toestemming werd geweigerd."),
+    "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scannen vereist toegang tot je locatie."),
     "RideAttendeeScanningPreparingScan" : MessageLookupByLibrary.simpleMessage("Scan Voorbereiden"),
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("Manueel"),
     "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scannen"),
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Opnieuw Scannen"),
-    "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Selectie Opslaan"),
-    "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Scan Resultaten Opslaan"),
-    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : MessageLookupByLibrary.simpleMessage("Eigendom van: "),
+    "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Opslaan"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Scan Overslaan"),
+    "RideAttendeeScanningUnresolvedOwnersListTooltip" : MessageLookupByLibrary.simpleMessage("Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren."),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),
@@ -204,7 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Onbekende Datum"),
-    "ValueIsRequired" : m12,
+    "ValueIsRequired" : m13,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

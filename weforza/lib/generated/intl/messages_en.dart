@@ -43,7 +43,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m12(value) => "${value} is required";
+  static m12(amount) => "${amount} people have a device with this name";
+
+  static m13(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -71,8 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Are you sure you want to delete this device?"),
     "DeleteDeviceErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete the device"),
     "DeleteDeviceTitle" : MessageLookupByLibrary.simpleMessage("Delete Device"),
-    "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("This device already exists"),
     "DeviceCadenceMeter" : MessageLookupByLibrary.simpleMessage("Cadence meter"),
+    "DeviceExists" : MessageLookupByLibrary.simpleMessage("This person already has a device with this name"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Headset"),
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("A device name can\'t be empty"),
@@ -166,20 +168,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("First Name"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
+    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Proceed to next step"),
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m12,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("There are no members to choose from"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Cannot start a scan, there are no members"),
-    "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan aborted, permission was denied"),
-    "RideAttendeeScanningPermissionDescription" : MessageLookupByLibrary.simpleMessage("Scanning requires permission to use your location"),
+    "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan aborted, permission was denied."),
+    "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scanning requires permission to use your location."),
     "RideAttendeeScanningPreparingScan" : MessageLookupByLibrary.simpleMessage("Preparing Scan"),
     "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("By Hand"),
     "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scan"),
     "RideAttendeeScanningRetryScan" : MessageLookupByLibrary.simpleMessage("Retry Scan"),
-    "RideAttendeeScanningSaveManualResults" : MessageLookupByLibrary.simpleMessage("Save Selection"),
-    "RideAttendeeScanningSaveScanResults" : MessageLookupByLibrary.simpleMessage("Save Scan Results"),
-    "RideAttendeeScanningScanResultDeviceOwnedByLabel" : MessageLookupByLibrary.simpleMessage("Owned by: "),
+    "RideAttendeeScanningSaveResults" : MessageLookupByLibrary.simpleMessage("Save"),
     "RideAttendeeScanningSkipScan" : MessageLookupByLibrary.simpleMessage("Skip Scan"),
+    "RideAttendeeScanningUnresolvedOwnersListTooltip" : MessageLookupByLibrary.simpleMessage("Some scanned devices have multiple possible owners. You can select the attending owners here."),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),
@@ -204,7 +207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m12,
+    "ValueIsRequired" : m13,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

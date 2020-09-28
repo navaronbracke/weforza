@@ -66,9 +66,14 @@ class AddDeviceBloc extends Bloc {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
 
-    final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
+    final device = Device(
+        ownerId: ownerId,
+        name: _newDeviceName,
+        type: type,
+        creationDate: DateTime.now()
+    );
 
-    final exists = await repository.deviceExists(device).catchError((error){
+    final bool exists = await repository.deviceExists(_newDeviceName, ownerId).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);

@@ -1,15 +1,14 @@
+import 'dart:collection';
+
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
-
-  Future<bool> deviceExists(Device device,[String ownerId]);
-
   Future<void> addDevice(Device device);
 
-  Future<void> removeDevice(String deviceName);
+  Future<void> removeDevice(Device device);
 
   Future<void> updateDevice(Device newDevice);
 
@@ -17,7 +16,10 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getAllDevices();
 
-  Future<Device> getDeviceWithName(String deviceName);
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]);
+
+  ///Get all the device names with their owner UUID's, grouped by device name.
+  Future<HashMap<String,List<String>>> getDeviceOwners();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -38,37 +40,22 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<bool> deviceExists(Device device,[String ownerId]) async {
-    final record = await _deviceStore.findFirst(
-        _database,
-        finder: Finder(
-            filter: Filter.equals("deviceName", device.name)
-        ),
-    );
-
-    if(record == null) return false;//No device with this name
-
-    //If an owner ID is given and the device we found has the same owner ID,
-    //then it doesn't exist. This only happens when we are editing a device and
-    //the device name was unchanged.
-    if(ownerId != null && ownerId.isNotEmpty){
-      final device = Device.of(record.key, record.value);
-      return device.ownerId != ownerId;
-    }
-
-    //The device record was found and we are not editing, thus the owner is never the same person.
-    return true;
-  }
-
-  @override
   Future<List<Device>> getOwnerDevices(String ownerId) async {
     final records = await _deviceStore.find(_database,finder: Finder(filter: Filter.equals("owner", ownerId)));
     return records.map((record) => Device.of(record.key,record.value)).toList();
   }
 
   @override
-  Future<void> removeDevice(String device) async {
-    await _deviceStore.delete(_database,finder: Finder(filter: Filter.equals("deviceName",device)));
+  Future<void> removeDevice(Device device) async {
+    await _deviceStore.delete(
+        _database,
+        finder: Finder(
+          filter: Filter.and(<Filter>[
+            Filter.equals("deviceName",device.name),
+            Filter.equals("owner",device.ownerId),
+          ]),
+        ),
+    );
   }
 
   @override
@@ -85,9 +72,39 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<Device> getDeviceWithName(String deviceName) async {
-    final finder = Finder(filter: Filter.equals("deviceName", deviceName));
-    final record = await _deviceStore.findFirst(_database, finder: finder);
-    return record == null ? null : Device.of(record.key,record.value);
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]) async {
+    final List<Filter> filters = [
+      Filter.equals("deviceName", deviceName),
+      Filter.equals("owner", ownerUuid),
+      if(creationDate != null)
+        Filter.notEquals(Field.key, creationDate.toIso8601String())
+    ];
+
+    return await _deviceStore.findFirst(
+      _database,
+      finder: Finder(
+        filter: Filter.and(filters),
+      ),
+    ) != null;
+  }
+
+  @override
+  Future<HashMap<String,List<String>>> getDeviceOwners() async {
+    final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
+
+    final HashMap<String,List<String>> collection = HashMap();
+
+    devices.forEach((record) {
+      final String device = record["deviceName"] as String;
+      final String ownerUuid = record["owner"] as String;
+
+      if(collection.containsKey(device)){
+        collection[record["deviceName"]].add(ownerUuid);
+      }else{
+        collection[record["deviceName"]] = <String>[ownerUuid];
+      }
+    });
+
+    return collection;
   }
 }

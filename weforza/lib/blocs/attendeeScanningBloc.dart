@@ -4,19 +4,18 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
+import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendee.dart';
-import 'package:weforza/model/scanResultItem.dart';
+import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
-///TODO use page nr with pagesize in _loadMembers(pageSize,pageNr)
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
     @required this.rideDate,
@@ -32,6 +31,10 @@ class AttendeeScanningBloc extends Bloc {
 
   ///The bluetooth scanner that will do bluetooth stuff for us.
   final BluetoothDeviceScanner scanner;
+
+  ///The already scanned devices are stored here.
+  ///This prevents duplicates during the scan.
+  final Set<BluetoothPeripheral> _scannedDevices = HashSet();
 
   ///A value notifier for the scanning boolean.
   ///We use it to check if we can pop the widget scope
@@ -73,20 +76,29 @@ class AttendeeScanningBloc extends Bloc {
   ///Saving happens after scanning and after manual assignment.
   HashSet<String> rideAttendees;
 
-  //The backing list for the scan results UI. 
-  final List<ScanResultItem> _scanResults = [];
+  /// This collection will group the Member uuids of the owners of devices with a given name.
+  /// The keys are the device names, while the values are lists of uuid's of Members with a device with the given name.
+  HashMap<String, List<String>> deviceOwners;
+
+  /// This list contains the scanned bluetooth device names.
+  final List<String> _scanResults = [];
+  /// The scan duration in seconds.
   int scanDuration;
 
-  ///The page number for the members that should get loaded.
-  ///This number starts at 0 but changes over time
-  ///(when scrolling in the manual step)
-  int memberListPageNr = 0;
-  ///The amount of elements in a single page.
-  int pageSize = 40;
+  /// This HashMap holds the members that were loaded from the database.
+  /// Each member is mapped to it's uuid.
+  /// This way we can easily map scanned device names to it.
+  HashMap<String, Member> members;
 
-  ///A subset of the total members is stored here.
-  ///Currently it's not a subset but the full list.
-  List<Member> currentMembersList;
+  /// This collection keeps track of a specific set of owners.
+  /// If a device with multiple possible owners is scanned,
+  /// the owners that aren't scanned yet (by finding a device only they own)
+  /// are added to this list.
+  ///
+  /// This list effectively collects the owners
+  /// that are passed to the multiple possible owners resolution screen.
+  /// On this screen the user can select the members from this list that weren't automatically resolved.
+  Set<Member> ownersOfScannedDevicesWithMultiplePossibleOwners = HashSet();
 
   ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   ///For each step it will trigger a rebuild of the UI accordingly.
@@ -94,17 +106,15 @@ class AttendeeScanningBloc extends Bloc {
   Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
 
   ///Start the initial device scan.
-  ///This is invoked when the scanning page is first loaded.
   ///It starts with checking the bluetooth state.
   ///Then it loads the settings and the members / ride attendees.
   ///Finally it starts the device scan.
   ///Any 'generic' errors are caught and pushed to [scanStepStream].
-  ///This function takes a lambda that gets the device name of a found device and the lookup future for getting the member.
-  Future<void> startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound) async {
+  Future<void> startDeviceScan(void Function(String deviceName) onDeviceFound) async {
     ///Check if bluetooth is on.
     await scanner.isBluetoothEnabled().then((enabled) async {
       if(enabled){
-        requestScanPermission(
+        scanner.requestScanPermission(
           onDenied: () => _scanStepController.add(ScanProcessStep.PERMISSION_DENIED),
           onGranted: () async {
             ///Wait for both the settings and the existing attendees/ first page of members.
@@ -112,8 +122,9 @@ class AttendeeScanningBloc extends Bloc {
             await Future.wait([
               _loadSettings(),
               _loadRideAttendees(rideDate),
-              _loadMembers(pageSize, page: memberListPageNr)
-            ]).then((_) async => _startDeviceScan(onDeviceFound), onError: (error){
+              _loadMembers(),
+              _loadDeviceOwners(),
+            ]).then((_) => _startDeviceScan(onDeviceFound), onError: (error){
               //Catch the settings/member load errors.
               //This is a generic error and is thus caught by the StreamBuilder.
               _scanStepController.addError(error);
@@ -131,22 +142,23 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   //Perform the actual bluetooth device scan
-  void _startDeviceScan(void Function(String deviceName, Future<Member> memberLookup) onDeviceFound){
+  void _startDeviceScan(void Function(String deviceName) onDeviceFound){
     //Start scan if not scanning
     if(!isScanning.value){
-      final Set<String> scannedDevices = HashSet();
+
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
-      
-      scanner.scanForDevices(scanDuration).listen((deviceName) {
-        if(!scannedDevices.contains(deviceName)){
-          scannedDevices.add(deviceName);
-          //Start the lookup for the member, giving the device name as placeholder.
-          onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
-        }
 
-      }, onError: (error){
-        //skip the error
+      //Start the scan.
+      //Filters the already scanned devices.
+      //Then maps the result to the device name.
+      //And finishes by filtering the devices of which there is only one owner, that was already scanned.
+      scanner.scanForDevices(scanDuration)
+          .where((device) => _scannedDevices.add(device))
+          .map((device) => device.deviceName)
+          .where(_deviceOwnerNotScanned)
+          .listen(onDeviceFound, onError: (error){
+            //skip the error
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
@@ -162,10 +174,32 @@ class AttendeeScanningBloc extends Bloc {
     scanDuration = settingsRepo.instance.scanDuration;
   }
 
-  ///Load the members subset (is better for memory usage).
-  ///Has a page parameter (ignored for now).
-  Future<void> _loadMembers(int pageSize, {int page = 0}) async {
-    currentMembersList = await memberRepo.getMembers();
+  /// Load the device owners.
+  Future<void> _loadDeviceOwners() async {
+    deviceOwners = await deviceRepo.getDeviceOwners();
+  }
+
+  /// Load the members. Returns a HashMap for easy lookup later.
+  Future<void> _loadMembers() async {
+    members = await memberRepo.getMembers().then((List<Member> list){
+      final HashMap<String,Member> collection = HashMap();
+      list.forEach((Member member) => collection[member.uuid] = member);
+
+      return collection;
+    });
+  }
+
+  /// Returns whether the single owner of the given [deviceName] wasn't scanned yet.
+  bool _deviceOwnerNotScanned(String deviceName){
+    final owners = deviceOwners[deviceName];
+
+    // Unknown devices or devices with multiple possible owners.
+    if(owners == null || owners.isEmpty || owners.length > 1){
+      return true;
+    }else {
+      // An owner that wasn't scanned yet.
+      return !rideAttendees.contains(owners.first);
+    }
   }
 
   ///Load the ride attendees and put them in a set.
@@ -176,29 +210,39 @@ class AttendeeScanningBloc extends Bloc {
     rideAttendees = HashSet.from(members.map((member) => member.uuid).toList());
   }
 
-  ///Find the owner of the given device.
-  ///If the owner is found, it is stored in [rideAttendees].
-  ///Everything in [rideAttendees] gets saved when the user confirms.
-  ///Returns the [Member] that is the owner or null if not found.
-  Future<Member> _findOwnerOfDevice(String deviceName) async {
-    //Find the device owner ID
-    final device = await deviceRepo.getDeviceWithName(deviceName);
-    if(device == null){
-      return null;
+  /// Retrieve the scan result at a given index.
+  /// Used by the list builder to fetch data.
+  String getScanResultAt(int index) => _scanResults[index];
+
+  /// Add the given [deviceName] to the scan results list.
+  /// If the given device has multiple possible owners,
+  /// these [Member]s are added to [ownersOfScannedDevicesWithMultiplePossibleOwners].
+  void addScanResult(String deviceName){
+    //Notify the backing list.
+    _scanResults.insert(0, deviceName);
+
+    //It's an unknown device, we can't add an owner to the attendees or the multiplePossibleOwners list.
+    if(deviceOwners[deviceName] == null || deviceOwners[deviceName].isEmpty){
+      return;
     }
-    //Find the owner by id
-    final owner = await memberRepo.getMemberByUuid(device.ownerId);
-    if(owner == null){
-      return null;
+
+    final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => members[uuid]);
+
+    if(owners.length > 1){
+      ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
     }else{
-      rideAttendees.add(device.ownerId);
-      return owner;
+      //Add the single owner to the attendees instead.
+      rideAttendees.add(owners.first.uuid);
     }
   }
 
-  ScanResultItem getScanResultAt(int index) => _scanResults[index];
-
-  void addScanResult(ScanResultItem item) => _scanResults.insert(0, item);
+  List<Member> getDeviceOwners(String deviceName) {
+    if(deviceOwners.containsKey(deviceName)){
+      return deviceOwners[deviceName].map((String uuid) => members[uuid]).toList();
+    }else{
+      return [];
+    }
+  }
 
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
@@ -209,7 +253,7 @@ class AttendeeScanningBloc extends Bloc {
     bool result = true;
     await scanner.stopScan().then((_){
       isScanning.value = false;
-    }, onError: (error){
+    }).catchError((error){
       result = false;//if it failed, prevent pop & show error first
       _scanStepController.addError(error);
       isScanning.value = false;
@@ -218,59 +262,45 @@ class AttendeeScanningBloc extends Bloc {
     return result;
   }
 
-  ///Cancel a running scan and continue to the manual assignment step.
+  ///Cancel a running scan and continue to the next step.
+  ///This can lead to either manual selection or owner resolution.
   void skipScan() async {
     await stopScan().then((scanStopped){
       if(scanStopped){
-        _scanStepController.add(ScanProcessStep.MANUAL);
-        isScanStep.value = false;
+        tryAdvanceToManualSelection();
       }
     });
   }
 
-  ///Save the current contents of [rideAttendees] to the database.
-  ///[mergeResults] dictates if the contents of [rideAttendees] should be merged in with the existing data.
-  ///This preserves old results.
-  ///[mergeResults] should only be true during the Scan step.
-  ///If [continueToManualAssignment] is true, the manual assignment screen will show up after saving is done.
-  ///[continueToManualAssignment] should only be true during the Scan step.
-  Future<void> saveRideAttendees(bool mergeResults, bool continueToManualAssignment) async {
+  /// Save the current contents of [rideAttendees] to the database.
+  Future<void> saveRideAttendees() async {
     isSaving.value = true;
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element)),
-        mergeResults
-    ).then((_){
-        if(continueToManualAssignment){
-          isSaving.value = false;
-          isScanStep.value = false;
-          _scanStepController.add(ScanProcessStep.MANUAL);
-        }
-      //The manual assignment step will pop when submitted.
-      //To make it look smoother, we show the loading indicator during the pop in manual submit.
-      //That's why we don't set isSaving to false if continueToManualAssignment is true.
-      },
-      onError: (error){
-        _scanStepController.addError(error);
-        isSaving.value = false;
-        return Future.error(error);
-      },
-    );
+        rideAttendees.map((element) => RideAttendee(rideDate, element))
+    ).catchError((error){
+      _scanStepController.addError(error);
+      isSaving.value = false;
+      return Future.error(error);
+    });
   }
 
-  ///Check the required permission for starting a scan.
-  ///When the permission is unknown, it is requested first.
-  ///After requesting the permission, the proper callback is called.
-  ///When the permission was granted before [onGranted] gets called.
-  ///When the permission is denied, [onDenied] gets called.
-  void requestScanPermission({
-    void Function() onGranted,
-    void Function() onDenied,
-  }) async {
-    if(await Permission.locationWhenInUse.request().isGranted){
-      onGranted();
+  /// Try to go to the manual selection screen.
+  /// If we have items in [ownersOfScannedDevicesWithMultiplePossibleOwners],
+  /// we go to the multiple owners resolution screen and [isScanStep] stays true.
+  /// Otherwise we go to the manual selection screen and [isScanStep] becomes false.
+  ///
+  /// If [override] is true, we go to manual selection anyway.
+  void tryAdvanceToManualSelection({bool override = false}){
+    if(override || ownersOfScannedDevicesWithMultiplePossibleOwners.isEmpty){
+      //Multiple invocations of this method, cannot alter isScanning.
+      if(isScanStep.value){
+        isScanStep.value = false;
+      }
+      _scanStepController.add(ScanProcessStep.MANUAL);
     }else{
-      onDenied();
+      // There are owners that we cannot resolve ourselves, scan step stays unmodified.
+      _scanStepController.add(ScanProcessStep.RESOLVE_MULTIPLE_OWNERS);
     }
   }
   
@@ -281,24 +311,23 @@ class AttendeeScanningBloc extends Bloc {
     _scanStepController.close();
   }
 
-  bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
+  bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
 
-  void onMemberSelected(Member item){
-    if(rideAttendees.contains(item.uuid)){
-      rideAttendees.remove(item.uuid);
+  void onMemberSelected(String memberUuid){
+    if(rideAttendees.contains(memberUuid)){
+      rideAttendees.remove(memberUuid);
     }else{
-      rideAttendees.add(item.uuid);
+      rideAttendees.add(memberUuid);
     }
   }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
-}
 
-enum ScanProcessStep {
-  INIT,//Check bluetooth on, then load settings and members
-  SCAN,//scanning
-  MANUAL,//scanning results were confirmed and we are in the manual assignment step
-  BLUETOOTH_DISABLED,//bluetooth is off
-  STOPPING_SCAN,//the scan is stopping
-  PERMISSION_DENIED,//the app didn't have the required permission to start scanning.
+  Future<List<Member>> filterAndSortMultipleOwnersList() {
+    final filtered = ownersOfScannedDevicesWithMultiplePossibleOwners.where((Member member) => !rideAttendees.contains(member.uuid)).toList();
+
+    filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
+
+    return Future.value(filtered);
+  }
 }

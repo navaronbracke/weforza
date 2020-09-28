@@ -39,7 +39,7 @@ class MemberDetailsBloc extends Bloc {
   @override
   void dispose() {}
 
-  Future<void> deleteDevice(String name) => deviceRepository.removeDevice(name);
+  Future<void> deleteDevice(Device device) => deviceRepository.removeDevice(device);
 
   Future<void> deleteMember() {
     return memberRepository.deleteMember(member.uuid);

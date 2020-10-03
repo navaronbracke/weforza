@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultUnknownDeviceListItem extends StatelessWidget {
-  ScanResultUnknownDeviceListItem({
-    @required this.deviceName
-  }): assert(deviceName != null && deviceName.isNotEmpty);
+  ScanResultUnknownDeviceListItem({@required this.deviceName});
 
   final String deviceName;
 
@@ -21,7 +19,7 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
                 color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
             ),
           ),
-          SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
+          SelectableText(deviceName ?? "", scrollPhysics: ClampingScrollPhysics()),
         ],
       ),
     );

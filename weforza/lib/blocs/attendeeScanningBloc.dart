@@ -159,7 +159,15 @@ class AttendeeScanningBloc extends Bloc {
       //Then maps the result to the device name.
       //And finishes by filtering the devices of which there is only one owner, that was already scanned.
       scanner.scanForDevices(scanDuration)
-          .where((device) => _scannedDevices.add(device))
+          .where((device){
+            //Remove invalid device names.
+            return device != null && device.deviceName != null && device.deviceName.trim().isNotEmpty;
+          })
+          .where((device){
+            //Remove already scanned devices.
+            //If not scanned yet, the device is added to the scanned devices list.
+            return _scannedDevices.add(device);
+          })
           .map((device) => device.deviceName)
           .where(_deviceOwnerNotScanned)
           .listen(onDeviceFound, onError: (error){

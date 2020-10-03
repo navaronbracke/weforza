@@ -88,7 +88,12 @@ class AttendeeScanningBloc extends Bloc {
   /// This HashMap holds the members that were loaded from the database.
   /// Each member is mapped to it's uuid.
   /// This way we can easily map scanned device names to it.
-  HashMap<String, Member> members;
+  HashMap<String, Member> _members = HashMap();
+
+  /// This collection will keep a duplicate, sorted version, of [members.values].
+  /// This gives us the advantage of still being able to do the efficient HashMap lookup.
+  /// Albeit with increased memory footprint, for the ordered collection.
+  List<Member> sortedMembers;
 
   /// This collection keeps track of a specific set of owners.
   /// If a device with multiple possible owners is scanned,
@@ -154,7 +159,15 @@ class AttendeeScanningBloc extends Bloc {
       //Then maps the result to the device name.
       //And finishes by filtering the devices of which there is only one owner, that was already scanned.
       scanner.scanForDevices(scanDuration)
-          .where((device) => _scannedDevices.add(device))
+          .where((device){
+            //Remove invalid device names.
+            return device != null && device.deviceName != null && device.deviceName.trim().isNotEmpty;
+          })
+          .where((device){
+            //Remove already scanned devices.
+            //If not scanned yet, the device is added to the scanned devices list.
+            return _scannedDevices.add(device);
+          })
           .map((device) => device.deviceName)
           .where(_deviceOwnerNotScanned)
           .listen(onDeviceFound, onError: (error){
@@ -181,12 +194,8 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Load the members. Returns a HashMap for easy lookup later.
   Future<void> _loadMembers() async {
-    members = await memberRepo.getMembers().then((List<Member> list){
-      final HashMap<String,Member> collection = HashMap();
-      list.forEach((Member member) => collection[member.uuid] = member);
-
-      return collection;
-    });
+    sortedMembers = await memberRepo.getMembers();
+    sortedMembers.forEach((Member member) => _members[member.uuid] = member);
   }
 
   /// Returns whether the single owner of the given [deviceName] wasn't scanned yet.
@@ -226,7 +235,7 @@ class AttendeeScanningBloc extends Bloc {
       return;
     }
 
-    final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => members[uuid]);
+    final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => _members[uuid]);
 
     if(owners.length > 1){
       ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
@@ -238,7 +247,7 @@ class AttendeeScanningBloc extends Bloc {
 
   List<Member> getDeviceOwners(String deviceName) {
     if(deviceOwners.containsKey(deviceName)){
-      return deviceOwners[deviceName].map((String uuid) => members[uuid]).toList();
+      return deviceOwners[deviceName].map((String uuid) => _members[uuid]).toList();
     }else{
       return [];
     }

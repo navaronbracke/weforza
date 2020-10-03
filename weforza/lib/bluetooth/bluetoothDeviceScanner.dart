@@ -46,10 +46,11 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
           allowDuplicates: false,
           scanMode: ScanMode.balanced,
           timeout: Duration(seconds: scanDurationInSeconds)
-      ).where((ScanResult result) => result?.device?.name != null).map((result) => BluetoothPeripheral(
-        id: result.device.id.id,//result.device.id = DeviceIdentifier
-        deviceName: result.device.name
-      ));
+      ).map((result){
+        if(result == null || result.device == null) return null;
+
+        return BluetoothPeripheral(id: result.device.id.id, deviceName: result.device.name);
+      });
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();

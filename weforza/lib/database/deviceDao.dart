@@ -14,12 +14,13 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getOwnerDevices(String ownerId);
 
-  Future<List<Device>> getAllDevices();
-
   Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]);
 
-  ///Get all the device names with their owner UUID's, grouped by device name.
-  Future<HashMap<String,List<String>>> getDeviceOwners();
+  Future<HashMap<String, List<String>>> getAllDevicesGroupedByOwnerId();
+
+  ///Get the owners of all devices, grouped by device name.
+  ///This groups owners that have devices with the same name in the same list.
+  Future<HashMap<String,List<String>>> getOwnersOfAllDevices();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -66,12 +67,6 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<List<Device>> getAllDevices() async {
-    final records = await _deviceStore.find(_database);
-    return records.map((record) => Device.of(record.key,record.value)).toList();
-  }
-
-  @override
   Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]) async {
     final List<Filter> filters = [
       Filter.equals("deviceName", deviceName),
@@ -89,7 +84,7 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<HashMap<String,List<String>>> getDeviceOwners() async {
+  Future<HashMap<String,List<String>>> getOwnersOfAllDevices() async {
     final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
 
     final HashMap<String,List<String>> collection = HashMap();
@@ -99,9 +94,29 @@ class DeviceDao implements IDeviceDao {
       final String ownerUuid = record["owner"] as String;
 
       if(collection.containsKey(device)){
-        collection[record["deviceName"]].add(ownerUuid);
+        collection[device].add(ownerUuid);
       }else{
-        collection[record["deviceName"]] = <String>[ownerUuid];
+        collection[device] = <String>[ownerUuid];
+      }
+    });
+
+    return collection;
+  }
+
+  @override
+  Future<HashMap<String, List<String>>> getAllDevicesGroupedByOwnerId() async {
+    final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
+
+    final HashMap<String,List<String>> collection = HashMap();
+
+    devices.forEach((record) {
+      final String device = record["deviceName"] as String;
+      final String ownerUuid = record["owner"] as String;
+
+      if(collection.containsKey(ownerUuid)){
+        collection[ownerUuid].add(device);
+      }else{
+        collection[ownerUuid] = <String>[device];
       }
     });
 

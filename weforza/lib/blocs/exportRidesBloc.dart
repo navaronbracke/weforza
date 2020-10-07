@@ -81,6 +81,7 @@ class ExportRidesBloc extends Bloc {
   void dispose() {
     _submitController.close();
     _fileExistsController.close();
+    fileNameController.dispose();
   }
 
 }

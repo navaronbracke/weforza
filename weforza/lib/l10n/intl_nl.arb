@@ -126,12 +126,15 @@
 
   "ExportRideTitle": "Rit Exporteren",
   "ExportRideFileNamePlaceholder": "rit_{date}",
-  "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
   "ExportRideExportingToFile": "Rit exporteren naar bestand",
   "Export": "Exporteren",
 
   "ExportRidesTitle": "Ritten Exporteren",
   "ExportingRidesDescription": "Ritten en aanwezigen exporteren",
+
+  "ExportMembersTitle": "Leden Exporteren",
+  "ExportingMembersDescription": "Leden en toestellen exporteren",
+  "ExportMembersCsvHeader": "voornaam,familienaam,alias,toestellen",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",

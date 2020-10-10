@@ -1,5 +1,7 @@
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
@@ -69,10 +71,35 @@ class ExportMembersBloc extends Bloc {
         _fileExistsController.add(false);
         _streamController.add(MembersExportState.EXPORTING);
         final Iterable<ExportableMember> exports = await exportMembersRepository.getMembers();
-        await fileHandler.saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
+        await _saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
         _streamController.add(MembersExportState.DONE);
       }
     }).catchError((e) => _streamController.addError(e));
+  }
+
+  /// Save the given [ExportableMember]s to the given file,
+  /// using a write algorithm compatible with the given extension.
+  /// In case of CSV files, the [csvHeader] is used as first line.
+  Future<void> _saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader) async {
+    if(extension == FileExtension.CSV.extension()){
+      final buffer = StringBuffer();
+
+      buffer.writeln(csvHeader);
+
+      members.forEach((exportedMember) {
+        buffer.writeln(exportedMember.toCsv());
+      });
+
+      await file.writeAsString(buffer.toString());
+    }else if(extension == FileExtension.JSON.extension()){
+      final Map<String, dynamic> data = {
+        "members": members.map((ExportableMember member) => member.toJson()).toList()
+      };
+
+      await file.writeAsString(jsonEncode(data));
+    }else{
+      return Future.error(InvalidFileFormatError());
+    }
   }
 
   @override

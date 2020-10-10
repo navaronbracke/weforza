@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -71,10 +73,40 @@ class ExportRidesBloc extends Bloc {
       }else{
         _fileExistsController.add(false);
         _submitController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRidesToFile(file, _fileExtension.extension(), rides);
+        await _saveRidesToFile(file, _fileExtension.extension(), rides);
         _submitController.add(RideExportState.DONE);
       }
     }).catchError((e)=> _submitController.addError(e));
+  }
+
+  ///Save the given [ExportableRide]s to the given file.
+  ///The extension determines how the data is structured inside the file.
+  Future<void> _saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides) async {
+    if(extension == FileExtension.CSV.extension()){
+      final buffer = StringBuffer();
+
+      rides.forEach((exportedRide) {
+        buffer.writeln(exportedRide.ride.toCsv());
+        buffer.writeln();
+        for(ExportableRideAttendee attendee in exportedRide.attendees){
+          buffer.writeln(attendee.toCsv());
+        }
+        buffer.writeln();
+      });
+
+      await file.writeAsString(buffer.toString());
+    }else if(extension == FileExtension.JSON.extension()){
+      final Map<String, dynamic> data = {
+        "rides": rides.map((ExportableRide exportableRide) => {
+          "ride": exportableRide.ride.toJson(),
+          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson()).toList()
+        }).toList()
+      };
+
+      await file.writeAsString(jsonEncode(data));
+    }else{
+      return Future.error(InvalidFileFormatError());
+    }
   }
 
   @override

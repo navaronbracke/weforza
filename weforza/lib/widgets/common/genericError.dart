@@ -3,9 +3,13 @@ import 'package:weforza/theme/appTheme.dart';
 
 ///This widget represents a 'something went wrong'-like generic error widget.
 class GenericError extends StatelessWidget {
-  GenericError({@required this.text}): assert(text != null && text.isNotEmpty);
+  GenericError({
+    @required this.text,
+    this.icon = Icons.warning,
+  }): assert(icon != null && text != null && text.isNotEmpty);
 
   final String text;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context){
@@ -14,7 +18,7 @@ class GenericError extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.warning,
+            icon,
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),

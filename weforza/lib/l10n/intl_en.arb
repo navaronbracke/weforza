@@ -119,10 +119,10 @@
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
   "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(alias|nickname)\\,(devices)(.*)",
+  "ImportMembersCsvHeaderRequired": "A header is required for .csv files.",
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
   "ImportMembersCsvHeaderExample": "firstname,surname,alias,devices",
-  "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
-  "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
+  "ImportMembersInvalidFileExtension": "Only .csv or .json files are allowed",
 
   "ExportRideTitle": "Export Ride",
   "ExportRideFileNamePlaceholder": "ride_{date}",

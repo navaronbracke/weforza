@@ -12,8 +12,8 @@ class NoFileChosenError extends ArgumentError {
   NoFileChosenError(): super.notNull("file");
 }
 
-class InvalidFileFormatError extends ArgumentError {
-  InvalidFileFormatError(): super("file format is invalid");
+class InvalidFileExtensionError extends ArgumentError {
+  InvalidFileExtensionError(): super("Invalid file extension");
 }
 
 extension ToFileTypeExtension on FileExtension {
@@ -75,7 +75,7 @@ class FileHandler implements IFileHandler {
     if(result == null || result.files == null || result.files.isEmpty) return Future.error(NoFileChosenError());
 
     if(!result.files.first.extension.endsWith('csv') || !result.files.first.extension.endsWith('json')){
-      return Future.error(InvalidFileFormatError());
+      return Future.error(InvalidFileExtensionError());
     }
 
     return File(result.files.first.path);

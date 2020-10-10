@@ -119,19 +119,23 @@
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
   "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(alias|nickname)\\,(devices)(.*)",
+  "ImportMembersCsvHeaderRequired": "A header is required for .csv files.",
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
   "ImportMembersCsvHeaderExample": "firstname,surname,alias,devices",
-  "ImportMembersInvalidFileFormat": "Only CSV files are allowed",
-  "ImportMembersHeaderStrippedMessage": "If a header exists, it will be removed",
+  "ImportMembersInvalidFileExtension": "Only .csv or .json files are allowed",
+  "ImportMembersIncompatibleFileJsonContents": "The chosen .json file is incompatible.",
 
   "ExportRideTitle": "Export Ride",
   "ExportRideFileNamePlaceholder": "ride_{date}",
-  "ExportRideExportedToPathMessage": "Ride saved at {path}",
   "ExportRideExportingToFile": "Exporting ride to file",
   "Export": "Export",
 
   "ExportRidesTitle": "Export Rides",
   "ExportingRidesDescription": "Exporting rides and attendees",
+
+  "ExportMembersTitle": "Export Members",
+  "ExportingMembersDescription": "Exporting members and devices",
+  "ExportMembersCsvHeader": "firstname,lastname,alias,devices",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

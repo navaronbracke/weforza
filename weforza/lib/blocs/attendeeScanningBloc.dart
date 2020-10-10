@@ -189,7 +189,7 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Load the device owners.
   Future<void> _loadDeviceOwners() async {
-    deviceOwners = await deviceRepo.getDeviceOwners();
+    deviceOwners = await deviceRepo.getOwnersOfAllDevices();
   }
 
   /// Load the members. Returns a HashMap for easy lookup later.

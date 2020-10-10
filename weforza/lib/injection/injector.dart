@@ -9,6 +9,7 @@ import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/database/settingsDao.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/repository/exportMembersRepository.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -43,6 +44,7 @@ class InjectionContainer {
     _injector.map<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);
     _injector.map<ImportMembersRepository>((i) => ImportMembersRepository(i.get<IImportMembersDao>()),isSingleton: true);
     _injector.map<ExportRidesRepository>((i) => ExportRidesRepository(i.get<IExportRidesDao>()),isSingleton: true);
+    _injector.map<ExportMembersRepository>((i) => ExportMembersRepository(i.get<IDeviceDao>(),i.get<IMemberDao>()),isSingleton: true);
 
     //file handler
     _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);

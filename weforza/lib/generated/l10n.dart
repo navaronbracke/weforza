@@ -1043,6 +1043,16 @@ class S {
     );
   }
 
+  /// `A header is required for .csv files.`
+  String get ImportMembersCsvHeaderRequired {
+    return Intl.message(
+      'A header is required for .csv files.',
+      name: 'ImportMembersCsvHeaderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `A csv header might look like:`
   String get ImportMembersCsvHeaderExampleDescription {
     return Intl.message(
@@ -1063,21 +1073,21 @@ class S {
     );
   }
 
-  /// `Only CSV files are allowed`
-  String get ImportMembersInvalidFileFormat {
+  /// `Only .csv or .json files are allowed`
+  String get ImportMembersInvalidFileExtension {
     return Intl.message(
-      'Only CSV files are allowed',
-      name: 'ImportMembersInvalidFileFormat',
+      'Only .csv or .json files are allowed',
+      name: 'ImportMembersInvalidFileExtension',
       desc: '',
       args: [],
     );
   }
 
-  /// `If a header exists, it will be removed`
-  String get ImportMembersHeaderStrippedMessage {
+  /// `The chosen .json file is incompatible.`
+  String get ImportMembersIncompatibleFileJsonContents {
     return Intl.message(
-      'If a header exists, it will be removed',
-      name: 'ImportMembersHeaderStrippedMessage',
+      'The chosen .json file is incompatible.',
+      name: 'ImportMembersIncompatibleFileJsonContents',
       desc: '',
       args: [],
     );
@@ -1100,16 +1110,6 @@ class S {
       name: 'ExportRideFileNamePlaceholder',
       desc: '',
       args: [date],
-    );
-  }
-
-  /// `Ride saved at {path}`
-  String ExportRideExportedToPathMessage(Object path) {
-    return Intl.message(
-      'Ride saved at $path',
-      name: 'ExportRideExportedToPathMessage',
-      desc: '',
-      args: [path],
     );
   }
 
@@ -1148,6 +1148,36 @@ class S {
     return Intl.message(
       'Exporting rides and attendees',
       name: 'ExportingRidesDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Members`
+  String get ExportMembersTitle {
+    return Intl.message(
+      'Export Members',
+      name: 'ExportMembersTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exporting members and devices`
+  String get ExportingMembersDescription {
+    return Intl.message(
+      'Exporting members and devices',
+      name: 'ExportingMembersDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,lastname,alias,devices`
+  String get ExportMembersCsvHeader {
+    return Intl.message(
+      'firstname,lastname,alias,devices',
+      name: 'ExportMembersCsvHeader',
       desc: '',
       args: [],
     );

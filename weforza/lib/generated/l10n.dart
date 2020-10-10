@@ -1043,6 +1043,16 @@ class S {
     );
   }
 
+  /// `A header is required for .csv files.`
+  String get ImportMembersCsvHeaderRequired {
+    return Intl.message(
+      'A header is required for .csv files.',
+      name: 'ImportMembersCsvHeaderRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `A csv header might look like:`
   String get ImportMembersCsvHeaderExampleDescription {
     return Intl.message(
@@ -1063,21 +1073,11 @@ class S {
     );
   }
 
-  /// `Only CSV files are allowed`
-  String get ImportMembersInvalidFileFormat {
+  /// `Only .csv or .json files are allowed`
+  String get ImportMembersInvalidFileExtension {
     return Intl.message(
-      'Only CSV files are allowed',
-      name: 'ImportMembersInvalidFileFormat',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `If a header exists, it will be removed`
-  String get ImportMembersHeaderStrippedMessage {
-    return Intl.message(
-      'If a header exists, it will be removed',
-      name: 'ImportMembersHeaderStrippedMessage',
+      'Only .csv or .json files are allowed',
+      name: 'ImportMembersInvalidFileExtension',
       desc: '',
       args: [],
     );

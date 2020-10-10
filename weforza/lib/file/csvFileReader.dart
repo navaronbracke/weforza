@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/tuple.dart';
@@ -32,10 +33,13 @@ class CsvFileReader {
     //This way we can do a regex check for the header presence.
     final possibleHeader = lines[0].toLowerCase();
 
-    //Remove the header if it exists
-    if(RegExp("^$headerRegex\$").hasMatch(possibleHeader)){
-      lines = lines.sublist(1);
+    // Check that the header is required.
+    if(!RegExp("^$headerRegex\$").hasMatch(possibleHeader)){
+      return Future.error(InvalidFileExtensionError());
     }
+
+    // Remove the header.
+    lines = lines.sublist(1);
 
     //Add a line processor for each line and run them in parallel.
     for(String line in lines){

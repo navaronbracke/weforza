@@ -13,9 +13,7 @@ class JsonFileReader {
   /// Read the [Member]s and their [Device]s from the given file.
   /// The [generateId] function is used to generate UUIDs for member objects.
   Future<Tuple<Set<Member>,Set<Device>>> readMembersFromFile(File file, String Function() generateId) async {
-    // We don't yet know if each item is a Map<String,dynamic>.
-    // This check has to happen on a per item basis during the reader step.
-    List<dynamic> jsonItems = await _readJsonItems(file);
+    List<Map<String,dynamic>> jsonItems = await _readJsonItems(file);
 
     //Return fast when there are no json items.
     if(jsonItems.isEmpty) return Tuple<Set<Member>,Set<Device>>(Set(), Set());
@@ -36,47 +34,34 @@ class JsonFileReader {
     return Tuple<Set<Member>,Set<Device>>(members, devices);
   }
 
-  Future<List<dynamic>> _readJsonItems(File file) async {
-    Map<String, dynamic> json = jsonDecode(await file.readAsString());
+  Future<List<Map<String, dynamic>>> _readJsonItems(File file) async {
+    final Map<String, dynamic> json = jsonDecode(await file.readAsString());
 
-    // The required key is not in the map.
-    if(json["members"] == null){
-      throw JsonFormatIncompatibleException();
+    try {
+      // The cast to a list can fail.
+      // The item cast to Map<String, dynamic> can also fail.
+      return (json["members"] as List).map((item)=> item as Map<String, dynamic>).toList();
+    }catch(e){
+      return Future.error(JsonFormatIncompatibleException());
     }
-
-    // The value is not a List<dynamic>.
-    if(!json["members"] is List<dynamic>){
-      throw JsonFormatIncompatibleException();
-    }
-
-    // The value exists and its a list.
-    // The items are dynamic however.
-    // Checking each item's type & data needs to happen in the object readers.
-    return json["members"];
   }
 
   // Process the given json object and add the member and devices to the given collections.
   // This function is a future, so we can process multiple json objects at once.
-  Future<void> _processJsonItem(dynamic json, Set<Member> members, Set<Device> devices, String Function() generateId) async {
-    // Only process Map<String,dynamic> items.
-    if(!json is Map<String, dynamic>){
-      return;
-    }
+  Future<void> _processJsonItem(Map<String,dynamic> json, Set<Member> members, Set<Device> devices, String Function() generateId) async {
+    String firstName;
+    String lastName;
+    String alias;
+    List<String> deviceNames;
 
-    // The item doesn't have the required keys.
-    if(json["firstName"] == null || json["lastName"] == null || json["alias"] == null || json["devices"] == null){
-      return;
+    try{
+      firstName = json["firstName"] as String;
+      lastName = json["lastName"] as String;
+      alias = json["alias"] as String;
+      deviceNames = (json["devices"] as List).cast<String>();
+    }catch(e){
+      return Future.error(JsonFormatIncompatibleException());
     }
-
-    // The items are not of the required data type.
-    if(!json["firstName"] is String || !json["lastName"] is String || !json["alias"] is String || json["devices"] is List<dynamic>){
-      return;
-    }
-
-    final String firstName = json["firstName"] as String;
-    final String lastName = json["lastName"] as String;
-    final String alias = json["alias"] as String;
-    final List<String> deviceNames = _castListOfDynamicToListOfString(json["devices"] as List<dynamic>);
 
     // The first name, last name or alias are not suitable for a member.
     if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || !Member.personNameAndAliasRegex.hasMatch(alias)){
@@ -94,15 +79,9 @@ class JsonFileReader {
     members.add(member);
 
     //Remove the invalid ones but keep the rest
-    deviceNames.retainWhere((deviceName) => Device.deviceNameRegex.hasMatch(deviceName));
+    deviceNames.retainWhere((deviceName) => deviceName != null && Device.deviceNameRegex.hasMatch(deviceName));
 
     //Add the devices to the collection. Since its a Set, duplicates are ignored.
     deviceNames.forEach((String deviceName) => devices.add(Device(name: deviceName, creationDate: DateTime.now(), ownerId: member.uuid, type: DeviceType.UNKNOWN)));
-  }
-
-  /// Convert a list of dynamic items to a list of String.
-  List<String> _castListOfDynamicToListOfString(List<dynamic> items) {
-    return items.where((dynamic item) => item is String)
-        .map((dynamic item) => item as String).toList();
   }
 }

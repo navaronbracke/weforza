@@ -21,7 +21,6 @@ class ExportableMember {
     return "$firstName,$lastName,$alias$devicesString";
   }
 
-  //TODO when implementing import members from json -> should be compatible
   Map<String,dynamic> toJson(){
     return {
       "firstName": firstName,

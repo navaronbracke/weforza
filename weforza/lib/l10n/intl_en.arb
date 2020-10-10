@@ -123,6 +123,7 @@
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
   "ImportMembersCsvHeaderExample": "firstname,surname,alias,devices",
   "ImportMembersInvalidFileExtension": "Only .csv or .json files are allowed",
+  "ImportMembersIncompatibleFileJsonContents": "The chosen .json file is incompatible.",
 
   "ExportRideTitle": "Export Ride",
   "ExportRideFileNamePlaceholder": "ride_{date}",

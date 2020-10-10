@@ -1083,6 +1083,16 @@ class S {
     );
   }
 
+  /// `The chosen .json file is incompatible.`
+  String get ImportMembersIncompatibleFileJsonContents {
+    return Intl.message(
+      'The chosen .json file is incompatible.',
+      name: 'ImportMembersIncompatibleFileJsonContents',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Export Ride`
   String get ExportRideTitle {
     return Intl.message(

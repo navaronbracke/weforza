@@ -123,6 +123,7 @@
   "ImportMembersCsvHeaderExampleDescription": "Een mogelijke csv hoofding ziet er zo uit:",
   "ImportMembersCsvHeaderExample": "voornaam,familienaam,alias,toestellen",
   "ImportMembersInvalidFileExtension": "Enkel .csv of .json bestanden zijn toegelaten",
+  "ImportMembersIncompatibleFileJsonContents": "Het gekozen .json bestand is incompatibel.",
 
   "ExportRideTitle": "Rit Exporteren",
   "ExportRideFileNamePlaceholder": "rit_{date}",

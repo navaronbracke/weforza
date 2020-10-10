@@ -2,13 +2,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/tuple.dart';
-
-class CsvHeaderMissingError extends ArgumentError {
-  CsvHeaderMissingError(): super.value("A csv file requires a header line.");
-}
 
 /// This class will read the contents of CSV files.
 class CsvFileReader {

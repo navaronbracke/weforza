@@ -29,7 +29,7 @@ class ExportMembersRepository {
         firstName: member.firstname,
         lastName: member.lastname,
         alias: member.alias,
-        devices: _devicesGroupedByOwner[member.uuid]
+        devices: _devicesGroupedByOwner[member.uuid] ?? []
     ));
   }
 }

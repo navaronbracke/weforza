@@ -64,7 +64,7 @@ class JsonFileReader {
     }
 
     // The first name, last name or alias are not suitable for a member.
-    if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || !Member.personNameAndAliasRegex.hasMatch(alias)){
+    if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias)){
       return;
     }
 

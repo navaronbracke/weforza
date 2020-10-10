@@ -93,11 +93,11 @@ class FileHandler implements IFileHandler {
 
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv']);
+    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv','json']);
 
     if(result == null || result.files == null || result.files.isEmpty) return Future.error(NoFileChosenError());
 
-    if(!result.files.first.extension.endsWith('csv')){
+    if(!result.files.first.extension.endsWith('csv') || !result.files.first.extension.endsWith('json')){
       return Future.error(InvalidFileFormatError());
     }
 

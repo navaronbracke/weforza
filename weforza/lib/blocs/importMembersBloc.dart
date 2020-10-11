@@ -8,6 +8,7 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/csvFileReader.dart';
 import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/file/importMembersFileReader.dart';
 import 'package:weforza/file/jsonFileReader.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
@@ -49,16 +50,35 @@ class ImportMembersBloc extends Bloc {
 
   Future<Iterable<ExportableMember>> _readMemberDataFromFile(File file, String csvHeaderRegex) async {
     if(file.path.endsWith(FileExtension.CSV.extension())){
-      final fileReader = CsvFileReader();
-
-      return fileReader.readMembersFromFile(file, csvHeaderRegex);
+      return await _readFile<String>(file, CsvFileReader(headerRegex: csvHeaderRegex));
     }else if(file.path.endsWith(FileExtension.JSON.extension())){
-      final fileReader = JsonFileReader();
+      return await _readFile<Map<String, dynamic>>(file, JsonFileReader());
+    }else{
+      return Future.error(InvalidFileExtensionError());
+    }
+  }
 
-      return fileReader.readMembersFromFile(file);
+  Future<List<ExportableMember>> _readFile<T>(File file, ImportMembersFileReader<T> fileReader) async {
+    // This list will hold the final output.
+    final List<ExportableMember> exports = [];
+
+    // This list contains the object readers that will run in parallel.
+    final List<Future<void>> objectReaders = [];
+
+    final List<T> objects = await fileReader.readFile(file);
+
+    // Return fast when there are no objects.
+    if(objects.isEmpty) return exports;
+
+    // Add a line processor for each object and run them in parallel.
+    for(T object in objects){
+      objectReaders.add(fileReader.processData(object, exports));
     }
 
-    return Future.error(InvalidFileExtensionError());
+    // Wait for the processors to finish.
+    await Future.wait(objectReaders);
+
+    return exports;
   }
 
   @override

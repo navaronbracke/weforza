@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+/// This class is used as format for exporting members
 class ExportableMember {
   ExportableMember({
     @required this.firstName,
@@ -14,7 +15,7 @@ class ExportableMember {
   final String firstName;
   final String lastName;
   final String alias;
-  final List<String> devices;
+  final Set<String> devices;
 
   String toCsv(){
     final String devicesString = devices.isEmpty ? "" : ",${devices.join(",")}";
@@ -26,7 +27,7 @@ class ExportableMember {
       "firstName": firstName,
       "lastName": lastName,
       "alias": alias,
-      "devices": devices
+      "devices": List<String>.of(devices)
     };
   }
 }

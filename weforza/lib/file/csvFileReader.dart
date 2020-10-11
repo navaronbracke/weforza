@@ -26,12 +26,12 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     //If the line doesn't have enough cells to fill the required fields
     // (first name, last name and alias, in that order), skip it
     if(values.length < 3){
-      return null;
+      return;
     }
 
     //Invalid data lines are skipped
     if(!Member.personNameAndAliasRegex.hasMatch(values[0]) || !Member.personNameAndAliasRegex.hasMatch(values[1]) || (values[2].isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(values[2]))){
-      return null;
+      return;
     }
 
     // This Set will keep the device names.

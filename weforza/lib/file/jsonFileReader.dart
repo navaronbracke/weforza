@@ -25,7 +25,7 @@ class JsonFileReader {
 
   // Process the given json and add it to collection if its valid.
   // This function is a future, so we can process multiple json objects at once.
-  Future<void> processLine(Map<String, dynamic> json, List<ExportableMember> collection){
+  Future<void> processJson(Map<String, dynamic> json, List<ExportableMember> collection){
     String firstName;
     String lastName;
     String alias;

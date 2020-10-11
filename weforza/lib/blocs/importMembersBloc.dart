@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/csvFileReader.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/file/jsonFileReader.dart';
-import 'package:weforza/model/device.dart';
-import 'package:weforza/model/member.dart';
-import 'package:weforza/model/tuple.dart';
+import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 
 enum ImportMembersState {
@@ -37,33 +36,30 @@ class ImportMembersBloc extends Bloc {
 
     await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
       _importStreamController.add(ImportMembersState.IMPORTING);
-      final Tuple<Set<Member>,Set<Device>> membersAndDevices = await _readMemberDataFromFile(file, headerRegex);
+      final Iterable<ExportableMember> members = await _readMemberDataFromFile(file, headerRegex);
       //Quick exit when there are no members to insert
       //(you can have a dataset full of members without devices however)
-      if(membersAndDevices.first.isEmpty) return;
+      if(members.isEmpty) return;
 
-      await _saveMemberData(membersAndDevices.first, membersAndDevices.second);
+      await repository.saveMembersWithDevices(members, () => _uuidGenerator.v4());
       reloadMembers.value = true;
       _importStreamController.add(ImportMembersState.DONE);
     }).catchError(_importStreamController.addError);
   }
 
-  Future<Tuple<Set<Member>,Set<Device>>> _readMemberDataFromFile(File file, String csvHeaderRegex) async {
+  Future<Iterable<ExportableMember>> _readMemberDataFromFile(File file, String csvHeaderRegex) async {
     if(file.path.endsWith(FileExtension.CSV.extension())){
       final fileReader = CsvFileReader();
 
-      return fileReader.readMembersFromFile(file, () => _uuidGenerator.v4(), csvHeaderRegex);
+      return fileReader.readMembersFromFile(file, csvHeaderRegex);
     }else if(file.path.endsWith(FileExtension.JSON.extension())){
       final fileReader = JsonFileReader();
 
-      return fileReader.readMembersFromFile(file, () => _uuidGenerator.v4());
+      return fileReader.readMembersFromFile(file);
     }
 
-    return Tuple<Set<Member>,Set<Device>>(Set(), Set());
+    return Future.error(InvalidFileExtensionError());
   }
-
-  Future<void> _saveMemberData(Set<Member> members, Set<Device> devices)
-    => repository.saveMembersWithDevices(members,devices);
 
   @override
   void dispose(){

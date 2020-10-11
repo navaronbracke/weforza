@@ -13,11 +13,11 @@ class ExportMembersRepository {
   final IDeviceDao deviceDao;
   final IMemberDao memberDao;
 
-  Future<void> _getDevices(HashMap<String,List<String>> collection) async => collection.addAll(await deviceDao.getAllDevicesGroupedByOwnerId());
+  Future<void> _getDevices(HashMap<String,Set<String>> collection) async => collection.addAll(await deviceDao.getAllDevicesGroupedByOwnerId());
   Future<void> _getMembers(List<Member> collection) async => collection.addAll(await memberDao.getMembers());
 
   Future<Iterable<ExportableMember>> getMembers() async {
-    final HashMap<String,List<String>> _devicesGroupedByOwner = HashMap();
+    final HashMap<String,Set<String>> _devicesGroupedByOwner = HashMap();
     final List<Member> _members = [];
 
     await Future.wait([

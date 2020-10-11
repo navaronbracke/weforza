@@ -38,7 +38,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
           devices: deviceNames.where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)).toSet()
       ));
     }catch(e){
-      return Future.error(JsonFormatIncompatibleException());
+      //Skip this item, instead of throwing an error.
     }
   }
 

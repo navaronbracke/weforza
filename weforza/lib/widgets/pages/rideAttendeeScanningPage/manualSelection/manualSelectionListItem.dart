@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/custom/profileImage/loadableProfileImage.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 
 class ManualSelectionListItem extends StatefulWidget {
   ManualSelectionListItem({
@@ -14,9 +13,10 @@ class ManualSelectionListItem extends StatefulWidget {
     @required this.profileImageFuture,
     @required this.firstName,
     @required this.lastName,
-    @required this.alias
+    @required this.alias,
+    @required this.personInitials,
   }): assert(
-    isSelected != null && profileImageFuture != null &&
+    isSelected != null && profileImageFuture != null && personInitials != null && personInitials.isNotEmpty &&
         onTap != null && firstName != null && lastName != null && alias != null
   );
 
@@ -26,6 +26,7 @@ class ManualSelectionListItem extends StatefulWidget {
   final String firstName;
   final String lastName;
   final String alias;
+  final String personInitials;
 
   @override
   _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
@@ -62,24 +63,9 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: LoadableProfileImage(
-                  image: widget.profileImageFuture,
-                  size: 40,
-                  onDone: (size, image){
-                    return ProfileImage(
-                      image: image,
-                      icon: Icons.person,
-                      size: size,
-                      personInitials: widget.firstName[0] + widget.lastName[0],
-                    );
-                  },
-                  onError: (size){
-                    return ProfileImage(
-                      icon: Icons.person,
-                      size: size,
-                      personInitials: widget.firstName[0] + widget.lastName[0],
-                    );
-                  },
+                child: AsyncProfileImage(
+                  future: widget.profileImageFuture,
+                  personInitials: widget.personInitials,
                 ),
               ),
               Expanded(
@@ -115,6 +101,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     }
   }
 
+  //TODO remove
   //Combine the first name with the alias.
   Widget _combineFirstNameAndAlias(){
     if(widget.alias.isEmpty){

@@ -27,6 +27,8 @@ class Member implements Comparable<Member> {
   ///The path to an optional profile picture.
   String profileImageFilePath;
 
+  String get initials => firstname[0] + lastname[0];
+
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {

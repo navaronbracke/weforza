@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -21,7 +20,7 @@ class RideDetailsBloc extends Bloc {
   final RideRepository rideRepo;
   Ride ride;
 
-  Future<List<MemberItem>> attendeesFuture;
+  Future<List<Member>> attendeesFuture;
 
   void loadAttendeesIfNotLoaded(){
     if(attendeesFuture == null){
@@ -29,12 +28,7 @@ class RideDetailsBloc extends Bloc {
     }
   }
 
-  Future<List<MemberItem>> loadRideAttendees() async {
-    List<Member> attendees = await rideRepo.getRideAttendees(ride.date);
-    List<Future<MemberItem>> items = attendees.map((attendee) async =>
-        MemberItem(attendee,await memberRepo.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
-    return Future.wait(items);
-  }
+  Future<List<Member>> loadRideAttendees() => rideRepo.getRideAttendees(ride.date);
 
   Future<void> deleteRide() => rideRepo.deleteRide(ride.date);
 

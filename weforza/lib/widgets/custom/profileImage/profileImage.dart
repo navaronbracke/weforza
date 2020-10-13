@@ -10,7 +10,7 @@ class ProfileImage extends StatelessWidget {
   ProfileImage({
     this.image,
     this.size = 75,
-    this.icon = Icons.person,
+    this.icon = Icons.camera_alt,
     this.iconColor = ApplicationTheme.profileImagePlaceholderIconColor,
     this.backgroundColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
     this.personInitials,

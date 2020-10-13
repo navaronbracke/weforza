@@ -7,10 +7,9 @@ import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 
 ///This is the [Bloc] for AddMemberPage.
-class AddMemberBloc extends Bloc implements IProfileImagePicker {
+class AddMemberBloc extends Bloc {
   AddMemberBloc(this._repository): assert(_repository != null);
 
   ///The [IMemberRepository] that handles the submit.
@@ -22,7 +21,6 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
   Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
 
-  @override
   Stream<bool> get stream => _imagePickingController.stream;
 
   StreamController<bool> _imagePickingController = BehaviorSubject();
@@ -31,7 +29,7 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   String _firstName;
   String _lastName;
   String _alias;
-  File _selectedImage;
+  File selectedImage;
 
   ///The actual errors.
   String firstNameError;
@@ -131,7 +129,7 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
         _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
         return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
       }else{
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_alias,(_selectedImage == null) ? null : _selectedImage.path)).then((_){
+        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_alias,(selectedImage == null) ? null : selectedImage.path)).then((_){
               //the then call will be executed in the submit widget
         },onError: (error){
           _submitStateController.add(AddMemberSubmitState.ERROR);
@@ -144,12 +142,11 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     });
   }
 
-  @override
   void pickProfileImage() async {
     _imagePickingController.add(true);
     await _repository.chooseProfileImageFromGallery().then((img){
       if(img != null){
-        _selectedImage = img;
+        selectedImage = img;
       }
       _imagePickingController.add(false);
     },onError: (error){
@@ -157,11 +154,10 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     });
   }
 
-  @override
   void clearSelectedImage() {
-    if(_selectedImage != null){
+    if(selectedImage != null){
       _imagePickingController.add(true);
-      _selectedImage = null;
+      selectedImage = null;
       _imagePickingController.add(false);
     }
   }
@@ -172,9 +168,6 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     _submitStateController.close();
     _imagePickingController.close();
   }
-
-  @override
-  File get selectedImage => _selectedImage;
 }
 
 ///This enum declares the different states for submitting a new [Member].

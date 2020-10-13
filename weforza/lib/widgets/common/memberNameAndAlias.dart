@@ -55,6 +55,7 @@ class MemberNameAndAlias extends StatelessWidget {
             ),
           ]
       ),
+      softWrap: true,
       overflow: TextOverflow.ellipsis,
     );
   }

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
@@ -14,11 +14,10 @@ class ProfileImagePicker extends StatelessWidget {
     @required this.isSelecting,
     @required this.selectImage,
     @required this.clear,
-    @required this.image,
-    this.personInitials
+    @required this.image
   }): assert(
     size != null && size > 0 && errorMessage != null && isSelecting != null
-        && selectImage != null && clear != null && personInitials == null || personInitials.isNotEmpty
+        && selectImage != null && clear != null && image != null
   );
 
   ///The size for a selected image.
@@ -32,9 +31,7 @@ class ProfileImagePicker extends StatelessWidget {
 
   final Stream<bool> isSelecting;
 
-  final File image;
-
-  final String personInitials;
+  final Future<File> image;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +49,9 @@ class ProfileImagePicker extends StatelessWidget {
               child: PlatformAwareLoadingIndicator(),
             ),
           ): GestureDetector(
-              child: ProfileImage(
-                size: size,
-                image: image,
-                personInitials: personInitials,
+              child: AsyncProfileImage(
+                future: image,
+                icon: Icons.camera_alt,
               ),
               onTap: selectImage,
               onLongPress: clear,

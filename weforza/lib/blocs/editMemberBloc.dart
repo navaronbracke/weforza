@@ -6,21 +6,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 
-class EditMemberBloc extends Bloc implements IProfileImagePicker {
+class EditMemberBloc extends Bloc {
   EditMemberBloc({
     @required this.repository,
-    @required this.profileImage,
+    @required this.profileImageFuture,
     @required this.firstName,
     @required this.lastName,
     @required this.alias,
     @required this.id,
   }): assert(
     repository != null && firstName != null && lastName != null
-        && alias != null && id != null
+        && alias != null && id != null && profileImageFuture != null
   );
 
   ///The [IMemberRepository] that handles the submit.
@@ -31,18 +29,19 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
 
   StreamController<bool> _imagePickingController = BehaviorSubject();
 
-  @override
   Stream<bool> get stream => _imagePickingController.stream;
+
+  /// The member's fixed UUID.
+  final String id;
 
   ///The actual inputs.
   String firstName;
   String lastName;
   String alias;
-  final String id;
-  File profileImage;
-
-  @override
-  File get selectedImage => profileImage;
+  /// This Future resolves to a profile image.
+  /// It starts with a value from the Member List page.
+  /// That page starts loading the profile image.
+  Future<File> profileImageFuture;
 
   ///The actual errors.
   String firstNameError;
@@ -132,15 +131,8 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     return aliasError;
   }
 
-  Future<MemberItem> editMember() async {
+  Future<Member> editMember() async {
     _submitStateController.add(EditMemberSubmitState.SUBMIT);
-    final Member newMember = Member(
-      id,
-      firstName,
-      lastName,
-      alias,
-      profileImage?.path,
-    );
 
     bool exists = await repository.memberExists(firstName, lastName, alias,id).catchError((error){
       _submitStateController.add(EditMemberSubmitState.ERROR);
@@ -151,26 +143,30 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
       _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       return Future.error(EditMemberSubmitState.MEMBER_EXISTS);
     }else{
-      return await repository.updateMember(newMember).then((_){
-        return MemberItem(newMember,profileImage);
-      },onError: (error){
+      ///Wait for the File to be resolved.
+      ///If it failed do a fallback to null.
+      final File profileImage = await profileImageFuture.catchError((error) => null);
+      final Member newMember = Member(
+        id,
+        firstName,
+        lastName,
+        alias,
+        profileImage?.path,
+      );
+
+      return await repository.updateMember(newMember).then((_) => newMember).catchError((error){
         _submitStateController.add(EditMemberSubmitState.ERROR);
         return Future.error(EditMemberSubmitState.ERROR);
       });
     }
   }
 
-  @override
   void pickProfileImage() async {
     _imagePickingController.add(true);
-    await repository.chooseProfileImageFromGallery().then((img){
-      if(img != null){
-        profileImage = img;
-      }
+    await repository.chooseProfileImageFromGallery().then((File image){
+      profileImageFuture = Future.value(image);
       _imagePickingController.add(false);
-    },onError: (error){
-      _imagePickingController.addError(Exception("Could not pick a profile image"));
-    });
+    }).catchError(_imagePickingController.addError);
   }
 
   @override
@@ -179,13 +175,10 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     _imagePickingController.close();
   }
 
-  @override
   void clearSelectedImage() {
-    if(profileImage != null){
-      _imagePickingController.add(true);
-      profileImage = null;
-      _imagePickingController.add(false);
-    }
+    _imagePickingController.add(true);
+    profileImageFuture = Future.value(null);
+    _imagePickingController.add(false);
   }
 }
 

@@ -64,6 +64,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: AsyncProfileImage(
+                  icon: Icons.person,
                   future: widget.profileImageFuture,
                   personInitials: widget.personInitials,
                 ),

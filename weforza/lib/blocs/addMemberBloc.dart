@@ -29,7 +29,7 @@ class AddMemberBloc extends Bloc {
   String _firstName;
   String _lastName;
   String _alias;
-  File selectedImage;
+  Future<File> selectedImage;
 
   ///The actual errors.
   String firstNameError;
@@ -129,14 +129,18 @@ class AddMemberBloc extends Bloc {
         _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
         return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
       }else{
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_alias,(selectedImage == null) ? null : selectedImage.path)).then((_){
-              //the then call will be executed in the submit widget
-        },onError: (error){
-          _submitStateController.add(AddMemberSubmitState.ERROR);
-          return Future.error(AddMemberSubmitState.ERROR);
-        });
+        final File image = await selectedImage.catchError((err) => null);
+        final Member member = Member(
+            _uuidGenerator.v4(),
+            _firstName,
+            _lastName,
+            _alias,
+            image?.path
+        );
+
+        await _repository.addMember(member);
       }
-    },onError: (error){
+    }).catchError((error){
       _submitStateController.add(AddMemberSubmitState.ERROR);
       return Future.error(AddMemberSubmitState.ERROR);
     });
@@ -144,14 +148,10 @@ class AddMemberBloc extends Bloc {
 
   void pickProfileImage() async {
     _imagePickingController.add(true);
-    await _repository.chooseProfileImageFromGallery().then((img){
-      if(img != null){
-        selectedImage = img;
-      }
+    await _repository.chooseProfileImageFromGallery().then((File image){
+      selectedImage = Future.value(image);
       _imagePickingController.add(false);
-    },onError: (error){
-      _imagePickingController.addError(Exception("Could not pick a profile image"));
-    });
+    }).catchError(_imagePickingController.addError);
   }
 
   void clearSelectedImage() {

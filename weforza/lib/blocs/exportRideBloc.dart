@@ -33,6 +33,7 @@ class ExportRideBloc extends Bloc {
   final Ride ride;
   final Future<List<Member>> loadedAttendees;
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
+  final int filenameMaxLength = 80;
   TextEditingController fileNameController;
 
   final StreamController<RideExportState> _streamController = BehaviorSubject();
@@ -71,7 +72,7 @@ class ExportRideBloc extends Bloc {
       filenameError = fileNameIsRequired;
     }else if(filename.trim().isEmpty){
       filenameError = isWhitespaceMessage;
-    }else if(Ride.titleMaxLength < filename.length){
+    }else if(filenameMaxLength < filename.length){
       //The full title is the biggest thing we allow
       filenameError = filenameNameMaxLengthMessage;
     }else if(!filenamePattern.hasMatch(filename)){

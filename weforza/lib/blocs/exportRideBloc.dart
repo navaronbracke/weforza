@@ -18,21 +18,18 @@ class ExportRideBloc extends Bloc {
     @required this.ride,
     @required this.loadedAttendees,
     @required this.fileHandler,
-    @required this.resolveInitialFilename,
+    @required this.filename,
   }): assert(ride != null && loadedAttendees != null
       && fileHandler != null
-      && resolveInitialFilename != null)
-  {
-    final String text = resolveInitialFilename();
-    _filename = text;
-    fileNameController = TextEditingController(text: text);
+      && filename != null && filename.isNotEmpty) {
+    fileNameController = TextEditingController(text: filename);
   }
 
-  final String Function() resolveInitialFilename;
   final IFileHandler fileHandler;
   final Ride ride;
   final Future<List<Member>> loadedAttendees;
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
+  final int filenameMaxLength = 80;
   TextEditingController fileNameController;
 
   final StreamController<RideExportState> _streamController = BehaviorSubject();
@@ -45,7 +42,7 @@ class ExportRideBloc extends Bloc {
 
   bool autoValidateFileName = false;
 
-  String _filename;
+  String filename;
 
   FileExtension _fileExtension = FileExtension.CSV;
 
@@ -61,23 +58,23 @@ class ExportRideBloc extends Bloc {
   }
 
   String validateFileName(
-      String filename,
+      String value,
       String fileNameIsRequired,
       String isWhitespaceMessage,
       String filenameNameMaxLengthMessage,
       String invalidFilenameMessage)
   {
-    if(filename == null || filename.isEmpty){
+    if(value == null || value.isEmpty){
       filenameError = fileNameIsRequired;
-    }else if(filename.trim().isEmpty){
+    }else if(value.trim().isEmpty){
       filenameError = isWhitespaceMessage;
-    }else if(Ride.titleMaxLength < filename.length){
+    }else if(filenameMaxLength < value.length){
       //The full title is the biggest thing we allow
       filenameError = filenameNameMaxLengthMessage;
-    }else if(!filenamePattern.hasMatch(filename)){
+    }else if(!filenamePattern.hasMatch(value)){
       filenameError = invalidFilenameMessage;
     }else{
-      _filename = filename;
+      filename = value;
       filenameError = null;
     }
 
@@ -85,7 +82,7 @@ class ExportRideBloc extends Bloc {
   }
 
   void exportRide() async {
-    await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
+    await fileHandler.createFile(filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
         _fileExistsController.add(true);
       }else{

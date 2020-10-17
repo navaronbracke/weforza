@@ -22,15 +22,9 @@ class MemberDevicesListHeader extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 4),
-              child: Text(
-                S.of(context).DevicesListHeader,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20
-                ),
-              ),
+            child: Text(
+              S.of(context).DevicesListHeader,
+              style: ApplicationTheme.memberDevicesListHeaderTextStyle,
             ),
           ),
           IconButton(

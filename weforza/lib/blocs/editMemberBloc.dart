@@ -27,6 +27,8 @@ class EditMemberBloc extends Bloc {
   StreamController<EditMemberSubmitState> _submitStateController = BehaviorSubject();
   Stream<EditMemberSubmitState> get submitStream => _submitStateController.stream;
 
+  void onError(Object error) => _submitStateController.addError(error);
+
   StreamController<bool> _imagePickingController = BehaviorSubject();
 
   Stream<bool> get stream => _imagePickingController.stream;
@@ -133,14 +135,9 @@ class EditMemberBloc extends Bloc {
 
   Future<Member> editMember() async {
     _submitStateController.add(EditMemberSubmitState.SUBMIT);
-
-    bool exists = await repository.memberExists(firstName, lastName, alias,id).catchError((error){
-      _submitStateController.add(EditMemberSubmitState.ERROR);
-      return Future.error(EditMemberSubmitState.ERROR);
-    });
+    bool exists = await repository.memberExists(firstName, lastName, alias,id);
 
     if(exists){
-      _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       return Future.error(EditMemberSubmitState.MEMBER_EXISTS);
     }else{
       ///Wait for the File to be resolved.
@@ -154,10 +151,9 @@ class EditMemberBloc extends Bloc {
         profileImage?.path,
       );
 
-      return await repository.updateMember(newMember).then((_) => newMember).catchError((error){
-        _submitStateController.add(EditMemberSubmitState.ERROR);
-        return Future.error(EditMemberSubmitState.ERROR);
-      });
+      await repository.updateMember(newMember);
+
+      return newMember;
     }
   }
 
@@ -183,5 +179,5 @@ class EditMemberBloc extends Bloc {
 }
 
 enum EditMemberSubmitState {
-  IDLE,SUBMIT,MEMBER_EXISTS,ERROR,
+  IDLE,SUBMIT,MEMBER_EXISTS
 }

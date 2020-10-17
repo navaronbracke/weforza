@@ -164,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),
+    "RideDetailsAttendeesListHeader" : MessageLookupByLibrary.simpleMessage("Aanwezigen"),
     "RideDetailsDeleteOption" : MessageLookupByLibrary.simpleMessage("Verwijderen"),
     "RideDetailsLoadAttendeesError" : MessageLookupByLibrary.simpleMessage("Kon de aanwezigen niet laden"),
     "RideDetailsNoAttendees" : MessageLookupByLibrary.simpleMessage("Deze rit heeft geen aanwezigen"),

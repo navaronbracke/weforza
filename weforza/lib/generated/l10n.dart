@@ -273,6 +273,16 @@ class S {
     );
   }
 
+  /// `Attendees`
+  String get RideDetailsAttendeesListHeader {
+    return Intl.message(
+      'Attendees',
+      name: 'RideDetailsAttendeesListHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Export`
   String get RideDetailsExportOption {
     return Intl.message(

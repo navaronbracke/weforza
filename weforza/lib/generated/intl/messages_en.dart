@@ -164,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete ride"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),
+    "RideDetailsAttendeesListHeader" : MessageLookupByLibrary.simpleMessage("Attendees"),
     "RideDetailsDeleteOption" : MessageLookupByLibrary.simpleMessage("Delete"),
     "RideDetailsExportOption" : MessageLookupByLibrary.simpleMessage("Export"),
     "RideDetailsLoadAttendeesError" : MessageLookupByLibrary.simpleMessage("Could not load attendees"),

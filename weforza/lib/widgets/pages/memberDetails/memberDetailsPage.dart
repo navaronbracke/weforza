@@ -8,10 +8,10 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/memberAttendingCount.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDetailsAttendingCounter.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -31,15 +31,37 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
   ///The BLoC in charge of the content.
   MemberDetailsBloc bloc;
 
+  void goToEditMemberPage(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
+      setState(() {
+        bloc.member = SelectedItemProvider.of(context).selectedMember.value;
+        bloc.profileImage = SelectedItemProvider.of(context).selectedMemberProfileImage.value;
+      });
+    });
+  }
+
+  Future<void> onDeleteMember(BuildContext context) async {
+    await bloc.deleteMember();
+
+    //trigger the reload of members
+    ReloadDataProvider.of(context).reloadMembers.value = true;
+    final navigator = Navigator.of(context);
+    //Pop both the dialog and the detail screen
+    navigator.pop();
+    navigator.pop();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = MemberDetailsBloc(
       memberRepository: InjectionContainer.get<MemberRepository>(),
       deviceRepository: InjectionContainer.get<DeviceRepository>(),
-      member: SelectedItemProvider.of(context).selectedMember.value
+      member: SelectedItemProvider.of(context).selectedMember.value,
+      profileImage: SelectedItemProvider.of(context).selectedMemberProfileImage.value,
+      attendingCountFuture: SelectedItemProvider.of(context).selectedMemberAttendingCount.value
     );
-    bloc.loadDevicesAndAttendingCount();
+    bloc.loadDevices();
   }
 
   @override
@@ -55,11 +77,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
-              setState(() {
-                bloc.member = SelectedItemProvider.of(context).selectedMember.value;
-              });
-            }),
+            onPressed: () => goToEditMemberPage(context),
           ),
           IconButton(
             icon: Icon(Icons.delete),
@@ -70,14 +88,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                   title: S.of(context).MemberDeleteDialogTitle,
                   description: S.of(context).MemberDeleteDialogDescription,
                   errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
-                  onDelete: () => bloc.deleteMember().then((_){
-                    //trigger the reload of members
-                    ReloadDataProvider.of(context).reloadMembers.value = true;
-                    final navigator = Navigator.of(context);
-                    //Pop both the dialog and the detail screen
-                    navigator.pop();
-                    navigator.pop();
-                  }),
+                  onDelete: () => onDeleteMember(context),
                 ),
             ),
           ),
@@ -109,11 +120,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
                     icon: Icons.edit,
-                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
-                      setState(() {
-                        bloc.member = SelectedItemProvider.of(context).selectedMember.value;
-                      });
-                    })
+                    onPressed: ()=> () => goToEditMemberPage(context),
                 ),
                 SizedBox(width: 15),
                 CupertinoIconButton.fromAppTheme(
@@ -124,14 +131,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                           title: S.of(context).MemberDeleteDialogTitle,
                           description: S.of(context).MemberDeleteDialogDescription,
                           errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
-                          onDelete: () => bloc.deleteMember().then((_){
-                            //trigger the reload of members
-                            ReloadDataProvider.of(context).reloadMembers.value = true;
-                            final navigator = Navigator.of(context);
-                            //Pop both the dialog and the detail screen
-                            navigator.pop();
-                            navigator.pop();
-                          }),
+                          onDelete: () => onDeleteMember(context),
                         ),
                     ),
                 ),
@@ -155,9 +155,11 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10),
-              child: ProfileImage(
-                image: bloc.member.profileImage,
-                personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
+              child: AsyncProfileImage(
+                icon: Icons.person,
+                size: 75,
+                personInitials: bloc.member.initials,
+                future: bloc.profileImage,
               ),
             ),
             Expanded(
@@ -165,14 +167,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                      bloc.member.firstName,
+                      bloc.member.firstname,
                       style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
                           fontSize: 25,
                           fontWeight: FontWeight.w500
                       ),
                       overflow: TextOverflow.ellipsis),
                   Text(
-                      bloc.member.lastName,
+                      bloc.member.lastname,
                       style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
                           fontSize: 20
                       ),
@@ -200,7 +202,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         Padding(
           padding: const EdgeInsets.only(top: 5),
           child: Center(
-            child: MemberDetailsAttendingCounter(
+            child: MemberAttendingCount(
               future: bloc.attendingCountFuture,
             ),
           ),

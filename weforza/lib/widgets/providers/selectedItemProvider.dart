@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 
 ///This InheritedWidget manages the selected items for Ride and Member.
@@ -11,8 +13,10 @@ class SelectedItemProvider extends InheritedWidget {
   }) : assert(child != null), super(key: key, child: child);
 
   final ValueNotifier<Ride> selectedRide = ValueNotifier(null);
-  final ValueNotifier<MemberItem> selectedMember = ValueNotifier(null);
+  final ValueNotifier<Member> selectedMember = ValueNotifier(null);
+  final ValueNotifier<Future<int>> selectedMemberAttendingCount = ValueNotifier(null);
   final ValueNotifier<Device> selectedDevice = ValueNotifier(null);
+  final ValueNotifier<Future<File>> selectedMemberProfileImage = ValueNotifier(null);
 
   static SelectedItemProvider of(BuildContext context)
    => context.dependOnInheritedWidgetOfExactType<SelectedItemProvider>();

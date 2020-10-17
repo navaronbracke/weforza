@@ -7,10 +7,9 @@ import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 
 ///This is the [Bloc] for AddMemberPage.
-class AddMemberBloc extends Bloc implements IProfileImagePicker {
+class AddMemberBloc extends Bloc {
   AddMemberBloc(this._repository): assert(_repository != null);
 
   ///The [IMemberRepository] that handles the submit.
@@ -22,16 +21,13 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
   Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
 
-  @override
-  Stream<bool> get stream => _imagePickingController.stream;
-
-  StreamController<bool> _imagePickingController = BehaviorSubject();
+  void onError(Object error) => _submitStateController.addError(error);
 
   ///The actual inputs.
   String _firstName;
   String _lastName;
   String _alias;
-  File _selectedImage;
+  Future<File> _selectedImage = Future.value(null);
 
   ///The actual errors.
   String firstNameError;
@@ -126,62 +122,40 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
 
   Future<void> addMember() async {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
-    await _repository.memberExists(_firstName, _lastName, _alias).then((exists) async {
-      if(exists){
-        _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
-        return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
-      }else{
-        await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_alias,(_selectedImage == null) ? null : _selectedImage.path)).then((_){
-              //the then call will be executed in the submit widget
-        },onError: (error){
-          _submitStateController.add(AddMemberSubmitState.ERROR);
-          return Future.error(AddMemberSubmitState.ERROR);
-        });
-      }
-    },onError: (error){
-      _submitStateController.add(AddMemberSubmitState.ERROR);
-      return Future.error(AddMemberSubmitState.ERROR);
-    });
-  }
 
-  @override
-  void pickProfileImage() async {
-    _imagePickingController.add(true);
-    await _repository.chooseProfileImageFromGallery().then((img){
-      if(img != null){
-        _selectedImage = img;
-      }
-      _imagePickingController.add(false);
-    },onError: (error){
-      _imagePickingController.addError(Exception("Could not pick a profile image"));
-    });
-  }
+    bool exists = await _repository.memberExists(_firstName, _lastName, _alias);
 
-  @override
-  void clearSelectedImage() {
-    if(_selectedImage != null){
-      _imagePickingController.add(true);
-      _selectedImage = null;
-      _imagePickingController.add(false);
+    if(exists){
+      return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
+    }else{
+      final File image = await _selectedImage.catchError((err) => null);
+      final Member member = Member(
+          _uuidGenerator.v4(),
+          _firstName,
+          _lastName,
+          _alias,
+          image?.path
+      );
+
+      await _repository.addMember(member);
     }
   }
+
+  Future<File> get initialImage => _selectedImage;
+  void clearSelectedImage() => _selectedImage = Future.value(null);
+  void setSelectedImage(Future<File> image) => _selectedImage = image;
 
   ///Dispose of this object.
   @override
   void dispose() {
     _submitStateController.close();
-    _imagePickingController.close();
   }
-
-  @override
-  File get selectedImage => _selectedImage;
 }
 
 ///This enum declares the different states for submitting a new [Member].
 ///[AddMemberSubmitState.IDLE] There is no submit in progress.
 ///[AddMemberSubmitState.SUBMIT] A submit is in progress.
-///[AddMemberSubmitState.ERROR] A submit failed because the member could not be saved.
 ///[AddMemberSubmitState.MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
 enum AddMemberSubmitState {
-  IDLE, SUBMIT, MEMBER_EXISTS, ERROR
+  IDLE, SUBMIT, MEMBER_EXISTS
 }

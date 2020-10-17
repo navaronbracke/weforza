@@ -238,6 +238,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   void goToScanningPage(BuildContext context){
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RideAttendeeScanningPage(
+          fileHandler: InjectionContainer.get<IFileHandler>(),
           onRefreshAttendees: () => RideAttendeeFutureProvider.of(context).rideAttendeeFuture.value = bloc.loadRideAttendees(),
         ))
     ).then((_){

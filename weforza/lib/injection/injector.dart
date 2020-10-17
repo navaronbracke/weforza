@@ -38,7 +38,7 @@ class InjectionContainer {
     _injector.map<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase),isSingleton: true);
     _injector.map<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase), isSingleton: true);
     //repositories
-    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>(),i.get<IFileHandler>()),isSingleton: true);
+    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>()),isSingleton: true);
     _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
     _injector.map<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
     _injector.map<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);

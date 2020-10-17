@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
@@ -143,24 +145,35 @@ class _MemberListPageState extends State<MemberListPage> {
           } else {
             return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
                 itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  final member = snapshot.data[index];
-                  return MemberListItem(
-                        member: member,
-                        memberProfileImage: bloc.getMemberProfileImage(member.profileImageFilePath),
-                        memberAttendingCount: bloc.getMemberAttendingCount(member.uuid),
-                        onTap: (){
-                      SelectedItemProvider.of(context).selectedMember.value = snapshot.data[index];
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => MemberDetailsPage())
-                      ).then((_)=> onReturnToMemberListPage(context));
-                    });
-                });
+                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
+            );
           }
         } else {
           return Center(child: PlatformAwareLoadingIndicator());
         }
       },
+    );
+  }
+
+  void onTapListItem(BuildContext context, Member member, Future<int> attendingCount, Future<File> profileImage){
+    final provider = SelectedItemProvider.of(context);
+    provider.selectedMember.value = member;
+    provider.selectedMemberAttendingCount.value = attendingCount;
+    provider.selectedMemberProfileImage.value = profileImage;
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => MemberDetailsPage())
+    ).then((_)=> onReturnToMemberListPage(context));
+  }
+
+  Widget _buildListItem(BuildContext context, int index, List<Member> members) {
+    final Member member = members[index];
+    final Future<int> attendingCount = bloc.getMemberAttendingCount(member.uuid);
+    final Future<File> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
+    return MemberListItem(
+        member: member,
+        memberProfileImage: profileImage,
+        memberAttendingCount: attendingCount,
+        onTap: ()=> onTapListItem(context, member, attendingCount, profileImage)
     );
   }
 

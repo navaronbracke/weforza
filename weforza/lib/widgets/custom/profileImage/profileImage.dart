@@ -71,7 +71,7 @@ class ProfileImage extends StatelessWidget {
           child: Center(
             child: Text(
                 personInitials.toUpperCase(),
-                style: ApplicationTheme.profileImageInitialTextStyle.copyWith(
+                style: ApplicationTheme.personInitialsTextStyle.copyWith(
                     fontSize: .5 * size
                 ),
             ),

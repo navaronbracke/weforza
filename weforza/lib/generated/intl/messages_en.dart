@@ -153,7 +153,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this member?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete member"),
     "MemberDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Member"),
-    "MemberDetailsAlias" : MessageLookupByLibrary.simpleMessage("Alias:"),
     "MemberDetailsLoadDevicesError" : MessageLookupByLibrary.simpleMessage("Could not load devices"),
     "MemberDetailsLoadPictureError" : MessageLookupByLibrary.simpleMessage("Could not load profile picture"),
     "MemberDetailsNoDevices" : MessageLookupByLibrary.simpleMessage("This member has no devices yet"),

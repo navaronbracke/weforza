@@ -50,7 +50,8 @@ class MemberListItem extends StatelessWidget {
                   alias: member.alias,
                 ),
               ),
-              Center(
+              Padding(
+                padding: const EdgeInsets.only(left: 3),
                 child: MemberAttendingCount(
                   future: memberAttendingCount,
                 ),

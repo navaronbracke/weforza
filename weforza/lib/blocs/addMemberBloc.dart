@@ -141,6 +141,7 @@ class AddMemberBloc extends Bloc {
     }
   }
 
+  Future<File> get initialImage => _selectedImage;
   void clearSelectedImage() => _selectedImage = Future.value(null);
   void setSelectedImage(Future<File> image) => _selectedImage = image;
 

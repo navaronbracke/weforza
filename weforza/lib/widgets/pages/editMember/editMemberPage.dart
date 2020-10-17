@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/editMemberBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
@@ -17,13 +18,18 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditMemberPage extends StatefulWidget {
   @override
-  _EditMemberPageState createState() => _EditMemberPageState();
+  _EditMemberPageState createState() => _EditMemberPageState(
+    InjectionContainer.get<IFileHandler>()
+  );
 }
 
 class _EditMemberPageState extends State<EditMemberPage> {
+  _EditMemberPageState(this._fileHandler): assert(_fileHandler != null);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
+
+  final IFileHandler _fileHandler;
 
   ///The BLoC in charge of the form.
   EditMemberBloc _bloc;
@@ -156,10 +162,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
-                      image: _bloc.profileImageFuture,
-                      isSelecting: _bloc.stream,
-                      selectImage: _bloc.pickProfileImage,
-                      clear: _bloc.clearSelectedImage,
+                      fileHandler: _fileHandler,
+                      onClearSelectedImage: _bloc.clearSelectedImage,
+                      setSelectedImage: _bloc.setSelectedImage,
                       errorMessage: S.of(context).MemberPickImageError,
                       size: 100,
                     ),
@@ -276,10 +281,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
-                    image: _bloc.profileImageFuture,
-                    clear: _bloc.clearSelectedImage,
-                    selectImage: _bloc.pickProfileImage,
-                    isSelecting: _bloc.stream,
+                    fileHandler: _fileHandler,
+                    onClearSelectedImage: _bloc.clearSelectedImage,
+                    setSelectedImage: _bloc.setSelectedImage,
                     errorMessage: S.of(context).MemberPickImageError,
                     size: 100,
                   ),

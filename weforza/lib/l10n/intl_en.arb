@@ -30,7 +30,6 @@
 
   "RideDetailsLoadAttendeesError": "Could not load attendees",
   "RideDetailsNoAttendees": "This ride has no attendees",
-  "RideDetailsEditOption": "Edit",
   "RideDetailsExportOption": "Export",
   "RideDetailsDeleteOption": "Delete",
 
@@ -97,22 +96,6 @@
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} people have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
 
-  "EditRidePageTitle": "Edit Ride",
-  "EditRideTitleLabel": "Title",
-  "EditRideDepartureLabel": "Departure",
-  "EditRideDestinationLabel": "Destination",
-  "EditRideDistanceLabel": "Distance",
-  "EditRideTitleMaxLength": "A title can't be longer than {maxLength} characters",
-  "EditRideTitleWhitespace": "A title can't be blank",
-  "EditRideDistanceInvalid": "Please enter a valid distance",
-  "EditRideDistancePositive": "Distance must be greater than zero",
-  "EditRideDistanceMaximum": "A ride cannot have a distance that exceeds {maxDistance} Km",
-  "EditRideAddressWhitespace": "An address can't be blank",
-  "EditRideAddressMaxLength": "An address can't be longer than {maxLength} characters",
-  "EditRideAddressInvalid": "An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -",
-  "EditRideSubmit": "Save Changes",
-  "EditRideSubmitError": "Failed to save the changes",
-
   "ImportMembersPageTitle": "Import Members",
   "ImportMembersPickFile": "Choose File",
   "ImportMembersPickFileWarning": "Please choose a file to import members",
@@ -135,9 +118,6 @@
   "ExportMembersTitle": "Export Members",
   "ExportingMembersDescription": "Exporting members and devices",
   "ExportMembersCsvHeader": "firstname,lastname,alias,devices",
-
-  "RideStart": "Start",
-  "RideDestination": "Destination",
 
   "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",
@@ -183,7 +163,6 @@
   "GenericError": "Something went wrong",
   "GoBack": "Go Back",
 
-  "DistanceKm": "Km",
   "Filename": "Filename",
   "InvalidFilename": "Invalid filename",
   "FilenameWhitespace": "A filename can't be blank",

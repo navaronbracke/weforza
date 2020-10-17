@@ -273,16 +273,6 @@ class S {
     );
   }
 
-  /// `Edit`
-  String get RideDetailsEditOption {
-    return Intl.message(
-      'Edit',
-      name: 'RideDetailsEditOption',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Export`
   String get RideDetailsExportOption {
     return Intl.message(
@@ -833,156 +823,6 @@ class S {
     );
   }
 
-  /// `Edit Ride`
-  String get EditRidePageTitle {
-    return Intl.message(
-      'Edit Ride',
-      name: 'EditRidePageTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Title`
-  String get EditRideTitleLabel {
-    return Intl.message(
-      'Title',
-      name: 'EditRideTitleLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Departure`
-  String get EditRideDepartureLabel {
-    return Intl.message(
-      'Departure',
-      name: 'EditRideDepartureLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Destination`
-  String get EditRideDestinationLabel {
-    return Intl.message(
-      'Destination',
-      name: 'EditRideDestinationLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Distance`
-  String get EditRideDistanceLabel {
-    return Intl.message(
-      'Distance',
-      name: 'EditRideDistanceLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `A title can't be longer than {maxLength} characters`
-  String EditRideTitleMaxLength(Object maxLength) {
-    return Intl.message(
-      'A title can\'t be longer than $maxLength characters',
-      name: 'EditRideTitleMaxLength',
-      desc: '',
-      args: [maxLength],
-    );
-  }
-
-  /// `A title can't be blank`
-  String get EditRideTitleWhitespace {
-    return Intl.message(
-      'A title can\'t be blank',
-      name: 'EditRideTitleWhitespace',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please enter a valid distance`
-  String get EditRideDistanceInvalid {
-    return Intl.message(
-      'Please enter a valid distance',
-      name: 'EditRideDistanceInvalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Distance must be greater than zero`
-  String get EditRideDistancePositive {
-    return Intl.message(
-      'Distance must be greater than zero',
-      name: 'EditRideDistancePositive',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `A ride cannot have a distance that exceeds {maxDistance} Km`
-  String EditRideDistanceMaximum(Object maxDistance) {
-    return Intl.message(
-      'A ride cannot have a distance that exceeds $maxDistance Km',
-      name: 'EditRideDistanceMaximum',
-      desc: '',
-      args: [maxDistance],
-    );
-  }
-
-  /// `An address can't be blank`
-  String get EditRideAddressWhitespace {
-    return Intl.message(
-      'An address can\'t be blank',
-      name: 'EditRideAddressWhitespace',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `An address can't be longer than {maxLength} characters`
-  String EditRideAddressMaxLength(Object maxLength) {
-    return Intl.message(
-      'An address can\'t be longer than $maxLength characters',
-      name: 'EditRideAddressMaxLength',
-      desc: '',
-      args: [maxLength],
-    );
-  }
-
-  /// `An address can only contain letters, numbers, spaces and # , ; : ' & / ° . ( ) -`
-  String get EditRideAddressInvalid {
-    return Intl.message(
-      'An address can only contain letters, numbers, spaces and # , ; : \' & / ° . ( ) -',
-      name: 'EditRideAddressInvalid',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save Changes`
-  String get EditRideSubmit {
-    return Intl.message(
-      'Save Changes',
-      name: 'EditRideSubmit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Failed to save the changes`
-  String get EditRideSubmitError {
-    return Intl.message(
-      'Failed to save the changes',
-      name: 'EditRideSubmitError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Import Members`
   String get ImportMembersPageTitle {
     return Intl.message(
@@ -1168,26 +1008,6 @@ class S {
     return Intl.message(
       'firstname,lastname,alias,devices',
       name: 'ExportMembersCsvHeader',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Start`
-  String get RideStart {
-    return Intl.message(
-      'Start',
-      name: 'RideStart',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Destination`
-  String get RideDestination {
-    return Intl.message(
-      'Destination',
-      name: 'RideDestination',
       desc: '',
       args: [],
     );
@@ -1568,16 +1388,6 @@ class S {
     return Intl.message(
       'Go Back',
       name: 'GoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Km`
-  String get DistanceKm {
-    return Intl.message(
-      'Km',
-      name: 'DistanceKm',
       desc: '',
       args: [],
     );

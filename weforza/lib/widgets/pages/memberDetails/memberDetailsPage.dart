@@ -181,19 +181,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       overflow: TextOverflow.ellipsis
                   ),
                   if(bloc.member.alias.isNotEmpty)
-                    Text.rich(
-                      TextSpan(
-                          text: S.of(context).MemberDetailsAlias,
-                          style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15),
-                          children: [
-                            TextSpan(
-                              text: " " + bloc.member.alias,
-                              style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15, fontStyle: FontStyle.italic),
-                            ),
-                          ]
+                    Text(
+                      "'${bloc.member.alias}'",
+                      style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+                          fontSize: 15, fontStyle: FontStyle.italic
                       ),
                       overflow: TextOverflow.ellipsis,
-                    )
+                    ),
                 ],
               ),
             ),

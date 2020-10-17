@@ -27,7 +27,7 @@ class AddMemberBloc extends Bloc {
   String _firstName;
   String _lastName;
   String _alias;
-  Future<File> _selectedImage;
+  Future<File> _selectedImage = Future.value(null);
 
   ///The actual errors.
   String firstNameError;

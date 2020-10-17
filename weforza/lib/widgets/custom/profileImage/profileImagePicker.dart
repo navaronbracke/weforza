@@ -17,9 +17,10 @@ class ProfileImagePicker extends StatefulWidget {
     @required this.setSelectedImage,
     @required this.initialImage,
   }): assert(
-    size != null && size > 0 && errorMessage != null && initialImage != null
-        && onClearSelectedImage != null && setSelectedImage != null
-        && errorMessage.isNotEmpty && fileHandler != null
+    size != null && size > 0 && errorMessage != null && errorMessage.isNotEmpty
+        && initialImage != null && onClearSelectedImage != null
+        && setSelectedImage != null && errorMessage.isNotEmpty
+        && fileHandler != null
   );
 
   final double size;

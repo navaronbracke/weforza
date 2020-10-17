@@ -1,17 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
+import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -22,7 +25,10 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 class MemberListPage extends StatefulWidget {
   @override
   _MemberListPageState createState() => _MemberListPageState(
-     bloc: MemberListBloc(InjectionContainer.get<MemberRepository>())
+     bloc: MemberListBloc(
+       InjectionContainer.get<MemberRepository>(),
+       InjectionContainer.get<IFileHandler>(),
+     )
   );
 }
 
@@ -134,29 +140,44 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildList(BuildContext context){
-    return FutureBuilder<List<MemberItem>>(
+    return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return GenericError(text: S.of(context).MemberListLoadingFailed);
           } else {
-            List<MemberItem> data = snapshot.data;
-            return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) =>
-                    MemberWithPictureListItem(
-                        item: data[index], onTap: (){
-                      SelectedItemProvider.of(context).selectedMember.value = data[index];
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => MemberDetailsPage())
-                      ).then((_)=> onReturnToMemberListPage(context));
-                    }));
+            return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
+            );
           }
         } else {
           return Center(child: PlatformAwareLoadingIndicator());
         }
       },
+    );
+  }
+
+  void onTapListItem(BuildContext context, Member member, Future<int> attendingCount, Future<File> profileImage){
+    final provider = SelectedItemProvider.of(context);
+    provider.selectedMember.value = member;
+    provider.selectedMemberAttendingCount.value = attendingCount;
+    provider.selectedMemberProfileImage.value = profileImage;
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => MemberDetailsPage())
+    ).then((_)=> onReturnToMemberListPage(context));
+  }
+
+  Widget _buildListItem(BuildContext context, int index, List<Member> members) {
+    final Member member = members[index];
+    final Future<int> attendingCount = bloc.getMemberAttendingCount(member.uuid);
+    final Future<File> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
+    return MemberListItem(
+        member: member,
+        memberProfileImage: profileImage,
+        memberAttendingCount: attendingCount,
+        onTap: ()=> onTapListItem(context, member, attendingCount, profileImage)
     );
   }
 

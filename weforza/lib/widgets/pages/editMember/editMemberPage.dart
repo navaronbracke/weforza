@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/editMemberBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
@@ -17,13 +18,18 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditMemberPage extends StatefulWidget {
   @override
-  _EditMemberPageState createState() => _EditMemberPageState();
+  _EditMemberPageState createState() => _EditMemberPageState(
+    InjectionContainer.get<IFileHandler>()
+  );
 }
 
 class _EditMemberPageState extends State<EditMemberPage> {
+  _EditMemberPageState(this._fileHandler): assert(_fileHandler != null);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
+
+  final IFileHandler _fileHandler;
 
   ///The BLoC in charge of the form.
   EditMemberBloc _bloc;
@@ -104,16 +110,25 @@ class _EditMemberPageState extends State<EditMemberPage> {
     return firstNameValid && lastNameValid && aliasValid;
   }
 
+  void editMember(BuildContext context) async {
+    await _bloc.editMember().then((member){
+      ReloadDataProvider.of(context).reloadMembers.value = true;
+      SelectedItemProvider.of(context).selectedMember.value = member;
+      SelectedItemProvider.of(context).selectedMemberProfileImage.value = _bloc.profileImageFuture;
+      Navigator.pop(context);
+    }).catchError(_bloc.onError);
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final MemberItem member = SelectedItemProvider.of(context).selectedMember.value;
+    final Member member = SelectedItemProvider.of(context).selectedMember.value;
     _bloc = EditMemberBloc(
       repository: InjectionContainer.get<MemberRepository>(),
-      firstName: member.firstName,
-      lastName: member.lastName,
+      firstName: member.firstname,
+      lastName: member.lastname,
       alias: member.alias,
-      profileImage: member.profileImage,
+      profileImageFuture: SelectedItemProvider.of(context).selectedMemberProfileImage.value,
       id: member.uuid,
     );
     _firstNameController = TextEditingController(text: _bloc.firstName);
@@ -147,7 +162,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
-                      imageHandler: _bloc,
+                      initialImage: _bloc.profileImageFuture,
+                      fileHandler: _fileHandler,
+                      onClearSelectedImage: _bloc.clearSelectedImage,
+                      setSelectedImage: _bloc.setSelectedImage,
                       errorMessage: S.of(context).MemberPickImageError,
                       size: 100,
                     ),
@@ -236,13 +254,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     child: Center(
                       child: EditMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
-                          await _bloc.editMember().then((member){
-                            ReloadDataProvider.of(context).reloadMembers.value = true;
-                            SelectedItemProvider.of(context).selectedMember.value = member;
-                            Navigator.pop(context);
-                          }).catchError((e){
-                            //the stream catches it
-                          });
+                          editMember(context);
                         }
                       }),
                     ),
@@ -270,7 +282,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
-                    imageHandler: _bloc,
+                    initialImage: _bloc.profileImageFuture,
+                    fileHandler: _fileHandler,
+                    onClearSelectedImage: _bloc.clearSelectedImage,
+                    setSelectedImage: _bloc.setSelectedImage,
                     errorMessage: S.of(context).MemberPickImageError,
                     size: 100,
                   ),
@@ -359,13 +374,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   child: Center(
                     child: EditMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.editMember().then((member){
-                          ReloadDataProvider.of(context).reloadMembers.value = true;
-                          SelectedItemProvider.of(context).selectedMember.value = member;
-                          Navigator.pop(context);
-                        }).catchError((e){
-                          //the stream catches it
-                        });
+                        editMember(context);
                       }
                     }),
                   ),

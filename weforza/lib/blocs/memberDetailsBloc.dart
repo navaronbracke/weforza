@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
@@ -11,24 +13,25 @@ class MemberDetailsBloc extends Bloc {
     @required this.memberRepository,
     @required this.deviceRepository,
     @required this.member,
+    @required this.profileImage,
+    @required this.attendingCountFuture
   }): assert(
     memberRepository != null && deviceRepository != null && member != null
+        && profileImage != null && attendingCountFuture != null
   );
 
   final MemberRepository memberRepository;
   final DeviceRepository deviceRepository;
-  MemberItem member;
+
+  final Future<int> attendingCountFuture;
+  Member member;
+  Future<File> profileImage;
 
   Future<List<Device>> devicesFuture;
 
-  Future<int> attendingCountFuture;
-
-  void loadDevicesAndAttendingCount(){
+  void loadDevices(){
     if(devicesFuture == null){
       devicesFuture = getMemberDevices();
-    }
-    if(attendingCountFuture == null){
-      attendingCountFuture = getAttendingCount();
     }
   }
 
@@ -41,15 +44,7 @@ class MemberDetailsBloc extends Bloc {
 
   Future<void> deleteDevice(Device device) => deviceRepository.removeDevice(device);
 
-  Future<void> deleteMember() {
-    return memberRepository.deleteMember(member.uuid);
-  }
+  Future<void> deleteMember() => memberRepository.deleteMember(member.uuid);
 
-  Future<int> getAttendingCount(){
-    return memberRepository.getAttendingCountForAttendee(member.uuid);
-  }
-
-  Future<List<Device>> getMemberDevices(){
-    return deviceRepository.getOwnerDevices(member.uuid);
-  }
+  Future<List<Device>> getMemberDevices() => deviceRepository.getOwnerDevices(member.uuid);
 }

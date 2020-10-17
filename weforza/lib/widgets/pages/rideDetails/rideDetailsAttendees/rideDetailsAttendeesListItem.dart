@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
   RideDetailsAttendeesListItem({
@@ -20,28 +22,13 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-      child: alias.isEmpty ? Text(
-          "$firstName $lastName",
-          softWrap: true,
-          style: textStyle,
-          overflow: TextOverflow.ellipsis
-      ): Text.rich(
-        TextSpan(
-            text: firstName,
-            style: textStyle,
-            children: <InlineSpan>[
-              TextSpan(
-                text: " '$alias' ",
-                style: textStyle != null ? textStyle.copyWith(fontStyle: FontStyle.italic) : TextStyle(fontStyle: FontStyle.italic),
-              ),
-              TextSpan(
-                text: lastName,
-                style: textStyle,
-              ),
-            ]
-        ),
-        softWrap: true,
-        overflow: TextOverflow.ellipsis,
+      child: MemberNameAndAlias(
+        firstNameStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
+        lastNameStyle: ApplicationTheme.memberListItemLastNameTextStyle,
+        firstName: firstName,
+        lastName: lastName,
+        alias: alias,
+        isTwoLine: false,
       ),
     );
   }

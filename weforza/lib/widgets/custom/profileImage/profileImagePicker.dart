@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,8 +15,9 @@ class ProfileImagePicker extends StatefulWidget {
     @required this.fileHandler,
     @required this.onClearSelectedImage,
     @required this.setSelectedImage,
+    @required this.initialImage,
   }): assert(
-    size != null && size > 0 && errorMessage != null
+    size != null && size > 0 && errorMessage != null && initialImage != null
         && onClearSelectedImage != null && setSelectedImage != null
         && errorMessage.isNotEmpty && fileHandler != null
   );
@@ -27,6 +27,7 @@ class ProfileImagePicker extends StatefulWidget {
   final IFileHandler fileHandler;
   final void Function() onClearSelectedImage;
   final void Function(Future<File> image) setSelectedImage;
+  final Future<File> initialImage;
 
   @override
   _ProfileImagePickerState createState() => _ProfileImagePickerState();
@@ -40,7 +41,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
     return StreamBuilder<_SelectProfileImageState>(
       stream: _imageController.stream,
       initialData: _SelectProfileImageState(
-          image: Future.value(null),
+          image: widget.initialImage,
           isSelecting: false
       ),
       builder: (context,snapshot){

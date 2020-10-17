@@ -162,6 +162,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
+                      initialImage: _bloc.profileImageFuture,
                       fileHandler: _fileHandler,
                       onClearSelectedImage: _bloc.clearSelectedImage,
                       setSelectedImage: _bloc.setSelectedImage,
@@ -281,6 +282,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
+                    initialImage: _bloc.profileImageFuture,
                     fileHandler: _fileHandler,
                     onClearSelectedImage: _bloc.clearSelectedImage,
                     setSelectedImage: _bloc.setSelectedImage,

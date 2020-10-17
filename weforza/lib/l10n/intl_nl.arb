@@ -30,8 +30,8 @@
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsAttendeesListHeader": "Aanwezigen",
   "RideDetailsEditOption": "Bewerken",
-  "RideDetailsExportOption": "Exporteren",
   "RideDetailsDeleteOption": "Verwijderen",
 
   "RideDeleteDialogTitle": "Verwijder Rit",
@@ -97,22 +97,6 @@
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} personen hebben een toestel met deze naam",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren.",
 
-  "EditRidePageTitle": "Rit Bewerken",
-  "EditRideTitleLabel": "Titel",
-  "EditRideDepartureLabel": "Vertrek",
-  "EditRideDestinationLabel": "Bestemming",
-  "EditRideDistanceLabel": "Afstand",
-  "EditRideTitleMaxLength": "Een titel mag niet langer zijn dan {maxLength} karakters",
-  "EditRideTitleWhitespace": "Een titel mag niet enkel witruimte zijn",
-  "EditRideDistanceInvalid": "Gelieve een geldige afstand in te geven",
-  "EditRideDistancePositive": "Een afstand moet groter zijn dan nul",
-  "EditRideDistanceMaximum": "De afstand van een rit mag niet groter zijn dan {maxDistance} Km",
-  "EditRideAddressWhitespace": "Een adres mag niet enkel witruimte zijn",
-  "EditRideAddressMaxLength": "Een adres mag niet langer zijn dan {maxLength} karakters",
-  "EditRideAddressInvalid": "Een adres mag enkel letters, nummers, spaties of # , ; : ' & / ° . ( ) - bevatten",
-  "EditRideSubmit": "Wijzigingen Opslaan",
-  "EditRideSubmitError": "Kon de wijzigingen niet opslaan",
-
   "ImportMembersPageTitle": "Importeer Leden",
   "ImportMembersPickFile": "Kies Bestand",
   "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
@@ -135,9 +119,6 @@
   "ExportMembersTitle": "Leden Exporteren",
   "ExportingMembersDescription": "Leden en toestellen exporteren",
   "ExportMembersCsvHeader": "voornaam,familienaam,alias,toestellen",
-
-  "RideStart": "Vertrek",
-  "RideDestination": "Bestemming",
 
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",
@@ -183,7 +164,6 @@
   "GenericError": "Er liep iets fout",
   "GoBack": "Keer Terug",
 
-  "DistanceKm": "Km",
   "Filename": "Bestandsnaam",
   "InvalidFilename": "Ongeldige bestandsnaam",
   "FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn",

@@ -11,7 +11,6 @@ import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart'
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/model/ride.dart';
 
 class ExportRidePage extends StatefulWidget {
   ExportRidePage({ @required this.bloc }): assert(bloc != null);
@@ -166,7 +165,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
             value,
             S.of(context).ValueIsRequired(S.of(context).Filename),
             S.of(context).FilenameWhitespace,
-            S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
+            S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
             S.of(context).InvalidFilename
           ),
           decoration: InputDecoration(
@@ -193,7 +192,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       value,
                       S.of(context).ValueIsRequired(S.of(context).Filename),
                       S.of(context).FilenameWhitespace,
-                      S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
+                      S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
                       S.of(context).InvalidFilename
                   );
                 });
@@ -218,7 +217,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
         widget.bloc.fileNameController.text,
         S.of(context).ValueIsRequired(S.of(context).Filename),
         S.of(context).FilenameWhitespace,
-        S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
+        S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
         S.of(context).InvalidFilename
     ) == null;
   }

@@ -32,7 +32,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
             children: <InlineSpan>[
               TextSpan(
                 text: " '$alias' ",
-                style: textStyle.copyWith(fontStyle: FontStyle.italic),
+                style: textStyle != null ? textStyle.copyWith(fontStyle: FontStyle.italic) : TextStyle(fontStyle: FontStyle.italic),
               ),
               TextSpan(
                 text: lastName,

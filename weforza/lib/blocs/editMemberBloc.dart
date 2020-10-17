@@ -29,10 +29,6 @@ class EditMemberBloc extends Bloc {
 
   void onError(Object error) => _submitStateController.addError(error);
 
-  StreamController<bool> _imagePickingController = BehaviorSubject();
-
-  Stream<bool> get stream => _imagePickingController.stream;
-
   /// The member's fixed UUID.
   final String id;
 
@@ -157,24 +153,12 @@ class EditMemberBloc extends Bloc {
     }
   }
 
-  void pickProfileImage() async {
-    _imagePickingController.add(true);
-    await repository.chooseProfileImageFromGallery().then((File image){
-      profileImageFuture = Future.value(image);
-      _imagePickingController.add(false);
-    }).catchError(_imagePickingController.addError);
-  }
+  void clearSelectedImage() => profileImageFuture = Future.value(null);
+  void setSelectedImage(Future<File> image) => profileImageFuture = image;
 
   @override
   void dispose() {
     _submitStateController.close();
-    _imagePickingController.close();
-  }
-
-  void clearSelectedImage() {
-    _imagePickingController.add(true);
-    profileImageFuture = Future.value(null);
-    _imagePickingController.add(false);
   }
 }
 

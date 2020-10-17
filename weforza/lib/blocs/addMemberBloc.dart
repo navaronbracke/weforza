@@ -23,15 +23,11 @@ class AddMemberBloc extends Bloc {
 
   void onError(Object error) => _submitStateController.addError(error);
 
-  Stream<bool> get stream => _imagePickingController.stream;
-
-  StreamController<bool> _imagePickingController = BehaviorSubject();
-
   ///The actual inputs.
   String _firstName;
   String _lastName;
   String _alias;
-  Future<File> selectedImage;
+  Future<File> _selectedImage;
 
   ///The actual errors.
   String firstNameError;
@@ -132,7 +128,7 @@ class AddMemberBloc extends Bloc {
     if(exists){
       return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
     }else{
-      final File image = await selectedImage.catchError((err) => null);
+      final File image = await _selectedImage.catchError((err) => null);
       final Member member = Member(
           _uuidGenerator.v4(),
           _firstName,
@@ -145,27 +141,13 @@ class AddMemberBloc extends Bloc {
     }
   }
 
-  void pickProfileImage() async {
-    _imagePickingController.add(true);
-    await _repository.chooseProfileImageFromGallery().then((File image){
-      selectedImage = Future.value(image);
-      _imagePickingController.add(false);
-    }).catchError(_imagePickingController.addError);
-  }
-
-  void clearSelectedImage() {
-    if(selectedImage != null){
-      _imagePickingController.add(true);
-      selectedImage = null;
-      _imagePickingController.add(false);
-    }
-  }
+  void clearSelectedImage() => _selectedImage = Future.value(null);
+  void setSelectedImage(Future<File> image) => _selectedImage = image;
 
   ///Dispose of this object.
   @override
   void dispose() {
     _submitStateController.close();
-    _imagePickingController.close();
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 
 class ManualSelectionListItem extends StatefulWidget {
@@ -70,17 +71,12 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
                 ),
               ),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _combineFirstNameAndAlias(),
-                    SizedBox(height: 5),
-                    Text(
-                      widget.lastName,
-                      style: lastNameStyle,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
+                child: MemberNameAndAlias(
+                  firstNameStyle: firstNameStyle,
+                  lastNameStyle: lastNameStyle,
+                  firstName: widget.firstName,
+                  lastName: widget.lastName,
+                  alias: widget.alias,
                 ),
               ),
             ],
@@ -93,39 +89,12 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   void _setColors(){
     if(widget.isSelected()){
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle.copyWith(color: Colors.white);
-      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle.copyWith(color: Colors.white);
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(color: Colors.white);
     }else{
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle;
-      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle;
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
     }
-  }
-
-  //TODO remove
-  //Combine the first name with the alias.
-  Widget _combineFirstNameAndAlias(){
-    if(widget.alias.isEmpty){
-      return Text(
-        widget.firstName,
-        style: firstNameStyle,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
-
-    // Firstname 'alias'
-    return Text.rich(
-      TextSpan(
-          text: widget.firstName,
-          style: firstNameStyle,
-          children: [
-            TextSpan(
-              text: " '${widget.alias}'",
-              style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
-            ),
-          ]
-      ),
-      overflow: TextOverflow.ellipsis,
-    );
   }
 }

@@ -150,7 +150,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Center(child: Text(S.of(context).MemberDetailsTitle)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(S.of(context).MemberDetailsTitle),
+              ),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -159,18 +162,20 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                     icon: Icons.edit,
                     onPressed: ()=> () => goToEditMemberPage(context),
                 ),
-                SizedBox(width: 15),
-                CupertinoIconButton.fromAppTheme(
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: CupertinoIconButton.fromAppTheme(
                     icon: Icons.delete,
                     onPressed: ()=> showCupertinoDialog(
-                        context: context,
-                        builder: (context) => DeleteItemDialog(
-                          title: S.of(context).MemberDeleteDialogTitle,
-                          description: S.of(context).MemberDeleteDialogDescription,
-                          errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
-                          onDelete: () => onDeleteMember(context),
-                        ),
+                      context: context,
+                      builder: (context) => DeleteItemDialog(
+                        title: S.of(context).MemberDeleteDialogTitle,
+                        description: S.of(context).MemberDeleteDialogDescription,
+                        errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                        onDelete: () => onDeleteMember(context),
+                      ),
                     ),
+                  ),
                 ),
               ],
             ),

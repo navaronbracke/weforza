@@ -115,7 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Instellingen"),
     "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,toestellen"),
     "ImportMembersCsvHeaderExampleDescription" : MessageLookupByLibrary.simpleMessage("Een mogelijke csv hoofding ziet er zo uit:"),
-    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam)\\,(achternaam|familienaam),(alias|bijnaam)\\,(toestellen|apparaten)(.*)"),
+    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(voornaam),(achternaam|familienaam),(alias|bijnaam),(actief),(toestellen|apparaten)(.*)"),
     "ImportMembersCsvHeaderRequired" : MessageLookupByLibrary.simpleMessage("Bij .csv bestanden is een hoofding verplicht."),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Leden Importeren"),
     "ImportMembersIncompatibleFileJsonContents" : MessageLookupByLibrary.simpleMessage("Het gekozen .json bestand is incompatibel."),

@@ -87,11 +87,11 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: StreamBuilder<bool>(
-                        initialData: false,
-                        stream: bloc.fileExistsStream,
+                      child: StreamBuilder<String>(
+                        initialData: "",
+                        stream: bloc.fileNameErrorStream,
                         builder: (context, snapshot){
-                          return Text(snapshot.data ? S.of(context).FileExists : "");
+                          return Text(snapshot.data);
                         },
                       ),
                     ),
@@ -102,7 +102,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await bloc.exportRidesWithAttendees();
+                            await bloc.exportRidesWithAttendees(S.of(context).FileExists);
                           }
                         },
                       ),
@@ -110,7 +110,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
-                            await bloc.exportRidesWithAttendees();
+                            await bloc.exportRidesWithAttendees(S.of(context).FileExists);
                           }else {
                             setState(() {});
                           }

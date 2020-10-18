@@ -16,9 +16,11 @@ class EditMemberBloc extends Bloc {
     @required this.lastName,
     @required this.alias,
     @required this.id,
+    @required this.isActiveMember,
   }): assert(
     repository != null && firstName != null && lastName != null
-        && alias != null && id != null && profileImageFuture != null
+        && isActiveMember != null && alias != null && id != null
+        && profileImageFuture != null
   );
 
   ///The [IMemberRepository] that handles the submit.
@@ -31,6 +33,9 @@ class EditMemberBloc extends Bloc {
 
   /// The member's fixed UUID.
   final String id;
+  /// The member's fixed isActive state.
+  /// This is managed elsewhere, therefor it is fixed here.
+  final bool isActiveMember;
 
   ///The actual inputs.
   String firstName;
@@ -134,11 +139,12 @@ class EditMemberBloc extends Bloc {
       ///If it failed do a fallback to null.
       final File profileImage = await profileImageFuture.catchError((error) => null);
       final Member newMember = Member(
-        id,
-        firstName,
-        lastName,
-        alias,
-        profileImage?.path,
+        uuid: id,
+        firstname: firstName,
+        lastname: lastName,
+        alias: alias,
+        profileImageFilePath: profileImage?.path,
+        isActiveMember: isActiveMember
       );
 
       await repository.updateMember(newMember);

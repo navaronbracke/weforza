@@ -7,15 +7,17 @@ class ImportableMember {
   ImportableMember({
     @required this.firstName,
     @required this.lastName,
-    @required this.alias
+    @required this.alias,
+    @required this.isActiveMember,
   }): assert(
     firstName != null && firstName.isNotEmpty && lastName != null &&
-        lastName.isNotEmpty && alias != null
+        lastName.isNotEmpty && alias != null && isActiveMember != null
   );
 
   final String firstName;
   final String lastName;
   final String alias;
+  final bool isActiveMember;
 
   @override
   bool operator ==(Object other) => other is ImportableMember

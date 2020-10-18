@@ -1,9 +1,20 @@
 import 'dart:ui';
+import 'package:meta/meta.dart';
 
 ///This class represents a 'Member.'
 class Member implements Comparable<Member> {
-  Member(this.uuid,this.firstname,this.lastname, this.alias,[this.profileImageFilePath]):
-        assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && alias != null);
+  Member({
+    @required this.uuid,
+    @required this.firstname,
+    @required this.lastname,
+    @required this.alias,
+    @required this.isActiveMember,
+    @required this.profileImageFilePath
+  }): assert(uuid != null && uuid.isNotEmpty
+        && firstname != null && firstname.isNotEmpty
+        && lastname != null && lastname.isNotEmpty
+        && alias != null && isActiveMember != null
+  );
 
   ///Regex for a member's first or last name or alias.
   ///
@@ -27,6 +38,9 @@ class Member implements Comparable<Member> {
   ///The path to an optional profile picture.
   String profileImageFilePath;
 
+  // Whether this member is currently an active ride participant.
+  bool isActiveMember;
+
   String get initials => firstname[0] + lastname[0];
 
   ///Convert this object to a Map.
@@ -35,6 +49,7 @@ class Member implements Comparable<Member> {
       "firstname": firstname,
       "lastname": lastname,
       "alias": alias,
+      "active": isActiveMember,
       "profile": profileImageFilePath
     };
   }
@@ -42,7 +57,14 @@ class Member implements Comparable<Member> {
   ///Create a member from a Map and a given uuid.
   static Member of(String uuid,Map<String,dynamic> values){
     assert(uuid != null && uuid.isNotEmpty && values != null);
-    return Member(uuid,values["firstname"],values["lastname"],values["alias"],values["profile"]);
+    return Member(
+      uuid: uuid,
+      firstname: values["firstname"],
+      lastname: values["lastname"],
+      alias: values["alias"],
+      isActiveMember: values["active"],
+      profileImageFilePath: values["profile"]
+    );
   }
 
   //If the uuid is the same, it is the same member.
@@ -52,21 +74,23 @@ class Member implements Comparable<Member> {
     return other is Member
         && firstname == other.firstname
         && lastname == other.lastname
-        && alias == other.alias;
+        && alias == other.alias
+        && isActiveMember == other.isActiveMember;
   }
 
   @override
-  int get hashCode => hashValues(firstname, lastname, alias);
+  int get hashCode => hashValues(firstname, lastname, alias, isActiveMember);
 
-  Map<String, String> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "firstname": firstname,
       "lastname": lastname,
-      "alias": alias
+      "alias": alias,
+      "active": isActiveMember
     };
   }
 
-  String toCsv() => "$firstname,$lastname,$alias";
+  String toCsv() => "$firstname,$lastname,$alias,${isActiveMember ? 1: 0}";
 
   ///Compare two members for use in sorting.
   ///Returns zero if both are considered equal.

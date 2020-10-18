@@ -31,6 +31,9 @@ abstract class IMemberDao {
   ///Get the member with the given UUID.
   ///Returns null if it doesn't exist.
   Future<Member> getMemberByUuid(String uuid);
+
+  /// Set the active state for a given member to the new value.
+  Future<void> setMemberActive(String uuid, bool value);
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -138,5 +141,14 @@ class MemberDao implements IMemberDao {
     final record = await _memberStore.record(uuid).getSnapshot(_database);
 
     return record == null ? null : Member.of(uuid, record.value);
+  }
+
+  @override
+  Future<void> setMemberActive(String uuid, bool value) async {
+    final record = _memberStore.record(uuid);
+
+    if(await record.exists(_database)){
+      await record.update(_database, { "active": value});
+    }
   }
 }

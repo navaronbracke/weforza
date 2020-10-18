@@ -35,8 +35,8 @@ class ExportRideBloc extends Bloc {
   final StreamController<RideExportState> _streamController = BehaviorSubject();
   Stream<RideExportState> get stream => _streamController.stream;
 
-  final StreamController<bool> _fileExistsController = BehaviorSubject();
-  Stream<bool> get fileExistsStream => _fileExistsController.stream;
+  final StreamController<String> _fileNameErrorController = BehaviorSubject();
+  Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
 
   List<Member> rideAttendees;
 
@@ -46,7 +46,12 @@ class ExportRideBloc extends Bloc {
 
   FileExtension _fileExtension = FileExtension.CSV;
 
-  void onSelectFileExtension(FileExtension extension) => _fileExtension = extension;
+  void onSelectFileExtension(FileExtension extension){
+    if(_fileExtension != extension){
+      _fileNameErrorController.add("");
+      _fileExtension = extension;
+    }
+  }
 
   ///Form Error message
   String filenameError;
@@ -64,6 +69,10 @@ class ExportRideBloc extends Bloc {
       String filenameNameMaxLengthMessage,
       String invalidFilenameMessage)
   {
+    if(filename != value){
+      _fileNameErrorController.add("");
+    }
+
     if(value == null || value.isEmpty){
       filenameError = fileNameIsRequired;
     }else if(value.trim().isEmpty){
@@ -81,12 +90,12 @@ class ExportRideBloc extends Bloc {
     return filenameError;
   }
 
-  void exportRide() async {
+  void exportRide(String fileExistsMessage) async {
     await fileHandler.createFile(filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _fileExistsController.add(true);
+        _fileNameErrorController.add(fileExistsMessage);
       }else{
-        _fileExistsController.add(false);
+        _fileNameErrorController.add("");
         _streamController.add(RideExportState.EXPORTING);
         await _saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
         _streamController.add(RideExportState.DONE);
@@ -118,7 +127,7 @@ class ExportRideBloc extends Bloc {
   @override
   void dispose() {
     _streamController.close();
-    _fileExistsController.close();
+    _fileNameErrorController.close();
     fileNameController.dispose();
   }
 }

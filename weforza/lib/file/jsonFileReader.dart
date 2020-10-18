@@ -18,12 +18,14 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
     String firstName;
     String lastName;
     String alias;
+    bool isActive;
     List<String> deviceNames;
 
     try{
       firstName = data["firstName"] as String;
       lastName = data["lastName"] as String;
       alias = data["alias"] as String;
+      isActive = data["active"] as bool;
       deviceNames = (data["devices"] as List).cast<String>();
 
       // The first name, last name or alias are not suitable for a member.
@@ -35,6 +37,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
           firstName: firstName,
           lastName: lastName,
           alias: alias,
+          isActiveMember: isActive,
           devices: deviceNames.where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)).toSet()
       ));
     }catch(e){

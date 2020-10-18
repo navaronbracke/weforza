@@ -101,10 +101,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
               labelText: S.of(context).DeviceNameLabel,
               helperText: " ",
             ),
-            autovalidate: bloc.autoValidateNewDeviceName,
-            onChanged: (value) => setState((){
-              bloc.autoValidateNewDeviceName = true;
-            }),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           ios: () => Column(
             children: <Widget>[

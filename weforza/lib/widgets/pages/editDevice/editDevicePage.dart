@@ -118,10 +118,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
               labelText: S.of(context).DeviceNameLabel,
               helperText: " ",
             ),
-            autovalidate: bloc.autoValidateDeviceName,
-            onChanged: (value) => setState((){
-              bloc.autoValidateDeviceName = true;
-            }),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
           ios: () => Column(
             children: <Widget>[

@@ -29,7 +29,6 @@ class ExportRidesBloc extends Bloc {
   final StreamController<String> _fileNameErrorController = BehaviorSubject();
   Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
 
-  bool autoValidateFileName = false;
   final int filenameMaxLength = 80;
 
   String _filename;

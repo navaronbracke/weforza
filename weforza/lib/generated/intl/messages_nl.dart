@@ -134,7 +134,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "MemberDetailsLoadDevicesError" : MessageLookupByLibrary.simpleMessage("Kon toestellen niet laden"),
     "MemberDetailsLoadPictureError" : MessageLookupByLibrary.simpleMessage("Kon profielfoto niet laden"),
     "MemberDetailsNoDevices" : MessageLookupByLibrary.simpleMessage("Dit lid heeft nog geen toestellen"),
-    "MemberDetailsNoDevicesAddDevice" : MessageLookupByLibrary.simpleMessage("Voeg een toestel toe"),
     "MemberDetailsTitle" : MessageLookupByLibrary.simpleMessage("Details"),
     "MemberListAddMemberInstruction" : MessageLookupByLibrary.simpleMessage("Voeg leden toe via het menu hierboven"),
     "MemberListLoadingFailed" : MessageLookupByLibrary.simpleMessage("Kon leden niet laden"),

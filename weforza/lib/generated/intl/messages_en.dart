@@ -134,7 +134,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "MemberDetailsLoadDevicesError" : MessageLookupByLibrary.simpleMessage("Could not load devices"),
     "MemberDetailsLoadPictureError" : MessageLookupByLibrary.simpleMessage("Could not load profile picture"),
     "MemberDetailsNoDevices" : MessageLookupByLibrary.simpleMessage("This member has no devices yet"),
-    "MemberDetailsNoDevicesAddDevice" : MessageLookupByLibrary.simpleMessage("Add a device"),
     "MemberDetailsTitle" : MessageLookupByLibrary.simpleMessage("Details"),
     "MemberListAddMemberInstruction" : MessageLookupByLibrary.simpleMessage("Add members by using the menu above"),
     "MemberListLoadingFailed" : MessageLookupByLibrary.simpleMessage("Could not load members"),

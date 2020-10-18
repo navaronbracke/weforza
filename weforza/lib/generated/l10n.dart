@@ -863,10 +863,10 @@ class S {
     );
   }
 
-  /// `(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)`
+  /// `(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)`
   String get ImportMembersCsvHeaderRegex {
     return Intl.message(
-      '(firstname)\,(surname|familyname|lastname),(alias|nickname)\,(devices)(.*)',
+      '(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)',
       name: 'ImportMembersCsvHeaderRegex',
       desc: '',
       args: [],

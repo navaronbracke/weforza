@@ -115,7 +115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Settings"),
     "ImportMembersCsvHeaderExample" : MessageLookupByLibrary.simpleMessage("firstname,surname,alias,devices"),
     "ImportMembersCsvHeaderExampleDescription" : MessageLookupByLibrary.simpleMessage("A csv header might look like:"),
-    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(firstname)\\,(surname|familyname|lastname),(alias|nickname)\\,(devices)(.*)"),
+    "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)"),
     "ImportMembersCsvHeaderRequired" : MessageLookupByLibrary.simpleMessage("A header is required for .csv files."),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Importing Members"),
     "ImportMembersIncompatibleFileJsonContents" : MessageLookupByLibrary.simpleMessage("The chosen .json file is incompatible."),

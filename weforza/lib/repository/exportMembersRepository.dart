@@ -29,6 +29,7 @@ class ExportMembersRepository {
         firstName: member.firstname,
         lastName: member.lastname,
         alias: member.alias,
+        isActiveMember: member.isActiveMember,
         devices: _devicesGroupedByOwner[member.uuid] ?? Set<String>()
     ));
   }

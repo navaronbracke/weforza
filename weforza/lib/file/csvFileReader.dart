@@ -24,13 +24,30 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     final List<String> values = data.split(',');
 
     //If the line doesn't have enough cells to fill the required fields
-    // (first name, last name and alias, in that order), skip it
-    if(values.length < 3){
+    // (first name, last name, alias, active) in that order, skip it
+    if(values.length < 4){
       return;
     }
 
-    //Invalid data lines are skipped
-    if(!Member.personNameAndAliasRegex.hasMatch(values[0]) || !Member.personNameAndAliasRegex.hasMatch(values[1]) || (values[2].isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(values[2]))){
+    final String firstName = values[0];
+    final String lastName = values[1];
+    final String alias = values[2];
+    final String isActiveAsString = values[3].toLowerCase();
+
+    // Invalid data lines are skipped.
+    // Check firstname, lastname & alias by regex.
+    if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || (alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias))){
+      return;
+    }
+
+    bool isActive;
+
+    if(isActiveAsString == "0" || isActiveAsString == "false"){
+      isActive = false;
+    }else if(isActiveAsString == "1" || isActiveAsString == "true"){
+      isActive = true;
+    }else{
+      // Invalid cell content, skip.
       return;
     }
 
@@ -38,17 +55,18 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     // Since its a Set, duplicates are ignored.
     final Set<String> devices = Set();
 
-    //Besides First Name, Last Name, Alias, there are more values
+    //Besides First Name, Last Name, Alias, Active there are more values
     //These are the device names: Device1, Device2,... , DeviceN
-    if(values.length > 3){
+    if(values.length > 4){
       //Filter the invalid device names.
-      devices.addAll(values.sublist(3).where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
+      devices.addAll(values.sublist(4).where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
     }
 
     collection.add(ExportableMember(
         firstName: values[0],
         lastName: values[1],
         alias: values[2],
+        isActiveMember: isActive,
         devices: devices
     ));
   }

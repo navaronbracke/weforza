@@ -76,7 +76,10 @@ class _SettingsPageState extends State<SettingsPage> {
         middle: Row(
           children: [
             Expanded(
-              child: Center(child: Text(S.of(context).SettingsTitle)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(S.of(context).SettingsTitle),
+              ),
             ),
             SizedBox(
               width: 40,

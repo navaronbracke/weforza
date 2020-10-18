@@ -353,16 +353,6 @@ class S {
     );
   }
 
-  /// `Add a device`
-  String get MemberDetailsNoDevicesAddDevice {
-    return Intl.message(
-      'Add a device',
-      name: 'MemberDetailsNoDevicesAddDevice',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Could not load devices`
   String get MemberDetailsLoadDevicesError {
     return Intl.message(

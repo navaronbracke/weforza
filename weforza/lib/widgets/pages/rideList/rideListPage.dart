@@ -77,7 +77,10 @@ class _RideListPageState extends State<RideListPage> {
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Center(child: Text(S.of(context).RideListRidesHeader)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(S.of(context).RideListRidesHeader),
+              ),
             ),
             CupertinoIconButton.fromAppTheme(
               icon: Icons.add,
@@ -85,13 +88,15 @@ class _RideListPageState extends State<RideListPage> {
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_) => onReturnToRideListPage(context)),
             ),
-            SizedBox(width: 15),
-            CupertinoIconButton.fromAppTheme(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ExportRidesPage())
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: CupertinoIconButton.fromAppTheme(
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ExportRidesPage())
+                ),
+                icon: Icons.file_upload,
               ),
-              icon: Icons.file_upload,
-            )
+            ),
           ],
         ),
       ),

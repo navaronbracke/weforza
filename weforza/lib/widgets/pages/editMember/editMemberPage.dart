@@ -309,10 +309,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       _firstNameMaxLengthMessage,
                       _firstNameIllegalCharactersMessage,
                       _firstNameBlankMessage),
-                  autovalidate: _bloc.autoValidateFirstName,
-                  onChanged: (value)=> setState(() {
-                    _bloc.autoValidateFirstName = true;
-                  }),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onFieldSubmitted: (value){
                     _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
                   },
@@ -336,10 +333,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       _lastNameMaxLengthMessage,
                       _lastNameIllegalCharactersMessage,
                       _lastNameBlankMessage),
-                  autovalidate: _bloc.autoValidateLastName,
-                  onChanged: (value)=> setState(() {
-                    _bloc.autoValidateLastName = true;
-                  }),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onFieldSubmitted: (value){
                     _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
                   },
@@ -361,10 +355,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       _aliasMaxLengthMessage,
                       _aliasIllegalCharactersMessage,
                       _aliasBlankMessage),
-                  autovalidate: _bloc.autoValidateAlias,
-                  onChanged: (value)=> setState(() {
-                    _bloc.autoValidateAlias = true;
-                  }),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onFieldSubmitted: (value){
                     _aliasFocusNode.unfocus();
                   },

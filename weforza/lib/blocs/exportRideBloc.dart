@@ -40,8 +40,6 @@ class ExportRideBloc extends Bloc {
 
   List<Member> rideAttendees;
 
-  bool autoValidateFileName = false;
-
   String filename;
 
   FileExtension _fileExtension = FileExtension.CSV;

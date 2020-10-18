@@ -173,10 +173,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
             labelText: S.of(context).Filename,
             helperText: " ",
           ),
-          autovalidate: widget.bloc.autoValidateFileName,
-          onChanged: (value) => setState((){
-            widget.bloc.autoValidateFileName = true;
-          }),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
         ios: () => Column(
           children: [

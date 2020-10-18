@@ -17,8 +17,6 @@ class AddDeviceBloc extends Bloc {
   final DeviceRepository repository;
   final String ownerId;
 
-  ///Auto validate flag for device name.
-  bool autoValidateNewDeviceName = false;
   ///Device Name max length
   int deviceNameMaxLength = 40;
 

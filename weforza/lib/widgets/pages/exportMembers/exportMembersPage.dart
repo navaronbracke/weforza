@@ -174,10 +174,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
             labelText: S.of(context).Filename,
             helperText: " ",
           ),
-          autovalidate: bloc.autoValidateFileName,
-          onChanged: (value) => setState((){
-            bloc.autoValidateFileName = true;
-          }),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
         ios: () => Column(
           children: [

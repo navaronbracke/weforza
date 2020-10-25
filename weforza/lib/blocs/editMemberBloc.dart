@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/saveMemberOrError.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 class EditMemberBloc extends Bloc {
@@ -26,8 +27,8 @@ class EditMemberBloc extends Bloc {
   ///The [IMemberRepository] that handles the submit.
   final MemberRepository repository;
 
-  StreamController<EditMemberSubmitState> _submitStateController = BehaviorSubject();
-  Stream<EditMemberSubmitState> get submitStream => _submitStateController.stream;
+  StreamController<SaveMemberOrError> _submitStateController = BehaviorSubject();
+  Stream<SaveMemberOrError> get submitStream => _submitStateController.stream;
 
   void onError(Object error) => _submitStateController.addError(error);
 
@@ -59,7 +60,7 @@ class EditMemberBloc extends Bloc {
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != firstName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(EditMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value == null || value.isEmpty)
     {
@@ -86,7 +87,7 @@ class EditMemberBloc extends Bloc {
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != lastName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(EditMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value == null || value.isEmpty)
     {
@@ -110,7 +111,7 @@ class EditMemberBloc extends Bloc {
   String validateAlias(String value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != alias){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(EditMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
@@ -129,11 +130,11 @@ class EditMemberBloc extends Bloc {
   }
 
   Future<Member> editMember() async {
-    _submitStateController.add(EditMemberSubmitState.SUBMIT);
+    _submitStateController.add(SaveMemberOrError.saving());
     bool exists = await repository.memberExists(firstName, lastName, alias,id);
 
     if(exists){
-      return Future.error(EditMemberSubmitState.MEMBER_EXISTS);
+      return Future.error(SaveMemberOrError.exists());
     }else{
       ///Wait for the File to be resolved.
       ///If it failed do a fallback to null.
@@ -160,8 +161,4 @@ class EditMemberBloc extends Bloc {
   void dispose() {
     _submitStateController.close();
   }
-}
-
-enum EditMemberSubmitState {
-  IDLE,SUBMIT,MEMBER_EXISTS
 }

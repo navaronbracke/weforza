@@ -26,11 +26,13 @@ class RideAttendeeCounter extends StatelessWidget {
             return invisibleWhenLoadingOrError ? SizedBox.expand(): Row(
               children: <Widget>[
                 Text("?", style: counterStyle),
-                SizedBox(width: 5),
-                Icon(
-                    Icons.people,
-                    size: iconSize,
-                    color: ApplicationTheme.rideAttendeeCounterIconColor
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Icon(
+                      Icons.people,
+                      size: iconSize,
+                      color: ApplicationTheme.rideAttendeeCounterIconColor
+                  ),
                 ),
               ],
             );
@@ -38,11 +40,13 @@ class RideAttendeeCounter extends StatelessWidget {
             return Row(
               children: <Widget>[
                 Text("${snapshot.data}", style: counterStyle),
-                SizedBox(width: 5),
-                Icon(
-                    Icons.people,
-                    size: iconSize,
-                    color: ApplicationTheme.rideAttendeeCounterIconColor
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: Icon(
+                      Icons.people,
+                      size: iconSize,
+                      color: ApplicationTheme.rideAttendeeCounterIconColor
+                  ),
                 ),
               ],
             );

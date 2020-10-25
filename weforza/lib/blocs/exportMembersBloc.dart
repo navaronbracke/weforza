@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';
 
@@ -20,11 +21,8 @@ class ExportMembersBloc extends Bloc {
   final ExportMembersRepository exportMembersRepository;
   final IFileHandler fileHandler;
 
-  final StreamController<MembersExportState> _streamController = BehaviorSubject();
-  Stream<MembersExportState> get stream => _streamController.stream;
-
-  final StreamController<String> _fileNameErrorController = BehaviorSubject();
-  Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
+  final StreamController<ExportDataOrError> _streamController = BehaviorSubject();
+  Stream<ExportDataOrError> get stream => _streamController.stream;
 
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final TextEditingController filenameController = TextEditingController();
@@ -36,7 +34,7 @@ class ExportMembersBloc extends Bloc {
 
   void onSelectFileExtension(FileExtension extension){
    if(_fileExtension != extension){
-     _fileNameErrorController.add("");
+     _streamController.add(ExportDataOrError.idle());
      _fileExtension = extension;
    }
   }
@@ -52,7 +50,7 @@ class ExportMembersBloc extends Bloc {
       String invalidFilenameMessage)
   {
     if(_filename != filename){
-      _fileNameErrorController.add("");
+      _streamController.add(ExportDataOrError.idle());
     }
 
     if(filename == null || filename.isEmpty){
@@ -71,16 +69,15 @@ class ExportMembersBloc extends Bloc {
     return filenameError;
   }
 
-  Future<void> exportMembers(String csvHeader, String fileExistsMessage) async {
+  Future<void> exportMembers(String csvHeader) async {
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _fileNameErrorController.add(fileExistsMessage);
+        _streamController.add(ExportDataOrError.fileExists());
       }else{
-        _fileNameErrorController.add("");
-        _streamController.add(MembersExportState.EXPORTING);
+        _streamController.add(ExportDataOrError.exporting());
         final Iterable<ExportableMember> exports = await exportMembersRepository.getMembers();
         await _saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
-        _streamController.add(MembersExportState.DONE);
+        _streamController.add(ExportDataOrError.success());
       }
     }).catchError((e) => _streamController.addError(e));
   }
@@ -113,13 +110,6 @@ class ExportMembersBloc extends Bloc {
   @override
   void dispose() {
     filenameController.dispose();
-    _fileNameErrorController.close();
     _streamController.close();
   }
-}
-
-enum MembersExportState {
-  IDLE,
-  EXPORTING,
-  DONE
 }

@@ -49,15 +49,15 @@
 
   "AddDeviceTitle": "Toestel Toevoegen",
   "AddDeviceError": "Kon toestel niet toevoegen",
-  "AddDeviceSubmit": "Toestel Aanmaken",
+  "AddDeviceSubmit": "Toestel toevoegen",
 
   "EditDeviceTitle": "Toestel Bewerken",
   "EditDeviceError": "Kon toestel niet bewerken",
-  "EditDeviceSubmit": "Wijzigingen Opslaan",
+  "EditDeviceSubmit": "Wijzigingen opslaan",
 
   "EditMemberTitle": "Lid Bewerken",
   "EditMemberError": "Kon de wijzigingen niet opslaan",
-  "EditMemberSubmit" : "Wijzigingen Opslaan",
+  "EditMemberSubmit" : "Wijzigingen opslaan",
 
   "MemberDeleteDialogTitle": "Verwijder Lid",
   "MemberDeleteDialogDescription": "Bent u zeker dat u dit lid wil verwijderen?",

@@ -49,15 +49,15 @@
 
   "AddDeviceTitle": "Add Device",
   "AddDeviceError": "Could not add device",
-  "AddDeviceSubmit": "Create Device",
+  "AddDeviceSubmit": "Add device",
 
   "EditDeviceTitle": "Edit Device",
   "EditDeviceError": "Could not edit device",
-  "EditDeviceSubmit": "Save Changes",
+  "EditDeviceSubmit": "Save changes",
 
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",
-  "EditMemberSubmit": "Save Changes",
+  "EditMemberSubmit": "Save changes",
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",

@@ -423,10 +423,10 @@ class S {
     );
   }
 
-  /// `Create Device`
+  /// `Add device`
   String get AddDeviceSubmit {
     return Intl.message(
-      'Create Device',
+      'Add device',
       name: 'AddDeviceSubmit',
       desc: '',
       args: [],
@@ -453,10 +453,10 @@ class S {
     );
   }
 
-  /// `Save Changes`
+  /// `Save changes`
   String get EditDeviceSubmit {
     return Intl.message(
-      'Save Changes',
+      'Save changes',
       name: 'EditDeviceSubmit',
       desc: '',
       args: [],
@@ -483,10 +483,10 @@ class S {
     );
   }
 
-  /// `Save Changes`
+  /// `Save changes`
   String get EditMemberSubmit {
     return Intl.message(
-      'Save Changes',
+      'Save changes',
       name: 'EditMemberSubmit',
       desc: '',
       args: [],

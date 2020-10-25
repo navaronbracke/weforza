@@ -235,13 +235,14 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                     child: Center(
-                      child: AddMemberSubmit(_bloc.submitStream,() async {
-                        if (_iosAllFormInputValidator()) {
-                          addMember(context);
-                        }else {
-                          setState(() {});
-                        }
-                      }),
+                      child: AddMemberSubmit(
+                          stream: _bloc.submitStream,
+                          onPressed: () {
+                            if (_iosAllFormInputValidator()) {
+                              addMember(context);
+                            }
+                          }
+                      ),
                     ),
                   ),
                 ],
@@ -348,11 +349,14 @@ class _AddMemberPageState extends State<AddMemberPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                   child: Center(
-                    child: AddMemberSubmit(_bloc.submitStream,() async {
-                      if (_formKey.currentState.validate()) {
-                        addMember(context);
-                      }
-                    }),
+                    child: AddMemberSubmit(
+                        stream: _bloc.submitStream,
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            addMember(context);
+                          }
+                        }
+                    ),
                   ),
                 ),
               ],

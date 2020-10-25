@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/saveMemberOrError.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 ///This is the [Bloc] for AddMemberPage.
@@ -18,8 +19,8 @@ class AddMemberBloc extends Bloc {
   ///The instance that will generate uuid's.
   final Uuid _uuidGenerator = Uuid();
 
-  StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
-  Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
+  StreamController<SaveMemberOrError> _submitStateController = BehaviorSubject();
+  Stream<SaveMemberOrError> get submitStream => _submitStateController.stream;
 
   void onError(Object error) => _submitStateController.addError(error);
 
@@ -42,7 +43,7 @@ class AddMemberBloc extends Bloc {
   String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _firstName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value == null || value.isEmpty)
     {
@@ -69,7 +70,7 @@ class AddMemberBloc extends Bloc {
   String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _lastName){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value == null || value.isEmpty)
     {
@@ -96,7 +97,7 @@ class AddMemberBloc extends Bloc {
   String validateAlias(String value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _alias){
       //Clear the 'user exists' error when a different input is given
-      _submitStateController.add(AddMemberSubmitState.IDLE);
+      _submitStateController.add(SaveMemberOrError.idle());
     }
     if(value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
@@ -115,12 +116,12 @@ class AddMemberBloc extends Bloc {
   }
 
   Future<void> addMember() async {
-    _submitStateController.add(AddMemberSubmitState.SUBMIT);
+    _submitStateController.add(SaveMemberOrError.saving());
 
     bool exists = await _repository.memberExists(_firstName, _lastName, _alias);
 
     if(exists){
-      return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
+      return Future.error(SaveMemberOrError.exists());
     }else{
       final File image = await _selectedImage.catchError((err) => null);
       final Member member = Member(
@@ -145,12 +146,4 @@ class AddMemberBloc extends Bloc {
   void dispose() {
     _submitStateController.close();
   }
-}
-
-///This enum declares the different states for submitting a new [Member].
-///[AddMemberSubmitState.IDLE] There is no submit in progress.
-///[AddMemberSubmitState.SUBMIT] A submit is in progress.
-///[AddMemberSubmitState.MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
-enum AddMemberSubmitState {
-  IDLE, SUBMIT, MEMBER_EXISTS
 }

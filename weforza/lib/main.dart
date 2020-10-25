@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -18,6 +19,10 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
+
+  //TODO remove when migrated.
+  final dao = MemberDao.withProvider(InjectionContainer.get<ApplicationDatabase>());
+  await dao.addActiveFlagToMemberRecords();
 
   runApp(WeForzaApp());
 }

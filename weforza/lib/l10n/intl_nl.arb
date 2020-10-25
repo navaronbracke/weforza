@@ -1,7 +1,6 @@
 {
   "@@locale": "nl",
 
-  "AppName": "WeForza",
   "AppVersionNumber": "Versie: {version}",
   "AppVersionBuildNumber": "Build Nummer: {buildNumber}",
 
@@ -12,18 +11,15 @@
   "FridayPrefix": "Vr",
   "SaturdayPrefix": "Za",
   "SundayPrefix": "Zo",
-  "UnknownDate": "Onbekende Datum",
 
-  "HomePageRidesTab": "Ritten",
-  "HomePageMembersTab": "Leden",
-  "HomePageSettingsTab": "Instellingen",
+  "Rides": "Ritten",
+  "Members": "Leden",
+  "Settings": "Instellingen",
 
-  "MemberListTitle": "Leden",
   "MemberListLoadingFailed": "Kon leden niet laden",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
 
-  "RideListRidesHeader": "Ritten",
   "RideListNoRides": "Er zijn geen ritten",
   "RideListAddRideInstruction": "Voeg ritten toe via het menu hierboven",
   "RideListLoadingRidesError": "Kon ritten niet laden",
@@ -136,7 +132,6 @@
   "DeleteDeviceDescription": "Bent u zeker dat u dit toestel wil verwijderen?",
   "DeleteDeviceErrorDescription": "Kon toestel niet verwijderen",
 
-  "SettingsTitle": "Instellingen",
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
   "SettingsLoadingError": "Kon de instellingen niet laden",

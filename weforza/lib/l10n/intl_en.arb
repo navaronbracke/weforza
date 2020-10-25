@@ -1,7 +1,6 @@
 {
   "@@locale": "en",
 
-  "AppName": "WeForza",
   "AppVersionNumber": "Version: {version}",
   "AppVersionBuildNumber": "Build Number: {buildNumber}",
 
@@ -12,18 +11,15 @@
   "FridayPrefix": "Fri",
   "SaturdayPrefix": "Sat",
   "SundayPrefix": "Sun",
-  "UnknownDate": "Unknown Date",
 
-  "HomePageRidesTab": "Rides",
-  "HomePageMembersTab": "Members",
-  "HomePageSettingsTab": "Settings",
+  "Rides": "Rides",
+  "Members": "Members",
+  "Settings": "Settings",
 
-  "MemberListTitle": "Members",
   "MemberListLoadingFailed": "Could not load members",
   "MemberListNoItems": "There are no members to display",
   "MemberListAddMemberInstruction": "Add members by using the menu above",
 
-  "RideListRidesHeader": "Rides",
   "RideListNoRides": "There are no rides",
   "RideListAddRideInstruction": "Add rides by using the menu above",
   "RideListLoadingRidesError": "Could not load rides",
@@ -136,7 +132,6 @@
   "DeleteDeviceDescription": "Are you sure you want to delete this device?",
   "DeleteDeviceErrorDescription": "Could not delete the device",
 
-  "SettingsTitle": "Settings",
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
   "SettingsLoadingError": "Could not load the settings",

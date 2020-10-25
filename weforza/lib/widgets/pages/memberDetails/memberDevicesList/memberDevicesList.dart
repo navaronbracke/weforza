@@ -11,11 +11,15 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 class MemberDevicesList extends StatefulWidget {
   MemberDevicesList({
     @required this.future,
-    @required this.onDeleteDevice
-  }): assert(future != null && onDeleteDevice != null);
+    @required this.onDeleteDevice,
+    @required this.onAddDeviceButtonPressed
+  }): assert(
+    future != null && onDeleteDevice != null && onAddDeviceButtonPressed != null
+  );
 
   final Future<List<Device>> future;
   final Future<void> Function(Device device) onDeleteDevice;
+  final void Function() onAddDeviceButtonPressed;
 
   @override
   _MemberDevicesListState createState() => _MemberDevicesListState();
@@ -36,8 +40,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
                 text: S.of(context).MemberDetailsLoadDevicesError
             );
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesListEmpty():
-              _buildDevicesList(context, snapshot.data);
+            return snapshot.data.isEmpty ? MemberDevicesListEmpty(
+              onAddDevicePageButtonPressed: widget.onAddDeviceButtonPressed,
+            ): _buildDevicesList(context, snapshot.data);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

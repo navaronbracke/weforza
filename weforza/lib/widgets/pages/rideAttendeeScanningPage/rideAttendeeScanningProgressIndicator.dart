@@ -25,6 +25,8 @@ class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScan
   final Color progressbarColor = ApplicationTheme.rideAttendeeScanProgressbarColor;
   final Color progressbarBackgroundColor = ApplicationTheme.rideAttendeeScanProgressbarBackgroundColor;
 
+  final double _kProgressIndicatorHeight = 4;
+
   Animation<double> _animation;
   int _duration;
 
@@ -64,7 +66,7 @@ class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScan
         }else{
           //Show nothing when not scanning.
           //Fill the space with a 4dp blank sized box. 4dp is the default height of the progress indicator.
-          return SizedBox(height: 4);
+          return SizedBox(height: _kProgressIndicatorHeight);
         }
       },
     );

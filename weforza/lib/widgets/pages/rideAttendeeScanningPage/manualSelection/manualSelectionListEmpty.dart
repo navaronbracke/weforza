@@ -15,9 +15,10 @@ class ManualSelectionListEmpty extends StatelessWidget {
           color: ApplicationTheme.listInformationalIconColor,
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
-        SizedBox(height: 5),
-        Text(S.of(context).RideAttendeeScanningManualSelectionEmptyList),
-        SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.only(top: 5, bottom: 20),
+          child: Text(S.of(context).RideAttendeeScanningManualSelectionEmptyList),
+        ),
         PlatformAwareWidget(
           android: () => FlatButton(
             child: Text(

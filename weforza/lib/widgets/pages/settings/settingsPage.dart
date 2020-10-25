@@ -55,7 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildAndroidWidget(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).SettingsTitle),
+        title: Text(S.of(context).Settings),
         actions: <Widget>[
           SettingsSubmit(
             submitStream: bloc.submitStream,
@@ -78,7 +78,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).SettingsTitle),
+                child: Text(S.of(context).Settings),
               ),
             ),
             SizedBox(

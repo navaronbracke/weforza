@@ -151,4 +151,16 @@ class MemberDao implements IMemberDao {
       await record.update(_database, { "active": value});
     }
   }
+
+  //TODO remove migration when done.
+  // This migration adds the 'active' flag to all members.
+  // Each member is active by default.
+  Future<void> addActiveFlagToMemberRecords() async {
+    final records = _memberStore.records(await _memberStore.findKeys(_database));
+
+    await _database.transaction((transaction) async {
+      final updates = records.keys.map((_) => { "active": true }).toList();
+      await records.update(transaction, updates);
+    });
+  }
 }

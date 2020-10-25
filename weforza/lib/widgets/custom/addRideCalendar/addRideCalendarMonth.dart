@@ -22,7 +22,7 @@ class AddRideCalendarMonth extends StatelessWidget {
     List<Widget> items = List();
     //Add start offset widgets first
     for(int i = 0; i<offset; i++){
-      items.add(SizedBox(width: 40, height: 40));
+      items.add(SizedBox.fromSize(size: Size.square(40)));
     }
 
     //Add days of month
@@ -35,7 +35,7 @@ class AddRideCalendarMonth extends StatelessWidget {
     offset = 7 - DateTime(pageDate.year,pageDate.month,daysInMonth).weekday;
     //Add end offset widgets last
     for(int i = 0; i<offset; i++){
-      items.add(SizedBox(width: 40, height: 40));
+      items.add(SizedBox.fromSize(size: Size.square(40)));
     }
 
     //The aforementioned items, but grouped in rows
@@ -58,7 +58,7 @@ class AddRideCalendarMonth extends StatelessWidget {
       Row row = Row(children: children, mainAxisAlignment: MainAxisAlignment.spaceAround);
       output.add(Padding(
         child: row,
-        padding: EdgeInsets.fromLTRB(0, 5,0,5),
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 5),
       ));
     }
     return output;

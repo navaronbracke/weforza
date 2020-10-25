@@ -26,8 +26,10 @@ class AddRideSubmit extends StatelessWidget {
             case AddRideSubmitState.IDLE: return Column(
               children: <Widget>[
                 //Show empty text widget to prevent popping
-                Text(""),
-                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(""),
+                ),
                 _buildButton(context),
               ],
             );
@@ -35,8 +37,10 @@ class AddRideSubmit extends StatelessWidget {
             case AddRideSubmitState.ERR_SUBMIT: return Text(S.of(context).AddRideError);
             case AddRideSubmitState.ERR_NO_SELECTION: return Column(
               children: <Widget>[
-                Text(S.of(context).AddRideEmptySelection),
-                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(S.of(context).AddRideEmptySelection),
+                ),
                 _buildButton(context),
               ],
             );

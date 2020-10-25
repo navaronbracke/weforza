@@ -1,29 +1,45 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/addRidesOrError.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AddRideSubmit extends StatelessWidget {
-  AddRideSubmit(this.stream,this.onPressed):
-        assert(onPressed != null && stream != null);
+  AddRideSubmit({
+    @required this.stream,
+    @required this.onPressed
+  }): assert(onPressed != null && stream != null);
 
-  final Stream<AddRideSubmitState> stream;
+  final Stream<AddRidesOrError> stream;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context){
-    return StreamBuilder<AddRideSubmitState>(
+    return StreamBuilder<AddRidesOrError>(
       stream: stream,
-      initialData: AddRideSubmitState.IDLE,
+      initialData: AddRidesOrError.idle(),
       builder: (context,snapshot){
         if(snapshot.hasError){
+          if(snapshot.error is AddRidesOrError && (snapshot.error as AddRidesOrError).noSelection){
+            return Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(S.of(context).AddRideEmptySelection),
+                ),
+                _buildButton(context),
+              ],
+            );
+          }
+
           return Text(S.of(context).AddRideError);
         }else{
-          switch(snapshot.data){
-            case AddRideSubmitState.IDLE: return Column(
+          if(snapshot.data.saving){
+            return PlatformAwareLoadingIndicator();
+          }else{
+            return Column(
               children: <Widget>[
                 //Show empty text widget to prevent popping
                 Padding(
@@ -33,18 +49,6 @@ class AddRideSubmit extends StatelessWidget {
                 _buildButton(context),
               ],
             );
-            case AddRideSubmitState.SUBMIT: return PlatformAwareLoadingIndicator();
-            case AddRideSubmitState.ERR_SUBMIT: return Text(S.of(context).AddRideError);
-            case AddRideSubmitState.ERR_NO_SELECTION: return Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Text(S.of(context).AddRideEmptySelection),
-                ),
-                _buildButton(context),
-              ],
-            );
-            default: return Text(S.of(context).AddRideError);
           }
         }
       },

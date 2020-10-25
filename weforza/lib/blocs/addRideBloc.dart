@@ -8,12 +8,15 @@ import 'package:rxdart/rxdart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/addRidesOrError.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
-  AddRideBloc({@required this.repository}): assert(repository != null);
+  AddRideBloc({
+    @required this.repository
+  }): assert(repository != null);
 
   ///The repository that will handle the submit.
   final RideRepository repository;
@@ -25,8 +28,8 @@ class AddRideBloc extends Bloc {
   //We start in the middle
   int _currentPage = 36000;
 
-  final StreamController<AddRideSubmitState> _submitController = BehaviorSubject();
-  Stream<AddRideSubmitState> get submitStream => _submitController.stream;
+  final StreamController<AddRidesOrError> _submitController = BehaviorSubject();
+  Stream<AddRidesOrError> get submitStream => _submitController.stream;
 
   final StreamController<DateTime> _calendarHeaderController = BehaviorSubject();
   Stream<DateTime> get headerStream => _calendarHeaderController.stream;
@@ -38,7 +41,7 @@ class AddRideBloc extends Bloc {
   final Curve _pageCurve = Curves.easeInOut;
 
   //The current submit state is cached, so we can check if we can allow events to alter the selected dates.
-  AddRideSubmitState _currentSubmitState;
+  AddRidesOrError _currentSubmitState;
 
   ///The days in the month of [pageDate].
   int daysInMonth = 0;
@@ -57,10 +60,14 @@ class AddRideBloc extends Bloc {
   //Intercept a day pressed event.
   //Returns true if the item state should be refreshed.
   bool onDayPressed(DateTime date){
-    if(_currentSubmitState == AddRideSubmitState.IDLE || _currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
+    // If we are not saving, continue.
+    // At this point we have one of the following:
+    // - idle with no warnings
+    // - idle with empty selection warning
+    if(!_currentSubmitState.saving){
       //if we had a no selection error, clear it.
-      if(_currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
-        _currentSubmitState = AddRideSubmitState.IDLE;
+      if(_currentSubmitState.noSelection){
+        _currentSubmitState = AddRidesOrError.idle();
         _submitController.add(_currentSubmitState);
       }
 
@@ -77,17 +84,20 @@ class AddRideBloc extends Bloc {
       }
       return true;
     }
+
     return false;
   }
   
   ///This function clears the current ride dates selection.
-  void onRequestClear(){
-    if(_currentSubmitState == AddRideSubmitState.IDLE){
+  void onClearSelection(){
+    // Only clear it when we are not saving.
+    // Secondly, clearing it when the empty selection warning is shown, is pointless.
+    if(!_currentSubmitState.saving && !_currentSubmitState.noSelection){
       _ridesToAdd.clear();
       _resetFunctions.forEach((method) => method());
 
       //unset the error -> the submit widget will show an empty string with IDLE
-      _currentSubmitState = AddRideSubmitState.IDLE;
+      _currentSubmitState = AddRidesOrError.idle();
       _submitController.add(_currentSubmitState);
     }
   }
@@ -130,7 +140,7 @@ class AddRideBloc extends Bloc {
     daysInMonth = jiffyDate.daysInMonth;
     pageController = PageController(initialPage: _currentPage);
     _calendarHeaderController.add(pageDate);
-    _currentSubmitState = AddRideSubmitState.IDLE;
+    _currentSubmitState = AddRidesOrError.idle();
   }
 
   ///Add a month to [pageDate].
@@ -178,21 +188,18 @@ class AddRideBloc extends Bloc {
 
   ///Add the selected rides.
   Future<void> addRides() async {
-    _currentSubmitState = AddRideSubmitState.SUBMIT;
+    _currentSubmitState = AddRidesOrError.saving();
     _submitController.add(_currentSubmitState);
     if(_ridesToAdd.isNotEmpty){
-      await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).catchError((error){
-        _currentSubmitState = AddRideSubmitState.ERR_SUBMIT;
-        _submitController.add(_currentSubmitState);
-        return Future.error(_currentSubmitState);
-      });
+      await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList());
     }else{
       //empty selection
-      _currentSubmitState = AddRideSubmitState.ERR_NO_SELECTION;
-      _submitController.add(_currentSubmitState);
+      _currentSubmitState = AddRidesOrError.noSelection();
       return Future.error(_currentSubmitState);
     }
   }
+  
+  void onError(Object error) => _submitController.addError(error);
 
   ///Whether [date] is before today.
   bool isBeforeToday(DateTime date){
@@ -222,13 +229,4 @@ class AddRideBloc extends Bloc {
     _calendarHeaderController.close();
     pageController.dispose();
   }
-}
-
-///This enum declares the different states for the ride submit process.
-///[AddRideSubmitState.IDLE] There is no submit in progress.
-///[AddRideSubmitState.SUBMIT] There is a submit in progress.
-///[AddRideSubmitState.ERR_SUBMIT] The rides could not be saved.
-///[AddRideSubmitState.ERR_NO_SELECTION] There is no selection to save.
-enum AddRideSubmitState {
-  IDLE, SUBMIT, ERR_NO_SELECTION, ERR_SUBMIT
 }

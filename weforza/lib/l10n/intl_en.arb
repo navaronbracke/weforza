@@ -15,6 +15,16 @@
   "Rides": "Rides",
   "Members": "Members",
   "Settings": "Settings",
+  "Export" : "Export",
+  "Delete": "Delete",
+  "Cancel": "Cancel",
+  "Ok": "Ok",
+  "Attendees": "Attendees",
+  "Details": "Details",
+  "Devices": "Devices",
+  "SaveChanges": "Save changes",
+  "Save": "Save",
+  "Filename": "Filename",
 
   "MemberListLoadingFailed": "Could not load members",
   "MemberListNoItems": "There are no members to display",
@@ -26,20 +36,15 @@
 
   "RideDetailsLoadAttendeesError": "Could not load attendees",
   "RideDetailsNoAttendees": "This ride has no attendees",
-  "RideDetailsAttendeesListHeader": "Attendees",
-  "RideDetailsExportOption": "Export",
-  "RideDetailsDeleteOption": "Delete",
 
   "RideDeleteDialogTitle": "Delete Ride",
   "RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",
   "RideDeleteDialogErrorDescription": "Could not delete ride",
 
-  "MemberDetailsTitle": "Details",
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
 
-  "DevicesListHeader": "Devices",
   "DevicesListNoDevices": "No devices to show",
   "DeviceNameLabel": "Device Name",
 
@@ -49,11 +54,9 @@
 
   "EditDeviceTitle": "Edit Device",
   "EditDeviceError": "Could not edit device",
-  "EditDeviceSubmit": "Save changes",
 
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",
-  "EditMemberSubmit": "Save changes",
 
   "MemberDeleteDialogTitle": "Delete Member",
   "MemberDeleteDialogDescription": "Are you sure that you want to delete this member?",
@@ -87,7 +90,6 @@
   "RideAttendeeScanningRetryScan": "Retry Scan",
   "RideAttendeeScanningSkipScan": "Skip Scan",
   "RideAttendeeScanningContinue": "Proceed to next step",
-  "RideAttendeeScanningSaveResults": "Save",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} people have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
@@ -106,7 +108,6 @@
   "ExportRideTitle": "Export Ride",
   "ExportRideFileNamePlaceholder": "ride_{date}",
   "ExportRideExportingToFile": "Exporting ride to file",
-  "Export": "Export",
 
   "ExportRidesTitle": "Export Rides",
   "ExportingRidesDescription": "Exporting rides and attendees",
@@ -152,13 +153,9 @@
   "AliasIllegalCharacters": "An alias can only contain letters, spaces or ' -",
 
   "ValueIsRequired": "{value} is required",
-  "DialogCancel": "Cancel",
-  "DialogDelete": "Delete",
-  "DialogDismiss": "Ok",
   "GenericError": "Something went wrong",
   "GoBack": "Go Back",
 
-  "Filename": "Filename",
   "InvalidFilename": "Invalid filename",
   "FilenameWhitespace": "A filename can't be blank",
   "FileExists": "This file already exists",

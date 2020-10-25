@@ -260,7 +260,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                     child: Center(
                       child: SaveMemberSubmit(
-                        submitButtonLabel: S.of(context).EditMemberSubmit,
+                        submitButtonLabel: S.of(context).SaveChanges,
                         memberExistsMessage: S.of(context).MemberAlreadyExists,
                         genericErrorMessage: S.of(context).EditMemberError,
                         stream: _bloc.submitStream,
@@ -376,7 +376,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                   child: Center(
                     child: SaveMemberSubmit(
-                      submitButtonLabel: S.of(context).EditMemberSubmit,
+                      submitButtonLabel: S.of(context).SaveChanges,
                       memberExistsMessage: S.of(context).MemberAlreadyExists,
                       genericErrorMessage: S.of(context).EditMemberError,
                       stream: _bloc.submitStream,

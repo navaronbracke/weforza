@@ -153,6 +153,106 @@ class S {
     );
   }
 
+  /// `Export`
+  String get Export {
+    return Intl.message(
+      'Export',
+      name: 'Export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get Delete {
+    return Intl.message(
+      'Delete',
+      name: 'Delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get Cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'Cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ok`
+  String get Ok {
+    return Intl.message(
+      'Ok',
+      name: 'Ok',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Attendees`
+  String get Attendees {
+    return Intl.message(
+      'Attendees',
+      name: 'Attendees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Details`
+  String get Details {
+    return Intl.message(
+      'Details',
+      name: 'Details',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Devices`
+  String get Devices {
+    return Intl.message(
+      'Devices',
+      name: 'Devices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save changes`
+  String get SaveChanges {
+    return Intl.message(
+      'Save changes',
+      name: 'SaveChanges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get Save {
+    return Intl.message(
+      'Save',
+      name: 'Save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filename`
+  String get Filename {
+    return Intl.message(
+      'Filename',
+      name: 'Filename',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Could not load members`
   String get MemberListLoadingFailed {
     return Intl.message(
@@ -233,36 +333,6 @@ class S {
     );
   }
 
-  /// `Attendees`
-  String get RideDetailsAttendeesListHeader {
-    return Intl.message(
-      'Attendees',
-      name: 'RideDetailsAttendeesListHeader',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Export`
-  String get RideDetailsExportOption {
-    return Intl.message(
-      'Export',
-      name: 'RideDetailsExportOption',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete`
-  String get RideDetailsDeleteOption {
-    return Intl.message(
-      'Delete',
-      name: 'RideDetailsDeleteOption',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Delete Ride`
   String get RideDeleteDialogTitle {
     return Intl.message(
@@ -293,16 +363,6 @@ class S {
     );
   }
 
-  /// `Details`
-  String get MemberDetailsTitle {
-    return Intl.message(
-      'Details',
-      name: 'MemberDetailsTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `This member has no devices yet`
   String get MemberDetailsNoDevices {
     return Intl.message(
@@ -328,16 +388,6 @@ class S {
     return Intl.message(
       'Could not load profile picture',
       name: 'MemberDetailsLoadPictureError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Devices`
-  String get DevicesListHeader {
-    return Intl.message(
-      'Devices',
-      name: 'DevicesListHeader',
       desc: '',
       args: [],
     );
@@ -413,16 +463,6 @@ class S {
     );
   }
 
-  /// `Save changes`
-  String get EditDeviceSubmit {
-    return Intl.message(
-      'Save changes',
-      name: 'EditDeviceSubmit',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Edit Member`
   String get EditMemberTitle {
     return Intl.message(
@@ -438,16 +478,6 @@ class S {
     return Intl.message(
       'Failed to save the changes',
       name: 'EditMemberError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save changes`
-  String get EditMemberSubmit {
-    return Intl.message(
-      'Save changes',
-      name: 'EditMemberSubmit',
       desc: '',
       args: [],
     );
@@ -743,16 +773,6 @@ class S {
     );
   }
 
-  /// `Save`
-  String get RideAttendeeScanningSaveResults {
-    return Intl.message(
-      'Save',
-      name: 'RideAttendeeScanningSaveResults',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `There are no members to choose from`
   String get RideAttendeeScanningManualSelectionEmptyList {
     return Intl.message(
@@ -908,16 +928,6 @@ class S {
     return Intl.message(
       'Exporting ride to file',
       name: 'ExportRideExportingToFile',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Export`
-  String get Export {
-    return Intl.message(
-      'Export',
-      name: 'Export',
       desc: '',
       args: [],
     );
@@ -1293,36 +1303,6 @@ class S {
     );
   }
 
-  /// `Cancel`
-  String get DialogCancel {
-    return Intl.message(
-      'Cancel',
-      name: 'DialogCancel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete`
-  String get DialogDelete {
-    return Intl.message(
-      'Delete',
-      name: 'DialogDelete',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Ok`
-  String get DialogDismiss {
-    return Intl.message(
-      'Ok',
-      name: 'DialogDismiss',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Something went wrong`
   String get GenericError {
     return Intl.message(
@@ -1338,16 +1318,6 @@ class S {
     return Intl.message(
       'Go Back',
       name: 'GoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Filename`
-  String get Filename {
-    return Intl.message(
-      'Filename',
-      name: 'Filename',
       desc: '',
       args: [],
     );

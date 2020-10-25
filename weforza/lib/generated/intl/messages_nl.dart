@@ -42,7 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "AddDeviceError" : MessageLookupByLibrary.simpleMessage("Kon toestel niet toevoegen"),
-    "AddDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Toestel Aanmaken"),
+    "AddDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Toestel toevoegen"),
     "AddDeviceTitle" : MessageLookupByLibrary.simpleMessage("Toestel Toevoegen"),
     "AddMemberError" : MessageLookupByLibrary.simpleMessage("Kon lid niet toevoegen"),
     "AddMemberSubmit" : MessageLookupByLibrary.simpleMessage("Voeg nieuw lid toe"),
@@ -84,10 +84,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "DialogDelete" : MessageLookupByLibrary.simpleMessage("Verwijderen"),
     "DialogDismiss" : MessageLookupByLibrary.simpleMessage("Ok"),
     "EditDeviceError" : MessageLookupByLibrary.simpleMessage("Kon toestel niet bewerken"),
-    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen Opslaan"),
+    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen opslaan"),
     "EditDeviceTitle" : MessageLookupByLibrary.simpleMessage("Toestel Bewerken"),
     "EditMemberError" : MessageLookupByLibrary.simpleMessage("Kon de wijzigingen niet opslaan"),
-    "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen Opslaan"),
+    "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Wijzigingen opslaan"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Lid Bewerken"),
     "Export" : MessageLookupByLibrary.simpleMessage("Exporteren"),
     "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,toestellen"),

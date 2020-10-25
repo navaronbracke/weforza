@@ -42,7 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "AddDeviceError" : MessageLookupByLibrary.simpleMessage("Could not add device"),
-    "AddDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Create Device"),
+    "AddDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Add device"),
     "AddDeviceTitle" : MessageLookupByLibrary.simpleMessage("Add Device"),
     "AddMemberError" : MessageLookupByLibrary.simpleMessage("Could not add member"),
     "AddMemberSubmit" : MessageLookupByLibrary.simpleMessage("Create New Member"),
@@ -84,10 +84,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "DialogDelete" : MessageLookupByLibrary.simpleMessage("Delete"),
     "DialogDismiss" : MessageLookupByLibrary.simpleMessage("Ok"),
     "EditDeviceError" : MessageLookupByLibrary.simpleMessage("Could not edit device"),
-    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
+    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Save changes"),
     "EditDeviceTitle" : MessageLookupByLibrary.simpleMessage("Edit Device"),
     "EditMemberError" : MessageLookupByLibrary.simpleMessage("Failed to save the changes"),
-    "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
+    "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Save changes"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Edit Member"),
     "Export" : MessageLookupByLibrary.simpleMessage("Export"),
     "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("firstname,lastname,alias,devices"),

@@ -38,8 +38,8 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
   //However simply 'removing the button' might look ugly.
   //Hence we show whitespace instead, that is the size of the button.
   Widget _buildButtonWhitespace() => PlatformAwareWidget(
-    android: () => SizedBox(width: 40, height: 40),
-    ios: () => SizedBox(width: 24, height: 24),
+    android: () => SizedBox.fromSize(size: Size.square(40)),
+    ios: () => SizedBox.fromSize(size: Size.square(24)),
   );
 
   Widget _mapDeviceTypeToIcon(){

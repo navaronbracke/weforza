@@ -243,7 +243,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 fileHandler: InjectionContainer.get<IFileHandler>(),
                 filename: S.of(context).ExportRideFileNamePlaceholder(bloc.ride.dateToDDMMYYY()),
                 ride: bloc.ride,
-                loadedAttendees: bloc.attendeesFuture,
+                rideRepository: InjectionContainer.get<RideRepository>()
               ),
             ),
         ),

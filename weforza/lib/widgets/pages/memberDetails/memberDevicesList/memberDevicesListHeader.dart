@@ -10,14 +10,14 @@ class MemberDevicesListHeader extends StatelessWidget {
     android: () => Padding(
       padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
       child: Text(
-        S.of(context).DevicesListHeader,
+        S.of(context).Devices,
         style: ApplicationTheme.memberDevicesListHeaderTextStyle,
       ),
     ),
     ios: () => Padding(
       padding: const EdgeInsets.fromLTRB(10,15,15,10),
       child: Text(
-        S.of(context).DevicesListHeader,
+        S.of(context).Devices,
         style: ApplicationTheme.memberDevicesListHeaderTextStyle,
       ),
     ),

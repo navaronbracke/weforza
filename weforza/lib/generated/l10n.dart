@@ -9,8 +9,6 @@ import 'intl/messages_all.dart';
 // **************************************************************************
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
-// ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
-// ignore_for_file: avoid_redundant_argument_values
 
 class S {
   S();
@@ -255,6 +253,36 @@ class S {
     );
   }
 
+  /// `Active`
+  String get MemberListFilterActive {
+    return Intl.message(
+      'Active',
+      name: 'MemberListFilterActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inactive`
+  String get MemberListFilterInactive {
+    return Intl.message(
+      'Inactive',
+      name: 'MemberListFilterInactive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get MemberListFilterAll {
+    return Intl.message(
+      'All',
+      name: 'MemberListFilterAll',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Could not load members`
   String get MemberListLoadingFailed {
     return Intl.message(
@@ -390,16 +418,6 @@ class S {
     return Intl.message(
       'Could not load profile picture',
       name: 'MemberDetailsLoadPictureError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Active`
-  String get MemberDetailsActiveLabel {
-    return Intl.message(
-      'Active',
-      name: 'MemberDetailsActiveLabel',
       desc: '',
       args: [],
     );

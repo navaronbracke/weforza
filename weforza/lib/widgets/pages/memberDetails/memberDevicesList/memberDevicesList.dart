@@ -56,7 +56,6 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
 
   Widget _buildDevicesList(BuildContext context, List<Device> devices){
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MemberDevicesListHeader(),
         Expanded(
@@ -70,23 +69,21 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             ),
           ),
         ),
-        Center(
-          child: PlatformAwareWidget(
-            android: () => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: FlatButton(
-                onPressed: widget.onAddDeviceButtonPressed,
-                child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
-              ),
+        PlatformAwareWidget(
+          android: () => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: FlatButton(
+              onPressed: widget.onAddDeviceButtonPressed,
+              child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
             ),
-            ios: () => Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 15),
-              child: CupertinoButton(
-                onPressed: widget.onAddDeviceButtonPressed,
-                child: Text(
-                  S.of(context).AddDeviceTitle,
-                  style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
-                ),
+          ),
+          ios: () => Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 15),
+            child: CupertinoButton(
+              onPressed: widget.onAddDeviceButtonPressed,
+              child: Text(
+                S.of(context).AddDeviceTitle,
+                style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
               ),
             ),
           ),

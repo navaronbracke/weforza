@@ -13,6 +13,7 @@ import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberActiveToggle.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -206,11 +207,32 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Center(
-            child: MemberAttendingCount(
-              future: bloc.attendingCountFuture,
-            ),
+          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+          child: Row(
+            children: [
+              MemberAttendingCount(
+                future: bloc.attendingCountFuture,
+              ),
+              Expanded(
+                child: Center(),
+              ),
+              MemberActiveToggle(
+                initialValue: bloc.member.isActiveMember,
+                label: S.of(context).MemberDetailsActiveLabel,
+                stream: bloc.isActiveStream,
+                onChanged: bloc.setMemberActive,
+                onErrorBuilder: () => PlatformAwareWidget(
+                  android: () => Switch(
+                    value: bloc.member.isActiveMember,
+                    onChanged: null,
+                  ),
+                  ios: () => CupertinoSwitch(
+                    value: bloc.member.isActiveMember,
+                    onChanged: null,
+                  ),
+                ),
+              ),
+            ],
           ),
         )
       ],

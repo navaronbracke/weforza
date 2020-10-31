@@ -28,10 +28,17 @@ class MemberListBloc extends Bloc {
 
   Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
 
-  void onFilterChanged(MemberFilterOption filterOption){
-    if(filterOption != _currentFilter){
-      _currentFilter = filterOption;
-      loadMembers(filterOption);
+  void onFilterChanged(int option){
+    MemberFilterOption filter = MemberFilterOption.ALL;
+    try {
+      filter = MemberFilterOption.values[option];
+    }catch(e){
+      // use default value.
+    }
+
+    if(filter != _currentFilter){
+      _currentFilter = filter;
+      loadMembers(_currentFilter);
     }
   }
 

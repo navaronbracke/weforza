@@ -16,17 +16,11 @@ abstract class IDeviceDao {
 
   Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]);
 
-  ///This groups all the devices together that belong to the same owner ids.
+  ///This groups all the devices together that belong to the same owner id.
   ///Note that device names can occur in multiple lists, as multiple people can have a device with the same name.
-  ///This method is essentially the exact opposite of [getAllOwnersGroupedByDeviceName].
-  ///We group on owner ID and not on device name.
   Future<HashMap<String, Set<String>>> getAllDevicesGroupedByOwnerId();
 
-  ///Get the owners of all devices, grouped by device name.
-  ///This groups owners that have devices with the same name in the same list.
-  ///This method is essentially the exact opposite of [getAllDevicesGroupedByOwnerId].
-  ///We group on device name and not on owner ID.
-  Future<HashMap<String,List<String>>> getAllOwnersGroupedByDeviceName();
+  Future<List<Device>> getAllDevices();
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -90,26 +84,6 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<HashMap<String,List<String>>> getAllOwnersGroupedByDeviceName() async {
-    final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
-
-    final HashMap<String,List<String>> collection = HashMap();
-
-    devices.forEach((record) {
-      final String device = record["deviceName"] as String;
-      final String ownerUuid = record["owner"] as String;
-
-      if(collection.containsKey(device)){
-        collection[device].add(ownerUuid);
-      }else{
-        collection[device] = <String>[ownerUuid];
-      }
-    });
-
-    return collection;
-  }
-
-  @override
   Future<HashMap<String, Set<String>>> getAllDevicesGroupedByOwnerId() async {
     final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
 
@@ -127,5 +101,11 @@ class DeviceDao implements IDeviceDao {
     });
 
     return collection;
+  }
+
+  @override
+  Future<List<Device>> getAllDevices() async {
+    final records = await _deviceStore.find(_database);
+    return records.map((record) => Device.of(record.key,record.value)).toList();
   }
 }

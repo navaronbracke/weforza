@@ -393,6 +393,16 @@ class S {
     );
   }
 
+  /// `Active`
+  String get MemberDetailsActiveLabel {
+    return Intl.message(
+      'Active',
+      name: 'MemberDetailsActiveLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No devices to show`
   String get DevicesListNoDevices {
     return Intl.message(

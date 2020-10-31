@@ -14,6 +14,7 @@ import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
+import 'package:weforza/widgets/pages/memberList/memberListFilter.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -34,7 +35,9 @@ class MemberListPage extends StatefulWidget {
 
 ///This is the [State] class for [MemberListPage].
 class _MemberListPageState extends State<MemberListPage> {
-  _MemberListPageState({@required this.bloc}): assert(bloc != null);
+  _MemberListPageState({
+    @required this.bloc
+  }): assert(bloc != null);
 
   final MemberListBloc bloc;
 
@@ -47,7 +50,7 @@ class _MemberListPageState extends State<MemberListPage> {
   @override
   void initState() {
     super.initState();
-    bloc.loadMembersIfNotLoaded();
+    bloc.loadMembers();
   }
 
   Widget _buildTitle(BuildContext context){
@@ -145,22 +148,35 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildList(BuildContext context){
-    return FutureBuilder<List<Member>>(
-      future: bloc.membersFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return GenericError(text: S.of(context).MemberListLoadingFailed);
-          } else {
-            return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
-            );
-          }
-        } else {
-          return Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
+    return Column(
+      children: [
+        PlatformAwareWidget(
+          android: () => MemberListFilter(onOptionSelected: null),
+          ios: () => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: MemberListFilter(onOptionSelected: null),
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder<List<Member>>(
+            future: bloc.membersFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return GenericError(text: S.of(context).MemberListLoadingFailed);
+                } else {
+                  return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
+                  );
+                }
+              } else {
+                return Center(child: PlatformAwareLoadingIndicator());
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -190,10 +206,12 @@ class _MemberListPageState extends State<MemberListPage> {
     final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
     if(reloadNotifier.value){
       reloadNotifier.value = false;
-      setState(() {
-        bloc.reloadMembers();
-      });
+      setState(() => bloc.loadMembers());
     }
+  }
+
+  void onFilterChanged(int option){
+    setState(() => bloc.onFilterChanged(option));
   }
 
   @override

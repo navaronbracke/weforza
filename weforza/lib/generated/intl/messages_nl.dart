@@ -126,6 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit lid wil verwijderen?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon lid niet verwijderen"),
     "MemberDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Lid"),
+    "MemberDetailsActiveLabel" : MessageLookupByLibrary.simpleMessage("Actief"),
     "MemberDetailsLoadDevicesError" : MessageLookupByLibrary.simpleMessage("Kon toestellen niet laden"),
     "MemberDetailsLoadPictureError" : MessageLookupByLibrary.simpleMessage("Kon profielfoto niet laden"),
     "MemberDetailsNoDevices" : MessageLookupByLibrary.simpleMessage("Dit lid heeft nog geen toestellen"),

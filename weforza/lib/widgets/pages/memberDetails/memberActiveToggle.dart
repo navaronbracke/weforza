@@ -9,12 +9,14 @@ class MemberActiveToggle extends StatelessWidget {
     @required this.label,
     @required this.stream,
     @required this.onChanged,
-    @required this.onErrorBuilder
+    @required this.onErrorBuilder,
+    @required this.initialValue
   }): assert(
     label != null && label.isNotEmpty && onChanged != null
-        && onErrorBuilder != null
+        && onErrorBuilder != null && initialValue != null
   );
 
+  final bool initialValue;
   final String label;
   final Stream<bool> stream;
   final void Function(bool value) onChanged;
@@ -29,6 +31,7 @@ class MemberActiveToggle extends StatelessWidget {
           padding: const EdgeInsets.only(left: 5),
           child: StreamBuilder<bool>(
             stream: stream,
+            initialData: initialValue,
             builder: (context, snapshot){
               if(snapshot.hasError){
                 return onErrorBuilder();

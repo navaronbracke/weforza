@@ -133,11 +133,7 @@ class AttendeeScanningBloc extends Bloc {
       }else{
         _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
       }
-    }, onError: (error){
-      //Catch the check bluetooth error.
-      //This is a generic error and is thus caught by the StreamBuilder.
-      _scanStepController.addError(error);
-    });
+    }, onError: _scanStepController.addError);
   }
 
   //Perform the actual bluetooth device scan

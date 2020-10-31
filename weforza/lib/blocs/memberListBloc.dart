@@ -16,6 +16,8 @@ class MemberListBloc extends Bloc {
 
   Future<List<Member>> membersFuture;
 
+  MemberFilterOption _currentFilter = MemberFilterOption.ALL;
+
   /// Load the members, using the given filter option.
   /// Defaults to using no filter.
   void loadMembers([MemberFilterOption filter = MemberFilterOption.ALL]){
@@ -25,6 +27,13 @@ class MemberListBloc extends Bloc {
   Future<File> getMemberProfileImage(String path) => _fileHandler.loadProfileImageFromDisk(path);
 
   Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
+
+  void onFilterChanged(MemberFilterOption filterOption){
+    if(filterOption != _currentFilter){
+      _currentFilter = filterOption;
+      loadMembers(filterOption);
+    }
+  }
 
   @override
   void dispose() {}

@@ -20,9 +20,9 @@ class MemberAttendingCount extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
+                  child: Text("?")
                 ),
-                Text("?")
+                Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
               ],
             );
           }
@@ -33,9 +33,9 @@ class MemberAttendingCount extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
+                child: Text(snapshot.data.toString())
               ),
-              Text(snapshot.data.toString())
+              Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
             ],
           );
         }else{

@@ -15,10 +15,9 @@ class RideListEmpty extends StatelessWidget {
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(S.of(context).RideListNoRides),
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(S.of(context).ListEmpty),
           ),
-          Text(S.of(context).RideListAddRideInstruction)
         ],
       ),
     );

@@ -127,7 +127,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   child: CupertinoIconButton.fromAppTheme(
                       icon: Icons.more_vert,
                       onPressed: () async {
-                        final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
+                        final RideDetailsPageOptions option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
                           return CupertinoActionSheet(
                             actions: [
                               CupertinoActionSheetAction(
@@ -259,7 +259,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         final Widget Function(BuildContext) builder = (context) => DeleteItemDialog(
           title: S.of(context).RideDeleteDialogTitle,
           description: S.of(context).RideDeleteDialogDescription,
-          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+          errorDescription: S.of(context).GenericError,
           onDelete: () => deleteRide(context),
         );
         if(Platform.isAndroid){

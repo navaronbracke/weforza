@@ -89,7 +89,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                 builder: (context) => DeleteItemDialog(
                   title: S.of(context).MemberDeleteDialogTitle,
                   description: S.of(context).MemberDeleteDialogDescription,
-                  errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                  errorDescription: S.of(context).GenericError,
                   onDelete: () => onDeleteMember(context),
                 ),
             ),
@@ -142,7 +142,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       builder: (context) => DeleteItemDialog(
                         title: S.of(context).MemberDeleteDialogTitle,
                         description: S.of(context).MemberDeleteDialogDescription,
-                        errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                        errorDescription: S.of(context).GenericError,
                         onDelete: () => onDeleteMember(context),
                       ),
                     ),
@@ -218,7 +218,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               ),
               MemberActiveToggle(
                 initialValue: bloc.member.isActiveMember,
-                label: S.of(context).MemberListFilterActive,
+                label: S.of(context).Active,
                 stream: bloc.isActiveStream,
                 onChanged: bloc.setMemberActive,
                 onErrorBuilder: () => PlatformAwareWidget(

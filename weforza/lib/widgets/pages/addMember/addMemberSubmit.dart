@@ -42,7 +42,7 @@ class AddMemberSubmit extends StatelessWidget {
       stream: stream,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return Text(S.of(context).AddMemberError);
+          return Text(S.of(context).GenericError);
         }else{
           if(snapshot.data.saving){
             return PlatformAwareLoadingIndicator();

@@ -133,11 +133,11 @@ class S {
     );
   }
 
-  /// `Members`
-  String get Members {
+  /// `Riders`
+  String get Riders {
     return Intl.message(
-      'Members',
-      name: 'Members',
+      'Riders',
+      name: 'Riders',
       desc: '',
       args: [],
     );
@@ -254,100 +254,50 @@ class S {
   }
 
   /// `Active`
-  String get MemberListFilterActive {
+  String get Active {
     return Intl.message(
       'Active',
-      name: 'MemberListFilterActive',
+      name: 'Active',
       desc: '',
       args: [],
     );
   }
 
   /// `Inactive`
-  String get MemberListFilterInactive {
+  String get Inactive {
     return Intl.message(
       'Inactive',
-      name: 'MemberListFilterInactive',
+      name: 'Inactive',
       desc: '',
       args: [],
     );
   }
 
   /// `All`
-  String get MemberListFilterAll {
+  String get All {
     return Intl.message(
       'All',
-      name: 'MemberListFilterAll',
+      name: 'All',
       desc: '',
       args: [],
     );
   }
 
-  /// `Could not load members`
-  String get MemberListLoadingFailed {
+  /// `Filter`
+  String get Filter {
     return Intl.message(
-      'Could not load members',
-      name: 'MemberListLoadingFailed',
+      'Filter',
+      name: 'Filter',
       desc: '',
       args: [],
     );
   }
 
-  /// `There are no members to display`
-  String get MemberListNoItems {
+  /// `There is nothing to show`
+  String get ListEmpty {
     return Intl.message(
-      'There are no members to display',
-      name: 'MemberListNoItems',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add members by using the menu above`
-  String get MemberListAddMemberInstruction {
-    return Intl.message(
-      'Add members by using the menu above',
-      name: 'MemberListAddMemberInstruction',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `There are no rides`
-  String get RideListNoRides {
-    return Intl.message(
-      'There are no rides',
-      name: 'RideListNoRides',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add rides by using the menu above`
-  String get RideListAddRideInstruction {
-    return Intl.message(
-      'Add rides by using the menu above',
-      name: 'RideListAddRideInstruction',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load rides`
-  String get RideListLoadingRidesError {
-    return Intl.message(
-      'Could not load rides',
-      name: 'RideListLoadingRidesError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load attendees`
-  String get RideDetailsLoadAttendeesError {
-    return Intl.message(
-      'Could not load attendees',
-      name: 'RideDetailsLoadAttendeesError',
+      'There is nothing to show',
+      name: 'ListEmpty',
       desc: '',
       args: [],
     );
@@ -383,41 +333,11 @@ class S {
     );
   }
 
-  /// `Could not delete ride`
-  String get RideDeleteDialogErrorDescription {
-    return Intl.message(
-      'Could not delete ride',
-      name: 'RideDeleteDialogErrorDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This member has no devices yet`
+  /// `This rider has no devices yet`
   String get MemberDetailsNoDevices {
     return Intl.message(
-      'This member has no devices yet',
+      'This rider has no devices yet',
       name: 'MemberDetailsNoDevices',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load devices`
-  String get MemberDetailsLoadDevicesError {
-    return Intl.message(
-      'Could not load devices',
-      name: 'MemberDetailsLoadDevicesError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load profile picture`
-  String get MemberDetailsLoadPictureError {
-    return Intl.message(
-      'Could not load profile picture',
-      name: 'MemberDetailsLoadPictureError',
       desc: '',
       args: [],
     );
@@ -453,16 +373,6 @@ class S {
     );
   }
 
-  /// `Could not add device`
-  String get AddDeviceError {
-    return Intl.message(
-      'Could not add device',
-      name: 'AddDeviceError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Add device`
   String get AddDeviceSubmit {
     return Intl.message(
@@ -483,111 +393,61 @@ class S {
     );
   }
 
-  /// `Could not edit device`
-  String get EditDeviceError {
-    return Intl.message(
-      'Could not edit device',
-      name: 'EditDeviceError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Edit Member`
+  /// `Edit Rider`
   String get EditMemberTitle {
     return Intl.message(
-      'Edit Member',
+      'Edit Rider',
       name: 'EditMemberTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Failed to save the changes`
-  String get EditMemberError {
-    return Intl.message(
-      'Failed to save the changes',
-      name: 'EditMemberError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete Member`
+  /// `Delete Rider`
   String get MemberDeleteDialogTitle {
     return Intl.message(
-      'Delete Member',
+      'Delete Rider',
       name: 'MemberDeleteDialogTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Are you sure that you want to delete this member?`
+  /// `Are you sure that you want to delete this rider?`
   String get MemberDeleteDialogDescription {
     return Intl.message(
-      'Are you sure that you want to delete this member?',
+      'Are you sure that you want to delete this rider?',
       name: 'MemberDeleteDialogDescription',
       desc: '',
       args: [],
     );
   }
 
-  /// `Could not delete member`
-  String get MemberDeleteDialogErrorDescription {
-    return Intl.message(
-      'Could not delete member',
-      name: 'MemberDeleteDialogErrorDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `New Member`
+  /// `New Rider`
   String get AddMemberTitle {
     return Intl.message(
-      'New Member',
+      'New Rider',
       name: 'AddMemberTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Create New Member`
+  /// `Create New Rider`
   String get AddMemberSubmit {
     return Intl.message(
-      'Create New Member',
+      'Create New Rider',
       name: 'AddMemberSubmit',
       desc: '',
       args: [],
     );
   }
 
-  /// `This member already exists`
+  /// `This rider already exists`
   String get MemberAlreadyExists {
     return Intl.message(
-      'This member already exists',
+      'This rider already exists',
       name: 'MemberAlreadyExists',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not add member`
-  String get AddMemberError {
-    return Intl.message(
-      'Could not add member',
-      name: 'AddMemberError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load image`
-  String get MemberPickImageError {
-    return Intl.message(
-      'Could not load image',
-      name: 'MemberPickImageError',
       desc: '',
       args: [],
     );
@@ -613,31 +473,11 @@ class S {
     );
   }
 
-  /// `Could not load Calendar`
-  String get AddRideLoadingFailed {
-    return Intl.message(
-      'Could not load Calendar',
-      name: 'AddRideLoadingFailed',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Please select at least one date`
   String get AddRideEmptySelection {
     return Intl.message(
       'Please select at least one date',
       name: 'AddRideEmptySelection',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not add rides`
-  String get AddRideError {
-    return Intl.message(
-      'Could not add rides',
-      name: 'AddRideError',
       desc: '',
       args: [],
     );
@@ -713,10 +553,10 @@ class S {
     );
   }
 
-  /// `Cannot start a scan, there are no members`
+  /// `Cannot start a scan, there are no riders`
   String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Cannot start a scan, there are no members',
+      'Cannot start a scan, there are no riders',
       name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
@@ -803,20 +643,20 @@ class S {
     );
   }
 
-  /// `There are no members to choose from`
+  /// `There are no riders to choose from`
   String get RideAttendeeScanningManualSelectionEmptyList {
     return Intl.message(
-      'There are no members to choose from',
+      'There are no riders to choose from',
       name: 'RideAttendeeScanningManualSelectionEmptyList',
       desc: '',
       args: [],
     );
   }
 
-  /// `{amount} people have a device with this name`
+  /// `{amount} riders have a device with this name`
   String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
-      '$amount people have a device with this name',
+      '$amount riders have a device with this name',
       name: 'RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel',
       desc: '',
       args: [amount],
@@ -833,10 +673,10 @@ class S {
     );
   }
 
-  /// `Import Members`
+  /// `Import Riders`
   String get ImportMembersPageTitle {
     return Intl.message(
-      'Import Members',
+      'Import Riders',
       name: 'ImportMembersPageTitle',
       desc: '',
       args: [],
@@ -853,20 +693,20 @@ class S {
     );
   }
 
-  /// `Please choose a file to import members`
+  /// `Please choose a file to import riders`
   String get ImportMembersPickFileWarning {
     return Intl.message(
-      'Please choose a file to import members',
+      'Please choose a file to import riders',
       name: 'ImportMembersPickFileWarning',
       desc: '',
       args: [],
     );
   }
 
-  /// `Importing Members`
+  /// `Importing Riders`
   String get ImportMembersImporting {
     return Intl.message(
-      'Importing Members',
+      'Importing Riders',
       name: 'ImportMembersImporting',
       desc: '',
       args: [],
@@ -983,20 +823,20 @@ class S {
     );
   }
 
-  /// `Export Members`
+  /// `Export Riders`
   String get ExportMembersTitle {
     return Intl.message(
-      'Export Members',
+      'Export Riders',
       name: 'ExportMembersTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Exporting members and devices`
+  /// `Exporting riders and devices`
   String get ExportingMembersDescription {
     return Intl.message(
-      'Exporting members and devices',
+      'Exporting riders and devices',
       name: 'ExportingMembersDescription',
       desc: '',
       args: [],
@@ -1153,16 +993,6 @@ class S {
     );
   }
 
-  /// `Could not delete the device`
-  String get DeleteDeviceErrorDescription {
-    return Intl.message(
-      'Could not delete the device',
-      name: 'DeleteDeviceErrorDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Duration of a scan (in seconds)`
   String get SettingsScanSliderHeader {
     return Intl.message(
@@ -1178,26 +1008,6 @@ class S {
     return Intl.message(
       'Loading Settings',
       name: 'SettingsLoading',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not load the settings`
-  String get SettingsLoadingError {
-    return Intl.message(
-      'Could not load the settings',
-      name: 'SettingsLoadingError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Could not save the settings`
-  String get SettingsSubmitError {
-    return Intl.message(
-      'Could not save the settings',
-      name: 'SettingsSubmitError',
       desc: '',
       args: [],
     );

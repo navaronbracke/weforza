@@ -101,7 +101,7 @@ class ExportMembersBloc extends Bloc {
       await file.writeAsString(buffer.toString());
     }else if(extension == FileExtension.JSON.extension()){
       final Map<String, dynamic> data = {
-        "members": members.map((ExportableMember member) => member.toJson()).toList()
+        "riders": members.map((ExportableMember member) => member.toJson()).toList()
       };
 
       await file.writeAsString(jsonEncode(data));

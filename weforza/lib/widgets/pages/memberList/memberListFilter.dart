@@ -5,13 +5,14 @@ import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
+/// This class wraps the data for the filter widget.
 class MemberListFilterItem {
   MemberListFilterItem({
     @required this.value,
     @required this.label,
     @required this.icon
   }): assert(
-    label != null && label.isNotEmpty && value != null && icon != null
+  label != null && label.isNotEmpty && value != null && icon != null
   );
 
   final MemberFilterOption value;
@@ -21,34 +22,19 @@ class MemberListFilterItem {
 
 /// This widget represents the filter at the top of the member list.
 /// This filter allows selecting between active, inactive & all members.
-class MemberListFilter extends StatefulWidget {
+class MemberListFilter extends StatelessWidget {
   MemberListFilter({
-    @required this.onOptionSelected,
-    @required this.items
-  }): assert(onOptionSelected != null && items != null && items.isNotEmpty);
+    @required this.stream,
+    @required this.onFilterChanged,
+    @required this.items,
+  }): assert(
+    stream != null && onFilterChanged != null
+        && items != null && items.isNotEmpty
+  );
 
-  final void Function(int option) onOptionSelected;
+  final Stream<MemberFilterOption> stream;
+  final void Function(MemberFilterOption filterOption) onFilterChanged;
   final List<MemberListFilterItem> items;
-
-  @override
-  _MemberListFilterState createState() => _MemberListFilterState();
-}
-
-class _MemberListFilterState extends State<MemberListFilter> {
-
-  /// The current selected option.
-  int currentValue = 0;
-
-  void _onOptionSelected(MemberFilterOption option){
-    if(option == null || option.index == currentValue){
-      return;
-    }else {
-      setState(() {
-        currentValue = option.index;
-        widget.onOptionSelected(currentValue);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +47,24 @@ class _MemberListFilterState extends State<MemberListFilter> {
             ios: () => _buildIosWidget(context),
           ),
           Expanded(child: Center()),
-          Text(widget.items[currentValue].label)
+          StreamBuilder<MemberFilterOption>(
+            initialData: MemberFilterOption.ALL,
+            stream: stream,
+            builder: (context, snapshot){
+              switch(snapshot.data){
+                case MemberFilterOption.ACTIVE: return Text(S.of(context).Active);
+                case MemberFilterOption.INACTIVE: return Text(S.of(context).Inactive);
+                default: return Text(S.of(context).All);
+              }
+            },
+          ),
         ],
       ),
     );
   }
 
   Widget _buildAndroidWidget(BuildContext context){
-    final items = widget.items.map((item) {
+    final options = items.map((item) {
       return ListTile(
           title: Text(item.label),
           leading: Icon(item.icon),
@@ -78,12 +74,12 @@ class _MemberListFilterState extends State<MemberListFilter> {
 
     return FlatButton.icon(
       onPressed: () async {
-          final option = await showModalBottomSheet<MemberFilterOption>(
-              context: context,
-              builder: (context) => Column(children: items, mainAxisSize: MainAxisSize.min)
-          );
+        final option = await showModalBottomSheet<MemberFilterOption>(
+            context: context,
+            builder: (context) => Column(children: options, mainAxisSize: MainAxisSize.min)
+        );
 
-          _onOptionSelected(option);
+        onFilterChanged(option);
       },
       icon: Icon(Icons.filter_alt, color: ApplicationTheme.primaryColor),
       label: Text(
@@ -94,7 +90,7 @@ class _MemberListFilterState extends State<MemberListFilter> {
   }
 
   Widget _buildIosWidget(BuildContext context){
-    final items = widget.items.map((item) {
+    final options = items.map((item) {
       return CupertinoActionSheetAction(
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -124,7 +120,7 @@ class _MemberListFilterState extends State<MemberListFilter> {
       onPressed: () async {
         final option = await showCupertinoModalPopup<MemberFilterOption>(context: context, builder: (context){
           return CupertinoActionSheet(
-            actions: items,
+            actions: options,
             cancelButton: CupertinoActionSheetAction(
               child: Text(S.of(context).Cancel),
               onPressed: () => Navigator.of(context).pop(),
@@ -132,7 +128,7 @@ class _MemberListFilterState extends State<MemberListFilter> {
           );
         });
 
-        _onOptionSelected(option);
+        onFilterChanged(option);
       },
     );
   }

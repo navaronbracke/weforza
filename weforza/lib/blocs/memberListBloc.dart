@@ -31,16 +31,18 @@ class MemberListBloc extends Bloc {
 
   Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
 
-  void onFilterChanged(MemberFilterOption option){
+  void onFilterChanged(MemberFilterOption option, [bool override = false]){
     if(option == null){
-      option = MemberFilterOption.ALL;
+      return; // Don't do anything, the user closed the menu.
     }
 
-    if(option != _filterController.value){
+    if(override || option != _filterController.value){
       _filterController.add(option);
       loadMembers(option);
     }
   }
+
+  get currentFilter => _filterController.value;
 
   @override
   void dispose() {

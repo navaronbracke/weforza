@@ -50,11 +50,12 @@ class MemberDetailsBloc extends Bloc {
 
   Future<List<Device>> getMemberDevices() => deviceRepository.getOwnerDevices(member.uuid);
 
-  void setMemberActive(bool value) async {
+  void setMemberActive(bool value, void Function() onSuccess) async {
     if(member.isActiveMember != value){
       await memberRepository.setMemberActive(member.uuid, value).then((_){
         member.isActiveMember = value;
         _isActiveController.add(value);
+        onSuccess();
       }).catchError(_isActiveController.addError);
     }
   }

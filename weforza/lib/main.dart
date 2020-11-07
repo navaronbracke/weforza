@@ -21,8 +21,8 @@ void main() async {
   await InjectionContainer.initProductionInjector();
 
   //TODO remove when migrated.
-  final dao = MemberDao.withProvider(InjectionContainer.get<ApplicationDatabase>());
-  await dao.addActiveFlagToMemberRecords();
+  //final dao = MemberDao.withProvider(InjectionContainer.get<ApplicationDatabase>());
+  //await dao.addActiveFlagToMemberRecords();
 
   runApp(WeForzaApp());
 }

@@ -121,7 +121,8 @@ class _MemberListPageState extends State<MemberListPage> {
       body: Column(
         children: [
           MemberListFilter(
-            onOptionSelected: onFilterChanged,
+            stream: bloc.stream,
+            onFilterChanged: onFilterChanged,
             items: filterItems,
           ),
           Expanded(
@@ -178,7 +179,8 @@ class _MemberListPageState extends State<MemberListPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: MemberListFilter(
-                onOptionSelected: onFilterChanged,
+                stream: bloc.stream,
+                onFilterChanged: onFilterChanged,
                 items: filterItems,
               ),
             ),
@@ -235,14 +237,20 @@ class _MemberListPageState extends State<MemberListPage> {
 
   void onReturnToMemberListPage(BuildContext context){
     final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
+    
+    // Trigger the reload of members, but do an override for the filter.
     if(reloadNotifier.value){
       reloadNotifier.value = false;
-      setState(() => bloc.loadMembers());
+      onFilterChanged(bloc.currentFilter, true);
     }
   }
 
-  void onFilterChanged(int option){
-    setState(() => bloc.onFilterChanged(option));
+  void onFilterChanged(MemberFilterOption option, [bool override = false]){
+    if(option == null){
+      return;
+    }
+
+    setState(() => bloc.onFilterChanged(option, override));
   }
 
   @override

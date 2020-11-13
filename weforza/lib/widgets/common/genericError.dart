@@ -22,8 +22,10 @@ class GenericError extends StatelessWidget {
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
-          SizedBox(height: 5),
-          Text(text)
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(text),
+          )
         ],
       ),
     );

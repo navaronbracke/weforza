@@ -22,9 +22,10 @@ class BluetoothDisabledWidget extends StatelessWidget {
         color: ApplicationTheme.listInformationalIconColor,
         size: MediaQuery.of(context).size.shortestSide * .1,
       ),
-      SizedBox(height: 10),
-      Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
-      SizedBox(height: 20),
+      Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 20),
+        child: Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
+      ),
       PlatformAwareWidget(
         android: () => _buildAndroidButtons(context),
         ios: () => _buildIosButtons(context),
@@ -44,13 +45,15 @@ class BluetoothDisabledWidget extends StatelessWidget {
           ),
           onPressed: onGoToSettings,
         ),
-        SizedBox(width: 20),
-        FlatButton(
-          child: Text(
-            S.of(context).RideAttendeeScanningRetryScan,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: FlatButton(
+            child: Text(
+              S.of(context).RideAttendeeScanningRetryScan,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+            ),
+            onPressed: onRetryScan,
           ),
-          onPressed: onRetryScan,
         ),
       ],
     );
@@ -71,13 +74,15 @@ class BluetoothDisabledWidget extends StatelessWidget {
           ),
           onPressed: onGoToSettings,
         ),
-        SizedBox(width: 20),
-        CupertinoButton(
-          child: Text(
-            S.of(context).RideAttendeeScanningRetryScan,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: CupertinoButton(
+            child: Text(
+              S.of(context).RideAttendeeScanningRetryScan,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+            ),
+            onPressed: onRetryScan,
           ),
-          onPressed: onRetryScan,
         ),
       ],
     );

@@ -7,7 +7,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
+import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
@@ -77,7 +79,7 @@ class AttendeeScanningBloc extends Bloc {
 
   /// This collection will group the Member uuids of the owners of devices with a given name.
   /// The keys are the device names, while the values are lists of uuid's of Members with a device with the given name.
-  HashMap<String, List<String>> deviceOwners;
+  HashMap<String, List<String>> ownersGroupedByDevice = HashMap();
 
   /// This list contains the scanned bluetooth device names.
   final List<String> _scanResults = [];
@@ -89,10 +91,8 @@ class AttendeeScanningBloc extends Bloc {
   /// This way we can easily map scanned device names to it.
   HashMap<String, Member> _members = HashMap();
 
-  /// This collection will keep a duplicate, sorted version, of [members.values].
-  /// This gives us the advantage of still being able to do the efficient HashMap lookup.
-  /// Albeit with increased memory footprint, for the ordered collection.
-  List<Member> sortedMembers;
+  /// This list holds all the devices that are used during the owner lookup.
+  List<Device> _devices;
 
   /// This collection keeps track of a specific set of owners.
   /// If a device with multiple possible owners is scanned,
@@ -121,28 +121,17 @@ class AttendeeScanningBloc extends Bloc {
         scanner.requestScanPermission(
           onDenied: () => _scanStepController.add(ScanProcessStep.PERMISSION_DENIED),
           onGranted: () async {
-            ///Wait for both the settings and the existing attendees/ first page of members.
-            ///Fail fast when either fails.
             await Future.wait([
               _loadSettings(),
               _loadRideAttendees(rideDate),
-              _loadMembers(),
-              _loadDeviceOwners(),
-            ]).then((_) => _startDeviceScan(onDeviceFound), onError: (error){
-              //Catch the settings/member load errors.
-              //This is a generic error and is thus caught by the StreamBuilder.
-              _scanStepController.addError(error);
-            });
+              _loadMembersAndDevices()
+            ]).then((_) => _startDeviceScan(onDeviceFound), onError: _scanStepController.addError);
           },
         );
       }else{
         _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
       }
-    }, onError: (error){
-      //Catch the check bluetooth error.
-      //This is a generic error and is thus caught by the StreamBuilder.
-      _scanStepController.addError(error);
-    });
+    }, onError: _scanStepController.addError);
   }
 
   //Perform the actual bluetooth device scan
@@ -153,10 +142,6 @@ class AttendeeScanningBloc extends Bloc {
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
 
-      //Start the scan.
-      //Filters the already scanned devices.
-      //Then maps the result to the device name.
-      //And finishes by filtering the devices of which there is only one owner, that was already scanned.
       scanner.scanForDevices(scanDuration)
           .where((device){
             //Remove invalid device names.
@@ -168,13 +153,12 @@ class AttendeeScanningBloc extends Bloc {
             return _scannedDevices.add(device);
           })
           .map((device) => device.deviceName)
-          .where(_deviceOwnerNotScanned)
+          .where(_includeDeviceScanResult)
           .listen(onDeviceFound, onError: (error){
             //skip the error
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
-        //At this point the user can also switch pages.
         isScanning.value = false;
       }, cancelOnError: false);
     }
@@ -186,28 +170,62 @@ class AttendeeScanningBloc extends Bloc {
     scanDuration = settingsRepo.instance.scanDuration;
   }
 
-  /// Load the device owners.
-  Future<void> _loadDeviceOwners() async {
-    deviceOwners = await deviceRepo.getOwnersOfAllDevices();
+  Future<List<Member>> loadActiveMembers(){
+    return memberRepo.getMembers(MemberFilterOption.ACTIVE);
   }
 
-  /// Load the members. Returns a HashMap for easy lookup later.
+  // Load the active members & all devices in parallel.
+  // When both are loaded, filter out the devices that don't belong to any active owners.
+  Future<void> _loadMembersAndDevices() async {
+    await Future.wait([
+      _loadMembers(),
+      _loadDevices()
+    ]);
+
+    // Keep the devices that are owned by active members.
+    // The _members variable contains all active members.
+    // If there is no key for the given device owner, that owner either isn't active or doesn't exist.
+    _devices = _devices.where((device) => _members[device.ownerId] != null).toList();
+
+    // Now group the uuid's of the owners by device name.
+    for (Device device in _devices){
+      if(ownersGroupedByDevice.containsKey(device.name)){
+        // Append the owner uuid to the list of owners for this device.
+        ownersGroupedByDevice[device.name].add(device.ownerId);
+      }else{
+        // Create a new list with just this device's owner.
+        ownersGroupedByDevice[device.name] = <String>[device.ownerId];
+      }
+    }
+  }
+
+  Future<void> _loadDevices() async {
+    _devices = await deviceRepo.getAllDevices();
+  }
+
+  /// Load the active members.
   Future<void> _loadMembers() async {
-    sortedMembers = await memberRepo.getMembers();
-    sortedMembers.forEach((Member member) => _members[member.uuid] = member);
+    final List<Member> list = await memberRepo.getMembers(MemberFilterOption.ACTIVE);
+
+    list.forEach((Member member) => _members[member.uuid] = member);
   }
 
-  /// Returns whether the single owner of the given [deviceName] wasn't scanned yet.
-  bool _deviceOwnerNotScanned(String deviceName){
-    final owners = deviceOwners[deviceName];
+  /// Returns whether a given device name should be included in the scan results.
+  /// The following devices are included:
+  /// - devices of single owners, where the owner wasn't scanned yet
+  /// - unknown devices
+  /// - devices of multiple owners
+  bool _includeDeviceScanResult(String deviceName){
+    final owners = ownersGroupedByDevice[deviceName];
 
-    // Unknown devices or devices with multiple possible owners.
+    // It's an unknown device, or a device with multiple possible owners.
     if(owners == null || owners.isEmpty || owners.length > 1){
       return true;
-    }else {
-      // An owner that wasn't scanned yet.
-      return !rideAttendees.contains(owners.first);
     }
+
+    // It's a device with exactly one owner.
+    // Only include it if the owner wasn't scanned yet.
+    return !rideAttendees.contains(owners.first);
   }
 
   ///Load the ride attendees and put them in a set.
@@ -230,12 +248,13 @@ class AttendeeScanningBloc extends Bloc {
     _scanResults.insert(0, deviceName);
 
     //It's an unknown device, we can't add an owner to the attendees or the multiplePossibleOwners list.
-    if(deviceOwners[deviceName] == null || deviceOwners[deviceName].isEmpty){
+    if(!ownersGroupedByDevice.containsKey(deviceName) || ownersGroupedByDevice[deviceName].isEmpty){
       return;
     }
 
-    final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => _members[uuid]);
+    final Iterable<Member> owners = ownersGroupedByDevice[deviceName].map((uuid) => _members[uuid]);
 
+    // This device belongs to multiple possible owners, add them to the list.
     if(owners.length > 1){
       ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
     }else{
@@ -244,9 +263,10 @@ class AttendeeScanningBloc extends Bloc {
     }
   }
 
+  /// Returns a list of members that own a device with the given name.
   List<Member> getDeviceOwners(String deviceName) {
-    if(deviceOwners.containsKey(deviceName)){
-      return deviceOwners[deviceName].map((String uuid) => _members[uuid]).toList();
+    if(ownersGroupedByDevice.containsKey(deviceName)){
+      return ownersGroupedByDevice[deviceName].map((String uuid) => _members[uuid]).toList();
     }else{
       return [];
     }
@@ -327,6 +347,8 @@ class AttendeeScanningBloc extends Bloc {
     }
   }
 
+  // Remove the already scanned owners and sort the remaining ones.
+  // This is useful for preparing the multiple owners resolution list screen.
   Future<List<Member>> filterAndSortMultipleOwnersList() {
     final filtered = ownersOfScannedDevicesWithMultiplePossibleOwners.where((Member member) => !rideAttendees.contains(member.uuid)).toList();
 

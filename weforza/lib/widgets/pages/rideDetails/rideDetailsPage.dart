@@ -76,7 +76,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               PopupMenuItem<RideDetailsPageOptions>(
                 child: ListTile(
                   leading: Icon(Icons.publish),
-                  title: Text(S.of(context).RideDetailsExportOption),
+                  title: Text(S.of(context).Export),
                 ),
                 value: RideDetailsPageOptions.EXPORT,
               ),
@@ -85,7 +85,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: ListTile(
                   leading: Icon(Icons.delete, color: Colors.red),
                   title: Text(
-                      S.of(context).RideDetailsDeleteOption,
+                      S.of(context).Delete,
                       style: TextStyle(color: Colors.red)
                   ),
                 ),
@@ -122,32 +122,34 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                     icon: Icons.bluetooth_searching,
                     onPressed: () => goToScanningPage(context),
                 ),
-                SizedBox(width: 15),
-                CupertinoIconButton.fromAppTheme(
-                    icon: Icons.more_vert,
-                    onPressed: () async {
-                      final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
-                        return CupertinoActionSheet(
-                          actions: [
-                            CupertinoActionSheetAction(
-                              child: Text(S.of(context).RideDetailsExportOption),
-                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: CupertinoIconButton.fromAppTheme(
+                      icon: Icons.more_vert,
+                      onPressed: () async {
+                        final RideDetailsPageOptions option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
+                          return CupertinoActionSheet(
+                            actions: [
+                              CupertinoActionSheetAction(
+                                child: Text(S.of(context).Export),
+                                onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(S.of(context).Delete),
+                                isDestructiveAction: true,
+                                onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
+                              child: Text(S.of(context).Cancel),
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
-                            CupertinoActionSheetAction(
-                              child: Text(S.of(context).RideDetailsDeleteOption),
-                              isDestructiveAction: true,
-                              onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
-                            ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            child: Text(S.of(context).DialogCancel),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        );
-                      });
+                          );
+                        });
 
-                      onSelectMenuOption(context, option);
-                    }
+                        onSelectMenuOption(context, option);
+                      }
+                  ),
                 ),
               ],
             ),
@@ -191,7 +193,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             }
 
             return Text(
-              "${S.of(context).RideDetailsAttendeesListHeader} (${snapshot.data})",
+              "${S.of(context).Attendees} (${snapshot.data})",
               style: textStyle,
             );
           }
@@ -241,7 +243,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 fileHandler: InjectionContainer.get<IFileHandler>(),
                 filename: S.of(context).ExportRideFileNamePlaceholder(bloc.ride.dateToDDMMYYY()),
                 ride: bloc.ride,
-                loadedAttendees: bloc.attendeesFuture,
+                rideRepository: InjectionContainer.get<RideRepository>()
               ),
             ),
         ),
@@ -257,7 +259,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         final Widget Function(BuildContext) builder = (context) => DeleteItemDialog(
           title: S.of(context).RideDeleteDialogTitle,
           description: S.of(context).RideDeleteDialogDescription,
-          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+          errorDescription: S.of(context).GenericError,
           onDelete: () => deleteRide(context),
         );
         if(Platform.isAndroid){

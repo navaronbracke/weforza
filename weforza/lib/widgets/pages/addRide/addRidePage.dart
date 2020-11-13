@@ -23,7 +23,9 @@ class AddRidePage extends StatefulWidget {
 
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
-  _AddRidePageState({@required this.bloc}): assert(bloc != null);
+  _AddRidePageState({
+    @required this.bloc
+  }): assert(bloc != null);
 
   ///The BLoC for this page.
   final AddRideBloc bloc;
@@ -48,7 +50,7 @@ class _AddRidePageState extends State<AddRidePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_sweep),
-            onPressed: () => bloc.onRequestClear(),
+            onPressed: bloc.onClearSelection,
           ),
         ],
       ),
@@ -67,16 +69,10 @@ class _AddRidePageState extends State<AddRidePage> {
                 ),
                 Expanded(
                   child: Center(
-                    child: AddRideSubmit(bloc.submitStream,() async {
-                      await bloc.addRides().then((_){
-                        ReloadDataProvider.of(context).reloadRides.value = true;
-                        Navigator.pop(context);
-                      }).catchError((e){
-                        //do nothing with the error
-                        //we throw the error to prevent the onSuccess being called
-                        //the submit handles the 'actual' error in its streambuilder
-                      });
-                    }),
+                    child: AddRideSubmit(
+                      stream: bloc.submitStream,
+                      onPressed: _onSubmit,
+                    ),
                   ),
                 ),
               ],
@@ -93,7 +89,7 @@ class _AddRidePageState extends State<AddRidePage> {
         transitionBetweenRoutes: false,
         trailing: CupertinoIconButton.fromAppTheme(
           icon: Icons.delete_sweep,
-          onPressed: () => bloc.onRequestClear(),
+          onPressed: bloc.onClearSelection,
         ),
         middle: Text(S.of(context).AddRideTitle),
       ),
@@ -114,14 +110,10 @@ class _AddRidePageState extends State<AddRidePage> {
                     ),
                     Expanded(
                       child: Center(
-                        child: AddRideSubmit(bloc.submitStream,() async {
-                          await bloc.addRides().then((_){
-                            ReloadDataProvider.of(context).reloadRides.value = true;
-                            Navigator.pop(context);
-                          }).catchError((e){
-                            //do nothing with the error
-                          });
-                        }),
+                        child: AddRideSubmit(
+                          stream: bloc.submitStream,
+                          onPressed: _onSubmit,
+                        ),
                       ),
                     ),
                   ],
@@ -142,7 +134,7 @@ class _AddRidePageState extends State<AddRidePage> {
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
               return Center(
-                child: Text(S.of(context).AddRideLoadingFailed),
+                child: Text(S.of(context).GenericError),
               );
             }
             else{
@@ -157,6 +149,13 @@ class _AddRidePageState extends State<AddRidePage> {
           }
         }
     );
+  }
+
+  void _onSubmit() async {
+    await bloc.addRides().then((_){
+      ReloadDataProvider.of(context).reloadRides.value = true;
+      Navigator.pop(context);
+    }).catchError(bloc.onError);
   }
 
   @override

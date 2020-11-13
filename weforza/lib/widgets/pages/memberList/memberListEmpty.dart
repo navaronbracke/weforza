@@ -16,10 +16,10 @@ class MemberListEmpty extends StatelessWidget {
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
-          SizedBox(height: 5),
-          Text(S.of(context).MemberListNoItems),
-          SizedBox(height: 5),
-          Text(S.of(context).MemberListAddMemberInstruction)
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Text(S.of(context).ListEmpty),
+          ),
         ],
       ),
     );

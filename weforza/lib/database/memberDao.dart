@@ -2,6 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -14,8 +15,8 @@ abstract class IMemberDao {
   ///Update a [Member].
   Future<void> updateMember(Member member);
 
-  ///Get all [Member]s.
-  Future<List<Member>> getMembers();
+  ///Get the [Member]s, using the given [MemberFilterOption].
+  Future<List<Member>> getMembers(MemberFilterOption filterOption);
 
   ///Check if a [Member] with the given values exists.
   ///If [uuid] is null or empty, it checks whether there is a member with the given values.
@@ -31,6 +32,9 @@ abstract class IMemberDao {
   ///Get the member with the given UUID.
   ///Returns null if it doesn't exist.
   Future<Member> getMemberByUuid(String uuid);
+
+  /// Set the active state for a given member to the new value.
+  Future<void> setMemberActive(String uuid, bool value);
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -86,10 +90,16 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<List<Member>> getMembers() async {
+  Future<List<Member>> getMembers(MemberFilterOption filterOption) async {
     final Finder finder = Finder(
         sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("alias")]
     );
+
+    switch(filterOption){
+      case MemberFilterOption.ACTIVE: finder.filter = Filter.equals("active", true); break;
+      case MemberFilterOption.INACTIVE: finder.filter = Filter.equals("active", false); break;
+      default: break;
+    }
 
     final Iterable<Member> members = await _memberStore.find(_database,finder: finder).then((records){
       return records.map((record)=> Member.of(record.key, record.value));
@@ -138,5 +148,26 @@ class MemberDao implements IMemberDao {
     final record = await _memberStore.record(uuid).getSnapshot(_database);
 
     return record == null ? null : Member.of(uuid, record.value);
+  }
+
+  @override
+  Future<void> setMemberActive(String uuid, bool value) async {
+    final record = _memberStore.record(uuid);
+
+    if(await record.exists(_database)){
+      await record.update(_database, { "active": value});
+    }
+  }
+
+  //TODO remove migration when done.
+  // This migration adds the 'active' flag to all members.
+  // Each member is active by default.
+  Future<void> addActiveFlagToMemberRecords() async {
+    final records = _memberStore.records(await _memberStore.findKeys(_database));
+
+    await _database.transaction((transaction) async {
+      final updates = records.keys.map((_) => { "active": true }).toList();
+      await records.update(transaction, updates);
+    });
   }
 }

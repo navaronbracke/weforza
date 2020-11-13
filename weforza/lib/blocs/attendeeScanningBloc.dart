@@ -91,6 +91,9 @@ class AttendeeScanningBloc extends Bloc {
   /// This way we can easily map scanned device names to it.
   HashMap<String, Member> _members = HashMap();
 
+  /// This list holds all the devices that are used during the owner lookup.
+  List<Device> _devices;
+
   /// This collection keeps track of a specific set of owners.
   /// If a device with multiple possible owners is scanned,
   /// the owners that aren't scanned yet (by finding a device only they own)
@@ -170,20 +173,18 @@ class AttendeeScanningBloc extends Bloc {
   // Load the active members & all devices in parallel.
   // When both are loaded, filter out the devices that don't belong to any active owners.
   Future<void> _loadMembersAndDevices() async {
-    List<Device> devices;
-
     await Future.wait([
       _loadMembers(),
-      _loadDevices(devices)
+      _loadDevices()
     ]);
 
     // Keep the devices that are owned by active members.
     // The _members variable contains all active members.
     // If there is no key for the given device owner, that owner either isn't active or doesn't exist.
-    devices = devices.where((device) => _members[device.ownerId] != null);
+    _devices = _devices.where((device) => _members[device.ownerId] != null).toList();
 
     // Now group the uuid's of the owners by device name.
-    for (Device device in devices){
+    for (Device device in _devices){
       if(ownersGroupedByDevice.containsKey(device.name)){
         // Append the owner uuid to the list of owners for this device.
         ownersGroupedByDevice[device.name].add(device.ownerId);
@@ -194,8 +195,8 @@ class AttendeeScanningBloc extends Bloc {
     }
   }
 
-  Future<void> _loadDevices(List<Device> collection) async {
-    collection = await deviceRepo.getAllDevices();
+  Future<void> _loadDevices() async {
+    _devices = await deviceRepo.getAllDevices();
   }
 
   /// Load the active members.

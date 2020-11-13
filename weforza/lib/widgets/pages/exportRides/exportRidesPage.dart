@@ -4,7 +4,7 @@ import 'package:weforza/blocs/exportRidesBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/rideExportState.dart';
+import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/fileExtensionSelection.dart';
@@ -59,15 +59,44 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
   }
 
   Widget _buildBody(BuildContext context){
-    return StreamBuilder<RideExportState>(
-      stream: bloc.submitStream,
-      initialData: RideExportState.IDLE,
+    return StreamBuilder<ExportDataOrError>(
+      stream: bloc.stream,
+      initialData: ExportDataOrError.idle(),
       builder: (context, snapshot){
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
-        }else {
-          switch(snapshot.data){
-            case RideExportState.IDLE: return Form(
+        }else{
+          if(snapshot.data.exporting){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: PlatformAwareLoadingIndicator(),
+                ),
+                Text(S.of(context).ExportingRidesDescription),
+              ],
+            );
+          }else if(snapshot.data.success){
+            return LayoutBuilder(
+              builder: (context,constraints){
+                final paintSize = constraints.biggest.shortestSide * .3;
+                return Center(
+                    child: SizedBox(
+                      width: paintSize,
+                      height: paintSize,
+                      child: Center(
+                        child: AnimatedCheckmark(
+                          color: ApplicationTheme.accentColor,
+                          size: Size.square(paintSize),
+                        ),
+                      ),
+                    )
+                );
+              },
+            );
+          }else{
+            return Form(
               key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -87,11 +116,11 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: StreamBuilder<String>(
-                        initialData: "",
-                        stream: bloc.fileNameErrorStream,
+                      child: StreamBuilder<bool>(
+                        initialData: false,
+                        stream: bloc.fileNameExistsStream,
                         builder: (context, snapshot){
-                          return Text(snapshot.data);
+                          return Text(snapshot.data ? S.of(context).FileExists : "");
                         },
                       ),
                     ),
@@ -102,7 +131,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await bloc.exportRidesWithAttendees(S.of(context).FileExists);
+                            await bloc.exportRidesWithAttendees();
                           }
                         },
                       ),
@@ -110,7 +139,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
-                            await bloc.exportRidesWithAttendees(S.of(context).FileExists);
+                            await bloc.exportRidesWithAttendees();
                           }else {
                             setState(() {});
                           }
@@ -121,34 +150,6 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                 ),
               ),
             );
-            case RideExportState.EXPORTING: return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: PlatformAwareLoadingIndicator(),
-                ),
-                Text(S.of(context).ExportingRidesDescription),
-              ],
-            );
-            case RideExportState.DONE: return LayoutBuilder(
-              builder: (context,constraints){
-                final paintSize = constraints.biggest.shortestSide * .3;
-                return Center(
-                    child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.accentColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
-              },
-            );
-            default: return GenericError(text: S.of(context).GenericError);
           }
         }
       },

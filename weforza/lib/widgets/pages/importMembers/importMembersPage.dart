@@ -81,8 +81,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 PlatformAwareLoadingIndicator(),
-                SizedBox(height: 10),
-                Text(S.of(context).ImportMembersImporting, softWrap: true),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(S.of(context).ImportMembersImporting, softWrap: true),
+                ),
               ],
             );
             case ImportMembersState.DONE: return Center(
@@ -146,8 +148,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             style: ApplicationTheme.importWarningTextStyle,
             softWrap: true
         ),
-        SizedBox(height: 10),
-        _buildButton(context),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: _buildButton(context),
+        ),
       ],
     );
   }
@@ -161,8 +165,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             style: ApplicationTheme.importWarningTextStyle,
             softWrap: true
         ),
-        SizedBox(height: 10),
-        _buildButton(context),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: _buildButton(context),
+        ),
       ],
     );
   }
@@ -176,9 +182,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             style: ApplicationTheme.importWarningTextStyle,
             softWrap: true
         ),
-        SizedBox(height: 10),
-        _buildButton(context),
-        SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: _buildButton(context),
+        ),
         LayoutBuilder(
           builder: (context, constraints){
             return SizedBox(
@@ -212,8 +219,10 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(""),
-        SizedBox(height: 10),
-        _buildButton(context),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: _buildButton(context),
+        ),
       ],
     );
   }

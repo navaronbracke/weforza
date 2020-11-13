@@ -52,18 +52,20 @@ class ImportMembersDao implements IImportMembersDao {
 
     members.forEach((ExportableMember exportableMember) {
       final ImportableMember key = ImportableMember(
-          firstName: exportableMember.firstName,
-          lastName: exportableMember.lastName,
-          alias: exportableMember.alias
+        firstName: exportableMember.firstName,
+        lastName: exportableMember.lastName,
+        alias: exportableMember.alias,
       );
 
       if(existingMembers[key] == null){
         // This is a new member.
         final Member member = Member(
-            generateId(),
-            exportableMember.firstName,
-            exportableMember.lastName,
-            exportableMember.alias
+          uuid: generateId(),
+          firstname: exportableMember.firstName,
+          lastname: exportableMember.lastName,
+          alias: exportableMember.alias,
+          isActiveMember: exportableMember.isActiveMember,
+          profileImageFilePath: null,
         );
 
         // Add a Member object to membersToImport.

@@ -80,11 +80,11 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
           child: ButtonBar(
             children: <Widget>[
               FlatButton(
-                child: Text(S.of(context).DialogCancel.toUpperCase()),
+                child: Text(S.of(context).Cancel.toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               FlatButton(
-                child: Text(S.of(context).DialogDelete.toUpperCase()),
+                child: Text(S.of(context).Delete.toUpperCase()),
                 textColor: ApplicationTheme.deleteItemButtonTextColor,
                 onPressed: () => _onConfirmDeletion(),
               ),
@@ -131,7 +131,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
           child: ButtonBar(
             children: <Widget>[
               FlatButton(
-                child: Text(S.of(context).DialogDismiss.toUpperCase()),
+                child: Text(S.of(context).Ok.toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
@@ -217,7 +217,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
               Flexible(
                 child: Center(
                   child: CupertinoDialogAction(
-                    child: Text(S.of(context).DialogCancel),
+                    child: Text(S.of(context).Cancel),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -226,7 +226,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
                 child: Center(
                   child: CupertinoDialogAction(
                     child: Text(
-                      S.of(context).DialogDelete,
+                      S.of(context).Delete,
                       style: TextStyle(
                         color: ApplicationTheme.deleteItemButtonTextColor
                         ),
@@ -300,7 +300,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
               Expanded(
                 child: Center(
                   child: CupertinoDialogAction(
-                    child: Text(S.of(context).DialogDismiss),
+                    child: Text(S.of(context).Ok),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),

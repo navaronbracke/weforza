@@ -4,6 +4,7 @@ import 'package:weforza/blocs/exportMembersBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/fileExtensionSelection.dart';
@@ -24,7 +25,9 @@ class ExportMembersPage extends StatefulWidget {
 }
 
 class _ExportMembersPageState extends State<ExportMembersPage> {
-  _ExportMembersPageState({@required this.bloc}) :assert(bloc != null);
+  _ExportMembersPageState({
+    @required this.bloc
+  }): assert(bloc != null);
 
   final ExportMembersBloc bloc;
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -57,15 +60,44 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
   }
 
   Widget _buildBody(BuildContext context){
-    return StreamBuilder<MembersExportState>(
+    return StreamBuilder<ExportDataOrError>(
       stream: bloc.stream,
-      initialData: MembersExportState.IDLE,
+      initialData: ExportDataOrError.idle(),
       builder: (context, snapshot){
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
         }else {
-          switch(snapshot.data){
-            case MembersExportState.IDLE: return Form(
+          if(snapshot.data.exporting){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: PlatformAwareLoadingIndicator(),
+                ),
+                Text(S.of(context).ExportingMembersDescription),
+              ],
+            );
+          }else if(snapshot.data.success){
+            return LayoutBuilder(
+              builder: (context,constraints){
+                final paintSize = constraints.biggest.shortestSide * .3;
+                return Center(
+                    child: SizedBox(
+                      width: paintSize,
+                      height: paintSize,
+                      child: Center(
+                        child: AnimatedCheckmark(
+                          color: ApplicationTheme.accentColor,
+                          size: Size.square(paintSize),
+                        ),
+                      ),
+                    )
+                );
+              },
+            );
+          }else{
+            return Form(
               key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -85,12 +117,10 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: StreamBuilder<String>(
-                        initialData: "",
-                        stream: bloc.fileNameErrorStream,
-                        builder: (context, snapshot){
-                          return Text(snapshot.data);
-                        },
+                      child: StreamBuilder<bool>(
+                        initialData: false,
+                        stream: bloc.filenameExistsStream,
+                        builder: (context, snapshot) => Text(snapshot.data ? S.of(context).FileExists : ""),
                       ),
                     ),
                     PlatformAwareWidget(
@@ -100,7 +130,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader, S.of(context).FileExists);
+                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
                           }
                         },
                       ),
@@ -108,7 +138,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader, S.of(context).FileExists);
+                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
                           }else {
                             setState(() {});
                           }
@@ -119,34 +149,6 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                 ),
               ),
             );
-            case MembersExportState.EXPORTING: return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: PlatformAwareLoadingIndicator(),
-                ),
-                Text(S.of(context).ExportingMembersDescription),
-              ],
-            );
-            case MembersExportState.DONE: return LayoutBuilder(
-              builder: (context,constraints){
-                final paintSize = constraints.biggest.shortestSide * .3;
-                return Center(
-                    child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.accentColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
-              },
-            );
-            default: return GenericError(text: S.of(context).GenericError);
           }
         }
       },

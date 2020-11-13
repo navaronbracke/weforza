@@ -47,7 +47,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           builder: (_) => DeleteItemDialog(
             title: S.of(context).DeleteDeviceTitle,
             description: S.of(context).DeleteDeviceDescription,
-            errorDescription: S.of(context).DeleteDeviceErrorDescription,
+            errorDescription: S.of(context).GenericError,
             onDelete: () => widget.onDelete(device, widget.index),
           ),
       ),
@@ -65,7 +65,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
         builder: (_) => DeleteItemDialog(
           title: S.of(context).DeleteDeviceTitle,
           description: S.of(context).DeleteDeviceDescription,
-          errorDescription: S.of(context).DeleteDeviceErrorDescription,
+          errorDescription: S.of(context).GenericError,
           onDelete: () => widget.onDelete(device, widget.index),
         ),
       ),

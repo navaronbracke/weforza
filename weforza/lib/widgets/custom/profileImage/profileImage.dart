@@ -11,12 +11,12 @@ class ProfileImage extends StatelessWidget {
     this.image,
     this.size = 75,
     @required this.icon,
-    this.iconColor = ApplicationTheme.profileImagePlaceholderIconColor,
-    this.backgroundColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
+    this.iconColor,
+    this.backgroundColor,
     this.personInitials,
   }): assert(
-    icon != null && iconColor != null && backgroundColor
-        != null && size != null && size > 0
+    icon != null && iconColor != null &&
+        backgroundColor != null && size != null && size > 0
   );
 
   ///The image to show.

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
@@ -34,6 +35,8 @@ class AsyncProfileImage extends StatelessWidget {
               image: null,
               size: size,
               personInitials: personInitials,
+              iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
+              backgroundColor: ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
             );
           }
 
@@ -42,6 +45,8 @@ class AsyncProfileImage extends StatelessWidget {
             image: snapshot.data,
             size: size,
             personInitials: personInitials,
+            iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
+            backgroundColor: ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
           );
         }else{
           return SizedBox(

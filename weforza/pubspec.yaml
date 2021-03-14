@@ -41,10 +41,10 @@ dependencies:
   uuid: ^2.0.4
 
   # The intl package provides translation utilities.
-  intl: ^0.16.1
+  intl: ^0.17.0
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^3.0.1
+  jiffy: ^4.0.0
 
   # RxDart provides extensions to Dart Streams.
   rxdart: ^0.24.1

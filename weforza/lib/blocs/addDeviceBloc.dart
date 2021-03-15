@@ -74,7 +74,7 @@ class AddDeviceBloc extends Bloc {
     final bool exists = await repository.deviceExists(_newDeviceName, ownerId).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
-      return Future.error(genericErrorMessage);
+      return Future<bool>.error(genericErrorMessage);
     });
 
     if(exists){

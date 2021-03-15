@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="600" viewBox="0 0 600 600">
+  <g id="icon-outer-arc-1" transform="translate(18 4.5)">
+    <path id="Path_1" data-name="Path 1" d="M142.1,440.6c-80.133-80.138-80.133-210.062,0-290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
+  </g>
+  <g id="icon-outer-arc-2" transform="translate(-11 4.5)">
+    <path id="Path_2" data-name="Path 2" d="M450.9,150.4c80.133,80.138,80.133,210.062,0,290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
+  </g>
+  <g id="icon-inner-arc-1" transform="translate(8.8 4.4)">
+    <path id="Path_3" data-name="Path 3" d="M201.6,381a120.711,120.711,0,0,1,0-170.8" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="7.948"/>
+  </g>
+  <g id="icon-inner-arc-2" transform="translate(-0.6 4.5)">
+    <path id="Path_4" data-name="Path 4" d="M390.2,210.1a120.711,120.711,0,0,1,0,170.8" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="7.948"/>
+  </g>
+  <g id="icon-letter-W" transform="translate(1.408 -4.86)">
+    <path id="Path_5" data-name="Path 5" d="M129.025-85.576,105.979,0H81.553L66.208-55.748,51.265,0H26.84L3.793-85.576H26.84L40-26.667,55.748-85.576H77.76l15,58.909,13.793-58.909Z" transform="translate(232.183 245.336)" fill="#fff"/>
+  </g>
+  <g id="icon-letter-F" transform="translate(2.284 -6.439)">
+    <path id="Path_6" data-name="Path 6" d="M82.835-79.144H37.694V-60.89H79.54v18.979H37.694V0H12.521V-98.123H82.835Z" transform="translate(250.038 451.539)" fill="#fff"/>
+  </g>
+</svg>

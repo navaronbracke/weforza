@@ -123,7 +123,9 @@ abstract class ApplicationTheme {
      return ThemeData(
        primaryColor: primaryColor,
        accentColor: accentColor,
-       splashColor: accentColor.withAlpha(150)
+       splashColor: accentColor.withAlpha(150),
+       // We need dark here, so the status bar gets a white text color.
+       appBarTheme: AppBarTheme(brightness: Brightness.dark)
      );
   }
 

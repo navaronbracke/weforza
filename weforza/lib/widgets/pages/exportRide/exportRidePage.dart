@@ -119,9 +119,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     ),
                   ),
                   PlatformAwareWidget(
-                    android: () => RaisedButton(
-                      textColor: Colors.white,
-                      color: ApplicationTheme.primaryColor,
+                    android: () => ElevatedButton(
                       child: Text(S.of(context).Export),
                       onPressed: (){
                         if(_formKey.currentState.validate()){

@@ -23,11 +23,8 @@ class ManualSelectionSubmit extends StatelessWidget {
           return PlatformAwareWidget(
             android: () => Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: isSaving ? PlatformAwareLoadingIndicator() : FlatButton(
-                child: Text(
-                    S.of(context).Save,
-                    style: TextStyle(color: ApplicationTheme.primaryColor)
-                ),
+              child: isSaving ? PlatformAwareLoadingIndicator() : TextButton(
+                child: Text(S.of(context).Save),
                 onPressed: onSave,
               ),
             ),

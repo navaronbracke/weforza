@@ -38,21 +38,14 @@ class ScanPermissionDenied extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        RaisedButton(
-          color: ApplicationTheme.primaryColor,
-          child: Text(
-            S.of(context).RideAttendeeScanningGoToSettings,
-            style: TextStyle(color: Colors.white),
-          ),
+        ElevatedButton(
+          child: Text(S.of(context).RideAttendeeScanningGoToSettings),
           onPressed: () async => await openAppSettings(),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: FlatButton(
-            child: Text(
-              S.of(context).GoBack,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
-            ),
+          child: TextButton(
+            child: Text(S.of(context).GoBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

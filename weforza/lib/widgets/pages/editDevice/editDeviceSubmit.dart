@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -42,12 +41,8 @@ class EditDeviceSubmit extends StatelessWidget {
               stream: isSubmittingStream,
               builder: (context,snapshot) => snapshot.data ? PlatformAwareLoadingIndicator() :
               PlatformAwareWidget(
-                android: () => RaisedButton(
-                  color: ApplicationTheme.primaryColor,
-                  child: Text(
-                    S.of(context).SaveChanges,
-                    style: TextStyle(color: Colors.white),
-                  ),
+                android: () => ElevatedButton(
+                  child: Text(S.of(context).SaveChanges),
                   onPressed: onSubmit,
                 ),
                 ios: () => CupertinoButton.filled(

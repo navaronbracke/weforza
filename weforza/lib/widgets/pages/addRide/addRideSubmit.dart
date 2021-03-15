@@ -56,13 +56,9 @@ class AddRideSubmit extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context) => PlatformAwareWidget(
-    android: () => RaisedButton(
-        color: Theme.of(context).primaryColor,
-        child: Text(
-            S.of(context).AddRideSubmit,
-            style:TextStyle(color: Colors.white)
-        ),
-        onPressed: onPressed
+    android: () => ElevatedButton(
+      child: Text(S.of(context).AddRideSubmit),
+      onPressed: onPressed,
     ),
     ios: () => CupertinoButton.filled(
       pressedOpacity: 0.5,

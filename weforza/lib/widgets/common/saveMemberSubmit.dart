@@ -30,12 +30,8 @@ class SaveMemberSubmit extends StatelessWidget {
   Widget build(BuildContext context){
     // Create the submit button in advance, for reuse later.
     final Widget button = PlatformAwareWidget(
-      android: () => RaisedButton(
-        color: Theme.of(context).primaryColor,
-        child: Text(
-            submitButtonLabel,
-            style: TextStyle(color: Colors.white)
-        ),
+      android: () => ElevatedButton(
+        child: Text(submitButtonLabel),
         onPressed: onPressed,
       ),
       ios: () => CupertinoButton.filled(

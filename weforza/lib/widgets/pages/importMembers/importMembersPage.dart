@@ -122,12 +122,9 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
 
   Widget _buildButton(BuildContext context){
     return PlatformAwareWidget(
-      android: () => FlatButton(
+      android: () => TextButton(
         onPressed: () => onImportMembers(context),
-        child: Text(
-          S.of(context).ImportMembersPickFile,
-          style: TextStyle(color: ApplicationTheme.primaryColor),
-        ),
+        child: Text(S.of(context).ImportMembersPickFile),
       ),
       ios: () => CupertinoButton(
         child: Text(

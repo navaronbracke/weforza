@@ -72,9 +72,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
         PlatformAwareWidget(
           android: () => Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: FlatButton(
+            child: TextButton(
               onPressed: widget.onAddDeviceButtonPressed,
-              child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+              child: Text(S.of(context).AddDeviceTitle),
             ),
           ),
           ios: () => Padding(
@@ -83,7 +83,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
               onPressed: widget.onAddDeviceButtonPressed,
               child: Text(
                 S.of(context).AddDeviceTitle,
-                style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+                style: ApplicationTheme.iosButtonTextStyle,
               ),
             ),
           ),

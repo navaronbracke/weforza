@@ -79,7 +79,7 @@ class EditDeviceBloc extends Bloc {
     final bool exists = await repository.deviceExists(deviceName, deviceOwnerId, deviceCreationDate).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
-      return Future.error(genericErrorMessage);
+      return Future<bool>.error(genericErrorMessage);
     });
 
     if(exists){
@@ -93,7 +93,7 @@ class EditDeviceBloc extends Bloc {
       }).catchError((error){
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
-        return Future.error(genericErrorMessage);
+        return Future<Device>.error(genericErrorMessage);
       });
     }
   }

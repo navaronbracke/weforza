@@ -93,6 +93,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
   @override
   void dispose() {
     InjectionContainer.get<ApplicationDatabase>().dispose();
+    InjectionContainer.dispose();
     super.dispose();
   }
 }

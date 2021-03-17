@@ -1,4 +1,3 @@
-import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/deviceDao.dart';

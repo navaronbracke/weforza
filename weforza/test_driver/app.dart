@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_driver/driver_extension.dart';
-import 'package:weforza/injection/injector.dart';
+import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/main.dart' as app;
 
 ///This file enables the Flutter Driver extension,

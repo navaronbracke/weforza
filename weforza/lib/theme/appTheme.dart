@@ -90,6 +90,7 @@ abstract class ApplicationTheme {
 
   static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
+  static final TextStyle settingsResetRideCalendarDescriptionTextStyle = TextStyle(fontSize: 12, fontStyle: FontStyle.italic);
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;

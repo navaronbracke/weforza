@@ -154,6 +154,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "SaveChanges" : MessageLookupByLibrary.simpleMessage("Save changes"),
     "Settings" : MessageLookupByLibrary.simpleMessage("Instellingen"),
     "SettingsLoading" : MessageLookupByLibrary.simpleMessage("Instellingen Laden"),
+    "SettingsResetRideCalendarButtonLabel" : MessageLookupByLibrary.simpleMessage("Rittenkalender Resetten"),
+    "SettingsResetRideCalendarDescription" : MessageLookupByLibrary.simpleMessage("Dit zal alle ritten verwijderen. De aanwezigheden worden terug op nul gezet."),
     "SettingsScanSliderHeader" : MessageLookupByLibrary.simpleMessage("Duur van een scan (in seconden)"),
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Zo"),
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),

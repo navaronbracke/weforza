@@ -120,6 +120,8 @@
 
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
+  "SettingsResetRideCalendarButtonLabel": "Rittenkalender Resetten",
+  "SettingsResetRideCalendarDescription": "Dit zal alle ritten verwijderen. De aanwezigheden worden terug op nul gezet.",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

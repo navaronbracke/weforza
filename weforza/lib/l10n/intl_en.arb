@@ -19,7 +19,7 @@
   "Delete": "Delete",
   "Cancel": "Cancel",
   "Ok": "Ok",
-  "Attendees": "Attendees",
+  "Attendees": "Attendants",
   "Details": "Details",
   "Devices": "Devices",
   "SaveChanges": "Save changes",
@@ -32,7 +32,7 @@
 
   "ListEmpty": "There is nothing to show",
 
-  "RideDetailsNoAttendees": "This ride has no attendees",
+  "RideDetailsNoAttendees": "This ride has no attendants",
 
   "RideDeleteDialogTitle": "Delete Ride",
   "RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",
@@ -96,7 +96,7 @@
   "ExportRideExportingToFile": "Exporting ride to file",
 
   "ExportRidesTitle": "Export Rides",
-  "ExportingRidesDescription": "Exporting rides and attendees",
+  "ExportingRidesDescription": "Exporting rides and attendants",
 
   "ExportMembersTitle": "Export Riders",
   "ExportingMembersDescription": "Exporting riders and devices",
@@ -120,6 +120,12 @@
 
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
+  "SettingsResetRideCalendarButtonLabel": "Reset Ride Calendar",
+  "SettingsResetRideCalendarDescription": "This will remove all rides. The attendances will be reset to zero.",
+  "SettingsResetRideCalendarErrorMessage": "Could not reset the ride calendar.",
+  "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
+  "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
+  "SettingsResetRideCalendarDialogConfirm": "Clear Calendar",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

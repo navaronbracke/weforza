@@ -21,11 +21,9 @@ class RideListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
-    final Color textColor = ride.date.month % 2 == 0 ?
-      ApplicationTheme.rideListItemEvenMonthColor:
-      ApplicationTheme.rideListItemOddMonthColor;
-
-    final textStyle = TextStyle(color: textColor);
+    final textStyle = ride.date.month % 2 == 0 ? TextStyle(
+      color: ApplicationTheme.rideListItemEvenMonthColor,
+    ) : TextStyle();
 
     final content = Row(
       children: <Widget>[

@@ -14,7 +14,7 @@ class RideRepository {
 
   Future<void> deleteRide(DateTime date) => _dao.deleteRide(date);
 
-  Future<void> deleteAllRides() => _dao.deleteAllRides();
+  Future<void> deleteRideCalendar() => _dao.deleteRideCalendar();
 
   Future<List<Ride>> getRides() => _dao.getRides();
 

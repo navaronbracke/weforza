@@ -1065,6 +1065,16 @@ class S {
     );
   }
 
+  /// `Clear Calendar`
+  String get SettingsResetRideCalendarDialogConfirm {
+    return Intl.message(
+      'Clear Calendar',
+      name: 'SettingsResetRideCalendarDialogConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `First Name`
   String get PersonFirstNameLabel {
     return Intl.message(

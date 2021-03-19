@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/resetRideCalendarBloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injector.dart';
+import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';

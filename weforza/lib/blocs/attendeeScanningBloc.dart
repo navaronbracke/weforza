@@ -166,8 +166,9 @@ class AttendeeScanningBloc extends Bloc {
 
   ///Load the application settings.
   Future<void> _loadSettings() async {
-    await settingsRepo.loadApplicationSettings();
-    scanDuration = settingsRepo.instance.scanDuration;
+    final settings = await settingsRepo.loadApplicationSettings();
+
+    scanDuration = settings.scanDuration;
   }
 
   Future<List<Member>> loadActiveMembers(){

@@ -195,10 +195,10 @@ class S {
     );
   }
 
-  /// `Attendees`
+  /// `Attendants`
   String get Attendees {
     return Intl.message(
-      'Attendees',
+      'Attendants',
       name: 'Attendees',
       desc: '',
       args: [],
@@ -305,10 +305,10 @@ class S {
     );
   }
 
-  /// `This ride has no attendees`
+  /// `This ride has no attendants`
   String get RideDetailsNoAttendees {
     return Intl.message(
-      'This ride has no attendees',
+      'This ride has no attendants',
       name: 'RideDetailsNoAttendees',
       desc: '',
       args: [],
@@ -815,10 +815,10 @@ class S {
     );
   }
 
-  /// `Exporting rides and attendees`
+  /// `Exporting rides and attendants`
   String get ExportingRidesDescription {
     return Intl.message(
-      'Exporting rides and attendees',
+      'Exporting rides and attendants',
       name: 'ExportingRidesDescription',
       desc: '',
       args: [],
@@ -1010,6 +1010,66 @@ class S {
     return Intl.message(
       'Loading Settings',
       name: 'SettingsLoading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Ride Calendar`
+  String get SettingsResetRideCalendarButtonLabel {
+    return Intl.message(
+      'Reset Ride Calendar',
+      name: 'SettingsResetRideCalendarButtonLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This will remove all rides. The attendances will be reset to zero.`
+  String get SettingsResetRideCalendarDescription {
+    return Intl.message(
+      'This will remove all rides. The attendances will be reset to zero.',
+      name: 'SettingsResetRideCalendarDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not reset the ride calendar.`
+  String get SettingsResetRideCalendarErrorMessage {
+    return Intl.message(
+      'Could not reset the ride calendar.',
+      name: 'SettingsResetRideCalendarErrorMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Calendar`
+  String get SettingsResetRideCalendarDialogTitle {
+    return Intl.message(
+      'Reset Calendar',
+      name: 'SettingsResetRideCalendarDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure that you want to remove all the rides?`
+  String get SettingsResetRideCalendarDialogDescription {
+    return Intl.message(
+      'Are you sure that you want to remove all the rides?',
+      name: 'SettingsResetRideCalendarDialogDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear Calendar`
+  String get SettingsResetRideCalendarDialogConfirm {
+    return Intl.message(
+      'Clear Calendar',
+      name: 'SettingsResetRideCalendarDialogConfirm',
       desc: '',
       args: [],
     );

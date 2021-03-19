@@ -1035,6 +1035,36 @@ class S {
     );
   }
 
+  /// `Could not reset the ride calendar.`
+  String get SettingsResetRideCalendarErrorMessage {
+    return Intl.message(
+      'Could not reset the ride calendar.',
+      name: 'SettingsResetRideCalendarErrorMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Calendar`
+  String get SettingsResetRideCalendarDialogTitle {
+    return Intl.message(
+      'Reset Calendar',
+      name: 'SettingsResetRideCalendarDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure that you want to remove all the rides?`
+  String get SettingsResetRideCalendarDialogDescription {
+    return Intl.message(
+      'Are you sure that you want to remove all the rides?',
+      name: 'SettingsResetRideCalendarDialogDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `First Name`
   String get PersonFirstNameLabel {
     return Intl.message(

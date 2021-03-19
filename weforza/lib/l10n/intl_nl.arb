@@ -122,6 +122,9 @@
   "SettingsLoading": "Instellingen Laden",
   "SettingsResetRideCalendarButtonLabel": "Rittenkalender Resetten",
   "SettingsResetRideCalendarDescription": "Dit zal alle ritten verwijderen. De aanwezigheden worden terug op nul gezet.",
+  "SettingsResetRideCalendarErrorMessage": "Kon de rittenkalender niet verwijderen.",
+  "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",
+  "SettingsResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injector.dart';
+import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -135,7 +135,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
                     icon: Icons.edit,
-                    onPressed: ()=> () => goToEditMemberPage(context),
+                    onPressed: ()=> goToEditMemberPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15),

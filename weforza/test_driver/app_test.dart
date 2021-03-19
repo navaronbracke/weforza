@@ -1,9 +1,11 @@
+// TODO: When the next stable release is published (the one after 2.0.2) switch back to stable.
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main(){
   group("We Forza App", (){
-    FlutterDriver driver;
+    late FlutterDriver driver;
 
     // Connect to the Flutter driver before running any tests.
     setUpAll(() async {
@@ -12,9 +14,7 @@ void main(){
 
     // Close the connection to the driver after the tests have completed.
     tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
+      await driver.close();
     });
 
     //group()

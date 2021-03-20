@@ -156,7 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "SettingsLoading" : MessageLookupByLibrary.simpleMessage("Instellingen Laden"),
     "SettingsResetRideCalendarButtonLabel" : MessageLookupByLibrary.simpleMessage("Rittenkalender Resetten"),
     "SettingsResetRideCalendarDescription" : MessageLookupByLibrary.simpleMessage("Dit zal alle ritten verwijderen. De aanwezigheden worden terug op nul gezet."),
-    "SettingsResetRideCalendarDialogConfirm" : MessageLookupByLibrary.simpleMessage("Kalender Leegmaken"),
+    "SettingsResetRideCalendarDialogConfirm" : MessageLookupByLibrary.simpleMessage("Resetten"),
     "SettingsResetRideCalendarDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u alle ritten wil verwijderen?"),
     "SettingsResetRideCalendarDialogTitle" : MessageLookupByLibrary.simpleMessage("Kalender Resetten"),
     "SettingsResetRideCalendarErrorMessage" : MessageLookupByLibrary.simpleMessage("Kon de rittenkalender niet verwijderen."),

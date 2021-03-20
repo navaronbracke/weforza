@@ -125,7 +125,7 @@
   "SettingsResetRideCalendarErrorMessage": "Kon de rittenkalender niet verwijderen.",
   "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",
   "SettingsResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
-  "SettingsResetRideCalendarDialogConfirm": "Kalender Leegmaken",
+  "SettingsResetRideCalendarDialogConfirm": "Resetten",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

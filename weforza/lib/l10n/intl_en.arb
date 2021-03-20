@@ -125,7 +125,7 @@
   "SettingsResetRideCalendarErrorMessage": "Could not reset the ride calendar.",
   "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
   "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
-  "SettingsResetRideCalendarDialogConfirm": "Clear Calendar",
+  "SettingsResetRideCalendarDialogConfirm": "Clear",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

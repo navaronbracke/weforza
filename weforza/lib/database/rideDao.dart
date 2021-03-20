@@ -125,9 +125,9 @@ class RideDao implements IRideDao {
   @override
   Future<int> getAmountOfRideAttendees(DateTime rideDate) async {
     //fetch the attendees of the ride
-    final attendees = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals("date", rideDate.toIso8601String())));
+    final attendees = await _rideAttendeeStore.count(_database,
+        filter: Filter.equals("date", rideDate.toIso8601String()));
 
-    return attendees.length;
+    return attendees;
   }
 }

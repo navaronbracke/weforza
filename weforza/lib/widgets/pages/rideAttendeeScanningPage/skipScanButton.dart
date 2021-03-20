@@ -20,6 +20,7 @@ class SkipScanButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
+      initialData: true,
       stream: isScanning,
       builder: (context, snapshot) => Center(
         child: snapshot.data! ? _buildSkipScanButton(context):

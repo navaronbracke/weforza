@@ -97,11 +97,9 @@ class ExportRidesBloc extends Bloc {
 
       rides.forEach((exportedRide) {
         buffer.writeln(exportedRide.ride.toCsv());
-        buffer.writeln();
         for(ExportableRideAttendee attendee in exportedRide.attendees){
           buffer.writeln(attendee.toCsv());
         }
-        buffer.writeln();
       });
 
       await file.writeAsString(buffer.toString());

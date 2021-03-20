@@ -351,7 +351,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             LayoutBuilder(
               builder: (context, constraints) {
                 return SizedBox(
-                  width: constraints.biggest.width,
+                  width: 270,
                   height: 200,
                   child: content,
                 );

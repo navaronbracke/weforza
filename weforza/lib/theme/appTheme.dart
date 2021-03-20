@@ -96,6 +96,7 @@ abstract class ApplicationTheme {
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
   static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
+  static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);

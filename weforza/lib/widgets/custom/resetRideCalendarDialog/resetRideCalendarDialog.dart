@@ -366,7 +366,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
             LayoutBuilder(
               builder: (context, constraints) {
                 return SizedBox(
-                  width: constraints.biggest.width,
+                  width: 270,
                   height: 200,
                   child: content,
                 );

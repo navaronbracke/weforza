@@ -10,11 +10,11 @@ import 'package:flutter/widgets.dart';
 ///This may change when support for the web and or desktop enters stable.
 class PlatformAwareWidget extends StatelessWidget {
   PlatformAwareWidget({
-    @required this.android,
-    @required this.ios,
+    required this.android,
+    required this.ios,
     this.platformHandler = const PlatformAwareWidgetPlatformChecker(),
-    Key key,
-  }): assert(android != null && ios != null && platformHandler != null), super(key: key);
+    Key? key,
+  }): super(key: key);
 
   ///The [Widget] builder for Android.
   final Widget Function() android;
@@ -38,7 +38,8 @@ class PlatformAwareWidget extends StatelessWidget {
     if(platformHandler.isIOS){
       return ios();
     }
-    throw FlutterError("Tried to build for an unsupported Platform");
+
+    throw FlutterError("Cannot build for an unsupported platform.");
   }
 }
 

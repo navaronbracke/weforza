@@ -11,7 +11,7 @@ import 'package:weforza/repository/memberRepository.dart';
 
 ///This is the [Bloc] for AddMemberPage.
 class AddMemberBloc extends Bloc {
-  AddMemberBloc(this._repository): assert(_repository != null);
+  AddMemberBloc(this._repository);
 
   ///The [IMemberRepository] that handles the submit.
   final MemberRepository _repository;
@@ -25,22 +25,22 @@ class AddMemberBloc extends Bloc {
   void onError(Object error) => _submitStateController.addError(error);
 
   ///The actual inputs.
-  String _firstName;
-  String _lastName;
-  String _alias;
-  Future<File> _selectedImage = Future.value(null);
+  String _firstName = "";
+  String _lastName = "";
+  String _alias = "";
+  Future<File?> _selectedImage = Future.value(null);
 
   ///The actual errors.
-  String firstNameError;
-  String lastNameError;
-  String aliasError;
+  String? firstNameError;
+  String? lastNameError;
+  String? aliasError;
 
   final int nameAndAliasMaxLength = 50;
 
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateFirstName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateFirstName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _firstName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -67,7 +67,7 @@ class AddMemberBloc extends Bloc {
   ///Validate [value] according to the last name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateLastName(String value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateLastName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _lastName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -94,12 +94,14 @@ class AddMemberBloc extends Bloc {
   ///Validate [value] according to the alias rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateAlias(String value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateAlias(String? value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
-    if(value.isNotEmpty && value.trim().isEmpty){
+    // Only the empty string is a valid blank value.
+    // null or only spaces are disallowed.
+    if(value == null || value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
     }
     else if(nameAndAliasMaxLength < value.length){
@@ -123,7 +125,7 @@ class AddMemberBloc extends Bloc {
     if(exists){
       return Future.error(SaveMemberOrError.exists());
     }else{
-      final File image = await _selectedImage.catchError((err) => null);
+      final File? image = await _selectedImage.catchError((err) => Future<File?>.value(null));
       final Member member = Member(
         uuid: _uuidGenerator.v4(),
         firstname: _firstName,
@@ -137,9 +139,9 @@ class AddMemberBloc extends Bloc {
     }
   }
 
-  Future<File> get initialImage => _selectedImage;
+  Future<File?> get initialImage => _selectedImage;
   void clearSelectedImage() => _selectedImage = Future.value(null);
-  void setSelectedImage(Future<File> image) => _selectedImage = image;
+  void setSelectedImage(Future<File?> image) => _selectedImage = image;
 
   ///Dispose of this object.
   @override

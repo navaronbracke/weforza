@@ -3,8 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
@@ -16,14 +15,11 @@ import 'package:weforza/repository/rideRepository.dart';
 
 class ExportRideBloc extends Bloc {
   ExportRideBloc({
-    @required this.ride,
-    @required this.fileHandler,
-    @required this.filename,
-    @required this.rideRepository
-  }): assert(
-    ride != null && rideRepository != null && fileHandler != null
-        && filename != null && filename.isNotEmpty
-  ) {
+    required this.ride,
+    required this.fileHandler,
+    required this.filename,
+    required this.rideRepository
+  }): assert(filename.isNotEmpty) {
     fileNameController = TextEditingController(text: filename);
   }
 
@@ -32,7 +28,7 @@ class ExportRideBloc extends Bloc {
   final Ride ride;
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final int filenameMaxLength = 80;
-  TextEditingController fileNameController;
+  late TextEditingController fileNameController;
 
   final StreamController<ExportDataOrError> _streamController = BehaviorSubject();
   Stream<ExportDataOrError> get stream => _streamController.stream;
@@ -40,7 +36,7 @@ class ExportRideBloc extends Bloc {
   final StreamController<bool> _filenameExistsController = BehaviorSubject();
   Stream<bool> get fileNameExistsStream => _filenameExistsController.stream;
 
-  String filename;
+  String filename = "";
 
   FileExtension _fileExtension = FileExtension.CSV;
 
@@ -52,10 +48,10 @@ class ExportRideBloc extends Bloc {
   }
 
   ///Form Error message
-  String filenameError;
+  String? filenameError;
 
-  String validateFileName(
-      String value,
+  String? validateFileName(
+      String? value,
       String fileNameIsRequired,
       String isWhitespaceMessage,
       String filenameNameMaxLengthMessage,
@@ -98,7 +94,9 @@ class ExportRideBloc extends Bloc {
         );
         _streamController.add(ExportDataOrError.success());
       }
-    }).catchError(_streamController.addError);
+    }).catchError((e){
+      _streamController.addError(e);
+    });
   }
 
   ///Save the given ride and attendees to the given file.

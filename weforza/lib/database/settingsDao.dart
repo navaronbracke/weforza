@@ -14,8 +14,7 @@ abstract class ISettingsDao {
 }
 
 class SettingsDao implements ISettingsDao {
-  SettingsDao(this._database, this._settingsStore, this._ridesStore):
-        assert(_database != null && _settingsStore != null && _ridesStore != null);
+  SettingsDao(this._database, this._settingsStore, this._ridesStore);
 
   SettingsDao.withProvider(ApplicationDatabase provider):
         this(provider.getDatabase(), provider.settingsStore, provider.rideStore);

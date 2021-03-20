@@ -9,18 +9,15 @@ import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 
 class MemberListItem extends StatelessWidget {
   MemberListItem({
-    @required this.member,
-    @required this.memberAttendingCount,
-    @required this.memberProfileImage,
-    @required this.onTap
-  }): assert(
-    member != null && memberProfileImage != null &&
-        memberAttendingCount != null && onTap != null
-  );
+    required this.member,
+    required this.memberAttendingCount,
+    required this.memberProfileImage,
+    required this.onTap
+  });
 
   final Member member;
   final Future<int> memberAttendingCount;
-  final Future<File> memberProfileImage;
+  final Future<File?> memberProfileImage;
   final void Function() onTap;
 
   @override

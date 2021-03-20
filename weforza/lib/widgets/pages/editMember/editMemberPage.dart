@@ -24,7 +24,7 @@ class EditMemberPage extends StatefulWidget {
 }
 
 class _EditMemberPageState extends State<EditMemberPage> {
-  _EditMemberPageState(this._fileHandler): assert(_fileHandler != null);
+  _EditMemberPageState(this._fileHandler);
 
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
@@ -32,29 +32,29 @@ class _EditMemberPageState extends State<EditMemberPage> {
   final IFileHandler _fileHandler;
 
   ///The BLoC in charge of the form.
-  EditMemberBloc _bloc;
+  late EditMemberBloc _bloc;
 
-  TextEditingController _firstNameController;
-  TextEditingController _lastNameController;
-  TextEditingController _aliasController;
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _aliasController;
 
   ///The input labels.
-  String _firstNameLabel;
-  String _lastNameLabel;
-  String _aliasLabel;
+  late String _firstNameLabel;
+  late String _lastNameLabel;
+  late String _aliasLabel;
 
   ///Error messages.
-  String _firstNameRequiredMessage;
-  String _lastNameRequiredMessage;
-  String _firstNameMaxLengthMessage;
-  String _firstNameIllegalCharactersMessage;
-  String _firstNameBlankMessage;
-  String _lastNameMaxLengthMessage;
-  String _lastNameIllegalCharactersMessage;
-  String _lastNameBlankMessage;
-  String _aliasMaxLengthMessage;
-  String _aliasIllegalCharactersMessage;
-  String _aliasBlankMessage;
+  late String _firstNameRequiredMessage;
+  late String _lastNameRequiredMessage;
+  late String _firstNameMaxLengthMessage;
+  late String _firstNameIllegalCharactersMessage;
+  late String _firstNameBlankMessage;
+  late String _lastNameMaxLengthMessage;
+  late String _lastNameIllegalCharactersMessage;
+  late String _lastNameBlankMessage;
+  late String _aliasMaxLengthMessage;
+  late String _aliasIllegalCharactersMessage;
+  late String _aliasBlankMessage;
 
   ///The [FocusNode]s for the inputs
   FocusNode _firstNameFocusNode = FocusNode();
@@ -116,20 +116,22 @@ class _EditMemberPageState extends State<EditMemberPage> {
       SelectedItemProvider.of(context).selectedMember.value = member;
       SelectedItemProvider.of(context).selectedMemberProfileImage.value = _bloc.profileImageFuture;
       Navigator.pop(context);
-    }).catchError(_bloc.onError);
+    }).catchError((e){
+      _bloc.onError(e);
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Member member = SelectedItemProvider.of(context).selectedMember.value;
+    final Member member = SelectedItemProvider.of(context).selectedMember.value!;
     _bloc = EditMemberBloc(
       repository: InjectionContainer.get<MemberRepository>(),
       isActiveMember: member.isActiveMember,
       firstName: member.firstname,
       lastName: member.lastname,
       alias: member.alias,
-      profileImageFuture: SelectedItemProvider.of(context).selectedMemberProfileImage.value,
+      profileImageFuture: SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
       id: member.uuid,
     );
     _firstNameController = TextEditingController(text: _bloc.firstName);
@@ -404,7 +406,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
   }
 
   void _onSubmitAndroid(){
-    if (_formKey.currentState.validate()) {
+    final formState = _formKey.currentState;
+
+    if (formState != null && formState.validate()) {
       editMember(context);
     }
   }

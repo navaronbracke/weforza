@@ -1,3 +1,5 @@
+// TODO: When the next stable release is published (the one after 2.0.2) switch back to stable.
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:weforza/injection/injectionContainer.dart';

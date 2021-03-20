@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:meta/meta.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/importMembersFileReader.dart';
 import 'package:weforza/model/device.dart';
@@ -12,8 +11,8 @@ import 'package:weforza/model/member.dart';
 /// This class will read the contents of CSV files.
 class CsvFileReader implements ImportMembersFileReader<String> {
   CsvFileReader({
-    @required this.headerRegex,
-  }): assert(headerRegex != null && headerRegex.isNotEmpty);
+    required this.headerRegex,
+  }): assert(headerRegex.isNotEmpty);
 
   final String headerRegex;
 
@@ -81,6 +80,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
     if(lines.isEmpty) return lines;
 
+    // FIXME: check that the header that is written by the export function is compatible.
     // Check that the header is present.
     if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
       return Future.error(CsvHeaderMissingError());

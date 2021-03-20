@@ -37,8 +37,8 @@ class MemberListPage extends StatefulWidget {
 ///This is the [State] class for [MemberListPage].
 class _MemberListPageState extends State<MemberListPage> {
   _MemberListPageState({
-    @required this.bloc
-  }): assert(bloc != null);
+    required this.bloc
+  });
 
   final MemberListBloc bloc;
 
@@ -82,9 +82,14 @@ class _MemberListPageState extends State<MemberListPage> {
         Padding(
           padding: const EdgeInsets.only(left: 5),
           child: FutureBuilder<int>(
-            future: bloc.membersFuture.then((items) => items.length),
-            builder: (context, snapshot) => snapshot.connectionState == ConnectionState.done &&
-                  !snapshot.hasError ? Text("(${snapshot.data})"): SizedBox.shrink(),
+            future: bloc.membersFuture?.then((items) => items.length),
+            builder: (context, snapshot){
+              if(snapshot.connectionState == ConnectionState.done && !snapshot.hasError){
+                return Text("(${snapshot.data})");
+              }
+
+              return SizedBox.shrink();
+            },
           ),
         )
       ],
@@ -198,9 +203,9 @@ class _MemberListPageState extends State<MemberListPage> {
           if (snapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
           } else {
-            return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
+            return (snapshot.data == null || snapshot.data!.isEmpty) ? MemberListEmpty() : ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data!)
             );
           }
         } else {
@@ -210,7 +215,7 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  void onTapListItem(BuildContext context, Member member, Future<int> attendingCount, Future<File> profileImage){
+  void onTapListItem(BuildContext context, Member member, Future<int> attendingCount, Future<File?> profileImage){
     final provider = SelectedItemProvider.of(context);
     provider.selectedMember.value = member;
     provider.selectedMemberAttendingCount.value = attendingCount;
@@ -223,7 +228,7 @@ class _MemberListPageState extends State<MemberListPage> {
   Widget _buildListItem(BuildContext context, int index, List<Member> members) {
     final Member member = members[index];
     final Future<int> attendingCount = bloc.getMemberAttendingCount(member.uuid);
-    final Future<File> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
+    final Future<File?> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
     return MemberListItem(
         member: member,
         memberProfileImage: profileImage,
@@ -243,10 +248,6 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   void onFilterChanged(MemberFilterOption option, [bool override = false]){
-    if(option == null){
-      return;
-    }
-
     setState(() => bloc.onFilterChanged(option, override));
   }
 

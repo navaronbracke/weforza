@@ -8,21 +8,23 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 /// When the scan is still running it gets skipped.
 class SkipScanButton extends StatelessWidget {
   SkipScanButton({
-    @required this.isScanning,
-    @required this.onPressed,
-    @required this.onSkip,
-  }): assert(isScanning != null && onPressed != null && onSkip != null);
+    required this.isScanning,
+    required this.onPressed,
+    required this.onSkip,
+  });
 
-  final ValueNotifier<bool> isScanning;
+  final Stream<bool> isScanning;
   final VoidCallback onPressed;
   final VoidCallback onSkip;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: isScanning,
-      builder: (context, isScanning, child) => Center(
-          child: isScanning ? _buildSkipScanButton(context): _buildContinueButton(context),
+    return StreamBuilder<bool>(
+      initialData: true,
+      stream: isScanning,
+      builder: (context, snapshot) => Center(
+        child: snapshot.data! ? _buildSkipScanButton(context):
+          _buildContinueButton(context),
       ),
     );
   }

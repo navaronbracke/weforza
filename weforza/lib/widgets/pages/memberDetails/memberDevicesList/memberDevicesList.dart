@@ -13,14 +13,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesList extends StatefulWidget {
   MemberDevicesList({
-    @required this.future,
-    @required this.onDeleteDevice,
-    @required this.onAddDeviceButtonPressed
-  }): assert(
-    future != null && onDeleteDevice != null && onAddDeviceButtonPressed != null
-  );
+    required this.future,
+    required this.onDeleteDevice,
+    required this.onAddDeviceButtonPressed
+  });
 
-  final Future<List<Device>> future;
+  final Future<List<Device>>? future;
   final Future<void> Function(Device device) onDeleteDevice;
   final void Function() onAddDeviceButtonPressed;
 
@@ -43,9 +41,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
                 text: S.of(context).GenericError
             );
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesListEmpty(
+            return snapshot.data == null || snapshot.data!.isEmpty ? MemberDevicesListEmpty(
               onAddDevicePageButtonPressed: widget.onAddDeviceButtonPressed,
-            ): _buildDevicesList(context, snapshot.data);
+            ): _buildDevicesList(context, snapshot.data!);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());
@@ -96,10 +94,13 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
     //delete it from the database
     return widget.onDeleteDevice(device).then((_){
       Navigator.of(context).pop();//get rid of the dialog
-      if(_listKey.currentState != null){
+
+      final listState = _listKey.currentState;
+
+      if(listState != null){
         final device = devices.removeAt(index);//remove it from memory
         //and remove it from the animated list
-        _listKey.currentState.removeItem(index, (context, animation) => SizeTransition(
+        listState.removeItem(index, (context, animation) => SizeTransition(
           sizeFactor: animation,
           child: MemberDevicesListDisabledItem(device: device),
         ));

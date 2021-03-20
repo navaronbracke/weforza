@@ -32,9 +32,9 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideAttendeeScanningPage extends StatefulWidget {
   RideAttendeeScanningPage({
-    @required this.onRefreshAttendees,
-    @required this.fileHandler
-  }): assert(onRefreshAttendees != null && fileHandler != null);
+    required this.onRefreshAttendees,
+    required this.fileHandler
+  });
 
   final void Function() onRefreshAttendees;
   final IFileHandler fileHandler;
@@ -45,7 +45,7 @@ class RideAttendeeScanningPage extends StatefulWidget {
 
 class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
-  AttendeeScanningBloc bloc;
+  late AttendeeScanningBloc bloc;
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
@@ -53,7 +53,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = AttendeeScanningBloc(
-      rideDate: SelectedItemProvider.of(context).selectedRide.value.date,
+      rideDate: SelectedItemProvider.of(context).selectedRide.value!.date,
       settingsRepo: InjectionContainer.get<SettingsRepository>(),
       deviceRepo: InjectionContainer.get<DeviceRepository>(),
       memberRepo: InjectionContainer.get<MemberRepository>(),
@@ -76,7 +76,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
-          isScanStep: bloc.isScanStep,
+          stream: bloc.isScanStep,
         ),
       ),
       body: _buildBody()
@@ -89,7 +89,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
-          isScanStep: bloc.isScanStep,
+          stream: bloc.isScanStep,
         ),
       ),
       child: SafeArea(
@@ -121,7 +121,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 child: Column(
                   children: <Widget>[
                     RideAttendeeScanningProgressIndicator(
-                      valueNotifier: bloc.isScanning,
+                      isScanning: bloc.scanning,
                       getDuration: () => bloc.scanDuration,
                     ),
                     Expanded(
@@ -139,7 +139,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                       ),
                     ),
                     SkipScanButton(
-                      isScanning: bloc.isScanning,
+                      isScanning: bloc.scanning,
                       onSkip: () => bloc.skipScan(),
                       onPressed: () => bloc.tryAdvanceToManualSelection(),
                     ),
@@ -179,7 +179,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   void _onDeviceFound(String deviceName){
     if(_listKey.currentState != null){
       bloc.addScanResult(deviceName);
-      _listKey.currentState.insertItem(0);
+      _listKey.currentState!.insertItem(0);
     }
   }
 
@@ -194,7 +194,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildSaveButton(BuildContext context){
     return ManualSelectionSubmit(
-      isSaving: bloc.isSaving,
+      isSaving: bloc.saving,
       onSave: () => _onSaveScanResults(context),
     );
   }
@@ -208,7 +208,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       personInitials: item.initials,
       isSelected: () => bloc.isItemSelected(item.uuid),
       onTap: (){
-        if(!bloc.isSaving.value){
+        if(bloc.canSelectMember()){
           bloc.onMemberSelected(item.uuid);
         }
       },

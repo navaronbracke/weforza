@@ -75,25 +75,22 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(translator.Cancel.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(false),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(translator.Cancel.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+            TextButton(
+              child: Text(
+                translator.SettingsResetRideCalendarDialogConfirm.toUpperCase(),
               ),
-              TextButton(
-                child: Text(
-                  translator.SettingsResetRideCalendarDialogConfirm.toUpperCase(),
-                ),
-                style: TextButton.styleFrom(
-                  primary: ApplicationTheme.deleteItemButtonTextColor,
-                ),
-                onPressed: () => _onConfirmDeletion(context),
+              style: TextButton.styleFrom(
+                primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
-            ],
-          ),
+              onPressed: () => _onConfirmDeletion(context),
+            ),
+          ],
         ),
       ],
     );
@@ -134,16 +131,13 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(translator.Ok.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-            ],
-          ),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(translator.Ok.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
+          ],
         ),
       ],
     );
@@ -176,11 +170,14 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(
-            // 280 is the minimum width for a material Dialog.
-            width: 280,
-            height: 200,
-            child: content,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SizedBox(
+                width: constraints.biggest.width,
+                height: 200,
+                child: content,
+              );
+            },
           ),
         ],
       ),
@@ -366,10 +363,14 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            SizedBox(
-              width: 270.0,
-              height: 200,
-              child: content,
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return SizedBox(
+                  width: constraints.biggest.width,
+                  height: 200,
+                  child: content,
+                );
+              },
             ),
           ],
         ),

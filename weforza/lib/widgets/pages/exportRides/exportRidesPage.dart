@@ -218,7 +218,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
         S.of(context).FilenameWhitespace,
         S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
         S.of(context).InvalidFilename
-    ) == "";
+    ) == null;
   }
 
   @override

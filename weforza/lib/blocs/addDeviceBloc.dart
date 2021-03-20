@@ -31,7 +31,7 @@ class AddDeviceBloc extends Bloc {
   );
 
   ///Form Error message
-  String addDeviceError = "";
+  String? addDeviceError;
 
   ///This controller manages the submit button/loading indicator.
   final StreamController<bool> _submitButtonController = BehaviorSubject();
@@ -89,7 +89,7 @@ class AddDeviceBloc extends Bloc {
     }
   }
 
-  String validateNewDeviceInput(
+  String? validateNewDeviceInput(
       String? value,
       String deviceNameIsRequired,
       String deviceNameMaxLengthMessage,
@@ -111,8 +111,9 @@ class AddDeviceBloc extends Bloc {
       addDeviceError = commaIsIllegalCharacterMessage;
     }else{
       _newDeviceName = value;
-      addDeviceError = "";
+      addDeviceError = null;
     }
+
     return addDeviceError;
   }
 }

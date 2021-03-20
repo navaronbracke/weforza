@@ -48,7 +48,9 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
           timeout: Duration(seconds: scanDurationInSeconds)
       ).map((result) => BluetoothPeripheral(
         id: result.device.id.id,
-        deviceName: result.device.name,
+        // Trim the whitespace off.
+        // This could otherwise cause matching issues later on.
+        deviceName: result.device.name.trim(),
       ));
 
   @override

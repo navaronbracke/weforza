@@ -14,8 +14,8 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ExportRidePage extends StatefulWidget {
   ExportRidePage({
-    @required this.bloc
-  }): assert(bloc != null);
+    required this.bloc
+  });
 
   final ExportRideBloc bloc;
 
@@ -62,7 +62,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
         }else{
-          if(snapshot.data.exporting){
+          if(snapshot.data!.exporting){
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -73,7 +73,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                 ),
               ],
             );
-          }else if(snapshot.data.success){
+          }else if(snapshot.data!.success){
             return LayoutBuilder(
               builder: (context,constraints){
                 final paintSize = constraints.biggest.shortestSide * .3;
@@ -114,7 +114,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       initialData: false,
                       stream: widget.bloc.fileNameExistsStream,
                       builder: (context, snapshot){
-                        return Text(snapshot.data ? S.of(context).FileExists : "");
+                        return Text(snapshot.data! ? S.of(context).FileExists : "");
                       },
                     ),
                   ),
@@ -122,7 +122,9 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     android: () => ElevatedButton(
                       child: Text(S.of(context).Export),
                       onPressed: (){
-                        if(_formKey.currentState.validate()){
+                        final formState = _formKey.currentState;
+
+                        if(formState != null && formState.validate()){
                           widget.bloc.exportRide();
                         }
                       },

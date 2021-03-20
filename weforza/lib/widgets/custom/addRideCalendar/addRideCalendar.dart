@@ -17,6 +17,7 @@ class AddRideCalendar extends StatelessWidget {
           Expanded(
             child: AddRideCalendarBody()
           ),
-        ]);
+        ],
+    );
   }
 }

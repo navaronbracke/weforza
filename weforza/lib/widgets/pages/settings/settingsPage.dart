@@ -24,7 +24,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  _SettingsPageState(this.bloc) : assert(bloc != null);
+  _SettingsPageState(this.bloc);
 
   final SettingsBloc bloc;
 
@@ -42,12 +42,12 @@ class _SettingsPageState extends State<SettingsPage> {
       future: Future.delayed(Duration(seconds: 1), () => bloc.loadSettings()),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
+          if (snapshot.hasError || snapshot.data == null) {
             return SettingsPageGenericError();
           } else {
             return PlatformAwareWidget(
-              android: () => _buildAndroidWidget(context, snapshot.data),
-              ios: () => _buildIosWidget(context, snapshot.data),
+              android: () => _buildAndroidWidget(context, snapshot.data!),
+              ios: () => _buildIosWidget(context, snapshot.data!),
             );
           }
         } else {

@@ -10,13 +10,12 @@ import 'package:weforza/blocs/bloc.dart';
 
 ///This Bloc will load the members.
 class MemberListBloc extends Bloc {
-  MemberListBloc(this._repository, this._fileHandler):
-        assert(_repository != null && _fileHandler != null);
+  MemberListBloc(this._repository, this._fileHandler);
 
   final MemberRepository _repository;
   final IFileHandler _fileHandler;
 
-  Future<List<Member>> membersFuture;
+  Future<List<Member>>? membersFuture;
 
   BehaviorSubject<MemberFilterOption> _filterController = BehaviorSubject.seeded(MemberFilterOption.ALL);
   Stream<MemberFilterOption> get stream => _filterController.stream;
@@ -27,15 +26,11 @@ class MemberListBloc extends Bloc {
     membersFuture = _repository.getMembers(filter);
   }
 
-  Future<File> getMemberProfileImage(String path) => _fileHandler.loadProfileImageFromDisk(path);
+  Future<File?> getMemberProfileImage(String? path) => _fileHandler.loadProfileImageFromDisk(path);
 
   Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
 
   void onFilterChanged(MemberFilterOption option, [bool override = false]){
-    if(option == null){
-      return; // Don't do anything, the user closed the menu.
-    }
-
     if(override || option != _filterController.value){
       _filterController.add(option);
       loadMembers(option);

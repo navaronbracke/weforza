@@ -22,7 +22,7 @@
   "Attendees": "Aanwezigen",
   "Details": "Details",
   "Devices": "Toestellen",
-  "SaveChanges": "Save changes",
+  "SaveChanges": "Opslaan",
   "Save": "Opslaan",
   "Filename": "Bestandsnaam",
   "Active": "Actief",
@@ -100,7 +100,7 @@
 
   "ExportMembersTitle": "Renners Exporteren",
   "ExportingMembersDescription": "Renners en toestellen exporteren",
-  "ExportMembersCsvHeader": "voornaam,familienaam,alias,toestellen",
+  "ExportMembersCsvHeader": "voornaam,familienaam,alias,actief,toestellen",
 
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",
@@ -125,7 +125,7 @@
   "SettingsResetRideCalendarErrorMessage": "Kon de rittenkalender niet verwijderen.",
   "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",
   "SettingsResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
-  "SettingsResetRideCalendarDialogConfirm": "Kalender Leegmaken",
+  "SettingsResetRideCalendarDialogConfirm": "Resetten",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

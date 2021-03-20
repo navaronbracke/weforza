@@ -8,9 +8,9 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AddRideSubmit extends StatelessWidget {
   AddRideSubmit({
-    @required this.stream,
-    @required this.onPressed
-  }): assert(onPressed != null && stream != null);
+    required this.stream,
+    required this.onPressed
+  });
 
   final Stream<AddRidesOrError> stream;
   final VoidCallback onPressed;
@@ -36,7 +36,7 @@ class AddRideSubmit extends StatelessWidget {
 
           return Text(S.of(context).GenericError);
         }else{
-          if(snapshot.data.saving){
+          if(snapshot.data!.saving){
             return PlatformAwareLoadingIndicator();
           }else{
             return Column(

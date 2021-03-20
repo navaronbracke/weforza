@@ -1,17 +1,13 @@
-import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
+import 'dart:ui';
 
 /// This class serves as a wrapper during the import members phase.
 /// It allows for using [firstName], [lastName] and [alias] as keys in a Map.
 class ImportableMember {
   ImportableMember({
-    @required this.firstName,
-    @required this.lastName,
-    @required this.alias,
-  }): assert(
-    firstName != null && firstName.isNotEmpty && lastName != null &&
-        lastName.isNotEmpty && alias != null
-  );
+    required this.firstName,
+    required this.lastName,
+    required this.alias,
+  }): assert(firstName.isNotEmpty && lastName.isNotEmpty);
 
   final String firstName;
   final String lastName;

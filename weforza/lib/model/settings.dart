@@ -4,14 +4,14 @@ import 'package:package_info/package_info.dart';
 class Settings {
   Settings({
     this.scanDuration = 20,
-  }): assert(scanDuration != null && scanDuration > 0);
+  }): assert(scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
   ///Defaults to 20 seconds
   final int scanDuration;
 
   //This variable stores the application package info.
-  PackageInfo packageInfo;
+  late PackageInfo packageInfo;
 
   // This variable denotes if there is a ride calendar.
   // It is set separately from the constructor invocation.
@@ -26,8 +26,6 @@ class Settings {
   }
 
   static Settings of(Map<String,dynamic> values){
-    assert(values != null);
-
     return Settings(scanDuration: values["scanDuration"] ?? 20);
   }
 }

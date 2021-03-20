@@ -29,7 +29,9 @@ class RideListPage extends StatefulWidget {
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage> {
-  _RideListPageState({@required this.bloc}): assert(bloc != null);
+  _RideListPageState({
+    required this.bloc
+  });
 
   final RideListBloc bloc;
 
@@ -115,13 +117,14 @@ class _RideListPageState extends State<RideListPage> {
           if(snapshot.hasError){
             return GenericError(text: S.of(context).GenericError);
           }else{
-            if(snapshot.data == null || snapshot.data.isEmpty){
+            if(snapshot.data == null || snapshot.data!.isEmpty){
               return RideListEmpty();
             }else{
               return ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: snapshot.data!.length,
                   itemBuilder: (context,index){
-                    final Ride ride = snapshot.data[index];
+                    final Ride ride = snapshot.data![index];
+
                     return RideListItem(
                       ride: ride,
                       rideAttendeeFuture: bloc.getAmountOfRideAttendees(ride.date),

@@ -30,7 +30,7 @@ abstract class BluetoothDeviceScanner {
   ///After requesting the permission, the proper callback is called.
   ///When the permission was granted before [onGranted] gets called.
   ///When the permission is denied, [onDenied] gets called.
-  void requestScanPermission({void Function() onGranted, void Function() onDenied});
+  void requestScanPermission({required void Function() onGranted, required void Function() onDenied});
 }
 
 class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
@@ -46,22 +46,22 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
           allowDuplicates: false,
           scanMode: ScanMode.balanced,
           timeout: Duration(seconds: scanDurationInSeconds)
-      ).map((result){
-        if(result == null || result.device == null) return null;
-
-        return BluetoothPeripheral(id: result.device.id.id, deviceName: result.device.name);
-      });
+      ).map((result) => BluetoothPeripheral(
+        id: result.device.id.id,
+        // Trim the whitespace off.
+        // This could otherwise cause matching issues later on.
+        deviceName: result.device.name.trim(),
+      ));
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();
 
   @override
-  void requestScanPermission({void Function() onGranted, void Function() onDenied}) async {
+  void requestScanPermission({required void Function() onGranted, required void Function() onDenied}) async {
     if(await Permission.locationWhenInUse.request().isGranted){
       onGranted();
     }else{
       onDenied();
     }
   }
-
 }

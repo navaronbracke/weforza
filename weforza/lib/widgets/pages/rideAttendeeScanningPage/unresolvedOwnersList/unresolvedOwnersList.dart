@@ -8,10 +8,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class UnresolvedOwnersList extends StatelessWidget {
   UnresolvedOwnersList({
-    @required this.future,
-    @required this.itemBuilder,
-    @required this.onButtonPressed,
-  }): assert(future != null && itemBuilder != null && onButtonPressed != null);
+    required this.future,
+    required this.itemBuilder,
+    required this.onButtonPressed,
+  });
 
   final Future<List<Member>> future;
   final Widget Function(Member member) itemBuilder;
@@ -37,8 +37,8 @@ class UnresolvedOwnersList extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemBuilder: (context, index) => itemBuilder(snapshot.data[index]),
-                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) => itemBuilder(snapshot.data![index]),
+                  itemCount: snapshot.data!.length,
                 ),
               ),
               Center(child: _buildButton(context)),

@@ -4,8 +4,8 @@ import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
   ScanResultSingleOwnerListItem({
-    @required this.owner
-  }): assert(owner != null);
+    required this.owner
+  });
 
   final Member owner;
 

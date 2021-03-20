@@ -83,7 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditDeviceTitle" : MessageLookupByLibrary.simpleMessage("Toestel Bewerken"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Renner Bewerken"),
     "Export" : MessageLookupByLibrary.simpleMessage("Exporteren"),
-    "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,toestellen"),
+    "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,actief,toestellen"),
     "ExportMembersTitle" : MessageLookupByLibrary.simpleMessage("Renners Exporteren"),
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Rit exporteren naar bestand"),
     "ExportRideFileNamePlaceholder" : m4,

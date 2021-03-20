@@ -100,7 +100,7 @@
 
   "ExportMembersTitle": "Export Riders",
   "ExportingMembersDescription": "Exporting riders and devices",
-  "ExportMembersCsvHeader": "firstname,lastname,alias,devices",
+  "ExportMembersCsvHeader": "firstname,lastname,alias,active,devices",
 
   "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",

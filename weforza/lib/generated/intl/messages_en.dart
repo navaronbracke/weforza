@@ -83,7 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditDeviceTitle" : MessageLookupByLibrary.simpleMessage("Edit Device"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Edit Rider"),
     "Export" : MessageLookupByLibrary.simpleMessage("Export"),
-    "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("firstname,lastname,alias,devices"),
+    "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("firstname,lastname,alias,active,devices"),
     "ExportMembersTitle" : MessageLookupByLibrary.simpleMessage("Export Riders"),
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Exporting ride to file"),
     "ExportRideFileNamePlaceholder" : m4,

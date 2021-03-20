@@ -15,10 +15,7 @@ abstract class IImportMembersDao {
 }
 
 class ImportMembersDao implements IImportMembersDao {
-  ImportMembersDao(this._database, this._memberStore, this._deviceStore):
-        assert(_database != null && _memberStore != null
-            && _deviceStore != null
-        );
+  ImportMembersDao(this._database, this._memberStore, this._deviceStore);
 
   ImportMembersDao.withProvider(ApplicationDatabase provider): this(
     provider.getDatabase(),
@@ -87,7 +84,7 @@ class ImportMembersDao implements IImportMembersDao {
         // Use the existing member uuid.
         final Iterable<Device> devicesToAdd = exportableMember.devices.map(
                 (deviceName) => Device(
-                ownerId: existingMembers[key],
+                ownerId: existingMembers[key]!,
                 name: deviceName,
                 creationDate: DateTime.now()
             )

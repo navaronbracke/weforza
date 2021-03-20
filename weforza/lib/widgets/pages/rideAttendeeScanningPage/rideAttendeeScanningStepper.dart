@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -9,18 +8,18 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///It shows if the user is in the scanning step or the manual assignment step.
 class RideAttendeeScanningStepper extends StatelessWidget {
   RideAttendeeScanningStepper({
-    @required this.isScanStep,
-  }): assert(isScanStep != null);
+    required this.stream,
+  });
 
-  final ValueListenable<bool> isScanStep;
+  final Stream<bool> stream;
 
   @override
-  Widget build(BuildContext context) => ValueListenableBuilder<bool>(
-    valueListenable: isScanStep,
-    builder: (context, value, child) => PlatformAwareWidget(
-        android: () => _buildAndroidWidget(context, value),
-        ios: () => _buildIosWidget(context, value),
-      ),
+  Widget build(BuildContext context) => StreamBuilder<bool>(
+    stream: stream,
+    builder: (context, snapshot) => PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context, snapshot.data!),
+      ios: () => _buildIosWidget(context, snapshot.data!),
+    ),
   );
 
   Widget _buildAndroidWidget(BuildContext context, bool isScanningStep){
@@ -71,8 +70,8 @@ class RideAttendeeScanningStepper extends StatelessWidget {
         Text(
           S.of(context).RideAttendeeScanningProcessAddMembersLabel.toUpperCase(),
           style: TextStyle(color: isScanningStep ? ApplicationTheme.iosRideAttendeeScanProcessOtherStepColor:
-          ApplicationTheme.iosRideAttendeeScanProcessCurrentStepColor
-          ) ,
+            ApplicationTheme.iosRideAttendeeScanProcessCurrentStepColor
+          ),
         ),
       ],
     );

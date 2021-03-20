@@ -1,7 +1,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -10,9 +9,9 @@ import 'package:weforza/repository/deviceRepository.dart';
 
 class AddDeviceBloc extends Bloc {
   AddDeviceBloc({
-    @required this.repository,
-    @required this.ownerId,
-  }): assert(repository != null && ownerId != null && ownerId.isNotEmpty);
+    required this.repository,
+    required this.ownerId,
+  }): assert(ownerId.isNotEmpty);
 
   final DeviceRepository repository;
   final String ownerId;
@@ -32,7 +31,7 @@ class AddDeviceBloc extends Bloc {
   );
 
   ///Form Error message
-  String addDeviceError;
+  String addDeviceError = "";
 
   ///This controller manages the submit button/loading indicator.
   final StreamController<bool> _submitButtonController = BehaviorSubject();
@@ -91,7 +90,7 @@ class AddDeviceBloc extends Bloc {
   }
 
   String validateNewDeviceInput(
-      String value,
+      String? value,
       String deviceNameIsRequired,
       String deviceNameMaxLengthMessage,
       String commaIsIllegalCharacterMessage,
@@ -112,7 +111,7 @@ class AddDeviceBloc extends Bloc {
       addDeviceError = commaIsIllegalCharacterMessage;
     }else{
       _newDeviceName = value;
-      addDeviceError = null;
+      addDeviceError = "";
     }
     return addDeviceError;
   }

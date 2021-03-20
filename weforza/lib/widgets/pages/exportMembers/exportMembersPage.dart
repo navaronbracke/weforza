@@ -26,8 +26,8 @@ class ExportMembersPage extends StatefulWidget {
 
 class _ExportMembersPageState extends State<ExportMembersPage> {
   _ExportMembersPageState({
-    @required this.bloc
-  }): assert(bloc != null);
+    required this.bloc
+  });
 
   final ExportMembersBloc bloc;
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -67,7 +67,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
         }else {
-          if(snapshot.data.exporting){
+          if(snapshot.data!.exporting){
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -78,7 +78,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                 Text(S.of(context).ExportingMembersDescription),
               ],
             );
-          }else if(snapshot.data.success){
+          }else if(snapshot.data!.success){
             return LayoutBuilder(
               builder: (context,constraints){
                 final paintSize = constraints.biggest.shortestSide * .3;
@@ -120,14 +120,16 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                       child: StreamBuilder<bool>(
                         initialData: false,
                         stream: bloc.filenameExistsStream,
-                        builder: (context, snapshot) => Text(snapshot.data ? S.of(context).FileExists : ""),
+                        builder: (context, snapshot) => Text(snapshot.data! ? S.of(context).FileExists : ""),
                       ),
                     ),
                     PlatformAwareWidget(
                       android: () => ElevatedButton(
                         child: Text(S.of(context).Export),
                         onPressed: () async {
-                          if(_formKey.currentState.validate()){
+                          final formState = _formKey.currentState;
+
+                          if(formState != null && formState.validate()){
                             await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
                           }
                         },
@@ -217,7 +219,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
         S.of(context).FilenameWhitespace,
         S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
         S.of(context).InvalidFilename
-    ) == null;
+    ) == "";
   }
 
   @override

@@ -5,11 +5,11 @@ import 'package:weforza/repository/rideRepository.dart';
 
 ///This Bloc will load the rides.
 class RideListBloc extends Bloc {
-  RideListBloc(this._repository): assert(_repository != null);
+  RideListBloc(this._repository);
 
   final RideRepository _repository;
 
-  Future<List<Ride>> ridesFuture;
+  Future<List<Ride>>? ridesFuture;
 
   void loadRidesIfNotLoaded(){
     if(ridesFuture == null){

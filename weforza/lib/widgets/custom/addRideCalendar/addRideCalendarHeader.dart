@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -9,10 +8,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This label is the current month + year.
 class AddRideCalenderHeader extends StatelessWidget {
   AddRideCalenderHeader({
-    @required this.stream,
-    @required this.onPageBack,
-    @required this.onPageForward
-  }): assert(stream != null && onPageBack != null && onPageForward != null);
+    required this.stream,
+    required this.onPageBack,
+    required this.onPageForward
+  });
 
   final Stream<DateTime> stream;
   final VoidCallback onPageBack;
@@ -24,8 +23,13 @@ class AddRideCalenderHeader extends StatelessWidget {
       height: 50,
       child: StreamBuilder<DateTime>(
         stream: stream,
-        builder: (context, snapshot) => snapshot.data == null ?
-          _buildPlaceholder(context) : _buildHeader(context, snapshot.data),
+        builder: (context, snapshot){
+          if(snapshot.data == null){
+            return _buildPlaceholder(context);
+          }
+
+          return _buildHeader(context, snapshot.data!);
+        },
       ),
     );
   }

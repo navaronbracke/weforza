@@ -8,12 +8,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 /// This class wraps the data for the filter widget.
 class MemberListFilterItem {
   MemberListFilterItem({
-    @required this.value,
-    @required this.label,
-    @required this.icon
-  }): assert(
-  label != null && label.isNotEmpty && value != null && icon != null
-  );
+    required this.value,
+    required this.label,
+    required this.icon
+  }): assert(label.isNotEmpty);
 
   final MemberFilterOption value;
   final String label;
@@ -24,13 +22,10 @@ class MemberListFilterItem {
 /// This filter allows selecting between active, inactive & all members.
 class MemberListFilter extends StatelessWidget {
   MemberListFilter({
-    @required this.stream,
-    @required this.onFilterChanged,
-    @required this.items,
-  }): assert(
-    stream != null && onFilterChanged != null
-        && items != null && items.isNotEmpty
-  );
+    required this.stream,
+    required this.onFilterChanged,
+    required this.items,
+  }): assert(items.isNotEmpty);
 
   final Stream<MemberFilterOption> stream;
   final void Function(MemberFilterOption filterOption) onFilterChanged;
@@ -82,6 +77,8 @@ class MemberListFilter extends StatelessWidget {
           ),
         );
 
+        if(option == null) return;
+
         onFilterChanged(option);
       },
       icon: Icon(Icons.filter_alt, color: ApplicationTheme.primaryColor),
@@ -130,6 +127,8 @@ class MemberListFilter extends StatelessWidget {
             ),
           );
         });
+
+        if(option == null) return;
 
         onFilterChanged(option);
       },

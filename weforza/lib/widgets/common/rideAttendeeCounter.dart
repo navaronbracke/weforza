@@ -4,14 +4,14 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeCounter extends StatelessWidget {
   RideAttendeeCounter({
-    @required this.future,
+    required this.future,
     this.iconSize = 24,
     this.counterStyle,
     this.invisibleWhenLoadingOrError = false,
-  }): assert(future != null);
+  });
 
   final double iconSize;
-  final TextStyle counterStyle;
+  final TextStyle? counterStyle;
   final Future<int> future;
   final bool invisibleWhenLoadingOrError;
 
@@ -30,7 +30,7 @@ class RideAttendeeCounter extends StatelessWidget {
                   child: Icon(
                       Icons.people,
                       size: iconSize,
-                      color: counterStyle.color,
+                      color: counterStyle?.color,
                   ),
                 ),
               ],
@@ -44,7 +44,7 @@ class RideAttendeeCounter extends StatelessWidget {
                   child: Icon(
                       Icons.people,
                       size: iconSize,
-                      color: counterStyle.color,
+                      color: counterStyle?.color,
                   ),
                 ),
               ],

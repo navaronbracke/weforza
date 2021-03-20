@@ -24,8 +24,8 @@ class AddRidePage extends StatefulWidget {
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
   _AddRidePageState({
-    @required this.bloc
-  }): assert(bloc != null);
+    required this.bloc
+  });
 
   ///The BLoC for this page.
   final AddRideBloc bloc;
@@ -155,7 +155,9 @@ class _AddRidePageState extends State<AddRidePage> {
     await bloc.addRides().then((_){
       ReloadDataProvider.of(context).reloadRides.value = true;
       Navigator.pop(context);
-    }).catchError(bloc.onError);
+    }).catchError((e){
+      bloc.onError(e);
+    });
   }
 
   @override

@@ -7,12 +7,10 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class RideAttendeeManualSelection extends StatelessWidget {
   RideAttendeeManualSelection({
-    @required this.future,
-    @required this.itemBuilder,
-    @required this.saveButtonBuilder
-  }): assert(
-    future != null && itemBuilder != null && saveButtonBuilder != null
-  );
+    required this.future,
+    required this.itemBuilder,
+    required this.saveButtonBuilder
+  });
 
   final Future<List<Member>> future;
   final Widget Function(Member item) itemBuilder;
@@ -27,7 +25,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
           if(snapshot.hasError){
             return GenericError(text: S.of(context).GenericError);
           }else {
-            if(snapshot.data.isEmpty){
+            if(snapshot.data == null || snapshot.data!.isEmpty){
               return Center(child: ManualSelectionListEmpty());
             }
 
@@ -35,8 +33,8 @@ class RideAttendeeManualSelection extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: ListView.builder(
-                    itemBuilder: (context, index) => itemBuilder(snapshot.data[index]),
-                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) => itemBuilder(snapshot.data![index]),
+                    itemCount: snapshot.data!.length,
                   ),
                 ),
                 saveButtonBuilder(context),

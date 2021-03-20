@@ -4,15 +4,13 @@ import 'package:flutter/widgets.dart';
 
 class AnimatedPathPainter extends CustomPainter {
   AnimatedPathPainter({
-    @required this.animation,
-    @required this.color,
-    @required this.strokeWidth,
-    @required this.strokeJoin,
-    @required this.strokeCap,
-    @required this.createPath,
-  }): assert(createPath != null && animation != null && color != null
-      && strokeWidth != null && strokeWidth > 0.0 && strokeCap != null
-      && strokeJoin != null), super(repaint: animation);
+    required this.animation,
+    required this.color,
+    required this.strokeWidth,
+    required this.strokeJoin,
+    required this.strokeCap,
+    required this.createPath,
+  }): assert(strokeWidth > 0.0), super(repaint: animation);
 
   final Path Function(Size size) createPath;
   final Animation<double> animation;

@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   ///The selected index.
   int _selectedIndex = 0;
   
-  PageController _pageController;
+  late PageController _pageController;
 
   final _pages = [RideListPage(),MemberListPage(),SettingsPage()];
 

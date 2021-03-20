@@ -39,10 +39,7 @@ class RideDao implements IRideDao {
       this._database,
       this._memberStore,
       this._rideStore,
-      this._rideAttendeeStore
-      ): assert(_database != null  && _memberStore != null
-        && _rideStore != null && _rideAttendeeStore != null
-  );
+      this._rideAttendeeStore);
 
   RideDao.withProvider(ApplicationDatabase provider): this(
     provider.getDatabase(),
@@ -63,7 +60,6 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> addRides(List<Ride> rides) async {
-    assert(rides != null);
     await _rideStore.records(rides.map((r) => r.date.toIso8601String()).toList())
         .put(_database, rides.map((r)=> r.toMap()).toList());
   }
@@ -78,7 +74,6 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> deleteRide(DateTime date) async {
-    assert(date != null);
     final isoDate = date.toIso8601String();
     final rideFinder = Finder(filter: Filter.byKey(isoDate));
     final rideAttendeeFinder = Finder(filter: Filter.equals("date", isoDate));
@@ -97,7 +92,6 @@ class RideDao implements IRideDao {
 
   @override
   Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees) async {
-    assert(rideDate != null && attendees != null);
     final date = rideDate.toIso8601String();
     //Delete all the old ones and insert the new ones.
     final finder = Finder(filter: Filter.equals("date", date));
@@ -116,7 +110,6 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Member>> getRideAttendees(DateTime date) async {
-    assert(date != null);
     //fetch the attendees of the ride and map to their uuid's
     final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
         finder: Finder(filter: Filter.equals("date", date.toIso8601String())));
@@ -131,7 +124,6 @@ class RideDao implements IRideDao {
 
   @override
   Future<int> getAmountOfRideAttendees(DateTime rideDate) async {
-    assert(rideDate != null);
     //fetch the attendees of the ride
     final attendees = await _rideAttendeeStore.find(_database,
         finder: Finder(filter: Filter.equals("date", rideDate.toIso8601String())));

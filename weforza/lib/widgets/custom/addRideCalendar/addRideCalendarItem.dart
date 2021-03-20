@@ -1,12 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
-  AddRideCalendarItem({@required this.date}): assert(date != null);
+  AddRideCalendarItem({
+    required this.date
+  });
 
   final DateTime date;
 
@@ -16,12 +17,12 @@ class AddRideCalendarItem extends StatefulWidget {
 
 class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
 
-  Color _backgroundColor;
-  Color _fontColor;
+  late Color _backgroundColor;
+  late Color _fontColor;
   ///The on reset callback
-  VoidCallback _onReset;
+  late VoidCallback _onReset;
 
-  AddRideBloc _bloc;
+  late AddRideBloc _bloc;
 
   @override
   void didChangeDependencies() {
@@ -91,7 +92,6 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
   @override
   void dispose() {
     _bloc.unregisterResetFunction(_onReset);
-    _onReset = null;
     super.dispose();
   }
 }

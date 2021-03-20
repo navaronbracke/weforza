@@ -8,14 +8,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This dialog handles the UI for a delete item confirmation.
 class DeleteItemDialog extends StatefulWidget {
   DeleteItemDialog({
-    @required this.onDelete,
-    @required this.title,
-    @required this.description,
-    @required this.errorDescription,
+    required this.onDelete,
+    required this.title,
+    required this.description,
+    required this.errorDescription,
   }): assert(
-    onDelete != null && title != null && title.isNotEmpty
-        && description != null && description.isNotEmpty
-        && errorDescription != null && errorDescription.isNotEmpty
+    title.isNotEmpty && description.isNotEmpty && errorDescription.isNotEmpty
   );
 
   //This lambda generates the delete computation.
@@ -30,7 +28,7 @@ class DeleteItemDialog extends StatefulWidget {
 
 class _DeleteItemDialogState extends State<DeleteItemDialog> {
 
-  Future<void> deleteItemFuture;
+  Future<void>? deleteItemFuture;
 
   @override
   Widget build(BuildContext context){
@@ -363,7 +361,10 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
   }
 
   void _onConfirmDeletion() {
-    deleteItemFuture = widget.onDelete();
-    setState(() {});
+    final void Function() callback = (){
+      deleteItemFuture = widget.onDelete();
+    };
+
+    setState(callback);
   }
 }

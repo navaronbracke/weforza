@@ -14,13 +14,13 @@ class TypeFactory<T> {
   final CreatorFunction<T> creatorFunction;
 
   /// The internal instance.
-  T _instance;
+  T? _instance;
 
   /// Get an instance of the required type.
   T get(Injector injector) {
     /// If provided as a singleton, return it.
     if (isSingleton && _instance != null) {
-      return _instance;
+      return _instance!;
     }
 
     final instance = creatorFunction(injector);

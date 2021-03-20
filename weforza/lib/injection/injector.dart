@@ -29,7 +29,7 @@ class Injector {
       );
     }
 
-    _factories[T] = TypeFactory<T>(creator, isSingleton);
+    _factories[T] = TypeFactory<T>(creator, isSingleton) as TypeFactory<Object>;
 
     return this;
   }

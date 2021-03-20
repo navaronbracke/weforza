@@ -7,9 +7,9 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class FileExtensionSelection extends StatefulWidget {
   FileExtensionSelection({
-    @required this.onExtensionSelected,
-    @required this.initialValue,
-  }): assert(initialValue != null && onExtensionSelected != null);
+    required this.onExtensionSelected,
+    required this.initialValue,
+  });
 
   final void Function(FileExtension value) onExtensionSelected;
   final FileExtension initialValue;
@@ -19,7 +19,7 @@ class FileExtensionSelection extends StatefulWidget {
 }
 
 class _FileExtensionSelectionState extends State<FileExtensionSelection> {
-  FileExtension currentValue;
+  late FileExtension currentValue;
 
   @override
   void initState() {
@@ -76,7 +76,9 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
     );
   }
 
-  void onValueChanged(FileExtension value){
+  void onValueChanged(FileExtension? value){
+    if(value == null) return; // Should not happen as we have an initial value.
+
     setState((){
       widget.onExtensionSelected(value);
       currentValue = value;

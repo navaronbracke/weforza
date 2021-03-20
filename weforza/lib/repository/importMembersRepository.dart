@@ -3,7 +3,7 @@ import 'package:weforza/database/importMembersDao.dart';
 import 'package:weforza/model/exportableMember.dart';
 
 class ImportMembersRepository {
-  ImportMembersRepository(this.dao): assert(dao != null);
+  ImportMembersRepository(this.dao);
 
   final IImportMembersDao dao;
 

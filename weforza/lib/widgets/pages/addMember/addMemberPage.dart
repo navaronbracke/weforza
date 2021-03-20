@@ -26,8 +26,7 @@ class AddMemberPage extends StatefulWidget {
 
 ///This is the [State] class for [AddMemberPage].
 class _AddMemberPageState extends State<AddMemberPage> {
-  _AddMemberPageState(this._bloc, this._fileHandler):
-        assert(_bloc != null && _fileHandler != null);
+  _AddMemberPageState(this._bloc, this._fileHandler);
 
   final IFileHandler _fileHandler;
   ///The key for the form.
@@ -41,22 +40,22 @@ class _AddMemberPageState extends State<AddMemberPage> {
   final TextEditingController _aliasController = TextEditingController();
 
   ///The input labels.
-  String _firstNameLabel;
-  String _lastNameLabel;
-  String _aliasLabel;
+  late String _firstNameLabel;
+  late String _lastNameLabel;
+  late String _aliasLabel;
 
   ///Error messages.
-  String _firstNameRequiredMessage;
-  String _lastNameRequiredMessage;
-  String _firstNameMaxLengthMessage;
-  String _firstNameIllegalCharactersMessage;
-  String _firstNameBlankMessage;
-  String _lastNameMaxLengthMessage;
-  String _lastNameIllegalCharactersMessage;
-  String _lastNameBlankMessage;
-  String _aliasMaxLengthMessage;
-  String _aliasIllegalCharactersMessage;
-  String _aliasBlankMessage;
+  late String _firstNameRequiredMessage;
+  late String _lastNameRequiredMessage;
+  late String _firstNameMaxLengthMessage;
+  late String _firstNameIllegalCharactersMessage;
+  late String _firstNameBlankMessage;
+  late String _lastNameMaxLengthMessage;
+  late String _lastNameIllegalCharactersMessage;
+  late String _lastNameBlankMessage;
+  late String _aliasMaxLengthMessage;
+  late String _aliasIllegalCharactersMessage;
+  late String _aliasBlankMessage;
 
   ///The [FocusNode]s for the inputs
   FocusNode _firstNameFocusNode = FocusNode();
@@ -97,18 +96,18 @@ class _AddMemberPageState extends State<AddMemberPage> {
         _firstNameRequiredMessage,
         _firstNameMaxLengthMessage,
         _firstNameIllegalCharactersMessage,
-        _firstNameBlankMessage) == null;
+        _firstNameBlankMessage) == "";
     final lastNameValid = _bloc.validateLastName(
             _lastNameController.text,
             _lastNameRequiredMessage,
             _lastNameMaxLengthMessage,
             _lastNameIllegalCharactersMessage,
-            _lastNameBlankMessage) == null;
+            _lastNameBlankMessage) == "";
     final aliasValid = _bloc.validateAlias(
         _aliasController.text,
         _aliasMaxLengthMessage,
         _aliasIllegalCharactersMessage,
-        _aliasBlankMessage) == null;
+        _aliasBlankMessage) == "";
     return firstNameValid && lastNameValid && aliasValid;
   }
 
@@ -116,7 +115,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
     await _bloc.addMember().then((_){
       ReloadDataProvider.of(context).reloadMembers.value = true;
       Navigator.pop(context);
-    }).catchError(_bloc.onError);
+    }).catchError((e) {
+      _bloc.onError(e);
+    });
   }
 
   @override
@@ -361,7 +362,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     child: AddMemberSubmit(
                         stream: _bloc.submitStream,
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
+                          final formState = _formKey.currentState;
+
+                          if (formState != null && formState.validate()) {
                             addMember(context);
                           }
                         }

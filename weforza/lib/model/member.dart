@@ -1,20 +1,15 @@
 import 'dart:ui';
-import 'package:meta/meta.dart';
 
 ///This class represents a 'Member.'
 class Member implements Comparable<Member> {
   Member({
-    @required this.uuid,
-    @required this.firstname,
-    @required this.lastname,
-    @required this.alias,
-    @required this.isActiveMember,
-    @required this.profileImageFilePath
-  }): assert(uuid != null && uuid.isNotEmpty
-        && firstname != null && firstname.isNotEmpty
-        && lastname != null && lastname.isNotEmpty
-        && alias != null && isActiveMember != null
-  );
+    required this.uuid,
+    required this.firstname,
+    required this.lastname,
+    required this.alias,
+    required this.isActiveMember,
+    required this.profileImageFilePath
+  }): assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
 
   ///Regex for a member's first or last name or alias.
   ///
@@ -36,7 +31,7 @@ class Member implements Comparable<Member> {
   String alias;
 
   ///The path to an optional profile picture.
-  String profileImageFilePath;
+  String? profileImageFilePath;
 
   // Whether this member is currently an active ride participant.
   bool isActiveMember;
@@ -56,7 +51,7 @@ class Member implements Comparable<Member> {
 
   ///Create a member from a Map and a given uuid.
   static Member of(String uuid,Map<String,dynamic> values){
-    assert(uuid != null && uuid.isNotEmpty && values != null);
+    assert(uuid.isNotEmpty);
     return Member(
       uuid: uuid,
       firstname: values["firstname"],

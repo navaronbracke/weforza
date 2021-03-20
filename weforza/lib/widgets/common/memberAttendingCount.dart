@@ -3,7 +3,9 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class MemberAttendingCount extends StatelessWidget {
-  MemberAttendingCount({ @required this.future }): assert(future != null);
+  MemberAttendingCount({
+    required this.future
+  });
 
   final Future<int> future;
 

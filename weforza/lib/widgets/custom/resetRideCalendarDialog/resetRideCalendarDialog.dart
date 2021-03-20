@@ -22,8 +22,8 @@ class ResetRideCalendarDialog extends StatefulWidget {
 
 class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
   _ResetRideCalendarDialogState({
-    @required this.bloc
-  }): assert(bloc != null);
+    required this.bloc
+  });
 
   final ResetRideCalendarBloc bloc;
 

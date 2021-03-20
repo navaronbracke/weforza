@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -14,8 +13,8 @@ import 'package:weforza/repository/exportRidesRepository.dart';
 
 class ExportRidesBloc extends Bloc {
   ExportRidesBloc({
-    @required this.repository,
-    @required this.fileHandler,
+    required this.repository,
+    required this.fileHandler,
   });
 
   final ExportRidesRepository repository;
@@ -31,7 +30,7 @@ class ExportRidesBloc extends Bloc {
 
   final int filenameMaxLength = 80;
 
-  String _filename;
+  String _filename = "";
 
   FileExtension _fileExtension = FileExtension.CSV;
 
@@ -43,10 +42,10 @@ class ExportRidesBloc extends Bloc {
   }
 
   ///Form Error message
-  String filenameError;
+  String filenameError = "";
 
   String validateFileName(
-      String filename,
+      String? filename,
       String fileNameIsRequired,
       String isWhitespaceMessage,
       String filenameNameMaxLengthMessage,
@@ -67,7 +66,7 @@ class ExportRidesBloc extends Bloc {
       filenameError = invalidFilenameMessage;
     }else{
       _filename = filename;
-      filenameError = null;
+      filenameError = "";
     }
 
     return filenameError;
@@ -85,7 +84,9 @@ class ExportRidesBloc extends Bloc {
         await _saveRidesToFile(file, _fileExtension.extension(), rides);
         _streamController.add(ExportDataOrError.success());
       }
-    }).catchError((e)=> _streamController.addError(e));
+    }).catchError((e){
+      _streamController.addError(e);
+    });
   }
 
   ///Save the given [ExportableRide]s to the given file.

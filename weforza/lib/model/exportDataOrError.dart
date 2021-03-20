@@ -1,11 +1,10 @@
-import 'package:meta/meta.dart';
 
 /// This class wraps the state for exporting data.
 class ExportDataOrError {
   ExportDataOrError({
-    @required this.exporting,
-    @required this.success,
-  }): assert(exporting != null && success != null);
+    required this.exporting,
+    required this.success,
+  });
 
   /// Whether we are currently exporting.
   final bool exporting;

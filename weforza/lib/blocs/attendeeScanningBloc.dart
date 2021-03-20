@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
@@ -19,16 +18,13 @@ import 'package:weforza/repository/settingsRepository.dart';
 
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
-    @required this.rideDate,
-    @required this.scanner,
-    @required this.settingsRepo,
-    @required this.memberRepo,
-    @required this.deviceRepo,
-    @required this.ridesRepo,
-  }): assert(
-  scanner != null && rideDate != null && settingsRepo != null
-      && memberRepo != null && deviceRepo != null && ridesRepo != null
-  );
+    required this.rideDate,
+    required this.scanner,
+    required this.settingsRepo,
+    required this.memberRepo,
+    required this.deviceRepo,
+    required this.ridesRepo,
+  });
 
   ///The bluetooth scanner that will do bluetooth stuff for us.
   final BluetoothDeviceScanner scanner;
@@ -37,22 +33,13 @@ class AttendeeScanningBloc extends Bloc {
   ///This prevents duplicates during the scan.
   final Set<BluetoothPeripheral> _scannedDevices = HashSet();
 
-  ///A value notifier for the scanning boolean.
-  ///We use it to check if we can pop the widget scope
-  ///and what button to show (skip or save scan).
-  ///It also manages the visibility of the scan progress indicator.
-  final ValueNotifier<bool> isScanning = ValueNotifier<bool>(false);
+  final BehaviorSubject<bool> _scanningStateController = BehaviorSubject.seeded(false);
+  final BehaviorSubject<bool> _savingStateController = BehaviorSubject.seeded(false);
+  final BehaviorSubject<bool> _isScanStepController = BehaviorSubject.seeded(true);
 
-  ///A value notifier for the saving boolean.
-  ///We use it to show a loading indicator or show scan related buttons.
-  final ValueNotifier<bool> isSaving = ValueNotifier<bool>(false);
-
-  ///This value notifier manages the state for the selected label in the UI.
-  ///It gets updated after the scan save step.
-  ///We keep track of this separately,
-  ///since the step chance shouldn't prevent
-  ///the user from going back to the details screen.
-  final ValueNotifier<bool> isScanStep = ValueNotifier<bool>(true);
+  Stream<bool> get scanning => _scanningStateController.stream;
+  Stream<bool> get saving => _savingStateController.stream;
+  Stream<bool> get isScanStep => _isScanStepController.stream;
 
   ///The repositories connect the bloc with the database.
   final SettingsRepository settingsRepo;
@@ -68,14 +55,14 @@ class AttendeeScanningBloc extends Bloc {
   ///During init state [doInitialDeviceScan] is stored here.
   ///When a user retries a scan, [retryDeviceScan] is stored here.
   ///This future is not used by a FutureBuilder since the UI is managed by a StreamBuilder.
-  Future<void> scanFuture;
+  late Future<void> scanFuture;
 
   ///Store the ride attendees in a hash set for easy lookup.
   ///Starts with the existing attendees but will get modified by scan/manual assignment.
   ///Is used to check the selected status of the members
   ///and the contents are used for saving the attendees.
   ///Saving happens after scanning and after manual assignment.
-  HashSet<String> rideAttendees;
+  late HashSet<String> rideAttendees;
 
   /// This collection will group the Member uuids of the owners of devices with a given name.
   /// The keys are the device names, while the values are lists of uuid's of Members with a device with the given name.
@@ -84,7 +71,7 @@ class AttendeeScanningBloc extends Bloc {
   /// This list contains the scanned bluetooth device names.
   final List<String> _scanResults = [];
   /// The scan duration in seconds.
-  int scanDuration;
+  late int scanDuration;
 
   /// This HashMap holds the members that were loaded from the database.
   /// Each member is mapped to it's uuid.
@@ -92,7 +79,7 @@ class AttendeeScanningBloc extends Bloc {
   HashMap<String, Member> _members = HashMap();
 
   /// This list holds all the devices that are used during the owner lookup.
-  List<Device> _devices;
+  late List<Device> _devices;
 
   /// This collection keeps track of a specific set of owners.
   /// If a device with multiple possible owners is scanned,
@@ -137,15 +124,15 @@ class AttendeeScanningBloc extends Bloc {
   //Perform the actual bluetooth device scan
   void _startDeviceScan(void Function(String deviceName) onDeviceFound){
     //Start scan if not scanning
-    if(!isScanning.value){
+    if(!_scanningStateController.value!){
 
-      isScanning.value = true;
+      _scanningStateController.add(true);
       _scanStepController.add(ScanProcessStep.SCAN);
 
       scanner.scanForDevices(scanDuration)
           .where((device){
             //Remove invalid device names.
-            return device != null && device.deviceName != null && device.deviceName.trim().isNotEmpty;
+            return device.deviceName.trim().isNotEmpty;
           })
           .where((device){
             //Remove already scanned devices.
@@ -159,7 +146,7 @@ class AttendeeScanningBloc extends Bloc {
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
-        isScanning.value = false;
+        _scanningStateController.add(false);
       }, cancelOnError: false);
     }
   }
@@ -192,7 +179,7 @@ class AttendeeScanningBloc extends Bloc {
     for (Device device in _devices){
       if(ownersGroupedByDevice.containsKey(device.name)){
         // Append the owner uuid to the list of owners for this device.
-        ownersGroupedByDevice[device.name].add(device.ownerId);
+        ownersGroupedByDevice[device.name]!.add(device.ownerId);
       }else{
         // Create a new list with just this device's owner.
         ownersGroupedByDevice[device.name] = <String>[device.ownerId];
@@ -249,11 +236,12 @@ class AttendeeScanningBloc extends Bloc {
     _scanResults.insert(0, deviceName);
 
     //It's an unknown device, we can't add an owner to the attendees or the multiplePossibleOwners list.
-    if(!ownersGroupedByDevice.containsKey(deviceName) || ownersGroupedByDevice[deviceName].isEmpty){
+    if(!ownersGroupedByDevice.containsKey(deviceName) || ownersGroupedByDevice[deviceName]!.isEmpty){
       return;
     }
 
-    final Iterable<Member> owners = ownersGroupedByDevice[deviceName].map((uuid) => _members[uuid]);
+    // We assume that at this point the owner is not null.
+    final Iterable<Member> owners = ownersGroupedByDevice[deviceName]!.map((uuid) => _members[uuid]!);
 
     // This device belongs to multiple possible owners, add them to the list.
     if(owners.length > 1){
@@ -267,7 +255,7 @@ class AttendeeScanningBloc extends Bloc {
   /// Returns a list of members that own a device with the given name.
   List<Member> getDeviceOwners(String deviceName) {
     if(ownersGroupedByDevice.containsKey(deviceName)){
-      return ownersGroupedByDevice[deviceName].map((String uuid) => _members[uuid]).toList();
+      return ownersGroupedByDevice[deviceName]!.map((String uuid) => _members[uuid]!).toList();
     }else{
       return [];
     }
@@ -277,15 +265,16 @@ class AttendeeScanningBloc extends Bloc {
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
     _scanStepController.add(ScanProcessStep.STOPPING_SCAN);
-    if(!isScanning.value) return true;
+    final scanInProgress = _scanningStateController.value!;
+    if(!scanInProgress) return true;
 
     bool result = true;
     await scanner.stopScan().then((_){
-      isScanning.value = false;
+      _scanningStateController.add(false);
     }).catchError((error){
-      result = false;//if it failed, prevent pop & show error first
+      result = false; //if it failed, prevent pop & show error first
       _scanStepController.addError(error);
-      isScanning.value = false;
+      _scanningStateController.add(false);
     });
 
     return result;
@@ -303,13 +292,13 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
-    isSaving.value = true;
+    _savingStateController.add(true);
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element))
+        rideAttendees.map((element) => RideAttendee(rideDate, element)).toList()
     ).catchError((error){
       _scanStepController.addError(error);
-      isSaving.value = false;
+      _savingStateController.add(false);
       return Future.error(error);
     });
   }
@@ -323,8 +312,8 @@ class AttendeeScanningBloc extends Bloc {
   void tryAdvanceToManualSelection({bool override = false}){
     if(override || ownersOfScannedDevicesWithMultiplePossibleOwners.isEmpty){
       //Multiple invocations of this method, cannot alter isScanning.
-      if(isScanStep.value){
-        isScanStep.value = false;
+      if(_isScanStepController.value!){
+        _isScanStepController.add(false);
       }
       _scanStepController.add(ScanProcessStep.MANUAL);
     }else{
@@ -336,9 +325,19 @@ class AttendeeScanningBloc extends Bloc {
   @override
   void dispose() {
     _scanStepController.close();
+    _scanningStateController.close();
+    _savingStateController.close();
+    _isScanStepController.close();
   }
 
   bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
+
+  /// Members can be selected if we are not saving.
+  bool canSelectMember(){
+    final lockedBySaving = _savingStateController.value!;
+
+    return !lockedBySaving;
+  }
 
   void onMemberSelected(String memberUuid){
     if(rideAttendees.contains(memberUuid)){

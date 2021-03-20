@@ -1,18 +1,15 @@
 
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 ///A device is a piece of hardware.
 ///It has a [name], an [ownerId] and a [type].
 class Device {
   Device({
-    @required this.ownerId,
-    @required this.name,
-    @required this.creationDate,
+    required this.ownerId,
+    required this.name,
+    required this.creationDate,
     this.type = DeviceType.UNKNOWN
-  }): assert(ownerId != null && ownerId.isNotEmpty && name != null
-      && name.isNotEmpty && type != null && creationDate != null);
+  }): assert(ownerId.isNotEmpty && name.isNotEmpty);
 
   final String ownerId;
   final DateTime creationDate;
@@ -32,7 +29,7 @@ class Device {
 
   ///Create a device from a Map and a given key.
   static Device of(String key, Map<String,dynamic> values){
-    assert(values != null &&  key != null && key.isNotEmpty);
+    assert(key.isNotEmpty);
     //Start with unknown
     DeviceType type = DeviceType.UNKNOWN;
     //if the index fits within the values, use it

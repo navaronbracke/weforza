@@ -7,9 +7,11 @@ import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetai
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class RideDetailsAttendeesList extends StatelessWidget {
-  RideDetailsAttendeesList({@required this.future}): assert(future != null);
+  RideDetailsAttendeesList({
+    required this.future
+  });
 
-  final Future<List<Member>> future;
+  final Future<List<Member>>? future;
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +20,22 @@ class RideDetailsAttendeesList extends StatelessWidget {
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
-            return GenericError(
-                text: S.of(context).GenericError
-            );
+            return GenericError(text: S.of(context).GenericError);
           } else {
-            if (snapshot.data == null || snapshot.data.isEmpty) {
+            if (snapshot.data == null || snapshot.data!.isEmpty) {
               return RideDetailsAttendeesListEmpty();
             } else {
               return ListView.builder(
                   itemBuilder: (context, index) {
-                    final member = snapshot.data[index];
+                    final member = snapshot.data![index];
                     return RideDetailsAttendeesListItem(
                       firstName: member.firstname,
                       lastName: member.lastname,
                       alias: member.alias,
                     );
                   },
-                  itemCount: snapshot.data.length);
+                  itemCount: snapshot.data!.length,
+              );
             }
           }
         }else{

@@ -3,72 +3,88 @@ import 'package:weforza/theme/appTheme.dart';
 
 ///This Widget will show a progress indicator
 ///that shows how much time is left until the scan stops.
-class RideAttendeeScanningProgressIndicator extends StatefulWidget {
+class RideAttendeeScanningProgressIndicator extends StatelessWidget {
   RideAttendeeScanningProgressIndicator({
-    @required this.getDuration,
-    @required this.valueNotifier
-  }): assert(valueNotifier != null && getDuration != null);
-
-  @override
-  _RideAttendeeScanningProgressIndicatorState createState() => _RideAttendeeScanningProgressIndicatorState();
+    required this.getDuration,
+    required this.isScanning
+  });
 
   ///This lambda will allow to get the duration on demand.
-  ///
+  ///The output of this function is not available immediately, hence the function.
   final int Function() getDuration;
   ///This notifier notifies when the scanning started.
-  final ValueNotifier<bool> valueNotifier;
-}
-
-class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScanningProgressIndicator> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  final Color progressbarColor = ApplicationTheme.rideAttendeeScanProgressbarColor;
-  final Color progressbarBackgroundColor = ApplicationTheme.rideAttendeeScanProgressbarBackgroundColor;
+  final Stream<bool> isScanning;
 
   final double _kProgressIndicatorHeight = 4;
 
-  Animation<double> _animation;
-  int _duration;
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: widget.valueNotifier,
-      builder: (context, value, child){
-        if(value){
-          //The settings have been loaded now
-          _duration = widget.getDuration();//Load the duration (from settings)
-          _controller = AnimationController(vsync: this, duration: Duration(seconds: _duration));
-          _animation = Tween(begin: 1.0,end: 0.0).animate(_controller);
-          //Make sure to start the animation
-          _controller.forward();
-          return AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child){
-              return PreferredSize(
-                preferredSize: Size(double.infinity,1.0),
-                child: Material(
-                  child: LinearProgressIndicator(
-                    value: _animation.value,
-                    valueColor: AlwaysStoppedAnimation<Color>(progressbarColor),
-                    backgroundColor: progressbarBackgroundColor,
-                  ),
-                ),
-              );
-            },
-          );
-        }else{
+    return StreamBuilder<bool>(
+      stream: isScanning,
+      builder: (context, snapshot) {
+        final value = snapshot.data;
+
+        if(value == null || !value){
           //Show nothing when not scanning.
           //Fill the space with a 4dp blank sized box. 4dp is the default height of the progress indicator.
           return SizedBox(height: _kProgressIndicatorHeight);
         }
+
+        // The duration is accessible at this point.
+        return _RideAttendeeScanningProgressIndicatorAnimatable(duration: getDuration());
       },
     );
+  }
+}
+
+/// The internal widget that wraps an AnimatedBuilder for the progress bar.
+/// This allows for the animation properties to be marked with late instead of being nullable.
+class _RideAttendeeScanningProgressIndicatorAnimatable extends StatefulWidget {
+  _RideAttendeeScanningProgressIndicatorAnimatable({
+    required this.duration
+  }): assert(duration > 0);
+
+  final int duration;
+
+  @override
+  _RideAttendeeScanningProgressIndicatorAnimatableState createState() => _RideAttendeeScanningProgressIndicatorAnimatableState();
+}
+
+class _RideAttendeeScanningProgressIndicatorAnimatableState extends State<_RideAttendeeScanningProgressIndicatorAnimatable> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: widget.duration));
+    _animation = Tween(begin: 1.0,end: 0.0).animate(_controller);
+    //Make sure to start the animation
+    _controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child){
+        return PreferredSize(
+          preferredSize: Size(double.infinity, 1.0),
+          child: Material(
+            child: LinearProgressIndicator(
+              value: _animation.value,
+              valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.rideAttendeeScanProgressbarColor),
+              backgroundColor: ApplicationTheme.rideAttendeeScanProgressbarBackgroundColor,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

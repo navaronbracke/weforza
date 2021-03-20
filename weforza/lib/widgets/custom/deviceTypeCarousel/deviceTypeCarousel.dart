@@ -6,12 +6,10 @@ import 'package:weforza/theme/appTheme.dart';
 
 class DeviceTypeCarousel extends StatelessWidget {
   DeviceTypeCarousel({
-    @required this.controller,
-    @required this.onPageChanged,
-    @required this.currentPageStream,
-  }): assert(
-    controller != null && onPageChanged != null && currentPageStream != null
-  );
+    required this.controller,
+    required this.onPageChanged,
+    required this.currentPageStream,
+  });
 
   final PageController controller;
   final void Function(int page) onPageChanged;

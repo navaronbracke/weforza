@@ -18,14 +18,14 @@ class EditDevicePage extends StatefulWidget {
 
 class _EditDevicePageState extends State<EditDevicePage> {
 
-  EditDeviceBloc bloc;
+  late EditDeviceBloc bloc;
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final device = SelectedItemProvider.of(context).selectedDevice.value;
+    final device = SelectedItemProvider.of(context).selectedDevice.value!;
     bloc = EditDeviceBloc(
       repository: InjectionContainer.get<DeviceRepository>(),
       deviceName: device.name,
@@ -161,7 +161,9 @@ class _EditDevicePageState extends State<EditDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
-          if(_formKey.currentState.validate()){
+          final formState = _formKey.currentState;
+
+          if(formState != null && formState.validate()){
             await bloc.editDevice(S.of(context).DeviceExists,S.of(context).GenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
               Navigator.of(context).pop(editedDevice);
@@ -202,6 +204,6 @@ class _EditDevicePageState extends State<EditDevicePage> {
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
         S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
         S.of(context).DeviceNameCannotContainComma,
-        S.of(context).DeviceNameBlank) == null;
+        S.of(context).DeviceNameBlank) == "";
   }
 }

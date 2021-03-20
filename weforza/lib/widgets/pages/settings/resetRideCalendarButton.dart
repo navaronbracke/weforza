@@ -62,9 +62,12 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               },
             ),
           ),
-          Text(
-            translator.SettingsResetRideCalendarDescription,
-            style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              translator.SettingsResetRideCalendarDescription,
+              style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+            ),
           ),
         ],
       ),

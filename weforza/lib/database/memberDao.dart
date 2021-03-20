@@ -125,12 +125,8 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<int> getAttendingCountForAttendee(String uuid) async {
-    final finder = Finder(filter: Filter.equals("attendee", uuid));
-
-    final records = await _rideAttendeeStore.find(_database,finder: finder);
-
-    return records.length;
+  Future<int> getAttendingCountForAttendee(String uuid) {
+    return _rideAttendeeStore.count(_database, filter: Filter.equals("attendee", uuid));
   }
 
   @override

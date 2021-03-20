@@ -43,16 +43,16 @@ class EditMemberBloc extends Bloc {
   Future<File?> profileImageFuture;
 
   ///The actual errors.
-  String firstNameError = "";
-  String lastNameError = "";
-  String aliasError = "";
+  String? firstNameError;
+  String? lastNameError;
+  String? aliasError;
 
   final int nameAndAliasMaxLength = 50;
 
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateFirstName(String? value, String isRequiredMessage, String maxLengthMessage, String illegalCharacterMessage, String isBlankMessage) {
+  String? validateFirstName(String? value, String isRequiredMessage, String maxLengthMessage, String illegalCharacterMessage, String isBlankMessage) {
     if(value != firstName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -68,7 +68,7 @@ class EditMemberBloc extends Bloc {
     }
     else if(Member.personNameAndAliasRegex.hasMatch(value)){
       firstName = value;
-      firstNameError = "";
+      firstNameError = null;
     }
     else{
       firstNameError = illegalCharacterMessage;
@@ -79,7 +79,7 @@ class EditMemberBloc extends Bloc {
   ///Validate [value] according to the last name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateLastName(String? value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateLastName(String? value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != lastName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -95,20 +95,21 @@ class EditMemberBloc extends Bloc {
     }
     else if(Member.personNameAndAliasRegex.hasMatch(value)){
       lastName = value;
-      lastNameError = "";
+      lastNameError = null;
     }
     else{
       lastNameError = illegalCharacterMessage;
     }
+
     return lastNameError;
   }
 
-  String validateAlias(String? value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateAlias(String? value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
-    if(value == null || value.trim().isEmpty){
+    if(value == null || value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
     }
     else if(nameAndAliasMaxLength < value.length){
@@ -116,7 +117,7 @@ class EditMemberBloc extends Bloc {
     }
     else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
       alias = value;
-      aliasError = "";
+      aliasError = null;
     }
     else{
       aliasError = illegalCharacterMessage;

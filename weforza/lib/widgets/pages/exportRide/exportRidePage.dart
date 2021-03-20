@@ -213,7 +213,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
         S.of(context).FilenameWhitespace,
         S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
         S.of(context).InvalidFilename
-    ) == "";
+    ) == null;
   }
 
   @override

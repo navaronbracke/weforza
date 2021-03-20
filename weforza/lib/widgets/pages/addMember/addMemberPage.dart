@@ -96,18 +96,18 @@ class _AddMemberPageState extends State<AddMemberPage> {
         _firstNameRequiredMessage,
         _firstNameMaxLengthMessage,
         _firstNameIllegalCharactersMessage,
-        _firstNameBlankMessage) == "";
+        _firstNameBlankMessage) == null;
     final lastNameValid = _bloc.validateLastName(
             _lastNameController.text,
             _lastNameRequiredMessage,
             _lastNameMaxLengthMessage,
             _lastNameIllegalCharactersMessage,
-            _lastNameBlankMessage) == "";
+            _lastNameBlankMessage) == null;
     final aliasValid = _bloc.validateAlias(
         _aliasController.text,
         _aliasMaxLengthMessage,
         _aliasIllegalCharactersMessage,
-        _aliasBlankMessage) == "";
+        _aliasBlankMessage) == null;
     return firstNameValid && lastNameValid && aliasValid;
   }
 

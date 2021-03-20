@@ -219,7 +219,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
         S.of(context).FilenameWhitespace,
         S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
         S.of(context).InvalidFilename
-    ) == "";
+    ) == null;
   }
 
   @override

@@ -73,26 +73,24 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(S.of(context).Cancel.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(S.of(context).Cancel.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(S.of(context).Delete.toUpperCase()),
+              style: TextButton.styleFrom(
+                primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
-              TextButton(
-                child: Text(S.of(context).Delete.toUpperCase()),
-                style: TextButton.styleFrom(
-                  primary: ApplicationTheme.deleteItemButtonTextColor,
-                ),
-                onPressed: () => _onConfirmDeletion(),
-              ),
-            ],
-          ),
+              onPressed: () => _onConfirmDeletion(),
+            ),
+          ],
         ),
       ],
     );
+
     return _buildAndroidDialog(content);
   }
 
@@ -126,16 +124,13 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(S.of(context).Ok.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(S.of(context).Ok.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ),
       ],
     );
@@ -163,10 +158,14 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(
-            width: 280,//280 is the minimum for a material Dialog
-            height: 200,
-            child: content,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SizedBox(
+                width: constraints.biggest.width,
+                height: 200,
+                child: content,
+              );
+            },
           ),
         ],
       ),
@@ -345,17 +344,20 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
   Widget _buildIosDialog(Widget content){
     return Center(
       child: CupertinoPopupSurface(
-      isSurfacePainted: true,
-      child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-            SizedBox(
-              width: 270.0,
-              height: 200,
-              child: content,
-            ),
-          ],
-        ),
+        isSurfacePainted: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return SizedBox(
+                  width: constraints.biggest.width,
+                  height: 200,
+                  child: content,
+                );
+              },
+          ),
+      ]),
       ),
     );
   }

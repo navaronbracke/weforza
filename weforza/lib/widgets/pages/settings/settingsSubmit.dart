@@ -1,51 +1,78 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:weforza/blocs/settingsBloc.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class SettingsSubmit extends StatelessWidget {
+class SettingsSubmit extends StatefulWidget {
   SettingsSubmit({
-    required this.onSubmit,
-    required this.submitStream,
+    required this.bloc
   });
 
-  final Stream<bool> submitStream;
-  final VoidCallback onSubmit;
+  final SettingsBloc bloc;
 
   @override
+  _SettingsSubmitState createState() => _SettingsSubmitState();
+}
+
+class _SettingsSubmitState extends State<SettingsSubmit> {
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: submitStream,
+    return FutureBuilder<void>(
+      future: widget.bloc.saveSettingsFuture,
       builder: (context,snapshot){
-        if(snapshot.hasError){
-          return SizedBox.shrink();
-        }else{
-          return snapshot.data! ? Padding(
+        // We did not submit yet, show the submit button.
+        if(snapshot.connectionState == ConnectionState.none){
+          return _buildSubmitButton();
+        }else if (snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return _buildError();
+          }else {
+            return _buildSubmitButton();
+          }
+        } else {
+          return Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: Center(
+              child: Center(
                 child: PlatformAwareWidget(
                   android: () => CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
                   ios: () => CupertinoActivityIndicator(),
                 ),
-            ),
-          ): PlatformAwareWidget(
-            android: () => IconButton(
-              icon: Icon(Icons.done,color: Colors.white),
-              onPressed: onSubmit,
-            ),
-            ios: () => Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: CupertinoIconButton.fromAppTheme(
-                icon: Icons.done,
-                onPressed: onSubmit,
               ),
-            ),
           );
         }
       },
     );
+  }
+
+  Widget _buildSubmitButton(){
+    return PlatformAwareWidget(
+      android: () => IconButton(
+        icon: Icon(Icons.done,color: Colors.white),
+        onPressed: onSaveSettings,
+      ),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: CupertinoIconButton.fromAppTheme(
+          icon: Icons.done,
+          onPressed: onSaveSettings,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(){
+    return PlatformAwareWidget(
+      android: () => Icon(Icons.warning, color: Colors.orange),
+      ios: () => Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.orange),
+    );
+  }
+
+  void onSaveSettings(){
+    setState((){
+      widget.bloc.saveSettings();
+    });
   }
 }

@@ -667,6 +667,26 @@ class S {
     );
   }
 
+  /// `Nothing found for the specified search term`
+  String get RideAttendeeScanningManualSelectionFilterNoResults {
+    return Intl.message(
+      'Nothing found for the specified search term',
+      name: 'RideAttendeeScanningManualSelectionFilterNoResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search riders`
+  String get RideAttendeeScanningManualSelectionFilterInputLabel {
+    return Intl.message(
+      'Search riders',
+      name: 'RideAttendeeScanningManualSelectionFilterInputLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{amount} riders have a device with this name`
   String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(

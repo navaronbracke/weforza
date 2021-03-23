@@ -75,12 +75,15 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                     contentPadding: const EdgeInsets.symmetric(horizontal: 5),
                   ),
                 ),
-                ios: () => CupertinoTextField(
-                  textInputAction: TextInputAction.done,
-                  placeholder: S.of(context).RideAttendeeScanningManualSelectionFilterInputLabel,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  onChanged: _queryController.add,
+                ios: () => Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CupertinoTextField(
+                    textInputAction: TextInputAction.done,
+                    placeholder: S.of(context).RideAttendeeScanningManualSelectionFilterInputLabel,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    onChanged: _queryController.add,
+                  ),
                 ),
               ),
               Expanded(

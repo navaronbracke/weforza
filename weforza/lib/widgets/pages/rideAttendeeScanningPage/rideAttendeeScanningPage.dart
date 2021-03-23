@@ -73,6 +73,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildAndroidLayout(BuildContext context){
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
@@ -85,6 +86,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildIOSLayout(BuildContext context){
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
@@ -147,9 +149,8 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 ),
               );
             case ScanProcessStep.MANUAL:
-              final Future<List<Member>> future = bloc.loadActiveMembers();
               return RideAttendeeManualSelection(
-                future: future,
+                activeMembersFuture: bloc.loadActiveMembers(),
                 itemBuilder: _buildManualSelectionListItem,
                 saveButtonBuilder: _buildSaveButton,
               );

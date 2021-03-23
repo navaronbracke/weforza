@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("Er zijn geen renners om uit te kiezen"),
+    "RideAttendeeScanningManualSelectionFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Renners zoeken"),
+    "RideAttendeeScanningManualSelectionFilterNoResults" : MessageLookupByLibrary.simpleMessage("Niks gevonden voor de opgegeven zoekterm"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Kan niet beginnen scannen, er zijn geen renners"),
     "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, toestemming werd geweigerd."),
     "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scannen vereist toegang tot je locatie."),

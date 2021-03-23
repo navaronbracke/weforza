@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("There are no riders to choose from"),
+    "RideAttendeeScanningManualSelectionFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Search riders"),
+    "RideAttendeeScanningManualSelectionFilterNoResults" : MessageLookupByLibrary.simpleMessage("Nothing found for the specified search term"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Cannot start a scan, there are no riders"),
     "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan aborted, permission was denied."),
     "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scanning requires permission to use your location."),

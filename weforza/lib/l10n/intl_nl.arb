@@ -19,7 +19,6 @@
   "Delete": "Verwijderen",
   "Cancel": "Annuleren",
   "Ok": "Ok",
-  "Attendees": "Aanwezigen",
   "Details": "Details",
   "Devices": "Toestellen",
   "SaveChanges": "Opslaan",
@@ -29,6 +28,9 @@
   "Inactive": "Inactief",
   "All": "Alle",
   "Filter": "Filter",
+
+  "AttendeeCounterOne": "Één aanwezige",
+  "AttendeeCounterMany": "{count} aanwezigen",
 
   "ListEmpty": "Er is niets om te tonen",
 

@@ -146,9 +146,12 @@ class AttendeeScanningBloc extends Bloc {
           .listen(onDeviceFound, onError: (error){
             //skip the error
       }, onDone: (){
-        //Set is scanning to false
-        //so the value listenable builder for the button updates.
-        _scanningStateController.add(false);
+        // Set is scanning to false
+        // so the value listenable builder for the button updates.
+        // However, only add it when the controller is still available.
+        if(!_scanningStateController.isClosed){
+          _scanningStateController.add(false);
+        }
       }, cancelOnError: false);
     }
   }

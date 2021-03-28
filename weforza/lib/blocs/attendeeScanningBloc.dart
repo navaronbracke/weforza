@@ -36,10 +36,12 @@ class AttendeeScanningBloc extends Bloc {
   final BehaviorSubject<bool> _scanningStateController = BehaviorSubject.seeded(false);
   final BehaviorSubject<bool> _savingStateController = BehaviorSubject.seeded(false);
   final BehaviorSubject<bool> _isScanStepController = BehaviorSubject.seeded(true);
+  final BehaviorSubject<int> _attendeeCountController = BehaviorSubject();
 
   Stream<bool> get scanning => _scanningStateController.stream;
   Stream<bool> get saving => _savingStateController.stream;
   Stream<bool> get isScanStep => _isScanStepController.stream;
+  Stream<int> get attendeeCount => _attendeeCountController.stream;
 
   ///The repositories connect the bloc with the database.
   final SettingsRepository settingsRepo;
@@ -144,9 +146,12 @@ class AttendeeScanningBloc extends Bloc {
           .listen(onDeviceFound, onError: (error){
             //skip the error
       }, onDone: (){
-        //Set is scanning to false
-        //so the value listenable builder for the button updates.
-        _scanningStateController.add(false);
+        // Set is scanning to false
+        // so the value listenable builder for the button updates.
+        // However, only add it when the controller is still available.
+        if(!_scanningStateController.isClosed){
+          _scanningStateController.add(false);
+        }
       }, cancelOnError: false);
     }
   }
@@ -328,6 +333,7 @@ class AttendeeScanningBloc extends Bloc {
     _scanningStateController.close();
     _savingStateController.close();
     _isScanStepController.close();
+    _attendeeCountController.close();
   }
 
   bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
@@ -345,7 +351,11 @@ class AttendeeScanningBloc extends Bloc {
     }else{
       rideAttendees.add(memberUuid);
     }
+
+    _attendeeCountController.add(rideAttendees.length);
   }
+
+  int getRideAttendeeCount() => rideAttendees.length;
 
   // Remove the already scanned owners and sort the remaining ones.
   // This is useful for preparing the multiple owners resolution list screen.

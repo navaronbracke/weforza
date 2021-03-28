@@ -207,16 +207,6 @@ class S {
     );
   }
 
-  /// `Attendants`
-  String get Attendees {
-    return Intl.message(
-      'Attendants',
-      name: 'Attendees',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Details`
   String get Details {
     return Intl.message(
@@ -304,6 +294,26 @@ class S {
       name: 'Filter',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `One attendant`
+  String get AttendeeCounterOne {
+    return Intl.message(
+      'One attendant',
+      name: 'AttendeeCounterOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} attendants`
+  String AttendeeCounterMany(Object count) {
+    return Intl.message(
+      '$count attendants',
+      name: 'AttendeeCounterMany',
+      desc: '',
+      args: [count],
     );
   }
 

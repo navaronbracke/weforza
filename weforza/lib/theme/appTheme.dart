@@ -67,7 +67,6 @@ abstract class ApplicationTheme {
   static final TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
 
   static final TextStyle androidRideAttendeeListCounterTextStyle = TextStyle(fontSize: 14.0, color: Colors.white);
-  static final TextStyle iosRideAttendeeListCounterTextStyle = TextStyle(fontSize: 12.0);
 
   static final Color deviceIconColor = Colors.blueGrey;
   static final Color deviceTypePickerDotColor = Colors.blueGrey.shade100;

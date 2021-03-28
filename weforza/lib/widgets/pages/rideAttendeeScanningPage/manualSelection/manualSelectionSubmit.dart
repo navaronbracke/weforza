@@ -73,12 +73,19 @@ class ManualSelectionSubmit extends StatelessWidget {
           stream: isSaving,
           initialData: false,
           builder: (context, snapshot){
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: snapshot.data! ? CupertinoActivityIndicator() : CupertinoButton(
+            return snapshot.data! ? Padding(
+              padding: const EdgeInsets.only(right: 20, bottom: 14),
+              child: CupertinoActivityIndicator(radius: 12.5),
+            ): Padding(
+              padding: const EdgeInsets.only(top: 10, right: 10),
+              child: CupertinoButton.filled(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14.0,
+                  horizontal: 56,
+                ),
                 child: Text(
                   S.of(context).Save,
-                  style: TextStyle(color: ApplicationTheme.primaryColor),
+                  style: TextStyle(color: Colors.white),
                 ),
                 onPressed: onSave,
               ),

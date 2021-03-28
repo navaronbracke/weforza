@@ -36,10 +36,12 @@ class AttendeeScanningBloc extends Bloc {
   final BehaviorSubject<bool> _scanningStateController = BehaviorSubject.seeded(false);
   final BehaviorSubject<bool> _savingStateController = BehaviorSubject.seeded(false);
   final BehaviorSubject<bool> _isScanStepController = BehaviorSubject.seeded(true);
+  final BehaviorSubject<int> _attendeeCountController = BehaviorSubject();
 
   Stream<bool> get scanning => _scanningStateController.stream;
   Stream<bool> get saving => _savingStateController.stream;
   Stream<bool> get isScanStep => _isScanStepController.stream;
+  Stream<int> get attendeeCount => _attendeeCountController.stream;
 
   ///The repositories connect the bloc with the database.
   final SettingsRepository settingsRepo;
@@ -293,6 +295,8 @@ class AttendeeScanningBloc extends Bloc {
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
     _savingStateController.add(true);
+    //TODO remove when done testing
+    await Future.delayed(Duration(seconds: 2), (){});
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
         rideAttendees.map((element) => RideAttendee(rideDate, element)).toList()
@@ -328,6 +332,7 @@ class AttendeeScanningBloc extends Bloc {
     _scanningStateController.close();
     _savingStateController.close();
     _isScanStepController.close();
+    _attendeeCountController.close();
   }
 
   bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
@@ -345,7 +350,11 @@ class AttendeeScanningBloc extends Bloc {
     }else{
       rideAttendees.add(memberUuid);
     }
+
+    _attendeeCountController.add(rideAttendees.length);
   }
+
+  int getRideAttendeeCount() => rideAttendees.length;
 
   // Remove the already scanned owners and sort the remaining ones.
   // This is useful for preparing the multiple owners resolution list screen.

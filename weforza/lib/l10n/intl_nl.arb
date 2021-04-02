@@ -2,7 +2,6 @@
   "@@locale": "nl",
 
   "AppVersionNumber": "Versie: {version}",
-  "AppVersionBuildNumber": "Build Nummer: {buildNumber}",
 
   "MondayPrefix": "Ma",
   "TuesdayPrefix": "Di",
@@ -128,6 +127,8 @@
   "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",
   "SettingsResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
   "SettingsResetRideCalendarDialogConfirm": "Resetten",
+  "SettingsRiderFilterHeader": "Rennerslijst Filter",
+  "SettingsRiderFilterDescription": "Filter renners in de rennerslijst, op basis van hun status",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

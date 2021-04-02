@@ -57,16 +57,6 @@ class S {
     );
   }
 
-  /// `Build Number: {buildNumber}`
-  String AppVersionBuildNumber(Object buildNumber) {
-    return Intl.message(
-      'Build Number: $buildNumber',
-      name: 'AppVersionBuildNumber',
-      desc: '',
-      args: [buildNumber],
-    );
-  }
-
   /// `Mon`
   String get MondayPrefix {
     return Intl.message(
@@ -1102,6 +1092,26 @@ class S {
     return Intl.message(
       'Clear',
       name: 'SettingsResetRideCalendarDialogConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rider List Filter`
+  String get SettingsRiderFilterHeader {
+    return Intl.message(
+      'Rider List Filter',
+      name: 'SettingsRiderFilterHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter riders in the rider list, based on their status`
+  String get SettingsRiderFilterDescription {
+    return Intl.message(
+      'Filter riders in the rider list, based on their status',
+      name: 'SettingsRiderFilterDescription',
       desc: '',
       args: [],
     );

@@ -35,11 +35,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m7(amount) => "${amount} renners hebben een toestel met deze naam";
 
-  static m8(amount) => "Actieve Renners (${amount})";
+  static m8(amount) => "Renners (${amount})";
 
-  static m9(amount) => "Inactieve Renners (${amount})";
-
-  static m10(value) => "${value} is verplicht";
+  static m9(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -151,8 +149,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),
     "RideDetailsNoAttendees" : MessageLookupByLibrary.simpleMessage("Deze rit heeft geen aanwezigen"),
     "Riders" : MessageLookupByLibrary.simpleMessage("Renners"),
-    "RidersListActiveRiders" : m8,
-    "RidersListInactiveRiders" : m9,
+    "RidersListTitle" : m8,
     "Rides" : MessageLookupByLibrary.simpleMessage("Ritten"),
     "SaturdayPrefix" : MessageLookupByLibrary.simpleMessage("Za"),
     "Save" : MessageLookupByLibrary.simpleMessage("Opslaan"),
@@ -171,7 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Zo"),
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
-    "ValueIsRequired" : m10,
+    "ValueIsRequired" : m9,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

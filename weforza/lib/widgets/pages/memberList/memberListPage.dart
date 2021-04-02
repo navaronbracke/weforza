@@ -7,8 +7,6 @@ import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberFilterOption.dart';
-import 'package:weforza/model/membersListWithFilterModel.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
@@ -59,9 +57,19 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildTitle(BuildContext context){
-    return FutureBuilder<MembersListWithFilterModel>(
+    return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
-      builder: (context, snapshot)=> _MemberListPageTitle(model: snapshot.data),
+      builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Text(S.of(context).Riders);
+          }
+
+          return Text(S.of(context).RidersListTitle(snapshot.data?.length ?? 0));
+        }
+
+        return Text(S.of(context).Riders);
+      },
     );
   }
 
@@ -156,7 +164,7 @@ class _MemberListPageState extends State<MemberListPage> {
 
   Widget _buildList(BuildContext context){
     return FutureBuilder<List<Member>>(
-      future: bloc.membersFuture?.then((model) => model.items),
+      future: bloc.membersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -212,29 +220,6 @@ class _MemberListPageState extends State<MemberListPage> {
   void dispose() {
     bloc.dispose();
     super.dispose();
-  }
-}
-
-class _MemberListPageTitle extends StatelessWidget {
-  _MemberListPageTitle({this.model});
-
-  final MembersListWithFilterModel? model;
-
-  @override
-  Widget build(BuildContext context) {
-    if(model == null){
-      return Text(S.of(context).Riders);
-    }
-
-    switch(model!.filter){
-      case MemberFilterOption.ACTIVE: return Text(
-        S.of(context).RidersListActiveRiders(model?.items.length ?? 0),
-      );
-      case MemberFilterOption.INACTIVE: return Text(
-        S.of(context).RidersListInactiveRiders(model?.items.length ?? 0),
-      );
-      case MemberFilterOption.ALL: return Text(S.of(context).Riders);
-    }
   }
 }
 

@@ -307,21 +307,11 @@ class S {
     );
   }
 
-  /// `Active Riders ({amount})`
-  String RidersListActiveRiders(Object amount) {
+  /// `Riders ({amount})`
+  String RidersListTitle(Object amount) {
     return Intl.message(
-      'Active Riders ($amount)',
-      name: 'RidersListActiveRiders',
-      desc: '',
-      args: [amount],
-    );
-  }
-
-  /// `Inactive Riders ({amount})`
-  String RidersListInactiveRiders(Object amount) {
-    return Intl.message(
-      'Inactive Riders ($amount)',
-      name: 'RidersListInactiveRiders',
+      'Riders ($amount)',
+      name: 'RidersListTitle',
       desc: '',
       args: [amount],
     );

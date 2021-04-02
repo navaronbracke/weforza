@@ -2,7 +2,6 @@
   "@@locale": "en",
 
   "AppVersionNumber": "Version: {version}",
-  "AppVersionBuildNumber": "Build Number: {buildNumber}",
 
   "MondayPrefix": "Mon",
   "TuesdayPrefix": "Tue",
@@ -128,6 +127,8 @@
   "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
   "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
   "SettingsResetRideCalendarDialogConfirm": "Clear",
+  "SettingsRiderFilterHeader": "Rider List Filter",
+  "SettingsRiderFilterDescription": "Filter riders in the rider list, based on their status",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

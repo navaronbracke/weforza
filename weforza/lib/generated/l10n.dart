@@ -307,6 +307,26 @@ class S {
     );
   }
 
+  /// `Active Riders ({amount})`
+  String RidersListActiveRiders(Object amount) {
+    return Intl.message(
+      'Active Riders ($amount)',
+      name: 'RidersListActiveRiders',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `Inactive Riders ({amount})`
+  String RidersListInactiveRiders(Object amount) {
+    return Intl.message(
+      'Inactive Riders ($amount)',
+      name: 'RidersListInactiveRiders',
+      desc: '',
+      args: [amount],
+    );
+  }
+
   /// `This ride has no attendants`
   String get RideDetailsNoAttendees {
     return Intl.message(

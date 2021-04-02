@@ -30,6 +30,8 @@
   "Filter": "Filter",
 
   "ListEmpty": "There is nothing to show",
+  "RidersListActiveRiders": "Active Riders ({amount})",
+  "RidersListInactiveRiders": "Inactive Riders ({amount})",
 
   "RideDetailsNoAttendees": "This ride has no attendants",
 

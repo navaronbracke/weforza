@@ -25,61 +25,45 @@ class ScanDurationOption extends StatefulWidget {
 class _ScanDurationOptionState extends State<ScanDurationOption> {
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
-
-  Widget _buildAndroidWidget(BuildContext context){
+  Widget build(BuildContext context){
     final currentValue = widget.getValue();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(S.of(context).SettingsScanSliderHeader,style: ApplicationTheme.settingsOptionHeaderStyle),
-        Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-          child: SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              trackHeight: 5,
-              thumbColor: ApplicationTheme.settingsScanSliderThumbColor
-            ),
-            child: Slider(
-              value: currentValue,
-              onChanged: (value)=> setState(() => widget.onChanged(value)),
-              min: widget.minScanValue,
-              max: widget.maxScanValue,
-              divisions: 5,
-            ),
-          ),
-        ),
-        Center(child: Text("${currentValue.floor()}s")),
-      ],
-    );
-  }
 
-  Widget _buildIosWidget(BuildContext context){
-    final currentValue = widget.getValue();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           S.of(context).SettingsScanSliderHeader,
-          style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 16)
+          style: ApplicationTheme.settingsOptionHeaderStyle,
         ),
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: CupertinoSlider(
-                  value: currentValue,
-                  onChanged: (value) => setState(() => widget.onChanged(value)),
-                  min: widget.minScanValue,
-                  max: widget.maxScanValue,
-                  divisions: 5,
-                ),
+          child: PlatformAwareWidget(
+            android: () => SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                  trackHeight: 5,
+                  thumbColor: ApplicationTheme.settingsScanSliderThumbColor
               ),
-            ],
+              child: Slider(
+                value: currentValue,
+                onChanged: (value)=> setState(() => widget.onChanged(value)),
+                min: widget.minScanValue,
+                max: widget.maxScanValue,
+                divisions: 5,
+              ),
+            ),
+            ios: () => Row(
+              children: <Widget>[
+                Expanded(
+                  child: CupertinoSlider(
+                    value: currentValue,
+                    onChanged: (value) => setState(() => widget.onChanged(value)),
+                    min: widget.minScanValue,
+                    max: widget.maxScanValue,
+                    divisions: 5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Center(child: Text("${currentValue.floor()}s")),

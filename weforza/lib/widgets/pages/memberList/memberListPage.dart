@@ -7,6 +7,8 @@ import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/model/membersListWithFilterModel.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
@@ -57,24 +59,9 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildTitle(BuildContext context){
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(S.of(context).Riders),
-        Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: FutureBuilder<int>(
-            future: bloc.membersFuture?.then((items) => items.length),
-            builder: (context, snapshot){
-              if(snapshot.connectionState == ConnectionState.done && !snapshot.hasError){
-                return Text("(${snapshot.data})");
-              }
-
-              return SizedBox.shrink();
-            },
-          ),
-        )
-      ],
+    return FutureBuilder<MembersListWithFilterModel>(
+      future: bloc.membersFuture,
+      builder: (context, snapshot)=> _MemberListPageTitle(model: snapshot.data),
     );
   }
 
@@ -169,7 +156,7 @@ class _MemberListPageState extends State<MemberListPage> {
 
   Widget _buildList(BuildContext context){
     return FutureBuilder<List<Member>>(
-      future: bloc.membersFuture,
+      future: bloc.membersFuture?.then((model) => model.items),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -227,3 +214,27 @@ class _MemberListPageState extends State<MemberListPage> {
     super.dispose();
   }
 }
+
+class _MemberListPageTitle extends StatelessWidget {
+  _MemberListPageTitle({this.model});
+
+  final MembersListWithFilterModel? model;
+
+  @override
+  Widget build(BuildContext context) {
+    if(model == null){
+      return Text(S.of(context).Riders);
+    }
+
+    switch(model!.filter){
+      case MemberFilterOption.ACTIVE: return Text(
+        S.of(context).RidersListActiveRiders(model?.items.length ?? 0),
+      );
+      case MemberFilterOption.INACTIVE: return Text(
+        S.of(context).RidersListInactiveRiders(model?.items.length ?? 0),
+      );
+      case MemberFilterOption.ALL: return Text(S.of(context).Riders);
+    }
+  }
+}
+

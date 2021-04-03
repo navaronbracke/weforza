@@ -5,8 +5,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/genericError.dart';
+import 'package:weforza/widgets/common/riderSearchFilterEmpty.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionListEmpty.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionListFilterEmpty.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -92,12 +92,12 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                   stream: _queryController.stream,
                   builder: (context, streamSnapshot) {
                     final data = filterData(
-                      futureSnapshot.data!,
+                      futureSnapshot.data ?? [],
                       streamSnapshot.data ?? "",
                     );
 
                     if(data.isEmpty){
-                      return ManualSelectionListFilterEmpty();
+                      return RiderSearchFilterEmpty();
                     }
 
                     return ListView.builder(

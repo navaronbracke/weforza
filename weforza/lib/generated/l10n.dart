@@ -667,26 +667,6 @@ class S {
     );
   }
 
-  /// `Nothing found for the specified search term`
-  String get RideAttendeeScanningManualSelectionFilterNoResults {
-    return Intl.message(
-      'Nothing found for the specified search term',
-      name: 'RideAttendeeScanningManualSelectionFilterNoResults',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Search riders`
-  String get RideAttendeeScanningManualSelectionFilterInputLabel {
-    return Intl.message(
-      'Search riders',
-      name: 'RideAttendeeScanningManualSelectionFilterInputLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `{amount} riders have a device with this name`
   String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
@@ -702,6 +682,26 @@ class S {
     return Intl.message(
       'Some scanned devices have multiple possible owners. You can select the attending owners here.',
       name: 'RideAttendeeScanningUnresolvedOwnersListTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing found for the specified search term`
+  String get RiderSearchFilterNoResults {
+    return Intl.message(
+      'Nothing found for the specified search term',
+      name: 'RiderSearchFilterNoResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search riders`
+  String get RiderSearchFilterInputLabel {
+    return Intl.message(
+      'Search riders',
+      name: 'RiderSearchFilterInputLabel',
       desc: '',
       args: [],
     );

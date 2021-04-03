@@ -2,7 +2,6 @@
   "@@locale": "en",
 
   "AppVersionNumber": "Version: {version}",
-  "AppVersionBuildNumber": "Build Number: {buildNumber}",
 
   "MondayPrefix": "Mon",
   "TuesdayPrefix": "Tue",
@@ -33,6 +32,7 @@
   "AttendeeCounterMany": "{count} attendants",
 
   "ListEmpty": "There is nothing to show",
+  "RidersListTitle": "Riders ({amount})",
 
   "RideDetailsNoAttendees": "This ride has no attendants",
 
@@ -79,10 +79,11 @@
   "RideAttendeeScanningSkipScan": "Skip Scan",
   "RideAttendeeScanningContinue": "Proceed to next step",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no riders to choose from",
-  "RideAttendeeScanningManualSelectionFilterNoResults": "Nothing found for the specified search term",
-  "RideAttendeeScanningManualSelectionFilterInputLabel": "Search riders",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} riders have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
+
+  "RiderSearchFilterNoResults": "Nothing found for the specified search term",
+  "RiderSearchFilterInputLabel": "Search riders",
 
   "ImportMembersPageTitle": "Import Riders",
   "ImportMembersPickFile": "Choose File",
@@ -130,6 +131,8 @@
   "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
   "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
   "SettingsResetRideCalendarDialogConfirm": "Clear",
+  "SettingsRiderFilterHeader": "Rider List Filter",
+  "SettingsRiderFilterDescription": "Filter riders in the rider list, based on their status",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

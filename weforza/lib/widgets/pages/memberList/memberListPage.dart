@@ -2,20 +2,21 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
+import 'package:weforza/widgets/common/riderSearchFilterEmpty.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
-import 'package:weforza/widgets/pages/memberList/memberListFilter.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -29,6 +30,7 @@ class MemberListPage extends StatefulWidget {
   _MemberListPageState createState() => _MemberListPageState(
      bloc: MemberListBloc(
        InjectionContainer.get<MemberRepository>(),
+       InjectionContainer.get<SettingsRepository>(),
        InjectionContainer.get<IFileHandler>(),
      )
   );
@@ -42,29 +44,30 @@ class _MemberListPageState extends State<MemberListPage> {
 
   final MemberListBloc bloc;
 
+  // This controller manages the query stream.
+  // The input field creates it's own TextEditingController,
+  // as it starts with an empty string.
+  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
+
+  List<Member> filterData(List<Member> list, String query){
+    if(query.isEmpty){
+      return list;
+    }
+
+    query = query.trim().toLowerCase();
+
+    return list.where((Member member){
+      return member.firstname.toLowerCase().contains(query) || member.lastname.toLowerCase().contains(query)
+          // If the alias is not empty, we can match it against the query string.
+          || (member.alias.isNotEmpty && member.alias.toLowerCase().contains(query));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context){
-    final List<MemberListFilterItem> filterItems = <MemberListFilterItem>[
-      MemberListFilterItem(
-          value: MemberFilterOption.ALL,
-          label: S.of(context).All,
-          icon: Icons.people,
-      ),
-      MemberListFilterItem(
-          value: MemberFilterOption.ACTIVE,
-          label: S.of(context).Active,
-          icon: Icons.directions_bike
-      ),
-      MemberListFilterItem(
-          value: MemberFilterOption.INACTIVE,
-          label: S.of(context).Inactive,
-          icon: Icons.block
-      ),
-    ];
-
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context, filterItems),
-      ios: () => _buildIosWidget(context, filterItems),
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
     );
   }
 
@@ -75,29 +78,25 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildTitle(BuildContext context){
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(S.of(context).Riders),
-        Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: FutureBuilder<int>(
-            future: bloc.membersFuture?.then((items) => items.length),
-            builder: (context, snapshot){
-              if(snapshot.connectionState == ConnectionState.done && !snapshot.hasError){
-                return Text("(${snapshot.data})");
-              }
+    return FutureBuilder<List<Member>>(
+      future: bloc.membersFuture,
+      builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          if(snapshot.hasError){
+            return Text(S.of(context).Riders);
+          }
 
-              return SizedBox.shrink();
-            },
-          ),
-        )
-      ],
+          return Text(S.of(context).RidersListTitle(snapshot.data?.length ?? 0));
+        }
+
+        return Text(S.of(context).Riders);
+      },
     );
   }
 
-  Widget _buildAndroidWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: _buildTitle(context),
         actions: <Widget>[
@@ -125,11 +124,6 @@ class _MemberListPageState extends State<MemberListPage> {
       ),
       body: Column(
         children: [
-          MemberListFilter(
-            stream: bloc.stream,
-            onFilterChanged: onFilterChanged,
-            items: filterItems,
-          ),
           Expanded(
             child: _buildList(context),
           ),
@@ -138,8 +132,9 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  Widget _buildIosWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Row(
@@ -181,11 +176,6 @@ class _MemberListPageState extends State<MemberListPage> {
         bottom: false,
         child: Column(
           children: [
-            MemberListFilter(
-              stream: bloc.stream,
-              onFilterChanged: onFilterChanged,
-              items: filterItems,
-            ),
             Expanded(
               child: _buildList(context),
             ),
@@ -198,19 +188,69 @@ class _MemberListPageState extends State<MemberListPage> {
   Widget _buildList(BuildContext context){
     return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
+      builder: (context, futureSnapshot) {
+        if (futureSnapshot.connectionState == ConnectionState.done) {
+          if (futureSnapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
-          } else {
-            return (snapshot.data == null || snapshot.data!.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data!)
-            );
           }
-        } else {
-          return Center(child: PlatformAwareLoadingIndicator());
+
+          if(futureSnapshot.data == null || futureSnapshot.data!.isEmpty){
+            return Center(child: MemberListEmpty());
+          }
+
+          return Column(
+            children: [
+              PlatformAwareWidget(
+                android: () => TextFormField(
+                  textInputAction: TextInputAction.search,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onChanged: _queryController.add,
+                  decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.search),
+                      labelText: S.of(context).RiderSearchFilterInputLabel,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                      floatingLabelBehavior: FloatingLabelBehavior.never
+                  ),
+                ),
+                ios: () => Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CupertinoTextField(
+                    textInputAction: TextInputAction.search,
+                    placeholder: S.of(context).RiderSearchFilterInputLabel,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    onChanged: _queryController.add,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<String>(
+                  stream: _queryController.stream,
+                    builder: (context, streamSnapshot){
+                      final data = filterData(
+                        futureSnapshot.data ?? [],
+                        streamSnapshot.data ?? "",
+                      );
+
+                      if(data.isEmpty){
+                        return RiderSearchFilterEmpty();
+                      }
+
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) => _buildListItem(context, data[index]),
+                      );
+                    },
+                ),
+              ),
+            ],
+          );
         }
+
+        return Center(child: PlatformAwareLoadingIndicator());
       },
     );
   }
@@ -225,15 +265,14 @@ class _MemberListPageState extends State<MemberListPage> {
     ).then((_)=> onReturnToMemberListPage(context));
   }
 
-  Widget _buildListItem(BuildContext context, int index, List<Member> members) {
-    final Member member = members[index];
-    final Future<int> attendingCount = bloc.getMemberAttendingCount(member.uuid);
-    final Future<File?> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
+  Widget _buildListItem(BuildContext context, Member item) {
+    final Future<int> attendingCount = bloc.getMemberAttendingCount(item.uuid);
+    final Future<File?> profileImage = bloc.getMemberProfileImage(item.profileImageFilePath);
     return MemberListItem(
-        member: member,
+        member: item,
         memberProfileImage: profileImage,
         memberAttendingCount: attendingCount,
-        onTap: ()=> onTapListItem(context, member, attendingCount, profileImage)
+        onTap: ()=> onTapListItem(context, item, attendingCount, profileImage)
     );
   }
 
@@ -243,17 +282,17 @@ class _MemberListPageState extends State<MemberListPage> {
     // Trigger the reload of members, but do an override for the filter.
     if(reloadNotifier.value){
       reloadNotifier.value = false;
-      onFilterChanged(bloc.currentFilter, true);
+      setState(() {
+        bloc.loadMembers();
+      });
     }
-  }
-
-  void onFilterChanged(MemberFilterOption option, [bool override = false]){
-    setState(() => bloc.onFilterChanged(option, override));
   }
 
   @override
   void dispose() {
     bloc.dispose();
+    _queryController.close();
     super.dispose();
   }
 }
+

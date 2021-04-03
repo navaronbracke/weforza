@@ -8,6 +8,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
+import 'package:weforza/widgets/pages/settings/memberListFilter.dart';
 import 'package:weforza/widgets/pages/settings/resetRideCalendarButton.dart';
 import 'package:weforza/widgets/pages/settings/scanDurationOption.dart';
 import 'package:weforza/widgets/pages/settings/settingsPageGenericError.dart';
@@ -104,6 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ScanDurationOption(
                     getValue: () => bloc.scanDuration,
@@ -111,37 +113,30 @@ class _SettingsPageState extends State<SettingsPage> {
                     minScanValue: bloc.minScanValue,
                     onChanged: bloc.onScanDurationChanged,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: MemberListFilter(
+                      getValue: () => bloc.memberListFilter,
+                      onChanged: bloc.onMemberListFilterChanged,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
           if (settings.hasRideCalendar) ResetRideCalendarButton(),
-          _buildApplicationPackageInfo(
-            context,
-            settings.packageInfo.version,
-            settings.packageInfo.buildNumber,
+          PlatformAwareWidget(
+            android: () => Text(
+              S.of(context).AppVersionNumber(settings.appVersion),
+              style: ApplicationTheme.appVersionTextStyle,
+            ),
+            ios: () => Text(
+              S.of(context).AppVersionNumber(settings.appVersion),
+              style: ApplicationTheme.appVersionTextStyle.copyWith(fontSize: 14),
+            ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildApplicationPackageInfo(
-    BuildContext context,
-    String version,
-    String buildNumber,
-  ) {
-    return Column(
-      children: [
-        Text(
-          S.of(context).AppVersionNumber(version),
-          style: ApplicationTheme.appVersionTextStyle,
-        ),
-        Text(
-          S.of(context).AppVersionBuildNumber(buildNumber),
-          style: ApplicationTheme.appVersionTextStyle,
-        ),
-      ],
     );
   }
 

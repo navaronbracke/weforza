@@ -2,7 +2,6 @@
   "@@locale": "nl",
 
   "AppVersionNumber": "Versie: {version}",
-  "AppVersionBuildNumber": "Build Nummer: {buildNumber}",
 
   "MondayPrefix": "Ma",
   "TuesdayPrefix": "Di",
@@ -33,6 +32,7 @@
   "AttendeeCounterMany": "{count} aanwezigen",
 
   "ListEmpty": "Er is niets om te tonen",
+  "RidersListTitle": "Renners ({amount})",
 
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
 
@@ -79,10 +79,11 @@
   "RideAttendeeScanningSkipScan": "Scan Overslaan",
   "RideAttendeeScanningContinue": "Doorgaan naar volgende stap",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen renners om uit te kiezen",
-  "RideAttendeeScanningManualSelectionFilterNoResults": "Niks gevonden voor de opgegeven zoekterm",
-  "RideAttendeeScanningManualSelectionFilterInputLabel": "Renners zoeken",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} renners hebben een toestel met deze naam",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren.",
+
+  "RiderSearchFilterNoResults": "Geen resultaten voor de opgegeven zoekterm",
+  "RiderSearchFilterInputLabel": "Renners zoeken",
 
   "ImportMembersPageTitle": "Importeer Renners",
   "ImportMembersPickFile": "Kies Bestand",
@@ -130,6 +131,8 @@
   "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",
   "SettingsResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
   "SettingsResetRideCalendarDialogConfirm": "Resetten",
+  "SettingsRiderFilterHeader": "Rennerslijst Filter",
+  "SettingsRiderFilterDescription": "Filter renners in de rennerslijst, op basis van hun status",
 
   "PersonFirstNameLabel": "Voornaam",
   "PersonLastNameLabel": "Familienaam",

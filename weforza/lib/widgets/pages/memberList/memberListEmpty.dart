@@ -7,21 +7,19 @@ import 'package:weforza/theme/appTheme.dart';
 class MemberListEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.people,
-            color: ApplicationTheme.listInformationalIconColor,
-            size: MediaQuery.of(context).size.shortestSide * .1,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Text(S.of(context).ListEmpty),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          Icons.people,
+          color: ApplicationTheme.listInformationalIconColor,
+          size: MediaQuery.of(context).size.shortestSide * .1,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(S.of(context).ListEmpty),
+        ),
+      ],
     );
   }
 }

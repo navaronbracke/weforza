@@ -21,23 +21,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(maxLength) => "An alias can\'t be longer than ${maxLength} characters";
 
-  static m1(buildNumber) => "Build Number: ${buildNumber}";
+  static m1(version) => "Version: ${version}";
 
-  static m2(version) => "Version: ${version}";
+  static m2(count) => "${count} attendants";
 
-  static m3(count) => "${count} attendants";
+  static m3(maxLength) => "Device name is max. ${maxLength} characters";
 
-  static m4(maxLength) => "Device name is max. ${maxLength} characters";
+  static m4(date) => "ride_${date}";
 
-  static m5(date) => "ride_${date}";
+  static m5(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m6(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
+  static m6(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m7(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m7(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m8(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m8(amount) => "${amount} riders have a device with this name";
 
-  static m9(amount) => "${amount} riders have a device with this name";
+  static m9(amount) => "Riders (${amount})";
 
   static m10(value) => "${value} is required";
 
@@ -59,9 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "AliasIllegalCharacters" : MessageLookupByLibrary.simpleMessage("An alias can only contain letters, spaces or \' -"),
     "AliasMaxLength" : m0,
     "All" : MessageLookupByLibrary.simpleMessage("All"),
-    "AppVersionBuildNumber" : m1,
-    "AppVersionNumber" : m2,
-    "AttendeeCounterMany" : m3,
+    "AppVersionNumber" : m1,
+    "AttendeeCounterMany" : m2,
     "AttendeeCounterOne" : MessageLookupByLibrary.simpleMessage("One attendant"),
     "Cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "Delete" : MessageLookupByLibrary.simpleMessage("Delete"),
@@ -75,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("A device name can\'t be empty"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("A device name cannot contain a ,"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Device Name"),
-    "DeviceNameMaxLength" : m4,
+    "DeviceNameMaxLength" : m3,
     "DevicePhone" : MessageLookupByLibrary.simpleMessage("Phone"),
     "DevicePowerMeter" : MessageLookupByLibrary.simpleMessage("Power meter"),
     "DevicePulseMonitor" : MessageLookupByLibrary.simpleMessage("Pulse Monitor"),
@@ -89,7 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("firstname,lastname,alias,active,devices"),
     "ExportMembersTitle" : MessageLookupByLibrary.simpleMessage("Export Riders"),
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Exporting ride to file"),
-    "ExportRideFileNamePlaceholder" : m5,
+    "ExportRideFileNamePlaceholder" : m4,
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Export Ride"),
     "ExportRidesTitle" : MessageLookupByLibrary.simpleMessage("Export Rides"),
     "ExportingMembersDescription" : MessageLookupByLibrary.simpleMessage("Exporting riders and devices"),
@@ -98,12 +97,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "FileExists" : MessageLookupByLibrary.simpleMessage("This file already exists"),
     "FileJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "Filename" : MessageLookupByLibrary.simpleMessage("Filename"),
-    "FilenameMaxLength" : m6,
+    "FilenameMaxLength" : m5,
     "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("A filename can\'t be blank"),
     "Filter" : MessageLookupByLibrary.simpleMessage("Filter"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be blank"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("First Name can only contain letters, spaces or \' -"),
-    "FirstNameMaxLength" : m7,
+    "FirstNameMaxLength" : m6,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Fri"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Go Back"),
@@ -121,7 +120,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Invalid filename"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be blank"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Last Name can only contain letters, spaces or \' -"),
-    "LastNameMaxLength" : m8,
+    "LastNameMaxLength" : m7,
     "ListEmpty" : MessageLookupByLibrary.simpleMessage("There is nothing to show"),
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("This rider already exists"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this rider?"),
@@ -134,12 +133,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
     "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Proceed to next step"),
-    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m9,
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m8,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("There are no riders to choose from"),
-    "RideAttendeeScanningManualSelectionFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Search riders"),
-    "RideAttendeeScanningManualSelectionFilterNoResults" : MessageLookupByLibrary.simpleMessage("Nothing found for the specified search term"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Cannot start a scan, there are no riders"),
     "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan aborted, permission was denied."),
     "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scanning requires permission to use your location."),
@@ -152,7 +149,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this ride?"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Delete Ride"),
     "RideDetailsNoAttendees" : MessageLookupByLibrary.simpleMessage("This ride has no attendants"),
+    "RiderSearchFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Search riders"),
+    "RiderSearchFilterNoResults" : MessageLookupByLibrary.simpleMessage("Nothing found for the specified search term"),
     "Riders" : MessageLookupByLibrary.simpleMessage("Riders"),
+    "RidersListTitle" : m9,
     "Rides" : MessageLookupByLibrary.simpleMessage("Rides"),
     "SaturdayPrefix" : MessageLookupByLibrary.simpleMessage("Sat"),
     "Save" : MessageLookupByLibrary.simpleMessage("Save"),
@@ -165,6 +165,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "SettingsResetRideCalendarDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to remove all the rides?"),
     "SettingsResetRideCalendarDialogTitle" : MessageLookupByLibrary.simpleMessage("Reset Calendar"),
     "SettingsResetRideCalendarErrorMessage" : MessageLookupByLibrary.simpleMessage("Could not reset the ride calendar."),
+    "SettingsRiderFilterDescription" : MessageLookupByLibrary.simpleMessage("Filter riders in the rider list, based on their status"),
+    "SettingsRiderFilterHeader" : MessageLookupByLibrary.simpleMessage("Rider List Filter"),
     "SettingsScanSliderHeader" : MessageLookupByLibrary.simpleMessage("Duration of a scan (in seconds)"),
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Sun"),
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),

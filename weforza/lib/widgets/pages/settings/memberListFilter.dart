@@ -95,9 +95,15 @@ class _MemberListFilterState extends State<MemberListFilter> {
             ),
           ),
         ),
-        Text(
-          S.of(context).SettingsRiderFilterDescription,
-          style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+        PlatformAwareWidget(
+          android: () => Text(
+            S.of(context).SettingsRiderFilterDescription,
+            style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+          ),
+          ios: () => Text(
+            S.of(context).SettingsRiderFilterDescription,
+            style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle.copyWith(fontSize: 14),
+          ),
         ),
       ],
     );

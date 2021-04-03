@@ -57,16 +57,6 @@ class S {
     );
   }
 
-  /// `Build Number: {buildNumber}`
-  String AppVersionBuildNumber(Object buildNumber) {
-    return Intl.message(
-      'Build Number: $buildNumber',
-      name: 'AppVersionBuildNumber',
-      desc: '',
-      args: [buildNumber],
-    );
-  }
-
   /// `Mon`
   String get MondayPrefix {
     return Intl.message(
@@ -324,6 +314,16 @@ class S {
       name: 'ListEmpty',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Riders ({amount})`
+  String RidersListTitle(Object amount) {
+    return Intl.message(
+      'Riders ($amount)',
+      name: 'RidersListTitle',
+      desc: '',
+      args: [amount],
     );
   }
 
@@ -677,26 +677,6 @@ class S {
     );
   }
 
-  /// `Nothing found for the specified search term`
-  String get RideAttendeeScanningManualSelectionFilterNoResults {
-    return Intl.message(
-      'Nothing found for the specified search term',
-      name: 'RideAttendeeScanningManualSelectionFilterNoResults',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Search riders`
-  String get RideAttendeeScanningManualSelectionFilterInputLabel {
-    return Intl.message(
-      'Search riders',
-      name: 'RideAttendeeScanningManualSelectionFilterInputLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `{amount} riders have a device with this name`
   String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
@@ -712,6 +692,26 @@ class S {
     return Intl.message(
       'Some scanned devices have multiple possible owners. You can select the attending owners here.',
       name: 'RideAttendeeScanningUnresolvedOwnersListTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nothing found for the specified search term`
+  String get RiderSearchFilterNoResults {
+    return Intl.message(
+      'Nothing found for the specified search term',
+      name: 'RiderSearchFilterNoResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search riders`
+  String get RiderSearchFilterInputLabel {
+    return Intl.message(
+      'Search riders',
+      name: 'RiderSearchFilterInputLabel',
       desc: '',
       args: [],
     );
@@ -1112,6 +1112,26 @@ class S {
     return Intl.message(
       'Clear',
       name: 'SettingsResetRideCalendarDialogConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rider List Filter`
+  String get SettingsRiderFilterHeader {
+    return Intl.message(
+      'Rider List Filter',
+      name: 'SettingsRiderFilterHeader',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter riders in the rider list, based on their status`
+  String get SettingsRiderFilterDescription {
+    return Intl.message(
+      'Filter riders in the rider list, based on their status',
+      name: 'SettingsRiderFilterDescription',
       desc: '',
       args: [],
     );

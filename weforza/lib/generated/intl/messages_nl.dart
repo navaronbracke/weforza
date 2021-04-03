@@ -21,23 +21,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(maxLength) => "Een alias is maximum ${maxLength} letters";
 
-  static m1(version) => "Versie: ${version}";
+  static m1(buildNumber) => "Build Nummer: ${buildNumber}";
 
-  static m2(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
+  static m2(version) => "Versie: ${version}";
 
-  static m3(date) => "rit_${date}";
+  static m3(count) => "${count} aanwezigen";
 
-  static m4(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m4(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
 
-  static m5(maxLength) => "Een voornaam is maximum ${maxLength} letters";
+  static m5(date) => "rit_${date}";
 
-  static m6(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m6(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m7(amount) => "${amount} renners hebben een toestel met deze naam";
+  static m7(maxLength) => "Een voornaam is maximum ${maxLength} letters";
 
-  static m8(amount) => "Renners (${amount})";
+  static m8(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m9(value) => "${value} is verplicht";
+  static m9(amount) => "${amount} renners hebben een toestel met deze naam";
+
+  static m10(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -57,8 +59,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "AliasIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een alias mag enkel letters, spaties of \' - bevatten"),
     "AliasMaxLength" : m0,
     "All" : MessageLookupByLibrary.simpleMessage("Alle"),
-    "AppVersionNumber" : m1,
-    "Attendees" : MessageLookupByLibrary.simpleMessage("Aanwezigen"),
+    "AppVersionBuildNumber" : m1,
+    "AppVersionNumber" : m2,
+    "AttendeeCounterMany" : m3,
+    "AttendeeCounterOne" : MessageLookupByLibrary.simpleMessage("Één aanwezige"),
     "Cancel" : MessageLookupByLibrary.simpleMessage("Annuleren"),
     "Delete" : MessageLookupByLibrary.simpleMessage("Verwijderen"),
     "DeleteDeviceDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit toestel wil verwijderen?"),
@@ -71,7 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag niet leeg zijn"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag geen , bevatten"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Naam Toestel"),
-    "DeviceNameMaxLength" : m2,
+    "DeviceNameMaxLength" : m4,
     "DevicePhone" : MessageLookupByLibrary.simpleMessage("Telefoon"),
     "DevicePowerMeter" : MessageLookupByLibrary.simpleMessage("Krachtmeter"),
     "DevicePulseMonitor" : MessageLookupByLibrary.simpleMessage("Hartslagmeter"),
@@ -85,7 +89,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExportMembersCsvHeader" : MessageLookupByLibrary.simpleMessage("voornaam,familienaam,alias,actief,toestellen"),
     "ExportMembersTitle" : MessageLookupByLibrary.simpleMessage("Renners Exporteren"),
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Rit exporteren naar bestand"),
-    "ExportRideFileNamePlaceholder" : m3,
+    "ExportRideFileNamePlaceholder" : m5,
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Rit Exporteren"),
     "ExportRidesTitle" : MessageLookupByLibrary.simpleMessage("Ritten Exporteren"),
     "ExportingMembersDescription" : MessageLookupByLibrary.simpleMessage("Renners en toestellen exporteren"),
@@ -94,12 +98,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "FileExists" : MessageLookupByLibrary.simpleMessage("Dit bestand bestaat al"),
     "FileJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "Filename" : MessageLookupByLibrary.simpleMessage("Bestandsnaam"),
-    "FilenameMaxLength" : m4,
+    "FilenameMaxLength" : m6,
     "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("Een bestandsnaam mag niet enkel witruimte zijn"),
     "Filter" : MessageLookupByLibrary.simpleMessage("Filter"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("Voornaam mag niet enkel witruimte zijn"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Voornaam mag enkel letters, spaties of \' - bevatten"),
-    "FirstNameMaxLength" : m5,
+    "FirstNameMaxLength" : m7,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Vr"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Keer Terug"),
@@ -117,7 +121,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Ongeldige bestandsnaam"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Familienaam mag niet enkel witruimte zijn"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Familienaam mag enkel letters,spaties of \' - bevatten"),
-    "LastNameMaxLength" : m6,
+    "LastNameMaxLength" : m8,
     "ListEmpty" : MessageLookupByLibrary.simpleMessage("Er is niets om te tonen"),
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("Deze renner bestaat al"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze renner wil verwijderen?"),
@@ -130,10 +134,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
     "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Doorgaan naar volgende stap"),
-    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m7,
+    "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m9,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
     "RideAttendeeScanningManualSelectionEmptyList" : MessageLookupByLibrary.simpleMessage("Er zijn geen renners om uit te kiezen"),
+    "RideAttendeeScanningManualSelectionFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Renners zoeken"),
+    "RideAttendeeScanningManualSelectionFilterNoResults" : MessageLookupByLibrary.simpleMessage("Niks gevonden voor de opgegeven zoekterm"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Kan niet beginnen scannen, er zijn geen renners"),
     "RideAttendeeScanningPermissionDenied" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, toestemming werd geweigerd."),
     "RideAttendeeScanningPermissionDeniedDescription" : MessageLookupByLibrary.simpleMessage("Scannen vereist toegang tot je locatie."),
@@ -146,10 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),
     "RideDetailsNoAttendees" : MessageLookupByLibrary.simpleMessage("Deze rit heeft geen aanwezigen"),
-    "RiderSearchFilterInputLabel" : MessageLookupByLibrary.simpleMessage("Renners zoeken"),
-    "RiderSearchFilterNoResults" : MessageLookupByLibrary.simpleMessage("Geen resultaten voor de opgegeven zoekterm"),
     "Riders" : MessageLookupByLibrary.simpleMessage("Renners"),
-    "RidersListTitle" : m8,
     "Rides" : MessageLookupByLibrary.simpleMessage("Ritten"),
     "SaturdayPrefix" : MessageLookupByLibrary.simpleMessage("Za"),
     "Save" : MessageLookupByLibrary.simpleMessage("Opslaan"),
@@ -162,13 +165,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "SettingsResetRideCalendarDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u alle ritten wil verwijderen?"),
     "SettingsResetRideCalendarDialogTitle" : MessageLookupByLibrary.simpleMessage("Kalender Resetten"),
     "SettingsResetRideCalendarErrorMessage" : MessageLookupByLibrary.simpleMessage("Kon de rittenkalender niet verwijderen."),
-    "SettingsRiderFilterDescription" : MessageLookupByLibrary.simpleMessage("Filter renners in de rennerslijst, op basis van hun status"),
-    "SettingsRiderFilterHeader" : MessageLookupByLibrary.simpleMessage("Rennerslijst Filter"),
     "SettingsScanSliderHeader" : MessageLookupByLibrary.simpleMessage("Duur van een scan (in seconden)"),
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Zo"),
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
-    "ValueIsRequired" : m9,
+    "ValueIsRequired" : m10,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

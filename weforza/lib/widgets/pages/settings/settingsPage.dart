@@ -125,9 +125,15 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ),
           if (settings.hasRideCalendar) ResetRideCalendarButton(),
-          Text(
-            S.of(context).AppVersionNumber(settings.appVersion),
-            style: ApplicationTheme.appVersionTextStyle,
+          PlatformAwareWidget(
+            android: () => Text(
+              S.of(context).AppVersionNumber(settings.appVersion),
+              style: ApplicationTheme.appVersionTextStyle,
+            ),
+            ios: () => Text(
+              S.of(context).AppVersionNumber(settings.appVersion),
+              style: ApplicationTheme.appVersionTextStyle.copyWith(fontSize: 14),
+            ),
           ),
         ],
       ),

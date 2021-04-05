@@ -24,7 +24,4 @@ class MemberRepository {
   Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
 
   Future<void> setMemberActive(String uuid, bool value) => _dao.setMemberActive(uuid, value);
-
-  //TODO remove when migrated
-  Future<void> migrateMembersToHaveTimestamp() => _dao.migrateMembersToHaveTimestamp();
 }

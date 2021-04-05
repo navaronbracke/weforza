@@ -9,6 +9,7 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/exportDataOrError.dart';
+import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -106,13 +107,21 @@ class ExportRideBloc extends Bloc {
       final buffer = StringBuffer();
       buffer.writeln(ride.toCsv());
       for(Member m in attendees){
-        buffer.writeln(m.toCsv());
+        buffer.writeln(ExportableRideAttendee(
+          firstName: m.firstname,
+          lastName: m.lastname,
+          alias: m.alias
+        ).toCsv());
       }
       await file.writeAsString(buffer.toString());
     }else if(extension == FileExtension.JSON.extension()){
       final data = {
         "details": ride.toJson(),
-        "attendees": attendees.map((a) => a.toJson()).toList()
+        "attendees": attendees.map((a) => ExportableRideAttendee(
+          firstName: a.firstname,
+          lastName: a.lastname,
+          alias: a.alias,
+        ).toJson()).toList()
       };
       await file.writeAsString(jsonEncode(data));
     }else{

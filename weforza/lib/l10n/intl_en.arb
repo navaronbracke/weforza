@@ -89,10 +89,9 @@
   "ImportMembersPickFile": "Choose File",
   "ImportMembersPickFileWarning": "Please choose a file to import riders",
   "ImportMembersImporting": "Importing Riders",
-  "ImportMembersCsvHeaderRegex": "(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)",
+  "ImportMembersCsvHeaderRegex": "(firstname),(lastname),(alias),(active),(last_updated),(devices)(.*)",
   "ImportMembersCsvHeaderRequired": "A header is required for .csv files.",
   "ImportMembersCsvHeaderExampleDescription": "A csv header might look like:",
-  "ImportMembersCsvHeaderExample": "firstname,surname,alias,devices",
   "ImportMembersInvalidFileExtension": "Only .csv or .json files are allowed",
   "ImportMembersIncompatibleFileJsonContents": "The chosen .json file is incompatible.",
 
@@ -105,7 +104,7 @@
 
   "ExportMembersTitle": "Export Riders",
   "ExportingMembersDescription": "Exporting riders and devices",
-  "ExportMembersCsvHeader": "firstname,lastname,alias,active,devices",
+  "ExportMembersCsvHeader": "firstname,lastname,alias,active,last_updated,devices",
 
   "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",

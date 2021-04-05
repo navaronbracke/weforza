@@ -39,7 +39,6 @@ class ImportMembersBloc extends Bloc {
       _importStreamController.add(ImportMembersState.IMPORTING);
       final Iterable<ExportableMember> members = await _readMemberDataFromFile(file, headerRegex);
       //Quick exit when there are no members to insert
-      //(you can have a dataset full of members without devices however)
       if(members.isEmpty) return;
 
       await repository.saveMembersWithDevices(members, () => _uuidGenerator.v4());

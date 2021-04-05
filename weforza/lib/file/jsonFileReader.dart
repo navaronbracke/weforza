@@ -20,6 +20,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
     String alias;
     bool isActive;
     List<String> deviceNames;
+    DateTime lastUpdated;
 
     try{
       firstName = data["firstName"] as String;
@@ -27,6 +28,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
       alias = data["alias"] as String;
       isActive = data["active"] as bool;
       deviceNames = (data["devices"] as List).cast<String>();
+      lastUpdated = DateTime.parse(data["lastUpdated"] as String);
 
       // The first name, last name or alias are not suitable for a member.
       if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias)){
@@ -34,14 +36,17 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
       }
 
       collection.add(ExportableMember(
-          firstName: firstName,
-          lastName: lastName,
-          alias: alias,
-          isActiveMember: isActive,
-          devices: deviceNames.where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)).toSet()
+        firstName: firstName,
+        lastName: lastName,
+        alias: alias,
+        isActiveMember: isActive,
+        devices: deviceNames.where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)).toSet(),
+        lastUpdated: lastUpdated,
       ));
     }catch(e){
-      //Skip this item, instead of throwing an error.
+      // Skip this item, instead of throwing an error.
+      // Usually we get either TypeError from casting bad values
+      // or FormatException from trying to parse an invalid date.
     }
   }
 

@@ -89,7 +89,7 @@
   "ImportMembersPickFile": "Kies Bestand",
   "ImportMembersPickFileWarning": "Een bestand is vereist om renners te importeren",
   "ImportMembersImporting": "Renners Importeren",
-  "ImportMembersCsvHeaderRegex": "(voornaam),(achternaam|familienaam),(alias|bijnaam),(actief),(toestellen|apparaten)(.*)",
+  "ImportMembersCsvHeaderRegex": "(voornaam),(achternaam),(alias),(actief),(laatste_update),(toestellen)(.*)",
   "ImportMembersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht.",
   "ImportMembersCsvHeaderExampleDescription": "Een mogelijke csv hoofding ziet er zo uit:",
   "ImportMembersCsvHeaderExample": "voornaam,familienaam,alias,toestellen",
@@ -105,7 +105,7 @@
 
   "ExportMembersTitle": "Renners Exporteren",
   "ExportingMembersDescription": "Renners en toestellen exporteren",
-  "ExportMembersCsvHeader": "voornaam,familienaam,alias,actief,toestellen",
+  "ExportMembersCsvHeader": "voornaam,achternaam,alias,actief,laatste_update,toestellen",
 
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",

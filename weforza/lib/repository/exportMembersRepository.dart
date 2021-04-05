@@ -26,11 +26,12 @@ class ExportMembersRepository {
     ]);
 
     return _members.map((member) => ExportableMember(
-        firstName: member.firstname,
-        lastName: member.lastname,
-        alias: member.alias,
-        isActiveMember: member.isActiveMember,
-        devices: _devicesGroupedByOwner[member.uuid] ?? Set<String>()
+      firstName: member.firstname,
+      lastName: member.lastname,
+      alias: member.alias,
+      isActiveMember: member.isActiveMember,
+      devices: _devicesGroupedByOwner[member.uuid] ?? Set<String>(),
+      lastUpdated: member.lastUpdated,
     ));
   }
 }

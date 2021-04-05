@@ -8,7 +8,8 @@ class Member implements Comparable<Member> {
     required this.lastname,
     required this.alias,
     required this.isActiveMember,
-    required this.profileImageFilePath
+    required this.profileImageFilePath,
+    required this.lastUpdated,
   }): assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
 
   ///Regex for a member's first or last name or alias.
@@ -36,6 +37,9 @@ class Member implements Comparable<Member> {
   // Whether this member is currently an active ride participant.
   bool isActiveMember;
 
+  // A date that tracks the last update timestamp.
+  final DateTime lastUpdated;
+
   String get initials => firstname[0] + lastname[0];
 
   ///Convert this object to a Map.
@@ -45,12 +49,22 @@ class Member implements Comparable<Member> {
       "lastname": lastname,
       "alias": alias,
       "active": isActiveMember,
-      "profile": profileImageFilePath
+      "profile": profileImageFilePath,
+      "lastUpdated": _lastUpdatedToString(),
     };
   }
 
+  /// Convert [lastUpdated] to a 'YYYY-MM-DD HH-MM-SSZ' string.
+  /// E.g. 1969-07-20 20:18:04Z
+  String _lastUpdatedToString(){
+    final String s = lastUpdated.toString();
+
+    // Strip the milliseconds and append a Z.
+    return s.substring(0, s.length - 4) + "Z";
+  }
+
   ///Create a member from a Map and a given uuid.
-  static Member of(String uuid,Map<String,dynamic> values){
+  static Member of(String uuid, Map<String, dynamic> values){
     assert(uuid.isNotEmpty);
     return Member(
       uuid: uuid,
@@ -58,12 +72,11 @@ class Member implements Comparable<Member> {
       lastname: values["lastname"],
       alias: values["alias"],
       isActiveMember: values["active"],
-      profileImageFilePath: values["profile"]
+      profileImageFilePath: values["profile"],
+      lastUpdated: values["lastUpdated"],
     );
   }
 
-  //If the uuid is the same, it is the same member.
-  //Otherwise it is the same member if all the properties match.
   @override
   bool operator ==(Object other){
     return other is Member
@@ -75,17 +88,6 @@ class Member implements Comparable<Member> {
 
   @override
   int get hashCode => hashValues(firstname, lastname, alias, isActiveMember);
-
-  Map<String, dynamic> toJson() {
-    return {
-      "firstname": firstname,
-      "lastname": lastname,
-      "alias": alias,
-      "active": isActiveMember
-    };
-  }
-
-  String toCsv() => "$firstname,$lastname,$alias,${isActiveMember ? 1: 0}";
 
   ///Compare two members for use in sorting.
   ///Returns zero if both are considered equal.

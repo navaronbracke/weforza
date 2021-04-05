@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
@@ -40,22 +41,13 @@ class DeviceDao implements IDeviceDao {
   ///A reference to the member store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
-  /// Convert the given date to a 'YYYY-MM-DD HH-MM-SSZ' string.
-  /// E.g. 1969-07-20 20:18:04Z
-  String _lastUpdatedToString(DateTime date){
-    final String s = date.toString();
-
-    // Strip the milliseconds and append a Z.
-    return s.substring(0, s.length - 4) + "Z";
-  }
-
   @override
   Future<void> addDevice(Device device) async {
     await _database.transaction((txn) async {
       await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.toMap());
       await _memberStore.update(
         txn,
-        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -84,7 +76,7 @@ class DeviceDao implements IDeviceDao {
 
       await _memberStore.update(
         txn,
-        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -100,7 +92,7 @@ class DeviceDao implements IDeviceDao {
       ));
       await _memberStore.update(
         txn,
-        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
         finder: Finder(
           filter: Filter.byKey(newDevice.ownerId),
         ),

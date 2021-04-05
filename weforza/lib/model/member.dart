@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:weforza/extensions/dateExtension.dart';
 
 ///This class represents a 'Member.'
 class Member implements Comparable<Member> {
@@ -50,17 +51,8 @@ class Member implements Comparable<Member> {
       "alias": alias,
       "active": isActiveMember,
       "profile": profileImageFilePath,
-      "lastUpdated": _lastUpdatedToString(),
+      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
     };
-  }
-
-  /// Convert [lastUpdated] to a 'YYYY-MM-DD HH-MM-SSZ' string.
-  /// E.g. 1969-07-20 20:18:04Z
-  String _lastUpdatedToString(){
-    final String s = lastUpdated.toString();
-
-    // Strip the milliseconds and append a Z.
-    return s.substring(0, s.length - 4) + "Z";
   }
 
   ///Create a member from a Map and a given uuid.

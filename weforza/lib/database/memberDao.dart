@@ -3,6 +3,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -145,15 +146,9 @@ class MemberDao implements IMemberDao {
   @override
   Future<void> migrateMembersToHaveTimestamp() async {
     final records = await _memberStore.find(_database);
-    final dateToString = (DateTime date){
-      final String s = date.toString();
-
-      // Strip the milliseconds and append a Z.
-      return s.substring(0, s.length - 4) + "Z";
-    };
 
     await _memberStore.records(records.map((record) => record.key)).update(_database, records.map((record) => {
-      "lastUpdated": dateToString(DateTime.now().toUtc())
+      "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds()
     }).toList());
   }
 }

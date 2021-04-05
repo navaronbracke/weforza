@@ -1,3 +1,5 @@
+import 'package:weforza/extensions/dateExtension.dart';
+
 
 /// This class is used as format for exporting members
 class ExportableMember {
@@ -19,16 +21,7 @@ class ExportableMember {
 
   String toCsv(){
     final String devicesString = devices.isEmpty ? "" : devices.join(",");
-    return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},${_lastUpdatedToString()},$devicesString";
-  }
-
-  /// Convert [lastUpdated] to a 'YYYY-MM-DD HH-MM-SSZ' string.
-  /// E.g. 1969-07-20 20:18:04Z
-  String _lastUpdatedToString(){
-    final String s = lastUpdated.toString();
-
-    // Strip the milliseconds and append a Z.
-    return s.substring(0, s.length - 4) + "Z";
+    return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},${lastUpdated.toStringWithoutMilliseconds()},$devicesString";
   }
 
   Map<String,dynamic> toJson(){
@@ -37,7 +30,7 @@ class ExportableMember {
       "lastName": lastName,
       "alias": alias,
       "active": isActiveMember,
-      "lastUpdated": _lastUpdatedToString(),
+      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
       "devices": List<String>.of(devices)
     };
   }

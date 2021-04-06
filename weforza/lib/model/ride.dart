@@ -37,11 +37,11 @@ class Ride {
   @override
   int get hashCode => date.hashCode;
 
-  String dateToDDMMYYY() => "${date.day}-${date.month}-${date.year}";
+  String dateToDDMMYYYY() => "${date.day}-${date.month}-${date.year}";
   
   Map<String, String> toJson() => {
-      "date": dateToDDMMYYY(),
+      "date": dateToDDMMYYYY(),
     };
 
-  String toCsv() => dateToDDMMYYY();
+  String toCsv() => dateToDDMMYYYY();
 }

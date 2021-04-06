@@ -132,7 +132,8 @@ class AddMemberBloc extends Bloc {
         lastname: _lastName,
         alias: _alias,
         profileImageFilePath: image?.path,
-        isActiveMember: false
+        isActiveMember: false,
+        lastUpdated: DateTime.now().toUtc()
       );
 
       await _repository.addMember(member);

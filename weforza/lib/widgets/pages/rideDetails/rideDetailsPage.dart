@@ -244,7 +244,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             builder: (context) => ExportRidePage(
               bloc: ExportRideBloc(
                 fileHandler: InjectionContainer.get<IFileHandler>(),
-                filename: S.of(context).ExportRideFileNamePlaceholder(bloc.ride.dateToDDMMYYY()),
+                filename: S.of(context).ExportRideFileNamePlaceholder(bloc.ride.dateToDDMMYYYY()),
                 ride: bloc.ride,
                 rideRepository: InjectionContainer.get<RideRepository>()
               ),

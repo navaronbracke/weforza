@@ -757,10 +757,10 @@ class S {
     );
   }
 
-  /// `(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)`
+  /// `(firstname),(lastname),(alias),(active),(last_updated),(devices)(.*)`
   String get ImportMembersCsvHeaderRegex {
     return Intl.message(
-      '(firstname),(surname|familyname|lastname),(alias|nickname),(active),(devices)(.*)',
+      '(firstname),(lastname),(alias),(active),(last_updated),(devices)(.*)',
       name: 'ImportMembersCsvHeaderRegex',
       desc: '',
       args: [],
@@ -782,16 +782,6 @@ class S {
     return Intl.message(
       'A csv header might look like:',
       name: 'ImportMembersCsvHeaderExampleDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `firstname,surname,alias,devices`
-  String get ImportMembersCsvHeaderExample {
-    return Intl.message(
-      'firstname,surname,alias,devices',
-      name: 'ImportMembersCsvHeaderExample',
       desc: '',
       args: [],
     );
@@ -887,10 +877,10 @@ class S {
     );
   }
 
-  /// `firstname,lastname,alias,active,devices`
+  /// `firstname,lastname,alias,active,last_updated,devices`
   String get ExportMembersCsvHeader {
     return Intl.message(
-      'firstname,lastname,alias,active,devices',
+      'firstname,lastname,alias,active,last_updated,devices',
       name: 'ExportMembersCsvHeader',
       desc: '',
       args: [],

@@ -22,9 +22,9 @@ class CsvFileReader implements ImportMembersFileReader<String> {
   Future<void> processData(String data, List<ExportableMember> collection) async {
     final List<String> values = data.split(',');
 
-    //If the line doesn't have enough cells to fill the required fields
-    // (first name, last name, alias, active) in that order, skip it
-    if(values.length < 4){
+    // If the line doesn't have enough cells
+    // to fill the required fields, skip it.
+    if(values.length < 5){
       return;
     }
 
@@ -32,6 +32,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     final String lastName = values[1];
     final String alias = values[2];
     final String isActiveAsString = values[3].toLowerCase();
+    final String lastUpdateString = values[4];
 
     // Invalid data lines are skipped.
     // Check firstname, lastname & alias by regex.
@@ -41,12 +42,21 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
     bool isActive;
 
-    if(isActiveAsString == "0" || isActiveAsString == "false"){
+    if(isActiveAsString == "0"){
       isActive = false;
-    }else if(isActiveAsString == "1" || isActiveAsString == "true"){
+    }else if(isActiveAsString == "1"){
       isActive = true;
     }else{
       // Invalid cell content, skip.
+      return;
+    }
+
+    DateTime lastUpdated;
+
+    try {
+      lastUpdated = DateTime.parse(lastUpdateString);
+    } on FormatException {
+      // Invalid timestamp.
       return;
     }
 
@@ -54,19 +64,21 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     // Since its a Set, duplicates are ignored.
     final Set<String> devices = Set();
 
-    //Besides First Name, Last Name, Alias, Active there are more values
-    //These are the device names: Device1, Device2,... , DeviceN
-    if(values.length > 4){
+    // Besides First Name, Last Name, Alias, Active, Last Update
+    // there are more values.
+    // These are the device names: Device1, Device2,... , DeviceN
+    if(values.length > 5){
       //Filter the invalid device names.
-      devices.addAll(values.sublist(4).where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
+      devices.addAll(values.sublist(5).where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
     }
 
     collection.add(ExportableMember(
-        firstName: values[0],
-        lastName: values[1],
-        alias: values[2],
-        isActiveMember: isActive,
-        devices: devices
+      firstName: firstName,
+      lastName: lastName,
+      alias: alias,
+      isActiveMember: isActive,
+      devices: devices,
+      lastUpdated: lastUpdated,
     ));
   }
 

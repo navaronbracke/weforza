@@ -39,3 +39,7 @@ To bump the minimum iOS version for a project do the following:
       end
     end
 ```
+
+#### Note
+
+If the iOS compilation fails, even after incrementing the supported iOS version, try running `flutter clean` and restarting your IDE.

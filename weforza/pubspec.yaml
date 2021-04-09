@@ -61,6 +61,9 @@ dependencies:
   # package_info provides access to app specific information such as build number & version.
   package_info: ^2.0.0
 
+  # encrypt provides encryption / decryption.
+  encrypt: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

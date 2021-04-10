@@ -46,9 +46,13 @@ class AddRideCalenderHeader extends StatelessWidget {
             splashColor: ApplicationTheme.choiceArrowOnPressedColor,
             onPressed: onPageBack,
           ),
-          ios: () => CupertinoIconButton.fromAppTheme(
-              icon: Icons.arrow_back_ios,
-              onPressed: onPageBack
+          ios: () => Padding(
+            // The left chevron is more to the left.
+            padding: const EdgeInsets.only(left: 10),
+            child: CupertinoIconButton.fromAppTheme(
+                icon: Icons.arrow_back_ios,
+                onPressed: onPageBack
+            ),
           ),
         ),
         Expanded(
@@ -68,9 +72,12 @@ class AddRideCalenderHeader extends StatelessWidget {
             splashColor: ApplicationTheme.choiceArrowOnPressedColor,
             onPressed: onPageForward,
           ),
-          ios: () => CupertinoIconButton.fromAppTheme(
-              icon: Icons.arrow_forward_ios,
-              onPressed: onPageForward
+          ios: () => Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: CupertinoIconButton.fromAppTheme(
+                icon: Icons.arrow_forward_ios,
+                onPressed: onPageForward
+            ),
           ),
         ),
       ],

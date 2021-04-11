@@ -18,8 +18,8 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
-                Icons.person,
-                color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
+              Icons.person,
+              color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
             ),
           ),
           _combineFirstNameAndAlias(),
@@ -34,6 +34,9 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
       return Text(
         "${owner.firstname} ${owner.lastname}",
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+        ),
       );
     }
 
@@ -44,9 +47,17 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
           children: [
             TextSpan(
               text: " '${owner.alias}' ",
-              style: TextStyle(fontStyle: FontStyle.italic),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
             ),
-            TextSpan(text: owner.lastname),
+            TextSpan(
+              text: owner.lastname,
+              style: TextStyle(
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
+            ),
           ]
       ),
       overflow: TextOverflow.ellipsis,

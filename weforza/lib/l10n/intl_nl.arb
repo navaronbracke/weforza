@@ -77,7 +77,7 @@
   "RideAttendeeScanningGoToSettings": "Naar Instellingen",
   "RideAttendeeScanningRetryScan": "Opnieuw Scannen",
   "RideAttendeeScanningSkipScan": "Scan Overslaan",
-  "RideAttendeeScanningContinue": "Doorgaan naar volgende stap",
+  "RideAttendeeScanningContinue": "Doorgaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen renners om uit te kiezen",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} renners hebben een toestel met deze naam",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren.",

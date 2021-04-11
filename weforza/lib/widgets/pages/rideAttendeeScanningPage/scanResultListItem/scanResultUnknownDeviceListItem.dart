@@ -15,9 +15,14 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(Icons.device_unknown),
+            child: Icon(
+              Icons.device_unknown,
+            ),
           ),
-          SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
+          SelectableText(
+            deviceName,
+            scrollPhysics: ClampingScrollPhysics(),
+          ),
         ],
       ),
     );

@@ -10,14 +10,13 @@ import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
   _AddRidePageState createState() => _AddRidePageState(
-      bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>())
+    bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>()),
   );
 }
 
@@ -43,6 +42,32 @@ class _AddRidePageState extends State<AddRidePage> {
     ios: () => _buildIOSLayout(context),
   );
 
+  Widget _buildBody(){
+    return Column(
+      children: <Widget>[
+        _buildCalendar(),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: AddRideCalendarColorLegend(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: AddRideSubmit(
+                  stream: bloc.submitStream,
+                  onPressed: _onSubmit,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -54,32 +79,7 @@ class _AddRidePageState extends State<AddRidePage> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 3,
-            child: _buildCalendar(),
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: AddRideCalendarColorLegend(),
-                ),
-                Expanded(
-                  child: Center(
-                    child: AddRideSubmit(
-                      stream: bloc.submitStream,
-                      onPressed: _onSubmit,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: _buildBody(),
     );
   }
 
@@ -94,34 +94,7 @@ class _AddRidePageState extends State<AddRidePage> {
         middle: Text(S.of(context).AddRideTitle),
       ),
       child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex:4,
-              child: _buildCalendar(),
-            ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: AddRideCalendarColorLegend(),
-                    ),
-                    Expanded(
-                      child: Center(
-                        child: AddRideSubmit(
-                          stream: bloc.submitStream,
-                          onPressed: _onSubmit,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: _buildBody(),
       ),
     );
   }
@@ -137,16 +110,13 @@ class _AddRidePageState extends State<AddRidePage> {
                 child: Text(S.of(context).GenericError),
               );
             }
-            else{
-              return AddRideBlocProvider(
-                bloc: bloc, child: AddRideCalendar()
-              );
-            }
-          }else {
-            return Center(
-              child: PlatformAwareLoadingIndicator(),
-            );
+
+            return AddRideCalendar(bloc: bloc);
           }
+
+          return Center(
+            child: PlatformAwareLoadingIndicator(),
+          );
         }
     );
   }

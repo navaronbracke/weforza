@@ -657,10 +657,10 @@ class S {
     );
   }
 
-  /// `Proceed to next step`
+  /// `Continue`
   String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Proceed to next step',
+      'Continue',
       name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],

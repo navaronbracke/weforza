@@ -131,7 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonFirstNameLabel" : MessageLookupByLibrary.simpleMessage("Voornaam"),
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
-    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Doorgaan naar volgende stap"),
+    "RideAttendeeScanningContinue" : MessageLookupByLibrary.simpleMessage("Doorgaan"),
     "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel" : m8,
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),

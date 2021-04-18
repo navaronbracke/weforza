@@ -16,8 +16,11 @@ class ManualSelectionListEmpty extends StatelessWidget {
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 20),
-          child: Text(S.of(context).RideAttendeeScanningManualSelectionEmptyList),
+          padding: const EdgeInsets.only(top: 5, bottom: 20, left: 16, right: 16),
+          child: Text(
+            S.of(context).RideAttendeeScanningManualSelectionEmptyList,
+            textAlign: TextAlign.center,
+          ),
         ),
         PlatformAwareWidget(
           android: () => TextButton(

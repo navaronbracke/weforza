@@ -59,11 +59,13 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           child: getDeviceIcon(device.type),
         ),
         Expanded(
-            child: Text(
-              device.name,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 15)
-            )
+          child: Text(
+            device.name,
+            overflow: TextOverflow.ellipsis,
+            softWrap: true,
+            maxLines: 2,
+            style: TextStyle(fontSize: 15),
+          ),
         ),
         Row(
           children: [
@@ -71,10 +73,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
               padding: const EdgeInsets.only(left: 5),
               child: _buildEditDeviceButton(context),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: _buildDeleteDeviceButton(context),
-            ),
+            _buildDeleteDeviceButton(context),
           ],
         ),
       ],

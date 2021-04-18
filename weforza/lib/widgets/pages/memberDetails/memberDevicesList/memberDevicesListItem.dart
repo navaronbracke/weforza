@@ -41,41 +41,13 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => GestureDetector(
-      onLongPress: () => showDialog(
-          context: context,
-          builder: (_) => DeleteItemDialog(
-            title: S.of(context).DeleteDeviceTitle,
-            description: S.of(context).DeleteDeviceDescription,
-            errorDescription: S.of(context).GenericError,
-            onDelete: () => widget.onDelete(device, widget.index),
-          ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10,0,5,5),
-          child: _buildItem(context),
-        ),
-      ),
+    android: () => Padding(
+      padding: const EdgeInsets.fromLTRB(10,0,5,5),
+      child: _buildItem(context),
     ),
-    ios: () => GestureDetector(
-      onLongPress: () => showCupertinoDialog(
-        context: context,
-        builder: (_) => DeleteItemDialog(
-          title: S.of(context).DeleteDeviceTitle,
-          description: S.of(context).DeleteDeviceDescription,
-          errorDescription: S.of(context).GenericError,
-          onDelete: () => widget.onDelete(device, widget.index),
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
-          child: _buildItem(context),
-        ),
-      ),
+    ios: () => Padding(
+      padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+      child: _buildItem(context),
     ),
   );
 
@@ -93,13 +65,17 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
               style: TextStyle(fontSize: 15)
             )
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: Row(
-            children: [
-              _buildEditDeviceButton(context),
-            ],
-          ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: _buildEditDeviceButton(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: _buildDeleteDeviceButton(context),
+            ),
+          ],
         ),
       ],
     );
@@ -135,6 +111,40 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           });
         },
         icon: Icons.edit,
+      ),
+    );
+  }
+
+  Widget _buildDeleteDeviceButton(BuildContext context){
+    return PlatformAwareWidget(
+      android: () => IconButton(
+        icon: Icon(
+          Icons.delete,
+          color: ApplicationTheme.deleteItemButtonTextColor,
+        ),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (_) => DeleteItemDialog(
+            title: S.of(context).DeleteDeviceTitle,
+            description: S.of(context).DeleteDeviceDescription,
+            errorDescription: S.of(context).GenericError,
+            onDelete: () => widget.onDelete(device, widget.index),
+          ),
+        ),
+      ),
+      ios: () => CupertinoIconButton(
+        icon: CupertinoIcons.delete,
+        idleColor: ApplicationTheme.deleteItemButtonTextColor,
+        onPressedColor: ApplicationTheme.deleteItemButtonTextColor.withAlpha(150),
+        onPressed: () => showCupertinoDialog(
+          context: context,
+          builder: (_) => DeleteItemDialog(
+            title: S.of(context).DeleteDeviceTitle,
+            description: S.of(context).DeleteDeviceDescription,
+            errorDescription: S.of(context).GenericError,
+            onDelete: () => widget.onDelete(device, widget.index),
+          ),
+        ),
       ),
     );
   }

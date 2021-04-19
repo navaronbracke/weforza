@@ -99,8 +99,8 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
-  static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue.shade200;
-  static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange.shade200;
+  static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
+  static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
   static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(

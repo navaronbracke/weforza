@@ -159,7 +159,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "Settings" : MessageLookupByLibrary.simpleMessage("Settings"),
     "SettingsLoading" : MessageLookupByLibrary.simpleMessage("Loading Settings"),
     "SettingsResetRideCalendarButtonLabel" : MessageLookupByLibrary.simpleMessage("Reset Ride Calendar"),
-    "SettingsResetRideCalendarDescription" : MessageLookupByLibrary.simpleMessage("This will remove all rides. The attendances will be reset to zero."),
+    "SettingsResetRideCalendarDescription" : MessageLookupByLibrary.simpleMessage("This will remove all rides.\nThe attendances will be reset to zero."),
     "SettingsResetRideCalendarDialogConfirm" : MessageLookupByLibrary.simpleMessage("Clear"),
     "SettingsResetRideCalendarDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to remove all the rides?"),
     "SettingsResetRideCalendarDialogTitle" : MessageLookupByLibrary.simpleMessage("Reset Calendar"),

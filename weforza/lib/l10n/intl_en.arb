@@ -125,7 +125,7 @@
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
   "SettingsResetRideCalendarButtonLabel": "Reset Ride Calendar",
-  "SettingsResetRideCalendarDescription": "This will remove all rides. The attendances will be reset to zero.",
+  "SettingsResetRideCalendarDescription": "This will remove all rides.\nThe attendances will be reset to zero.",
   "SettingsResetRideCalendarErrorMessage": "Could not reset the ride calendar.",
   "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
   "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",

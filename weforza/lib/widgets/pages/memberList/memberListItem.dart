@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberAttendingCount.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberListItem extends StatelessWidget {
   MemberListItem({
@@ -32,10 +34,17 @@ class MemberListItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: AsyncProfileImage(
-                  icon: Icons.person,
-                  personInitials: member.initials,
-                  future: memberProfileImage,
+                child: PlatformAwareWidget(
+                  android: () => AsyncProfileImage(
+                    icon: Icons.person,
+                    personInitials: member.initials,
+                    future: memberProfileImage,
+                  ),
+                  ios: () => AsyncProfileImage(
+                    icon: CupertinoIcons.person_fill,
+                    personInitials: member.initials,
+                    future: memberProfileImage,
+                  ),
                 ),
               ),
               Expanded(

@@ -281,7 +281,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Icon(
-                      Icons.error_outline,
+                      CupertinoIcons.exclamationmark_circle,
                       size: 25,
                       color: ApplicationTheme.deleteItemButtonTextColor
                   ),

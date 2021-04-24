@@ -27,10 +27,17 @@ class RideAttendeeCounter extends StatelessWidget {
                 Text("?", style: counterStyle),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: Icon(
+                  child: PlatformAwareWidget(
+                    android: () => Icon(
                       Icons.people,
                       size: iconSize,
                       color: counterStyle?.color,
+                    ),
+                    ios: () => Icon(
+                      CupertinoIcons.person_2_fill,
+                      size: iconSize,
+                      color: counterStyle?.color,
+                    ),
                   ),
                 ),
               ],
@@ -41,10 +48,17 @@ class RideAttendeeCounter extends StatelessWidget {
                 Text("${snapshot.data}", style: counterStyle),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: Icon(
+                  child: PlatformAwareWidget(
+                    android: () => Icon(
                       Icons.people,
                       size: iconSize,
                       color: counterStyle?.color,
+                    ),
+                    ios: () => Icon(
+                      CupertinoIcons.person_2_fill,
+                      size: iconSize,
+                      color: counterStyle?.color,
+                    ),
                   ),
                 ),
               ],

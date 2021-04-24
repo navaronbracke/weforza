@@ -1047,10 +1047,10 @@ class S {
     );
   }
 
-  /// `Reset Ride Calendar`
+  /// `Reset Calendar`
   String get SettingsResetRideCalendarButtonLabel {
     return Intl.message(
-      'Reset Ride Calendar',
+      'Reset Calendar',
       name: 'SettingsResetRideCalendarButtonLabel',
       desc: '',
       args: [],

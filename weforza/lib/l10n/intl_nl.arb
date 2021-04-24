@@ -125,7 +125,7 @@
 
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
-  "SettingsResetRideCalendarButtonLabel": "Rittenkalender Resetten",
+  "SettingsResetRideCalendarButtonLabel": "Kalender Resetten",
   "SettingsResetRideCalendarDescription": "Dit zal alle ritten verwijderen.\nDe aanwezigheden worden terug op nul gezet.",
   "SettingsResetRideCalendarErrorMessage": "Kon de rittenkalender niet verwijderen.",
   "SettingsResetRideCalendarDialogTitle": "Kalender Resetten",

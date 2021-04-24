@@ -124,7 +124,7 @@ abstract class ApplicationTheme {
 
   static final TextStyle appVersionTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
-  static final Color rideListItemEvenMonthColor = Colors.blue.shade400;
+  static final Color rideListItemEvenMonthColor = Colors.blue;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

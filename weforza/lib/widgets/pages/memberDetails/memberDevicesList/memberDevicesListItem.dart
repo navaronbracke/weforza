@@ -109,7 +109,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             }
           });
         },
-        icon: Icons.edit,
+        icon: CupertinoIcons.pencil,
       ),
     );
   }

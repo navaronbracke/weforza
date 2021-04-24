@@ -93,11 +93,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 label: S.of(context).Rides,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.people),
+                icon: Icon(CupertinoIcons.person_2_fill),
                 label: S.of(context).Riders,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
+                icon: Icon(CupertinoIcons.settings),
                 label: S.of(context).Settings,
               ),
             ],

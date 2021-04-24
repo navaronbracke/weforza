@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
   ScanResultMultiplePossibleOwnersListItem({
@@ -25,9 +27,15 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: Icon(
-                    Icons.people,
-                    color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor,
+                  child: PlatformAwareWidget(
+                    android: () => Icon(
+                      Icons.people,
+                      color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor,
+                    ),
+                    ios: () => Icon(
+                      CupertinoIcons.person_2_fill,
+                      color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor, 
+                    ),
                   ),
                 ),
                 SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),

@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
   ScanResultSingleOwnerListItem({
@@ -17,9 +19,15 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(
-              Icons.person,
-              color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+            child: PlatformAwareWidget(
+              android: () => Icon(
+                Icons.person,
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
+              ios: () => Icon(
+                CupertinoIcons.person_fill,
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
             ),
           ),
           _combineFirstNameAndAlias(),

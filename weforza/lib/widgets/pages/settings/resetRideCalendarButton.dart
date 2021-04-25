@@ -74,10 +74,12 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               android: () => Text(
                 translator.SettingsResetRideCalendarDescription,
                 style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+                textAlign: TextAlign.center,
               ),
               ios: () => Text(
                 translator.SettingsResetRideCalendarDescription,
                 style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle.copyWith(fontSize: 14),
+                textAlign: TextAlign.center,
               ),
             ),
           ),

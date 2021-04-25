@@ -85,7 +85,7 @@ class _RideListPageState extends State<RideListPage> {
               ),
             ),
             CupertinoIconButton.fromAppTheme(
-              icon: Icons.add,
+              icon: CupertinoIcons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
               ).then((_) => onReturnToRideListPage(context)),
@@ -96,7 +96,7 @@ class _RideListPageState extends State<RideListPage> {
                 onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => ExportRidesPage())
                 ),
-                icon: Icons.file_upload,
+                icon: CupertinoIcons.arrow_up_doc_fill,
               ),
             ),
           ],

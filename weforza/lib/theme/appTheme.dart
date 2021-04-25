@@ -93,7 +93,7 @@ abstract class ApplicationTheme {
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
-  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
   static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
@@ -124,7 +124,7 @@ abstract class ApplicationTheme {
 
   static final TextStyle appVersionTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
-  static final Color rideListItemEvenMonthColor = Colors.blue.shade400;
+  static final Color rideListItemEvenMonthColor = Colors.blue;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

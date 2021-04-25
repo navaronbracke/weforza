@@ -17,6 +17,7 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
             padding: const EdgeInsets.only(right: 5),
             child: Icon(
               Icons.device_unknown,
+              color: Colors.black,
             ),
           ),
           SelectableText(

@@ -213,17 +213,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         ))
     ).then((_){
       final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
-      //When its not null, a new future has been submitted.
-      if(attendeeProvider.value != null){
-        final void Function() callback = (){
-          //Also set reload for the rides, the counters need to refresh.
+
+      final void Function() callback = (){
+        // The attendee counters need an update too.
+        if(attendeeProvider.value != null){
           ReloadDataProvider.of(context).reloadRides.value = true;
           bloc.attendeesFuture = attendeeProvider.value!;
           attendeeProvider.value = null;
-        };
+        }
+      };
 
-        setState(callback);
-      }
+      // Update the UI with the new bloc.ride value.
+      // Also trigger an optional refresh of the attendees.
+      setState(callback);
     });
   }
 

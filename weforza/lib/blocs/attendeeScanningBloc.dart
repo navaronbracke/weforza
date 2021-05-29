@@ -9,6 +9,7 @@ import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
@@ -18,7 +19,7 @@ import 'package:weforza/repository/settingsRepository.dart';
 
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
-    required this.rideDate,
+    required this.ride,
     required this.scanner,
     required this.settingsRepo,
     required this.memberRepo,
@@ -49,9 +50,9 @@ class AttendeeScanningBloc extends Bloc {
   final DeviceRepository deviceRepo;
   final RideRepository ridesRepo;
 
-  ///The date of the ride that will get attendees assigned
+  ///The ride that will get attendees assigned
   ///during the scan / manual assignment.
-  final DateTime rideDate;
+  final Ride ride;
 
   ///The scan future is stored here.
   ///During init state [doInitialDeviceScan] is stored here.
@@ -111,7 +112,7 @@ class AttendeeScanningBloc extends Bloc {
           onGranted: () async {
             await Future.wait([
               _loadSettings(),
-              _loadRideAttendees(rideDate),
+              _loadRideAttendees(ride.date),
               _loadMembersAndDevices()
             ]).then((_) => _startDeviceScan(onDeviceFound), onError: _scanStepController.addError);
           },
@@ -252,7 +253,15 @@ class AttendeeScanningBloc extends Bloc {
     if(owners.length > 1){
       unresolvedDevicesOwners.addAll(owners);
     }else{
-      //Add the single owner to the attendees instead.
+      // It's a single owner, increment the scanned attendees counter.
+      if(ride.scannedAttendees == null){
+        // It's the first one ever, set it to 1.
+        ride.scannedAttendees = 1;
+      }else{
+        ride.scannedAttendees = (ride.scannedAttendees! + 1);
+      }
+
+      // Add the single owner to the attendees instead.
       rideAttendees.add(owners.first.uuid);
     }
   }
@@ -300,9 +309,15 @@ class AttendeeScanningBloc extends Bloc {
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
     _savingStateController.add(true);
-    await ridesRepo.updateAttendeesForRideWithDate(
-        rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element)).toList()
+
+    // We did a scan but the counter was never updated due to a lack of results.
+    // Replace the unknown counter value with an actual zero.
+    if(ride.scannedAttendees == null){
+      ride.scannedAttendees = 0;
+    }
+    await ridesRepo.updateRide(
+        ride,
+        rideAttendees.map((element) => RideAttendee(ride.date, element)).toList()
     ).catchError((error){
       _scanStepController.addError(error);
       _savingStateController.add(false);

@@ -133,13 +133,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
-                    icon: Icons.edit,
+                    icon: CupertinoIcons.pencil,
                     onPressed: ()=> goToEditMemberPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: CupertinoIconButton.fromAppTheme(
-                    icon: Icons.delete,
+                    icon: CupertinoIcons.delete,
                     onPressed: ()=> showCupertinoDialog(
                       context: context,
                       builder: (context) => DeleteItemDialog(
@@ -171,11 +171,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10),
-              child: AsyncProfileImage(
-                icon: Icons.person,
-                size: 75,
-                personInitials: bloc.member.initials,
-                future: bloc.profileImage,
+              child: PlatformAwareWidget(
+                android: () => AsyncProfileImage(
+                  icon: Icons.person,
+                  size: 75,
+                  personInitials: bloc.member.initials,
+                  future: bloc.profileImage,
+                ),
+                ios: () => AsyncProfileImage(
+                  icon: CupertinoIcons.person_fill,
+                  size: 75,
+                  personInitials: bloc.member.initials,
+                  future: bloc.profileImage,
+                ),
               ),
             ),
             Expanded(

@@ -660,10 +660,10 @@ class S {
     );
   }
 
-  /// `Proceed to next step`
+  /// `Continue`
   String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Proceed to next step',
+      'Continue',
       name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],
@@ -1051,20 +1051,20 @@ class S {
     );
   }
 
-  /// `Reset Ride Calendar`
+  /// `Reset Calendar`
   String get SettingsResetRideCalendarButtonLabel {
     return Intl.message(
-      'Reset Ride Calendar',
+      'Reset Calendar',
       name: 'SettingsResetRideCalendarButtonLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `This will remove all rides. The attendances will be reset to zero.`
+  /// `This will remove all rides.\nThe attendances will be reset to zero.`
   String get SettingsResetRideCalendarDescription {
     return Intl.message(
-      'This will remove all rides. The attendances will be reset to zero.',
+      'This will remove all rides.\nThe attendances will be reset to zero.',
       name: 'SettingsResetRideCalendarDescription',
       desc: '',
       args: [],

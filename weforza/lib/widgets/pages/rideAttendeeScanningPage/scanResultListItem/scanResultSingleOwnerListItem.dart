@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
   ScanResultSingleOwnerListItem({
@@ -17,9 +19,15 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(
+            child: PlatformAwareWidget(
+              android: () => Icon(
                 Icons.person,
-                color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
+              ios: () => Icon(
+                CupertinoIcons.person_fill,
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+              ),
             ),
           ),
           _combineFirstNameAndAlias(),
@@ -34,6 +42,10 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
       return Text(
         "${owner.firstname} ${owner.lastname}",
         overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+          fontWeight: FontWeight.bold,
+        ),
       );
     }
 
@@ -44,9 +56,19 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
           children: [
             TextSpan(
               text: " '${owner.alias}' ",
-              style: TextStyle(fontStyle: FontStyle.italic),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            TextSpan(text: owner.lastname),
+            TextSpan(
+              text: owner.lastname,
+              style: TextStyle(
+                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ]
       ),
       overflow: TextOverflow.ellipsis,

@@ -28,13 +28,12 @@
   "All": "All",
   "Filter": "Filter",
 
-  "AttendeeCounterOne": "One attendant",
-  "AttendeeCounterMany": "{count} attendants",
-
   "ListEmpty": "There is nothing to show",
   "RidersListTitle": "Riders ({amount})",
 
   "RideDetailsNoAttendees": "This ride has no attendants",
+  "RideDetailsTotalAttendeesTooltip": "Total",
+  "RideDetailsScannedAttendeesTooltip": "Scanned",
 
   "RideDeleteDialogTitle": "Delete Ride",
   "RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",
@@ -77,7 +76,7 @@
   "RideAttendeeScanningGoToSettings": "Go to Settings",
   "RideAttendeeScanningRetryScan": "Retry Scan",
   "RideAttendeeScanningSkipScan": "Skip Scan",
-  "RideAttendeeScanningContinue": "Proceed to next step",
+  "RideAttendeeScanningContinue": "Continue",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no riders to choose from",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} riders have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
@@ -124,8 +123,8 @@
 
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
-  "SettingsResetRideCalendarButtonLabel": "Reset Ride Calendar",
-  "SettingsResetRideCalendarDescription": "This will remove all rides. The attendances will be reset to zero.",
+  "SettingsResetRideCalendarButtonLabel": "Reset Calendar",
+  "SettingsResetRideCalendarDescription": "This will remove all rides.\nThe attendances will be reset to zero.",
   "SettingsResetRideCalendarErrorMessage": "Could not reset the ride calendar.",
   "SettingsResetRideCalendarDialogTitle": "Reset Calendar",
   "SettingsResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",

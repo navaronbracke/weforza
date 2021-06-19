@@ -79,6 +79,10 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                 ios: () => Padding(
                   padding: const EdgeInsets.all(8),
                   child: CupertinoTextField(
+                    suffix: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: const Icon(CupertinoIcons.search),
+                    ),
                     textInputAction: TextInputAction.search,
                     placeholder: S.of(context).RiderSearchFilterInputLabel,
                     autocorrect: false,

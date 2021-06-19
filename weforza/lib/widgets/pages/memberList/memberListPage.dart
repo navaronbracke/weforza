@@ -101,7 +101,10 @@ class _MemberListPageState extends State<MemberListPage> {
         title: _buildTitle(context),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.person_add, color: Colors.white),
+            icon: Icon(
+              Icons.person_add, 
+              color: Colors.white,
+            ),
             onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context)=> AddMemberPage())
             ).then((_) => onReturnToMemberListPage(context)),
@@ -146,7 +149,7 @@ class _MemberListPageState extends State<MemberListPage> {
                 ),
             ),
             CupertinoIconButton.fromAppTheme(
-                icon: Icons.person_add,
+                icon: CupertinoIcons.person_badge_plus_fill,
                 onPressed: ()=> Navigator.of(context).push(
                     MaterialPageRoute(builder: (context)=> AddMemberPage())
                 ).then((_)=> onReturnToMemberListPage(context))
@@ -154,7 +157,7 @@ class _MemberListPageState extends State<MemberListPage> {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child:  CupertinoIconButton.fromAppTheme(
-                icon: Icons.file_download,
+                icon: CupertinoIcons.arrow_down_doc_fill,
                 onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context)=> ImportMembersPage())
                 ).then((_) => onReturnToMemberListPage(context)),
@@ -163,7 +166,7 @@ class _MemberListPageState extends State<MemberListPage> {
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: CupertinoIconButton.fromAppTheme(
-                icon: Icons.file_upload,
+                icon: CupertinoIcons.arrow_up_doc_fill,
                 onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context)=> ExportMembersPage())
                 ),
@@ -218,6 +221,10 @@ class _MemberListPageState extends State<MemberListPage> {
                 ios: () => Padding(
                   padding: const EdgeInsets.all(8),
                   child: CupertinoTextField(
+                    suffix: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: const Icon(CupertinoIcons.search),
+                    ),
                     textInputAction: TextInputAction.search,
                     placeholder: S.of(context).RiderSearchFilterInputLabel,
                     autocorrect: false,

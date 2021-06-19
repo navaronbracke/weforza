@@ -10,10 +10,17 @@ class GenericScanErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      Icon(
-        Icons.warning,
-        color: ApplicationTheme.listInformationalIconColor,
-        size: MediaQuery.of(context).size.shortestSide * .1,
+      PlatformAwareWidget(
+        android: () => Icon(
+          Icons.warning,
+          color: ApplicationTheme.listInformationalIconColor,
+          size: MediaQuery.of(context).size.shortestSide * .1,
+        ),
+        ios: () => Icon(
+          CupertinoIcons.exclamationmark_triangle_fill,
+          color: ApplicationTheme.listInformationalIconColor,
+          size: MediaQuery.of(context).size.shortestSide * .1,
+        ),
       ),
       Padding(
         padding: const EdgeInsets.only(top: 5, bottom: 20),

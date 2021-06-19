@@ -8,12 +8,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 class SkipScanButton extends StatelessWidget {
   SkipScanButton({
     required this.isScanning,
-    required this.onPressed,
+    required this.onContinue,
     required this.onSkip,
   });
 
   final Stream<bool> isScanning;
-  final VoidCallback onPressed;
+  final VoidCallback onContinue;
   final VoidCallback onSkip;
 
   @override
@@ -56,7 +56,7 @@ class SkipScanButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ElevatedButton(
           child: Text(S.of(context).RideAttendeeScanningContinue),
-          onPressed: onPressed,
+          onPressed: onContinue,
         ),
       ),
       ios: () => Padding(
@@ -66,7 +66,7 @@ class SkipScanButton extends StatelessWidget {
             S.of(context).RideAttendeeScanningContinue,
             style: TextStyle(color: Colors.white),
           ),
-          onPressed: onPressed,
+          onPressed: onContinue,
         ),
       ),
     );

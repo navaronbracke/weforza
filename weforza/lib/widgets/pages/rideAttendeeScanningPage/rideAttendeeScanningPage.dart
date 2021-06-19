@@ -53,7 +53,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = AttendeeScanningBloc(
-      rideDate: SelectedItemProvider.of(context).selectedRide.value!.date,
+      ride: SelectedItemProvider.of(context).selectedRide.value!,
       settingsRepo: InjectionContainer.get<SettingsRepository>(),
       deviceRepo: InjectionContainer.get<DeviceRepository>(),
       memberRepo: InjectionContainer.get<MemberRepository>(),
@@ -65,13 +65,17 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Fetch the MediaQuery before creating the scaffold widget.
+    // The scaffold exposes a MediaQuery without the viewPadding.
+    final mediaQuery = MediaQuery.of(context);
+
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIOSLayout(context),
+      android: () => _buildAndroidLayout(context, mediaQuery.viewPadding.bottom),
+      ios: () => _buildIOSLayout(context, mediaQuery.viewPadding.bottom),
     );
   }
 
-  Widget _buildAndroidLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context, double bottomInset){
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -80,11 +84,11 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
           stream: bloc.isScanStep,
         ),
       ),
-      body: _buildBody()
+      body: _buildBody(bottomInset)
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context){
+  Widget _buildIOSLayout(BuildContext context, double bottomInset){
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -95,12 +99,12 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
         ),
       ),
       child: SafeArea(
-        child: _buildBody(),
+        child: _buildBody(bottomInset),
       ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(double bottomInset) {
     return StreamBuilder<ScanProcessStep>(
       initialData: ScanProcessStep.INIT,
       stream: bloc.scanStepStream,
@@ -142,7 +146,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                     SkipScanButton(
                       isScanning: bloc.scanning,
                       onSkip: () => bloc.skipScan(),
-                      onPressed: () => bloc.tryAdvanceToManualSelection(),
+                      onContinue: () => bloc.continueToUnresolvedOwnersList(),
                     ),
                   ],
                 ),
@@ -151,7 +155,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
               return RideAttendeeManualSelection(
                 activeMembersFuture: bloc.loadActiveMembers(),
                 itemBuilder: _buildManualSelectionListItem,
-                saveButtonBuilder: _buildSaveButton,
+                saveButtonBuilder: (BuildContext buildContext) => _buildSaveButton(buildContext, bottomInset),
               );
             case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
             case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
@@ -165,7 +169,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   isSelected: () => bloc.isItemSelected(member.uuid),
                   onTap: () => bloc.onMemberSelected(member.uuid),
                 ),
-                onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
+                onButtonPressed: () => bloc.continueToManualSelection(),
               ),
             );
             default: return Center(child: GenericScanErrorWidget());
@@ -192,12 +196,13 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
     });
   }
 
-  Widget _buildSaveButton(BuildContext context){
+  Widget _buildSaveButton(BuildContext context, double bottomInset){
     return ManualSelectionSubmit(
       isSaving: bloc.saving,
       onSave: () => _onSaveScanResults(context),
       getAttendeeCount: bloc.getRideAttendeeCount,
       attendeeCountStream: bloc.attendeeCount,
+      bottomInset: bottomInset,
     );
   }
 

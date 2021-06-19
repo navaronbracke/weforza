@@ -1,89 +1,126 @@
-
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
   AddRideCalendarItem({
-    required this.date
+    required this.date,
+    required this.register,
+    required this.unregister,
+    required this.onTap,
+    required this.isBeforeToday,
+    required this.rideScheduledDuringCurrentSession,
+    required this.rideScheduledOn,
   });
 
+  /// The date for the calendar item.
   final DateTime date;
+
+  /// Register the given reset function.
+  /// This allows the given function to be called from a parent widget.
+  final void Function(void Function() resetFunction) register;
+
+  /// Unregister the given reset function.
+  /// This is meant as cleanup during dispose().
+  final void Function(void Function() resetFunction) unregister;
+
+  /// The onTap function for the item.
+  /// Returns true if the item can be used in a click gesture.
+  final bool Function(DateTime date) onTap;
+
+  /// This function determines if the given date is before 'today'.
+  /// This is a parameter, as 'today' is a fixed value.
+  final bool Function(DateTime date) isBeforeToday;
+
+  /// This function determines if there is a ride scheduled for the given date.
+  final bool Function(DateTime date) rideScheduledOn;
+
+  /// This function determines if there is a ride scheduled for the given date,
+  /// and this ride was scheduled in the current session.
+  /// I.e. The ride on this date was scheduled in the current session
+  /// and not in a previous session.
+  final bool Function(DateTime date) rideScheduledDuringCurrentSession;
 
   @override
   _AddRideCalendarItemState createState() => _AddRideCalendarItemState();
 }
 
 class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
-
   late Color _backgroundColor;
   late Color _fontColor;
+
   ///The on reset callback
   late VoidCallback _onReset;
 
-  late AddRideBloc _bloc;
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _bloc = AddRideBlocProvider.of(context).bloc;
+  void initState() {
+    super.initState();
     _onReset = () {
-      if(mounted) {
-        setState(() { _setColors(_bloc); });
-      }
+      if (mounted) setState(_setColors);
     };
-    _bloc.registerResetFunction(_onReset);
-    _setColors(_bloc);
+    widget.register(_onReset);
+    _setColors();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = AddRideBlocProvider.of(context).bloc;
     return GestureDetector(
-      onTap: (){
-        //Update the widget if allowed
-        if(mounted && bloc.onDayPressed(widget.date)){
-          setState(() { _setColors(bloc); });
+      onTap: () {
+        // Update the widget if allowed.
+        if (mounted && widget.onTap(widget.date)) {
+          setState(() {
+            _setColors();
+          });
         }
       },
       child: Container(
         width: 40,
         height: 40,
-        decoration: BoxDecoration(color: _backgroundColor,borderRadius: BorderRadius.all(Radius.circular(5))),
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+        ),
         child: Center(
-          child: Text("${widget.date.day}",style: TextStyle(color: _fontColor),textAlign: TextAlign.center),
+          child: Text(
+            "${widget.date.day}",
+            style: TextStyle(color: _fontColor),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );
   }
 
   ///Update the colors for the widget.
-  void _setColors(AddRideBloc bloc){
-    if(bloc.isBeforeToday(widget.date)){
-      if(bloc.dayIsNewlyScheduledRide(widget.date)){
+  void _setColors() {
+    if (widget.isBeforeToday(widget.date)) {
+      if (widget.rideScheduledDuringCurrentSession(widget.date)) {
         //Past day with ride
-        _backgroundColor = ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
+        _backgroundColor =
+            ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarPastDayWithRideFontColor;
-      }else{
+      } else {
         //Past day without ride
-        _backgroundColor = ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
+        _backgroundColor =
+            ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarPastDayWithoutRideFontColor;
       }
-    }else{
-      if(bloc.dayHasRidePlanned(widget.date)){
-        if(bloc.dayIsNewlyScheduledRide(widget.date)){
+    } else {
+      if (widget.rideScheduledOn(widget.date)) {
+        if (widget.rideScheduledDuringCurrentSession(widget.date)) {
           //new selected date
-          _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+          _backgroundColor =
+              ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarSelectedDayFontColor;
-        }else{
+        } else {
           //existing date
-          _backgroundColor = ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
+          _backgroundColor =
+              ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarFutureDayWithRideFontColor;
         }
-      }else{
+      } else {
         //day without ride
-        _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
+        _backgroundColor =
+            ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
       }
     }
@@ -91,7 +128,7 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
 
   @override
   void dispose() {
-    _bloc.unregisterResetFunction(_onReset);
+    widget.unregister(_onReset);
     super.dispose();
   }
 }

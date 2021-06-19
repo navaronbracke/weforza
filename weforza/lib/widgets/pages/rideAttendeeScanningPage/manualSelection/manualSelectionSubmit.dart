@@ -11,15 +11,20 @@ class ManualSelectionSubmit extends StatelessWidget {
     required this.isSaving,
     required this.attendeeCountStream,
     required this.getAttendeeCount,
+    required this.bottomInset,
   });
 
   final void Function() onSave;
   final Stream<bool> isSaving;
   final Stream<int> attendeeCountStream;
   final int Function() getAttendeeCount;
+  // The bottom inset from the device notch at the bottom.
+  final double bottomInset;
 
   @override
-  Widget build(BuildContext context) => Row(
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           ManualSelectionItemCounter(
@@ -28,14 +33,35 @@ class ManualSelectionSubmit extends StatelessWidget {
             initialData: getAttendeeCount(),
           ),
           Expanded(child: Center()),
-          PlatformAwareWidget(
-            android: _buildAndroidWidget,
-            ios: _buildIosWidget,
-          ),
+          _buildAndroidSaveButton(),
         ],
-      );
+      ),
+      ios: (){
+        final child = Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ManualSelectionItemCounter(
+              backgroundColor: ApplicationTheme.primaryColor,
+              countStream: attendeeCountStream,
+              initialData: getAttendeeCount(),
+            ),
+            Expanded(child: Center()),
+            _buildIosSaveButton(),
+          ],
+        );
 
-  Widget _buildAndroidWidget() {
+        return Padding(
+          // Push the child away from the screen bottom edge.
+          // If there is a bottom inset,
+          // the inset can be used for this purpose.
+          padding: bottomInset == 0 ? const EdgeInsets.only(bottom: 5) : EdgeInsets.zero,
+          child: child,
+        );
+      },
+    );
+  }
+
+  Widget _buildAndroidSaveButton() {
     return StreamBuilder<bool>(
       stream: isSaving,
       initialData: false,
@@ -60,7 +86,7 @@ class ManualSelectionSubmit extends StatelessWidget {
     );
   }
 
-  Widget _buildIosWidget() {
+  Widget _buildIosSaveButton() {
     return StreamBuilder<bool>(
       stream: isSaving,
       initialData: false,

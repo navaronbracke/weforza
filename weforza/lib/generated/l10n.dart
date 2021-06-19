@@ -290,26 +290,6 @@ class S {
     );
   }
 
-  /// `One attendant`
-  String get AttendeeCounterOne {
-    return Intl.message(
-      'One attendant',
-      name: 'AttendeeCounterOne',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{count} attendants`
-  String AttendeeCounterMany(Object count) {
-    return Intl.message(
-      '$count attendants',
-      name: 'AttendeeCounterMany',
-      desc: '',
-      args: [count],
-    );
-  }
-
   /// `There is nothing to show`
   String get ListEmpty {
     return Intl.message(
@@ -335,6 +315,26 @@ class S {
     return Intl.message(
       'This ride has no attendants',
       name: 'RideDetailsNoAttendees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get RideDetailsTotalAttendeesTooltip {
+    return Intl.message(
+      'Total',
+      name: 'RideDetailsTotalAttendeesTooltip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanned`
+  String get RideDetailsScannedAttendeesTooltip {
+    return Intl.message(
+      'Scanned',
+      name: 'RideDetailsScannedAttendeesTooltip',
       desc: '',
       args: [],
     );
@@ -660,10 +660,10 @@ class S {
     );
   }
 
-  /// `Proceed to next step`
+  /// `Continue`
   String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Proceed to next step',
+      'Continue',
       name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],
@@ -1051,20 +1051,20 @@ class S {
     );
   }
 
-  /// `Reset Ride Calendar`
+  /// `Reset Calendar`
   String get SettingsResetRideCalendarButtonLabel {
     return Intl.message(
-      'Reset Ride Calendar',
+      'Reset Calendar',
       name: 'SettingsResetRideCalendarButtonLabel',
       desc: '',
       args: [],
     );
   }
 
-  /// `This will remove all rides. The attendances will be reset to zero.`
+  /// `This will remove all rides.\nThe attendances will be reset to zero.`
   String get SettingsResetRideCalendarDescription {
     return Intl.message(
-      'This will remove all rides. The attendances will be reset to zero.',
+      'This will remove all rides.\nThe attendances will be reset to zero.',
       name: 'SettingsResetRideCalendarDescription',
       desc: '',
       args: [],

@@ -731,6 +731,16 @@ class S {
     );
   }
 
+  /// `Scanned riders`
+  String get RideAttendeeScanningManualSelectionShowScannedRidersLabel {
+    return Intl.message(
+      'Scanned riders',
+      name: 'RideAttendeeScanningManualSelectionShowScannedRidersLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No riders found for the specified search term.`
   String get RiderSearchFilterNoResults {
     return Intl.message(

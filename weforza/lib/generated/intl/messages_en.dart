@@ -199,6 +199,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "RideAttendeeScanningManualSelectionEmptyList":
             MessageLookupByLibrary.simpleMessage(
                 "There are no riders to choose from"),
+        "RideAttendeeScanningManualSelectionShowScannedRidersLabel":
+            MessageLookupByLibrary.simpleMessage("Scanned riders"),
         "RideAttendeeScanningNoMembers": MessageLookupByLibrary.simpleMessage(
             "Cannot start a scan, there are no riders"),
         "RideAttendeeScanningPermissionDenied":

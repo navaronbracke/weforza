@@ -83,6 +83,7 @@
   "RideAttendeeDeselectScannedMemberDialogTitle": "Renner Afvinken",
   "RideAttendeeDeselectScannedMemberDialogDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
   "RideAttendeeDeselectScannedMemberDialogConfirm": "Afvinken",
+  "RideAttendeeScanningManualSelectionShowScannedRidersLabel": "Gescande renners",
 
   "RiderSearchFilterNoResults": "Geen renners gevonden voor de opgegeven zoekterm",
   "RiderSearchFilterInputLabel": "Renners zoeken",

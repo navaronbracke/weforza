@@ -3,9 +3,27 @@ import 'package:flutter/cupertino.dart';
 /// A Cupertino equivalent of the Material [BottomAppBar].
 /// Styles have been adapted from [CupertinoTabBar].
 class CupertinoBottomBar extends StatelessWidget {
-  CupertinoBottomBar({ required this.child });
+  const CupertinoBottomBar._({
+    required this.child,
+    required this.useMaximumTabBarHeight,
+  });
+
+  /// Constructor for [CupertinoBottomBar]'s that act like a [CupertinoTabBar].
+  const CupertinoBottomBar.tabBar({
+    required Widget child
+  }): this._(child: child, useMaximumTabBarHeight: true);
+
+  /// Constructor for [CupertinoBottomBar]'s
+  /// that let their child decide the height.
+  const CupertinoBottomBar({
+    required Widget child
+  }) : this._(child: child, useMaximumTabBarHeight: false);
 
   final Widget child;
+
+  /// Whether to limit the height of the [child]
+  /// to a maximum of [_kTabBarHeight].
+  final bool useMaximumTabBarHeight;
 
   /// Standard iOS 10 tab bar height.
   /// Taken from [CupertinoTabBar].
@@ -33,23 +51,35 @@ class CupertinoBottomBar extends StatelessWidget {
       ),
     );
 
+    // The content gets a DefaultTextStyle to match the iOS text styles.
+    // It also gets bottom padding to avoid the bottom notch.
+    Widget content = DefaultTextStyle(
+      style: CupertinoTheme.of(context).textTheme.textStyle,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: child,
+      ),
+    );
+
+    if(useMaximumTabBarHeight){
+      content = SizedBox(
+        // We create a SizedBox that takes up
+        // the maximum tab bar height + notch height.
+        //
+        // Since the child gets some padding that is equal to the notch height,
+        // it gets pushed upwards into the upper part of the SizedBox,
+        // away from the notch.
+        height: _kTabBarHeight + bottomPadding,
+        child: content,
+      );
+    }
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(top: resolveBorderSide(context, border.top)),
         color: backgroundColor,
       ),
-      child: SizedBox(
-        // We create a SizedBox that takes up the combined bar + notch height.
-        // Then we push the child upwards, using the notch height.
-        height: _kTabBarHeight + bottomPadding,
-        child: DefaultTextStyle(
-          style: CupertinoTheme.of(context).textTheme.textStyle,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: bottomPadding),
-            child: child,
-          ),
-        ),
-      ),
+      child: content,
     );
   }
 }

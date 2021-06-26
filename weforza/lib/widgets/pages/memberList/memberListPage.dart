@@ -50,11 +50,11 @@ class _MemberListPageState extends State<MemberListPage> {
   final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
 
   List<Member> filterData(List<Member> list, String query){
+    query = query.trim().toLowerCase();
+
     if(query.isEmpty){
       return list;
     }
-
-    query = query.trim().toLowerCase();
 
     return list.where((Member member){
       return member.firstname.toLowerCase().contains(query) || member.lastname.toLowerCase().contains(query)

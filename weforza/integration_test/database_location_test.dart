@@ -14,8 +14,8 @@ void main(){
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   /// Integration/regression test for the database location.
-  /// Old version of the app used to store the database in the Documents folder.
-  /// Newer version correctly store the database
+  /// Older versions of the app used to store the database
+  /// in the Documents folder. Newer versions correctly store the database
   /// in the application support directory.
   /*
   Run this test:

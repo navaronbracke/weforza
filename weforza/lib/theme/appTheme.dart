@@ -94,16 +94,21 @@ abstract class ApplicationTheme {
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
-  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green;
-  static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
+  static final Color androidRideAttendeeScanProcessArrowColor = Colors.lightBlue.shade200;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = CupertinoColors.activeGreen;
+  static final Color iosRideAttendeeScanProcessOtherStepColor = CupertinoColors.inactiveGray;
+  static final Color iosRideAttendeeScanProcessArrowColor = CupertinoColors.activeBlue;
   static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
-  static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
   static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
   static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
+  static final Color androidManualSelectionSwitchActiveTrackColor = Colors.lightBlue.shade200;
+
+  static final Color androidManualSelectionSaveButtonPrimaryColor = Color(0xFF1666a5);
+
   static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 12,

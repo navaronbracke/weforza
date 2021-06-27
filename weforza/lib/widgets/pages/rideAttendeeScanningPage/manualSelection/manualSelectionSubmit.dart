@@ -33,9 +33,6 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
   Future<void>? saveFuture;
 
   void onSave(){
-    //TODO enable when testing
-    //saveFuture = Future.delayed(Duration(seconds: 5), () => Future<void>.error("Some Error"));
-
     // Get the Future before we call setState.
     saveFuture = widget.save();
     setState(() {});
@@ -186,7 +183,7 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                             child: CupertinoButton.filled(
                               child: Text(
                                 translator.Save,
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 16, color: Colors.white),
                               ),
                               onPressed: onSave,
                               padding: const EdgeInsets.symmetric(horizontal: 24),

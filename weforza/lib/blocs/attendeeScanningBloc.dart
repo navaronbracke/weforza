@@ -11,6 +11,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/rideAttendeeScanResult.dart';
 import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -34,14 +35,28 @@ class AttendeeScanningBloc extends Bloc {
   ///This prevents duplicates during the scan.
   final Set<BluetoothPeripheral> _scannedDevices = HashSet();
 
-  final BehaviorSubject<bool> _scanningStateController = BehaviorSubject.seeded(false);
-  final BehaviorSubject<bool> _savingStateController = BehaviorSubject.seeded(false);
-  final BehaviorSubject<bool> _isScanStepController = BehaviorSubject.seeded(true);
+  final BehaviorSubject<bool> _scanningController = BehaviorSubject.seeded(false);
   final BehaviorSubject<int> _attendeeCountController = BehaviorSubject();
 
-  Stream<bool> get scanning => _scanningStateController.stream;
-  Stream<bool> get saving => _savingStateController.stream;
-  Stream<bool> get isScanStep => _isScanStepController.stream;
+  // Search controllers.
+  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
+  final BehaviorSubject<bool> _showScannedController = BehaviorSubject.seeded(true);
+
+  void onQueryChanged(String newQuery) => _queryController.add(newQuery);
+  void onShowScannedChanged(bool newShowScanned) => _showScannedController.add(newShowScanned);
+
+  ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
+  final StreamController<ScanProcessStep> _scanStepController = BehaviorSubject.seeded(ScanProcessStep.INIT);
+
+  Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
+  Stream<bool> get scanning => _scanningController.stream;
+
+  Stream<bool> get showScanned => _showScannedController.stream;
+  Stream<String> get searchQuery => _queryController.stream;
+
+  /// Every step before [ScanProcessStep.MANUAL]
+  /// should highlight the first step label.
+  Stream<bool> get isScanStep => scanStepStream.map((currentStep) => currentStep != ScanProcessStep.MANUAL);
   Stream<int> get attendeeCount => _attendeeCountController.stream;
 
   ///The repositories connect the bloc with the database.
@@ -65,7 +80,7 @@ class AttendeeScanningBloc extends Bloc {
   ///Is used to check the selected status of the members
   ///and the contents are used for saving the attendees.
   ///Saving happens after scanning and after manual assignment.
-  late HashSet<String> rideAttendees;
+  late HashSet<RideAttendeeScanResult> rideAttendees;
 
   /// This collection will group the Member uuids of the owners of devices with a given name.
   /// The keys are the device names, while the values are lists of uuid's of Members with a device with the given name.
@@ -92,11 +107,6 @@ class AttendeeScanningBloc extends Bloc {
   ///
   /// This list will not contain owners that have already been scanned.
   Set<Member> unresolvedDevicesOwners = HashSet();
-
-  ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
-  ///For each step it will trigger a rebuild of the UI accordingly.
-  StreamController<ScanProcessStep> _scanStepController = BehaviorSubject();
-  Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
 
   ///Start the initial device scan.
   ///It starts with checking the bluetooth state.
@@ -126,9 +136,9 @@ class AttendeeScanningBloc extends Bloc {
   //Perform the actual bluetooth device scan
   void _startDeviceScan(void Function(String deviceName) onDeviceFound){
     //Start scan if not scanning
-    if(!_scanningStateController.value!){
+    if(!_scanningController.value!){
 
-      _scanningStateController.add(true);
+      _scanningController.add(true);
       _scanStepController.add(ScanProcessStep.SCAN);
 
       scanner.scanForDevices(scanDuration)
@@ -149,8 +159,8 @@ class AttendeeScanningBloc extends Bloc {
         // Set is scanning to false
         // so the value listenable builder for the button updates.
         // However, only add it when the controller is still available.
-        if(!_scanningStateController.isClosed){
-          _scanningStateController.add(false);
+        if(!_scanningController.isClosed){
+          _scanningController.add(false);
         }
       }, cancelOnError: false);
     }
@@ -218,25 +228,37 @@ class AttendeeScanningBloc extends Bloc {
 
     // It's a device with exactly one owner.
     // Only include it if the owner wasn't scanned yet.
-    return !rideAttendees.contains(owners.first);
+    return !rideAttendees.contains(RideAttendeeScanResult(uuid: owners.first, isScanned: false));
   }
 
   ///Load the ride attendees and put them in a set.
   ///We need them in a set for easy lookup
   ///during the building of the member list item widgets in the manual step.
   Future<void> _loadRideAttendees(DateTime rideDate) async {
-    final members = await ridesRepo.getRideAttendees(rideDate);
-    rideAttendees = HashSet.from(members.map((member) => member.uuid).toList());
+    final items = await ridesRepo.getRideAttendeesAsScanResults(rideDate);
+
+    rideAttendees = HashSet.from(items);
   }
 
   /// Retrieve the scan result at a given index.
   /// Used by the list builder to fetch data.
   String getScanResultAt(int index) => _scanResults[index];
 
+  void _addRideAttendee(String uuid, bool isScanned){
+    rideAttendees.add(RideAttendeeScanResult(uuid: uuid, isScanned: isScanned));
+    _attendeeCountController.add(rideAttendees.length);
+  }
+
+  void _removeRideAttendee(RideAttendeeScanResult item){
+    rideAttendees.remove(item);
+    _attendeeCountController.add(rideAttendees.length);
+  }
+
   /// Add the given [deviceName] to the scan results list.
   /// If the given device has multiple possible owners,
   /// these [Member]s are added to [unresolvedDevicesOwners].
-  void addScanResult(String deviceName){
+  /// Results added to
+  void addAutomaticScanResult(String deviceName){
     //Notify the backing list.
     _scanResults.insert(0, deviceName);
 
@@ -253,16 +275,9 @@ class AttendeeScanningBloc extends Bloc {
     if(owners.length > 1){
       unresolvedDevicesOwners.addAll(owners);
     }else{
-      // It's a single owner, increment the scanned attendees counter.
-      if(ride.scannedAttendees == null){
-        // It's the first one ever, set it to 1.
-        ride.scannedAttendees = 1;
-      }else{
-        ride.scannedAttendees = (ride.scannedAttendees! + 1);
-      }
-
       // Add the single owner to the attendees instead.
-      rideAttendees.add(owners.first.uuid);
+      // The owner was found during a scan.
+      _addRideAttendee(owners.first.uuid, true);
     }
   }
 
@@ -279,16 +294,16 @@ class AttendeeScanningBloc extends Bloc {
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
     _scanStepController.add(ScanProcessStep.STOPPING_SCAN);
-    final scanInProgress = _scanningStateController.value!;
+    final scanInProgress = _scanningController.value!;
     if(!scanInProgress) return true;
 
     bool result = true;
     await scanner.stopScan().then((_){
-      _scanningStateController.add(false);
+      _scanningController.add(false);
     }).catchError((error){
       result = false; //if it failed, prevent pop & show error first
       _scanStepController.addError(error);
-      _scanningStateController.add(false);
+      _scanningController.add(false);
     });
 
     return result;
@@ -306,23 +321,33 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
+  // This variable is used as a locking flag for the item selection.
+  // When it is true, no items can be selected.
+  bool _isSavingLock = false;
+
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
-    _savingStateController.add(true);
+    _isSavingLock = true;
 
-    // We did a scan but the counter was never updated, due to a lack of results.
-    // If there was at least one scanned person, we would have 1 as value (or higher).
-    // Replace the null counter value with an actual zero.
-    if(ride.scannedAttendees == null){
-      ride.scannedAttendees = 0;
-    }
-    await ridesRepo.updateRide(
-        ride,
-        rideAttendees.map((element) => RideAttendee(ride.date, element)).toList()
-    ).catchError((error){
+    // Now we have the results from all sources:
+    // - the scan itself
+    // - owner conflict resolution
+    // - manual selection
+    // - null conversion for old values
+    // Count all the scanned members from the entire list.
+    ride.scannedAttendees = rideAttendees.where((attendee) => attendee.isScanned).length;
+
+    final items = rideAttendees.map((element) =>
+        RideAttendee(rideDate: ride.date, uuid: element.uuid, isScanned: element.isScanned)
+    ).toList();
+
+    await ridesRepo.updateRide(ride, items).then<void>((_){
+      _isSavingLock = false;
+    }).catchError((error){
+      // Notify the scan step stream, so it shows a generic error.
       _scanStepController.addError(error);
-      _savingStateController.add(false);
-      return Future.error(error);
+      _isSavingLock = false;
+      return Future<void>.error(error);
     });
   }
 
@@ -339,50 +364,61 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   /// Go to the manual selection screen.
-  void continueToManualSelection(){
-    _isScanStepController.add(false);
-    _scanStepController.add(ScanProcessStep.MANUAL);
+  void continueToManualSelection() => _scanStepController.add(
+    ScanProcessStep.MANUAL,
+  );
+
+  bool isItemSelected(RideAttendeeScanResult item) => rideAttendees.contains(item);
+
+  bool isMemberScanned(String uuid){
+    // Lookup the item with the given uuid.
+    // Thanks to [RideAttendeeScanResult]'s equality, isScanned is irrelevant.
+    final item = rideAttendees.lookup(RideAttendeeScanResult(uuid: uuid, isScanned: false));
+
+    // If we don't find the item, the given UUID is not scanned (and not manually selected either).
+    return item != null && item.isScanned;
+  }
+
+  /// Members can be selected if we are not saving.
+  bool get canSelectMember => !_isSavingLock;
+
+  bool scanResultExists(RideAttendeeScanResult item) => rideAttendees.contains(item);
+  void removeScanResult(RideAttendeeScanResult item) => _removeRideAttendee(item);
+
+  void addManualScanResult(String uuid) => _addRideAttendee(uuid, false);
+
+  void onMemberSelectedWithoutConfirmationDialog(RideAttendeeScanResult member){
+    if(rideAttendees.contains(member)){
+      _removeRideAttendee(member);
+    }else {
+      // A person was selected that isn't an attendee yet.
+      // This person was 'found' manually.
+      _addRideAttendee(member.uuid, false);
+    }
+  }
+
+  int get rideAttendeeCount => rideAttendees.length;
+
+  // Remove the already scanned owners and sort the remaining ones.
+  // This is useful for preparing the multiple owners resolution list screen.
+  Future<List<Member>> filterAndSortMultipleOwnersList() {
+    final filtered = unresolvedDevicesOwners.where((Member member) {
+      return !rideAttendees.contains(
+        RideAttendeeScanResult(uuid: member.uuid, isScanned: false),
+      );
+    }).toList();
+
+    filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
+
+    return Future.value(filtered);
   }
 
   @override
   void dispose() {
     _scanStepController.close();
-    _scanningStateController.close();
-    _savingStateController.close();
-    _isScanStepController.close();
+    _scanningController.close();
     _attendeeCountController.close();
-  }
-
-  bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
-
-  /// Members can be selected if we are not saving.
-  bool canSelectMember(){
-    final lockedBySaving = _savingStateController.value!;
-
-    return !lockedBySaving;
-  }
-
-  void onMemberSelected(String memberUuid){
-    if(rideAttendees.contains(memberUuid)){
-      rideAttendees.remove(memberUuid);
-    }else{
-      rideAttendees.add(memberUuid);
-    }
-
-    _attendeeCountController.add(rideAttendees.length);
-  }
-
-  int getRideAttendeeCount() => rideAttendees.length;
-
-  // Remove the already scanned owners and sort the remaining ones.
-  // This is useful for preparing the multiple owners resolution list screen.
-  Future<List<Member>> filterAndSortMultipleOwnersList() {
-    final filtered = unresolvedDevicesOwners.where(
-          (Member member) => !rideAttendees.contains(member.uuid)
-    ).toList();
-
-    filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
-
-    return Future.value(filtered);
+    _queryController.close();
+    _showScannedController.close();
   }
 }

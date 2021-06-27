@@ -20,7 +20,7 @@ class RideAttendeeScanResult {
     return RideAttendeeScanResult(
       uuid: values["attendee"],
       // The rate of automatic scanning is bigger than manual selection.
-      // Thus we use an 'optimistic' true as default
+      // Thus we use an 'optimistic' true as default.
       isScanned: values["isScanned"] ?? true,
     );
   }

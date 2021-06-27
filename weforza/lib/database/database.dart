@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -9,8 +11,12 @@ import 'package:path/path.dart';
 
 ///This class wraps a Sembast [Database] and datastore instances along with initializer and close methods.
 class ApplicationDatabase {
+  ApplicationDatabase({
+    this.databaseName = "weforza_database.db"
+  });
+
   //The database filename.
-  final String _databaseName = "weforza_database.db";
+  final String databaseName;
 
   ///The data store for [Member].
   final memberStore = stringMapStoreFactory.store("member");
@@ -34,10 +40,42 @@ class ApplicationDatabase {
   ///Get the database instance.
   Database getDatabase() => _database;
 
+  //TODO remove when migrated to new directory.
+  /// Moves the database from the old Documents directory
+  /// to the Application Support directory for the current platform.
+  Future<void> _moveDatabase(String newDatabasePath) async {
+    final oldDirectory = await getApplicationDocumentsDirectory();
+    final oldDatabasePath = join(oldDirectory.path, databaseName);
+    final file = File(oldDatabasePath);
+
+    if(await file.exists()){
+      print("Found database on old location: $oldDatabasePath");
+      print("Migrating database to new location: $newDatabasePath");
+
+      try {
+        print("Using migration strategy: RENAME FILE");
+
+        await file.rename(newDatabasePath);
+      } on FileSystemException {
+        print("Migration using migration strategy: RENAME FILE failed.");
+        print("Retrying with migration strategy: MOVE FILE");
+
+        await file.copy(newDatabasePath);
+        await file.delete();
+      }
+
+      print("Done migrating database.");
+    }
+  }
+
   ///Initialize the database.
   Future<void> createDatabase() async {
-    final appDocumentDir = await getApplicationDocumentsDirectory();
-    final dbPath = join(appDocumentDir.path,_databaseName);
+    final databaseDirectory = await getApplicationSupportDirectory();
+    final dbPath = join(databaseDirectory.path, databaseName);
+
+    // Move the database to the new directory if required.
+    await _moveDatabase(dbPath);
+
     _database = await databaseFactoryIo.openDatabase(dbPath);
   }
 

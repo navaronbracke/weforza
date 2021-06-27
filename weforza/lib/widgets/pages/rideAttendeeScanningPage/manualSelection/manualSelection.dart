@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/genericError.dart';
@@ -10,26 +9,26 @@ import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/m
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class RideAttendeeManualSelection extends StatefulWidget {
+class RideAttendeeManualSelection extends StatelessWidget {
   RideAttendeeManualSelection({
     required this.activeMembersFuture,
+    required this.isMemberScanned,
     required this.itemBuilder,
-    required this.saveButtonBuilder
+    required this.saveButtonBuilder,
+    required this.onShowScannedChanged,
+    required this.onQueryChanged,
+    required this.showScanned,
+    required this.query,
   });
 
   final Future<List<Member>> activeMembersFuture;
-  final Widget Function(Member item) itemBuilder;
+  final Widget Function(Member item, bool isScanned) itemBuilder;
+  final bool Function(String uuid) isMemberScanned;
   final Widget Function(BuildContext context) saveButtonBuilder;
-
-  @override
-  _RideAttendeeManualSelectionState createState() => _RideAttendeeManualSelectionState();
-}
-
-class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelection> {
-  // This controller manages the query stream.
-  // The input field creates it's own TextEditingController,
-  // as it starts with an empty string.
-  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
+  final void Function(String query) onQueryChanged;
+  final void Function(bool showScanned) onShowScannedChanged;
+  final Stream<String> query;
+  final Stream<bool> showScanned;
 
   List<Member> filterOnQueryString(List<Member> list, String query){
     query = query.trim().toLowerCase();
@@ -45,17 +44,28 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
     }).toList();
   }
 
+  List<Member> filterOnShowScanned(List<Member> list, bool showScanned){
+    // Show everything, including the scanned members.
+    if(showScanned){
+      return list;
+    }
+
+    // Only show the not scanned members.
+    return list.where((member) => !isMemberScanned(member.uuid)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Member>>(
-      future: widget.activeMembersFuture,
+      future: activeMembersFuture,
       builder: (context, futureSnapshot){
         if(futureSnapshot.connectionState == ConnectionState.done){
           if(futureSnapshot.hasError){
             return GenericError(text: S.of(context).GenericError);
           }
+          final list = futureSnapshot.data;
 
-          if(futureSnapshot.data == null || futureSnapshot.data!.isEmpty){
+          if(list == null || list.isEmpty){
             return Center(child: ManualSelectionListEmpty());
           }
 
@@ -67,7 +77,7 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                   keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidateMode: AutovalidateMode.disabled,
-                  onChanged: _queryController.add,
+                  onChanged: onQueryChanged,
                   decoration: InputDecoration(
                     suffixIcon: Icon(Icons.search),
                     labelText: S.of(context).RiderSearchFilterInputLabel,
@@ -80,32 +90,13 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                   padding: const EdgeInsets.all(8),
                   child: CupertinoSearchTextField(
                     suffixIcon: const Icon(CupertinoIcons.search),
-                    onChanged: _queryController.add,
+                    onChanged: onQueryChanged,
                     placeholder: S.of(context).RiderSearchFilterInputLabel,
                   ),
                 ),
               ),
-              Expanded(
-                child: StreamBuilder<String>(
-                  stream: _queryController.stream,
-                  builder: (context, streamSnapshot) {
-                    final data = filterData(
-                      futureSnapshot.data ?? [],
-                      streamSnapshot.data ?? "",
-                    );
-
-                    if(data.isEmpty){
-                      return RiderSearchFilterEmpty();
-                    }
-
-                    return ListView.builder(
-                      itemBuilder: (context, index) => widget.itemBuilder(data[index]),
-                      itemCount: data.length,
-                    );
-                  }
-                ),
-              ),
-              widget.saveButtonBuilder(context),
+              Expanded(child: _buildScannedStreamBuilder(list)),
+              saveButtonBuilder(context),
             ],
           );
         }
@@ -115,9 +106,39 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
     );
   }
 
-  @override
-  void dispose() {
-    _queryController.close();
-    super.dispose();
+  /// Build the [StreamBuilder] for the query string.
+  Widget _buildQueryStringStreamBuilder(List<Member> data){
+    return StreamBuilder<String>(
+      stream: query,
+      builder: (_, snapshot){
+        final filteredData = filterOnQueryString(data, snapshot.data ?? "");
+
+        if(filteredData.isEmpty){
+          return RiderSearchFilterEmpty();
+        }
+
+        return ListView.builder(
+          itemBuilder: (context, index){
+            final item = filteredData[index];
+
+            return itemBuilder(item, isMemberScanned(item.uuid));
+          },
+          itemCount: filteredData.length,
+        );
+      }
+    );
+  }
+
+  /// Build the [StreamBuilder] for the scanned filter.
+  Widget _buildScannedStreamBuilder(List<Member> data){
+    return StreamBuilder<bool>(
+      stream: showScanned,
+      builder: (_, snapshot){
+        final showAll = snapshot.data ?? true;
+        final list = filterOnShowScanned(data, showAll);
+
+        return _buildQueryStringStreamBuilder(list);
+      },
+    );
   }
 }

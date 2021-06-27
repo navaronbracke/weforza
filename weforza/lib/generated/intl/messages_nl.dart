@@ -184,6 +184,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Voornaam"),
         "PersonLastNameLabel":
             MessageLookupByLibrary.simpleMessage("Familienaam"),
+        "RideAttendeeDeselectScannedMemberDialogConfirm":
+            MessageLookupByLibrary.simpleMessage("Afvinken"),
+        "RideAttendeeDeselectScannedMemberDialogDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Bent u zeker dat u deze gescande renner wil afvinken?"),
+        "RideAttendeeDeselectScannedMemberDialogTitle":
+            MessageLookupByLibrary.simpleMessage("Renner Afvinken"),
         "RideAttendeeScanningBluetoothDisabled":
             MessageLookupByLibrary.simpleMessage(
                 "Scan geannuleerd, Bluetooth staat uit"),
@@ -197,6 +204,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "RideAttendeeScanningManualSelectionEmptyList":
             MessageLookupByLibrary.simpleMessage(
                 "Er zijn geen renners om uit te kiezen"),
+        "RideAttendeeScanningManualSelectionShowScannedRidersLabel":
+            MessageLookupByLibrary.simpleMessage("Gescande renners"),
         "RideAttendeeScanningNoMembers": MessageLookupByLibrary.simpleMessage(
             "Kan niet beginnen scannen, er zijn geen renners"),
         "RideAttendeeScanningPermissionDenied":
@@ -231,7 +240,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "RiderSearchFilterInputLabel":
             MessageLookupByLibrary.simpleMessage("Renners zoeken"),
         "RiderSearchFilterNoResults": MessageLookupByLibrary.simpleMessage(
-            "Geen resultaten voor de opgegeven zoekterm"),
+            "Geen renners gevonden voor de opgegeven zoekterm"),
         "Riders": MessageLookupByLibrary.simpleMessage("Renners"),
         "RidersListTitle": m8,
         "Rides": MessageLookupByLibrary.simpleMessage("Ritten"),

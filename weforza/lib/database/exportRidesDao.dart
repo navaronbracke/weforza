@@ -90,7 +90,7 @@ class ExportRidesDao implements IExportRidesDao {
 
     rides.forEach((DateTime rideDate, Ride ride) {
       final Iterable<ExportableRideAttendee> membersAttendingRide = attendees.containsKey(rideDate) ? attendees[rideDate]!.map((RideAttendee attendee){
-        final Member member = members[attendee.attendeeId]!;
+        final Member member = members[attendee.uuid]!;
         return ExportableRideAttendee(
           firstName: member.firstname,
           lastName: member.lastname,

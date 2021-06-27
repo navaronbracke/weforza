@@ -701,10 +701,50 @@ class S {
     );
   }
 
-  /// `Nothing found for the specified search term`
+  /// `Deselect Rider`
+  String get RideAttendeeDeselectScannedMemberDialogTitle {
+    return Intl.message(
+      'Deselect Rider',
+      name: 'RideAttendeeDeselectScannedMemberDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure that you want to uncheck this rider?`
+  String get RideAttendeeDeselectScannedMemberDialogDescription {
+    return Intl.message(
+      'Are you sure that you want to uncheck this rider?',
+      name: 'RideAttendeeDeselectScannedMemberDialogDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Uncheck`
+  String get RideAttendeeDeselectScannedMemberDialogConfirm {
+    return Intl.message(
+      'Uncheck',
+      name: 'RideAttendeeDeselectScannedMemberDialogConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanned riders`
+  String get RideAttendeeScanningManualSelectionShowScannedRidersLabel {
+    return Intl.message(
+      'Scanned riders',
+      name: 'RideAttendeeScanningManualSelectionShowScannedRidersLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No riders found for the specified search term.`
   String get RiderSearchFilterNoResults {
     return Intl.message(
-      'Nothing found for the specified search term',
+      'No riders found for the specified search term.',
       name: 'RiderSearchFilterNoResults',
       desc: '',
       args: [],

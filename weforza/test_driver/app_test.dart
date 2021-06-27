@@ -1,4 +1,3 @@
-// TODO: When the next stable release is published (the one after 2.0.2) switch back to stable.
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';

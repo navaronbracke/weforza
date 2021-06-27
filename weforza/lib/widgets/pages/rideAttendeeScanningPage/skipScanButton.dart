@@ -37,16 +37,20 @@ class SkipScanButton extends StatelessWidget {
           onPressed: onSkip,
         ),
       ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: CupertinoButton.filled(
-          child: Text(
-            S.of(context).RideAttendeeScanningSkipScan,
-            style: TextStyle(color: Colors.white),
+      ios: (){
+        final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
+          child: CupertinoButton.filled(
+            child: Text(
+              S.of(context).RideAttendeeScanningSkipScan,
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: onSkip,
           ),
-          onPressed: onSkip,
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -59,16 +63,20 @@ class SkipScanButton extends StatelessWidget {
           onPressed: onContinue,
         ),
       ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: CupertinoButton.filled(
-          child: Text(
-            S.of(context).RideAttendeeScanningContinue,
-            style: TextStyle(color: Colors.white),
+      ios: (){
+        final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
+          child: CupertinoButton.filled(
+            child: Text(
+              S.of(context).RideAttendeeScanningContinue,
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: onContinue,
           ),
-          onPressed: onContinue,
-        ),
-      ),
+        );
+      },
     );
   }
 }

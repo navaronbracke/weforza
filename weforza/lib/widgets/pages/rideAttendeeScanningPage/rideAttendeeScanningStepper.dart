@@ -37,7 +37,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
           child: Center(
               child: Icon(
                   Icons.arrow_forward_ios,
-                  color: ApplicationTheme.rideAttendeeScanProcessArrowColor
+                  color: ApplicationTheme.androidRideAttendeeScanProcessArrowColor
               )
           ),
         ),
@@ -64,7 +64,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
           child: Center(
               child: Icon(
                   Icons.arrow_forward_ios,
-                  color: ApplicationTheme.rideAttendeeScanProcessArrowColor
+                  color: ApplicationTheme.iosRideAttendeeScanProcessArrowColor
               )
           ),
         ),

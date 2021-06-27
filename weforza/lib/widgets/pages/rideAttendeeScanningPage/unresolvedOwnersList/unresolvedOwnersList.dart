@@ -60,16 +60,20 @@ class UnresolvedOwnersList extends StatelessWidget {
           onPressed: onButtonPressed,
         ),
       ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: CupertinoButton(
-          child: Text(
-            S.of(context).RideAttendeeScanningContinue,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+      ios: (){
+        final double bottomPadding = MediaQuery.of(context).padding.bottom;
+
+        return Padding(
+          padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 10),
+          child: CupertinoButton(
+            child: Text(
+              S.of(context).RideAttendeeScanningContinue,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+            ),
+            onPressed: onButtonPressed,
           ),
-          onPressed: onButtonPressed,
-        ),
-      ),
+        );
+      },
     );
   }
 }

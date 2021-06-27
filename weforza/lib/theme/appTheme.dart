@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 ///This class provides the application [ThemeData].
 abstract class ApplicationTheme {
 
-  ///Primary/Accent Theme colors.
-  static final Color primaryColor = Colors.blue;
-  static final Color accentColor = Colors.blue.shade300;
+  /// Primary / Secondary Theme colors.
+  /// The primary color is defined as a [MaterialColor].
+  static final MaterialColor primaryColor = Colors.blue;
+  static final Color secondaryColor = Colors.blue.shade300;
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -93,16 +94,25 @@ abstract class ApplicationTheme {
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
-  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green;
-  static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
+  static final Color androidRideAttendeeScanProcessArrowColor = Colors.lightBlue.shade200;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = CupertinoColors.activeGreen;
+  static final Color iosRideAttendeeScanProcessOtherStepColor = CupertinoColors.inactiveGray;
+  static final Color iosRideAttendeeScanProcessArrowColor = CupertinoColors.activeBlue;
   static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
-  static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
-  static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
-  static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  static final Color androidRideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
+  static final Color androidRideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  
+  static final Color iosRideAttendeeScanProgressbarColor = CupertinoColors.activeGreen;
+  static final Color iosRideAttendeeScanProgressbarBackgroundColor = CupertinoColors.activeGreen.withOpacity(0.4);
+
   static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
   static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
+  static final Color androidManualSelectionSwitchActiveTrackColor = Colors.lightBlue.shade200;
+
+  static final Color androidManualSelectionSaveButtonPrimaryColor = Color(0xFF1666a5);
+
   static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(
       fontStyle: FontStyle.italic,
       fontSize: 12,
@@ -129,9 +139,9 @@ abstract class ApplicationTheme {
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
-       primaryColor: primaryColor,
-       accentColor: accentColor,
-       splashColor: accentColor.withAlpha(150),
+       primarySwatch: primaryColor,
+       accentColor: secondaryColor,
+       splashColor: secondaryColor.withAlpha(150),
        // We need dark here, so the status bar gets a white text color.
        appBarTheme: AppBarTheme(brightness: Brightness.dark),
        // We set button styles explicitly here.
@@ -164,7 +174,7 @@ abstract class ApplicationTheme {
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
       primaryColor: primaryColor,
-      primaryContrastingColor: accentColor
+      primaryContrastingColor: secondaryColor
     );
   }
 }

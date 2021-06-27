@@ -88,7 +88,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                       height: paintSize,
                       child: Center(
                         child: AnimatedCheckmark(
-                          color: ApplicationTheme.accentColor,
+                          color: ApplicationTheme.secondaryColor,
                           size: Size.square(paintSize),
                         ),
                       ),

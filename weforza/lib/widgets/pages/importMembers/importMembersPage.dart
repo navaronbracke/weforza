@@ -112,7 +112,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                         height: paintSize,
                         child: Center(
                           child: AnimatedCheckmark(
-                            color: ApplicationTheme.accentColor,
+                            color: ApplicationTheme.secondaryColor,
                             size: Size.square(paintSize),
                           ),
                         ),

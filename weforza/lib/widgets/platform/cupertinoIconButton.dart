@@ -17,7 +17,7 @@ class CupertinoIconButton extends StatefulWidget {
     double? size
   }): this(
     idleColor: ApplicationTheme.primaryColor,
-    onPressedColor: ApplicationTheme.accentColor,
+    onPressedColor: ApplicationTheme.secondaryColor,
     icon: icon,
     onPressed: onPressed,
     size: size ?? 28

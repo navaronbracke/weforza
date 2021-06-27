@@ -80,8 +80,12 @@
   "RideAttendeeScanningManualSelectionEmptyList": "There are no riders to choose from",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} riders have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
+  "RideAttendeeDeselectScannedMemberDialogTitle": "Deselect Rider",
+  "RideAttendeeDeselectScannedMemberDialogDescription": "Are you sure that you want to uncheck this rider?",
+  "RideAttendeeDeselectScannedMemberDialogConfirm": "Uncheck",
+  "RideAttendeeScanningManualSelectionShowScannedRidersLabel": "Scanned riders",
 
-  "RiderSearchFilterNoResults": "Nothing found for the specified search term",
+  "RiderSearchFilterNoResults": "No riders found for the specified search term.",
   "RiderSearchFilterInputLabel": "Search riders",
 
   "ImportMembersPageTitle": "Import Riders",

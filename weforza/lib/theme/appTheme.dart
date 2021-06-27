@@ -99,8 +99,12 @@ abstract class ApplicationTheme {
   static final Color iosRideAttendeeScanProcessOtherStepColor = CupertinoColors.inactiveGray;
   static final Color iosRideAttendeeScanProcessArrowColor = CupertinoColors.activeBlue;
   static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
-  static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
-  static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  static final Color androidRideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
+  static final Color androidRideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  
+  static final Color iosRideAttendeeScanProgressbarColor = CupertinoColors.activeGreen;
+  static final Color iosRideAttendeeScanProgressbarBackgroundColor = CupertinoColors.activeGreen.withOpacity(0.4);
+
   static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
   static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;

@@ -239,7 +239,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
                     child: Text(
                       translator.SettingsResetRideCalendarDialogConfirm,
                       style: TextStyle(
-                        color: ApplicationTheme.deleteItemButtonTextColor,
+                        color: CupertinoColors.destructiveRed,
                       ),
                     ),
                     onPressed: () => _onConfirmDeletion(context),
@@ -283,7 +283,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
                   child: Icon(
                       CupertinoIcons.exclamationmark_circle,
                       size: 25,
-                      color: ApplicationTheme.deleteItemButtonTextColor
+                      color: CupertinoColors.destructiveRed,
                   ),
                 ),
                 Text(

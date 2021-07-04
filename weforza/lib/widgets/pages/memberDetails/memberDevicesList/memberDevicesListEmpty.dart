@@ -42,11 +42,11 @@ class MemberDevicesListEmpty extends StatelessWidget {
             onPressed: onAddDevicePageButtonPressed,
             child: Text(S.of(context).AddDeviceTitle),
           ),
-          ios: () => CupertinoButton(
+          ios: () => CupertinoButton.filled(
             onPressed: onAddDevicePageButtonPressed,
             child: Text(
               S.of(context).AddDeviceTitle,
-              style: ApplicationTheme.iosButtonTextStyle,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         )

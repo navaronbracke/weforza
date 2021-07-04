@@ -61,8 +61,13 @@ dependencies:
   # package_info provides access to app specific information such as build number & version.
   package_info: ^2.0.0
 
+  file: 6.1.0
+
 dev_dependencies:
+  file_testing: 3.0.0
+
   test: any
+
   integration_test:
     sdk: flutter
   flutter_test:

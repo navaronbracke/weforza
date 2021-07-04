@@ -48,10 +48,10 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
             ios: () => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: CupertinoButton(
-                color: ApplicationTheme.deleteItemButtonTextColor,
+                color: CupertinoColors.destructiveRed,
                 child: Text(
                   translator.SettingsResetRideCalendarButtonLabel,
-                  style: ApplicationTheme.iosSettingsResetRideCalendarTextStyle,
+                  style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
                   final result = await showCupertinoDialog(

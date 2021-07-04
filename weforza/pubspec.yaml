@@ -61,15 +61,19 @@ dependencies:
   # package_info provides access to app specific information such as build number & version.
   package_info: ^2.0.0
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  file: 6.1.0
 
-  #The flutter_driver package for our integration tests
-  flutter_driver:
-    sdk: flutter
+dev_dependencies:
+  file_testing: 3.0.0
 
   test: any
+
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

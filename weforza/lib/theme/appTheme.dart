@@ -89,7 +89,6 @@ abstract class ApplicationTheme {
   static final Color iosRideAttendeeScanProcessCurrentStepColor = CupertinoColors.activeGreen;
   static final Color iosRideAttendeeScanProcessOtherStepColor = CupertinoColors.inactiveGray;
   static final Color iosRideAttendeeScanProcessArrowColor = CupertinoColors.activeBlue;
-  static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
   static final Color androidRideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color androidRideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
   

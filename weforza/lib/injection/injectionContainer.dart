@@ -1,3 +1,6 @@
+import 'package:file/local.dart';
+import 'package:sembast/sembast_io.dart';
+import 'package:weforza/database/databaseFactory.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/database/database.dart';
@@ -29,7 +32,7 @@ class InjectionContainer {
     _injector = Injector();
 
     //database
-    _injector.register<ApplicationDatabase>((i) => ApplicationDatabase(),isSingleton: true);
+    _injector.register<ApplicationDatabase>((i) => ApplicationDatabase(), isSingleton: true);
     //We need a reference to the database provider for passing the database/stores to the Dao instances.
     final ApplicationDatabase applicationDatabase = _injector.get<ApplicationDatabase>();
 
@@ -56,8 +59,14 @@ class InjectionContainer {
 
     //other
 
-    //After setting up the dependency tree, we can initialize the production database.
-    await applicationDatabase.createDatabase();
+    // After setting up the dependency tree, we can initialize the production database.
+    // Provide the database factory that uses actual File I/O.
+    await applicationDatabase.openDatabase(
+      ApplicationDatabaseFactory(
+        factory: databaseFactoryIo,
+        fileSystem: const LocalFileSystem(),
+      ),
+    );
   }
 
   ///Initialize an [Injector] for testing.

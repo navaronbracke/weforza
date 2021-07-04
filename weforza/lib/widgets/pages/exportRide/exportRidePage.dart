@@ -129,8 +129,11 @@ class _ExportRidePageState extends State<ExportRidePage> {
                         }
                       },
                     ),
-                    ios: () => CupertinoButton(
-                      child: Text(S.of(context).Export),
+                    ios: () => CupertinoButton.filled(
+                      child: Text(
+                        S.of(context).Export,
+                        style: TextStyle(color: Colors.white),
+                      ),
                       onPressed: (){
                         if (_iosValidateFilename(context)) {
                           widget.bloc.exportRide();

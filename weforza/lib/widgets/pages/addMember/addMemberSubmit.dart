@@ -25,10 +25,9 @@ class AddMemberSubmit extends StatelessWidget {
       ),
       ios: () => CupertinoButton.filled(
         child: Text(
-            S.of(context).AddMemberSubmit,
-            style: TextStyle(color: Colors.white)
+          S.of(context).AddMemberSubmit,
+          style: TextStyle(color: Colors.white),
         ),
-        pressedOpacity: 0.5,
         onPressed: onPressed,
       ),
     );

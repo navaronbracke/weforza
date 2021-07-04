@@ -42,27 +42,30 @@ class ScanPermissionDenied extends StatelessWidget {
   );
 
   Widget _buildAndroidButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      direction: Axis.horizontal,
+      children: [
         ElevatedButton(
           child: Text(S.of(context).RideAttendeeScanningGoToSettings),
           onPressed: () async => await openAppSettings(),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: TextButton(
-            child: Text(S.of(context).GoBack),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+        TextButton(
+          child: Text(S.of(context).GoBack),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );
   }
 
   Widget _buildIosButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      direction: Axis.horizontal,
       children: <Widget>[
         CupertinoButton.filled(
           padding: const EdgeInsets.symmetric(
@@ -75,15 +78,12 @@ class ScanPermissionDenied extends StatelessWidget {
           ),
           onPressed: () async => await openAppSettings(),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: CupertinoButton(
-            child: Text(
-              S.of(context).GoBack,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
+        CupertinoButton(
+          child: Text(
+            S.of(context).GoBack,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );

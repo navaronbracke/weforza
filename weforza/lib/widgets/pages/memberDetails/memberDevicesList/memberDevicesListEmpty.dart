@@ -31,22 +31,22 @@ class MemberDevicesListEmpty extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
           child: Text(
             S.of(context).MemberDetailsNoDevices,
             textAlign: TextAlign.center,
           ),
         ),
         PlatformAwareWidget(
-          android: () => TextButton(
+          android: () => ElevatedButton(
             onPressed: onAddDevicePageButtonPressed,
             child: Text(S.of(context).AddDeviceTitle),
           ),
-          ios: () => CupertinoButton(
+          ios: () => CupertinoButton.filled(
             onPressed: onAddDevicePageButtonPressed,
             child: Text(
               S.of(context).AddDeviceTitle,
-              style: ApplicationTheme.iosButtonTextStyle,
+              style: TextStyle(color: Colors.white),
             ),
           ),
         )

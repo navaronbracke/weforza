@@ -61,11 +61,9 @@ class AddRideSubmit extends StatelessWidget {
       onPressed: onPressed,
     ),
     ios: () => CupertinoButton.filled(
-      pressedOpacity: 0.5,
       child: Text(
-          S.of(context).AddRideSubmit,
-          softWrap: true,
-          style: TextStyle(color: Colors.white)
+        S.of(context).AddRideSubmit,
+        style: TextStyle(color: Colors.white),
       ),
       onPressed: onPressed,
     ),

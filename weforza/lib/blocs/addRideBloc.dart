@@ -74,8 +74,8 @@ class AddRideBloc extends Bloc {
         _submitController.add(_currentSubmitState);
       }
 
-      //This date is in the past OR there is a ride with this date.
-      if(isBeforeToday(date) || _existingRides!.contains(date)){
+      //There is a ride with this date.
+      if(_existingRides!.contains(date)){
         return false;
       }
 

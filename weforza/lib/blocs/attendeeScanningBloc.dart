@@ -309,14 +309,14 @@ class AttendeeScanningBloc extends Bloc {
     return result;
   }
 
-  /// Cancel a running scan and continue to the manual selection screen.
-  /// The unresolved owners list is deliberately skipped.
+  /// Cancel a running scan.
+  /// Once the scan has been stopped, continue to the next screen.
+  /// If there are unresolved owners, go to the unresolved owners screen.
+  /// Otherwise go to the manual selection.
   void skipScan() async {
     await stopScan().then((scanStopped){
       if(scanStopped){
-        // We do not check unresolvedDevicesOwners.isEmpty !
-        // Skipping should send the user directly to the last screen.
-        continueToManualSelection();
+        continueToUnresolvedOwnersList();
       }
     });
   }

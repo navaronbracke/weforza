@@ -61,7 +61,14 @@ dependencies:
   # package_info provides access to app specific information such as build number & version.
   package_info: ^2.0.0
 
+  # For access to FileSystem.
   file: 6.1.0
+
+  # For .env file support
+  dotenv: ^3.0.0
+
+  # For two-way encryption
+  encrypt: ^5.0.1
 
 dev_dependencies:
   file_testing: 3.0.0

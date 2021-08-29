@@ -80,3 +80,5 @@
 **/ios/Flutter/flutter_export_environment.sh
 
 /certificates
+
+.env

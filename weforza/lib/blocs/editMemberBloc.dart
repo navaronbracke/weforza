@@ -145,7 +145,7 @@ class EditMemberBloc extends Bloc {
         alias: alias,
         profileImageFilePath: profileImage?.path,
         isActiveMember: isActiveMember,
-        lastUpdated: DateTime.now().toUtc(),
+        lastUpdated: DateTime.now(),
       );
 
       await repository.updateMember(newMember);

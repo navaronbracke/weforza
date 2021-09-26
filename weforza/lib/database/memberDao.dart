@@ -143,7 +143,7 @@ class MemberDao implements IMemberDao {
     if(await record.exists(_database)){
       await record.update(_database, {
         "active": value,
-        "lastUpdated": DateTime.now()
+        "lastUpdated": DateTime.now().toIso8601String()
       });
     }
   }

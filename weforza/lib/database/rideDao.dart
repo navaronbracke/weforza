@@ -1,5 +1,6 @@
 
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
@@ -42,14 +43,20 @@ class RideDao implements IRideDao {
       this._database,
       this._memberStore,
       this._rideStore,
-      this._rideAttendeeStore);
+      this._rideAttendeeStore,
+      this._cipher,
+      );
 
-  RideDao.withProvider(ApplicationDatabase provider): this(
+  RideDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
     provider.getDatabase(),
     provider.memberStore,
     provider.rideStore,
-    provider.rideAttendeeStore
+    provider.rideAttendeeStore,
+    cipher,
   );
+
+  /// The [Cipher] in charge of encryption.
+  final Cipher _cipher;
 
   ///A reference to the database.
   final Database _database;
@@ -110,7 +117,7 @@ class RideDao implements IRideDao {
         finder: Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)),
             sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
     //map the record snapshots
-    return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
+    return memberRecords.map((record) => Member.decrypt(record.key, record.value, _cipher)).toList();
   }
 
   @override

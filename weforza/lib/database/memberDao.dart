@@ -1,9 +1,9 @@
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
-import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -40,14 +40,20 @@ class MemberDao implements IMemberDao {
       this._database,
       this._memberStore,
       this._rideAttendeeStore,
-      this._deviceStore);
+      this._deviceStore,
+      this._cipher,
+      );
 
-  MemberDao.withProvider(ApplicationDatabase provider): this(
+  MemberDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
     provider.getDatabase(),
     provider.memberStore,
     provider.rideAttendeeStore,
-    provider.deviceStore
+    provider.deviceStore,
+    cipher,
   );
+
+  /// The [Cipher] in charge of encryption.
+  final Cipher _cipher;
 
   ///A reference to the application database.
   final Database _database;
@@ -64,7 +70,7 @@ class MemberDao implements IMemberDao {
     if(await _memberStore.findFirst(_database, finder: Finder(filter: Filter.byKey(member.uuid))) != null){
       throw Exception("The member's uuid: ${member.uuid} is already in use");
     }
-    await _memberStore.record(member.uuid).add(_database, member.toMap());
+    await _memberStore.record(member.uuid).add(_database, member.encrypt(_cipher));
   }
 
   @override
@@ -94,7 +100,7 @@ class MemberDao implements IMemberDao {
     }
 
     final Iterable<Member> members = await _memberStore.find(_database,finder: finder).then((records){
-      return records.map((record)=> Member.of(record.key, record.value));
+      return records.map((record)=> Member.decrypt(record.key, record.value, _cipher));
     });
 
     return members.toList();
@@ -106,7 +112,7 @@ class MemberDao implements IMemberDao {
       filter: Filter.byKey(member.uuid),
     );
 
-    await _memberStore.update(_database,member.toMap(),finder: finder);
+    await _memberStore.update(_database,member.encrypt(_cipher),finder: finder);
   }
 
   @override
@@ -137,7 +143,7 @@ class MemberDao implements IMemberDao {
     if(await record.exists(_database)){
       await record.update(_database, {
         "active": value,
-        "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds()
+        "lastUpdated": DateTime.now()
       });
     }
   }

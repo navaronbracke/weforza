@@ -25,15 +25,14 @@ void main(){
         profileImageFilePath: null,
       );
 
-      final Member encryptedMember = memberToEncrypt.encrypt(cipher);
+      final Map<String, dynamic> encryptedMember = memberToEncrypt.encrypt(cipher);
 
-      expect(encryptedMember.firstname, cipher.encrypt(firstName));
-      expect(encryptedMember.lastname, cipher.encrypt(lastName));
-      expect(encryptedMember.alias, cipher.encrypt(alias));
-      expect(encryptedMember.profileImageFilePath, null);
-      expect(encryptedMember.isActiveMember, true);
-      expect(encryptedMember.lastUpdated, lastUpdated);
-      expect(encryptedMember.uuid, uuid);
+      expect(encryptedMember["firstname"], cipher.encrypt(firstName));
+      expect(encryptedMember["lastname"], cipher.encrypt(lastName));
+      expect(encryptedMember["alias"], cipher.encrypt(alias));
+      expect(encryptedMember["profile"], null);
+      expect(encryptedMember["active"], true);
+      expect(encryptedMember["lastUpdated"], lastUpdated.toIso8601String());
     });
 
     test("Member decrypt test", (){
@@ -43,17 +42,16 @@ void main(){
       final lastName = "Doe";
       final alias = "JohnDoeAlias";
 
-      final encryptedMember = Member(
-        uuid: uuid,
-        firstname: cipher.encrypt(firstName),
-        lastname: cipher.encrypt(lastName),
-        alias: cipher.encrypt(alias),
-        profileImageFilePath: null,
-        isActiveMember: true,
-        lastUpdated: lastUpdated
-      );
+      final Map<String, dynamic> encryptedMember = {
+        "firstname" : cipher.encrypt(firstName),
+        "lastname": cipher.encrypt(lastName),
+        "alias": cipher.encrypt(alias),
+        "profile": null,
+        "active": true,
+        "lastUpdated": lastUpdated.toIso8601String(),
+      };
 
-      final decryptedMember = encryptedMember.decrypt(cipher);
+      final decryptedMember = Member.decrypt(uuid, encryptedMember, cipher);
 
       expect(decryptedMember.firstname, firstName);
       expect(decryptedMember.lastname, lastName);
@@ -80,15 +78,14 @@ void main(){
         profileImageFilePath: null,
       );
 
-      final Member encryptedMember = memberToEncrypt.encrypt(cipher);
+      final Map<String, dynamic> encryptedMember = memberToEncrypt.encrypt(cipher);
 
-      expect(encryptedMember.firstname, cipher.encrypt(firstName));
-      expect(encryptedMember.lastname, cipher.encrypt(lastName));
-      expect(encryptedMember.alias, "");
-      expect(encryptedMember.profileImageFilePath, null);
-      expect(encryptedMember.isActiveMember, true);
-      expect(encryptedMember.lastUpdated, lastUpdated);
-      expect(encryptedMember.uuid, uuid);
+      expect(encryptedMember["firstname"], cipher.encrypt(firstName));
+      expect(encryptedMember["lastname"], cipher.encrypt(lastName));
+      expect(encryptedMember["alias"], "");
+      expect(encryptedMember["profile"], null);
+      expect(encryptedMember["active"], true);
+      expect(encryptedMember["lastUpdated"], lastUpdated.toIso8601String());
     });
 
     test("Member without alias decrypt test", (){
@@ -97,17 +94,16 @@ void main(){
       final firstName = "John";
       final lastName = "Doe";
 
-      final encryptedMember = Member(
-          uuid: uuid,
-          firstname: cipher.encrypt(firstName),
-          lastname: cipher.encrypt(lastName),
-          alias: cipher.encrypt(""),
-          profileImageFilePath: null,
-          isActiveMember: true,
-          lastUpdated: lastUpdated
-      );
+      final Map<String, dynamic> encryptedMember = {
+        "firstname": cipher.encrypt(firstName),
+        "lastname": cipher.encrypt(lastName),
+        "alias": cipher.encrypt(""),
+        "profile": null,
+        "active": true,
+        "lastUpdated": lastUpdated.toIso8601String(),
+      };
 
-      final decryptedMember = encryptedMember.decrypt(cipher);
+      final decryptedMember = Member.decrypt(uuid, encryptedMember, cipher);
 
       expect(decryptedMember.firstname, firstName);
       expect(decryptedMember.lastname, lastName);

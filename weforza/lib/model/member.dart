@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:weforza/extensions/dateExtension.dart';
+import 'package:weforza/cipher/cipher.dart';
 
 ///This class represents a 'Member.'
 class Member implements Comparable<Member> {
@@ -24,13 +24,13 @@ class Member implements Comparable<Member> {
   final String uuid;
 
   ///A member's first name.
-  String firstname;
+  final String firstname;
 
   ///A member's last name.
-  String lastname;
+  final String lastname;
 
   ///A member's alias.
-  String alias;
+  final String alias;
 
   ///The path to an optional profile picture.
   String? profileImageFilePath;
@@ -43,26 +43,29 @@ class Member implements Comparable<Member> {
 
   String get initials => firstname[0] + lastname[0];
 
-  ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
+  /// Convert this object to a Map, encrypting sensitive values.
+  Map<String,dynamic> encrypt(Cipher cipher){
     return {
-      "firstname": firstname,
-      "lastname": lastname,
-      "alias": alias,
+      "firstname": cipher.encrypt(firstname),
+      "lastname": cipher.encrypt(lastname),
+      "alias": alias.isEmpty ? alias : cipher.encrypt(alias),
       "active": isActiveMember,
       "profile": profileImageFilePath,
-      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
+      "lastUpdated": lastUpdated.toIso8601String(),
     };
   }
 
-  ///Create a member from a Map and a given uuid.
-  static Member of(String uuid, Map<String, dynamic> values){
+  /// Create a member from a Map and a given uuid,
+  /// while decrypting sensitive values with the [Cipher].
+  static Member decrypt(String uuid, Map<String, dynamic> values, Cipher cipher){
     assert(uuid.isNotEmpty);
+    final alias = values["alias"] as String;
+
     return Member(
       uuid: uuid,
-      firstname: values["firstname"],
-      lastname: values["lastname"],
-      alias: values["alias"],
+      firstname: cipher.decrypt(values["firstname"]),
+      lastname: cipher.decrypt(values["lastname"]),
+      alias: alias.isEmpty ? alias : cipher.decrypt(alias),
       isActiveMember: values["active"],
       profileImageFilePath: values["profile"],
       lastUpdated: DateTime.parse(values["lastUpdated"]),

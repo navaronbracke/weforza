@@ -2,6 +2,7 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/member.dart';
@@ -18,14 +19,20 @@ class ExportRidesDao implements IExportRidesDao {
       this._database,
       this._memberStore,
       this._rideStore,
-      this._rideAttendeeStore);
+      this._rideAttendeeStore,
+      this._cipher,
+      );
 
-  ExportRidesDao.withProvider(ApplicationDatabase provider): this(
+  ExportRidesDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
     provider.getDatabase(),
     provider.memberStore,
     provider.rideStore,
-    provider.rideAttendeeStore
+    provider.rideAttendeeStore,
+    cipher
   );
+
+  /// The [Cipher] in charge of encryption.
+  final Cipher _cipher;
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
@@ -67,7 +74,7 @@ class ExportRidesDao implements IExportRidesDao {
     final records = await _memberStore.find(_database);
 
     records.forEach((record){
-      final Member member = Member.of(record.key, record.value);
+      final Member member = Member.decrypt(record.key, record.value, _cipher);
       members[member.uuid] = member;
     });
   }

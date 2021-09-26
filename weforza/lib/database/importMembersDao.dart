@@ -2,6 +2,7 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportableMember.dart';
@@ -15,13 +16,17 @@ abstract class IImportMembersDao {
 }
 
 class ImportMembersDao implements IImportMembersDao {
-  ImportMembersDao(this._database, this._memberStore, this._deviceStore);
+  ImportMembersDao(this._database, this._memberStore, this._deviceStore, this._cipher);
 
-  ImportMembersDao.withProvider(ApplicationDatabase provider): this(
+  ImportMembersDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
     provider.getDatabase(),
     provider.memberStore,
-    provider.deviceStore
+    provider.deviceStore,
+    cipher,
   );
+
+  /// The [Cipher] in charge of encryption.
+  final Cipher _cipher;
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
@@ -36,14 +41,16 @@ class ImportMembersDao implements IImportMembersDao {
     final records = await _memberStore.find(_database);
 
     records.forEach((record) {
+      final member = Member.decrypt(record.key, record.value,_cipher);
+
       final key = ImportableMemberKey(
-        firstName: record.value["firstname"],
-        lastName: record.value["lastname"],
-        alias: record.value["alias"],
+        firstName: member.firstname,
+        lastName: member.lastname,
+        alias: member.alias,
       );
 
       if(collection[key] == null){
-        collection[key] = Member.of(record.key, record.value);
+        collection[key] = member;
       }
     });
   }
@@ -54,7 +61,7 @@ class ImportMembersDao implements IImportMembersDao {
     final records = await _deviceStore.find(_database);
 
     records.forEach((record) {
-      final Device device = Device.of(record.key, record.value);
+      final Device device = Device.decrypt(record.key, record.value, _cipher);
 
       if(collection[device.ownerId] == null){
         collection[device.ownerId] = <String>[device.name].toSet();
@@ -155,12 +162,12 @@ class ImportMembersDao implements IImportMembersDao {
       // Add the new members.
       await _memberStore.records(
           newMembers.map((member) => member.uuid)
-      ).add(txn, newMembers.map((member) => member.toMap()).toList());
+      ).add(txn, newMembers.map((member) => member.encrypt(_cipher)).toList());
 
       // Add the new devices.
       await _deviceStore.records(
           newDevices.map((device) => device.creationDate.toIso8601String())
-      ).add(txn, newDevices.map((device) => device.toMap()).toList());
+      ).add(txn, newDevices.map((device) => device.encrypt(_cipher)).toList());
     });
   }
 }

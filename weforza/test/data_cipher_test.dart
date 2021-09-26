@@ -1,10 +1,11 @@
 
 import 'package:test/test.dart';
-import 'package:weforza/cipher/data_cipher.dart';
+
+import 'test_cipher.dart';
 
 void main(){
   group("DataCipher tests", (){
-    final cipher = DataCipher(encryptionKey: "long enough test encryption key1");
+    final cipher = TestCipher();
 
     test("DataCipher can encrypt and decrypt", (){
       final s = "test123456789Abcéhg";

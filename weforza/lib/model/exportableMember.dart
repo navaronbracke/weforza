@@ -1,5 +1,5 @@
-import 'package:weforza/extensions/dateExtension.dart';
 
+import 'package:weforza/extensions/date_extensions.dart';
 
 /// This class is used as format for exporting members
 class ExportableMember {
@@ -21,7 +21,7 @@ class ExportableMember {
 
   String toCsv(){
     final String devicesString = devices.isEmpty ? "" : devices.join(",");
-    return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},${lastUpdated.toStringWithoutMilliseconds()},$devicesString";
+    return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},${lastUpdated.toStringSimple()},$devicesString";
   }
 
   Map<String,dynamic> toJson(){
@@ -30,7 +30,7 @@ class ExportableMember {
       "lastName": lastName,
       "alias": alias,
       "active": isActiveMember,
-      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
+      "lastUpdated": lastUpdated.toStringSimple(),
       "devices": List<String>.of(devices)
     };
   }

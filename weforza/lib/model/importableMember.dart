@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:weforza/extensions/dateExtension.dart';
 
 /// This class serves as a wrapper during the import members phase.
 /// It allows for using [firstName], [lastName] and [alias] as keys in a Map.
@@ -38,7 +37,7 @@ class ImportableMember {
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {
-      "lastUpdated": updatedOn.toStringWithoutMilliseconds(),
+      "lastUpdated": updatedOn.toIso8601String(),
     };
   }
 

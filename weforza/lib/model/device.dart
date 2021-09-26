@@ -1,6 +1,8 @@
 
 import 'dart:ui';
 
+import 'package:weforza/cipher/cipher.dart';
+
 ///A device is a piece of hardware.
 ///It has a [name], an [ownerId] and a [type].
 class Device {
@@ -13,22 +15,23 @@ class Device {
 
   final String ownerId;
   final DateTime creationDate;
-  String name;
-  DeviceType type;
+  final String name;
+  final DeviceType type;
 
   static final RegExp deviceNameRegex = RegExp(r"^[^,]{1,40}$");
 
-  ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
+  /// Convert this object to a Map, encrypting sensitive values.
+  Map<String,dynamic> encrypt(Cipher cipher){
     return {
-      "deviceName": name,
+      "deviceName": cipher.encrypt(name),
       "owner": ownerId,
       "type": type.index
     };
   }
 
-  ///Create a device from a Map and a given key.
-  static Device of(String key, Map<String,dynamic> values){
+  /// Create a device from a Map and a given key,
+  /// while decrypting sensitive values with the [Cipher].
+  static Device decrypt(String key, Map<String, dynamic> values, Cipher cipher){
     assert(key.isNotEmpty);
     //Start with unknown
     DeviceType type = DeviceType.UNKNOWN;
@@ -39,7 +42,7 @@ class Device {
 
     return Device(
       creationDate: DateTime.parse(key),
-      name: values["deviceName"],
+      name: cipher.decrypt(values["deviceName"]),
       ownerId: values["owner"],
       type: type
     );

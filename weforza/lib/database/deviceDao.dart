@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
@@ -25,12 +25,13 @@ abstract class IDeviceDao {
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
-  DeviceDao(this._database, this._deviceStore, this._memberStore);
+  DeviceDao(this._database, this._deviceStore, this._memberStore, this._cipher);
 
-  DeviceDao.withProvider(ApplicationDatabase provider): this(
+  DeviceDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
     provider.getDatabase(),
     provider.deviceStore,
     provider.memberStore,
+    cipher,
   );
 
   ///A reference to the database, which is needed by the Store.
@@ -41,13 +42,16 @@ class DeviceDao implements IDeviceDao {
   ///A reference to the member store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
+  /// The [Cipher] in charge of encryption.
+  final Cipher _cipher;
+
   @override
   Future<void> addDevice(Device device) async {
     await _database.transaction((txn) async {
-      await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.toMap());
+      await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.encrypt(_cipher));
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        { "lastUpdated": DateTime.now().toIso8601String() },
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -58,7 +62,7 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<List<Device>> getOwnerDevices(String ownerId) async {
     final records = await _deviceStore.find(_database,finder: Finder(filter: Filter.equals("owner", ownerId)));
-    return records.map((record) => Device.of(record.key,record.value)).toList();
+    return records.map((record) => Device.decrypt(record.key,record.value, _cipher)).toList();
   }
 
   @override
@@ -76,7 +80,7 @@ class DeviceDao implements IDeviceDao {
 
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        { "lastUpdated": DateTime.now().toIso8601String() },
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -87,12 +91,12 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<void> updateDevice(Device newDevice) async {
     await _database.transaction((txn) async {
-      await _deviceStore.update(txn, newDevice.toMap(),finder: Finder(
+      await _deviceStore.update(txn, newDevice.encrypt(_cipher),finder: Finder(
           filter: Filter.byKey(newDevice.creationDate.toIso8601String())
       ));
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        { "lastUpdated": DateTime.now().toIso8601String() },
         finder: Finder(
           filter: Filter.byKey(newDevice.ownerId),
         ),
@@ -140,6 +144,6 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<List<Device>> getAllDevices() async {
     final records = await _deviceStore.find(_database);
-    return records.map((record) => Device.of(record.key,record.value)).toList();
+    return records.map((record) => Device.decrypt(record.key,record.value, _cipher)).toList();
   }
 }

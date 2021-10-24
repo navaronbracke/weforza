@@ -1,7 +1,7 @@
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/cipher/cipher.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
@@ -47,11 +47,11 @@ class RideDao implements IRideDao {
       this._cipher,
       );
 
-  RideDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
-    provider.getDatabase(),
-    provider.memberStore,
-    provider.rideStore,
-    provider.rideAttendeeStore,
+  RideDao.withProvider(Database database, DatabaseStoreProvider storeProvider, Cipher cipher): this(
+    database,
+    storeProvider.memberStore,
+    storeProvider.rideStore,
+    storeProvider.rideAttendeeStore,
     cipher,
   );
 

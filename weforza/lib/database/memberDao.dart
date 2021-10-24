@@ -1,6 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/cipher/cipher.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
@@ -44,11 +44,11 @@ class MemberDao implements IMemberDao {
       this._cipher,
       );
 
-  MemberDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
-    provider.getDatabase(),
-    provider.memberStore,
-    provider.rideAttendeeStore,
-    provider.deviceStore,
+  MemberDao.withProvider(Database database, DatabaseStoreProvider storeProvider, Cipher cipher): this(
+    database,
+    storeProvider.memberStore,
+    storeProvider.rideAttendeeStore,
+    storeProvider.deviceStore,
     cipher,
   );
 

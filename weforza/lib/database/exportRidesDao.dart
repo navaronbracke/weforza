@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/cipher/cipher.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
@@ -23,12 +23,12 @@ class ExportRidesDao implements IExportRidesDao {
       this._cipher,
       );
 
-  ExportRidesDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
-    provider.getDatabase(),
-    provider.memberStore,
-    provider.rideStore,
-    provider.rideAttendeeStore,
-    cipher
+  ExportRidesDao.withProvider(Database database, DatabaseStoreProvider storeProvider, Cipher cipher): this(
+    database,
+    storeProvider.memberStore,
+    storeProvider.rideStore,
+    storeProvider.rideAttendeeStore,
+    cipher,
   );
 
   /// The [Cipher] in charge of encryption.

@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/cipher/cipher.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/model/importableMember.dart';
@@ -18,10 +18,10 @@ abstract class IImportMembersDao {
 class ImportMembersDao implements IImportMembersDao {
   ImportMembersDao(this._database, this._memberStore, this._deviceStore, this._cipher);
 
-  ImportMembersDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
-    provider.getDatabase(),
-    provider.memberStore,
-    provider.deviceStore,
+  ImportMembersDao.withProvider(Database database, DatabaseStoreProvider storeProvider, Cipher cipher): this(
+    database,
+    storeProvider.memberStore,
+    storeProvider.deviceStore,
     cipher,
   );
 

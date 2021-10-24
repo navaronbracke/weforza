@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/cipher/cipher.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/model/device.dart';
 
 ///This interface defines a contract to work with member devices.
@@ -27,10 +27,10 @@ abstract class IDeviceDao {
 class DeviceDao implements IDeviceDao {
   DeviceDao(this._database, this._deviceStore, this._memberStore, this._cipher);
 
-  DeviceDao.withProvider(ApplicationDatabase provider, Cipher cipher): this(
-    provider.getDatabase(),
-    provider.deviceStore,
-    provider.memberStore,
+  DeviceDao.withProvider(Database database, DatabaseStoreProvider storeProvider, Cipher cipher): this(
+    database,
+    storeProvider.deviceStore,
+    storeProvider.memberStore,
     cipher,
   );
 

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:file/file.dart';
 import 'package:file/memory.dart';
 import 'package:file_testing/file_testing.dart';
 import 'package:integration_test/integration_test.dart';
@@ -8,8 +8,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
+import 'package:weforza/cipher/pass_through_cipher.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/databaseFactory.dart';
+import 'package:weforza/database/database_migration.dart';
+import 'package:weforza/database/database_store_provider.dart';
 
 /// This fake database provides an implementation for testing database creation.
 /// It does not support actual transactions.
@@ -59,10 +62,6 @@ class FakeDatabaseFactory implements DatabaseFactory {
   Future<Database> openDatabase(String path, {int? version, OnVersionChangedFunction? onVersionChanged, DatabaseMode? mode, SembastCodec? codec}) async {
     final File storage = fileSystem.file(path);
 
-    if(await storage.exists()){
-      return FakeDatabase(path: storage.path, version: version ?? 1);
-    }
-
     // Use recursive to avoid having to create empty directories separately.
     // It's just for testing anyway.
     final File newStorage = await storage.create(recursive: true);
@@ -96,15 +95,20 @@ void main(){
       );
 
       // Create the actual database.
-      await applicationDatabase.openDatabase(dbFactory);
+      await applicationDatabase.openDatabase(
+        dbFactory,
+        DatabaseMigration(
+          encryptingCipher: PassThroughCipher(), // We only open the database.
+          storeProvider: DatabaseStoreProvider(),
+        ),
+      );
 
       final newDatabasePath = path.join(newDirectory.path, testDbName);
       final realDb = applicationDatabase.getDatabase();
 
-      // There is currently no database migration in use.
-      // Thus new databases should start with version 1.
+      // New databases start with version 2.
       expect(realDb.path, newDatabasePath);
-      expect(realDb.version, 1);
+      expect(realDb.version, 2);
     });
 
     /// Integration / regression test for old databases that need to be moved
@@ -134,16 +138,59 @@ void main(){
       // Try to open the application database.
       // Since the 'old' database is in the wrong directory,
       // we expect it to be moved.
-      await db.openDatabase(dbFactory);
+      await db.openDatabase(
+        dbFactory,
+        DatabaseMigration(
+          encryptingCipher: PassThroughCipher(), // We only open the database.
+          storeProvider: DatabaseStoreProvider(),
+        ),
+      );
 
       final newDatabasePath = path.join(newDirectory.path, testDbName);
       final newDatabase = db.getDatabase();
 
-      // There is currently no database migration in use.
-      // Thus databases should start with version 1.
-      expect(newDatabase.version, 1);
+      // New databases start with version 2.
+      expect(newDatabase.version, 2);
       expect(newDatabase.path, newDatabasePath);
       expect(dbFactory.fileSystem.file(oldDatabasePath), isNot(exists));
     });
+  });
+
+  testWidgets("Databases in the correct directory are left unchanged", (WidgetTester tester) async {
+    final testDbName = "test_database.db";
+    final db = ApplicationDatabase(databaseName: testDbName);
+    final dbFactory = ApplicationDatabaseFactory(
+      fileSystem: MemoryFileSystem(),
+      factory: FakeDatabaseFactory(),
+    );
+
+    final dbDirectory = await getApplicationSupportDirectory();
+    final databasePath = path.join(dbDirectory.path, testDbName);
+
+    final existingDatabaseFile = dbFactory.fileSystem.file(databasePath);
+
+    // Create the 'existing' database.
+    await existingDatabaseFile.create(recursive: true);
+
+    final currentFileStat = await existingDatabaseFile.stat();
+
+    // Try to open the application database.
+    // Since the database is in the correct directory,
+    // we expect it to be left as is.
+    await db.openDatabase(
+      dbFactory,
+      DatabaseMigration(
+        encryptingCipher: PassThroughCipher(), // We only open the database.
+        storeProvider: DatabaseStoreProvider(),
+      ),
+    );
+
+    final existingDatabase = db.getDatabase();
+    final newFileStat = await dbFactory.fileSystem.file(databasePath).stat();
+
+    // The current db version is 2.
+    expect(existingDatabase.version, 2);
+    expect(existingDatabase.path, databasePath);
+    expect(newFileStat.modified, currentFileStat.modified);
   });
 }

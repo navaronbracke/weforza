@@ -3,6 +3,8 @@ import 'package:sembast/sembast_io.dart';
 import 'package:weforza/cipher/cipher.dart';
 import 'package:weforza/cipher/data_cipher.dart';
 import 'package:weforza/database/databaseFactory.dart';
+import 'package:weforza/database/database_migration.dart';
+import 'package:weforza/database/database_store_provider.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/database/database.dart';
@@ -35,19 +37,25 @@ class InjectionContainer {
 
     //Only now we configure the injector itself.
     _injector = Injector();
-    _injector.register<Cipher>((i) => DataCipher(encryptionKey: env["ENCRYPTION_KEY"]!));
+    _injector.register<Cipher>((i){
+      return DataCipher(
+        encryptionKey: env["ENCRYPTION_KEY"]!,
+        encryptionSalt: env["ENCRYPTION_SALT"]!
+      );
+    });
 
     //database
     _injector.register<ApplicationDatabase>((i) => ApplicationDatabase(), isSingleton: true);
     //We need a reference to the database provider for passing the database/stores to the Dao instances.
     final ApplicationDatabase applicationDatabase = _injector.get<ApplicationDatabase>();
+    final storeProvider = DatabaseStoreProvider();
 
-    _injector.register<IMemberDao>((i) => MemberDao.withProvider(applicationDatabase, i.get<Cipher>()),isSingleton: true);
-    _injector.register<IRideDao>((i) => RideDao.withProvider(applicationDatabase, i.get<Cipher>()),isSingleton: true);
-    _injector.register<IDeviceDao>((i)=> DeviceDao.withProvider(applicationDatabase, i.get<Cipher>()),isSingleton: true);
-    _injector.register<ISettingsDao>((i) => SettingsDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase, i.get<Cipher>()),isSingleton: true);
-    _injector.register<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase, i.get<Cipher>()), isSingleton: true);
+    _injector.register<IMemberDao>((i) => MemberDao.withProvider(applicationDatabase.getDatabase(), storeProvider, i.get<Cipher>()),isSingleton: true);
+    _injector.register<IRideDao>((i) => RideDao.withProvider(applicationDatabase.getDatabase(), storeProvider, i.get<Cipher>()),isSingleton: true);
+    _injector.register<IDeviceDao>((i)=> DeviceDao.withProvider(applicationDatabase.getDatabase(), storeProvider, i.get<Cipher>()),isSingleton: true);
+    _injector.register<ISettingsDao>((i) => SettingsDao.withProvider(applicationDatabase.getDatabase(), storeProvider),isSingleton: true);
+    _injector.register<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase.getDatabase(), storeProvider, i.get<Cipher>()),isSingleton: true);
+    _injector.register<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase.getDatabase(), storeProvider, i.get<Cipher>()), isSingleton: true);
 
     //repositories
     _injector.register<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>()),isSingleton: true);
@@ -71,6 +79,10 @@ class InjectionContainer {
       ApplicationDatabaseFactory(
         factory: databaseFactoryIo,
         fileSystem: const LocalFileSystem(),
+      ),
+      DatabaseMigration(
+        encryptingCipher: _injector.get<Cipher>(),
+        storeProvider: storeProvider,
       ),
     );
   }

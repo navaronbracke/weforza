@@ -3,7 +3,9 @@ extension SimpleToString on DateTime {
   String _padLeft(int number) => number.toString().padLeft(2,"0");
 
   // Returns a simple date string.
-  // I.e. 2012-02-27 13:27:00
+  // I.e. 2012-02-27 13:27:00.
+  //
+  // The output of this method is compatible with `DateTime.parse(input)`.
   String toStringSimple(){
     final month = _padLeft(this.month);
     final day = _padLeft(this.day);

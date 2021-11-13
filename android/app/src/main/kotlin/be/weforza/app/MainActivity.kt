@@ -1,4 +1,4 @@
-package be.weforza.weforza
+package be.weforza.app
 
 import io.flutter.embedding.android.FlutterActivity
 

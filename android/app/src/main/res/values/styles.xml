@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Android S splash screen theming -->
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">@color/background_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_app_icon_foreground</item>
+
+        <!-- Set the theme of the Activity that directly follows the splash screen. -->
+        <item name="postSplashScreenTheme">@style/LaunchTheme</item>
+    </style>    
+
     <!-- Show a splash screen on the activity. Automatically removed when
      Flutter draws its first frame -->
     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">

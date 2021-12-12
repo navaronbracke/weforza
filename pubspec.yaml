@@ -56,7 +56,7 @@ dependencies:
   app_settings: ^4.1.0
 
   # The permission_handler packages provides utilities for requesting permissions.
-  permission_handler: ^6.1.0
+  permission_handler: ^8.3.0
 
   # package_info provides access to app specific information such as build number & version.
   package_info: ^2.0.0

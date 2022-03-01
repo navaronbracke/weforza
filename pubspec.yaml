@@ -53,7 +53,7 @@ dependencies:
   flutter_blue: ^0.8.0
 
   # This package provides easy access to app settings.
-  app_settings: ^4.1.0
+  app_settings: ^4.1.1
 
   # The permission_handler packages provides utilities for requesting permissions.
   permission_handler: ^9.2.0

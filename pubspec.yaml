@@ -44,13 +44,13 @@ dependencies:
   jiffy: ^4.0.0
 
   # RxDart provides extensions to Dart Streams.
-  rxdart: ^0.26.0
+  rxdart: ^0.27.3
 
   # This package provides platform independent file picking.
   file_picker: ^4.5.0
 
   # This package provides Bluetooth Low Energy functionality.
-  flutter_blue: ^0.8.0 # TODO: migrate to flutter_blue_plus
+  flutter_blue_plus: ^1.1.2
 
   # This package provides easy access to app settings.
   app_settings: ^4.1.1

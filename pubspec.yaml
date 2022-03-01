@@ -58,8 +58,8 @@ dependencies:
   # The permission_handler packages provides utilities for requesting permissions.
   permission_handler: ^8.3.0
 
-  # package_info provides access to app specific information such as build number & version.
-  package_info: ^2.0.0
+  # package_info_plus provides access to app specific information such as build number & version.
+  package_info_plus: ^1.4.0
 
   file: ^6.1.2
 

@@ -2,7 +2,7 @@
 
 ### Translation setup
 
-This project uses (flutter i18n)[https://plugins.jetbrains.com/plugin/10128-flutter-i18n] for generating i18n-related boilerplate code.
+This project uses [flutter i18n](https://plugins.jetbrains.com/plugin/10128-flutter-i18n) for generating i18n-related boilerplate code.
 
 Installation of the plugin is thus required.
 
@@ -11,7 +11,7 @@ Installation of the plugin is thus required.
 Before runing the app on a real IOS device, this checklist should be performed.
 
 - Make sure the signing config is correct.
-Check the bundle ID / development team through the `Signing Config` tab in XCode.
+  Check the bundle ID / development team through the `Signing Config` tab in XCode.
 
 - Let XCode set up the device for development.
   * Check that the device is shown in XCode as the selected device.
@@ -26,8 +26,8 @@ Check the bundle ID / development team through the `Signing Config` tab in XCode
 
 To bump the minimum iOS version for a project do the following:
 
-- Set MinimumOSVersion to (version number, e.g. 14.4 for iOS 14.4) in ios/Flutter/AppFrameworkInfo.plist
-- Ensure that you uncomment platform :ios, '(version number, e.g. 14.4 for iOS 14.4)' in ios/Podfile 
+- Open the project in XCode and set the target OS version
+- Update the `platform :ios, <version number>` section in the Podfile.
 - Ensure that the `flutter_additional_ios_build_settings(target)` section in ios/Podfile has set `IPHONEOS_DEPLOYMENT_TARGET`
 ```
     post_install do |installer|

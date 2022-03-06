@@ -1,9 +1,10 @@
 import 'package:sembast/sembast.dart';
+
 import 'package:weforza/database/database.dart';
+import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
-import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -25,7 +26,12 @@ abstract class IMemberDao {
   ///If [uuid] isn't null or empty it checks if there is a member with the values and a uuid that is different from [uuid].
   ///A member with the same values and uuid means it's the owner of said values.
   ///This would merely overwrite the old one with a copy of itself and is thus harmless.
-  Future<bool> memberExists(String firstname, String lastname, String alias, [String? uuid]);
+  Future<bool> memberExists(
+    String firstname,
+    String lastname,
+    String alias, [
+    String? uuid,
+  ]);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);

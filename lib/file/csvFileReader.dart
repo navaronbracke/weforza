@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,19 +11,20 @@ import 'package:weforza/model/member.dart';
 class CsvFileReader implements ImportMembersFileReader<String> {
   CsvFileReader({
     required this.headerRegex,
-  }): assert(headerRegex.isNotEmpty);
+  }) : assert(headerRegex.isNotEmpty);
 
   final String headerRegex;
 
   //Process the given data and add it to the given collection, if it is valid.
   //This function is a future, so we can process multiple lines at once.
   @override
-  Future<void> processData(String data, List<ExportableMember> collection) async {
+  Future<void> processData(
+      String data, List<ExportableMember> collection) async {
     final List<String> values = data.split(',');
 
     // If the line doesn't have enough cells
     // to fill the required fields, skip it.
-    if(values.length < 5){
+    if (values.length < 5) {
       return;
     }
 
@@ -36,17 +36,19 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
     // Invalid data lines are skipped.
     // Check firstname, lastname & alias by regex.
-    if(!Member.personNameAndAliasRegex.hasMatch(firstName) || !Member.personNameAndAliasRegex.hasMatch(lastName) || (alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias))){
+    if (!Member.personNameAndAliasRegex.hasMatch(firstName) ||
+        !Member.personNameAndAliasRegex.hasMatch(lastName) ||
+        (alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias))) {
       return;
     }
 
     bool isActive;
 
-    if(isActiveAsString == "0"){
+    if (isActiveAsString == '0') {
       isActive = false;
-    }else if(isActiveAsString == "1"){
+    } else if (isActiveAsString == '1') {
       isActive = true;
-    }else{
+    } else {
       // Invalid cell content, skip.
       return;
     }
@@ -67,9 +69,11 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     // Besides First Name, Last Name, Alias, Active, Last Update
     // there are more values.
     // These are the device names: Device1, Device2,... , DeviceN
-    if(values.length > 5){
+    if (values.length > 5) {
       //Filter the invalid device names.
-      devices.addAll(values.sublist(5).where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
+      devices.addAll(values
+          .sublist(5)
+          .where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
     }
 
     collection.add(ExportableMember(
@@ -88,12 +92,16 @@ class CsvFileReader implements ImportMembersFileReader<String> {
   /// Returns an empty list if the file is empty.
   @override
   Future<List<String>> readFile(File file) async {
-    final List<String> lines = await file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
+    final List<String> lines = await file
+        .openRead()
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .toList();
 
-    if(lines.isEmpty) return lines;
-    
+    if (lines.isEmpty) return lines;
+
     // Check that the header is present.
-    if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
+    if (!RegExp('^$headerRegex\$').hasMatch(lines.first.toLowerCase())) {
       return Future.error(CsvHeaderMissingError());
     }
 

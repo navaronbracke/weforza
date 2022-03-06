@@ -39,7 +39,7 @@ class AttendeeScanningBloc extends Bloc {
   final BehaviorSubject<int> _attendeeCountController = BehaviorSubject();
 
   /// The search query controller.
-  final _queryController = BehaviorSubject.seeded("");
+  final _queryController = BehaviorSubject.seeded('');
 
   /// The visibility controller for the scanned members.
   final _showScannedController = BehaviorSubject.seeded(true);

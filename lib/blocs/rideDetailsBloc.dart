@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:weforza/blocs/bloc.dart';
@@ -12,7 +11,7 @@ class RideDetailsBloc extends Bloc {
   RideDetailsBloc({
     required this.ride,
     required this.rideRepo,
-    required this.memberRepo
+    required this.memberRepo,
   });
 
   final MemberRepository memberRepo;
@@ -21,13 +20,12 @@ class RideDetailsBloc extends Bloc {
 
   Future<List<Member>>? attendeesFuture;
 
-  void loadAttendeesIfNotLoaded(){
-    if(attendeesFuture == null){
-      attendeesFuture = loadRideAttendees();
-    }
+  void loadAttendeesIfNotLoaded() {
+    attendeesFuture ??= loadRideAttendees();
   }
 
-  Future<List<Member>> loadRideAttendees() => rideRepo.getRideAttendees(ride.date);
+  Future<List<Member>> loadRideAttendees() =>
+      rideRepo.getRideAttendees(ride.date);
 
   Future<void> deleteRide() => rideRepo.deleteRide(ride.date);
 
@@ -35,7 +33,4 @@ class RideDetailsBloc extends Bloc {
   void dispose() {}
 }
 
-enum RideDetailsPageOptions {
-  DELETE,
-  EXPORT
-}
+enum RideDetailsPageOptions { DELETE, EXPORT }

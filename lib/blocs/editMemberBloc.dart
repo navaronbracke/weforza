@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 
@@ -22,13 +21,14 @@ class EditMemberBloc extends Bloc {
   ///The [IMemberRepository] that handles the submit.
   final MemberRepository repository;
 
-  StreamController<SaveMemberOrError> _submitStateController = BehaviorSubject();
-  Stream<SaveMemberOrError> get submitStream => _submitStateController.stream;
+  final _submitStateController = BehaviorSubject<SaveMemberOrError>();
+  Stream<SaveMemberOrError> get submitStream => _submitStateController;
 
   void onError(Object error) => _submitStateController.addError(error);
 
   /// The member's fixed UUID.
   final String id;
+
   /// The member's fixed isActive state.
   /// This is managed elsewhere, therefor it is fixed here.
   final bool isActiveMember;
@@ -37,6 +37,7 @@ class EditMemberBloc extends Bloc {
   String firstName;
   String lastName;
   String alias;
+
   /// This Future resolves to a profile image.
   /// It starts with a value from the Member List page.
   /// That page starts loading the profile image.
@@ -52,25 +53,26 @@ class EditMemberBloc extends Bloc {
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String? validateFirstName(String? value, String isRequiredMessage, String maxLengthMessage, String illegalCharacterMessage, String isBlankMessage) {
-    if(value != firstName){
+  String? validateFirstName(
+      String? value,
+      String isRequiredMessage,
+      String maxLengthMessage,
+      String illegalCharacterMessage,
+      String isBlankMessage) {
+    if (value != firstName) {
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
-    if(value == null || value.isEmpty)
-    {
+    if (value == null || value.isEmpty) {
       firstNameError = isRequiredMessage;
-    }else if(value.trim().isEmpty){
+    } else if (value.trim().isEmpty) {
       firstNameError = isBlankMessage;
-    }
-    else if(nameAndAliasMaxLength < value.length){
+    } else if (nameAndAliasMaxLength < value.length) {
       firstNameError = maxLengthMessage;
-    }
-    else if(Member.personNameAndAliasRegex.hasMatch(value)){
+    } else if (Member.personNameAndAliasRegex.hasMatch(value)) {
       firstName = value;
       firstNameError = null;
-    }
-    else{
+    } else {
       firstNameError = illegalCharacterMessage;
     }
     return firstNameError;
@@ -79,47 +81,47 @@ class EditMemberBloc extends Bloc {
   ///Validate [value] according to the last name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String? validateLastName(String? value,String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != lastName){
+  String? validateLastName(
+      String? value,
+      String isRequiredMessage,
+      String maxLengthMessage,
+      String illegalCharacterMessage,
+      String isBlankMessage) {
+    if (value != lastName) {
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
-    if(value  == null || value.isEmpty)
-    {
+    if (value == null || value.isEmpty) {
       lastNameError = isRequiredMessage;
-    }else if(value.trim().isEmpty){
+    } else if (value.trim().isEmpty) {
       lastNameError = isBlankMessage;
-    }
-    else if(nameAndAliasMaxLength < value.length){
+    } else if (nameAndAliasMaxLength < value.length) {
       lastNameError = maxLengthMessage;
-    }
-    else if(Member.personNameAndAliasRegex.hasMatch(value)){
+    } else if (Member.personNameAndAliasRegex.hasMatch(value)) {
       lastName = value;
       lastNameError = null;
-    }
-    else{
+    } else {
       lastNameError = illegalCharacterMessage;
     }
 
     return lastNameError;
   }
 
-  String? validateAlias(String? value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
-    if(value != alias){
+  String? validateAlias(String? value, String maxLengthMessage,
+      String illegalCharacterMessage, String isBlankMessage) {
+    if (value != alias) {
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
-    if(value == null || value.isNotEmpty && value.trim().isEmpty){
+    if (value == null || value.isNotEmpty && value.trim().isEmpty) {
       aliasError = isBlankMessage;
-    }
-    else if(nameAndAliasMaxLength < value.length){
+    } else if (nameAndAliasMaxLength < value.length) {
       aliasError = maxLengthMessage;
-    }
-    else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
+    } else if (value.isEmpty ||
+        Member.personNameAndAliasRegex.hasMatch(value)) {
       alias = value;
       aliasError = null;
-    }
-    else{
+    } else {
       aliasError = illegalCharacterMessage;
     }
     return aliasError;
@@ -127,14 +129,14 @@ class EditMemberBloc extends Bloc {
 
   Future<Member> editMember() async {
     _submitStateController.add(SaveMemberOrError.saving());
-    bool exists = await repository.memberExists(firstName, lastName, alias,id);
+    bool exists = await repository.memberExists(firstName, lastName, alias, id);
 
-    if(exists){
+    if (exists) {
       return Future.error(SaveMemberOrError.exists());
-    }else{
+    } else {
       ///Wait for the File to be resolved.
       ///If it failed do a fallback to null.
-      final File? profileImage = await profileImageFuture.catchError((error){
+      final File? profileImage = await profileImageFuture.catchError((error) {
         return Future<File?>.value(null);
       });
 

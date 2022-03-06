@@ -1,7 +1,6 @@
-
 import 'dart:io';
 
-import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/model/exportable_member.dart';
 
 ///This interface provides a contract for reading importable member data files.
 abstract class ImportMembersFileReader<T> {

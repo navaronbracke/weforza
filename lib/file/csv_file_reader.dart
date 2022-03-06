@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/import_members_file_reader.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/member.dart';
 
 /// This class will read the contents of CSV files.

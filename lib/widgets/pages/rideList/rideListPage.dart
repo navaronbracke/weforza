@@ -5,7 +5,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/ride_repository.dart';
-import 'package:weforza/widgets/common/genericError.dart';
+import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/exportRides/exportRidesPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';

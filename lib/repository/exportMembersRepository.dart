@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/member_dao.dart';
-import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/model/member_filter_option.dart';
 
 class ExportMembersRepository {
   ExportMembersRepository(this.deviceDao, this.memberDao);

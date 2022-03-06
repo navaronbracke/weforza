@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/model/exportableRide.dart';
+import 'package:weforza/model/exportable_ride.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/ride_attendee.dart';
 
 abstract class IExportRidesDao {
   //Get the exportable rides with their attendees.

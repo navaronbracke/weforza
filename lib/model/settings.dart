@@ -1,4 +1,4 @@
-import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/model/member_filter_option.dart';
 
 ///This class defines a wrapper for application settings.
 class Settings {

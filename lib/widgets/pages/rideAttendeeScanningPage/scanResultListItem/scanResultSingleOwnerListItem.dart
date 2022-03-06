@@ -5,9 +5,10 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
-  ScanResultSingleOwnerListItem({
-    required this.owner
-  });
+  const ScanResultSingleOwnerListItem({
+    Key? key,
+    required this.owner,
+  }) : super(key: key);
 
   final Member owner;
 
@@ -20,11 +21,11 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 5),
             child: PlatformAwareWidget(
-              android: () => Icon(
+              android: () => const Icon(
                 Icons.person,
                 color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
               ),
-              ios: () => Icon(
+              ios: () => const Icon(
                 CupertinoIcons.person_fill,
                 color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
               ),
@@ -37,12 +38,12 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
   }
 
   //Combine the first name with the alias.
-  Widget _combineFirstNameAndAlias(){
-    if(owner.alias.isEmpty){
+  Widget _combineFirstNameAndAlias() {
+    if (owner.alias.isEmpty) {
       return Text(
-        "${owner.firstname} ${owner.lastname}",
+        '${owner.firstname} ${owner.lastname}',
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: const TextStyle(
           color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
           fontWeight: FontWeight.bold,
         ),
@@ -51,26 +52,23 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
 
     // Firstname 'alias'
     return Text.rich(
-      TextSpan(
-          text: owner.firstname,
-          children: [
-            TextSpan(
-              text: " '${owner.alias}' ",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextSpan(
-              text: owner.lastname,
-              style: TextStyle(
-                color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ]
-      ),
+      TextSpan(text: owner.firstname, children: [
+        TextSpan(
+          text: " '${owner.alias}' ",
+          style: const TextStyle(
+            fontStyle: FontStyle.italic,
+            color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextSpan(
+          text: owner.lastname,
+          style: const TextStyle(
+            color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ]),
       overflow: TextOverflow.ellipsis,
     );
   }

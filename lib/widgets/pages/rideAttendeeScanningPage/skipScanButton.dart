@@ -1,16 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 /// This widget provides a button that advances the scan process step.
 /// When the scan is still running it gets skipped.
 class SkipScanButton extends StatelessWidget {
-  SkipScanButton({
+  const SkipScanButton({
+    Key? key,
     required this.isScanning,
     required this.onContinue,
     required this.onSkip,
-  });
+  }) : super(key: key);
 
   final Stream<bool> isScanning;
   final VoidCallback onContinue;
@@ -22,13 +23,14 @@ class SkipScanButton extends StatelessWidget {
       initialData: true,
       stream: isScanning,
       builder: (context, snapshot) => Center(
-        child: snapshot.data! ? _buildSkipScanButton(context):
-          _buildContinueButton(context),
+        child: snapshot.data!
+            ? _buildSkipScanButton(context)
+            : _buildContinueButton(context),
       ),
     );
   }
 
-  Widget _buildSkipScanButton(BuildContext context){
+  Widget _buildSkipScanButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -37,7 +39,7 @@ class SkipScanButton extends StatelessWidget {
           onPressed: onSkip,
         ),
       ),
-      ios: (){
+      ios: () {
         final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
         return Padding(
@@ -45,7 +47,7 @@ class SkipScanButton extends StatelessWidget {
           child: CupertinoButton.filled(
             child: Text(
               S.of(context).RideAttendeeScanningSkipScan,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
             onPressed: onSkip,
           ),
@@ -54,7 +56,7 @@ class SkipScanButton extends StatelessWidget {
     );
   }
 
-  Widget _buildContinueButton(BuildContext context){
+  Widget _buildContinueButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -63,7 +65,7 @@ class SkipScanButton extends StatelessWidget {
           onPressed: onContinue,
         ),
       ),
-      ios: (){
+      ios: () {
         final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
         return Padding(
@@ -71,7 +73,7 @@ class SkipScanButton extends StatelessWidget {
           child: CupertinoButton.filled(
             child: Text(
               S.of(context).RideAttendeeScanningContinue,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
             onPressed: onContinue,
           ),

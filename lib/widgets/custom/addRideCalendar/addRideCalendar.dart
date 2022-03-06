@@ -4,9 +4,10 @@ import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarBody.dart'
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarHeader.dart';
 
 class AddRideCalendar extends StatelessWidget {
-  AddRideCalendar({
+  const AddRideCalendar({
+    Key? key,
     required this.bloc,
-  });
+  }) : super(key: key);
 
   final AddRideBloc bloc;
 

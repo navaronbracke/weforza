@@ -5,6 +5,8 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RiderSearchFilterEmpty extends StatelessWidget {
+  const RiderSearchFilterEmpty({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(

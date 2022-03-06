@@ -128,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          if (settings.hasRideCalendar) ResetRideCalendarButton(),
+          if (settings.hasRideCalendar) const ResetRideCalendarButton(),
           PlatformAwareWidget(
             android: () => Text(
               S.of(context).AppVersionNumber(settings.appVersion),

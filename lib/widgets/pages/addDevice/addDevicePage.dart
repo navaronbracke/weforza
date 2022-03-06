@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
@@ -13,23 +13,23 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class AddDevicePage extends StatefulWidget {
+  const AddDevicePage({Key? key}) : super(key: key);
+
   @override
   _AddDevicePageState createState() => _AddDevicePageState();
 }
 
 class _AddDevicePageState extends State<AddDevicePage> {
-
   late AddDeviceBloc bloc;
 
-  GlobalKey<FormState> _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = AddDeviceBloc(
-      repository: InjectionContainer.get<DeviceRepository>(),
-      ownerId: SelectedItemProvider.of(context).selectedMember.value!.uuid
-    );
+        repository: InjectionContainer.get<DeviceRepository>(),
+        ownerId: SelectedItemProvider.of(context).selectedMember.value!.uuid);
   }
 
   @override
@@ -40,9 +40,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
+        android: () => _buildAndroidWidget(context),
+        ios: () => _buildIosWidget(context),
+      );
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -70,7 +70,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  Widget _buildTypeCarousel(){
+  Widget _buildTypeCarousel() {
     return DeviceTypeCarousel(
       controller: bloc.pageController,
       onPageChanged: bloc.onDeviceTypeChanged,
@@ -78,7 +78,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  Widget _buildDeviceNameInput(BuildContext context){
+  Widget _buildDeviceNameInput(BuildContext context) {
     return Form(
       key: _formKey,
       child: Padding(
@@ -92,14 +92,15 @@ class _AddDevicePageState extends State<AddDevicePage> {
             validator: (value) => bloc.validateNewDeviceInput(
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                S
+                    .of(context)
+                    .DeviceNameMaxLength('${bloc.deviceNameMaxLength}'),
                 S.of(context).DeviceNameCannotContainComma,
-                S.of(context).DeviceNameBlank
-            ),
+                S.of(context).DeviceNameBlank),
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 5),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 5),
               labelText: S.of(context).DeviceNameLabel,
-              helperText: " ",
+              helperText: ' ',
             ),
             autovalidateMode: AutovalidateMode.onUserInteraction,
           ),
@@ -115,8 +116,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   setState(() {
                     bloc.validateNewDeviceInput(
                       value,
-                      S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                      S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                      S
+                          .of(context)
+                          .ValueIsRequired(S.of(context).DeviceNameLabel),
+                      S
+                          .of(context)
+                          .DeviceNameMaxLength('${bloc.deviceNameMaxLength}'),
                       S.of(context).DeviceNameCannotContainComma,
                       S.of(context).DeviceNameBlank,
                     );
@@ -126,9 +131,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
               Row(
                 children: <Widget>[
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(bloc.addDeviceError),
-                      style: ApplicationTheme.iosFormErrorStyle
-                  ),
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          bloc.addDeviceError),
+                      style: ApplicationTheme.iosFormErrorStyle),
                 ],
               ),
             ],
@@ -138,7 +143,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context){
+  Widget _buildSubmitButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => AddDeviceSubmit(
         isSubmittingStream: bloc.submitStream,
@@ -146,11 +151,14 @@ class _AddDevicePageState extends State<AddDevicePage> {
         onSubmit: () async {
           final formState = _formKey.currentState;
 
-          if(formState != null && formState.validate()){
-            await bloc.addDevice(S.of(context).DeviceExists, S.of(context).GenericError).then((_){
+          if (formState != null && formState.validate()) {
+            await bloc
+                .addDevice(
+                    S.of(context).DeviceExists, S.of(context).GenericError)
+                .then((_) {
               ReloadDataProvider.of(context).reloadDevices.value = true;
               Navigator.of(context).pop();
-            }).catchError((e){
+            }).catchError((e) {
               //the stream catches the error
             });
           }
@@ -160,14 +168,17 @@ class _AddDevicePageState extends State<AddDevicePage> {
         isSubmittingStream: bloc.submitStream,
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
-          if(iosValidateAddDevice(context)){
-            await bloc.addDevice(S.of(context).DeviceExists,S.of(context).GenericError).then((_){
+          if (iosValidateAddDevice(context)) {
+            await bloc
+                .addDevice(
+                    S.of(context).DeviceExists, S.of(context).GenericError)
+                .then((_) {
               ReloadDataProvider.of(context).reloadDevices.value = true;
               Navigator.of(context).pop();
-            }).catchError((e){
+            }).catchError((e) {
               //the stream catches the error
             });
-          }else {
+          } else {
             setState(() {});
           }
         },
@@ -175,7 +186,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return Column(
       children: <Widget>[
         Flexible(
@@ -196,10 +207,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
   }
 
   bool iosValidateAddDevice(BuildContext context) {
-    return bloc.validateNewDeviceInput(bloc.deviceNameController.text,
-        S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
-        S.of(context).DeviceNameCannotContainComma,
-        S.of(context).DeviceNameBlank) == null;
+    return bloc.validateNewDeviceInput(
+            bloc.deviceNameController.text,
+            S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
+            S.of(context).DeviceNameMaxLength('${bloc.deviceNameMaxLength}'),
+            S.of(context).DeviceNameCannotContainComma,
+            S.of(context).DeviceNameBlank) ==
+        null;
   }
 }

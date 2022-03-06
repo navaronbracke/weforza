@@ -5,14 +5,16 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This Widget will show a progress indicator
 ///that shows how much time is left until the scan stops.
 class RideAttendeeScanningProgressIndicator extends StatelessWidget {
-  RideAttendeeScanningProgressIndicator({
+  const RideAttendeeScanningProgressIndicator({
+    Key? key,
     required this.getDuration,
-    required this.isScanning
-  });
+    required this.isScanning,
+  }) : super(key: key);
 
   ///This lambda will allow to get the duration on demand.
   ///The output of this function is not available immediately, hence the function.
   final int Function() getDuration;
+
   ///This notifier notifies when the scanning started.
   final Stream<bool> isScanning;
 
@@ -25,14 +27,15 @@ class RideAttendeeScanningProgressIndicator extends StatelessWidget {
       builder: (context, snapshot) {
         final value = snapshot.data;
 
-        if(value == null || !value){
+        if (value == null || !value) {
           //Show nothing when not scanning.
           //Fill the space with a 4dp blank sized box. 4dp is the default height of the progress indicator.
           return SizedBox(height: _kProgressIndicatorHeight);
         }
 
         // The duration is accessible at this point.
-        return _RideAttendeeScanningProgressIndicatorAnimatable(duration: getDuration());
+        return _RideAttendeeScanningProgressIndicatorAnimatable(
+            duration: getDuration());
       },
     );
   }
@@ -41,25 +44,29 @@ class RideAttendeeScanningProgressIndicator extends StatelessWidget {
 /// The internal widget that wraps an AnimatedBuilder for the progress bar.
 /// This allows for the animation properties to be marked with late instead of being nullable.
 class _RideAttendeeScanningProgressIndicatorAnimatable extends StatefulWidget {
-  _RideAttendeeScanningProgressIndicatorAnimatable({
-    required this.duration
-  }): assert(duration > 0);
+  const _RideAttendeeScanningProgressIndicatorAnimatable({
+    required this.duration,
+  }) : assert(duration > 0);
 
   final int duration;
 
   @override
-  _RideAttendeeScanningProgressIndicatorAnimatableState createState() => _RideAttendeeScanningProgressIndicatorAnimatableState();
+  _RideAttendeeScanningProgressIndicatorAnimatableState createState() =>
+      _RideAttendeeScanningProgressIndicatorAnimatableState();
 }
 
-class _RideAttendeeScanningProgressIndicatorAnimatableState extends State<_RideAttendeeScanningProgressIndicatorAnimatable> with SingleTickerProviderStateMixin {
+class _RideAttendeeScanningProgressIndicatorAnimatableState
+    extends State<_RideAttendeeScanningProgressIndicatorAnimatable>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: widget.duration));
-    _animation = Tween(begin: 1.0,end: 0.0).animate(_controller);
+    _controller = AnimationController(
+        vsync: this, duration: Duration(seconds: widget.duration));
+    _animation = Tween(begin: 1.0, end: 0.0).animate(_controller);
     //Make sure to start the animation
     _controller.forward();
   }
@@ -68,26 +75,30 @@ class _RideAttendeeScanningProgressIndicatorAnimatableState extends State<_RideA
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child){
+      builder: (context, child) {
         return PreferredSize(
-          preferredSize: Size(double.infinity, 1.0),
+          preferredSize: const Size(double.infinity, 1.0),
           child: Material(child: _buildIndicator(_animation.value)),
         );
       },
     );
   }
 
-  Widget _buildIndicator(double progress){
+  Widget _buildIndicator(double progress) {
     return PlatformAwareWidget(
       android: () => LinearProgressIndicator(
         value: progress,
-        valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.androidRideAttendeeScanProgressbarColor),
-        backgroundColor: ApplicationTheme.androidRideAttendeeScanProgressbarBackgroundColor,
+        valueColor: const AlwaysStoppedAnimation<Color>(
+            ApplicationTheme.androidRideAttendeeScanProgressbarColor),
+        backgroundColor:
+            ApplicationTheme.androidRideAttendeeScanProgressbarBackgroundColor,
       ),
       ios: () => LinearProgressIndicator(
         value: progress,
-        valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.iosRideAttendeeScanProgressbarColor),
-        backgroundColor: ApplicationTheme.iosRideAttendeeScanProgressbarBackgroundColor,
+        valueColor: const AlwaysStoppedAnimation<Color>(
+            ApplicationTheme.iosRideAttendeeScanProgressbarColor),
+        backgroundColor:
+            ApplicationTheme.iosRideAttendeeScanProgressbarBackgroundColor,
       ),
     );
   }

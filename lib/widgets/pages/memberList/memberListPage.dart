@@ -28,19 +28,16 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 class MemberListPage extends StatefulWidget {
   @override
   _MemberListPageState createState() => _MemberListPageState(
-     bloc: MemberListBloc(
-       InjectionContainer.get<MemberRepository>(),
-       InjectionContainer.get<SettingsRepository>(),
-       InjectionContainer.get<IFileHandler>(),
-     )
-  );
+          bloc: MemberListBloc(
+        InjectionContainer.get<MemberRepository>(),
+        InjectionContainer.get<SettingsRepository>(),
+        InjectionContainer.get<IFileHandler>(),
+      ));
 }
 
 ///This is the [State] class for [MemberListPage].
 class _MemberListPageState extends State<MemberListPage> {
-  _MemberListPageState({
-    required this.bloc
-  });
+  _MemberListPageState({required this.bloc});
 
   final MemberListBloc bloc;
 
@@ -49,22 +46,25 @@ class _MemberListPageState extends State<MemberListPage> {
   // as it starts with an empty string.
   final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
 
-  List<Member> filterData(List<Member> list, String query){
+  List<Member> filterData(List<Member> list, String query) {
     query = query.trim().toLowerCase();
 
-    if(query.isEmpty){
+    if (query.isEmpty) {
       return list;
     }
 
-    return list.where((Member member){
-      return member.firstname.toLowerCase().contains(query) || member.lastname.toLowerCase().contains(query)
+    return list.where((Member member) {
+      return member.firstname.toLowerCase().contains(query) ||
+          member.lastname.toLowerCase().contains(query)
           // If the alias is not empty, we can match it against the query string.
-          || (member.alias.isNotEmpty && member.alias.toLowerCase().contains(query));
+          ||
+          (member.alias.isNotEmpty &&
+              member.alias.toLowerCase().contains(query));
     }).toList();
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: () => _buildAndroidWidget(context),
       ios: () => _buildIosWidget(context),
@@ -77,16 +77,17 @@ class _MemberListPageState extends State<MemberListPage> {
     bloc.loadMembers();
   }
 
-  Widget _buildTitle(BuildContext context){
+  Widget _buildTitle(BuildContext context) {
     return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
             return Text(S.of(context).Riders);
           }
 
-          return Text(S.of(context).RidersListTitle(snapshot.data?.length ?? 0));
+          return Text(
+              S.of(context).RidersListTitle(snapshot.data?.length ?? 0));
         }
 
         return Text(S.of(context).Riders);
@@ -101,27 +102,27 @@ class _MemberListPageState extends State<MemberListPage> {
         title: _buildTitle(context),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.person_add, 
+            icon: const Icon(
+              Icons.person_add,
               color: Colors.white,
             ),
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=> AddMemberPage())
-            ).then((_) => onReturnToMemberListPage(context)),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AddMemberPage()))
+                .then((_) => onReturnToMemberListPage(context)),
           ),
           IconButton(
-            icon: Icon(Icons.file_download),
+            icon: const Icon(Icons.file_download),
             color: Colors.white,
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=> ImportMembersPage())
-            ).then((_)=> onReturnToMemberListPage(context)),
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => ImportMembersPage()))
+                .then((_) => onReturnToMemberListPage(context)),
           ),
           IconButton(
-            icon: Icon(Icons.file_upload),
+            icon: const Icon(Icons.file_upload),
             color: Colors.white,
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=> ExportMembersPage())
-            ),
+                MaterialPageRoute(builder: (context) => ExportMembersPage())),
           ),
         ],
       ),
@@ -143,33 +144,33 @@ class _MemberListPageState extends State<MemberListPage> {
         middle: Row(
           children: <Widget>[
             Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: _buildTitle(context),
-                ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: _buildTitle(context),
+              ),
             ),
             CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.person_badge_plus_fill,
-                onPressed: ()=> Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context)=> AddMemberPage())
-                ).then((_)=> onReturnToMemberListPage(context))
-            ),
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => AddMemberPage()))
+                    .then((_) => onReturnToMemberListPage(context))),
             Padding(
               padding: const EdgeInsets.only(left: 15),
-              child:  CupertinoIconButton.fromAppTheme(
+              child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_down_doc_fill,
-                onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context)=> ImportMembersPage())
-                ).then((_) => onReturnToMemberListPage(context)),
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => ImportMembersPage()))
+                    .then((_) => onReturnToMemberListPage(context)),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context)=> ExportMembersPage())
-                ),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ExportMembersPage())),
               ),
             ),
           ],
@@ -188,7 +189,7 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  Widget _buildList(BuildContext context){
+  Widget _buildList(BuildContext context) {
     return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
       builder: (context, futureSnapshot) {
@@ -197,7 +198,7 @@ class _MemberListPageState extends State<MemberListPage> {
             return GenericError(text: S.of(context).GenericError);
           }
 
-          if(futureSnapshot.data == null || futureSnapshot.data!.isEmpty){
+          if (futureSnapshot.data == null || futureSnapshot.data!.isEmpty) {
             return Center(child: MemberListEmpty());
           }
 
@@ -211,12 +212,11 @@ class _MemberListPageState extends State<MemberListPage> {
                   autovalidateMode: AutovalidateMode.disabled,
                   onChanged: _queryController.add,
                   decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.search),
+                      suffixIcon: const Icon(Icons.search),
                       labelText: S.of(context).RiderSearchFilterInputLabel,
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                      floatingLabelBehavior: FloatingLabelBehavior.never
-                  ),
+                      floatingLabelBehavior: FloatingLabelBehavior.never),
                 ),
                 ios: () => Padding(
                   padding: const EdgeInsets.all(8),
@@ -230,58 +230,61 @@ class _MemberListPageState extends State<MemberListPage> {
               Expanded(
                 child: StreamBuilder<String>(
                   stream: _queryController.stream,
-                    builder: (context, streamSnapshot){
-                      final data = filterData(
-                        futureSnapshot.data ?? [],
-                        streamSnapshot.data ?? "",
-                      );
+                  builder: (context, streamSnapshot) {
+                    final data = filterData(
+                      futureSnapshot.data ?? [],
+                      streamSnapshot.data ?? "",
+                    );
 
-                      if(data.isEmpty){
-                        return RiderSearchFilterEmpty();
-                      }
+                    if (data.isEmpty) {
+                      return const RiderSearchFilterEmpty();
+                    }
 
-                      return ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) => _buildListItem(context, data[index]),
-                      );
-                    },
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) =>
+                          _buildListItem(context, data[index]),
+                    );
+                  },
                 ),
               ),
             ],
           );
         }
 
-        return Center(child: PlatformAwareLoadingIndicator());
+        return const Center(child: PlatformAwareLoadingIndicator());
       },
     );
   }
 
-  void onTapListItem(BuildContext context, Member member, Future<int> attendingCount, Future<File?> profileImage){
+  void onTapListItem(BuildContext context, Member member,
+      Future<int> attendingCount, Future<File?> profileImage) {
     final provider = SelectedItemProvider.of(context);
     provider.selectedMember.value = member;
     provider.selectedMemberAttendingCount.value = attendingCount;
     provider.selectedMemberProfileImage.value = profileImage;
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => MemberDetailsPage())
-    ).then((_)=> onReturnToMemberListPage(context));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => MemberDetailsPage()))
+        .then((_) => onReturnToMemberListPage(context));
   }
 
   Widget _buildListItem(BuildContext context, Member item) {
     final Future<int> attendingCount = bloc.getMemberAttendingCount(item.uuid);
-    final Future<File?> profileImage = bloc.getMemberProfileImage(item.profileImageFilePath);
+    final Future<File?> profileImage =
+        bloc.getMemberProfileImage(item.profileImageFilePath);
     return MemberListItem(
         member: item,
         memberProfileImage: profileImage,
         memberAttendingCount: attendingCount,
-        onTap: ()=> onTapListItem(context, item, attendingCount, profileImage)
-    );
+        onTap: () =>
+            onTapListItem(context, item, attendingCount, profileImage));
   }
 
-  void onReturnToMemberListPage(BuildContext context){
+  void onReturnToMemberListPage(BuildContext context) {
     final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
-    
+
     // Trigger the reload of members, but do an override for the filter.
-    if(reloadNotifier.value){
+    if (reloadNotifier.value) {
       reloadNotifier.value = false;
       setState(() {
         bloc.loadMembers();
@@ -296,4 +299,3 @@ class _MemberListPageState extends State<MemberListPage> {
     super.dispose();
   }
 }
-

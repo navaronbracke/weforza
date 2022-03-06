@@ -1,9 +1,10 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
+
 import 'package:weforza/database/database.dart';
+import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to work with member devices.
 abstract class IDeviceDao {
@@ -15,7 +16,11 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getOwnerDevices(String ownerId);
 
-  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime? creationDate]);
+  Future<bool> deviceExists(
+    String deviceName,
+    String ownerUuid, [
+    DateTime? creationDate,
+  ]);
 
   ///This groups all the devices together that belong to the same owner id.
   ///Note that device names can occur in multiple lists, as multiple people can have a device with the same name.
@@ -23,6 +28,7 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getAllDevices();
 }
+
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
   DeviceDao(this._database, this._deviceStore, this._memberStore);

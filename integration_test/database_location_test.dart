@@ -78,6 +78,7 @@ class FakeDatabaseFactory implements DatabaseFactory {
     // Use recursive to avoid having to create empty directories separately.
     // It's just for testing anyway.
     final File newStorage = await storage.create(recursive: true);
+
     return FakeDatabase(path: newStorage.path, version: version ?? 1);
   }
 }
@@ -99,8 +100,9 @@ void main() {
       'New databases are created in the Application Support Directory',
       (WidgetTester tester) async {
         const testDbName = 'test_database.db';
-        final applicationDatabase =
-            ApplicationDatabase(databaseName: testDbName);
+        final applicationDatabase = ApplicationDatabase(
+          databaseName: testDbName,
+        );
 
         // Setup the fake file system.
         // Only provide the application support folder.

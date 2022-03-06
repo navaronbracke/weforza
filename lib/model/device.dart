@@ -1,53 +1,47 @@
-
 import 'dart:ui';
 
 ///A device is a piece of hardware.
 ///It has a [name], an [ownerId] and a [type].
 class Device {
-  Device({
-    required this.ownerId,
-    required this.name,
-    required this.creationDate,
-    this.type = DeviceType.UNKNOWN
-  }): assert(ownerId.isNotEmpty && name.isNotEmpty);
+  Device(
+      {required this.ownerId,
+      required this.name,
+      required this.creationDate,
+      this.type = DeviceType.UNKNOWN})
+      : assert(ownerId.isNotEmpty && name.isNotEmpty);
 
   final String ownerId;
   final DateTime creationDate;
   String name;
   DeviceType type;
 
-  static final RegExp deviceNameRegex = RegExp(r"^[^,]{1,40}$");
+  static final RegExp deviceNameRegex = RegExp(r'^[^,]{1,40}$');
 
   ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
-    return {
-      "deviceName": name,
-      "owner": ownerId,
-      "type": type.index
-    };
+  Map<String, dynamic> toMap() {
+    return {'deviceName': name, 'owner': ownerId, 'type': type.index};
   }
 
   ///Create a device from a Map and a given key.
-  static Device of(String key, Map<String,dynamic> values){
+  static Device of(String key, Map<String, dynamic> values) {
     assert(key.isNotEmpty);
     //Start with unknown
     DeviceType type = DeviceType.UNKNOWN;
     //if the index fits within the values, use it
-    if(values["type"] < DeviceType.values.length){
-      type = DeviceType.values[values["type"]];
+    if (values['type'] < DeviceType.values.length) {
+      type = DeviceType.values[values['type']];
     }
 
     return Device(
-      creationDate: DateTime.parse(key),
-      name: values["deviceName"],
-      ownerId: values["owner"],
-      type: type
-    );
+        creationDate: DateTime.parse(key),
+        name: values['deviceName'],
+        ownerId: values['owner'],
+        type: type);
   }
 
   @override
-  bool operator ==(Object other) => other is Device && name == other.name
-      && ownerId == other.ownerId;
+  bool operator ==(Object other) =>
+      other is Device && name == other.name && ownerId == other.ownerId;
 
   @override
   int get hashCode => hashValues(name, ownerId);
@@ -65,10 +59,10 @@ class Device {
 enum DeviceType {
   UNKNOWN,
   PULSE_MONITOR,
-  POWER_METER,//powermeter
-  CADENCE_METER,//cadence meter
-  WATCH,//smartwatch
+  POWER_METER, //powermeter
+  CADENCE_METER, //cadence meter
+  WATCH, //smartwatch
   GPS,
   HEADSET,
-  PHONE,//smartphone
+  PHONE, //smartphone
 }

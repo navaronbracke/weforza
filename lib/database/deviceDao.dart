@@ -139,16 +139,16 @@ class DeviceDao implements IDeviceDao {
 
     final HashMap<String, Set<String>> collection = HashMap();
 
-    devices.forEach((record) {
+    for (final record in devices) {
       final String device = record['deviceName'] as String;
       final String ownerUuid = record['owner'] as String;
 
       if (collection.containsKey(ownerUuid)) {
         collection[ownerUuid]!.add(device);
       } else {
-        collection[ownerUuid] = Set.of(<String>[device]);
+        collection[ownerUuid] = <String>{device};
       }
-    });
+    }
 
     return collection;
   }

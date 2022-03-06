@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:file/file.dart' show FileSystem;
@@ -39,11 +41,15 @@ class ApplicationDatabase {
   ///Get the database instance.
   Database getDatabase() => _database;
 
-  //TODO remove when migrated to new directory.
+  // TODO remove this method when migrated to new directory.
+  // Also remove the ignore_for_file above.
+
   /// Moves the database from the old Documents directory
   /// to the Application Support directory for the current platform.
   Future<void> _moveDatabase(
-      String newDatabasePath, FileSystem fileSystem) async {
+    String newDatabasePath,
+    FileSystem fileSystem,
+  ) async {
     final oldDirectory = await getApplicationDocumentsDirectory();
     final oldDatabasePath = join(oldDirectory.path, databaseName);
     final file = fileSystem.file(oldDatabasePath);

@@ -8,7 +8,7 @@ import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
-import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
+import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';

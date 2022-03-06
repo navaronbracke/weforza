@@ -4,6 +4,8 @@ import 'package:weforza/theme/appTheme.dart';
 
 ///This [Widget] represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {
+  const AddRideCalendarColorLegend({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return IntrinsicWidth(
@@ -17,12 +19,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 width: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor,
+                  color: ApplicationTheme
+                      .rideCalendarPastDayWithoutRideBackgroundColor,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).AddRideColorLegendPastDay,softWrap: true),
+                child: Text(S.of(context).AddRideColorLegendPastDay,
+                    softWrap: true),
               ),
             ],
           ),
@@ -35,12 +39,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor,
+                    color: ApplicationTheme
+                        .rideCalendarPastDayWithRideBackgroundColor,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(S.of(context).AddRideColorLegendPastRide,softWrap: true),
+                  child: Text(S.of(context).AddRideColorLegendPastRide,
+                      softWrap: true),
                 ),
               ],
             ),
@@ -54,12 +60,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: ApplicationTheme.rideCalendarSelectedDayBackgroundColor,
+                    color:
+                        ApplicationTheme.rideCalendarSelectedDayBackgroundColor,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(S.of(context).AddRideColorLegendCurrentSelection,softWrap: true),
+                  child: Text(S.of(context).AddRideColorLegendCurrentSelection,
+                      softWrap: true),
                 ),
               ],
             ),
@@ -71,12 +79,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 width: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor,
+                  color: ApplicationTheme
+                      .rideCalendarFutureDayWithRideBackgroundColor,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).AddRideColorLegendFutureRide,softWrap: true),
+                child: Text(S.of(context).AddRideColorLegendFutureRide,
+                    softWrap: true),
               ),
             ],
           ),

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/memberAttendingCount.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class UnresolvedOwnersListItem extends StatefulWidget {

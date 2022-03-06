@@ -64,7 +64,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
           } else if (snapshot.error is CsvHeaderMissingError) {
             return _buildCsvHeaderMissing(context);
           } else if (snapshot.error is JsonFormatIncompatibleException) {
-            final iconBuilder = (BuildContext ctx) {
+            iconBuilder(BuildContext ctx) {
               return PlatformAwareWidget(
                 android: () => Icon(
                   Icons.insert_drive_file,
@@ -77,7 +77,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                   size: MediaQuery.of(ctx).size.shortestSide * .1,
                 ),
               );
-            };
+            }
 
             return GenericError(
               text: S.of(context).ImportMembersIncompatibleFileJsonContents,
@@ -88,11 +88,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
           }
         } else {
           switch (snapshot.data) {
-            case ImportMembersState.IDLE:
+            case ImportMembersState.idle:
               return _buildPickFileForm(context);
-            case ImportMembersState.PICKING_FILE:
+            case ImportMembersState.pickingFile:
               return const Center(child: PlatformAwareLoadingIndicator());
-            case ImportMembersState.IMPORTING:
+            case ImportMembersState.importing:
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -104,7 +104,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                   ),
                 ],
               );
-            case ImportMembersState.DONE:
+            case ImportMembersState.done:
               return Center(
                 child: LayoutBuilder(
                   builder: (context, constraints) {

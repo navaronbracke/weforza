@@ -39,7 +39,7 @@ class ExportRideBloc extends Bloc {
 
   String filename = '';
 
-  FileExtension _fileExtension = FileExtension.CSV;
+  FileExtension _fileExtension = FileExtension.csv;
 
   void onSelectFileExtension(FileExtension extension) {
     if (_fileExtension != extension) {
@@ -101,7 +101,7 @@ class ExportRideBloc extends Bloc {
   ///The extension determines how the data is structured inside the file.
   Future<void> _saveRideAndAttendeesToFile(
       File file, String extension, Ride ride, List<Member> attendees) async {
-    if (extension == FileExtension.CSV.extension()) {
+    if (extension == FileExtension.csv.extension()) {
       final buffer = StringBuffer();
       buffer.writeln(ride.toCsv());
       for (Member m in attendees) {
@@ -110,7 +110,7 @@ class ExportRideBloc extends Bloc {
             .toCsv());
       }
       await file.writeAsString(buffer.toString());
-    } else if (extension == FileExtension.JSON.extension()) {
+    } else if (extension == FileExtension.json.extension()) {
       final data = {
         'details': ride.toJson(),
         'attendees': attendees

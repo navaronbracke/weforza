@@ -25,7 +25,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
     return FutureBuilder<List<Member>>(
       future: future,
       builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.done){
+        if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
           } else {
@@ -50,21 +50,24 @@ class RideDetailsAttendeesList extends StatelessWidget {
                     ),
                   ),
                   PlatformAwareWidget(
-                    android: () => _buildAndroidLayout(context, list.length, scannedAttendees),
-                    ios: () => _buildIosLayout(context, list.length, scannedAttendees),
+                    android: () => _buildAndroidLayout(
+                        context, list.length, scannedAttendees),
+                    ios: () =>
+                        _buildIosLayout(context, list.length, scannedAttendees),
                   ),
                 ],
               );
             }
           }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
+        } else {
+          return const Center(child: const PlatformAwareLoadingIndicator());
         }
       },
     );
   }
 
-  Widget _buildAndroidLayout(BuildContext context, int total, int? scannedNumber){
+  Widget _buildAndroidLayout(
+      BuildContext context, int total, int? scannedNumber) {
     return BottomAppBar(
       color: ApplicationTheme.primaryColor,
       child: Padding(
@@ -78,19 +81,21 @@ class RideDetailsAttendeesList extends StatelessWidget {
                   const Icon(Icons.people, color: Colors.white),
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
-                    child: Text("$total", style: TextStyle(color: Colors.white)),
+                    child: Text('$total',
+                        style: const TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
             ),
-            Expanded(child: Center()),
+            const Expanded(child: Center()),
             Tooltip(
               message: S.of(context).RideDetailsScannedAttendeesTooltip,
               child: Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: Text(scannedNumber == null ? "-" : "$scannedNumber", style: TextStyle(color: Colors.white)),
+                    child: Text(scannedNumber == null ? '-' : '$scannedNumber',
+                        style: const TextStyle(color: Colors.white)),
                   ),
                   const Icon(Icons.bluetooth_searching, color: Colors.white),
                 ],
@@ -102,7 +107,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
     );
   }
 
-  Widget _buildIosLayout(BuildContext context, int total, int? scannedNumber){
+  Widget _buildIosLayout(BuildContext context, int total, int? scannedNumber) {
     return CupertinoBottomBar.tabBar(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -115,16 +120,16 @@ class RideDetailsAttendeesList extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Text(
-                "$total",
-                style: TextStyle(color: CupertinoColors.activeBlue),
+                '$total',
+                style: const TextStyle(color: CupertinoColors.activeBlue),
               ),
             ),
-            Expanded(child: Center()),
+            const Expanded(child: Center()),
             Padding(
               padding: const EdgeInsets.only(right: 4),
               child: Text(
-                scannedNumber == null ? "?" : "$scannedNumber",
-                style: TextStyle(color: CupertinoColors.activeBlue),
+                scannedNumber == null ? '?' : '$scannedNumber',
+                style: const TextStyle(color: CupertinoColors.activeBlue),
               ),
             ),
             const Icon(

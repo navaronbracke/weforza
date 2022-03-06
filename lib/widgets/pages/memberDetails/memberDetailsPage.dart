@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
@@ -22,6 +21,7 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
+  const MemberDetailsPage({Key? key}) : super(key: key);
 
   @override
   _MemberDetailsPageState createState() => _MemberDetailsPageState();
@@ -29,21 +29,24 @@ class MemberDetailsPage extends StatefulWidget {
 
 ///This is the [State] class for [MemberDetailsPage].
 class _MemberDetailsPageState extends State<MemberDetailsPage> {
-
   ///The BLoC in charge of the content.
   late MemberDetailsBloc bloc;
 
-  void goToEditMemberPage(BuildContext context){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
+  void goToEditMemberPage(BuildContext context) {
+    Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const EditMemberPage()))
+        .then((_) {
       setState(() {
         bloc.member = SelectedItemProvider.of(context).selectedMember.value!;
-        bloc.profileImage = SelectedItemProvider.of(context).selectedMemberProfileImage.value!;
+        bloc.profileImage =
+            SelectedItemProvider.of(context).selectedMemberProfileImage.value!;
       });
     });
   }
 
-  void onMemberActiveChanged(bool value, BuildContext context){
-    bloc.setMemberActive(value, () => ReloadDataProvider.of(context).reloadMembers.value = true);
+  void onMemberActiveChanged(bool value, BuildContext context) {
+    bloc.setMemberActive(
+        value, () => ReloadDataProvider.of(context).reloadMembers.value = true);
   }
 
   Future<void> onDeleteMember(BuildContext context) async {
@@ -61,20 +64,22 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = MemberDetailsBloc(
-      memberRepository: InjectionContainer.get<MemberRepository>(),
-      deviceRepository: InjectionContainer.get<DeviceRepository>(),
-      member: SelectedItemProvider.of(context).selectedMember.value!,
-      profileImage: SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
-      attendingCountFuture: SelectedItemProvider.of(context).selectedMemberAttendingCount.value!
-    );
+        memberRepository: InjectionContainer.get<MemberRepository>(),
+        deviceRepository: InjectionContainer.get<DeviceRepository>(),
+        member: SelectedItemProvider.of(context).selectedMember.value!,
+        profileImage:
+            SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
+        attendingCountFuture: SelectedItemProvider.of(context)
+            .selectedMemberAttendingCount
+            .value!);
     bloc.loadDevices();
   }
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIOSLayout(context),
-  );
+  Widget build(BuildContext context) => PlatformAwareWidget(
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIOSLayout(context),
+      );
 
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
@@ -82,19 +87,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         title: Text(S.of(context).Details),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () => goToEditMemberPage(context),
           ),
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: () => showDialog(
-                context: context,
-                builder: (context) => DeleteItemDialog(
-                  title: S.of(context).MemberDeleteDialogTitle,
-                  description: S.of(context).MemberDeleteDialogDescription,
-                  errorDescription: S.of(context).GenericError,
-                  onDelete: () => onDeleteMember(context),
-                ),
+              context: context,
+              builder: (context) => DeleteItemDialog(
+                title: S.of(context).MemberDeleteDialogTitle,
+                description: S.of(context).MemberDeleteDialogDescription,
+                errorDescription: S.of(context).GenericError,
+                onDelete: () => onDeleteMember(context),
+              ),
             ),
           ),
         ],
@@ -103,17 +108,16 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return Column(
       children: <Widget>[
         _buildMemberInfoSection(context),
         Expanded(
             child: MemberDevicesList(
-              future: bloc.devicesFuture,
-              onDeleteDevice: bloc.deleteDevice,
-              onAddDeviceButtonPressed: () => goToAddDevicePage(context),
-            )
-        ),
+          future: bloc.devicesFuture,
+          onDeleteDevice: bloc.deleteDevice,
+          onAddDeviceButtonPressed: () => goToAddDevicePage(context),
+        )),
       ],
     );
   }
@@ -133,18 +137,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
-                    icon: CupertinoIcons.pencil,
-                    onPressed: ()=> goToEditMemberPage(context),
+                  icon: CupertinoIcons.pencil,
+                  onPressed: () => goToEditMemberPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: CupertinoIconButton.fromAppTheme(
                     icon: CupertinoIcons.delete,
-                    onPressed: ()=> showCupertinoDialog(
+                    onPressed: () => showCupertinoDialog(
                       context: context,
                       builder: (context) => DeleteItemDialog(
                         title: S.of(context).MemberDeleteDialogTitle,
-                        description: S.of(context).MemberDeleteDialogDescription,
+                        description:
+                            S.of(context).MemberDeleteDialogDescription,
                         errorDescription: S.of(context).GenericError,
                         onDelete: () => onDeleteMember(context),
                       ),
@@ -164,7 +169,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     );
   }
 
-  Widget _buildMemberInfoSection(BuildContext context){
+  Widget _buildMemberInfoSection(BuildContext context) {
     return Column(
       children: <Widget>[
         Row(
@@ -190,26 +195,19 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                      bloc.member.firstname,
-                      style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w500
-                      ),
+                  Text(bloc.member.firstname,
+                      style: ApplicationTheme.memberListItemFirstNameTextStyle
+                          .copyWith(fontSize: 25, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis),
-                  Text(
-                      bloc.member.lastname,
-                      style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-                          fontSize: 20
-                      ),
-                      overflow: TextOverflow.ellipsis
-                  ),
-                  if(bloc.member.alias.isNotEmpty)
+                  Text(bloc.member.lastname,
+                      style: ApplicationTheme.memberListItemLastNameTextStyle
+                          .copyWith(fontSize: 20),
+                      overflow: TextOverflow.ellipsis),
+                  if (bloc.member.alias.isNotEmpty)
                     Text(
                       "'${bloc.member.alias}'",
-                      style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-                          fontSize: 15, fontStyle: FontStyle.italic
-                      ),
+                      style: ApplicationTheme.memberListItemLastNameTextStyle
+                          .copyWith(fontSize: 15, fontStyle: FontStyle.italic),
                       overflow: TextOverflow.ellipsis,
                     ),
                 ],
@@ -224,14 +222,15 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               MemberAttendingCount(
                 future: bloc.attendingCountFuture,
               ),
-              Expanded(
+              const Expanded(
                 child: Center(),
               ),
               MemberActiveToggle(
                 initialValue: bloc.member.isActiveMember,
                 label: S.of(context).Active,
                 stream: bloc.isActiveStream,
-                onChanged: (bool value) => onMemberActiveChanged(value, context),
+                onChanged: (bool value) =>
+                    onMemberActiveChanged(value, context),
                 onErrorBuilder: () => PlatformAwareWidget(
                   android: () => Switch(
                     value: bloc.member.isActiveMember,
@@ -250,12 +249,13 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     );
   }
 
-  void goToAddDevicePage(BuildContext context){
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context)=> AddDevicePage())
-    ).then((_){
-      final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
-      if(reloadDevicesNotifier.value){
+  void goToAddDevicePage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const AddDevicePage()))
+        .then((_) {
+      final reloadDevicesNotifier =
+          ReloadDataProvider.of(context).reloadDevices;
+      if (reloadDevicesNotifier.value) {
         reloadDevicesNotifier.value = false;
         setState(() => bloc.loadDevices());
       }

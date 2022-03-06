@@ -1,6 +1,6 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
+import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 ///This class defines behaviour to scan for bluetooth devices.
 abstract class BluetoothDeviceScanner {

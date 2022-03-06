@@ -1,6 +1,6 @@
 import 'package:file/local.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
+import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/databaseFactory.dart';
 import 'package:weforza/database/deviceDao.dart';

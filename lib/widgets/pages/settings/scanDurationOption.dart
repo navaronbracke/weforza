@@ -1,17 +1,18 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanDurationOption extends StatefulWidget {
-  ScanDurationOption({
+  const ScanDurationOption({
+    Key? key,
     required this.getValue,
     required this.minScanValue,
     required this.maxScanValue,
     required this.onChanged,
-  }): assert(minScanValue > 0 && maxScanValue > minScanValue);
+  })  : assert(minScanValue > 0 && maxScanValue > minScanValue),
+        super(key: key);
 
   final void Function(double value) onChanged;
   final double minScanValue;
@@ -23,9 +24,8 @@ class ScanDurationOption extends StatefulWidget {
 }
 
 class _ScanDurationOptionState extends State<ScanDurationOption> {
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final currentValue = widget.getValue();
 
     return Column(
@@ -41,11 +41,10 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
             android: () => SliderTheme(
               data: SliderTheme.of(context).copyWith(
                   trackHeight: 5,
-                  thumbColor: ApplicationTheme.settingsScanSliderThumbColor
-              ),
+                  thumbColor: ApplicationTheme.settingsScanSliderThumbColor),
               child: Slider(
                 value: currentValue,
-                onChanged: (value)=> setState(() => widget.onChanged(value)),
+                onChanged: (value) => setState(() => widget.onChanged(value)),
                 min: widget.minScanValue,
                 max: widget.maxScanValue,
                 divisions: 5,
@@ -56,7 +55,8 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
                 Expanded(
                   child: CupertinoSlider(
                     value: currentValue,
-                    onChanged: (value) => setState(() => widget.onChanged(value)),
+                    onChanged: (value) =>
+                        setState(() => widget.onChanged(value)),
                     min: widget.minScanValue,
                     max: widget.maxScanValue,
                     divisions: 5,
@@ -66,7 +66,7 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
             ),
           ),
         ),
-        Center(child: Text("${currentValue.floor()}s")),
+        Center(child: Text('${currentValue.floor()}s')),
       ],
     );
   }

@@ -111,7 +111,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                       child: FileExtensionSelection(
                         onExtensionSelected: (ext) =>
                             bloc.onSelectFileExtension(ext),
-                        initialValue: FileExtension.CSV,
+                        initialValue: FileExtension.csv,
                       ),
                     ),
                     Padding(

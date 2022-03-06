@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/importMembersFileReader.dart';
+import 'package:weforza/file/import_members_file_reader.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/model/member.dart';

@@ -6,7 +6,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
-import 'package:weforza/widgets/pages/addDevice/addDeviceSubmit.dart';
+import 'package:weforza/widgets/pages/add_device/add_device_submit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';

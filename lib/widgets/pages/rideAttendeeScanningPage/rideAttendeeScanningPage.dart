@@ -109,11 +109,11 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       stream: bloc.scanStepStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: GenericScanErrorWidget());
+          return const Center(child: GenericScanErrorWidget());
         } else {
           switch (snapshot.data) {
             case ScanProcessStep.INIT:
-              return Center(child: PreparingScanWidget());
+              return const Center(child: PreparingScanWidget());
             case ScanProcessStep.BLUETOOTH_DISABLED:
               return Center(
                 child: BluetoothDisabledWidget(
@@ -195,7 +195,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 ),
               );
             default:
-              return Center(child: GenericScanErrorWidget());
+              return const Center(child: GenericScanErrorWidget());
           }
         }
       },

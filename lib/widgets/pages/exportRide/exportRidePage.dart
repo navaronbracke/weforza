@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -13,9 +13,7 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ExportRidePage extends StatefulWidget {
-  ExportRidePage({
-    required this.bloc
-  });
+  const ExportRidePage({Key? key, required this.bloc}) : super(key: key);
 
   final ExportRideBloc bloc;
 
@@ -24,16 +22,15 @@ class ExportRidePage extends StatefulWidget {
 }
 
 class _ExportRidePageState extends State<ExportRidePage> {
-
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIosLayout(context),
-  );
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIosLayout(context),
+      );
 
-  Widget _buildAndroidLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -43,7 +40,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
     );
   }
 
-  Widget _buildIosLayout(BuildContext context){
+  Widget _buildIosLayout(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -54,44 +51,43 @@ class _ExportRidePageState extends State<ExportRidePage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return StreamBuilder<ExportDataOrError>(
       initialData: ExportDataOrError.idle(),
       stream: widget.bloc.stream,
-      builder: (context, snapshot){
-        if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
           return GenericError(text: S.of(context).GenericError);
-        }else{
-          if(snapshot.data!.exporting){
+        } else {
+          if (snapshot.data!.exporting) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                PlatformAwareLoadingIndicator(),
+                const PlatformAwareLoadingIndicator(),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Text(S.of(context).ExportRideExportingToFile),
                 ),
               ],
             );
-          }else if(snapshot.data!.success){
+          } else if (snapshot.data!.success) {
             return LayoutBuilder(
-              builder: (context,constraints){
+              builder: (context, constraints) {
                 final paintSize = constraints.biggest.shortestSide * .3;
                 return Center(
                     child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.secondaryColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
+                  width: paintSize,
+                  height: paintSize,
+                  child: Center(
+                    child: AnimatedCheckmark(
+                      color: ApplicationTheme.secondaryColor,
+                      size: Size.square(paintSize),
+                    ),
+                  ),
+                ));
               },
             );
-          }else{
+          } else {
             return Form(
               key: _formKey,
               child: Column(
@@ -104,7 +100,8 @@ class _ExportRidePageState extends State<ExportRidePage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: FileExtensionSelection(
-                      onExtensionSelected: (ext) => widget.bloc.onSelectFileExtension(ext),
+                      onExtensionSelected: (ext) =>
+                          widget.bloc.onSelectFileExtension(ext),
                       initialValue: FileExtension.CSV,
                     ),
                   ),
@@ -113,18 +110,19 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     child: StreamBuilder<bool>(
                       initialData: false,
                       stream: widget.bloc.fileNameExistsStream,
-                      builder: (context, snapshot){
-                        return Text(snapshot.data! ? S.of(context).FileExists : "");
+                      builder: (context, snapshot) {
+                        return Text(
+                            snapshot.data! ? S.of(context).FileExists : '');
                       },
                     ),
                   ),
                   PlatformAwareWidget(
                     android: () => ElevatedButton(
                       child: Text(S.of(context).Export),
-                      onPressed: (){
+                      onPressed: () {
                         final formState = _formKey.currentState;
 
-                        if(formState != null && formState.validate()){
+                        if (formState != null && formState.validate()) {
                           widget.bloc.exportRide();
                         }
                       },
@@ -132,12 +130,12 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     ios: () => CupertinoButton.filled(
                       child: Text(
                         S.of(context).Export,
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      onPressed: (){
+                      onPressed: () {
                         if (_iosValidateFilename(context)) {
                           widget.bloc.exportRide();
-                        }else {
+                        } else {
                           setState(() {});
                         }
                       },
@@ -152,7 +150,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
     );
   }
 
-  Widget _buildFilenameInputField(BuildContext context){
+  Widget _buildFilenameInputField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PlatformAwareWidget(
@@ -162,16 +160,17 @@ class _ExportRidePageState extends State<ExportRidePage> {
           autocorrect: false,
           controller: widget.bloc.fileNameController,
           validator: (value) => widget.bloc.validateFileName(
-            value,
-            S.of(context).ValueIsRequired(S.of(context).Filename),
-            S.of(context).FilenameWhitespace,
-            S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
-            S.of(context).InvalidFilename
-          ),
+              value,
+              S.of(context).ValueIsRequired(S.of(context).Filename),
+              S.of(context).FilenameWhitespace,
+              S
+                  .of(context)
+                  .FilenameMaxLength('${widget.bloc.filenameMaxLength}'),
+              S.of(context).InvalidFilename),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
             labelText: S.of(context).Filename,
-            helperText: " ",
+            helperText: ' ',
           ),
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
@@ -183,24 +182,24 @@ class _ExportRidePageState extends State<ExportRidePage> {
               placeholder: S.of(context).Filename,
               autocorrect: false,
               controller: widget.bloc.fileNameController,
-              onChanged: (value){
+              onChanged: (value) {
                 setState(() {
                   widget.bloc.validateFileName(
                       value,
                       S.of(context).ValueIsRequired(S.of(context).Filename),
                       S.of(context).FilenameWhitespace,
-                      S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
-                      S.of(context).InvalidFilename
-                  );
+                      S.of(context).FilenameMaxLength(
+                          '${widget.bloc.filenameMaxLength}'),
+                      S.of(context).InvalidFilename);
                 });
               },
             ),
             Row(
               children: [
                 Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.filenameError),
-                    style: ApplicationTheme.iosFormErrorStyle
-                ),
+                    CupertinoFormErrorFormatter.formatErrorMessage(
+                        widget.bloc.filenameError),
+                    style: ApplicationTheme.iosFormErrorStyle),
               ],
             ),
           ],
@@ -211,12 +210,12 @@ class _ExportRidePageState extends State<ExportRidePage> {
 
   bool _iosValidateFilename(BuildContext context) {
     return widget.bloc.validateFileName(
-        widget.bloc.fileNameController.text,
-        S.of(context).ValueIsRequired(S.of(context).Filename),
-        S.of(context).FilenameWhitespace,
-        S.of(context).FilenameMaxLength("${widget.bloc.filenameMaxLength}"),
-        S.of(context).InvalidFilename
-    ) == null;
+            widget.bloc.fileNameController.text,
+            S.of(context).ValueIsRequired(S.of(context).Filename),
+            S.of(context).FilenameWhitespace,
+            S.of(context).FilenameMaxLength('${widget.bloc.filenameMaxLength}'),
+            S.of(context).InvalidFilename) ==
+        null;
   }
 
   @override

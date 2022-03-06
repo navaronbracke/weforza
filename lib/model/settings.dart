@@ -4,7 +4,7 @@ import 'package:weforza/model/memberFilterOption.dart';
 class Settings {
   Settings({
     this.scanDuration = 20,
-    this.memberListFilter = MemberFilterOption.ALL,
+    this.memberListFilter = MemberFilterOption.all,
   }) : assert(scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
@@ -36,7 +36,7 @@ class Settings {
     return Settings(
       scanDuration: values['scanDuration'] ?? 20,
       memberListFilter: memberListFilter == null
-          ? MemberFilterOption.ALL
+          ? MemberFilterOption.all
           : MemberFilterOption.values[memberListFilter],
     );
   }

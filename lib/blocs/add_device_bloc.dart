@@ -22,9 +22,9 @@ class AddDeviceBloc extends Bloc {
 
   String _newDeviceName = '';
 
-  DeviceType type = DeviceType.UNKNOWN;
+  DeviceType type = DeviceType.unknown;
 
-  final pageController = PageController(initialPage: DeviceType.UNKNOWN.index);
+  final pageController = PageController(initialPage: DeviceType.unknown.index);
 
   String? addDeviceError;
 
@@ -34,7 +34,7 @@ class AddDeviceBloc extends Bloc {
   final BehaviorSubject<String> _submitErrorController = BehaviorSubject();
   Stream<String> get submitErrorStream => _submitErrorController;
 
-  final _typeController = BehaviorSubject.seeded(DeviceType.UNKNOWN.index);
+  final _typeController = BehaviorSubject.seeded(DeviceType.unknown.index);
   Stream<int> get currentTypeStream => _typeController;
 
   void onDeviceTypeChanged(int page) {

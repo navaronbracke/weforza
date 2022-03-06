@@ -7,7 +7,7 @@ class Device {
       {required this.ownerId,
       required this.name,
       required this.creationDate,
-      this.type = DeviceType.UNKNOWN})
+      this.type = DeviceType.unknown})
       : assert(ownerId.isNotEmpty && name.isNotEmpty);
 
   final String ownerId;
@@ -26,7 +26,7 @@ class Device {
   static Device of(String key, Map<String, dynamic> values) {
     assert(key.isNotEmpty);
     //Start with unknown
-    DeviceType type = DeviceType.UNKNOWN;
+    DeviceType type = DeviceType.unknown;
     //if the index fits within the values, use it
     if (values['type'] < DeviceType.values.length) {
       type = DeviceType.values[values['type']];
@@ -47,22 +47,22 @@ class Device {
   int get hashCode => hashValues(name, ownerId);
 }
 
-///This enum declares the different device types.
-///[DeviceType.UNKNOWN] This is the default for when the type is unknown or not specified here.
-///[DeviceType.PHONE] The device is a phone.
-///[DeviceType.POWER_METER] The device is a power meter.
-///[DeviceType.CADENCE_METER] The device is a cadence meter.
-///[DeviceType.WATCH] The device is a (smart)watch that supports bluetooth.
-///[DeviceType.HEADSET] The device is a wireless headset/a pair of wireless earbuds.
-///[DeviceType.GPS] The device is a GPS.
-///[DeviceType.PULSE_MONITOR] The device is a heart rate monitor.
+/// This enum declares the different device types.
+/// [DeviceType.phone] The device is a phone.
+/// [DeviceType.powerMeter] The device is a power meter.
+/// [DeviceType.cadenceMeter] The device is a cadence meter.
+/// [DeviceType.watch] The device is a (smart)watch that supports bluetooth.
+/// [DeviceType.headset] The device is a wireless headset /
+/// a pair of wireless earbuds.
+/// [DeviceType.gps] The device is a GPS.
+/// [DeviceType.pulseMonitor] The device is a heart rate monitor.
 enum DeviceType {
-  UNKNOWN,
-  PULSE_MONITOR,
-  POWER_METER, //powermeter
-  CADENCE_METER, //cadence meter
-  WATCH, //smartwatch
-  GPS,
-  HEADSET,
-  PHONE, //smartphone
+  unknown,
+  pulseMonitor,
+  powerMeter,
+  cadenceMeter,
+  watch,
+  gps,
+  headset,
+  phone,
 }

@@ -13,7 +13,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scan_result.dart';
 import 'package:weforza/model/scan_process_step.dart';
-import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';

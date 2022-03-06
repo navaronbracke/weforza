@@ -4,7 +4,7 @@ import 'package:weforza/blocs/member_details_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberAttendingCount.dart';

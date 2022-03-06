@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';

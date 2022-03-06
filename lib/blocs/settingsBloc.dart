@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:weforza/blocs/bloc.dart';
@@ -36,7 +35,7 @@ class SettingsBloc extends Bloc {
   }
 
   void saveSettings() async {
-    saveSettingsFuture = Future.delayed(Duration(milliseconds: 500), () {
+    saveSettingsFuture = Future.delayed(const Duration(milliseconds: 500), () {
       return _repository.writeApplicationSettings(
         Settings(
           scanDuration: _scanDuration.floor(),
@@ -48,7 +47,8 @@ class SettingsBloc extends Bloc {
 
   void onScanDurationChanged(double newValue) => _scanDuration = newValue;
 
-  void onMemberListFilterChanged(MemberFilterOption newValue) => _memberListFilter = newValue;
+  void onMemberListFilterChanged(MemberFilterOption newValue) =>
+      _memberListFilter = newValue;
 
   @override
   void dispose() {}

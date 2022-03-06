@@ -1,11 +1,7 @@
-
 import 'package:weforza/model/ride.dart';
 
 class ExportableRide {
-  ExportableRide({
-    required this.ride,
-    required this.attendees
-  });
+  ExportableRide({required this.ride, required this.attendees});
 
   final Iterable<ExportableRideAttendee> attendees;
   final Ride ride;
@@ -16,8 +12,8 @@ class ExportableRideAttendee {
   ExportableRideAttendee({
     required this.firstName,
     required this.lastName,
-    this.alias = "",
-  }): assert(firstName.isNotEmpty && lastName.isNotEmpty);
+    this.alias = '',
+  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
 
   final String firstName;
   final String lastName;
@@ -25,15 +21,11 @@ class ExportableRideAttendee {
   //We add a field for the alias to be future proof.
   final String alias;
 
-  Map<String, dynamic> toJson(){
-    return {
-      "firstName": firstName,
-      "lastName": lastName,
-      "alias": alias
-    };
+  Map<String, dynamic> toJson() {
+    return {'firstName': firstName, 'lastName': lastName, 'alias': alias};
   }
 
-  String toCsv(){
-    return "$firstName,$lastName${alias.isEmpty ? "": ",$alias"}";
+  String toCsv() {
+    return '$firstName,$lastName${alias.isEmpty ? '' : ',$alias'}';
   }
 }

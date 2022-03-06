@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/rideAttendeeScanResult.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -24,10 +23,10 @@ class _ManualSelectionListItemKey {
 
   @override
   bool operator ==(Object other) {
-    return other is _ManualSelectionListItemKey
-        && firstName == other.firstName
-        && lastName == other.lastName
-        && alias == other.alias;
+    return other is _ManualSelectionListItemKey &&
+        firstName == other.firstName &&
+        lastName == other.lastName &&
+        alias == other.alias;
   }
 
   @override
@@ -48,15 +47,15 @@ class ManualSelectionListItem extends StatefulWidget {
     required this.addScanResult,
     required this.removeScanResult,
     required this.scanResultExists,
-  }): super(
-    key: ValueKey<_ManualSelectionListItemKey>(
-      _ManualSelectionListItemKey(
-        firstName: firstName,
-        lastName: lastName,
-        alias: alias,
-      ),
-    ),
-  );
+  }) : super(
+          key: ValueKey<_ManualSelectionListItemKey>(
+            _ManualSelectionListItemKey(
+              firstName: firstName,
+              lastName: lastName,
+              alias: alias,
+            ),
+          ),
+        );
 
   final bool Function() isSelected;
   final bool Function() isScanned;
@@ -72,11 +71,11 @@ class ManualSelectionListItem extends StatefulWidget {
   final String uuid;
 
   @override
-  _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
+  _ManualSelectionListItemState createState() =>
+      _ManualSelectionListItemState();
 }
 
 class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
-
   late Color itemDecorationBackgroundColor;
   late TextStyle firstNameStyle;
   late TextStyle lastNameStyle;
@@ -93,7 +92,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if(mounted){
+        if (mounted) {
           // If the search bar still has focus, unfocus it first.
           final FocusScopeNode currentFocus = FocusScope.of(context);
           if (!currentFocus.hasPrimaryFocus) {
@@ -130,15 +129,13 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
               ),
               Expanded(
                   child: MemberNameAndAlias(
-                    firstNameStyle: firstNameStyle,
-                    lastNameStyle: lastNameStyle,
-                    firstName: widget.firstName,
-                    lastName: widget.lastName,
-                    alias: widget.alias,
-                  )
-              ),
-              if(isSelected)
-                _buildSelectedIcon()
+                firstNameStyle: firstNameStyle,
+                lastNameStyle: lastNameStyle,
+                firstName: widget.firstName,
+                lastName: widget.lastName,
+                alias: widget.alias,
+              )),
+              if (isSelected) _buildSelectedIcon()
             ],
           ),
         ),
@@ -146,7 +143,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     );
   }
 
-  Widget _buildSelectedIcon(){
+  Widget _buildSelectedIcon() {
     return Padding(
       padding: const EdgeInsets.only(left: 5),
       child: Icon(
@@ -156,16 +153,20 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     );
   }
 
-  void _setColors(){
+  void _setColors() {
     isSelected = widget.isSelected();
     isScanned = widget.isScanned();
 
-    if(isSelected){
-      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(color: Colors.white);
-      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(color: Colors.white);
-    }else{
-      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
+    if (isSelected) {
+      itemDecorationBackgroundColor =
+          ApplicationTheme.rideAttendeeSelectedBackgroundColor;
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle
+          .copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle
+          .copyWith(color: Colors.white);
+    } else {
+      itemDecorationBackgroundColor =
+          ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
       lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
     }
@@ -174,55 +175,58 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   void handleTap(BuildContext context) async {
     // Don't allow selecting the member when locked by saving.
     // Focus changes are allowed but those have been handled already.
-    if(!widget.canTap()){
+    if (!widget.canTap()) {
       return;
     }
 
     final RideAttendeeScanResult scanResult = RideAttendeeScanResult(
-      uuid: widget.uuid, isScanned: isScanned,
+      uuid: widget.uuid,
+      isScanned: isScanned,
     );
 
     // The item exists, remove the item from the results.
-    if(widget.scanResultExists(scanResult)){
+    if (widget.scanResultExists(scanResult)) {
       // It's a scanned item, ask for confirmation first.
-      if(isScanned){
+      if (isScanned) {
         final result = await showConfirmationDialog(context);
 
-        if(result != null && result){
+        if (result != null && result) {
           widget.removeScanResult(scanResult);
         }
-      }else {
+      } else {
         // It's not a scanned item.
         // We can remove it.
         widget.removeScanResult(scanResult);
       }
-    }else {
+    } else {
       // The item does not exist.
       // Add it to the results.
       widget.addScanResult(widget.uuid);
     }
 
     // Rebuild with the new colors.
-    if(mounted){
+    if (mounted) {
       setState(() => _setColors());
     }
   }
 
-  Future<bool?> showConfirmationDialog(BuildContext context){
+  Future<bool?> showConfirmationDialog(BuildContext context) {
     final S translator = S.of(context);
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       return showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
-          content: Text(translator.RideAttendeeDeselectScannedMemberDialogDescription),
+          title:
+              Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
+          content: Text(
+              translator.RideAttendeeDeselectScannedMemberDialogDescription),
           actions: [
             TextButton(
               child: Text(
                 translator.RideAttendeeDeselectScannedMemberDialogConfirm,
                 textAlign: TextAlign.end,
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ),
               onPressed: () => Navigator.of(context).pop(true),
             ),
@@ -233,16 +237,19 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           ],
         ),
       );
-    }else if(Platform.isIOS){
+    } else if (Platform.isIOS) {
       return showCupertinoDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(
-          title: Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
-          content: Text(translator.RideAttendeeDeselectScannedMemberDialogDescription),
+          title:
+              Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
+          content: Text(
+              translator.RideAttendeeDeselectScannedMemberDialogDescription),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
-              child: Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
+              child: Text(
+                  translator.RideAttendeeDeselectScannedMemberDialogConfirm),
               onPressed: () => Navigator.of(context).pop(true),
             ),
             CupertinoDialogAction(

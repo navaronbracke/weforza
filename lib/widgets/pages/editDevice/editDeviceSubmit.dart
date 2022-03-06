@@ -25,34 +25,34 @@ class EditDeviceSubmit extends StatelessWidget {
             child: StreamBuilder<String>(
               initialData: "",
               stream: submitErrorStream,
-              builder: (context, snapshot){
-                return snapshot.hasError ?
-                Text(S.of(context).GenericError):
-                Text(snapshot.data!);
+              builder: (context, snapshot) {
+                return snapshot.hasError
+                    ? Text(S.of(context).GenericError)
+                    : Text(snapshot.data!);
               },
             ),
           ),
         ),
         Center(
             child: StreamBuilder<bool>(
-              initialData: false,
-              stream: isSubmittingStream,
-              builder: (context,snapshot) => snapshot.data! ? PlatformAwareLoadingIndicator() :
-              PlatformAwareWidget(
-                android: () => ElevatedButton(
-                  child: Text(S.of(context).SaveChanges),
-                  onPressed: onSubmit,
-                ),
-                ios: () => CupertinoButton.filled(
-                  child: Text(
-                    S.of(context).SaveChanges,
-                    style: TextStyle(color: Colors.white),
+          initialData: false,
+          stream: isSubmittingStream,
+          builder: (context, snapshot) => snapshot.data!
+              ? const PlatformAwareLoadingIndicator()
+              : PlatformAwareWidget(
+                  android: () => ElevatedButton(
+                    child: Text(S.of(context).SaveChanges),
+                    onPressed: onSubmit,
                   ),
-                  onPressed: onSubmit,
+                  ios: () => CupertinoButton.filled(
+                    child: Text(
+                      S.of(context).SaveChanges,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    onPressed: onSubmit,
+                  ),
                 ),
-              ),
-            )
-        ),
+        )),
       ],
     );
   }

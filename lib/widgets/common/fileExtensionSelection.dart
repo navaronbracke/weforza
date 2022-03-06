@@ -48,7 +48,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           child: Text(
             S.of(context).FileCsvExtension.toUpperCase(),
             style: FileExtension.CSV == currentValue
-                ? TextStyle(color: ApplicationTheme.primaryColor)
+                ? const TextStyle(color: ApplicationTheme.primaryColor)
                 : null,
           ),
         ),
@@ -62,7 +62,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           child: Text(
             S.of(context).FileJsonExtension.toUpperCase(),
             style: FileExtension.JSON == currentValue
-                ? TextStyle(color: ApplicationTheme.primaryColor)
+                ? const TextStyle(color: ApplicationTheme.primaryColor)
                 : null,
           ),
         ),

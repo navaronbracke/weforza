@@ -33,7 +33,7 @@ class ExportMembersBloc extends Bloc {
   final int filenameMaxLength = 80;
   String _filename = '';
 
-  FileExtension _fileExtension = FileExtension.CSV;
+  FileExtension _fileExtension = FileExtension.csv;
 
   void onSelectFileExtension(FileExtension extension) {
     if (_fileExtension != extension) {
@@ -95,7 +95,7 @@ class ExportMembersBloc extends Bloc {
   /// In case of CSV files, the [csvHeader] is used as first line.
   Future<void> _saveMembersToFile(File file, String extension,
       Iterable<ExportableMember> members, String csvHeader) async {
-    if (extension == FileExtension.CSV.extension()) {
+    if (extension == FileExtension.csv.extension()) {
       final buffer = StringBuffer();
 
       buffer.writeln(csvHeader);
@@ -105,7 +105,7 @@ class ExportMembersBloc extends Bloc {
       }
 
       await file.writeAsString(buffer.toString());
-    } else if (extension == FileExtension.JSON.extension()) {
+    } else if (extension == FileExtension.json.extension()) {
       final Map<String, dynamic> data = {
         'riders':
             members.map((ExportableMember member) => member.toJson()).toList()

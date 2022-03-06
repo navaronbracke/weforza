@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/common/deviceWidgetUtils.dart';
+import 'package:weforza/widgets/common/device_widget_utils.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/editDevice/editDevicePage.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';

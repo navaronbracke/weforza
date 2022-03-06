@@ -95,7 +95,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     final List<String> lines = await file
         .openRead()
         .transform(utf8.decoder)
-        .transform(LineSplitter())
+        .transform(const LineSplitter())
         .toList();
 
     if (lines.isEmpty) return lines;

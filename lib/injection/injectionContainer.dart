@@ -1,9 +1,8 @@
 import 'package:file/local.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:weforza/database/databaseFactory.dart';
-import 'package:weforza/injection/injector.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/database/databaseFactory.dart';
 import 'package:weforza/database/deviceDao.dart';
 import 'package:weforza/database/exportRidesDao.dart';
 import 'package:weforza/database/importMembersDao.dart';
@@ -11,6 +10,7 @@ import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/database/settingsDao.dart';
 import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';
@@ -32,30 +32,60 @@ class InjectionContainer {
     _injector = Injector();
 
     //database
-    _injector.register<ApplicationDatabase>((i) => ApplicationDatabase(), isSingleton: true);
+    _injector.register<ApplicationDatabase>((i) => ApplicationDatabase(),
+        isSingleton: true);
     //We need a reference to the database provider for passing the database/stores to the Dao instances.
-    final ApplicationDatabase applicationDatabase = _injector.get<ApplicationDatabase>();
+    final ApplicationDatabase applicationDatabase =
+        _injector.get<ApplicationDatabase>();
 
-    _injector.register<IMemberDao>((i) => MemberDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<IRideDao>((i) => RideDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<IDeviceDao>((i)=> DeviceDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<ISettingsDao>((i) => SettingsDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.register<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase), isSingleton: true);
+    _injector.register<IMemberDao>(
+        (i) => MemberDao.withProvider(applicationDatabase),
+        isSingleton: true);
+    _injector.register<IRideDao>(
+        (i) => RideDao.withProvider(applicationDatabase),
+        isSingleton: true);
+    _injector.register<IDeviceDao>(
+        (i) => DeviceDao.withProvider(applicationDatabase),
+        isSingleton: true);
+    _injector.register<ISettingsDao>(
+        (i) => SettingsDao.withProvider(applicationDatabase),
+        isSingleton: true);
+    _injector.register<IImportMembersDao>(
+        (i) => ImportMembersDao.withProvider(applicationDatabase),
+        isSingleton: true);
+    _injector.register<IExportRidesDao>(
+        (i) => ExportRidesDao.withProvider(applicationDatabase),
+        isSingleton: true);
 
     //repositories
-    _injector.register<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>()),isSingleton: true);
-    _injector.register<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
-    _injector.register<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
-    _injector.register<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);
-    _injector.register<ImportMembersRepository>((i) => ImportMembersRepository(i.get<IImportMembersDao>()),isSingleton: true);
-    _injector.register<ExportRidesRepository>((i) => ExportRidesRepository(i.get<IExportRidesDao>()),isSingleton: true);
-    _injector.register<ExportMembersRepository>((i) => ExportMembersRepository(i.get<IDeviceDao>(),i.get<IMemberDao>()),isSingleton: true);
+    _injector.register<MemberRepository>(
+        (i) => MemberRepository(i.get<IMemberDao>()),
+        isSingleton: true);
+    _injector.register<RideRepository>((i) => RideRepository(i.get<IRideDao>()),
+        isSingleton: true);
+    _injector.register<DeviceRepository>(
+        (i) => DeviceRepository(i.get<IDeviceDao>()),
+        isSingleton: true);
+    _injector.register<SettingsRepository>(
+        (i) => SettingsRepository(i.get<ISettingsDao>()),
+        isSingleton: true);
+    _injector.register<ImportMembersRepository>(
+        (i) => ImportMembersRepository(i.get<IImportMembersDao>()),
+        isSingleton: true);
+    _injector.register<ExportRidesRepository>(
+        (i) => ExportRidesRepository(i.get<IExportRidesDao>()),
+        isSingleton: true);
+    _injector.register<ExportMembersRepository>(
+        (i) =>
+            ExportMembersRepository(i.get<IDeviceDao>(), i.get<IMemberDao>()),
+        isSingleton: true);
 
     //file handler
-    _injector.register<IFileHandler>((i) => FileHandler(),isSingleton: true);
+    _injector.register<IFileHandler>((i) => FileHandler(), isSingleton: true);
     //bluetooth scanner
-    _injector.register<BluetoothDeviceScanner>((i) => BluetoothDeviceScannerImpl(),isSingleton: true);
+    _injector.register<BluetoothDeviceScanner>(
+        (i) => BluetoothDeviceScannerImpl(),
+        isSingleton: true);
 
     //other
 
@@ -76,11 +106,11 @@ class InjectionContainer {
   }
 
   ///Get a dependency of type [T].
-  static T get<T>(){
+  static T get<T>() {
     return _injector.get<T>();
   }
 
-  static void dispose(){
+  static void dispose() {
     _injector.dispose();
   }
 }

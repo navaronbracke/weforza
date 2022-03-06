@@ -5,7 +5,7 @@ import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/member_repository.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';

@@ -69,7 +69,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
         S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
+        GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),

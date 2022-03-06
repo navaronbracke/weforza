@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/add_ride_bloc.dart';
-import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarBody.dart';
-import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarHeader.dart';
+import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_body.dart';
+import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_header.dart';
 
 class AddRideCalendar extends StatelessWidget {
   const AddRideCalendar({
@@ -11,7 +11,7 @@ class AddRideCalendar extends StatelessWidget {
 
   final AddRideBloc bloc;
 
-  // TODO: Fix the responseive design on small screens.
+  // TODO: Fix the responsive design on small screens.
   // The calendar items should be slightly smaller.
   // The font size for the days should be smaller.
   // The pageview height constraint should be smaller.

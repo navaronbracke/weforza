@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This Widget will show a progress indicator

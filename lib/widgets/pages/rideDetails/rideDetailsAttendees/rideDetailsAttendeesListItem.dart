@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/common/memberNameAndAlias.dart';
+import 'package:weforza/widgets/common/member_name_and_alias.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
   RideDetailsAttendeesListItem({

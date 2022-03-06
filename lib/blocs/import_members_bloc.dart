@@ -11,7 +11,7 @@ import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/file/import_members_file_reader.dart';
 import 'package:weforza/file/json_file_reader.dart';
 import 'package:weforza/model/exportable_member.dart';
-import 'package:weforza/repository/importMembersRepository.dart';
+import 'package:weforza/repository/import_members_repository.dart';
 
 enum ImportMembersState { idle, importing, done, pickingFile }
 

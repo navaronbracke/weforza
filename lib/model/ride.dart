@@ -9,8 +9,8 @@ class Ride {
   });
 
   ///Date formatting patterns
-  static final String longDatePattern = 'EEEE d MMMM yyyy';
-  static final String shortDatePattern = 'EEE d MMM yyyy';
+  static const longDatePattern = 'EEEE d MMMM yyyy';
+  static const shortDatePattern = 'EEE d MMM yyyy';
 
   /// The Date of the Ride. This is the key for the stored record.
   final DateTime date;

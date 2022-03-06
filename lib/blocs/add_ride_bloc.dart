@@ -8,7 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/add_rides_or_error.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/ride_repository.dart';
 
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {

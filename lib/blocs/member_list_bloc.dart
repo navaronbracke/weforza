@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/repository/member_repository.dart';
+import 'package:weforza/repository/settings_repository.dart';
 
 ///This Bloc will load the members.
 class MemberListBloc extends Bloc {

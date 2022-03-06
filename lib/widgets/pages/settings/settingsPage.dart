@@ -4,7 +4,7 @@ import 'package:weforza/blocs/settings_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/settings.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
 import 'package:weforza/widgets/pages/settings/memberListFilter.dart';

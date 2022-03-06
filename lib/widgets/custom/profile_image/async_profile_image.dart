@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 /// This widget asynchronously loads a given profile image.

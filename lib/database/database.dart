@@ -10,7 +10,7 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_factory.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/ride_attendee.dart';
 
 ///This class wraps a Sembast [Database] and datastore instances along with initializer and close methods.
 class ApplicationDatabase {

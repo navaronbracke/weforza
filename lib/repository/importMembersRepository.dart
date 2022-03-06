@@ -1,5 +1,5 @@
 import 'package:weforza/database/import_members_dao.dart';
-import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/model/exportable_member.dart';
 
 class ImportMembersRepository {
   ImportMembersRepository(this.dao);

@@ -22,7 +22,7 @@ class RideListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = ride.date.month % 2 == 0
-        ? TextStyle(
+        ? const TextStyle(
             color: ApplicationTheme.rideListItemEvenMonthColor,
           )
         : const TextStyle();

@@ -6,7 +6,6 @@ import 'package:weforza/injection/type_factory.dart';
 /// Thus you should not override this getter.
 /// (Overriding this would be weird anyway)
 class Injector {
-
   /// The collection of types that are mapped to creator functions.
   ///
   /// As the map that collects the factories needs to be able to store any type,
@@ -25,7 +24,7 @@ class Injector {
   Injector register<T>(CreatorFunction<T> creator, {bool isSingleton = false}) {
     if (_factories.containsKey(T)) {
       throw ArgumentError(
-        "The type $T already has a registered creator function",
+        'The type $T already has a registered creator function',
       );
     }
 
@@ -40,17 +39,17 @@ class Injector {
   T get<T>() {
     final factory = _factories[T];
 
-    if(factory == null){
+    if (factory == null) {
       throw ArgumentError(
-        "There is no registered creator function for type $T",
+        'There is no registered creator function for type $T',
       );
     }
 
     try {
       return factory.creatorFunction(this) as T;
-    }catch (TypeError){
+    } catch (_) {
       throw ArgumentError(
-        "The registered creator function for type $T did not return an instance of $T",
+        'The registered creator function for type $T did not return an instance of $T',
       );
     }
   }

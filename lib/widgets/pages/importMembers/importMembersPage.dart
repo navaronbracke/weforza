@@ -14,13 +14,13 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 class ImportMembersPage extends StatefulWidget {
+  const ImportMembersPage({Key? key}) : super(key: key);
 
   @override
   _ImportMembersPageState createState() => _ImportMembersPageState();
 }
 
 class _ImportMembersPageState extends State<ImportMembersPage> {
-
   final ImportMembersBloc bloc = ImportMembersBloc(
     fileHandler: InjectionContainer.get<IFileHandler>(),
     repository: InjectionContainer.get<ImportMembersRepository>(),
@@ -34,7 +34,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildAndroidWidget(BuildContext context){
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).ImportMembersPageTitle),
@@ -43,7 +43,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildIosWidget(BuildContext context){
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(S.of(context).ImportMembersPageTitle),
@@ -52,19 +52,19 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return StreamBuilder<ImportMembersState>(
       stream: bloc.importStream,
-      builder: (context, snapshot){
-        if(snapshot.hasError){
-          if(snapshot.error is NoFileChosenError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          if (snapshot.error is NoFileChosenError) {
             return _buildNoFileChosen(context);
-          }else if(snapshot.error is InvalidFileExtensionError){
+          } else if (snapshot.error is InvalidFileExtensionError) {
             return _buildInvalidFileExtension(context);
-          }else if(snapshot.error is CsvHeaderMissingError){
+          } else if (snapshot.error is CsvHeaderMissingError) {
             return _buildCsvHeaderMissing(context);
-          }else if(snapshot.error is JsonFormatIncompatibleException){
-            final iconBuilder = (BuildContext ctx){
+          } else if (snapshot.error is JsonFormatIncompatibleException) {
+            final iconBuilder = (BuildContext ctx) {
               return PlatformAwareWidget(
                 android: () => Icon(
                   Icons.insert_drive_file,
@@ -79,65 +79,65 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
               );
             };
 
-            return  GenericError(
+            return GenericError(
               text: S.of(context).ImportMembersIncompatibleFileJsonContents,
-              iconBuilder: iconBuilder, 
+              iconBuilder: iconBuilder,
             );
-          }else{
+          } else {
             return GenericError(text: S.of(context).GenericError);
           }
-        }else{
-          switch(snapshot.data){
-            case ImportMembersState.IDLE: return _buildPickFileForm(context);
-            case ImportMembersState.PICKING_FILE: return Center(
-                child: PlatformAwareLoadingIndicator()
-            );
-            case ImportMembersState.IMPORTING: return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                PlatformAwareLoadingIndicator(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(S.of(context).ImportMembersImporting, softWrap: true),
-                ),
-              ],
-            );
-            case ImportMembersState.DONE: return Center(
-              child: LayoutBuilder(
-                builder: (context,constraints){
-                  final paintSize = constraints.biggest.shortestSide * .3;
-                  return Center(
-                      child: SizedBox(
-                        width: paintSize,
-                        height: paintSize,
-                        child: Center(
-                          child: AnimatedCheckmark(
-                            color: ApplicationTheme.secondaryColor,
-                            size: Size.square(paintSize),
-                          ),
+        } else {
+          switch (snapshot.data) {
+            case ImportMembersState.IDLE:
+              return _buildPickFileForm(context);
+            case ImportMembersState.PICKING_FILE:
+              return const Center(child: PlatformAwareLoadingIndicator());
+            case ImportMembersState.IMPORTING:
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const PlatformAwareLoadingIndicator(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(S.of(context).ImportMembersImporting,
+                        softWrap: true),
+                  ),
+                ],
+              );
+            case ImportMembersState.DONE:
+              return Center(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final paintSize = constraints.biggest.shortestSide * .3;
+                    return Center(
+                        child: SizedBox(
+                      width: paintSize,
+                      height: paintSize,
+                      child: Center(
+                        child: AnimatedCheckmark(
+                          color: ApplicationTheme.secondaryColor,
+                          size: Size.square(paintSize),
                         ),
-                      )
-                  );
-                },
-              ),
-            );
-            default: return GenericError(text: S.of(context).GenericError);
+                      ),
+                    ));
+                  },
+                ),
+              );
+            default:
+              return GenericError(text: S.of(context).GenericError);
           }
         }
       },
     );
   }
 
-  void onImportMembers(BuildContext context){
+  void onImportMembers(BuildContext context) {
     final provider = ReloadDataProvider.of(context);
-    bloc.pickFileAndImportMembers(
-      S.of(context).ImportMembersCsvHeaderRegex,
-      provider.reloadMembers,
-      provider.reloadDevices
-    );
+    bloc.pickFileAndImportMembers(S.of(context).ImportMembersCsvHeaderRegex,
+        provider.reloadMembers, provider.reloadDevices);
   }
 
-  Widget _buildButton(BuildContext context){
+  Widget _buildButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => TextButton(
         onPressed: () => onImportMembers(context),
@@ -146,22 +146,19 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
       ios: () => CupertinoButton.filled(
         child: Text(
           S.of(context).ImportMembersPickFile,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         onPressed: () => onImportMembers(context),
       ),
     );
   }
 
-  Widget _buildNoFileChosen(BuildContext context){
+  Widget _buildNoFileChosen(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-            S.of(context).ImportMembersPickFileWarning,
-            style: ApplicationTheme.importWarningTextStyle,
-            softWrap: true
-        ),
+        Text(S.of(context).ImportMembersPickFileWarning,
+            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: _buildButton(context),
@@ -170,15 +167,12 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildInvalidFileExtension(BuildContext context){
+  Widget _buildInvalidFileExtension(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-            S.of(context).ImportMembersInvalidFileExtension,
-            style: ApplicationTheme.importWarningTextStyle,
-            softWrap: true
-        ),
+        Text(S.of(context).ImportMembersInvalidFileExtension,
+            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: _buildButton(context),
@@ -187,21 +181,18 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildCsvHeaderMissing(BuildContext context){
+  Widget _buildCsvHeaderMissing(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(
-            S.of(context).ImportMembersCsvHeaderRequired,
-            style: ApplicationTheme.importWarningTextStyle,
-            softWrap: true
-        ),
+        Text(S.of(context).ImportMembersCsvHeaderRequired,
+            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: _buildButton(context),
         ),
         LayoutBuilder(
-          builder: (context, constraints){
+          builder: (context, constraints) {
             return SizedBox(
               width: constraints.biggest.shortestSide * .8,
               child: Column(
@@ -209,10 +200,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(S.of(context).ImportMembersCsvHeaderExampleDescription,
-                        style: ApplicationTheme.importMembersHeaderExampleTextStyle,
-                        softWrap: true
-                    ),
+                    child: Text(
+                        S.of(context).ImportMembersCsvHeaderExampleDescription,
+                        style: ApplicationTheme
+                            .importMembersHeaderExampleTextStyle,
+                        softWrap: true),
                   ),
                   Text(
                     S.of(context).ExportMembersCsvHeader,
@@ -228,11 +220,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
-  Widget _buildPickFileForm(BuildContext context){
+  Widget _buildPickFileForm(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text(""),
+        const Text(''),
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: _buildButton(context),
@@ -246,5 +238,4 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     bloc.dispose();
     super.dispose();
   }
-
 }

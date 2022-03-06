@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:weforza/database/memberDao.dart';
+import 'package:weforza/database/member_dao.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
 
@@ -13,15 +13,20 @@ class MemberRepository {
 
   Future<void> addMember(Member member) => _dao.addMember(member);
 
-  Future<List<Member>> getMembers(MemberFilterOption filter) => _dao.getMembers(filter);
+  Future<List<Member>> getMembers(MemberFilterOption filter) =>
+      _dao.getMembers(filter);
 
-  Future<bool> memberExists(String firstname, String lastname, String alias, [String? uuid]) => _dao.memberExists(firstname, lastname, alias, uuid);
+  Future<bool> memberExists(String firstname, String lastname, String alias,
+          [String? uuid]) =>
+      _dao.memberExists(firstname, lastname, alias, uuid);
 
   Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 
   Future<void> updateMember(Member member) => _dao.updateMember(member);
 
-  Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
+  Future<int> getAttendingCountForAttendee(String uuid) =>
+      _dao.getAttendingCountForAttendee(uuid);
 
-  Future<void> setMemberActive(String uuid, bool value) => _dao.setMemberActive(uuid, value);
+  Future<void> setMemberActive(String uuid, bool value) =>
+      _dao.setMemberActive(uuid, value);
 }

@@ -11,13 +11,13 @@ import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/repository/exportMembersRepository.dart';
-import 'package:weforza/repository/exportRidesRepository.dart';
-import 'package:weforza/repository/importMembersRepository.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/repository/device_repository.dart';
+import 'package:weforza/repository/export_members_repository.dart';
+import 'package:weforza/repository/export_rides_repository.dart';
+import 'package:weforza/repository/import_members_repository.dart';
+import 'package:weforza/repository/member_repository.dart';
+import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/repository/settings_repository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {

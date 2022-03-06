@@ -1,6 +1,5 @@
-
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/ride_repository.dart';
 
 class ResetRideCalendarBloc extends Bloc {
   ResetRideCalendarBloc({
@@ -12,8 +11,8 @@ class ResetRideCalendarBloc extends Bloc {
   Future<void>? deleteCalendarFuture;
 
   void deleteRideCalendar(void Function() onSuccess) {
-    deleteCalendarFuture = repository.deleteRideCalendar()
-        .then((_) => onSuccess());
+    deleteCalendarFuture =
+        repository.deleteRideCalendar().then((_) => onSuccess());
   }
 
   @override

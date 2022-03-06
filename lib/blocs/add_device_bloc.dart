@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/repository/deviceRepository.dart';
+import 'package:weforza/repository/device_repository.dart';
 
 class AddDeviceBloc extends Bloc {
   AddDeviceBloc({

@@ -7,7 +7,7 @@ import 'package:weforza/model/export_data_or_error.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';
+import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

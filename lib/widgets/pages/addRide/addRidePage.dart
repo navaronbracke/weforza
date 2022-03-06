@@ -14,17 +14,17 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
+  const AddRidePage({Key? key}) : super(key: key);
+
   @override
   _AddRidePageState createState() => _AddRidePageState(
-    bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>()),
-  );
+        bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>()),
+      );
 }
 
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
-  _AddRidePageState({
-    required this.bloc
-  });
+  _AddRidePageState({required this.bloc});
 
   ///The BLoC for this page.
   final AddRideBloc bloc;
@@ -37,12 +37,12 @@ class _AddRidePageState extends State<AddRidePage> {
   }
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIOSLayout(context),
-  );
+  Widget build(BuildContext context) => PlatformAwareWidget(
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIOSLayout(context),
+      );
 
-  Widget _buildBody(){
+  Widget _buildBody() {
     return Column(
       children: <Widget>[
         _buildCalendar(),
@@ -50,8 +50,8 @@ class _AddRidePageState extends State<AddRidePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: AddRideCalendarColorLegend(),
               ),
               Padding(
@@ -76,15 +76,15 @@ class _AddRidePageState extends State<AddRidePage> {
           StreamBuilder<bool>(
             initialData: false,
             stream: bloc.showDeleteSelectionStream,
-            builder: (context, snapshot){
+            builder: (context, snapshot) {
               bool? show = snapshot.data;
 
-              if(show == null || !show){
-                return SizedBox.shrink();
+              if (show == null || !show) {
+                return const SizedBox.shrink();
               }
 
               return IconButton(
-                icon: Icon(Icons.delete_sweep),
+                icon: const Icon(Icons.delete_sweep),
                 onPressed: bloc.onClearSelection,
               );
             },
@@ -102,11 +102,11 @@ class _AddRidePageState extends State<AddRidePage> {
         trailing: StreamBuilder<bool>(
           initialData: false,
           stream: bloc.showDeleteSelectionStream,
-          builder: (context, snapshot){
+          builder: (context, snapshot) {
             bool? show = snapshot.data;
 
-            if(show == null || !show){
-              return SizedBox.shrink();
+            if (show == null || !show) {
+              return const SizedBox.shrink();
             }
 
             return CupertinoIconButton(
@@ -126,12 +126,12 @@ class _AddRidePageState extends State<AddRidePage> {
   }
 
   ///Build the calendar.
-  Widget _buildCalendar(){
+  Widget _buildCalendar() {
     return FutureBuilder<void>(
-      future: bloc.loadExistingRidesFuture,
-        builder: (context,snapshot){
-          if (snapshot.connectionState == ConnectionState.done){
-            if(snapshot.hasError){
+        future: bloc.loadExistingRidesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
               return Center(
                 child: Text(S.of(context).GenericError),
               );
@@ -140,18 +140,17 @@ class _AddRidePageState extends State<AddRidePage> {
             return AddRideCalendar(bloc: bloc);
           }
 
-          return Center(
+          return const Center(
             child: PlatformAwareLoadingIndicator(),
           );
-        }
-    );
+        });
   }
 
   void _onSubmit() async {
-    await bloc.addRides().then((_){
+    await bloc.addRides().then((_) {
       ReloadDataProvider.of(context).reloadRides.value = true;
       Navigator.pop(context);
-    }).catchError((e){
+    }).catchError((e) {
       bloc.onError(e);
     });
   }

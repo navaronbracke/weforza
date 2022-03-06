@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
-  AddRideCalendarItem({
+  const AddRideCalendarItem({
+    Key? key,
     required this.date,
     required this.register,
     required this.unregister,
@@ -10,7 +11,7 @@ class AddRideCalendarItem extends StatefulWidget {
     required this.isBeforeToday,
     required this.rideScheduledDuringCurrentSession,
     required this.rideScheduledOn,
-  });
+  }) : super(key: key);
 
   /// The date for the calendar item.
   final DateTime date;
@@ -77,11 +78,11 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
         height: 40,
         decoration: BoxDecoration(
           color: _backgroundColor,
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Center(
           child: Text(
-            "${widget.date.day}",
+            '${widget.date.day}',
             style: TextStyle(color: _fontColor),
             textAlign: TextAlign.center,
           ),
@@ -95,20 +96,23 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
     // In the past.
     if (widget.isBeforeToday(widget.date)) {
       // A day in the past that had a ride.
-      if(widget.rideScheduledOn(widget.date)){
+      if (widget.rideScheduledOn(widget.date)) {
         // A day in the past that just got a ride scheduled in the current session.
-        if(widget.rideScheduledDuringCurrentSession(widget.date)){
-          _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+        if (widget.rideScheduledDuringCurrentSession(widget.date)) {
+          _backgroundColor =
+              ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarDayFontColor;
-        }else {
+        } else {
           // A day in the past that had a ride.
           // The ride was scheduled in a different session.
-          _backgroundColor = ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
+          _backgroundColor =
+              ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarDayFontColor;
         }
-      }else {
+      } else {
         // A day in the past that didn't have a ride.
-        _backgroundColor = ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
+        _backgroundColor =
+            ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
         _fontColor = ApplicationTheme.rideCalendarDayFontColor;
       }
     } else {
@@ -116,17 +120,20 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
       if (widget.rideScheduledOn(widget.date)) {
         // A day in the future (or today) that just got a ride scheduled in the current session.
         if (widget.rideScheduledDuringCurrentSession(widget.date)) {
-          _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+          _backgroundColor =
+              ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarDayFontColor;
         } else {
           // A day in the future (or today) that
           // already had a ride scheduled in a different session.
-          _backgroundColor = ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
+          _backgroundColor =
+              ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
           _fontColor = ApplicationTheme.rideCalendarDayFontColor;
         }
       } else {
         // A day in the future (or today) that does not have a ride scheduled.
-        _backgroundColor = Colors.transparent; // Use the background color of the page.
+        _backgroundColor =
+            Colors.transparent; // Use the background color of the page.
         _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
       }
     }

@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/editMemberBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -17,10 +15,11 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditMemberPage extends StatefulWidget {
+  const EditMemberPage({Key? key}) : super(key: key);
+
   @override
-  _EditMemberPageState createState() => _EditMemberPageState(
-    InjectionContainer.get<IFileHandler>()
-  );
+  _EditMemberPageState createState() =>
+      _EditMemberPageState(InjectionContainer.get<IFileHandler>());
 }
 
 class _EditMemberPageState extends State<EditMemberPage> {
@@ -57,9 +56,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
   late String _aliasBlankMessage;
 
   ///The [FocusNode]s for the inputs
-  FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _lastNameFocusNode = FocusNode();
-  FocusNode _aliasFocusNode = FocusNode();
+  final FocusNode _firstNameFocusNode = FocusNode();
+  final FocusNode _lastNameFocusNode = FocusNode();
+  final FocusNode _aliasFocusNode = FocusNode();
 
   ///Initialize localized strings for the form.
   ///This requires a [BuildContext] for the lookup.
@@ -73,50 +72,54 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
 
     _firstNameMaxLengthMessage =
-        translator.FirstNameMaxLength("${_bloc.nameAndAliasMaxLength}");
+        translator.FirstNameMaxLength('${_bloc.nameAndAliasMaxLength}');
     _firstNameIllegalCharactersMessage = translator.FirstNameIllegalCharacters;
     _firstNameBlankMessage = translator.FirstNameBlank;
 
     _lastNameMaxLengthMessage =
-        translator.LastNameMaxLength("${_bloc.nameAndAliasMaxLength}");
+        translator.LastNameMaxLength('${_bloc.nameAndAliasMaxLength}');
     _lastNameIllegalCharactersMessage = translator.LastNameIllegalCharacters;
     _lastNameBlankMessage = translator.LastNameBlank;
 
     _aliasMaxLengthMessage =
-        translator.AliasMaxLength("${_bloc.nameAndAliasMaxLength}");
+        translator.AliasMaxLength('${_bloc.nameAndAliasMaxLength}');
     _aliasIllegalCharactersMessage = translator.AliasIllegalCharacters;
     _aliasBlankMessage = translator.AliasBlank;
   }
 
   ///Validate all current form input for IOS.
-  bool _iosAllFormInputValidator(){
-    final firstNameValid =  _bloc.validateFirstName(
-        _firstNameController.text,
-        _firstNameRequiredMessage,
-        _firstNameMaxLengthMessage,
-        _firstNameIllegalCharactersMessage,
-        _firstNameBlankMessage) == null;
+  bool _iosAllFormInputValidator() {
+    final firstNameValid = _bloc.validateFirstName(
+            _firstNameController.text,
+            _firstNameRequiredMessage,
+            _firstNameMaxLengthMessage,
+            _firstNameIllegalCharactersMessage,
+            _firstNameBlankMessage) ==
+        null;
     final lastNameValid = _bloc.validateLastName(
-        _lastNameController.text,
-        _lastNameRequiredMessage,
-        _lastNameMaxLengthMessage,
-        _lastNameIllegalCharactersMessage,
-        _lastNameBlankMessage) == null;
+            _lastNameController.text,
+            _lastNameRequiredMessage,
+            _lastNameMaxLengthMessage,
+            _lastNameIllegalCharactersMessage,
+            _lastNameBlankMessage) ==
+        null;
     final aliasValid = _bloc.validateAlias(
-        _aliasController.text,
-        _aliasMaxLengthMessage,
-        _aliasIllegalCharactersMessage,
-        _aliasBlankMessage) == null;
+            _aliasController.text,
+            _aliasMaxLengthMessage,
+            _aliasIllegalCharactersMessage,
+            _aliasBlankMessage) ==
+        null;
     return firstNameValid && lastNameValid && aliasValid;
   }
 
   void editMember(BuildContext context) async {
-    await _bloc.editMember().then((member){
+    await _bloc.editMember().then((member) {
       ReloadDataProvider.of(context).reloadMembers.value = true;
       SelectedItemProvider.of(context).selectedMember.value = member;
-      SelectedItemProvider.of(context).selectedMemberProfileImage.value = _bloc.profileImageFuture;
+      SelectedItemProvider.of(context).selectedMemberProfileImage.value =
+          _bloc.profileImageFuture;
       Navigator.pop(context);
-    }).catchError((e){
+    }).catchError((e) {
       _bloc.onError(e);
     });
   }
@@ -124,14 +127,16 @@ class _EditMemberPageState extends State<EditMemberPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Member member = SelectedItemProvider.of(context).selectedMember.value!;
+    final Member member =
+        SelectedItemProvider.of(context).selectedMember.value!;
     _bloc = EditMemberBloc(
       repository: InjectionContainer.get<MemberRepository>(),
       isActiveMember: member.isActiveMember,
       firstName: member.firstname,
       lastName: member.lastname,
       alias: member.alias,
-      profileImageFuture: SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
+      profileImageFuture:
+          SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
       id: member.uuid,
     );
     _firstNameController = TextEditingController(text: _bloc.firstName);
@@ -159,7 +164,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -193,15 +198,16 @@ class _EditMemberPageState extends State<EditMemberPage> {
                               _firstNameBlankMessage);
                         });
                       },
-                      onSubmitted: (value){
-                        _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                      onSubmitted: (value) {
+                        _focusChange(
+                            context, _firstNameFocusNode, _lastNameFocusNode);
                       },
                     ),
                   ),
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(_bloc.firstNameError),
-                      style: ApplicationTheme.iosFormErrorStyle
-                  ),
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.firstNameError),
+                      style: ApplicationTheme.iosFormErrorStyle),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: CupertinoTextField(
@@ -222,15 +228,16 @@ class _EditMemberPageState extends State<EditMemberPage> {
                               _lastNameBlankMessage);
                         });
                       },
-                      onSubmitted: (value){
-                        _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
+                      onSubmitted: (value) {
+                        _focusChange(
+                            context, _lastNameFocusNode, _aliasFocusNode);
                       },
                     ),
                   ),
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(_bloc.lastNameError),
-                      style: ApplicationTheme.iosFormErrorStyle
-                  ),
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.lastNameError),
+                      style: ApplicationTheme.iosFormErrorStyle),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: CupertinoTextField(
@@ -249,15 +256,15 @@ class _EditMemberPageState extends State<EditMemberPage> {
                               _aliasBlankMessage);
                         });
                       },
-                      onSubmitted: (value){
+                      onSubmitted: (value) {
                         _aliasFocusNode.unfocus();
                       },
                     ),
                   ),
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(_bloc.aliasError),
-                      style: ApplicationTheme.iosFormErrorStyle
-                  ),
+                      CupertinoFormErrorFormatter.formatErrorMessage(
+                          _bloc.aliasError),
+                      style: ApplicationTheme.iosFormErrorStyle),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 15, 0, 30),
                     child: Center(
@@ -288,7 +295,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: <Widget>[
                 Center(
@@ -308,9 +315,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     focusNode: _firstNameFocusNode,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       labelText: _firstNameLabel,
-                      helperText: " ",//Prevent popping up and down after validation
+                      helperText:
+                          ' ', //Prevent popping up and down after validation
                     ),
                     controller: _firstNameController,
                     autocorrect: false,
@@ -322,8 +330,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
                         _firstNameIllegalCharactersMessage,
                         _firstNameBlankMessage),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onFieldSubmitted: (value){
-                      _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                    onFieldSubmitted: (value) {
+                      _focusChange(
+                          context, _firstNameFocusNode, _lastNameFocusNode);
                     },
                   ),
                 ),
@@ -334,9 +343,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     focusNode: _lastNameFocusNode,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       labelText: _lastNameLabel,
-                      helperText: " ",//Prevent popping up and down after validation
+                      helperText:
+                          ' ', //Prevent popping up and down after validation
                     ),
                     controller: _lastNameController,
                     autocorrect: false,
@@ -348,8 +358,9 @@ class _EditMemberPageState extends State<EditMemberPage> {
                         _lastNameIllegalCharactersMessage,
                         _lastNameBlankMessage),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onFieldSubmitted: (value){
-                      _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
+                    onFieldSubmitted: (value) {
+                      _focusChange(
+                          context, _lastNameFocusNode, _aliasFocusNode);
                     },
                   ),
                 ),
@@ -357,9 +368,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   focusNode: _aliasFocusNode,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
+                    contentPadding: const EdgeInsets.all(10),
                     labelText: _aliasLabel,
-                    helperText: " ",//Prevent popping up and down after validation
+                    helperText:
+                        ' ', //Prevent popping up and down after validation
                   ),
                   controller: _aliasController,
                   autocorrect: false,
@@ -370,7 +382,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       _aliasIllegalCharactersMessage,
                       _aliasBlankMessage),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onFieldSubmitted: (value){
+                  onFieldSubmitted: (value) {
                     _aliasFocusNode.unfocus();
                   },
                 ),
@@ -394,18 +406,19 @@ class _EditMemberPageState extends State<EditMemberPage> {
     );
   }
 
-  void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+  void _focusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
-  void _onSubmitIos(){
+  void _onSubmitIos() {
     if (_iosAllFormInputValidator()) {
       editMember(context);
     }
   }
 
-  void _onSubmitAndroid(){
+  void _onSubmitAndroid() {
     final formState = _formKey.currentState;
 
     if (formState != null && formState.validate()) {

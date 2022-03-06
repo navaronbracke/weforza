@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
 class CupertinoLoadingDialog extends StatelessWidget {
-  const CupertinoLoadingDialog({ Key? key }) : super(key: key);
+  const CupertinoLoadingDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: CupertinoPopupSurface(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16),
           child: CupertinoActivityIndicator(),
         ),
       ),

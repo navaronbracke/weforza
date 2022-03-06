@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -7,9 +6,11 @@ import 'package:weforza/widgets/custom/resetRideCalendarDialog/resetRideCalendar
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ResetRideCalendarButton extends StatefulWidget {
+  const ResetRideCalendarButton({Key? key}) : super(key: key);
 
   @override
-  _ResetRideCalendarButtonState createState() => _ResetRideCalendarButtonState();
+  _ResetRideCalendarButtonState createState() =>
+      _ResetRideCalendarButtonState();
 }
 
 class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
@@ -18,7 +19,7 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
 
   @override
   Widget build(BuildContext context) {
-    if(_deleted) return SizedBox.shrink();
+    if (_deleted) return const SizedBox.shrink();
 
     final translator = S.of(context);
 
@@ -37,7 +38,7 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
                   builder: (context) => ResetRideCalendarDialog(),
                 );
 
-                if(result != null && result){
+                if (result != null && result) {
                   setState(() {
                     _deleted = true;
                   });
@@ -46,39 +47,41 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               child: Text(translator.SettingsResetRideCalendarButtonLabel),
             ),
             ios: () => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: CupertinoButton(
-                color: CupertinoColors.destructiveRed,
-                child: Text(
-                  translator.SettingsResetRideCalendarButtonLabel,
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  final result = await showCupertinoDialog(
-                    context: context,
-                    builder: (context) => ResetRideCalendarDialog(),
-                  );
+                padding: const EdgeInsets.only(bottom: 10),
+                child: CupertinoButton(
+                  color: CupertinoColors.destructiveRed,
+                  child: Text(
+                    translator.SettingsResetRideCalendarButtonLabel,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () async {
+                    final result = await showCupertinoDialog(
+                      context: context,
+                      builder: (context) => ResetRideCalendarDialog(),
+                    );
 
-                  if(result != null && result){
-                    setState(() {
-                      _deleted = true;
-                    });
-                  }
-                },
-              )
-            ),
+                    if (result != null && result) {
+                      setState(() {
+                        _deleted = true;
+                      });
+                    }
+                  },
+                )),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: PlatformAwareWidget(
               android: () => Text(
                 translator.SettingsResetRideCalendarDescription,
-                style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+                style: ApplicationTheme
+                    .settingsResetRideCalendarDescriptionTextStyle,
                 textAlign: TextAlign.center,
               ),
               ios: () => Text(
                 translator.SettingsResetRideCalendarDescription,
-                style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle.copyWith(fontSize: 14),
+                style: ApplicationTheme
+                    .settingsResetRideCalendarDescriptionTextStyle
+                    .copyWith(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
             ),

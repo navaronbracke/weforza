@@ -33,14 +33,16 @@ abstract class IDeviceDao {
 class DeviceDao implements IDeviceDao {
   DeviceDao(this._database, this._deviceStore, this._memberStore);
 
-  DeviceDao.withProvider(ApplicationDatabase provider): this(
-    provider.getDatabase(),
-    provider.deviceStore,
-    provider.memberStore,
-  );
+  DeviceDao.withProvider(ApplicationDatabase provider)
+      : this(
+          provider.getDatabase(),
+          provider.deviceStore,
+          provider.memberStore,
+        );
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
+
   ///A reference to the device store.
   final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
@@ -50,10 +52,12 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<void> addDevice(Device device) async {
     await _database.transaction((txn) async {
-      await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.toMap());
+      await _deviceStore
+          .record(device.creationDate.toIso8601String())
+          .add(txn, device.toMap());
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        {'lastUpdated': DateTime.now().toUtc().toStringWithoutMilliseconds()},
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -63,8 +67,11 @@ class DeviceDao implements IDeviceDao {
 
   @override
   Future<List<Device>> getOwnerDevices(String ownerId) async {
-    final records = await _deviceStore.find(_database,finder: Finder(filter: Filter.equals("owner", ownerId)));
-    return records.map((record) => Device.of(record.key,record.value)).toList();
+    final records = await _deviceStore.find(_database,
+        finder: Finder(filter: Filter.equals('owner', ownerId)));
+    return records
+        .map((record) => Device.of(record.key, record.value))
+        .toList();
   }
 
   @override
@@ -74,15 +81,15 @@ class DeviceDao implements IDeviceDao {
         txn,
         finder: Finder(
           filter: Filter.and(<Filter>[
-            Filter.equals("deviceName",device.name),
-            Filter.equals("owner",device.ownerId),
+            Filter.equals('deviceName', device.name),
+            Filter.equals('owner', device.ownerId),
           ]),
         ),
       );
 
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        {'lastUpdated': DateTime.now().toUtc().toStringWithoutMilliseconds()},
         finder: Finder(
           filter: Filter.byKey(device.ownerId),
         ),
@@ -93,12 +100,12 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<void> updateDevice(Device newDevice) async {
     await _database.transaction((txn) async {
-      await _deviceStore.update(txn, newDevice.toMap(),finder: Finder(
-          filter: Filter.byKey(newDevice.creationDate.toIso8601String())
-      ));
+      await _deviceStore.update(txn, newDevice.toMap(),
+          finder: Finder(
+              filter: Filter.byKey(newDevice.creationDate.toIso8601String())));
       await _memberStore.update(
         txn,
-        { "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds() },
+        {'lastUpdated': DateTime.now().toUtc().toStringWithoutMilliseconds()},
         finder: Finder(
           filter: Filter.byKey(newDevice.ownerId),
         ),
@@ -107,35 +114,38 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime? creationDate]) async {
+  Future<bool> deviceExists(String deviceName, String ownerUuid,
+      [DateTime? creationDate]) async {
     final List<Filter> filters = [
-      Filter.equals("deviceName", deviceName),
-      Filter.equals("owner", ownerUuid),
-      if(creationDate != null)
+      Filter.equals('deviceName', deviceName),
+      Filter.equals('owner', ownerUuid),
+      if (creationDate != null)
         Filter.notEquals(Field.key, creationDate.toIso8601String())
     ];
 
     return await _deviceStore.findFirst(
-      _database,
-      finder: Finder(
-        filter: Filter.and(filters),
-      ),
-    ) != null;
+          _database,
+          finder: Finder(
+            filter: Filter.and(filters),
+          ),
+        ) !=
+        null;
   }
 
   @override
   Future<HashMap<String, Set<String>>> getAllDevicesGroupedByOwnerId() async {
-    final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
+    final List<RecordSnapshot<String, Map<String, dynamic>>> devices =
+        await _deviceStore.find(_database);
 
-    final HashMap<String,Set<String>> collection = HashMap();
+    final HashMap<String, Set<String>> collection = HashMap();
 
     devices.forEach((record) {
-      final String device = record["deviceName"] as String;
-      final String ownerUuid = record["owner"] as String;
+      final String device = record['deviceName'] as String;
+      final String ownerUuid = record['owner'] as String;
 
-      if(collection.containsKey(ownerUuid)){
+      if (collection.containsKey(ownerUuid)) {
         collection[ownerUuid]!.add(device);
-      }else{
+      } else {
         collection[ownerUuid] = Set.of(<String>[device]);
       }
     });
@@ -146,6 +156,8 @@ class DeviceDao implements IDeviceDao {
   @override
   Future<List<Device>> getAllDevices() async {
     final records = await _deviceStore.find(_database);
-    return records.map((record) => Device.of(record.key,record.value)).toList();
+    return records
+        .map((record) => Device.of(record.key, record.value))
+        .toList();
   }
 }

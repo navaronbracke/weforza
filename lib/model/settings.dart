@@ -1,4 +1,3 @@
-
 import 'package:weforza/model/memberFilterOption.dart';
 
 ///This class defines a wrapper for application settings.
@@ -6,7 +5,7 @@ class Settings {
   Settings({
     this.scanDuration = 20,
     this.memberListFilter = MemberFilterOption.ALL,
-  }): assert(scanDuration > 0);
+  }) : assert(scanDuration > 0);
 
   ///The duration of a device scan, in seconds.
   ///Defaults to 20 seconds
@@ -23,21 +22,22 @@ class Settings {
   final MemberFilterOption memberListFilter;
 
   ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
+  Map<String, dynamic> toMap() {
     return {
-      "scanDuration": scanDuration,
-      "memberListFilter": memberListFilter.index,
+      'scanDuration': scanDuration,
+      'memberListFilter': memberListFilter.index,
       // We don't write hasRideCalendar, as this is fetched at runtime.
     };
   }
 
-  static Settings of(Map<String,dynamic> values){
-    int? memberListFilter = values["memberListFilter"];
+  static Settings of(Map<String, dynamic> values) {
+    int? memberListFilter = values['memberListFilter'];
 
     return Settings(
-      scanDuration: values["scanDuration"] ?? 20,
-      memberListFilter: memberListFilter == null ? MemberFilterOption.ALL:
-        MemberFilterOption.values[memberListFilter],
+      scanDuration: values['scanDuration'] ?? 20,
+      memberListFilter: memberListFilter == null
+          ? MemberFilterOption.ALL
+          : MemberFilterOption.values[memberListFilter],
     );
   }
 }

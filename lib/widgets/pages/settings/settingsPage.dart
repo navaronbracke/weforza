@@ -1,10 +1,9 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/settingsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings.dart';
 import 'package:weforza/injection/injectionContainer.dart';
+import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
@@ -16,6 +15,8 @@ import 'package:weforza/widgets/pages/settings/settingsSubmit.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({Key? key}) : super(key: key);
+
   @override
   _SettingsPageState createState() => _SettingsPageState(
         SettingsBloc(
@@ -40,11 +41,14 @@ class _SettingsPageState extends State<SettingsPage> {
       //
       // We put an artificial delay here to decrease the feeling of popping in.
       // See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
-      future: Future.delayed(Duration(seconds: 1), () => bloc.loadSettings()),
+      future: Future.delayed(
+        const Duration(seconds: 1),
+        () => bloc.loadSettings(),
+      ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError || snapshot.data == null) {
-            return SettingsPageGenericError();
+            return const SettingsPageGenericError();
           } else {
             return PlatformAwareWidget(
               android: () => _buildAndroidWidget(context, snapshot.data!),
@@ -132,7 +136,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             ios: () => Text(
               S.of(context).AppVersionNumber(settings.appVersion),
-              style: ApplicationTheme.appVersionTextStyle.copyWith(fontSize: 14),
+              style:
+                  ApplicationTheme.appVersionTextStyle.copyWith(fontSize: 14),
             ),
           ),
         ],

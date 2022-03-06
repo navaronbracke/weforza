@@ -6,9 +6,11 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 /// This widget represents a 'something went wrong'-like generic error widget.
 class GenericError extends StatelessWidget {
   GenericError({
+    Key? key,
     required this.text,
     this.iconBuilder,
-  }): assert(text.isNotEmpty);
+  })  : assert(text.isNotEmpty),
+        super(key: key);
 
   final String text;
   final Widget Function(BuildContext context)? iconBuilder;
@@ -16,10 +18,10 @@ class GenericError extends StatelessWidget {
   /// Build a Widget that serves as the icon.
   /// Returns the result of [iconBuilder]
   /// or a default warning icon.
-  Widget _buildIcon(BuildContext context){
+  Widget _buildIcon(BuildContext context) {
     final _builder = iconBuilder;
 
-    if(_builder != null) return _builder(context);
+    if (_builder != null) return _builder(context);
 
     return PlatformAwareWidget(
       android: () => Icon(
@@ -36,7 +38,7 @@ class GenericError extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

@@ -5,6 +5,8 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ManualSelectionListEmpty extends StatelessWidget {
+  const ManualSelectionListEmpty({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +25,8 @@ class ManualSelectionListEmpty extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 20, left: 16, right: 16),
+          padding:
+              const EdgeInsets.only(top: 5, bottom: 20, left: 16, right: 16),
           child: Text(
             S.of(context).RideAttendeeScanningManualSelectionEmptyList,
             textAlign: TextAlign.center,
@@ -37,7 +40,7 @@ class ManualSelectionListEmpty extends StatelessWidget {
           ios: () => CupertinoButton.filled(
             child: Text(
               S.of(context).GoBack,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),

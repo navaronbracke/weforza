@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
@@ -12,13 +11,15 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   ProfileImagePicker({
+    Key? key,
     required this.errorMessage,
     required this.size,
     required this.fileHandler,
     required this.onClearSelectedImage,
     required this.setSelectedImage,
     required this.initialImage,
-  }): assert(size > 0 && errorMessage.isNotEmpty && errorMessage.isNotEmpty);
+  })  : assert(size > 0 && errorMessage.isNotEmpty && errorMessage.isNotEmpty),
+        super(key: key);
 
   final double size;
   final String errorMessage;
@@ -32,62 +33,70 @@ class ProfileImagePicker extends StatefulWidget {
 }
 
 class _ProfileImagePickerState extends State<ProfileImagePicker> {
-  StreamController<_SelectProfileImageState> _imageController = BehaviorSubject();
+  final _imageController = BehaviorSubject<_SelectProfileImageState>();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<_SelectProfileImageState>(
       stream: _imageController.stream,
       initialData: _SelectProfileImageState(
-          image: widget.initialImage,
-          isSelecting: false
+        image: widget.initialImage,
+        isSelecting: false,
       ),
-      builder: (context,snapshot){
-        if(snapshot.hasError){
-          return Center(child: Text(widget.errorMessage,softWrap: true));
-        }else{
-          return snapshot.data!.isSelecting ? SizedBox(
-            width: widget.size,
-            height: widget.size,
-            child: Center(
-              child: PlatformAwareLoadingIndicator(),
-            ),
-          ): GestureDetector(
-            child: PlatformAwareWidget(
-              android: () => AsyncProfileImage(
-                future: snapshot.data!.image,
-                icon: Icons.camera_alt,
-                size: widget.size,
-              ),
-              ios: () => AsyncProfileImage(
-                future: snapshot.data!.image,
-                icon: CupertinoIcons.camera_fill,
-                size: widget.size,
-              ),
-            ),
-            onTap: pickProfileImage,
-            onLongPress: clearSelectedImage,
-          );
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text(widget.errorMessage, softWrap: true));
+        } else {
+          return snapshot.data!.isSelecting
+              ? SizedBox(
+                  width: widget.size,
+                  height: widget.size,
+                  child: const Center(
+                    child: PlatformAwareLoadingIndicator(),
+                  ),
+                )
+              : GestureDetector(
+                  child: PlatformAwareWidget(
+                    android: () => AsyncProfileImage(
+                      future: snapshot.data!.image,
+                      icon: Icons.camera_alt,
+                      size: widget.size,
+                    ),
+                    ios: () => AsyncProfileImage(
+                      future: snapshot.data!.image,
+                      icon: CupertinoIcons.camera_fill,
+                      size: widget.size,
+                    ),
+                  ),
+                  onTap: pickProfileImage,
+                  onLongPress: clearSelectedImage,
+                );
         }
       },
     );
   }
 
   void pickProfileImage() async {
-    _imageController.add(_SelectProfileImageState(image: Future.value(null), isSelecting: true));
-    await widget.fileHandler.chooseProfileImageFromGallery().then((File? image){
+    _imageController.add(
+        _SelectProfileImageState(image: Future.value(null), isSelecting: true));
+    await widget.fileHandler
+        .chooseProfileImageFromGallery()
+        .then((File? image) {
       final future = Future.value(image);
       widget.setSelectedImage(future);
-      _imageController.add(_SelectProfileImageState(image: future, isSelecting: false));
-    }).catchError((e){
+      _imageController
+          .add(_SelectProfileImageState(image: future, isSelecting: false));
+    }).catchError((e) {
       _imageController.addError(e);
     });
   }
 
   void clearSelectedImage() {
-    _imageController.add(_SelectProfileImageState(image: Future.value(null), isSelecting: true));
+    _imageController.add(
+        _SelectProfileImageState(image: Future.value(null), isSelecting: true));
     widget.onClearSelectedImage();
-    _imageController.add(_SelectProfileImageState(image: Future.value(null), isSelecting: false));
+    _imageController.add(_SelectProfileImageState(
+        image: Future.value(null), isSelecting: false));
   }
 
   @override
@@ -99,13 +108,11 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
 /// This wrapper is used by [ProfileImagePicker] for wrapping the selection state.
 class _SelectProfileImageState {
-  _SelectProfileImageState({
-    required this.image,
-    required this.isSelecting
-  });
+  _SelectProfileImageState({required this.image, required this.isSelecting});
 
   /// Whether the user is still busy selecting an image.
   final bool isSelecting;
+
   /// The Future that resolves to the selected File.
   /// The File from this Future can be null.
   final Future<File?> image;

@@ -7,21 +7,26 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ManualSelectionSubmit extends StatefulWidget {
   const ManualSelectionSubmit({
+    Key? key,
     required this.attendeeCount,
     required this.initialAttendeeCount,
     required this.save,
     required this.showScanned,
     required this.onShowScannedChanged,
-  });
+  }) : super(key: key);
 
   /// A function that returns the Future that handles saving the results.
   final Future<void> Function() save;
+
   /// A Stream of the current attendee count.
   final Stream<int> attendeeCount;
+
   /// The initial data for [attendeeCount].
   final int initialAttendeeCount;
+
   /// The Stream for the showScanned switch.
   final Stream<bool> showScanned;
+
   /// A function that handles the changes of the showScanned switch.
   final void Function(bool newValue) onShowScannedChanged;
 
@@ -32,13 +37,13 @@ class ManualSelectionSubmit extends StatefulWidget {
 class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
   Future<void>? saveFuture;
 
-  void onSave(){
+  void onSave() {
     // Get the Future before we call setState.
     saveFuture = widget.save();
     setState(() {});
   }
 
-  Widget _buildAndroidLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context) {
     final translator = S.of(context);
 
     return BottomAppBar(
@@ -55,13 +60,14 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                   height: 36,
                   child: FutureBuilder<void>(
                     future: saveFuture,
-                    builder: (_, snapshot){
-                      if(snapshot.connectionState == ConnectionState.none){
+                    builder: (_, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.none) {
                         return Center(
                           child: ElevatedButtonTheme(
                             data: ElevatedButtonThemeData(
                               style: ElevatedButton.styleFrom(
-                                primary: ApplicationTheme.androidManualSelectionSaveButtonPrimaryColor,
+                                primary: ApplicationTheme
+                                    .androidManualSelectionSaveButtonPrimaryColor,
                                 onPrimary: Colors.white,
                               ),
                             ),
@@ -71,7 +77,9 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                             ),
                           ),
                         );
-                      }else if(snapshot.connectionState == ConnectionState.done && snapshot.hasError){
+                      } else if (snapshot.connectionState ==
+                              ConnectionState.done &&
+                          snapshot.hasError) {
                         return Center(
                           child: SizedBox(
                             height: 30,
@@ -88,7 +96,7 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                       // and when the computation is done.
                       // We navigate away when complete,
                       // the loading indicator makes this look smoother.
-                      return Center(
+                      return const Center(
                         child: SizedBox(
                           height: 30,
                           width: 30,
@@ -112,29 +120,33 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                 StreamBuilder<int>(
                   stream: widget.attendeeCount,
                   initialData: widget.initialAttendeeCount,
-                  builder: (_, snapshot){
+                  builder: (_, snapshot) {
                     final count = snapshot.data;
 
-                    if(snapshot.hasError || count == null){
-                      return Text("-", style: TextStyle(color: Colors.white));
+                    if (snapshot.hasError || count == null) {
+                      return const Text('-',
+                          style: TextStyle(color: Colors.white));
                     }
 
-                    if(count > 999){
-                      return Text("999+", style: TextStyle(color: Colors.white));
+                    if (count > 999) {
+                      return const Text('999+',
+                          style: TextStyle(color: Colors.white));
                     }
 
-                    return Text("$count", style: TextStyle(color: Colors.white));
+                    return Text('$count',
+                        style: const TextStyle(color: Colors.white));
                   },
                 ),
                 Expanded(
                   // FR: 'Coureurs scannés'
                   // DE: 'Gescannte fahrer'
                   child: Text(
-                    translator.RideAttendeeScanningManualSelectionShowScannedRidersLabel,
+                    translator
+                        .RideAttendeeScanningManualSelectionShowScannedRidersLabel,
                     maxLines: 2,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.right,
                   ),
                 ),
@@ -142,12 +154,13 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                   stream: widget.showScanned,
                   // Initially we show everything.
                   initialData: true,
-                  builder: (_, snapshot){
+                  builder: (_, snapshot) {
                     return Switch(
                       value: snapshot.data!,
                       onChanged: widget.onShowScannedChanged,
                       activeColor: Colors.white,
-                      activeTrackColor: ApplicationTheme.androidManualSelectionSwitchActiveTrackColor,
+                      activeTrackColor: ApplicationTheme
+                          .androidManualSelectionSwitchActiveTrackColor,
                     );
                   },
                 ),
@@ -159,7 +172,7 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
     );
   }
 
-  Widget _buildIosLayout(BuildContext context){
+  Widget _buildIosLayout(BuildContext context) {
     final translator = S.of(context);
 
     return CupertinoBottomBar(
@@ -177,20 +190,24 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                     height: 44,
                     child: FutureBuilder<void>(
                       future: saveFuture,
-                      builder: (_, snapshot){
-                        if(snapshot.connectionState == ConnectionState.none){
+                      builder: (_, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none) {
                           return Center(
                             child: CupertinoButton.filled(
                               child: Text(
                                 translator.Save,
-                                style: TextStyle(fontSize: 16, color: Colors.white),
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.white),
                               ),
                               onPressed: onSave,
-                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
                             ),
                           );
-                        }else if(snapshot.connectionState == ConnectionState.done && snapshot.hasError){
-                          return Center(
+                        } else if (snapshot.connectionState ==
+                                ConnectionState.done &&
+                            snapshot.hasError) {
+                          return const Center(
                             child: Icon(
                               CupertinoIcons.exclamationmark_triangle_fill,
                               color: Colors.orange,
@@ -202,7 +219,9 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                         // and when the computation is done.
                         // We navigate away when complete,
                         // the loading indicator makes this look smoother.
-                        return Center(child: CupertinoActivityIndicator());
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
                       },
                     ),
                   ),
@@ -211,8 +230,8 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
             ),
             Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 4),
+                const Padding(
+                  padding: EdgeInsets.only(right: 4),
                   child: Icon(
                     CupertinoIcons.person_2_fill,
                     color: CupertinoColors.label,
@@ -221,12 +240,12 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                 StreamBuilder<int>(
                   stream: widget.attendeeCount,
                   initialData: widget.initialAttendeeCount,
-                  builder: (_, snapshot){
+                  builder: (_, snapshot) {
                     final count = snapshot.data;
 
-                    if(snapshot.hasError || count == null){
-                      return Text(
-                        "-",
+                    if (snapshot.hasError || count == null) {
+                      return const Text(
+                        '-',
                         style: TextStyle(
                           color: CupertinoColors.label,
                           fontSize: 15,
@@ -234,9 +253,9 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                       );
                     }
 
-                    if(count > 999){
-                      return Text(
-                        "999+",
+                    if (count > 999) {
+                      return const Text(
+                        '999+',
                         style: TextStyle(
                           color: CupertinoColors.label,
                           fontSize: 15,
@@ -245,8 +264,8 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                     }
 
                     return Text(
-                      "$count",
-                      style: TextStyle(
+                      '$count',
+                      style: const TextStyle(
                         color: CupertinoColors.label,
                         fontSize: 15,
                       ),
@@ -255,11 +274,12 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                 ),
                 Expanded(
                   child: Text(
-                    translator.RideAttendeeScanningManualSelectionShowScannedRidersLabel,
+                    translator
+                        .RideAttendeeScanningManualSelectionShowScannedRidersLabel,
                     maxLines: 2,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: CupertinoColors.label,
                       fontSize: 15,
                     ),
@@ -270,7 +290,7 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                   stream: widget.showScanned,
                   // Initially we show everything.
                   initialData: true,
-                  builder: (_, snapshot){
+                  builder: (_, snapshot) {
                     return CupertinoSwitch(
                       value: snapshot.data!,
                       onChanged: widget.onShowScannedChanged,

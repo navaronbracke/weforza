@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/resetRideCalendarBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
@@ -12,55 +12,55 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This dialog handles the UI for the reset ride calendar confirmation.
 class ResetRideCalendarDialog extends StatefulWidget {
+  const ResetRideCalendarDialog({Key? key}) : super(key: key);
 
   @override
   _ResetRideCalendarDialogState createState() => _ResetRideCalendarDialogState(
-    bloc: ResetRideCalendarBloc(
-      repository: InjectionContainer.get<RideRepository>(),
-    ),
-  );
+        bloc: ResetRideCalendarBloc(
+          repository: InjectionContainer.get<RideRepository>(),
+        ),
+      );
 }
 
 class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
-  _ResetRideCalendarDialogState({
-    required this.bloc
-  });
+  _ResetRideCalendarDialogState({required this.bloc});
 
   final ResetRideCalendarBloc bloc;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final translator = S.of(context);
 
     return FutureBuilder<void>(
       future: bloc.deleteCalendarFuture,
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.none){
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.none) {
           return PlatformAwareWidget(
             android: () => _buildAndroidConfirmDialog(context, translator),
             ios: () => _buildIosConfirmDialog(context, translator),
           );
-        }else if(snapshot.connectionState == ConnectionState.done && snapshot.hasError){
+        } else if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasError) {
           return PlatformAwareWidget(
             android: () => _buildAndroidErrorDialog(context, translator),
             ios: () => _buildIosErrorDialog(context, translator),
           );
-        }else{
+        } else {
           return PlatformAwareWidget(
             android: () => _buildAndroidLoadingDialog(context, translator),
-            ios: () => CupertinoLoadingDialog(),
+            ios: () => const CupertinoLoadingDialog(),
           );
         }
       },
     );
   }
 
-  Widget _buildAndroidConfirmDialog(BuildContext context, S translator){
+  Widget _buildAndroidConfirmDialog(BuildContext context, S translator) {
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, 20),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
             translator.SettingsResetRideCalendarDialogTitle,
             style: Theme.of(context).textTheme.headline6,
@@ -99,12 +99,12 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
     return _buildAndroidDialog(content);
   }
 
-  Widget _buildAndroidErrorDialog(BuildContext context, S translator){
+  Widget _buildAndroidErrorDialog(BuildContext context, S translator) {
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, 20),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
             translator.SettingsResetRideCalendarDialogTitle,
             style: Theme.of(context).textTheme.headline6,
@@ -115,8 +115,8 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5),
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
@@ -146,18 +146,18 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
     return _buildAndroidDialog(content);
   }
 
-  Widget _buildAndroidLoadingDialog(BuildContext context, S translator){
+  Widget _buildAndroidLoadingDialog(BuildContext context, S translator) {
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
           child: Text(
             translator.SettingsResetRideCalendarDialogTitle,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Center(child: PlatformAwareLoadingIndicator()),
         ),
       ],
@@ -166,7 +166,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
     return _buildAndroidDialog(content);
   }
 
-  Widget _buildAndroidDialog(Widget content){
+  Widget _buildAndroidDialog(Widget content) {
     return Dialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -185,7 +185,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
     );
   }
 
-  Widget _buildIosConfirmDialog(BuildContext context, S translator){
+  Widget _buildIosConfirmDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
       title: Text(translator.SettingsResetRideCalendarDialogTitle),
       content: Text(translator.SettingsResetRideCalendarDialogDescription),
@@ -203,15 +203,15 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
     );
   }
 
-  Widget _buildIosErrorDialog(BuildContext context, S translator){
+  Widget _buildIosErrorDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
       title: Text(translator.SettingsResetRideCalendarDialogTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
             child: Icon(
               CupertinoIcons.exclamationmark_circle,
               color: CupertinoColors.destructiveRed,

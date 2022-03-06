@@ -10,7 +10,8 @@ class AnimatedPathPainter extends CustomPainter {
     required this.strokeJoin,
     required this.strokeCap,
     required this.createPath,
-  }): assert(strokeWidth > 0.0), super(repaint: animation);
+  })  : assert(strokeWidth > 0.0),
+        super(repaint: animation);
 
   final Path Function(Size size) createPath;
   final Animation<double> animation;
@@ -34,10 +35,12 @@ class AnimatedPathPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(AnimatedPathPainter old){
-    return animation.value != old.animation.value || color != old.color ||
-        strokeWidth != old.strokeWidth ||
-        strokeCap != old.strokeCap || strokeJoin != old.strokeJoin;
+  bool shouldRepaint(AnimatedPathPainter oldDelegate) {
+    return animation.value != oldDelegate.animation.value ||
+        color != oldDelegate.color ||
+        strokeWidth != oldDelegate.strokeWidth ||
+        strokeCap != oldDelegate.strokeCap ||
+        strokeJoin != oldDelegate.strokeJoin;
   }
 
   Path _extractPathUntilLength(Path originalPath, double length) {
@@ -50,7 +53,8 @@ class AnimatedPathPainter extends CustomPainter {
       final nextLength = currentLength + metric.length;
 
       if (nextLength > length) {
-        path.addPath(metric.extractPath(0.0, length - currentLength), Offset.zero);
+        path.addPath(
+            metric.extractPath(0.0, length - currentLength), Offset.zero);
         break;
       } else {
         // There might be a more efficient way of extracting an entire path
@@ -68,6 +72,7 @@ class AnimatedPathPainter extends CustomPainter {
         .computeMetrics()
         .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
 
-    return _extractPathUntilLength(originalPath, totalLength * animationPercent);
+    return _extractPathUntilLength(
+        originalPath, totalLength * animationPercent);
   }
 }

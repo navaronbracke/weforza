@@ -15,23 +15,23 @@ class BluetoothDisabledWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      Icon(
-        Icons.bluetooth_disabled,
-        color: ApplicationTheme.listInformationalIconColor,
-        size: MediaQuery.of(context).size.shortestSide * .1,
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
-        child: Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
-      ),
-      PlatformAwareWidget(
-        android: () => _buildAndroidButtons(context),
-        ios: () => _buildIosButtons(context),
-      )
-    ],
-  );
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.bluetooth_disabled,
+            color: ApplicationTheme.listInformationalIconColor,
+            size: MediaQuery.of(context).size.shortestSide * .1,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 20),
+            child: Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
+          ),
+          PlatformAwareWidget(
+            android: () => _buildAndroidButtons(context),
+            ios: () => _buildIosButtons(context),
+          )
+        ],
+      );
 
   Widget _buildAndroidButtons(BuildContext context) {
     return Wrap(
@@ -62,14 +62,14 @@ class BluetoothDisabledWidget extends StatelessWidget {
         CupertinoButton.filled(
           child: Text(
             S.of(context).RideAttendeeScanningGoToSettings,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
         ),
         CupertinoButton(
           child: Text(
             S.of(context).RideAttendeeScanningRetryScan,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+            style: const TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: onRetryScan,
         ),

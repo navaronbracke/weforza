@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/model/addRidesOrError.dart';
+import 'package:weforza/model/add_rides_or_error.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 

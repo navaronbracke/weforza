@@ -10,12 +10,13 @@ import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberListItem extends StatelessWidget {
-  MemberListItem({
+  const MemberListItem({
+    Key? key,
     required this.member,
     required this.memberAttendingCount,
     required this.memberProfileImage,
-    required this.onTap
-  });
+    required this.onTap,
+  }) : super(key: key);
 
   final Member member;
   final Future<int> memberAttendingCount;
@@ -27,7 +28,7 @@ class MemberListItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -49,8 +50,10 @@ class MemberListItem extends StatelessWidget {
               ),
               Expanded(
                 child: MemberNameAndAlias(
-                  firstNameStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
-                  lastNameStyle: ApplicationTheme.memberListItemLastNameTextStyle,
+                  firstNameStyle:
+                      ApplicationTheme.memberListItemFirstNameTextStyle,
+                  lastNameStyle:
+                      ApplicationTheme.memberListItemLastNameTextStyle,
                   firstName: member.firstname,
                   lastName: member.lastname,
                   alias: member.alias,

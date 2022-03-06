@@ -5,11 +5,12 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class EditDeviceSubmit extends StatelessWidget {
-  EditDeviceSubmit({
+  const EditDeviceSubmit({
+    Key? key,
     required this.isSubmittingStream,
     required this.submitErrorStream,
     required this.onSubmit,
-  });
+  }) : super(key: key);
 
   final Stream<String> submitErrorStream;
   final Stream<bool> isSubmittingStream;
@@ -23,7 +24,7 @@ class EditDeviceSubmit extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Center(
             child: StreamBuilder<String>(
-              initialData: "",
+              initialData: '',
               stream: submitErrorStream,
               builder: (context, snapshot) {
                 return snapshot.hasError

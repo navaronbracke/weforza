@@ -105,16 +105,16 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildBody() {
     return StreamBuilder<ScanProcessStep>(
-      initialData: ScanProcessStep.INIT,
+      initialData: ScanProcessStep.init,
       stream: bloc.scanStepStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Center(child: GenericScanErrorWidget());
         } else {
           switch (snapshot.data) {
-            case ScanProcessStep.INIT:
+            case ScanProcessStep.init:
               return const Center(child: PreparingScanWidget());
-            case ScanProcessStep.BLUETOOTH_DISABLED:
+            case ScanProcessStep.bluetoothDisabled:
               return Center(
                 child: BluetoothDisabledWidget(
                   onGoToSettings: () async =>
@@ -123,7 +123,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                       bloc.scanFuture = bloc.startDeviceScan(_onDeviceFound),
                 ),
               );
-            case ScanProcessStep.SCAN:
+            case ScanProcessStep.scan:
               return WillPopScope(
                 onWillPop: () => bloc.stopScan(),
                 child: Column(
@@ -155,7 +155,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   ],
                 ),
               );
-            case ScanProcessStep.MANUAL:
+            case ScanProcessStep.manual:
               return RideAttendeeManualSelection(
                 isMemberScanned: bloc.isMemberScanned,
                 activeMembersFuture: bloc.loadActiveMembers(),
@@ -166,11 +166,11 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 onShowScannedChanged: bloc.onShowScannedChanged,
                 onQueryChanged: bloc.onQueryChanged,
               );
-            case ScanProcessStep.STOPPING_SCAN:
+            case ScanProcessStep.stoppingScan:
               return const Center(child: PlatformAwareLoadingIndicator());
-            case ScanProcessStep.PERMISSION_DENIED:
+            case ScanProcessStep.permissionDenied:
               return const Center(child: ScanPermissionDenied());
-            case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS:
+            case ScanProcessStep.resolveMultipleOwners:
               return Center(
                 child: UnresolvedOwnersList(
                   future: bloc.filterAndSortMultipleOwnersList(),

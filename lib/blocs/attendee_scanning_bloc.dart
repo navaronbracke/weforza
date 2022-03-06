@@ -48,7 +48,7 @@ class AttendeeScanningBloc extends Bloc {
   void onShowScannedChanged(bool newShowScanned) => _showScannedController.add;
 
   /// This controller maintains the general UI state as divided in steps by [ScanProcessStep].
-  final _scanStepController = BehaviorSubject.seeded(ScanProcessStep.INIT);
+  final _scanStepController = BehaviorSubject.seeded(ScanProcessStep.init);
 
   Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
   Stream<bool> get scanning => _scanningController.stream;
@@ -56,10 +56,10 @@ class AttendeeScanningBloc extends Bloc {
   Stream<bool> get showScanned => _showScannedController.stream;
   Stream<String> get searchQuery => _queryController.stream;
 
-  /// Every step before [ScanProcessStep.MANUAL]
+  /// Every step before [ScanProcessStep.manual]
   /// should highlight the first step label.
   Stream<bool> get isScanStep => scanStepStream
-      .map((currentStep) => currentStep != ScanProcessStep.MANUAL);
+      .map((currentStep) => currentStep != ScanProcessStep.manual);
   Stream<int> get attendeeCount => _attendeeCountController.stream;
 
   ///The repositories connect the bloc with the database.
@@ -125,7 +125,7 @@ class AttendeeScanningBloc extends Bloc {
       if (enabled) {
         scanner.requestScanPermission(
           onDenied: () =>
-              _scanStepController.add(ScanProcessStep.PERMISSION_DENIED),
+              _scanStepController.add(ScanProcessStep.permissionDenied),
           onGranted: () async {
             await Future.wait([
               _loadSettings(),
@@ -138,7 +138,7 @@ class AttendeeScanningBloc extends Bloc {
           },
         );
       } else {
-        _scanStepController.add(ScanProcessStep.BLUETOOTH_DISABLED);
+        _scanStepController.add(ScanProcessStep.bluetoothDisabled);
       }
     }, onError: _scanStepController.addError);
   }
@@ -148,7 +148,7 @@ class AttendeeScanningBloc extends Bloc {
     //Start scan if not scanning
     if (!_scanningController.value) {
       _scanningController.add(true);
-      _scanStepController.add(ScanProcessStep.SCAN);
+      _scanStepController.add(ScanProcessStep.scan);
 
       scanner
           .scanForDevices(scanDuration)
@@ -184,7 +184,7 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   Future<List<Member>> loadActiveMembers() {
-    return memberRepo.getMembers(MemberFilterOption.ACTIVE);
+    return memberRepo.getMembers(MemberFilterOption.active);
   }
 
   // Load the active members & all devices in parallel.
@@ -217,7 +217,7 @@ class AttendeeScanningBloc extends Bloc {
   /// Load the active members.
   Future<void> _loadMembers() async {
     final List<Member> list =
-        await memberRepo.getMembers(MemberFilterOption.ACTIVE);
+        await memberRepo.getMembers(MemberFilterOption.active);
 
     for (final member in list) {
       _members[member.uuid] = member;
@@ -309,7 +309,7 @@ class AttendeeScanningBloc extends Bloc {
   ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
-    _scanStepController.add(ScanProcessStep.STOPPING_SCAN);
+    _scanStepController.add(ScanProcessStep.stoppingScan);
     final scanInProgress = _scanningController.value;
     if (!scanInProgress) return true;
 
@@ -379,13 +379,13 @@ class AttendeeScanningBloc extends Bloc {
       continueToManualSelection();
     } else {
       // Resolving the multiple owners is still part of the 'Scan' step.
-      _scanStepController.add(ScanProcessStep.RESOLVE_MULTIPLE_OWNERS);
+      _scanStepController.add(ScanProcessStep.resolveMultipleOwners);
     }
   }
 
   /// Go to the manual selection screen.
   void continueToManualSelection() => _scanStepController.add(
-        ScanProcessStep.MANUAL,
+        ScanProcessStep.manual,
       );
 
   bool isItemSelected(RideAttendeeScanResult item) =>

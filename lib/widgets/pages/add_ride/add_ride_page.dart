@@ -6,7 +6,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_color_legend.dart';
-import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
+import 'package:weforza/widgets/pages/add_ride/add_ride_submit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

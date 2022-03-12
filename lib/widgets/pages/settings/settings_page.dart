@@ -6,12 +6,12 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
-import 'package:weforza/widgets/pages/settings/memberListFilter.dart';
-import 'package:weforza/widgets/pages/settings/resetRideCalendarButton.dart';
-import 'package:weforza/widgets/pages/settings/scanDurationOption.dart';
-import 'package:weforza/widgets/pages/settings/settingsPageGenericError.dart';
-import 'package:weforza/widgets/pages/settings/settingsSubmit.dart';
+import 'package:weforza/widgets/pages/settings/loading_settings.dart';
+import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
+import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
+import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_generic_error.dart';
+import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SettingsPage extends StatefulWidget {

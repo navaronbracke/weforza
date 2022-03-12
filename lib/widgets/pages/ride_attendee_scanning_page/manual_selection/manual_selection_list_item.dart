@@ -91,6 +91,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (mounted) {
           // If the search bar still has focus, unfocus it first.
@@ -106,7 +107,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           handleTap(context);
         }
       },
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

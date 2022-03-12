@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/widgets/common/device_widget_utils.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListDisabledItem extends StatelessWidget {
   const MemberDevicesListDisabledItem({

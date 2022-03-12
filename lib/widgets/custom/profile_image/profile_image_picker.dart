@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   ProfileImagePicker({

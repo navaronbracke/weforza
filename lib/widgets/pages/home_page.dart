@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/widgets/pages/memberList/member_list_page.dart';
+import 'package:weforza/widgets/pages/member_list/member_list_page.dart';
 import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
 import 'package:weforza/widgets/pages/settings/settingsPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

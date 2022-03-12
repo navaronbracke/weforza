@@ -1,36 +1,50 @@
+import 'package:file/local.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database_factory.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
+import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/pages/home_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
-import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
-import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Setup the database and other dependencies.
-  await InjectionContainer.initProductionInjector();
 
-  runApp(const WeForzaApp());
+  // Setup the database at startup.
+  final database = ApplicationDatabase();
+  await database.openDatabase(
+    ApplicationDatabaseFactory(
+      factory: databaseFactoryIo,
+      fileSystem: const LocalFileSystem(),
+    ),
+  );
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        // Inject the database after it is ready.
+        databaseProvider.overrideWithValue(database),
+      ],
+      child: const WeForzaApp(),
+    ),
+  );
 }
 
 /// This class represents the application.
-class WeForzaApp extends StatefulWidget {
+class WeForzaApp extends ConsumerStatefulWidget {
   const WeForzaApp({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _WeForzaAppState();
+  _WeForzaAppState createState() => _WeForzaAppState();
 }
 
-class _WeForzaAppState extends State<WeForzaApp> {
+class _WeForzaAppState extends ConsumerState<WeForzaApp> {
   static const _appName = 'WeForza';
 
   @override
@@ -41,21 +55,15 @@ class _WeForzaAppState extends State<WeForzaApp> {
       DeviceOrientation.portraitDown,
     ]);
 
-    return SelectedItemProvider(
-      child: ReloadDataProvider(
-        child: RideAttendeeFutureProvider(
-          child: GestureDetector(
-            child: PlatformAwareWidget(
-              android: () => _buildAndroidWidget(),
-              ios: () => _buildIosWidget(),
-            ),
-            onTap: () {
-              // Enable tap to dismiss the keyboard.
-              FocusScope.of(context).unfocus();
-            },
-          ),
-        ),
+    return GestureDetector(
+      child: PlatformAwareWidget(
+        android: () => _buildAndroidWidget(),
+        ios: () => _buildIosWidget(),
       ),
+      onTap: () {
+        // Enable tap to dismiss the keyboard.
+        FocusScope.of(context).unfocus();
+      },
     );
   }
 
@@ -90,8 +98,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
 
   @override
   void dispose() {
-    InjectionContainer.get<ApplicationDatabase>().dispose();
-    InjectionContainer.dispose();
+    ref.read(databaseProvider).dispose();
     super.dispose();
   }
 }

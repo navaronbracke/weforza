@@ -12,7 +12,7 @@ import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_generic_error.dart';
 import 'package:weforza/widgets/pages/settings/settings_submit.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 ///The calendar header displays a label in the center.
 ///This label is the current month + year.

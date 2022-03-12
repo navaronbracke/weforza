@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/settings_bloc.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsSubmit extends StatefulWidget {
   const SettingsSubmit({Key? key, required this.bloc}) : super(key: key);

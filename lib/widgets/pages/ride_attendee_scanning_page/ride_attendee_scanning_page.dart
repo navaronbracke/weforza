@@ -27,8 +27,8 @@ import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_result_li
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/skip_scan_button.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/unresolved_owners_list/unresolved_owners_list.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/unresolved_owners_list/unresolved_owners_list_item.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideAttendeeScanningPage extends StatefulWidget {

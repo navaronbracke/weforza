@@ -1,5 +1,4 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
@@ -33,16 +32,17 @@ abstract class IRideDao {
 
   /// Get the attendees of the ride, converted to [RideAttendeeScanResult]s.
   Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
-      DateTime date);
+    DateTime date,
+  );
 }
 
 class RideDao implements IRideDao {
-  RideDao(this._database, this._memberStore, this._rideStore,
-      this._rideAttendeeStore);
-
-  RideDao.withProvider(ApplicationDatabase provider)
-      : this(provider.getDatabase(), provider.memberStore, provider.rideStore,
-            provider.rideAttendeeStore);
+  RideDao(
+    this._database,
+    this._memberStore,
+    this._rideStore,
+    this._rideAttendeeStore,
+  );
 
   ///A reference to the database.
   final Database _database;

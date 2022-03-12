@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListDisabledItem.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListEmpty.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListHeader.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListItem.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_disabled_item.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_item.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 

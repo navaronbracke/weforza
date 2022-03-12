@@ -11,9 +11,9 @@ import 'package:weforza/widgets/pages/export_rides_page.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_page.dart';
 import 'package:weforza/widgets/pages/ride_list/ride_list_empty.dart';
 import 'package:weforza/widgets/pages/ride_list/ride_list_item.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 

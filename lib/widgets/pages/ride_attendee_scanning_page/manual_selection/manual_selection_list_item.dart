@@ -7,7 +7,7 @@ import 'package:weforza/model/ride_attendee_scan_result.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class is used as the type parameter of [ManualSelectionListItem]'s key.
 class _ManualSelectionListItemKey {

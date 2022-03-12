@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/save_member_or_error.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class AddMemberSubmit extends StatelessWidget {
   const AddMemberSubmit({

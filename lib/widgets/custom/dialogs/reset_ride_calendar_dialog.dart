@@ -5,9 +5,9 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/cupertinoLoadingDialog.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This dialog handles the UI for the reset ride calendar confirmation.

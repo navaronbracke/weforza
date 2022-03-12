@@ -9,8 +9,8 @@ import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/save_member_submit.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
-import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_form_error_formatter.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 

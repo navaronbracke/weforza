@@ -4,7 +4,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionListEmpty.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection/manual_selection_list_empty.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 

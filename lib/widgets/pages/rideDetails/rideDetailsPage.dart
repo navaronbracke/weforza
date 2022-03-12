@@ -10,7 +10,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
-import 'package:weforza/widgets/pages/exportRide/exportRidePage.dart';
+import 'package:weforza/widgets/pages/export_ride_page.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';

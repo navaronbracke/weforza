@@ -95,14 +95,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       onTap: () {
         if (mounted) {
           // If the search bar still has focus, unfocus it first.
-          final FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.focusedChild?.unfocus();
-            // Don't trigger the on tap.
-            // The user has to press the item again to open the dialog.
-            // This way a first tap just dismisses the search.
-            return;
-          }
+          FocusScope.of(context).unfocus();
 
           handleTap(context);
         }
@@ -175,7 +168,6 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
 
   void handleTap(BuildContext context) async {
     // Don't allow selecting the member when locked by saving.
-    // Focus changes are allowed but those have been handled already.
     if (!mounted || !widget.canTap()) {
       return;
     }

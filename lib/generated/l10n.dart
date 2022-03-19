@@ -1081,16 +1081,6 @@ class S {
     );
   }
 
-  /// `Loading Settings`
-  String get SettingsLoading {
-    return Intl.message(
-      'Loading Settings',
-      name: 'SettingsLoading',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Reset Calendar`
   String get SettingsResetRideCalendarButtonLabel {
     return Intl.message(

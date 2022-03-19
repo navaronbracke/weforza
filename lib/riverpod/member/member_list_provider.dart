@@ -38,9 +38,6 @@ class MemberListNotifier extends StateNotifier<Future<List<Member>>?> {
   /// The backing list for the data.
   List<Member> _memberList = [];
 
-  /// The search query that filters the members.
-  String _searchQuery = '';
-
   /// Returns whether [firstName], [lastName] or [alias]
   /// match the given [query].
   bool _matchesQuery({
@@ -60,9 +57,9 @@ class MemberListNotifier extends StateNotifier<Future<List<Member>>?> {
     return false;
   }
 
-  /// Filter the given [list] on the current [_searchQuery].
-  List<Member> _filterOnSearchQuery(List<Member> list) {
-    final effectiveQuery = _searchQuery.trim().toLowerCase();
+  /// Filter the given [list] on the current [searchQuery].
+  List<Member> filterOnSearchQuery(List<Member> list, String searchQuery) {
+    final effectiveQuery = searchQuery.trim().toLowerCase();
 
     if (effectiveQuery.isEmpty) {
       return list;
@@ -80,18 +77,6 @@ class MemberListNotifier extends StateNotifier<Future<List<Member>>?> {
         query: effectiveQuery,
       );
     }).toList();
-  }
-
-  /// Update the search query with the [newQuery]
-  /// and update the list of members.
-  void onSearchQueryChanged(String newQuery) {
-    if (_searchQuery != newQuery) {
-      _searchQuery = newQuery;
-    }
-
-    _memberList = _filterOnSearchQuery(_memberList);
-
-    state = Future.value(_memberList);
   }
 
   /// Get the member list and filter only on the [memberFilter].

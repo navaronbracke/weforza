@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/model/extended_settings.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/member_list_filter_delegate.dart';
+import 'package:weforza/model/save_settings_delegate.dart';
+import 'package:weforza/model/scan_duration_delegate.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
@@ -14,7 +18,11 @@ final settingsProvider =
   );
 });
 
-class SettingsNotifier extends StateNotifier<Settings> {
+class SettingsNotifier extends StateNotifier<Settings>
+    implements
+        SaveSettingsDelegate,
+        ScanDurationDelegate,
+        MemberListFilterDelegate {
   SettingsNotifier({
     required Settings currentSettings,
     required this.settingsRepository,
@@ -22,51 +30,60 @@ class SettingsNotifier extends StateNotifier<Settings> {
         _memberListFilter = currentSettings.memberListFilter,
         super(currentSettings);
 
-  final double maxScanValue = 60;
+  MemberFilterOption _memberListFilter;
 
-  final double minScanValue = 10;
+  @override
+  MemberFilterOption get memberListFilter => _memberListFilter;
 
   /// The repository that loads the settings.
   final SettingsRepository settingsRepository;
 
-  /// The future that keeps track of the save settings computation.
-  Future<void>? saveSettingsFuture;
+  Future<void>? _saveSettingsFuture;
 
-  /// The current scan duration setting.
+  @override
+  Future<void>? get saveSettingsFuture => _saveSettingsFuture;
+
   double _scanDuration;
 
-  /// The current member list filter setting.
-  MemberFilterOption _memberListFilter;
+  @override
+  double get currentScanDuration => _scanDuration.floorToDouble();
 
-  /// Get the current scan duration, as a double.
-  double get scanDuration => _scanDuration.floorToDouble();
+  @override
+  double get maxScanDuration => 60;
 
-  /// Get the current member list filter setting.
-  MemberFilterOption get memberListFilter => _memberListFilter;
+  @override
+  double get minScanDuration => 10;
 
-  /// Update the scan duration to the new [value].
-  void updateScanDuration(double value) {
-    if (_scanDuration != value) {
-      _scanDuration = value;
+  @override
+  void onScanDurationChanged(double newValue) {
+    if (_scanDuration != newValue) {
+      _scanDuration = newValue;
     }
   }
 
-  /// Update the member list filter to the new [value].
-  void updateMemberListFilter(MemberFilterOption value) {
-    if (_memberListFilter != value) {
-      _memberListFilter = value;
+  @override
+  void onMemberListFilterChanged(MemberFilterOption newValue) {
+    if (_memberListFilter != newValue) {
+      _memberListFilter = newValue;
     }
   }
 
+  @override
   void saveSettings() async {
-    // Use an ertificial delay to make it look smoother.
-    saveSettingsFuture = Future.delayed(const Duration(milliseconds: 500), () {
-      return settingsRepository.writeApplicationSettings(
-        Settings(
-          scanDuration: _scanDuration.floor(),
-          memberListFilter: _memberListFilter,
-        ),
+    // Use an artificial delay to make it look smoother.
+    _saveSettingsFuture = Future.delayed(const Duration(milliseconds: 500), () {
+      final newSettings = Settings(
+        scanDuration: _scanDuration.floor(),
+        memberListFilter: _memberListFilter,
       );
+
+      return settingsRepository.writeApplicationSettings(newSettings).then((_) {
+        state = newSettings;
+      });
     });
+  }
+
+  Future<ExtendedSettings> loadExtendedSettings() async {
+    return ExtendedSettings(state, await settingsRepository.hasRides());
   }
 }

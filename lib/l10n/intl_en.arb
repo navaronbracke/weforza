@@ -126,6 +126,7 @@
   "DeleteDeviceDescription": "Are you sure you want to delete this device?",
 
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
+  "SettingsLoading": "Loading Settings",
   "SettingsResetRideCalendarButtonLabel": "Reset Calendar",
   "SettingsResetRideCalendarDescription": "This will remove all rides.\nThe attendances will be reset to zero.",
   "SettingsResetRideCalendarErrorMessage": "Could not reset the ride calendar.",

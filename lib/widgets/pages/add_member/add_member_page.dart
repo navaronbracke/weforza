@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/add_member_bloc.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';

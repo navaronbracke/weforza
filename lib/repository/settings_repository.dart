@@ -13,9 +13,11 @@ class SettingsRepository {
     // Append the app version to the settings.
     final packageInfo = await PackageInfo.fromPlatform();
 
-    settings.appVersion = packageInfo.version;
-
-    return settings;
+    return Settings(
+      appVersion: packageInfo.version,
+      memberListFilter: settings.memberListFilter,
+      scanDuration: settings.scanDuration,
+    );
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {

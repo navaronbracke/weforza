@@ -35,9 +35,6 @@ class MemberListNotifier extends StateNotifier<Future<List<Member>>?> {
   /// The persisted filter for the member list.
   final MemberFilterOption memberFilter;
 
-  /// The backing list for the data.
-  List<Member> _memberList = [];
-
   /// Returns whether [firstName], [lastName] or [alias]
   /// match the given [query].
   bool _matchesQuery({
@@ -81,21 +78,6 @@ class MemberListNotifier extends StateNotifier<Future<List<Member>>?> {
 
   /// Get the member list and filter only on the [memberFilter].
   void getMembers() {
-    state = memberRepository.getMembers(memberFilter).then((members) {
-      _memberList = members;
-
-      return Future.value(_memberList);
-    });
-  }
-
-  /// Update the member at the given [index] in the list with the new [value].
-  void updateMember(Member value, int index) {
-    if (_memberList[index] == value) {
-      return;
-    }
-
-    _memberList[index] = value;
-
-    state = Future.value(_memberList);
+    state = memberRepository.getMembers(memberFilter);
   }
 }

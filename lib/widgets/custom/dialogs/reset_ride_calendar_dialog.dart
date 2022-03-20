@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -23,14 +22,14 @@ class _ResetRideCalendarDialogState
     extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? deleteFuture;
 
-  late final RideRepository repository;
+  late final RideListNotifier rideList;
 
   late final MemberListNotifier memberList;
 
   @override
   void initState() {
     super.initState();
-    repository = ref.read(rideRepositoryProvider);
+    rideList = ref.read(rideListProvider.notifier);
     memberList = ref.read(memberListProvider.notifier);
   }
 
@@ -249,13 +248,12 @@ class _ResetRideCalendarDialogState
   }
 
   void _resetCalendar(BuildContext context) {
-    deleteFuture = repository.deleteRideCalendar().then((_) {
+    deleteFuture = rideList.repository.deleteRideCalendar().then((_) {
       if (!mounted) {
         return;
       }
 
-      // TODO: refresh the ride list as well, this notifier does not exist yet
-      reloadDataProvider.reloadRides.value = true;
+      rideList.getRides();
       memberList.getMembers();
 
       // Pop the dialog with a deletion confirmation.

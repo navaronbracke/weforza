@@ -7,6 +7,8 @@ class SettingsRepository {
 
   final ISettingsDao _dao;
 
+  Future<bool> hasRides() => _dao.hasRides();
+
   Future<Settings> loadApplicationSettings() async {
     final settings = await _dao.readApplicationSettings();
 

@@ -249,6 +249,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "Save": MessageLookupByLibrary.simpleMessage("Opslaan"),
         "SaveChanges": MessageLookupByLibrary.simpleMessage("Opslaan"),
         "Settings": MessageLookupByLibrary.simpleMessage("Instellingen"),
+        "SettingsLoading":
+            MessageLookupByLibrary.simpleMessage("Instellingen Laden"),
         "SettingsResetRideCalendarButtonLabel":
             MessageLookupByLibrary.simpleMessage("Kalender Resetten"),
         "SettingsResetRideCalendarDescription":

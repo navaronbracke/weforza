@@ -20,7 +20,7 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: widget.delegate.future,
+      future: widget.delegate.saveSettingsFuture,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:

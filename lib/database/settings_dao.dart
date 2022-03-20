@@ -3,9 +3,13 @@ import 'package:weforza/model/settings.dart';
 
 ///This class defines a contract for managing application settings.
 abstract class ISettingsDao {
+  /// Returns whether there are rides.
+  Future<bool> hasRides();
+
   /// Read the [Settings] from the database.
   Future<Settings> readApplicationSettings();
 
+  /// Write the given settings to the database.
   Future<void> writeApplicationSettings(Settings newSettings);
 }
 
@@ -26,18 +30,17 @@ class SettingsDao implements ISettingsDao {
   final StoreRef<String, Map<String, dynamic>> _ridesStore;
 
   @override
+  Future<bool> hasRides() async {
+    return _ridesStore.count(_database).then((count) => count > 0);
+  }
+
+  @override
   Future<Settings> readApplicationSettings() async {
     final settingsRecord = await _settingsStore.findFirst(_database);
 
-    final settings =
-        settingsRecord == null ? Settings() : Settings.of(settingsRecord.value);
-
-    // There is a calendar when there is 1+ rides.
-    // Rides can exists without attendants, thus we don't check on that.
-    settings.hasRideCalendar =
-        await _ridesStore.count(_database).then((count) => count > 0);
-
-    return settings;
+    return settingsRecord == null
+        ? Settings()
+        : Settings.of(settingsRecord.value);
   }
 
   @override

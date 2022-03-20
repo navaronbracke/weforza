@@ -34,8 +34,9 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
           child: PlatformAwareWidget(
             android: () => SliderTheme(
               data: SliderTheme.of(context).copyWith(
-                  trackHeight: 5,
-                  thumbColor: ApplicationTheme.settingsScanSliderThumbColor),
+                trackHeight: 5,
+                thumbColor: ApplicationTheme.settingsScanSliderThumbColor,
+              ),
               child: Slider(
                 value: currentValue,
                 onChanged: (value) {

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/reset_ride_calendar_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';

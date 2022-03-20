@@ -2,14 +2,14 @@
 /// in the settings page.
 abstract class ScanDurationDelegate {
   /// Get the minimum allowed value.
-  double get min;
+  double get minScanDuration;
 
   /// Get the maximum allowed value.
-  double get max;
+  double get maxScanDuration;
 
   /// Get the current value.
-  double get value;
+  double get currentScanDuration;
 
   /// Update the value.
-  void onChanged(double newValue);
+  void onScanDurationChanged(double newValue);
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/settings_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/model/settings.dart';
-import 'package:weforza/repository/settings_repository.dart';
-import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/model/extended_settings.dart';
+import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/loading_settings.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
@@ -14,67 +13,68 @@ import 'package:weforza/widgets/pages/settings/settings_page_generic_error.dart'
 import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState(
-        SettingsBloc(
-          InjectionContainer.get<SettingsRepository>(),
-        ),
-      );
+  _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
-  _SettingsPageState(this.bloc);
+class _SettingsPageState extends ConsumerState<SettingsPage> {
+  late final SettingsNotifier settingsNotifier;
 
-  final SettingsBloc bloc;
+  @override
+  void initState() {
+    super.initState();
+    settingsNotifier = ref.read(settingsProvider.notifier);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Settings>(
-      // We have to reload the future on each build.
-      // Sadly enough we don't have any other options.
-      // There is no global store tat could have helped :/
-      // But this widget doesn't call it's setState method.
-      // Thus we don't get any unnecessary build calls for the FutureBuilder.
-      //
-      // We put an artificial delay here to decrease the feeling of popping in.
-      // See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
+    return FutureBuilder<ExtendedSettings>(
+      // Each time this page is visited, the calendar data could be out of sync.
+      // Therefor, fetch the data on each build.
+      // This might seem bad at first,
+      // but this widget does not call its setState method anywhere.
+      // Its children manage their own state
+      // and never ask this widget to rebuild.
       future: Future.delayed(
-        const Duration(seconds: 1),
-        () => bloc.loadSettings(),
+        // Use an artificial delay to make it look smoother.
+        const Duration(milliseconds: 500),
+        () => settingsNotifier.loadExtendedSettings(),
       ),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError || snapshot.data == null) {
-            return const SettingsPageGenericError();
-          } else {
-            return PlatformAwareWidget(
-              android: () => _buildAndroidWidget(context, snapshot.data!),
-              ios: () => _buildIosWidget(context, snapshot.data!),
-            );
-          }
-        } else {
+        if (snapshot.connectionState != ConnectionState.done) {
           return const LoadingSettings();
         }
+
+        final settings = snapshot.data;
+
+        if (snapshot.hasError || settings == null) {
+          return const SettingsPageGenericError();
+        }
+
+        final translator = S.of(context);
+
+        return PlatformAwareWidget(
+          android: () => _buildAndroidWidget(translator, settings),
+          ios: () => _buildIosWidget(translator, settings),
+        );
       },
     );
   }
 
-  Widget _buildAndroidWidget(BuildContext context, Settings settings) {
+  Widget _buildAndroidWidget(S translator, ExtendedSettings extendedSettings) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).Settings),
-        actions: <Widget>[
-          SettingsSubmit(bloc: bloc),
-        ],
+        title: Text(translator.Settings),
+        actions: <Widget>[SettingsSubmit(delegate: settingsNotifier)],
       ),
-      body: _buildBody(context, settings),
+      body: _buildBody(translator, extendedSettings),
     );
   }
 
-  Widget _buildIosWidget(BuildContext context, Settings settings) {
+  Widget _buildIosWidget(S translator, ExtendedSettings extendedSettings) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -82,26 +82,24 @@ class _SettingsPageState extends State<SettingsPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).Settings),
+                child: Text(translator.Settings),
               ),
             ),
             SizedBox(
               width: 40,
               child: Center(
-                child: SettingsSubmit(bloc: bloc),
+                child: SettingsSubmit(delegate: settingsNotifier),
               ),
             ),
           ],
         ),
         transitionBetweenRoutes: false,
       ),
-      child: SafeArea(
-        child: _buildBody(context, settings),
-      ),
+      child: SafeArea(child: _buildBody(translator, extendedSettings)),
     );
   }
 
-  Widget _buildBody(BuildContext context, Settings settings) {
+  Widget _buildBody(S translator, ExtendedSettings extendedSettings) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -111,43 +109,19 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ScanDurationOption(
-                    getValue: () => bloc.scanDuration,
-                    maxScanValue: bloc.maxScanValue,
-                    minScanValue: bloc.minScanValue,
-                    onChanged: bloc.onScanDurationChanged,
-                  ),
+                  ScanDurationOption(delegate: settingsNotifier),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
-                    child: MemberListFilter(
-                      getValue: () => bloc.memberListFilter,
-                      onChanged: bloc.onMemberListFilterChanged,
-                    ),
+                    child: MemberListFilter(delegate: settingsNotifier),
                   ),
                 ],
               ),
             ),
           ),
-          if (settings.hasRideCalendar) const ResetRideCalendarButton(),
-          PlatformAwareWidget(
-            android: () => Text(
-              S.of(context).AppVersionNumber(settings.appVersion),
-              style: ApplicationTheme.appVersionTextStyle,
-            ),
-            ios: () => Text(
-              S.of(context).AppVersionNumber(settings.appVersion),
-              style:
-                  ApplicationTheme.appVersionTextStyle.copyWith(fontSize: 14),
-            ),
-          ),
+          if (extendedSettings.hasRideCalendar) const ResetRideCalendarButton(),
+          AppVersion(version: extendedSettings.generalSettings.appVersion),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
   }
 }

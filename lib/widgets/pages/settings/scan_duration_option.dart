@@ -20,7 +20,7 @@ class ScanDurationOption extends StatefulWidget {
 class _ScanDurationOptionState extends State<ScanDurationOption> {
   @override
   Widget build(BuildContext context) {
-    final currentValue = widget.delegate.value;
+    final currentValue = widget.delegate.currentScanDuration;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,10 +40,10 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
               child: Slider(
                 value: currentValue,
                 onChanged: (value) {
-                  setState(() => widget.delegate.onChanged(value));
+                  setState(() => widget.delegate.onScanDurationChanged(value));
                 },
-                min: widget.delegate.min,
-                max: widget.delegate.max,
+                min: widget.delegate.minScanDuration,
+                max: widget.delegate.maxScanDuration,
                 divisions: 5,
               ),
             ),
@@ -53,10 +53,12 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
                   child: CupertinoSlider(
                     value: currentValue,
                     onChanged: (value) {
-                      setState(() => widget.delegate.onChanged(value));
+                      setState(() {
+                        widget.delegate.onScanDurationChanged(value);
+                      });
                     },
-                    min: widget.delegate.min,
-                    max: widget.delegate.max,
+                    min: widget.delegate.minScanDuration,
+                    max: widget.delegate.maxScanDuration,
                     divisions: 5,
                   ),
                 ),

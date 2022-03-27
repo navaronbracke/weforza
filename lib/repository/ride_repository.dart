@@ -30,7 +30,4 @@ class RideRepository {
   Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
           DateTime date) =>
       _dao.getRideAttendeesAsScanResults(date);
-
-  Future<int> getAmountOfRideAttendees(DateTime rideDate) =>
-      _dao.getAmountOfRideAttendees(rideDate);
 }

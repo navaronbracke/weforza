@@ -27,9 +27,6 @@ abstract class IRideDao {
   /// Get the [Member]s of a given ride.
   Future<List<Member>> getRideAttendees(DateTime date);
 
-  ///Get the amount of attendees for a given ride.
-  Future<int> getAmountOfRideAttendees(DateTime rideDate);
-
   /// Get the attendees of the ride, converted to [RideAttendeeScanResult]s.
   Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
     DateTime date,
@@ -114,15 +111,6 @@ class RideDao implements IRideDao {
     return memberRecords
         .map((record) => Member.of(record.key, record.value))
         .toList();
-  }
-
-  @override
-  Future<int> getAmountOfRideAttendees(DateTime rideDate) async {
-    //fetch the attendees of the ride
-    final attendees = await _rideAttendeeStore.count(_database,
-        filter: Filter.equals('date', rideDate.toIso8601String()));
-
-    return attendees;
   }
 
   @override

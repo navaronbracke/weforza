@@ -69,8 +69,11 @@ class _MemberListPageState extends ConsumerState<MemberListPage> {
           IconButton(
             icon: const Icon(Icons.file_upload),
             color: Colors.white,
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ExportMembersPage())),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ExportMembersPage(),
+              ),
+            ),
           ),
         ],
       ),
@@ -120,8 +123,11 @@ class _MemberListPageState extends ConsumerState<MemberListPage> {
               padding: const EdgeInsets.only(left: 15),
               child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ExportMembersPage())),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ExportMembersPage(),
+                  ),
+                ),
               ),
             ),
           ],

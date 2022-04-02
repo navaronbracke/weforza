@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/selected_member.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
@@ -82,13 +80,12 @@ class _MemberListItemState extends ConsumerState<MemberListItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final deviceRepository = ref.read(deviceRepositoryProvider);
+        final notifier = ref.read(selectedMemberProvider.notifier);
 
-        ref.read(selectedMemberProvider.notifier).state = SelectedMember(
+        notifier.setSelectedMember(
           attendingCount: memberAttendingCount,
-          devices: deviceRepository.getOwnerDevices(widget.member.uuid),
+          member: widget.member,
           profileImage: memberProfileImage,
-          value: widget.member,
         );
 
         Navigator.of(context).push(

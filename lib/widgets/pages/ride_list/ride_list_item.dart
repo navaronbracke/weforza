@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/selected_ride.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
@@ -70,10 +69,9 @@ class _RideListItemState extends ConsumerState<RideListItem> {
         ),
       ),
       onTap: () {
-        ref.read(selectedRideProvider.notifier).state = SelectedRide(
-          rideAttendees,
-          widget.ride,
-        );
+        final notifier = ref.read(selectedRideProvider.notifier);
+
+        notifier.setSelectedRide(attendees: rideAttendees, ride: widget.ride);
 
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const RideDetailsPage()),

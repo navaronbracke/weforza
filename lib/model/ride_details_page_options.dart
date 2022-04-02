@@ -1,0 +1,1 @@
+enum RideDetailsPageOptions { delete, export }

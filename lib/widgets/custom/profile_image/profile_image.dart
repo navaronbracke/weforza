@@ -49,8 +49,10 @@ class ProfileImage extends StatelessWidget {
         return Container(
           height: size,
           width: size,
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor,
+          ),
           child: Center(
             child: Icon(
               icon,
@@ -59,24 +61,24 @@ class ProfileImage extends StatelessWidget {
             ),
           ),
         );
-      } else {
-        return Container(
-          height: size,
-          width: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _getBackgroundColor(personInitials!),
-          ),
-          child: Center(
-            child: Text(
-              personInitials!.toUpperCase(),
-              style: ApplicationTheme.personInitialsTextStyle.copyWith(
-                fontSize: .5 * size,
-              ),
+      }
+
+      return Container(
+        height: size,
+        width: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: _getBackgroundColor(personInitials!),
+        ),
+        child: Center(
+          child: Text(
+            personInitials!.toUpperCase(),
+            style: ApplicationTheme.personInitialsTextStyle.copyWith(
+              fontSize: .5 * size,
             ),
           ),
-        );
-      }
+        ),
+      );
     }
 
     return ClipOval(

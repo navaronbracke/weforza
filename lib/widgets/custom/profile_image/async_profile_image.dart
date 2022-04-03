@@ -14,47 +14,58 @@ class AsyncProfileImage extends StatelessWidget {
     required this.icon,
     required this.future,
     this.size = 40,
-  })  : assert(size > 0),
-        super(key: key);
+  }) : super(key: key);
 
-  final Future<File?> future;
+  final Future<File>? future;
   final String? personInitials;
   final double size;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<File?>(
+    const iconColor = ApplicationTheme.profileImagePlaceholderIconColor;
+    final bgColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor;
+
+    return FutureBuilder<File>(
       future: future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError || snapshot.data == null) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
             return ProfileImage(
               icon: icon,
               image: null,
               size: size,
               personInitials: personInitials,
-              iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
-              backgroundColor:
-                  ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
+              iconColor: iconColor,
+              backgroundColor: bgColor,
             );
-          }
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return ProfileImage(
+                icon: icon,
+                image: null,
+                size: size,
+                personInitials: personInitials,
+                iconColor: iconColor,
+                backgroundColor: bgColor,
+              );
+            }
 
-          return ProfileImage(
-            icon: icon,
-            image: snapshot.data,
-            size: size,
-            personInitials: personInitials,
-            iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
-            backgroundColor:
-                ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
-          );
-        } else {
-          return SizedBox(
-            width: size,
-            height: size,
-            child: const Center(child: PlatformAwareLoadingIndicator()),
-          );
+            return ProfileImage(
+              icon: icon,
+              image: snapshot.data,
+              size: size,
+              personInitials: personInitials,
+              iconColor: iconColor,
+              backgroundColor: bgColor,
+            );
+
+          default:
+            return SizedBox(
+              width: size,
+              height: size,
+              child: const Center(child: PlatformAwareLoadingIndicator()),
+            );
         }
       },
     );

@@ -22,6 +22,8 @@ class Member implements Comparable<Member> {
     unicode: true,
   );
 
+  static const int nameAndAliasMaxLength = 50;
+
   /// The member's GUID.
   final String uuid;
 

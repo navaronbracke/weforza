@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 /// This widget represents a [CupertinoTextField] that has a validation message.
@@ -40,12 +39,10 @@ class CupertinoFormField extends StatelessWidget {
 
   final TextInputAction? textInputAction;
 
-  final String? Function(String value, S translator)? validator;
+  final String? Function(String value)? validator;
 
   @override
   Widget build(BuildContext context) {
-    final translator = S.of(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +62,7 @@ class CupertinoFormField extends StatelessWidget {
               return;
             }
 
-            errorController.add(validator!(value, translator) ?? '');
+            errorController.add(validator!(value) ?? '');
           },
           onSubmitted: onSubmitted,
         ),

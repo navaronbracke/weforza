@@ -13,3 +13,5 @@ class InvalidFileExtensionError extends ArgumentError {
 class JsonFormatIncompatibleException extends ArgumentError {
   JsonFormatIncompatibleException() : super('The given json is incompatible.');
 }
+
+class MemberExistsException implements Exception {}

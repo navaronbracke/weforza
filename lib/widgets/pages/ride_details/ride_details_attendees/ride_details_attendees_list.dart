@@ -86,7 +86,7 @@ class _ScannedAttendeesBottomBar extends StatelessWidget {
         child: Row(
           children: [
             Tooltip(
-              message: translator.RideDetailsTotalAttendeesTooltip,
+              message: translator.Total,
               child: Row(
                 children: [
                   const Icon(Icons.people, color: Colors.white),
@@ -102,7 +102,7 @@ class _ScannedAttendeesBottomBar extends StatelessWidget {
             ),
             const Expanded(child: Center()),
             Tooltip(
-              message: translator.RideDetailsScannedAttendeesTooltip,
+              message: translator.Scanned,
               child: Row(
                 children: [
                   Padding(

@@ -44,14 +44,14 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
                   });
                 }
               },
-              child: Text(translator.SettingsResetRideCalendarButtonLabel),
+              child: Text(translator.ResetCalendar),
             ),
             ios: () => Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: CupertinoButton(
                   color: CupertinoColors.destructiveRed,
                   child: Text(
-                    translator.SettingsResetRideCalendarButtonLabel,
+                    translator.ResetCalendar,
                     style: const TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
@@ -72,13 +72,13 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: PlatformAwareWidget(
               android: () => Text(
-                translator.SettingsResetRideCalendarDescription,
+                translator.ResetCalendarDescription,
                 style: ApplicationTheme
                     .settingsResetRideCalendarDescriptionTextStyle,
                 textAlign: TextAlign.center,
               ),
               ios: () => Text(
-                translator.SettingsResetRideCalendarDescription,
+                translator.ResetCalendarDescription,
                 style: ApplicationTheme
                     .settingsResetRideCalendarDescriptionTextStyle
                     .copyWith(fontSize: 14),

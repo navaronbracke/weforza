@@ -79,7 +79,7 @@ class _ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -87,7 +87,7 @@ class _ResetRideCalendarDialogState
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              translator.SettingsResetRideCalendarDialogDescription,
+              translator.ResetCalendarDialogDescription,
               softWrap: true,
               style: Theme.of(context).textTheme.subtitle1,
             ),
@@ -101,7 +101,7 @@ class _ResetRideCalendarDialogState
             ),
             TextButton(
               child: Text(
-                translator.SettingsResetRideCalendarDialogConfirm.toUpperCase(),
+                translator.Clear.toUpperCase(),
               ),
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
@@ -123,7 +123,7 @@ class _ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -141,7 +141,7 @@ class _ResetRideCalendarDialogState
                   ),
                 ),
                 Text(
-                  translator.SettingsResetRideCalendarErrorMessage,
+                  translator.ResetCalendarError,
                   softWrap: true,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -170,7 +170,7 @@ class _ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -204,12 +204,12 @@ class _ResetRideCalendarDialogState
 
   Widget _buildIosConfirmDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.SettingsResetRideCalendarDialogTitle),
-      content: Text(translator.SettingsResetRideCalendarDialogDescription),
+      title: Text(translator.ResetCalendar),
+      content: Text(translator.ResetCalendarDialogDescription),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
-          child: Text(translator.SettingsResetRideCalendarDialogConfirm),
+          child: Text(translator.Clear),
           onPressed: () => _resetCalendar(context),
         ),
         CupertinoDialogAction(
@@ -222,7 +222,7 @@ class _ResetRideCalendarDialogState
 
   Widget _buildIosErrorDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.SettingsResetRideCalendarDialogTitle),
+      title: Text(translator.ResetCalendar),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -235,7 +235,7 @@ class _ResetRideCalendarDialogState
               size: 25,
             ),
           ),
-          Text(translator.SettingsResetRideCalendarErrorMessage),
+          Text(translator.ResetCalendarError),
         ],
       ),
       actions: [

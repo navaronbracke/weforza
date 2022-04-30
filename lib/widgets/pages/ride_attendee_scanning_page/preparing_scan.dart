@@ -13,7 +13,7 @@ class PreparingScanWidget extends StatelessWidget {
         const PlatformAwareLoadingIndicator(),
         Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: Text(S.of(context).RideAttendeeScanningPreparingScan),
+          child: Text(S.of(context).PreparingScan),
         ),
       ],
     );

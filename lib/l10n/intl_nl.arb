@@ -58,6 +58,7 @@
 	"FileJsonExtension": "json",
 	"Filename": "Bestandsnaam",
 	"FilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
+	"FilenameRequired": "Een bestandsnaam is verplicht",
 	"FilenameWhitespace": "Een bestandsnaam mag niet enkel witruimte zijn",
 	"Filter": "Filter",
 	"FirstName": "Voornaam",

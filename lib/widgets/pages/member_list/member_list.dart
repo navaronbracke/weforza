@@ -55,7 +55,7 @@ class MemberList extends ConsumerWidget {
                   onChanged: onSearchQueryChanged,
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.search),
-                    labelText: translator.RiderSearchFilterInputLabel,
+                    labelText: translator.SearchRiders,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 5),
                     floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -66,7 +66,7 @@ class MemberList extends ConsumerWidget {
                   child: CupertinoSearchTextField(
                     suffixIcon: const Icon(CupertinoIcons.search),
                     onChanged: onSearchQueryChanged,
-                    placeholder: translator.RiderSearchFilterInputLabel,
+                    placeholder: translator.SearchRiders,
                   ),
                 ),
               ),

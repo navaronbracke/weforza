@@ -18,6 +18,8 @@ class AddDeviceSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return Column(
       children: <Widget>[
         Padding(
@@ -27,33 +29,42 @@ class AddDeviceSubmit extends StatelessWidget {
               initialData: '',
               stream: submitErrorStream,
               builder: (context, snapshot) {
-                return snapshot.hasError
-                    ? Text(S.of(context).GenericError)
-                    : Text(snapshot.data!);
+                if (snapshot.hasError) {
+                  return Text(translator.GenericError);
+                }
+
+                return Text(snapshot.data ?? '');
               },
             ),
           ),
         ),
         Center(
-            child: StreamBuilder<bool>(
-          initialData: false,
-          stream: isSubmittingStream,
-          builder: (context, snapshot) => snapshot.data!
-              ? const PlatformAwareLoadingIndicator()
-              : PlatformAwareWidget(
-                  android: () => ElevatedButton(
-                    child: Text(S.of(context).AddDeviceSubmit),
-                    onPressed: onSubmit,
-                  ),
-                  ios: () => CupertinoButton.filled(
-                    child: Text(
-                      S.of(context).AddDeviceSubmit,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    onPressed: onSubmit,
-                  ),
+          child: StreamBuilder<bool>(
+            initialData: false,
+            stream: isSubmittingStream,
+            builder: (context, snapshot) {
+              final value = snapshot.data ?? false;
+
+              if (value) {
+                return const PlatformAwareLoadingIndicator();
+              }
+
+              return PlatformAwareWidget(
+                android: () => ElevatedButton(
+                  child: Text(translator.AddDevice),
+                  onPressed: onSubmit,
                 ),
-        )),
+                ios: () => CupertinoButton.filled(
+                  child: Text(
+                    translator.AddDevice,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  onPressed: onSubmit,
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

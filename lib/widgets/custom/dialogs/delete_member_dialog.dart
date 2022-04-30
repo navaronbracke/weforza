@@ -19,7 +19,7 @@ class _DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      title: translator.MemberDeleteDialogTitle,
+      title: translator.DeleteRider,
       description: translator.MemberDeleteDialogDescription,
       errorDescription: translator.GenericError,
       future: future,

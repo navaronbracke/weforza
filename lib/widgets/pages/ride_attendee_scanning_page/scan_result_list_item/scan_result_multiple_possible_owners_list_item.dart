@@ -17,6 +17,8 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(5),
       child: Column(
@@ -31,30 +33,26 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
                   child: PlatformAwareWidget(
                     android: () => const Icon(
                       Icons.people,
-                      color: ApplicationTheme
-                          .rideAttendeeScanResultMultipleOwnerColor,
+                      color: ApplicationTheme.multipleOwnerColor,
                     ),
                     ios: () => const Icon(
                       CupertinoIcons.person_2_fill,
-                      color: ApplicationTheme
-                          .rideAttendeeScanResultMultipleOwnerColor,
+                      color: ApplicationTheme.multipleOwnerColor,
                     ),
                   ),
                 ),
-                SelectableText(deviceName,
-                    scrollPhysics: const ClampingScrollPhysics()),
+                SelectableText(
+                  deviceName,
+                  scrollPhysics: const ClampingScrollPhysics(),
+                ),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Text(
-              S
-                  .of(context)
-                  .RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(
-                      amountOfPossibleOwners),
-              style: ApplicationTheme
-                  .rideAttendeeScanResultMultipleOwnersLabelStyle,
+              translator.AmountOfRidersWithDeviceName(amountOfPossibleOwners),
+              style: ApplicationTheme.multipleOwnersLabelStyle,
             ),
           ),
         ],

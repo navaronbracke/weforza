@@ -9,6 +9,8 @@ class ManualSelectionListEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -25,21 +27,25 @@ class ManualSelectionListEmpty extends StatelessWidget {
           ),
         ),
         Padding(
-          padding:
-              const EdgeInsets.only(top: 5, bottom: 20, left: 16, right: 16),
+          padding: const EdgeInsets.only(
+            top: 4,
+            bottom: 20,
+            left: 16,
+            right: 16,
+          ),
           child: Text(
-            S.of(context).RideAttendeeScanningManualSelectionEmptyList,
+            translator.ManualSelectionEmpty,
             textAlign: TextAlign.center,
           ),
         ),
         PlatformAwareWidget(
           android: () => ElevatedButton(
-            child: Text(S.of(context).GoBack),
+            child: Text(translator.GoBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
           ios: () => CupertinoButton.filled(
             child: Text(
-              S.of(context).GoBack,
+              translator.GoBack,
               style: const TextStyle(color: Colors.white),
             ),
             onPressed: () => Navigator.of(context).pop(),

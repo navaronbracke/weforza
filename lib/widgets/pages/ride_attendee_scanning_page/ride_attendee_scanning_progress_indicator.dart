@@ -89,16 +89,16 @@ class _RideAttendeeScanningProgressIndicatorAnimatableState
       android: () => LinearProgressIndicator(
         value: progress,
         valueColor: const AlwaysStoppedAnimation<Color>(
-            ApplicationTheme.androidRideAttendeeScanProgressbarColor),
-        backgroundColor:
-            ApplicationTheme.androidRideAttendeeScanProgressbarBackgroundColor,
+          ApplicationTheme.androidScanProgressColor,
+        ),
+        backgroundColor: ApplicationTheme.androidScanProgressBackground,
       ),
       ios: () => LinearProgressIndicator(
         value: progress,
         valueColor: const AlwaysStoppedAnimation<Color>(
-            ApplicationTheme.iosRideAttendeeScanProgressbarColor),
-        backgroundColor:
-            ApplicationTheme.iosRideAttendeeScanProgressbarBackgroundColor,
+          ApplicationTheme.iosScanProgressColor,
+        ),
+        backgroundColor: ApplicationTheme.iosScanProgressBackground,
       ),
     );
   }

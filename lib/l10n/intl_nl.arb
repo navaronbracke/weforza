@@ -130,6 +130,7 @@
 	"TuesdayPrefix": "Di",
 	"Uncheck": "Afvinken",
 	"UncheckRiderDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
+	"UncheckRiderTitle": "Renner afvinken",
 	"UnresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. U kan de aanwezige eigenaars hier selecteren.",
 	"WednesdayPrefix": "Wo"
 }

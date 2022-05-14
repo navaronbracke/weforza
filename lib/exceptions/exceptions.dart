@@ -15,3 +15,5 @@ class JsonFormatIncompatibleException extends ArgumentError {
 }
 
 class MemberExistsException implements Exception {}
+
+class FileExistsException implements Exception {}

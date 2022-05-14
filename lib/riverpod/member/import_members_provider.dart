@@ -69,7 +69,7 @@ class ImportMembersNotifier {
     return Future.error(InvalidFileExtensionError());
   }
 
-  Future<void> importMembers(
+  void importMembers(
     String headerRegex,
     void Function(ImportMembersState) onProgress,
   ) async {

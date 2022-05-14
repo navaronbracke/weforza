@@ -71,27 +71,32 @@ class ImportMembersNotifier {
 
   void importMembers(
     String headerRegex,
-    void Function(ImportMembersState) onProgress,
+    void Function(ImportMembersState progress) onProgress,
+    void Function(Object error) onError,
   ) async {
-    onProgress(ImportMembersState.pickingFile);
+    try {
+      onProgress(ImportMembersState.pickingFile);
 
-    final file = await fileHandler.chooseImportMemberDatasourceFile();
+      final file = await fileHandler.chooseImportMemberDatasourceFile();
 
-    onProgress(ImportMembersState.importing);
+      onProgress(ImportMembersState.importing);
 
-    final members = await _readMemberDataFromFile(file, headerRegex);
+      final members = await _readMemberDataFromFile(file, headerRegex);
 
-    if (members.isEmpty) {
+      if (members.isEmpty) {
+        onProgress(ImportMembersState.done);
+
+        return;
+      }
+
+      const uuidGenerator = Uuid();
+
+      await repository.saveMembersWithDevices(members, uuidGenerator.v4);
+
+      membersList.getMembers(); // Trigger a reload of the members list.
       onProgress(ImportMembersState.done);
-
-      return;
+    } catch (error) {
+      onError(error);
     }
-
-    const uuidGenerator = Uuid();
-
-    await repository.saveMembersWithDevices(members, uuidGenerator.v4);
-
-    membersList.getMembers(); // Trigger a reload of the members list.
-    onProgress(ImportMembersState.done);
   }
 }

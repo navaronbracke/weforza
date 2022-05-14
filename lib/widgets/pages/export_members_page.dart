@@ -1,40 +1,106 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/export_members_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/export_data_or_error.dart';
-import 'package:weforza/repository/export_members_repository.dart';
+import 'package:weforza/riverpod/member/export_members_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
+import 'package:weforza/widgets/common/validation_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
-import 'package:weforza/widgets/platform/cupertino_form_error_formatter.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class ExportMembersPage extends StatefulWidget {
+class ExportMembersPage extends ConsumerStatefulWidget {
   const ExportMembersPage({Key? key}) : super(key: key);
 
   @override
-  _ExportMembersPageState createState() => _ExportMembersPageState(
-      bloc: ExportMembersBloc(
-          exportMembersRepository:
-              InjectionContainer.get<ExportMembersRepository>(),
-          fileHandler: InjectionContainer.get<IFileHandler>()));
+  _ExportMembersPageState createState() => _ExportMembersPageState();
 }
 
-class _ExportMembersPageState extends State<ExportMembersPage> {
-  _ExportMembersPageState({required this.bloc});
+class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
+  late final ExportMembersProvider exportProvider;
 
-  final ExportMembersBloc bloc;
+  final RegExp filenamePattern = RegExp(r'^[\w\s-]{1,80}$');
+
+  final int filenameMaxLength = 80;
+
   final GlobalKey<FormState> _formKey = GlobalKey();
+  final _filenameController = TextEditingController();
+
+  Future<void>? _exportFuture;
+  FileExtension _fileExtension = FileExtension.csv;
+
+  final _filenameErrorController = BehaviorSubject.seeded('');
+
+  String? validateFileName(
+    String? filename, {
+    required String fileNameIsRequired,
+    required String isWhitespaceMessage,
+    required String filenameNameMaxLengthMessage,
+    required String invalidFilenameMessage,
+  }) {
+    if (filename == null || filename.isEmpty) {
+      return fileNameIsRequired;
+    }
+    if (filename.trim().isEmpty) {
+      return isWhitespaceMessage;
+    }
+    if (filenameMaxLength < filename.length) {
+      return filenameNameMaxLengthMessage;
+    }
+    if (!filenamePattern.hasMatch(filename)) {
+      return invalidFilenameMessage;
+    }
+
+    return null;
+  }
+
+  bool _iosValidateFilename(S translator) {
+    final error = validateFileName(
+      _filenameController.text,
+      fileNameIsRequired: translator.FilenameRequired,
+      isWhitespaceMessage: translator.FilenameWhitespace,
+      filenameNameMaxLengthMessage: translator.FilenameMaxLength(
+        filenameMaxLength,
+      ),
+      invalidFilenameMessage: translator.InvalidFilename,
+    );
+
+    return error == null;
+  }
+
+  void onSelectFileExtension(FileExtension extension) {
+    if (_fileExtension != extension) {
+      _fileExtension = extension;
+    }
+  }
+
+  Future<void> _submitForm(S translator) async {
+    try {
+      return exportProvider.exportMembers(
+        csvHeader: translator.ExportMembersCsvHeader,
+        fileExtension: _fileExtension.extension(),
+        fileName: _filenameController.text,
+      );
+    } catch (error) {
+      // Forward the file exists exception to the validation label.
+      if (error is FileExistsException && !_filenameErrorController.isClosed) {
+        _filenameErrorController.add(translator.FileExists);
+      }
+
+      rethrow;
+    }
+  }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidLayout(context),
-        ios: () => _buildIosLayout(context),
-      );
+  void initState() {
+    super.initState();
+    exportProvider = ref.read(exportMembersProvider);
+  }
 
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
@@ -58,157 +124,172 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<ExportDataOrError>(
-      stream: bloc.stream,
-      initialData: ExportDataOrError.idle(),
+    return FutureBuilder<void>(
+      future: _exportFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return GenericError(text: S.of(context).GenericError);
-        } else {
-          if (snapshot.data!.exporting) {
+        final translator = S.of(context);
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return _buildForm(translator);
+          case ConnectionState.waiting:
+          case ConnectionState.active:
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsets.only(bottom: 4),
                   child: PlatformAwareLoadingIndicator(),
                 ),
-                Text(S.of(context).ExportingMembersDescription),
+                Text(translator.ExportingMembersDescription),
               ],
             );
-          } else if (snapshot.data!.success) {
+          case ConnectionState.done:
+            final error = snapshot.error;
+
+            if (error is FileExistsException) {
+              return _buildForm(translator);
+            }
+
+            if (error != null) {
+              return GenericError(text: translator.GenericError);
+            }
+
             return LayoutBuilder(
               builder: (context, constraints) {
                 final paintSize = constraints.biggest.shortestSide * .3;
                 return Center(
-                    child: SizedBox(
-                  width: paintSize,
-                  height: paintSize,
-                  child: Center(
-                    child: AnimatedCheckmark(
-                      color: ApplicationTheme.secondaryColor,
-                      size: Size.square(paintSize),
+                  child: SizedBox.square(
+                    dimension: paintSize,
+                    child: Center(
+                      child: AnimatedCheckmark(
+                        color: ApplicationTheme.secondaryColor,
+                        size: Size.square(paintSize),
+                      ),
                     ),
                   ),
-                ));
+                );
               },
             );
-          } else {
-            return Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: _buildFilenameInputField(context),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: FileExtensionSelection(
-                        onExtensionSelected: (ext) =>
-                            bloc.onSelectFileExtension(ext),
-                        initialValue: FileExtension.csv,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: StreamBuilder<bool>(
-                        initialData: false,
-                        stream: bloc.filenameExistsStream,
-                        builder: (context, snapshot) => Text(
-                            snapshot.data! ? S.of(context).FileExists : ''),
-                      ),
-                    ),
-                    PlatformAwareWidget(
-                      android: () => ElevatedButton(
-                        child: Text(S.of(context).Export),
-                        onPressed: () async {
-                          final formState = _formKey.currentState;
-
-                          if (formState != null && formState.validate()) {
-                            await bloc.exportMembers(
-                                S.of(context).ExportMembersCsvHeader);
-                          }
-                        },
-                      ),
-                      ios: () => CupertinoButton.filled(
-                        child: Text(
-                          S.of(context).Export,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          if (_iosValidateFilename(context)) {
-                            await bloc.exportMembers(
-                                S.of(context).ExportMembersCsvHeader);
-                          } else {
-                            setState(() {});
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
         }
       },
     );
   }
 
-  Widget _buildFilenameInputField(BuildContext context) {
+  Widget _buildFilenameInputField(S translator) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: PlatformAwareWidget(
-        android: () => TextFormField(
-          textInputAction: TextInputAction.done,
-          keyboardType: TextInputType.text,
-          autocorrect: false,
-          controller: bloc.filenameController,
-          validator: (value) => bloc.validateFileName(
-              value,
-              S.of(context).ValueIsRequired(S.of(context).Filename),
-              S.of(context).FilenameWhitespace,
-              S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
-              S.of(context).InvalidFilename),
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-            labelText: S.of(context).Filename,
-            helperText: ' ',
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-        ),
-        ios: () => Column(
-          children: [
-            CupertinoTextField(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PlatformAwareWidget(
+            android: () => TextFormField(
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
-              placeholder: S.of(context).Filename,
               autocorrect: false,
-              controller: bloc.filenameController,
+              controller: _filenameController,
+              validator: (value) {
+                // Clear the file exists message.
+                _filenameErrorController.add('');
+
+                return validateFileName(
+                  value,
+                  fileNameIsRequired: translator.FilenameRequired,
+                  isWhitespaceMessage: translator.FilenameWhitespace,
+                  filenameNameMaxLengthMessage: translator.FilenameMaxLength(
+                    filenameMaxLength,
+                  ),
+                  invalidFilenameMessage: translator.InvalidFilename,
+                );
+              },
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                labelText: translator.Filename,
+                helperText: ' ',
+              ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
+            ios: () => CupertinoTextField(
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              placeholder: translator.Filename,
+              autocorrect: false,
+              controller: _filenameController,
               onChanged: (value) {
-                setState(() {
-                  bloc.validateFileName(
-                      value,
-                      S.of(context).ValueIsRequired(S.of(context).Filename),
-                      S.of(context).FilenameWhitespace,
-                      S
-                          .of(context)
-                          .FilenameMaxLength('${bloc.filenameMaxLength}'),
-                      S.of(context).InvalidFilename);
-                });
+                final validationError = validateFileName(
+                  value,
+                  fileNameIsRequired: translator.FilenameRequired,
+                  isWhitespaceMessage: translator.FilenameWhitespace,
+                  filenameNameMaxLengthMessage: translator.FilenameMaxLength(
+                    filenameMaxLength,
+                  ),
+                  invalidFilenameMessage: translator.InvalidFilename,
+                );
+
+                _filenameErrorController.add(validationError ?? '');
               },
             ),
-            Row(
-              children: [
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        bloc.filenameError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-              ],
+          ),
+          PlatformAwareWidget(
+            android: () => ValidationLabel(
+              stream: _filenameErrorController,
+              style: ApplicationTheme.androidFormErrorStyle,
+            ),
+            ios: () => ValidationLabel(
+              stream: _filenameErrorController,
+              style: ApplicationTheme.iosFormErrorStyle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildForm(S translator) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _buildFilenameInputField(translator),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: FileExtensionSelection(
+                onExtensionSelected: onSelectFileExtension,
+                initialValue: FileExtension.csv,
+              ),
+            ),
+            PlatformAwareWidget(
+              android: () => ElevatedButton(
+                child: Text(translator.Export),
+                onPressed: () {
+                  final formState = _formKey.currentState;
+
+                  if (formState != null && formState.validate()) {
+                    _exportFuture = _submitForm(translator);
+
+                    setState(() {});
+                  }
+                },
+              ),
+              ios: () => CupertinoButton.filled(
+                child: Text(
+                  translator.Export,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  if (_iosValidateFilename(translator)) {
+                    _exportFuture = _submitForm(translator);
+                  }
+
+                  setState(() {});
+                },
+              ),
             ),
           ],
         ),
@@ -216,19 +297,18 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
     );
   }
 
-  bool _iosValidateFilename(BuildContext context) {
-    return bloc.validateFileName(
-            bloc.filenameController.text,
-            S.of(context).ValueIsRequired(S.of(context).Filename),
-            S.of(context).FilenameWhitespace,
-            S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
-            S.of(context).InvalidFilename) ==
-        null;
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => _buildAndroidLayout(context),
+      ios: () => _buildIosLayout(context),
+    );
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    _filenameController.dispose();
+    _filenameErrorController.close();
     super.dispose();
   }
 }

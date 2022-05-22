@@ -39,7 +39,7 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     }
   }
 
-  Future<void> _submitForm(S translator) async {
+  Future<void> _submitForm(S translator) {
     try {
       return exportProvider.exportMembers(
         csvHeader: translator.ExportMembersCsvHeader,

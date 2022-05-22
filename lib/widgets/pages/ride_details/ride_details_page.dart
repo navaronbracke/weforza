@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_details_page_options.dart';
+import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_ride_dialog.dart';
 import 'package:weforza/widgets/pages/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_page.dart';
@@ -12,14 +14,14 @@ import 'package:weforza/widgets/pages/ride_details/ride_details_title.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class RideDetailsPage extends StatefulWidget {
+class RideDetailsPage extends ConsumerStatefulWidget {
   const RideDetailsPage({Key? key}) : super(key: key);
 
   @override
   _RideDetailsPageState createState() => _RideDetailsPageState();
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> {
+class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
@@ -151,8 +153,16 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {
     switch (option) {
       case RideDetailsPageOptions.export:
+        final notifier = ref.read(selectedRideProvider.notifier);
+
+        assert(notifier.selectedRide != null, 'The selected ride was null.');
+
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ExportRidePage()),
+          MaterialPageRoute(
+            builder: (context) => ExportRidePage(
+              rideToExport: notifier.selectedRide!,
+            ),
+          ),
         );
         break;
       case RideDetailsPageOptions.delete:

@@ -8,12 +8,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class FileExtensionSelection extends StatefulWidget {
   const FileExtensionSelection({
     Key? key,
-    this.enabled = true,
     required this.initialValue,
     required this.onExtensionSelected,
   }) : super(key: key);
 
-  final bool enabled;
   final FileExtension initialValue;
   final void Function(FileExtension value) onExtensionSelected;
 
@@ -47,7 +45,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
         Radio<FileExtension>(
           value: FileExtension.csv,
           groupValue: currentValue,
-          onChanged: widget.enabled ? onValueChanged : null,
+          onChanged: onValueChanged,
         ),
         Padding(
           padding: const EdgeInsets.only(right: 20),
@@ -61,7 +59,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
         Radio<FileExtension>(
           value: FileExtension.json,
           groupValue: currentValue,
-          onChanged: widget.enabled ? onValueChanged : null,
+          onChanged: onValueChanged,
         ),
         Text(
           translator.FileJsonExtension.toUpperCase(),
@@ -85,7 +83,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
   }
 
   void onValueChanged(FileExtension? value) {
-    if (!widget.enabled || value == null) {
+    if (value == null) {
       return;
     }
 

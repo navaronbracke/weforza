@@ -5,29 +5,60 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class FileExtensionSelection extends StatefulWidget {
+class FileExtensionSelection extends StatelessWidget {
   const FileExtensionSelection({
     Key? key,
     this.enabled = true,
-    required this.initialValue,
     required this.onExtensionSelected,
+    required this.value,
   }) : super(key: key);
 
   final bool enabled;
-  final FileExtension initialValue;
-  final void Function(FileExtension value) onExtensionSelected;
+  final void Function(FileExtension? value) onExtensionSelected;
+  final FileExtension value;
 
-  @override
-  _FileExtensionSelectionState createState() => _FileExtensionSelectionState();
-}
+  Widget _buildAndroidWidget(S translator) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Radio<FileExtension>(
+          value: FileExtension.csv,
+          groupValue: value,
+          onChanged: enabled ? onExtensionSelected : null,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Text(
+            translator.FileCsvExtension.toUpperCase(),
+            style: FileExtension.csv == value
+                ? const TextStyle(color: ApplicationTheme.primaryColor)
+                : null,
+          ),
+        ),
+        Radio<FileExtension>(
+          value: FileExtension.json,
+          groupValue: value,
+          onChanged: enabled ? onExtensionSelected : null,
+        ),
+        Text(
+          translator.FileJsonExtension.toUpperCase(),
+          style: FileExtension.json == value
+              ? const TextStyle(color: ApplicationTheme.primaryColor)
+              : null,
+        )
+      ],
+    );
+  }
 
-class _FileExtensionSelectionState extends State<FileExtensionSelection> {
-  late FileExtension currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    currentValue = widget.initialValue;
+  Widget _buildIosWidget(S translator) {
+    return CupertinoSlidingSegmentedControl<FileExtension>(
+      groupValue: value,
+      onValueChanged: onExtensionSelected,
+      children: {
+        FileExtension.csv: Text(translator.FileCsvExtension.toUpperCase()),
+        FileExtension.json: Text(translator.FileJsonExtension.toUpperCase()),
+      },
+    );
   }
 
   @override
@@ -38,60 +69,5 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
       android: () => _buildAndroidWidget(translator),
       ios: () => _buildIosWidget(translator),
     );
-  }
-
-  Widget _buildAndroidWidget(S translator) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Radio<FileExtension>(
-          value: FileExtension.csv,
-          groupValue: currentValue,
-          onChanged: widget.enabled ? onValueChanged : null,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Text(
-            translator.FileCsvExtension.toUpperCase(),
-            style: FileExtension.csv == currentValue
-                ? const TextStyle(color: ApplicationTheme.primaryColor)
-                : null,
-          ),
-        ),
-        Radio<FileExtension>(
-          value: FileExtension.json,
-          groupValue: currentValue,
-          onChanged: widget.enabled ? onValueChanged : null,
-        ),
-        Text(
-          translator.FileJsonExtension.toUpperCase(),
-          style: FileExtension.json == currentValue
-              ? const TextStyle(color: ApplicationTheme.primaryColor)
-              : null,
-        )
-      ],
-    );
-  }
-
-  Widget _buildIosWidget(S translator) {
-    return CupertinoSlidingSegmentedControl<FileExtension>(
-      groupValue: currentValue,
-      onValueChanged: onValueChanged,
-      children: {
-        FileExtension.csv: Text(translator.FileCsvExtension.toUpperCase()),
-        FileExtension.json: Text(translator.FileJsonExtension.toUpperCase()),
-      },
-    );
-  }
-
-  void onValueChanged(FileExtension? value) {
-    if (!widget.enabled || value == null) {
-      return;
-    }
-
-    setState(() {
-      currentValue = value;
-      widget.onExtensionSelected(currentValue);
-    });
   }
 }

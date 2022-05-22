@@ -5,9 +5,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/selected_ride.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/ride/export_rides_provider.dart';
-import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
 import 'package:weforza/widgets/common/filename_input_field.dart';
@@ -19,7 +18,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a page for exporting rides.
 /// It supports both exporting a single ride and exporting all rides.
 class ExportRidePage extends ConsumerStatefulWidget {
-  const ExportRidePage({Key? key}) : super(key: key);
+  const ExportRidePage({Key? key, this.rideToExport}) : super(key: key);
+
+  final Ride? rideToExport;
 
   @override
   _ExportRidePageState createState() => _ExportRidePageState();
@@ -29,7 +30,6 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   late final TextEditingController _filenameController;
   final _filenameErrorController = BehaviorSubject.seeded('');
-  late final SelectedRide? ride;
   late final ExportRidesProvider exportProvider;
 
   Future<void>? _exportFuture;
@@ -48,7 +48,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
       return exportProvider.exportRidesWithAttendees(
         fileExtension: _fileExtension.extension(),
         fileName: _filenameController.text,
-        ride: ride?.value.date,
+        ride: widget.rideToExport?.date,
       );
     } catch (error) {
       // Forward the file exists exception to the validation label.
@@ -67,7 +67,9 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          ride == null ? translator.ExportRides : translator.ExportRide,
+          widget.rideToExport == null
+              ? translator.ExportRides
+              : translator.ExportRide,
         ),
       ),
       body: Center(child: _buildBody(context)),
@@ -81,7 +83,9 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         middle: Text(
-          ride == null ? translator.ExportRides : translator.ExportRide,
+          widget.rideToExport == null
+              ? translator.ExportRides
+              : translator.ExportRide,
         ),
         transitionBetweenRoutes: false,
       ),
@@ -100,7 +104,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
             return _buildForm(translator);
           case ConnectionState.waiting:
           case ConnectionState.active:
-            final label = ride == null
+            final label = widget.rideToExport == null
                 ? translator.ExportingAllRides
                 : translator.ExportingRide;
 
@@ -198,15 +202,14 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
   @override
   void initState() {
     super.initState();
-    ride = ref.read(selectedRideProvider);
     exportProvider = ref.read(exportRidesProvider);
 
-    if (ride == null) {
+    if (widget.rideToExport == null) {
       _filenameController = TextEditingController();
     } else {
       _filenameController = TextEditingController(
         text: S.current.ExportRideFileNamePlaceholder(
-          ride!.value.dateToDDMMYYYY(),
+          widget.rideToExport!.dateToDDMMYYYY(),
         ),
       );
     }

@@ -8,8 +8,8 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/export_members_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
+import 'package:weforza/widgets/common/filename_input_field.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/common/validation_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -24,10 +24,6 @@ class ExportMembersPage extends ConsumerStatefulWidget {
 class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   late final ExportMembersProvider exportProvider;
 
-  final RegExp filenamePattern = RegExp(r'^[\w\s-]{1,80}$');
-
-  final int filenameMaxLength = 80;
-
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _filenameController = TextEditingController();
 
@@ -35,43 +31,6 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   FileExtension _fileExtension = FileExtension.csv;
 
   final _filenameErrorController = BehaviorSubject.seeded('');
-
-  String? validateFileName(
-    String? filename, {
-    required String fileNameIsRequired,
-    required String isWhitespaceMessage,
-    required String filenameNameMaxLengthMessage,
-    required String invalidFilenameMessage,
-  }) {
-    if (filename == null || filename.isEmpty) {
-      return fileNameIsRequired;
-    }
-    if (filename.trim().isEmpty) {
-      return isWhitespaceMessage;
-    }
-    if (filenameMaxLength < filename.length) {
-      return filenameNameMaxLengthMessage;
-    }
-    if (!filenamePattern.hasMatch(filename)) {
-      return invalidFilenameMessage;
-    }
-
-    return null;
-  }
-
-  bool _iosValidateFilename(S translator) {
-    final error = validateFileName(
-      _filenameController.text,
-      fileNameIsRequired: translator.FilenameRequired,
-      isWhitespaceMessage: translator.FilenameWhitespace,
-      filenameNameMaxLengthMessage: translator.FilenameMaxLength(
-        filenameMaxLength,
-      ),
-      invalidFilenameMessage: translator.InvalidFilename,
-    );
-
-    return error == null;
-  }
 
   void onSelectFileExtension(FileExtension extension) {
     if (_fileExtension != extension) {
@@ -177,75 +136,6 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     );
   }
 
-  Widget _buildFilenameInputField(S translator) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          PlatformAwareWidget(
-            android: () => TextFormField(
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              autocorrect: false,
-              controller: _filenameController,
-              validator: (value) {
-                // Clear the file exists message.
-                _filenameErrorController.add('');
-
-                return validateFileName(
-                  value,
-                  fileNameIsRequired: translator.FilenameRequired,
-                  isWhitespaceMessage: translator.FilenameWhitespace,
-                  filenameNameMaxLengthMessage: translator.FilenameMaxLength(
-                    filenameMaxLength,
-                  ),
-                  invalidFilenameMessage: translator.InvalidFilename,
-                );
-              },
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                labelText: translator.Filename,
-                helperText: ' ',
-              ),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-            ios: () => CupertinoTextField(
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              placeholder: translator.Filename,
-              autocorrect: false,
-              controller: _filenameController,
-              onChanged: (value) {
-                final validationError = validateFileName(
-                  value,
-                  fileNameIsRequired: translator.FilenameRequired,
-                  isWhitespaceMessage: translator.FilenameWhitespace,
-                  filenameNameMaxLengthMessage: translator.FilenameMaxLength(
-                    filenameMaxLength,
-                  ),
-                  invalidFilenameMessage: translator.InvalidFilename,
-                );
-
-                _filenameErrorController.add(validationError ?? '');
-              },
-            ),
-          ),
-          PlatformAwareWidget(
-            android: () => ValidationLabel(
-              stream: _filenameErrorController,
-              style: ApplicationTheme.androidFormErrorStyle,
-            ),
-            ios: () => ValidationLabel(
-              stream: _filenameErrorController,
-              style: ApplicationTheme.iosFormErrorStyle,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildForm(S translator) {
     return Form(
       key: _formKey,
@@ -254,9 +144,10 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: _buildFilenameInputField(translator),
+            FileNameInputField(
+              controller: _filenameController,
+              errorController: _filenameErrorController,
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -284,7 +175,7 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  if (_iosValidateFilename(translator)) {
+                  if (_filenameErrorController.value.isEmpty) {
                     _exportFuture = _submitForm(translator);
                   }
 

@@ -50,8 +50,6 @@
 	"ExportRide": "Rit Exporteren",
 	"ExportRideFileNamePlaceholder": "rit_{date}",
 	"ExportRides": "Ritten Exporteren",
-	"ExportingAllRides": "Alle ritten exporteren",
-	"ExportingRide" : "Rit exporteren",
 	"ExportingMembersDescription": "Renners en toestellen exporteren",
 	"FileCsvExtension": "csv",
 	"FileExists": "Dit bestand bestaat al",

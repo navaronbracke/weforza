@@ -46,7 +46,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
   Future<void> _submitForm(S translator) {
     try {
       return exportProvider.exportRidesWithAttendees(
-        fileExtension: _fileExtension.extension(),
+        fileExtension: _fileExtension.ext,
         fileName: _filenameController.text,
         ride: widget.rideToExport?.date,
       );

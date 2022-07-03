@@ -55,14 +55,14 @@ class ImportMembersNotifier {
     File file,
     String csvHeaderRegex,
   ) {
-    if (file.path.endsWith(FileExtension.csv.extension())) {
+    if (file.path.endsWith(FileExtension.csv.ext)) {
       return _readFile<String>(
         file,
         CsvFileReader(headerRegex: csvHeaderRegex),
       );
     }
 
-    if (file.path.endsWith(FileExtension.json.extension())) {
+    if (file.path.endsWith(FileExtension.json.ext)) {
       return _readFile<Map<String, dynamic>>(file, JsonFileReader());
     }
 

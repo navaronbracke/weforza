@@ -43,7 +43,7 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     try {
       return exportProvider.exportMembers(
         csvHeader: translator.ExportMembersCsvHeader,
-        fileExtension: _fileExtension.extension(),
+        fileExtension: _fileExtension.ext,
         fileName: _filenameController.text,
       );
     } catch (error) {

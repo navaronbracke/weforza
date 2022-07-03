@@ -4,10 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
-enum FileExtension { json, csv }
+enum FileExtension {
+  csv(),
+  json();
 
-extension ToFileTypeExtension on FileExtension {
-  String extension() {
+  const FileExtension();
+
+  String get ext {
     switch (this) {
       case FileExtension.json:
         return '.json';

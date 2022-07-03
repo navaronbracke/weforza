@@ -30,7 +30,7 @@ class ExportRidesProvider {
     String extension,
     Iterable<ExportableRide> rides,
   ) async {
-    if (extension == FileExtension.csv.extension()) {
+    if (extension == FileExtension.csv.ext) {
       final buffer = StringBuffer();
 
       for (final exportedRide in rides) {
@@ -42,7 +42,7 @@ class ExportRidesProvider {
       return;
     }
 
-    if (extension == FileExtension.json.extension()) {
+    if (extension == FileExtension.json.ext) {
       final Map<String, Object?> data = {
         'rides': rides.map((e) => e.toJson()).toList()
       };

@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
-import 'package:weforza/widgets/pages/add_member/add_member_page.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
 import 'package:weforza/widgets/pages/import_members_page.dart';
+import 'package:weforza/widgets/pages/member_form/member_form.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-///This [Widget] will display a list of members.
+/// This widget represents the list of members.
 class MemberListPage extends ConsumerStatefulWidget {
   const MemberListPage({Key? key}) : super(key: key);
 
@@ -48,14 +48,20 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       appBar: AppBar(
         title: const MemberListTitle(),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.person_add,
-              color: Colors.white,
-            ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const AddMemberPage()),
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              return IconButton(
+                icon: const Icon(
+                  Icons.person_add,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const MemberForm()),
+                  );
+                },
+              );
+            },
           ),
           IconButton(
             icon: const Icon(Icons.file_download),
@@ -104,9 +110,11 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
             CupertinoIconButton.fromAppTheme(
               icon: CupertinoIcons.person_badge_plus_fill,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AddMemberPage()),
-              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MemberForm()),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.only(left: 15),

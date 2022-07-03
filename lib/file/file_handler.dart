@@ -73,10 +73,9 @@ class FileHandler implements IFileHandler {
     }
 
     final chosenFile = result.files.first;
+    final ext = chosenFile.extension;
 
-    if (chosenFile.extension == null ||
-        (!chosenFile.extension!.endsWith('csv') &&
-            !chosenFile.extension!.endsWith('json'))) {
+    if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
       return Future.error(InvalidFileExtensionError());
     }
 

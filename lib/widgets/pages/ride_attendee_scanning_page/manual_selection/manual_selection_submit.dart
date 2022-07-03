@@ -31,10 +31,10 @@ class ManualSelectionSubmit extends StatefulWidget {
   final void Function(bool newValue) onShowScannedChanged;
 
   @override
-  _ManualSelectionSubmitState createState() => _ManualSelectionSubmitState();
+  ManualSelectionSubmitState createState() => ManualSelectionSubmitState();
 }
 
-class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
+class ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
   Future<void>? saveFuture;
 
   void onSave() {
@@ -72,8 +72,8 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                                 ),
                               ),
                               child: ElevatedButton(
-                                child: Text(translator.Save),
                                 onPressed: onSave,
+                                child: Text(translator.Save),
                               ),
                             ),
                           );
@@ -191,28 +191,33 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                     child: FutureBuilder<void>(
                       future: saveFuture,
                       builder: (_, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none) {
-                          return Center(
-                            child: CupertinoButton.filled(
-                              child: Text(
-                                translator.Save,
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.white),
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                            return Center(
+                              child: CupertinoButton.filled(
+                                onPressed: onSave,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                                child: Text(
+                                  translator.Save,
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
+                                ),
                               ),
-                              onPressed: onSave,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                            ),
-                          );
-                        } else if (snapshot.connectionState ==
-                                ConnectionState.done &&
-                            snapshot.hasError) {
-                          return const Center(
-                            child: Icon(
-                              CupertinoIcons.exclamationmark_triangle_fill,
-                              color: Colors.orange,
-                            ),
-                          );
+                            );
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+                              return const Center(
+                                child: Icon(
+                                  CupertinoIcons.exclamationmark_triangle_fill,
+                                  color: Colors.orange,
+                                ),
+                              );
+                            }
+                            break;
+                          default:
+                            break;
                         }
 
                         // The loading indicator is shown during saving

@@ -42,6 +42,8 @@ class ProfileImagePicker extends StatelessWidget {
         }
 
         return GestureDetector(
+          onTap: delegate.pickImage,
+          onLongPress: delegate.clearImage,
           child: PlatformAwareWidget(
             android: () => AsyncProfileImage(
               future: value.image,
@@ -54,8 +56,6 @@ class ProfileImagePicker extends StatelessWidget {
               size: size,
             ),
           ),
-          onTap: delegate.pickImage,
-          onLongPress: delegate.clearImage,
         );
       },
     );

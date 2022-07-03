@@ -16,11 +16,11 @@ class MemberListPage extends ConsumerStatefulWidget {
   const MemberListPage({Key? key}) : super(key: key);
 
   @override
-  _MemberListPageState createState() => _MemberListPageState();
+  MemberListPageState createState() => MemberListPageState();
 }
 
 ///This is the [State] class for [MemberListPage].
-class _MemberListPageState extends ConsumerState<MemberListPage> {
+class MemberListPageState extends ConsumerState<MemberListPage> {
   // This controller manages the query stream.
   // The input field creates it's own TextEditingController,
   // as it starts with an empty string.

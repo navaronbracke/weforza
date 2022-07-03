@@ -41,11 +41,11 @@ class CupertinoIconButton extends StatefulWidget {
   final Color onPressedColor;
 
   @override
-  _CupertinoIconButtonState createState() => _CupertinoIconButtonState();
+  CupertinoIconButtonState createState() => CupertinoIconButtonState();
 }
 
 ///This is the State class for [CupertinoIconButton].
-class _CupertinoIconButtonState extends State<CupertinoIconButton> {
+class CupertinoIconButtonState extends State<CupertinoIconButton> {
   ///The current background color.
   late Color _currentColor;
 

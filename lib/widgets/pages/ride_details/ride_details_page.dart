@@ -18,10 +18,10 @@ class RideDetailsPage extends ConsumerStatefulWidget {
   const RideDetailsPage({Key? key}) : super(key: key);
 
   @override
-  _RideDetailsPageState createState() => _RideDetailsPageState();
+  RideDetailsPageState createState() => RideDetailsPageState();
 }
 
-class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
+class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
@@ -51,14 +51,15 @@ class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
             icon: const Icon(Icons.more_vert, color: Colors.white),
             itemBuilder: (context) => <PopupMenuEntry<RideDetailsPageOptions>>[
               PopupMenuItem<RideDetailsPageOptions>(
+                value: RideDetailsPageOptions.export,
                 child: ListTile(
                   leading: const Icon(Icons.publish),
                   title: Text(translator.Export),
                 ),
-                value: RideDetailsPageOptions.export,
               ),
               const PopupMenuDivider(),
               PopupMenuItem<RideDetailsPageOptions>(
+                value: RideDetailsPageOptions.delete,
                 child: ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
                   title: Text(
@@ -66,7 +67,6 @@ class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
-                value: RideDetailsPageOptions.delete,
               ),
             ],
             onSelected: (RideDetailsPageOptions option) {
@@ -169,11 +169,11 @@ class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
               },
             ),
             CupertinoActionSheetAction(
-              child: Text(translator.Delete),
               isDestructiveAction: true,
               onPressed: () {
                 Navigator.of(context).pop(RideDetailsPageOptions.delete);
               },
+              child: Text(translator.Delete),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(

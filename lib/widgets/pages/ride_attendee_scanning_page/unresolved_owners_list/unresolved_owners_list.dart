@@ -62,8 +62,8 @@ class UnresolvedOwnersList extends StatelessWidget {
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: TextButton(
-          child: Text(translator.Continue),
           onPressed: onButtonPressed,
+          child: Text(translator.Continue),
         ),
       ),
       ios: () {
@@ -72,11 +72,11 @@ class UnresolvedOwnersList extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 10),
           child: CupertinoButton.filled(
+            onPressed: onButtonPressed,
             child: Text(
               translator.Continue,
               style: const TextStyle(color: Colors.white),
             ),
-            onPressed: onButtonPressed,
           ),
         );
       },

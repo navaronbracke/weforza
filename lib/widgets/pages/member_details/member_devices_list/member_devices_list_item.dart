@@ -24,10 +24,10 @@ class MemberDevicesListItem extends ConsumerStatefulWidget {
   final Future<void> Function() onDelete;
 
   @override
-  _MemberDevicesListItemState createState() => _MemberDevicesListItemState();
+  MemberDevicesListItemState createState() => MemberDevicesListItemState();
 }
 
-class _MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
+class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
   /// The mutable variant of the device.
   /// This object is updated whenever the device is edited.
   late Device device;

@@ -16,10 +16,10 @@ class ImportMembersPage extends ConsumerStatefulWidget {
   const ImportMembersPage({Key? key}) : super(key: key);
 
   @override
-  _ImportMembersPageState createState() => _ImportMembersPageState();
+  ImportMembersPageState createState() => ImportMembersPageState();
 }
 
-class _ImportMembersPageState extends ConsumerState<ImportMembersPage> {
+class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
   final _importController = BehaviorSubject.seeded(ImportMembersState.idle);
 
   late final ImportMembersNotifier notifier;
@@ -234,8 +234,8 @@ class _ImportMembersButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => TextButton(onPressed: onTap, child: Text(text)),
       ios: () => CupertinoButton.filled(
-        child: Text(text, style: const TextStyle(color: Colors.white)),
         onPressed: onTap,
+        child: Text(text, style: const TextStyle(color: Colors.white)),
       ),
     );
   }

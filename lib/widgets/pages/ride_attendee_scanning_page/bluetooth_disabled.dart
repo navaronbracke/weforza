@@ -46,12 +46,12 @@ class BluetoothDisabledWidget extends StatelessWidget {
       direction: Axis.horizontal,
       children: [
         ElevatedButton(
-          child: Text(translator.GoToSettings),
           onPressed: onGoToSettings,
+          child: Text(translator.GoToSettings),
         ),
         TextButton(
-          child: Text(translator.RetryScan),
           onPressed: onRetryScan,
+          child: Text(translator.RetryScan),
         ),
       ],
     );
@@ -65,18 +65,18 @@ class BluetoothDisabledWidget extends StatelessWidget {
       direction: Axis.horizontal,
       children: [
         CupertinoButton.filled(
+          onPressed: onGoToSettings,
           child: Text(
             translator.GoToSettings,
             style: const TextStyle(color: Colors.white),
           ),
-          onPressed: onGoToSettings,
         ),
         CupertinoButton(
+          onPressed: onRetryScan,
           child: Text(
             translator.RetryScan,
             style: const TextStyle(color: ApplicationTheme.primaryColor),
           ),
-          onPressed: onRetryScan,
         ),
       ],
     );

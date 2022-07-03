@@ -7,8 +7,9 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 
-class AddMemberDelegate {
-  AddMemberDelegate(this.repository, this.memberList);
+/// This class represents the delegate for a Member form.
+class MemberFormDelegate {
+  MemberFormDelegate(this.repository, this.memberList);
 
   final MemberListNotifier memberList;
 

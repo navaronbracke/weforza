@@ -29,6 +29,10 @@ class MemberFormDelegate {
 
   final _uuidGenerator = const Uuid();
 
+  bool get isSubmitting => _submitController.value;
+
+  Stream<bool> get isSubmittingStream => _submitController;
+
   Future<void> addMember(AddMemberModel model) async {
     _submitController.add(true);
 
@@ -67,7 +71,11 @@ class MemberFormDelegate {
     }
   }
 
-  void resetSubmit() => _submitController.add(false);
+  void resetSubmit(String? _) {
+    if (!_submitController.isClosed && _submitController.hasError) {
+      _submitController.add(false);
+    }
+  }
 
   void dispose() {
     _submitController.close();

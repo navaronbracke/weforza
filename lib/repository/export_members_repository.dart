@@ -18,18 +18,18 @@ class ExportMembersRepository {
       collection.addAll(await memberDao.getMembers(MemberFilterOption.all));
 
   Future<Iterable<ExportableMember>> getMembers() async {
-    final HashMap<String, Set<String>> _devicesGroupedByOwner = HashMap();
-    final List<Member> _members = [];
+    final HashMap<String, Set<String>> devicesGroupedByOwner = HashMap();
+    final List<Member> members = [];
 
     await Future.wait(
-        [_getDevices(_devicesGroupedByOwner), _getMembers(_members)]);
+        [_getDevices(devicesGroupedByOwner), _getMembers(members)]);
 
-    return _members.map((member) => ExportableMember(
+    return members.map((member) => ExportableMember(
           firstName: member.firstname,
           lastName: member.lastname,
           alias: member.alias,
           isActiveMember: member.isActiveMember,
-          devices: _devicesGroupedByOwner[member.uuid] ?? <String>{},
+          devices: devicesGroupedByOwner[member.uuid] ?? <String>{},
           lastUpdated: member.lastUpdated,
         ));
   }

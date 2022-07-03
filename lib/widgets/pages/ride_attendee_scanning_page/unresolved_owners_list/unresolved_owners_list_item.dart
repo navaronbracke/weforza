@@ -19,11 +19,10 @@ class UnresolvedOwnersListItem extends StatefulWidget {
   final String alias;
 
   @override
-  _UnresolvedOwnerListItemState createState() =>
-      _UnresolvedOwnerListItemState();
+  UnresolvedOwnerListItemState createState() => UnresolvedOwnerListItemState();
 }
 
-class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
+class UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
   late Color itemDecorationBackgroundColor;
   late TextStyle firstNameStyle;
   late TextStyle lastNameStyle;

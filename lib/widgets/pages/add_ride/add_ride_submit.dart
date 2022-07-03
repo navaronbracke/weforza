@@ -58,15 +58,15 @@ class AddRideSubmit extends StatelessWidget {
 
   Widget _buildButton(BuildContext context) => PlatformAwareWidget(
         android: () => ElevatedButton(
-          child: Text(S.of(context).AddRideSubmit),
           onPressed: onPressed,
+          child: Text(S.of(context).AddRideSubmit),
         ),
         ios: () => CupertinoButton.filled(
+          onPressed: onPressed,
           child: Text(
             S.of(context).AddRideSubmit,
             style: const TextStyle(color: Colors.white),
           ),
-          onPressed: onPressed,
         ),
       );
 }

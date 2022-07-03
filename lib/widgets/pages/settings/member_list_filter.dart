@@ -15,10 +15,10 @@ class MemberListFilter extends StatefulWidget {
   final MemberListFilterDelegate delegate;
 
   @override
-  _MemberListFilterState createState() => _MemberListFilterState();
+  MemberListFilterState createState() => MemberListFilterState();
 }
 
-class _MemberListFilterState extends State<MemberListFilter> {
+class MemberListFilterState extends State<MemberListFilter> {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);

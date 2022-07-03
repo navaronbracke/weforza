@@ -42,15 +42,15 @@ class EditDeviceSubmit extends StatelessWidget {
               ? const PlatformAwareLoadingIndicator()
               : PlatformAwareWidget(
                   android: () => ElevatedButton(
-                    child: Text(S.of(context).SaveChanges),
                     onPressed: onSubmit,
+                    child: Text(S.of(context).SaveChanges),
                   ),
                   ios: () => CupertinoButton.filled(
+                    onPressed: onSubmit,
                     child: Text(
                       S.of(context).SaveChanges,
                       style: const TextStyle(color: Colors.white),
                     ),
-                    onPressed: onSubmit,
                   ),
                 ),
         )),

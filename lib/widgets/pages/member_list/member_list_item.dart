@@ -22,10 +22,10 @@ class MemberListItem extends ConsumerStatefulWidget {
   final Member member;
 
   @override
-  _MemberListItemState createState() => _MemberListItemState();
+  MemberListItemState createState() => MemberListItemState();
 }
 
-class _MemberListItemState extends ConsumerState<MemberListItem> {
+class MemberListItemState extends ConsumerState<MemberListItem> {
   late final Future<int> memberAttendingCount;
   late final Future<File?> memberProfileImage;
 

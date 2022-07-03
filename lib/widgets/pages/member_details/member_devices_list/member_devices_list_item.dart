@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/riverpod/device/selected_device_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/common/device_widget_utils.dart';
+import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
 import 'package:weforza/widgets/pages/edit_device/edit_device_page.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
@@ -73,7 +73,7 @@ class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 5),
-          child: getDeviceIcon(device.type),
+          child: DeviceIcon(type: device.type),
         ),
         Expanded(
           child: Text(

@@ -1,14 +1,18 @@
 import 'dart:io';
 
-/// This class represents the model to add a new member.
-class AddMemberModel {
+/// This class represents the model to add or edit a member.
+class MemberPayload {
   /// The default constructor.
-  const AddMemberModel({
+  const MemberPayload({
     required this.alias,
     required this.firstName,
     required this.lastName,
     required this.profileImage,
+    required this.uuid,
   });
+
+  /// The uuid of the member, or null if the member should be created.
+  final String? uuid;
 
   /// The alias for the member.
   final String alias;

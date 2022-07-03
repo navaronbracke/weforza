@@ -19,9 +19,11 @@ class GenericError extends StatelessWidget {
   /// Returns the result of [iconBuilder]
   /// or a default warning icon.
   Widget _buildIcon(BuildContext context) {
-    final _builder = iconBuilder;
+    final builder = iconBuilder;
 
-    if (_builder != null) return _builder(context);
+    if (builder != null) {
+      return builder(context);
+    }
 
     return PlatformAwareWidget(
       android: () => Icon(

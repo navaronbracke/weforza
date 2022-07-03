@@ -42,10 +42,10 @@ class AddRideCalendarItem extends StatefulWidget {
   final bool Function(DateTime date) rideScheduledDuringCurrentSession;
 
   @override
-  _AddRideCalendarItemState createState() => _AddRideCalendarItemState();
+  AddRideCalendarItemState createState() => AddRideCalendarItemState();
 }
 
-class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
+class AddRideCalendarItemState extends State<AddRideCalendarItem> {
   late Color _backgroundColor;
   late Color _fontColor;
 

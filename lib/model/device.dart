@@ -16,7 +16,7 @@ class Device {
   String name;
   DeviceType type;
 
-  static final RegExp deviceNameRegex = RegExp(r'^[^,]{1,40}$');
+  static const int nameMaxLength = 40;
 
   ///Convert this object to a Map.
   Map<String, dynamic> toMap() {

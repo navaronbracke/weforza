@@ -13,10 +13,10 @@ class SettingsSubmit extends StatefulWidget {
   final SaveSettingsDelegate delegate;
 
   @override
-  _SettingsSubmitState createState() => _SettingsSubmitState();
+  SettingsSubmitState createState() => SettingsSubmitState();
 }
 
-class _SettingsSubmitState extends State<SettingsSubmit> {
+class SettingsSubmitState extends State<SettingsSubmit> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(

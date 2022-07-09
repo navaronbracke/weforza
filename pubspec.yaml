@@ -63,7 +63,7 @@ dependencies:
   # package_info_plus provides access to app specific information such as build number & version.
   package_info_plus: ^1.4.2
 
-  # For shard state management.
+  # For shared state management.
   flutter_riverpod: ^1.0.3
 
   file: ^6.1.2

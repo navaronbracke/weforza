@@ -511,7 +511,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.3"
+    version: "0.27.4"
   sembast:
     dependency: "direct main"
     description:

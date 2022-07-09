@@ -59,7 +59,7 @@ dependencies:
   permission_handler: ^9.2.0
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^1.4.0
+  package_info_plus: ^1.4.2
 
   file: ^6.1.2
 

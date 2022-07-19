@@ -44,23 +44,6 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
 
   bool get hasNoDevices => _memberDevices.isEmpty;
 
-  void setSelectedMember({
-    required Future<int> attendingCount,
-    required Member member,
-    required Future<File?> profileImage,
-  }) {
-    state = SelectedMember(
-      attendingCount: attendingCount,
-      devices: deviceRepository.getOwnerDevices(member.uuid).then((value) {
-        _memberDevices = value;
-
-        return _memberDevices;
-      }),
-      profileImage: profileImage,
-      value: member,
-    );
-  }
-
   Future<Device> deleteDevice(int index) async {
     final device = _memberDevices[index];
 
@@ -113,5 +96,22 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
     } catch (error) {
       // Errors are ignored.
     }
+  }
+
+  void setSelectedMember({
+    required Future<int> attendingCount,
+    required Member member,
+    required Future<File?> profileImage,
+  }) {
+    state = SelectedMember(
+      attendingCount: attendingCount,
+      devices: deviceRepository.getOwnerDevices(member.uuid).then((value) {
+        _memberDevices = value;
+
+        return _memberDevices;
+      }),
+      profileImage: profileImage,
+      value: member,
+    );
   }
 }

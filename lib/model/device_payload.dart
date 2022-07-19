@@ -10,8 +10,9 @@ class DevicePayload {
     required this.type,
   });
 
-  /// The local creation date of this device.
-  final DateTime creationDate;
+  /// The local creation date of this device,
+  /// or null if the device should be created.
+  final DateTime? creationDate;
 
   /// The name of this device.
   final String name;

@@ -84,14 +84,14 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
         ),
         PlatformAwareWidget(
           android: () => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: TextButton(
               onPressed: () => onAddDevicePressed(context),
               child: Text(S.of(context).AddDevice),
             ),
           ),
           ios: () => Padding(
-            padding: const EdgeInsets.only(top: 5, bottom: 15),
+            padding: const EdgeInsets.only(top: 4, bottom: 12),
             child: CupertinoButton.filled(
               onPressed: () => onAddDevicePressed(context),
               child: Text(

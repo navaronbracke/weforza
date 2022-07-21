@@ -23,7 +23,7 @@ class AddDeviceSubmit extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Center(
             child: StreamBuilder<String>(
               initialData: '',

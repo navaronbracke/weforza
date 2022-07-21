@@ -29,7 +29,7 @@ class UnresolvedOwnersList extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 2),
+                padding: const EdgeInsets.only(bottom: 4),
                 child: Center(
                   child: Text(
                     S.of(context).UnresolvedOwnersDescription,
@@ -60,7 +60,7 @@ class UnresolvedOwnersList extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: TextButton(
           onPressed: onButtonPressed,
           child: Text(translator.Continue),
@@ -70,7 +70,7 @@ class UnresolvedOwnersList extends StatelessWidget {
         final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
         return Padding(
-          padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 10),
+          padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 8),
           child: CupertinoButton.filled(
             onPressed: onButtonPressed,
             child: Text(

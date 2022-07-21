@@ -23,7 +23,7 @@ class ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
     final translator = S.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
+      padding: const EdgeInsets.only(bottom: 24),
       child: Column(
         children: [
           PlatformAwareWidget(
@@ -46,7 +46,7 @@ class ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               child: Text(translator.ResetCalendar),
             ),
             ios: () => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: CupertinoButton(
                   color: CupertinoColors.destructiveRed,
                   child: Text(

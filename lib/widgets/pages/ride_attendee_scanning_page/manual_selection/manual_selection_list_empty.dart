@@ -27,12 +27,7 @@ class ManualSelectionListEmpty extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            top: 4,
-            bottom: 20,
-            left: 16,
-            right: 16,
-          ),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
           child: Text(
             translator.ManualSelectionEmpty,
             textAlign: TextAlign.center,

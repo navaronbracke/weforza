@@ -35,7 +35,7 @@ class SkipScanButton extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: ElevatedButton(
           onPressed: onSkip,
           child: Text(translator.SkipScan),
@@ -45,7 +45,7 @@ class SkipScanButton extends StatelessWidget {
         final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
         return Padding(
-          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
+          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 8),
           child: CupertinoButton.filled(
             onPressed: onSkip,
             child: Text(
@@ -63,7 +63,7 @@ class SkipScanButton extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: ElevatedButton(
           onPressed: onContinue,
           child: Text(translator.Continue),
@@ -73,7 +73,7 @@ class SkipScanButton extends StatelessWidget {
         final double bottomPadding = MediaQuery.of(context).padding.bottom;
 
         return Padding(
-          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
+          padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 8),
           child: CupertinoButton.filled(
             onPressed: onContinue,
             child: Text(

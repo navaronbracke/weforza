@@ -63,7 +63,7 @@ class RideListItemState extends ConsumerState<RideListItem> {
         ios: () => Container(
           decoration: const BoxDecoration(),
           child: Padding(
-            padding: const EdgeInsets.all(14.0),
+            padding: const EdgeInsets.all(12),
             child: content,
           ),
         ),

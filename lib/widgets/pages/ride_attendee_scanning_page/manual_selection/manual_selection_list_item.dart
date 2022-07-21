@@ -102,11 +102,11 @@ class ManualSelectionListItemState extends State<ManualSelectionListItem> {
       child: DecoratedBox(
         decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 4),
                 child: PlatformAwareWidget(
                   android: () => AsyncProfileImage(
                     icon: Icons.person,
@@ -138,7 +138,7 @@ class ManualSelectionListItemState extends State<ManualSelectionListItem> {
 
   Widget _buildSelectedIcon() {
     return Padding(
-      padding: const EdgeInsets.only(left: 5),
+      padding: const EdgeInsets.only(left: 4),
       child: Icon(
         isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded,
         color: Colors.white,

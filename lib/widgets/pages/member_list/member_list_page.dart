@@ -104,7 +104,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           children: <Widget>[
             const Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 8),
                 child: MemberListTitle(),
               ),
             ),
@@ -117,7 +117,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 12),
               child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_down_doc_fill,
                 onPressed: () => Navigator.of(context).push(
@@ -128,7 +128,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 12),
               child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_up_doc_fill,
                 onPressed: () => Navigator.of(context).push(

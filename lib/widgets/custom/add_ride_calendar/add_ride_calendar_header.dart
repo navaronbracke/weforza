@@ -49,9 +49,11 @@ class AddRideCalenderHeader extends StatelessWidget {
           ),
           ios: () => Padding(
             // The left chevron is more to the left.
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 8),
             child: CupertinoIconButton.fromAppTheme(
-                icon: Icons.arrow_back_ios, onPressed: onPageBack),
+              icon: Icons.arrow_back_ios,
+              onPressed: onPageBack,
+            ),
           ),
         ),
         Expanded(
@@ -73,9 +75,11 @@ class AddRideCalenderHeader extends StatelessWidget {
             onPressed: onPageForward,
           ),
           ios: () => Padding(
-            padding: const EdgeInsets.only(right: 5),
+            padding: const EdgeInsets.only(right: 4),
             child: CupertinoIconButton.fromAppTheme(
-                icon: Icons.arrow_forward_ios, onPressed: onPageForward),
+              icon: Icons.arrow_forward_ios,
+              onPressed: onPageForward,
+            ),
           ),
         ),
       ],

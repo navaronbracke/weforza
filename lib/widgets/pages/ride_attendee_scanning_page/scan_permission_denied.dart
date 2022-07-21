@@ -28,7 +28,7 @@ class ScanPermissionDenied extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+          padding: const EdgeInsets.only(top: 4, bottom: 20),
           child: Center(
             child: Text(translator.ScanAbortedPermissionDenied, softWrap: true),
           ),
@@ -72,7 +72,7 @@ class ScanPermissionDenied extends StatelessWidget {
       direction: Axis.horizontal,
       children: <Widget>[
         CupertinoButton.filled(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           child: Text(
             translator.GoToSettings,
             style: const TextStyle(color: Colors.white),

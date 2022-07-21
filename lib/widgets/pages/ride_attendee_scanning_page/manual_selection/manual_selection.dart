@@ -85,7 +85,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
                     suffixIcon: const Icon(Icons.search),
                     labelText: S.of(context).SearchRiders,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                   ),
                 ),

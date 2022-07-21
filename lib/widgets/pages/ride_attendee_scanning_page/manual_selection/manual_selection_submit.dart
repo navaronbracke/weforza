@@ -48,7 +48,7 @@ class ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
     return BottomAppBar(
       color: ApplicationTheme.primaryColor,
       child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 4),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

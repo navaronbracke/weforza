@@ -29,7 +29,7 @@ class SettingsSubmitState extends State<SettingsSubmit> {
             return snapshot.hasError ? _buildError() : _buildSubmitButton();
           default:
             return Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.only(right: 8),
               child: Center(
                 child: PlatformAwareWidget(
                   android: () => const CircularProgressIndicator(
@@ -51,7 +51,7 @@ class SettingsSubmitState extends State<SettingsSubmit> {
         onPressed: onSaveSettings,
       ),
       ios: () => Padding(
-        padding: const EdgeInsets.only(right: 8.0),
+        padding: const EdgeInsets.only(right: 8),
         child: CupertinoIconButton.fromAppTheme(
           icon: CupertinoIcons.checkmark_alt,
           onPressed: onSaveSettings,

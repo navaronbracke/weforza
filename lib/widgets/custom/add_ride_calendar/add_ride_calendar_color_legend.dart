@@ -26,13 +26,13 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(translator.PastDayNoRide, softWrap: true),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               children: <Widget>[
                 Container(
@@ -45,14 +45,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(translator.PastDayWithRide, softWrap: true),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(bottom: 4),
             child: Row(
               children: <Widget>[
                 Container(
@@ -65,7 +65,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(translator.CurrentSelection, softWrap: true),
                 ),
               ],
@@ -83,7 +83,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(translator.FutureRide, softWrap: true),
               ),
             ],

@@ -20,16 +20,16 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
     final translator = S.of(context);
 
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(bottom: 4),
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 5),
+                  padding: const EdgeInsets.only(right: 4),
                   child: PlatformAwareWidget(
                     android: () => const Icon(
                       Icons.people,
@@ -49,7 +49,7 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 4),
             child: Text(
               translator.AmountOfRidersWithDeviceName(amountOfPossibleOwners),
               style: ApplicationTheme.multipleOwnersLabelStyle,

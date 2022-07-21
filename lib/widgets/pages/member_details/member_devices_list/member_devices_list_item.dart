@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/riverpod/device/selected_device_provider.dart';
+import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
-import 'package:weforza/widgets/pages/edit_device/edit_device_page.dart';
+import 'package:weforza/widgets/pages/device_form/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -28,15 +28,18 @@ class MemberDevicesListItem extends ConsumerStatefulWidget {
 }
 
 class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
-  /// The mutable variant of the device.
-  /// This object is updated whenever the device is edited.
   late Device device;
 
   void _onEditDevicePressed(BuildContext context) async {
-    ref.read(selectedDeviceProvider.notifier).state = device;
+    final selectedMember = ref.read(selectedMemberProvider);
 
     final updatedDevice = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const EditDevicePage()),
+      MaterialPageRoute(
+        builder: (context) => DeviceForm(
+          device: device,
+          ownerUuid: selectedMember!.value.uuid,
+        ),
+      ),
     );
 
     if (!mounted || updatedDevice == null) {

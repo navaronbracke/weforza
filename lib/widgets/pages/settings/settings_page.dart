@@ -81,7 +81,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(translator.Settings),
               ),
             ),
@@ -101,7 +101,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   Widget _buildBody(S translator, ExtendedSettings extendedSettings) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Column(
         children: [
           Expanded(
@@ -111,7 +111,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                 children: <Widget>[
                   ScanDurationOption(delegate: settingsNotifier),
                   Padding(
-                    padding: const EdgeInsets.only(top: 15),
+                    padding: const EdgeInsets.only(top: 16),
                     child: MemberListFilter(delegate: settingsNotifier),
                   ),
                 ],

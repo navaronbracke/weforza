@@ -30,7 +30,7 @@ class ScanDurationOptionState extends State<ScanDurationOption> {
           style: ApplicationTheme.settingsOptionHeaderStyle,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
           child: PlatformAwareWidget(
             android: () => SliderTheme(
               data: SliderTheme.of(context).copyWith(

@@ -47,7 +47,7 @@ class GenericError extends StatelessWidget {
         children: <Widget>[
           _buildIcon(context),
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 4),
             child: Text(text),
           )
         ],

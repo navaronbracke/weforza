@@ -25,7 +25,7 @@ class GenericScanErrorWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5, bottom: 20),
+          padding: const EdgeInsets.only(top: 4, bottom: 20),
           child: Text(S.of(context).GenericError),
         ),
         _buildGoBackButton(context)

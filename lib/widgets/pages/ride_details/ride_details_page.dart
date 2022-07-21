@@ -87,7 +87,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
           children: <Widget>[
             const Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 8),
                 child: RideDetailsTitle(),
               ),
             ),
@@ -105,7 +105,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(left: 12),
                   child: CupertinoIconButton.fromAppTheme(
                     icon: CupertinoIcons.ellipsis_vertical,
                     onPressed: () => _showCupertinoModalBottomPopup(context),

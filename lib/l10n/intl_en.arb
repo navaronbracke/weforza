@@ -66,7 +66,6 @@
 	"FirstNameIllegalCharacters": "First name can only contain letters, spaces, ' or -",
 	"FirstNameMaxLength": "First name can't be longer than {maxLength} characters",
 	"FirstNameRequired": "First name is required",
-	"FridayPrefix": "Fri",
 	"FutureRide": "Future Ride",
 	"GenericError": "Something went wrong",
 	"GoBack": "Go Back",
@@ -92,7 +91,6 @@
 	"MemberAlreadyExists": "This rider already exists",
 	"MemberDeleteDialogDescription": "Are you sure that you want to delete this rider?",
 	"MemberDetailsNoDevices": "This rider has no devices yet",
-	"MondayPrefix": "Mon",
 	"Ok": "Ok",
 	"PastDayNoRide": "Past Day Without Ride",
 	"PastDayWithRide": "Past Day With Ride",
@@ -107,7 +105,6 @@
 	"Riders": "Riders",
 	"RidersListTitle": "Riders ({amount})",
 	"Rides": "Rides",
-	"SaturdayPrefix": "Sat",
 	"Save": "Save",
 	"SaveChanges": "Save Changes",
 	"Scan": "Scan",
@@ -124,13 +121,9 @@
 	"SettingsRiderFilterHeader": "Rider List Filter",
 	"SettingsScanSliderHeader": "Duration of a scan (in seconds)",
 	"SkipScan": "Skip Scan",
-	"SundayPrefix": "Sun",
-	"ThursdayPrefix": "Thu",
 	"Total": "Total",
-	"TuesdayPrefix": "Tue",
 	"Uncheck": "Uncheck",
 	"UncheckRiderDescription": "Are you sure that you want to uncheck this rider?",
 	"UncheckRiderTitle": "Uncheck rider",
-	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
-	"WednesdayPrefix": "Wed"
+	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners. You can select the attending owners here."
 }

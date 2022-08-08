@@ -66,7 +66,6 @@
 	"FirstNameIllegalCharacters": "Voornaam mag enkel letters, spaties, ' of - bevatten",
 	"FirstNameMaxLength": "Een voornaam mag niet langer zijn dan {maxLength} karakters",
 	"FirstNameRequired": "Voornaam is verplicht",
-	"FridayPrefix": "Vr",
 	"FutureRide": "Toekomstige Rit",
 	"GenericError": "Er liep iets fout",
 	"GoBack": "Keer Terug",
@@ -92,7 +91,6 @@
 	"MemberAlreadyExists": "Deze renner bestaat al",
 	"MemberDeleteDialogDescription": "Bent u zeker dat u deze renner wil verwijderen?",
 	"MemberDetailsNoDevices": "Deze renner heeft nog geen toestellen",
-	"MondayPrefix": "Ma",
 	"Ok": "Ok",
 	"PastDayNoRide": "Gepasseerde Dag Zonder Rit",
 	"PastDayWithRide": "Gepasseerde Dag Met Rit",
@@ -107,7 +105,6 @@
 	"Riders": "Renners",
 	"RidersListTitle": "Renners ({amount})",
 	"Rides": "Ritten",
-	"SaturdayPrefix": "Za",
 	"Save": "Opslaan",
 	"SaveChanges": "Aanpassingen Opslaan",
 	"Scan": "Scannen",
@@ -124,13 +121,9 @@
 	"SettingsRiderFilterHeader": "Rennerslijst Filter",
 	"SettingsScanSliderHeader": "Duur van een scan (in seconden)",
 	"SkipScan": "Scan Overslaan",
-	"SundayPrefix": "Zo",
-	"ThursdayPrefix": "Do",
 	"Total": "Totaal",
-	"TuesdayPrefix": "Di",
 	"Uncheck": "Afvinken",
 	"UncheckRiderDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
 	"UncheckRiderTitle": "Renner afvinken",
-	"UnresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. U kan de aanwezige eigenaars hier selecteren.",
-	"WednesdayPrefix": "Wo"
+	"UnresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. U kan de aanwezige eigenaars hier selecteren."
 }

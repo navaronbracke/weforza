@@ -6,16 +6,13 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/repository/export_members_repository.dart';
-import 'package:weforza/riverpod/database/database_dao_provider.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/repository/export_members_repository_provider.dart';
 
 final exportMembersProvider = Provider((ref) {
   return ExportMembersProvider(
     ref.read(fileHandlerProvider),
-    ExportMembersRepository(
-      ref.read(deviceDaoProvider),
-      ref.read(memberDaoProvider),
-    ),
+    ref.read(exportMembersRepositoryProvider),
   );
 });
 

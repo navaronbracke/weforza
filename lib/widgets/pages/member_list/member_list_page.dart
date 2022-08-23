@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
 import 'package:weforza/widgets/pages/import_members_page.dart';
 import 'package:weforza/widgets/pages/member_form/member_form.dart';
@@ -26,20 +26,29 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
   // as it starts with an empty string.
   final BehaviorSubject<String> _queryController = BehaviorSubject.seeded('');
 
-  late final MemberListNotifier memberListNotifier;
+  /// Filter the given [list] on the current [searchQuery].
+  List<Member> _filterOnSearchQuery(List<Member> list, String searchQuery) {
+    final query = searchQuery.trim().toLowerCase();
 
-  @override
-  void initState() {
-    super.initState();
-    memberListNotifier = ref.read(memberListProvider.notifier);
-  }
+    if (query.isEmpty) {
+      return list;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
-    );
+    return list.where((member) {
+      final firstName = member.firstname.toLowerCase();
+      final lastName = member.lastname.toLowerCase();
+      final alias = member.alias.toLowerCase();
+
+      if (firstName.contains(query) || lastName.contains(query)) {
+        return true;
+      }
+
+      if (alias.isNotEmpty && alias.contains(query)) {
+        return true;
+      }
+
+      return false;
+    }).toList();
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -86,7 +95,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       body: Column(children: [
         Expanded(
           child: MemberList(
-            filter: memberListNotifier.filterOnSearchQuery,
+            filter: _filterOnSearchQuery,
             onSearchQueryChanged: _queryController.add,
             searchQueryStream: _queryController,
           ),
@@ -146,13 +155,21 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
         child: Column(children: [
           Expanded(
             child: MemberList(
-              filter: memberListNotifier.filterOnSearchQuery,
+              filter: _filterOnSearchQuery,
               onSearchQueryChanged: _queryController.add,
               searchQueryStream: _queryController,
             ),
           ),
         ]),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
     );
   }
 

@@ -2,27 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/selected_ride.dart';
-import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 
 /// This provider manages the selected ride.
 final selectedRideProvider =
     StateNotifierProvider<SelectedRideNotifier, SelectedRide?>(
-  (ref) {
-    return SelectedRideNotifier(
-      ref.read(rideRepositoryProvider),
-      ref.read(rideListProvider.notifier),
-    );
-  },
+  (ref) => SelectedRideNotifier(ref),
 );
 
 class SelectedRideNotifier extends StateNotifier<SelectedRide?> {
-  SelectedRideNotifier(this.rideRepository, this.rideList) : super(null);
+  SelectedRideNotifier(this.ref) : super(null);
 
-  final RideRepository rideRepository;
-
-  final RideListNotifier rideList;
+  final Ref ref;
 
   Ride? get selectedRide => state?.value;
 
@@ -40,9 +32,9 @@ class SelectedRideNotifier extends StateNotifier<SelectedRide?> {
       return Future.error(ArgumentError.notNull('selected ride'));
     }
 
-    await rideRepository.deleteRide(ride.value.date);
+    await ref.read(rideRepositoryProvider).deleteRide(ride.value.date);
 
     // Refresh the ride list.
-    rideList.getRides();
+    ref.refresh(rideListProvider);
   }
 }

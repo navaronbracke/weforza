@@ -1,19 +1,21 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
 /// This class represents the delegate for the add ride page.
 class AddRideFormDelegate {
-  AddRideFormDelegate({
-    required this.repository,
-    required this.rideList,
-  }) {
+  AddRideFormDelegate(this.ref) {
+    final repository = ref.read(rideRepositoryProvider);
+
     _initializeFuture = repository.getRideDates().then((rides) {
       _existingRides.addAll(rides);
     });
   }
+
+  final WidgetRef ref;
 
   /// The rides that already exist.
   final _existingRides = <DateTime>{};
@@ -37,11 +39,6 @@ class AddRideFormDelegate {
 
   /// The delegate that manages the calendar.
   final calendarDelegate = DatePickerDelegate();
-
-  final RideListNotifier rideList;
-
-  /// The repository that handles the submit.
-  final RideRepository repository;
 
   Set<DateTime> get currentSelection => _selectionController.value;
 
@@ -115,8 +112,8 @@ class AddRideFormDelegate {
 
     final items = rides.map((date) => Ride(date: date)).toList();
 
-    _submitFuture = repository.addRides(items).then((_) {
-      rideList.getRides();
+    _submitFuture = ref.read(rideRepositoryProvider).addRides(items).then((_) {
+      ref.refresh(rideListProvider);
       _savingSelection = false;
     }).catchError((_) {
       _savingSelection = false;

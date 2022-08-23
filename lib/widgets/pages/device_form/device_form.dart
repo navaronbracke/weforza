@@ -8,8 +8,6 @@ import 'package:weforza/model/device_form_delegate.dart';
 import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/model/device_type.dart';
 import 'package:weforza/model/device_validator.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
 import 'package:weforza/widgets/pages/device_form/device_form_submit_button.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
@@ -49,10 +47,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   void initState() {
     super.initState();
 
-    _delegate = DeviceFormDelegate(
-      ref.read(deviceRepositoryProvider),
-      ref.read(selectedMemberProvider.notifier),
-    );
+    _delegate = DeviceFormDelegate(ref);
     final deviceType = widget.device?.type ?? DeviceType.unknown;
 
     _deviceNameController = TextEditingController(text: widget.device?.name);

@@ -22,14 +22,6 @@ class ResetRideCalendarDialogState
     extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? deleteFuture;
 
-  late final MemberListNotifier memberList;
-
-  @override
-  void initState() {
-    super.initState();
-    memberList = ref.read(memberListProvider.notifier);
-  }
-
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
@@ -251,7 +243,7 @@ class ResetRideCalendarDialogState
       }
 
       ref.refresh(rideListProvider);
-      memberList.getMembers();
+      ref.refresh(memberListProvider);
 
       // Pop the dialog with a deletion confirmation.
       Navigator.of(context).pop(true);

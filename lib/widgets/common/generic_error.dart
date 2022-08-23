@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents a 'something went wrong'-like generic error widget.
+/// This class represents a generic error widget.
+///
+/// This widget centers itself within its parent.
 class GenericError extends StatelessWidget {
   GenericError({
     Key? key,

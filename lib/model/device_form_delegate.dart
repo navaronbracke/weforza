@@ -1,17 +1,16 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_payload.dart';
-import 'package:weforza/repository/device_repository.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
+import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.
 class DeviceFormDelegate {
-  DeviceFormDelegate(this.repository, this.notifier);
+  DeviceFormDelegate(this.ref);
 
-  final SelectedMemberNotifier notifier;
-
-  final DeviceRepository repository;
+  final WidgetRef ref;
 
   /// This controller manages a submit flag.
   /// If the current value is true, the delegate is submitting the form.
@@ -32,6 +31,8 @@ class DeviceFormDelegate {
     _submitController.add(true);
 
     try {
+      final repository = ref.read(deviceRepositoryProvider);
+
       final exists = await repository.deviceExists(model.name, model.ownerId);
 
       if (exists) {
@@ -47,7 +48,7 @@ class DeviceFormDelegate {
 
       await repository.addDevice(device);
 
-      notifier.reloadDevices();
+      ref.refresh(selectedMemberDevicesProvider);
     } catch (error) {
       _submitController.addError(error);
 
@@ -64,6 +65,8 @@ class DeviceFormDelegate {
       if (creationDate == null) {
         throw ArgumentError.notNull('creationDate');
       }
+
+      final repository = ref.read(deviceRepositoryProvider);
 
       final exists = await repository.deviceExists(
         model.name,

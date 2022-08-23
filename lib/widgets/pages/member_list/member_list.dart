@@ -28,76 +28,65 @@ class MemberList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final future = ref.watch(memberListProvider);
+    final memberList = ref.watch(memberListProvider);
+    final translator = S.of(context);
 
-    return FutureBuilder<List<Member>>(
-      future: future,
-      builder: (context, futureSnapshot) {
-        final translator = S.of(context);
-
-        if (futureSnapshot.connectionState == ConnectionState.done) {
-          if (futureSnapshot.hasError) {
-            return GenericError(text: translator.GenericError);
-          }
-
-          if (futureSnapshot.data == null || futureSnapshot.data!.isEmpty) {
-            return const Center(child: MemberListEmpty());
-          }
-
-          return Column(
-            children: [
-              PlatformAwareWidget(
-                android: () => TextFormField(
-                  textInputAction: TextInputAction.search,
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  onChanged: onSearchQueryChanged,
-                  decoration: InputDecoration(
-                    suffixIcon: const Icon(Icons.search),
-                    labelText: translator.SearchRiders,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                  ),
-                ),
-                ios: () => Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: CupertinoSearchTextField(
-                    suffixIcon: const Icon(CupertinoIcons.search),
-                    onChanged: onSearchQueryChanged,
-                    placeholder: translator.SearchRiders,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: StreamBuilder<String>(
-                  stream: searchQueryStream,
-                  builder: (context, streamSnapshot) {
-                    final data = filter(
-                      futureSnapshot.data ?? [],
-                      streamSnapshot.data ?? '',
-                    );
-
-                    if (data.isEmpty) {
-                      return const RiderSearchFilterEmpty();
-                    }
-
-                    return ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (_, index) => MemberListItem(
-                        member: data[index],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
+    return memberList.when(
+      data: (items) {
+        if (items.isEmpty) {
+          return const Center(child: MemberListEmpty());
         }
 
-        return const Center(child: PlatformAwareLoadingIndicator());
+        return Column(
+          children: [
+            PlatformAwareWidget(
+              android: () => TextFormField(
+                textInputAction: TextInputAction.search,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                autovalidateMode: AutovalidateMode.disabled,
+                onChanged: onSearchQueryChanged,
+                decoration: InputDecoration(
+                  suffixIcon: const Icon(Icons.search),
+                  labelText: translator.SearchRiders,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+              ),
+              ios: () => Padding(
+                padding: const EdgeInsets.all(8),
+                child: CupertinoSearchTextField(
+                  suffixIcon: const Icon(CupertinoIcons.search),
+                  onChanged: onSearchQueryChanged,
+                  placeholder: translator.SearchRiders,
+                ),
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder<String>(
+                stream: searchQueryStream,
+                builder: (context, snapshot) {
+                  final results = filter(items, snapshot.data ?? '');
+
+                  if (results.isEmpty) {
+                    return const RiderSearchFilterEmpty();
+                  }
+
+                  return ListView.builder(
+                    itemCount: results.length,
+                    itemBuilder: (_, index) => MemberListItem(
+                      member: results[index],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
       },
+      error: (error, stackTrace) => GenericError(text: translator.GenericError),
+      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }
 }

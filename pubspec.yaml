@@ -64,7 +64,7 @@ dependencies:
   package_info_plus: ^1.4.2
 
   # For shared state management.
-  flutter_riverpod: ^1.0.3
+  flutter_riverpod: ^2.0.0-dev.9
 
   file: ^6.1.2
 

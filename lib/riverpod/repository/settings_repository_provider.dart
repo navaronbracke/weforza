@@ -4,5 +4,8 @@ import 'package:weforza/riverpod/database/database_dao_provider.dart';
 
 /// This provider provides the [SettingsRepository].
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
-  return SettingsRepository(ref.read(settingsDaoProvider));
+  return SettingsRepository(
+    ref.read(rideDaoProvider),
+    ref.read(settingsDaoProvider),
+  );
 });

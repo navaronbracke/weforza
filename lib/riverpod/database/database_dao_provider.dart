@@ -76,9 +76,5 @@ final settingsDaoProvider = Provider<ISettingsDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return SettingsDao(
-    database.getDatabase(),
-    databaseTables.settings,
-    databaseTables.ride,
-  );
+  return SettingsDao(database.getDatabase(), databaseTables.settings);
 });

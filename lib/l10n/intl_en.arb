@@ -116,7 +116,6 @@
 	"SearchRiders": "Search riders",
 	"SearchRidersEmpty": "No riders found for the specified search term",
 	"Settings": "Settings",
-	"SettingsLoading": "Loading Settings",
 	"SettingsRiderFilterDescription": "Filter riders in the rider list, based on their status",
 	"SettingsRiderFilterHeader": "Rider List Filter",
 	"SettingsScanSliderHeader": "Duration of a scan (in seconds)",

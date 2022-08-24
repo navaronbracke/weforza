@@ -1,4 +1,3 @@
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/model/settings.dart';
 
@@ -7,13 +6,8 @@ class SettingsRepository {
 
   final ISettingsDao _settingsDao;
 
-  Future<Settings> loadApplicationSettings(int ridesCount) async {
-    final packageInfo = await PackageInfo.fromPlatform();
-
-    return _settingsDao.readApplicationSettings(
-      packageInfo.version,
-      ridesCount > 0,
-    );
+  Future<Settings> loadApplicationSettings() {
+    return _settingsDao.readApplicationSettings();
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {

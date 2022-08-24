@@ -19,8 +19,8 @@ abstract class IRideDao {
   /// and populate their attendee count.
   Future<List<Ride>> getRides();
 
-  /// Get the amount of rides.
-  Future<int> getRidesCount();
+  /// Get a stream of changes to the amount of rides.
+  Stream<int> getRideCount();
 
   /// Update the scanned attendees counter and attendees list for the given ride.
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
@@ -97,7 +97,9 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<int> getRidesCount() => _rideStore.count(_database);
+  Stream<int> getRideCount() {
+    return _rideStore.query().onSnapshots(_database).map((e) => e.length);
+  }
 
   @override
   Future<List<DateTime>> getRideDates() async {

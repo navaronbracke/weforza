@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/extended_settings.dart';
+import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/settings.dart';
+import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
-import 'package:weforza/widgets/pages/settings/loading_settings.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
-import 'package:weforza/widgets/pages/settings/settings_page_generic_error.dart';
 import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -21,60 +22,62 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class SettingsPageState extends ConsumerState<SettingsPage> {
-  late final SettingsNotifier settingsNotifier;
+  late final BehaviorSubject<MemberFilterOption> memberFilterController;
+
+  late final BehaviorSubject<double> scanDurationController;
+
+  late final SettingsRepository settingsRepository;
+
+  Future<void>? _saveSettingsFuture;
+
+  Future<void> saveSettings() {
+    // Use an artificial delay to make it look smoother.
+    return Future.delayed(const Duration(milliseconds: 500), () {
+      final newSettings = Settings(
+        scanDuration: scanDurationController.value.floor(),
+        memberListFilter: memberFilterController.value,
+      );
+
+      return settingsRepository.writeApplicationSettings(newSettings).then((_) {
+        if (mounted) {
+          ref.read(settingsProvider.notifier).state = newSettings;
+        }
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    settingsNotifier = ref.read(settingsProvider.notifier);
+    final settings = ref.read(settingsProvider);
+
+    memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
+    scanDurationController = BehaviorSubject.seeded(
+      settings.scanDuration.toDouble(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ExtendedSettings>(
-      // Each time this page is visited, the calendar data could be out of sync.
-      // Therefor, fetch the data on each build.
-      // This might seem bad at first,
-      // but this widget does not call its setState method anywhere.
-      // Its children manage their own state
-      // and never ask this widget to rebuild.
-      future: Future.delayed(
-        // Use an artificial delay to make it look smoother.
-        const Duration(milliseconds: 500),
-        () => settingsNotifier.loadExtendedSettings(),
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const LoadingSettings();
-        }
+    final translator = S.of(context);
 
-        final settings = snapshot.data;
-
-        if (snapshot.hasError || settings == null) {
-          return const SettingsPageGenericError();
-        }
-
-        final translator = S.of(context);
-
-        return PlatformAwareWidget(
-          android: () => _buildAndroidWidget(translator, settings),
-          ios: () => _buildIosWidget(translator, settings),
-        );
-      },
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(translator),
+      ios: () => _buildIosWidget(translator),
     );
   }
 
-  Widget _buildAndroidWidget(S translator, ExtendedSettings extendedSettings) {
+  Widget _buildAndroidWidget(S translator) {
     return Scaffold(
       appBar: AppBar(
         title: Text(translator.Settings),
-        actions: <Widget>[SettingsSubmit(delegate: settingsNotifier)],
+        actions: <Widget>[_buildSubmitButton()],
       ),
-      body: _buildBody(translator, extendedSettings),
+      body: _buildBody(translator),
     );
   }
 
-  Widget _buildIosWidget(S translator, ExtendedSettings extendedSettings) {
+  Widget _buildIosWidget(S translator) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -85,21 +88,16 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                 child: Text(translator.Settings),
               ),
             ),
-            SizedBox(
-              width: 40,
-              child: Center(
-                child: SettingsSubmit(delegate: settingsNotifier),
-              ),
-            ),
+            SizedBox(width: 40, child: Center(child: _buildSubmitButton())),
           ],
         ),
         transitionBetweenRoutes: false,
       ),
-      child: SafeArea(child: _buildBody(translator, extendedSettings)),
+      child: SafeArea(child: _buildBody(translator)),
     );
   }
 
-  Widget _buildBody(S translator, ExtendedSettings extendedSettings) {
+  Widget _buildBody(S translator) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -109,19 +107,48 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ScanDurationOption(delegate: settingsNotifier),
+                  ScanDurationOption(
+                    initialScanDuration: scanDurationController.value,
+                    onChanged: scanDurationController.add,
+                    stream: scanDurationController,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: MemberListFilter(delegate: settingsNotifier),
+                    child: MemberListFilter(
+                      initialFilter: memberFilterController.value,
+                      onChanged: memberFilterController.add,
+                      stream: memberFilterController,
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          if (extendedSettings.hasRideCalendar) const ResetRideCalendarButton(),
-          AppVersion(version: extendedSettings.generalSettings.appVersion),
+          const ResetRideCalendarButton(),
+          const AppVersion(),
         ],
       ),
     );
+  }
+
+  Widget _buildSubmitButton() {
+    // Use a stateful builder to avoid having to rebuild the entire page.
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return SettingsSubmit(
+          future: _saveSettingsFuture,
+          onSaveSettings: () => setState(() {
+            _saveSettingsFuture = saveSettings();
+          }),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    memberFilterController.close();
+    scanDurationController.close();
+    super.dispose();
   }
 }

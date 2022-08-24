@@ -1,26 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/save_settings_delegate.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class SettingsSubmit extends StatefulWidget {
-  const SettingsSubmit({
-    Key? key,
-    required this.delegate,
-  }) : super(key: key);
+class SettingsSubmit extends StatelessWidget {
+  const SettingsSubmit({super.key, this.future, required this.onSaveSettings});
 
-  final SaveSettingsDelegate delegate;
+  final Future<void>? future;
 
-  @override
-  SettingsSubmitState createState() => SettingsSubmitState();
-}
+  final void Function() onSaveSettings;
 
-class SettingsSubmitState extends State<SettingsSubmit> {
+  Widget _buildError() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: PlatformAwareWidget(
+        android: () => Icon(
+          Icons.warning,
+          color: Colors.orange.shade200,
+        ),
+        ios: () => const Icon(
+          CupertinoIcons.exclamationmark_triangle_fill,
+          color: Colors.orange,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return PlatformAwareWidget(
+      android: () => IconButton(
+        icon: const Icon(Icons.done, color: Colors.white),
+        onPressed: onSaveSettings,
+      ),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: CupertinoIconButton.fromAppTheme(
+          icon: CupertinoIcons.checkmark_alt,
+          onPressed: onSaveSettings,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: widget.delegate.saveSettingsFuture,
+      future: future,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -42,43 +67,5 @@ class SettingsSubmitState extends State<SettingsSubmit> {
         }
       },
     );
-  }
-
-  Widget _buildSubmitButton() {
-    return PlatformAwareWidget(
-      android: () => IconButton(
-        icon: const Icon(Icons.done, color: Colors.white),
-        onPressed: onSaveSettings,
-      ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: CupertinoIconButton.fromAppTheme(
-          icon: CupertinoIcons.checkmark_alt,
-          onPressed: onSaveSettings,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildError() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: PlatformAwareWidget(
-        android: () => Icon(
-          Icons.warning,
-          color: Colors.orange.shade200,
-        ),
-        ios: () => const Icon(
-          CupertinoIcons.exclamationmark_triangle_fill,
-          color: Colors.orange,
-        ),
-      ),
-    );
-  }
-
-  void onSaveSettings() {
-    setState(() {
-      widget.delegate.saveSettings();
-    });
   }
 }

@@ -2,10 +2,6 @@ import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 class MockBluetoothScanner implements BluetoothDeviceScanner {
-  /// This flag handles the internal for requesting the scan permission.
-  /// This value can be changed for testing.
-  bool isPermissionGranted = true;
-
   @override
   Future<bool> isBluetoothEnabled() {
     return Future.value(true);
@@ -58,14 +54,4 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() => Future<void>.value(null);
-
-  @override
-  void requestScanPermission(
-      {required void Function() onGranted, required void Function() onDenied}) {
-    if (isPermissionGranted) {
-      onGranted();
-    } else {
-      onDenied();
-    }
-  }
 }

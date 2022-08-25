@@ -58,14 +58,4 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() => Future<void>.value(null);
-
-  @override
-  void requestScanPermission(
-      {required void Function() onGranted, required void Function() onDenied}) {
-    if (isPermissionGranted) {
-      onGranted();
-    } else {
-      onDenied();
-    }
-  }
 }

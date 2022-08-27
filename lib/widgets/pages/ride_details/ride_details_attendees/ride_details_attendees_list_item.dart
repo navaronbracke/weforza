@@ -20,8 +20,8 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4),
       child: MemberNameAndAlias(
-        firstNameStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
-        lastNameStyle: ApplicationTheme.memberListItemLastNameTextStyle,
+        firstLineStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
+        secondLineStyle: ApplicationTheme.memberListItemLastNameTextStyle,
         firstName: firstName,
         lastName: lastName,
         alias: alias,

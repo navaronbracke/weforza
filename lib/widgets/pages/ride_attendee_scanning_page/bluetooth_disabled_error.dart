@@ -6,9 +6,9 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class BluetoothDisabledError extends StatelessWidget {
-  const BluetoothDisabledError({super.key, required this.onRetryScan});
+  const BluetoothDisabledError({super.key, required this.onRetry});
 
-  final void Function() onRetryScan;
+  final void Function() onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +47,11 @@ class BluetoothDisabledError extends StatelessWidget {
             ),
             PlatformAwareWidget(
               android: () => TextButton(
-                onPressed: onRetryScan,
+                onPressed: onRetry,
                 child: Text(translator.RetryScan),
               ),
               ios: () => CupertinoButton(
-                onPressed: onRetryScan,
+                onPressed: onRetry,
                 child: Text(
                   translator.RetryScan,
                   style: const TextStyle(color: ApplicationTheme.primaryColor),

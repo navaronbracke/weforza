@@ -53,8 +53,8 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
 
   Widget _buildName() {
     return MemberNameAndAlias(
-      firstNameStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
-      lastNameStyle: ApplicationTheme.memberListItemLastNameTextStyle,
+      firstLineStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
+      secondLineStyle: ApplicationTheme.memberListItemLastNameTextStyle,
       firstName: widget.member.firstname,
       lastName: widget.member.lastname,
       alias: widget.member.alias,

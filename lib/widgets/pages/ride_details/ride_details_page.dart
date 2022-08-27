@@ -123,15 +123,13 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {
     switch (option) {
       case RideDetailsPageOptions.export:
-        final notifier = ref.read(selectedRideProvider.notifier);
+        final selectedRide = ref.read(selectedRideProvider);
 
-        assert(notifier.selectedRide != null, 'The selected ride was null.');
+        assert(selectedRide != null, 'The selected ride was null.');
 
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ExportRidePage(
-              rideToExport: notifier.selectedRide!,
-            ),
+            builder: (_) => ExportRidePage(rideToExport: selectedRide!.value),
           ),
         );
         break;

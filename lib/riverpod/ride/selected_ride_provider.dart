@@ -16,8 +16,6 @@ class SelectedRideNotifier extends StateNotifier<SelectedRide?> {
 
   final Ref ref;
 
-  Ride? get selectedRide => state?.value;
-
   void setSelectedRide({
     required Future<List<Member>> attendees,
     required Ride ride,

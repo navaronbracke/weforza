@@ -2,7 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
-import 'package:weforza/model/ride_attendee_scan_result.dart';
+import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 
 /// This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {
@@ -31,8 +31,8 @@ abstract class IRideDao {
   /// Get the [Member]s of a given ride.
   Future<List<Member>> getRideAttendees(DateTime date);
 
-  /// Get the attendees of the ride, converted to [RideAttendeeScanResult]s.
-  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
+  /// Get the attendees of the ride, converted to [ScannedRideAttendee]s.
+  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
     DateTime date,
   );
 }
@@ -153,7 +153,7 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
+  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
     DateTime date,
   ) async {
     final rideAttendeeRecords = await _rideAttendeeStore.find(
@@ -162,7 +162,7 @@ class RideDao implements IRideDao {
     );
 
     return rideAttendeeRecords
-        .map((record) => RideAttendeeScanResult.of(record.value))
+        .map((record) => ScannedRideAttendee.of(record.value))
         .toList();
   }
 }

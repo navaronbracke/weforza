@@ -5,9 +5,9 @@ import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/ride_attendee_scan_result.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
+import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
@@ -60,8 +60,7 @@ class RideAttendeeScanningDelegate {
   final _deviceOwners = <String, Set<String>>{};
 
   /// The controller that manages the attendees for [ride].
-  final _rideAttendeeController =
-      BehaviorSubject<Set<RideAttendeeScanResult>>();
+  final _rideAttendeeController = BehaviorSubject<Set<ScannedRideAttendee>>();
 
   /// This list contains the devices that were scanned.
   final _scannedDevices = <ScannedDevice>[];
@@ -196,10 +195,13 @@ class RideAttendeeScanningDelegate {
   void addRideAttendee(String uuid, {required bool isScanned}) {
     final items = _rideAttendeeController.valueOrNull ?? {};
 
-    items.add(RideAttendeeScanResult(uuid: uuid, isScanned: isScanned));
+    items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
 
     _rideAttendeeController.add(items);
   }
+
+  /// Get the scanned device at the given [index].
+  ScannedDevice getScanResult(int index) => _scannedDevices[index];
 
   /// Start a new device scan.
   ///
@@ -247,7 +249,7 @@ class RideAttendeeScanningDelegate {
         // The value of `isScanned` is irrelevant,
         // since it is excluded from the `operator==` implementation.
         return !_rideAttendeeController.value.contains(
-          RideAttendeeScanResult(uuid: owners.first, isScanned: false),
+          ScannedRideAttendee(uuid: owners.first, isScanned: false),
         );
       }).listen(
         _addScannedDevice,

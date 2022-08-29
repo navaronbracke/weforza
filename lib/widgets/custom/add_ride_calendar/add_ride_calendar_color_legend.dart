@@ -20,7 +20,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 height: 20,
                 width: 20,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   color: ApplicationTheme
                       .rideCalendarPastDayWithoutRideBackgroundColor,
                 ),
@@ -39,7 +39,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   height: 20,
                   width: 20,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color: ApplicationTheme
                         .rideCalendarPastDayWithRideBackgroundColor,
                   ),
@@ -59,7 +59,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   height: 20,
                   width: 20,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                     color:
                         ApplicationTheme.rideCalendarSelectedDayBackgroundColor,
                   ),
@@ -77,7 +77,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 height: 20,
                 width: 20,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   color: ApplicationTheme
                       .rideCalendarFutureDayWithRideBackgroundColor,
                 ),

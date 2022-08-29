@@ -50,16 +50,10 @@ class ProfileImage extends StatelessWidget {
           height: size,
           width: size,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
+            borderRadius: BorderRadius.all(Radius.circular(size / 2)),
             color: backgroundColor,
           ),
-          child: Center(
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: .7 * size,
-            ),
-          ),
+          child: Center(child: Icon(icon, color: iconColor, size: .7 * size)),
         );
       }
 
@@ -67,7 +61,7 @@ class ProfileImage extends StatelessWidget {
         height: size,
         width: size,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.all(Radius.circular(size / 2)),
           color: _getBackgroundColor(personInitials!),
         ),
         child: Center(
@@ -82,12 +76,7 @@ class ProfileImage extends StatelessWidget {
     }
 
     return ClipOval(
-      child: Image.file(
-        image!,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-      ),
+      child: Image.file(image!, width: size, height: size, fit: BoxFit.cover),
     );
   }
 }

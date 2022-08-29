@@ -263,6 +263,26 @@ class RideAttendeeScanningDelegate {
     }
   }
 
+  /// Stop a running device scan.
+  ///
+  /// Returns whether the scan was stopped successfully.
+  Future<bool> stopScan() async {
+    _changeState(RideAttendeeScanningState.stoppingScan);
+
+    try {
+      await scanner.stopScan();
+
+      return true;
+    } catch (error) {
+      if (!_stateMachine.isClosed) {
+        // If stopping the scan failed, pipe the error through the state machine.
+        _stateMachine.addError(error);
+      }
+
+      return false;
+    }
+  }
+
   /// Dispose of this delegate.
   void dispose() {
     // Close the state machine first,

@@ -2,13 +2,12 @@ import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
-import 'package:weforza/model/ride_attendee_scan_result.dart';
+import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 
-///This class will manage the rides.
+/// This class represents the repository that manages the rides.
 class RideRepository {
   RideRepository(this._dao);
 
-  ///The internal DAO instance.
   final IRideDao _dao;
 
   Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
@@ -23,13 +22,17 @@ class RideRepository {
 
   Future<List<DateTime>> getRideDates() => _dao.getRideDates();
 
-  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) =>
-      _dao.updateRide(ride, attendees);
+  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
+    return _dao.updateRide(ride, attendees);
+  }
 
-  Future<List<Member>> getRideAttendees(DateTime date) =>
-      _dao.getRideAttendees(date);
+  Future<List<Member>> getRideAttendees(DateTime date) {
+    return _dao.getRideAttendees(date);
+  }
 
-  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
-          DateTime date) =>
-      _dao.getRideAttendeesAsScanResults(date);
+  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
+    DateTime date,
+  ) {
+    return _dao.getRideAttendeesAsScanResults(date);
+  }
 }

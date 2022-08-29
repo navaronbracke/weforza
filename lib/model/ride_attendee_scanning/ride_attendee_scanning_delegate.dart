@@ -82,8 +82,8 @@ class RideAttendeeScanningDelegate {
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stateStream => _stateMachine;
 
-  /// Add a new scan result for the given [device] to the list of scan results.
-  void _addDeviceScanResult(BluetoothPeripheral device) {
+  /// Add [device] to the list of scanned devices.
+  void _addScannedDevice(BluetoothPeripheral device) {
     if (_stateMachine.isClosed) {
       return;
     }
@@ -250,7 +250,7 @@ class RideAttendeeScanningDelegate {
           RideAttendeeScanResult(uuid: owners.first, isScanned: false),
         );
       }).listen(
-        _addDeviceScanResult,
+        _addScannedDevice,
         onError: (error) {
           // Ignore errors from individual events.
           // Otherwise the next scan results might be dropped.

@@ -4,8 +4,9 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
+/// This widget represents the empty manual selection list.
 class ManualSelectionListEmpty extends StatelessWidget {
-  const ManualSelectionListEmpty({Key? key}) : super(key: key);
+  const ManualSelectionListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {

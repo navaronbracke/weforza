@@ -4,6 +4,29 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
+/// This widget represents a button for the ride attendee scanning page.
+///
+/// On iOS this button offsets itself
+/// to avoid a bottom notch in the device display.
+class ScanButton extends StatelessWidget {
+  const ScanButton({super.key, required this.onPressed, required this.text});
+
+  final void Function() onPressed;
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+      ),
+      ios: () => _CupertinoScanButton(onPressed: onPressed, text: text),
+    );
+  }
+}
+
 /// This widget represents a button that stops a scan.
 class StopScanButton extends StatelessWidget {
   const StopScanButton({super.key, required this.delegate});
@@ -19,20 +42,10 @@ class StopScanButton extends StatelessWidget {
         builder: (context, snapshot) {
           final isScanning = snapshot.data!;
           final translator = S.of(context);
-          final text = isScanning ? translator.SkipScan : translator.Continue;
 
-          return PlatformAwareWidget(
-            android: () => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: ElevatedButton(
-                onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),
-                child: Text(text),
-              ),
-            ),
-            ios: () => _CupertinoStopScanButton(
-              onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),
-              text: text,
-            ),
+          return ScanButton(
+            onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),
+            text: isScanning ? translator.SkipScan : translator.Continue,
           );
         },
       ),
@@ -40,9 +53,11 @@ class StopScanButton extends StatelessWidget {
   }
 }
 
-/// This widget represents the iOS implementation of the stop scan button.
-class _CupertinoStopScanButton extends StatelessWidget {
-  const _CupertinoStopScanButton({required this.onPressed, required this.text});
+/// This widget represents the iOS implementation of the scan button.
+///
+/// This button offsets itself to avoid a bottom notch in the device display.
+class _CupertinoScanButton extends StatelessWidget {
+  const _CupertinoScanButton({required this.onPressed, required this.text});
 
   final void Function() onPressed;
 

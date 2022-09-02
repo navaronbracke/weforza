@@ -5,7 +5,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
-import 'package:weforza/widgets/pages/ride_attendee_scanning_page/stop_scan_button.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the scan results list

@@ -7,8 +7,11 @@ import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_opt
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_button_bar.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_item.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_save_button.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/show_scanned_results_toggle.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -31,6 +34,8 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   final _filtersController = BehaviorSubject.seeded(
     const ManualSelectionFilterOptions(),
   );
+
+  Future<void>? _saveAttendeesFuture;
 
   List<Member> _filterActiveMembers(
     List<Member> items,
@@ -67,6 +72,16 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
       // Only match against the alias if it is not empty.
       return alias.isNotEmpty && alias.contains(query);
     }).toList();
+  }
+
+  void _onSaveRideAttendeesButtonPressed(BuildContext context) {
+    _saveAttendeesFuture = widget.delegate.saveRideAttendeeSelection().then(
+      (_) {
+        if (mounted) {
+          Navigator.of(context).pop(); // Return back to the ride detail page.
+        }
+      },
+    );
   }
 
   void _onSearchQueryChanged(String newQuery) {
@@ -147,7 +162,24 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             },
           ),
         ),
-        saveButtonBuilder(context),
+        ManualSelectionButtonBar(
+          delegate: widget.delegate,
+          saveButton: StatefulBuilder(
+            builder: (context, setState) => ManualSelectionSaveButton(
+              future: _saveAttendeesFuture,
+              onPressed: () {
+                _onSaveRideAttendeesButtonPressed(context);
+
+                setState(() {});
+              },
+            ),
+          ),
+          showScannedResultsToggle: ShowScannedResultsToggle(
+            initialValue: _filtersController.value.showScannedResults,
+            onChanged: _onShowScannedResultsChanged,
+            stream: _filtersController.map((f) => f.showScannedResults),
+          ),
+        ),
       ],
     );
   }

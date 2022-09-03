@@ -1,37 +1,27 @@
 import 'package:flutter/cupertino.dart';
 
-/// A Cupertino equivalent of the Material [BottomAppBar].
-/// Styles have been adapted from [CupertinoTabBar].
+/// A Cupertino equivalent of the Material [BottomAppBar]
+/// with theming similar to a [CupertinoTabBar].
 class CupertinoBottomBar extends StatelessWidget {
-  const CupertinoBottomBar._({
-    required this.child,
-    required this.useMaximumTabBarHeight,
-  });
+  /// The default constructor.
+  const CupertinoBottomBar({super.key, required this.child, this.height});
 
-  /// Constructor for [CupertinoBottomBar]'s that act like a [CupertinoTabBar].
-  const CupertinoBottomBar.tabBar({required Widget child})
-      : this._(child: child, useMaximumTabBarHeight: true);
+  /// Create a [CupertinoBottomBar] with a height
+  /// equal to that of a [CupertinoTabBar].
+  const CupertinoBottomBar.constrained({
+    Key? key,
+    required Widget child,
+  }) : this(key: key, child: child, height: _kTabBarHeight);
 
-  /// Constructor for [CupertinoBottomBar]'s
-  /// that let their child decide the height.
-  const CupertinoBottomBar({required Widget child})
-      : this._(child: child, useMaximumTabBarHeight: false);
-
+  /// The child for this widget.
   final Widget child;
 
-  /// Whether to limit the height of the [child]
-  /// to a maximum of [_kTabBarHeight].
-  final bool useMaximumTabBarHeight;
+  /// The height that this widget should occupy.
+  /// If this is null, this widget sizes itself to fit its [child].
+  final double? height;
 
-  /// Standard iOS 10 tab bar height.
-  /// Taken from [CupertinoTabBar].
-  final double _kTabBarHeight = 50.0;
-
-  /// BorderSide resolution, as defined in [CupertinoTabBar].
-  BorderSide resolveBorderSide(BuildContext context, BorderSide side) {
-    return side.copyWith(
-        color: CupertinoDynamicColor.resolve(side.color, context));
-  }
+  /// The height of a [CupertinoTabBar] in iOS 10.
+  static const _kTabBarHeight = 50.0;
 
   @override
   Widget build(BuildContext context) {
@@ -60,22 +50,17 @@ class CupertinoBottomBar extends StatelessWidget {
       ),
     );
 
-    if (useMaximumTabBarHeight) {
-      content = SizedBox(
-        // We create a SizedBox that takes up
-        // the maximum tab bar height + notch height.
-        //
-        // Since the child gets some padding that is equal to the notch height,
-        // it gets pushed upwards into the upper part of the SizedBox,
-        // away from the notch.
-        height: _kTabBarHeight + bottomPadding,
-        child: content,
-      );
+    if (height != null) {
+      content = SizedBox(height: height! + bottomPadding, child: content);
     }
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(top: resolveBorderSide(context, border.top)),
+        border: Border(
+          top: border.top.copyWith(
+            color: CupertinoDynamicColor.resolve(border.top.color, context),
+          ),
+        ),
         color: backgroundColor,
       ),
       child: content,

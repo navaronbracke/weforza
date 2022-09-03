@@ -65,6 +65,11 @@ class RideAttendeeScanningDelegate {
   /// This list contains the devices that were scanned.
   final _scannedDevices = <ScannedDevice>[];
 
+  /// This flag is a mutex that locks the ride attendee selection
+  /// when the selection is being saved.
+  /// When this flag is true, the selection should not be modified.
+  bool _selectionLocked = false;
+
   /// The state machine for the scanning page.
   final _stateMachine = BehaviorSubject.seeded(
     RideAttendeeScanningState.requestPermissions,
@@ -350,6 +355,54 @@ class RideAttendeeScanningDelegate {
 
       return false;
     }
+  }
+
+  /// Toggle the selection state for the given active member.
+  ///
+  /// If the [item] is selected and the item was manually added,
+  /// it is removed from the selection.
+  ///
+  /// If the [item] is selected and the item was scanned automatically,
+  /// a confirmation is requested using the [requestUnselectConfirmation]
+  /// method. If the confirmation indicates that the item should be unselected,
+  /// it is removed from the selection. Otherwise the selection is not modified.
+  ///
+  /// If the [item] was not selected,
+  /// it is added to the selection as a manually selected item.
+  ///
+  /// If the selection is locked, the selection is also not modified.
+  ///
+  /// Returns whether the selection was updated.
+  Future<bool> toggleSelectionForActiveMember(
+    ScannedRideAttendee item,
+    Future<bool?> Function() requestUnselectConfirmation,
+  ) async {
+    if (_selectionLocked) {
+      return false;
+    }
+
+    // The item is not yet in the selection.
+    // Add it to the selection as a manually selected entry.
+    if (!_rideAttendeeController.value.contains(item)) {
+      _addRideAttendee(item.uuid, isScanned: false);
+
+      return true;
+    }
+
+    // The item is in the selection and the item was previously scanned.
+    // Ask for confirmation before unselecting the item.
+    if (item.isScanned) {
+      final confirmation = await requestUnselectConfirmation();
+
+      // Abort when the confirmation was negative.
+      if (confirmation == null || !confirmation) {
+        return false;
+      }
+    }
+
+    _removeRideAttendee(item);
+
+    return true;
   }
 
   /// Toggle the selection state for the given unresolved owner.

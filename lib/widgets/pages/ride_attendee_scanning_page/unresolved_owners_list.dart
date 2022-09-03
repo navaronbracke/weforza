@@ -155,7 +155,7 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
           isScanned: false,
         );
 
-        widget.delegate.toggleSelectionForItem(scanResultEntry);
+        widget.delegate.toggleSelectionForUnresolvedOwner(scanResultEntry);
 
         if (!mounted) {
           return;

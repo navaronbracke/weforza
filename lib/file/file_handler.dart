@@ -4,12 +4,16 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
+/// This enum defines the supported file extensions for importing and exporting.
 enum FileExtension {
   csv(),
   json();
 
   const FileExtension();
 
+  /// Get the actual file extension for this extension type.
+  ///
+  /// The returned extension includes a leading dot.
   String get ext {
     switch (this) {
       case FileExtension.json:
@@ -20,32 +24,33 @@ enum FileExtension {
   }
 }
 
-///This class provides a contract to work with [File].
+/// This interface provides methods to work with [File]s.
 abstract class IFileHandler {
-  ///Pick an image from the device gallery.
-  ///Returns the [File] that was picked or null otherwise.
+  /// Pick a profile image from the device gallery.
+  /// Returns the [File] that was chosen.
   Future<File?> chooseProfileImageFromGallery();
 
-  ///Load a file from the given [path].
-  ///Returns the [File] if it exists, or null otherwise.
+  /// Load a profile image from the given [path].
+  /// Returns the [File] if it exists, or null otherwise.
   Future<File?> loadProfileImageFromDisk(String? path);
 
-  ///Choose the file to use as datasource,
-  ///from which to import members and their devices.
+  /// Choose the file to use as datasource
+  /// for importing members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
 
-  //Create a file with the given name and extension.
+  /// Create a file with the given [fileName] and [extension].
   Future<File> createFile(String fileName, String extension);
 }
 
-///This class is an implementation of [IFileHandler].
+/// The default implementation of [IFileHandler].
 class FileHandler implements IFileHandler {
   @override
   Future<File?> chooseProfileImageFromGallery() async {
-    final FilePickerResult? result =
-        await FilePicker.platform.pickFiles(type: FileType.image);
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if (result == null || result.files.isEmpty) return null;
+    if (result == null || result.files.isEmpty) {
+      return null;
+    }
 
     final path = result.files.first.path;
 
@@ -56,17 +61,19 @@ class FileHandler implements IFileHandler {
   Future<File?> loadProfileImageFromDisk(String? path) async {
     if (path == null || path.isEmpty) {
       return null;
-    } else {
-      File image = File(path);
-
-      return await image.exists() ? image : null;
     }
+
+    final image = File(path);
+
+    return await image.exists() ? image : null;
   }
 
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: <String>['csv', 'json']);
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: <String>['csv', 'json'],
+    );
 
     if (result == null || result.files.isEmpty) {
       return Future.error(NoFileChosenError());

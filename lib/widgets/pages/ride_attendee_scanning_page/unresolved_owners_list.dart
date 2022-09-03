@@ -97,17 +97,11 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
   _UnresolvedOwnersListItem({
     required this.delegate,
     required this.item,
-  })  : scanResultEntry = ScannedRideAttendee(
-          uuid: item.uuid,
-          isScanned: false,
-        ),
-        super(key: ValueKey(item.uuid));
+  }) : super(key: ValueKey(item.uuid));
 
   final RideAttendeeScanningDelegate delegate;
 
   final Member item;
-
-  final ScannedRideAttendee scanResultEntry;
 
   @override
   State<_UnresolvedOwnersListItem> createState() =>
@@ -120,7 +114,11 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   late TextStyle lastNameStyle;
 
   void _setColors() {
-    if (widget.delegate.isSelectedRideAttendee(widget.scanResultEntry)) {
+    final selectedAttendee = widget.delegate.getSelectedRideAttendee(
+      widget.item.uuid,
+    );
+
+    if (selectedAttendee != null) {
       backgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
       firstNameStyle =
           ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
@@ -152,7 +150,12 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
         // Unresolved owners are never initially scanned.
         // Thus showing a confirmation dialog before unselecting
         // an item in the list is redundant.
-        widget.delegate.toggleSelectionForItem(widget.scanResultEntry);
+        final scanResultEntry = ScannedRideAttendee(
+          uuid: widget.item.uuid,
+          isScanned: false,
+        );
+
+        widget.delegate.toggleSelectionForItem(scanResultEntry);
 
         if (!mounted) {
           return;

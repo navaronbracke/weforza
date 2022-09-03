@@ -208,6 +208,18 @@ class RideAttendeeScanningDelegate {
   /// Get the scanned device at the given [index].
   ScannedDevice getScannedDevice(int index) => _scannedDevices[index];
 
+  /// Get the selected ride attendee for the member with the given [uuid].
+  ///
+  /// Returns the selected ride attendee
+  /// or null if the member is currently not selected.
+  ScannedRideAttendee? getSelectedRideAttendee(String uuid) {
+    // Lookup if an attendee with the given uuid is selected.
+    // The isScanned value is irrelevant, as it is merely presentational.
+    return _rideAttendeeController.value.lookup(
+      ScannedRideAttendee(uuid: uuid, isScanned: false),
+    );
+  }
+
   /// Get the list of unresolved device owners
   /// that have not yet been scanned automatically.
   List<Member> getUnresolvedDeviceOwners() {
@@ -218,11 +230,6 @@ class RideAttendeeScanningDelegate {
         ScannedRideAttendee(uuid: member.uuid, isScanned: false),
       );
     }).toList();
-  }
-
-  /// Returns whether the given [item] is selected.
-  bool isSelectedRideAttendee(ScannedRideAttendee item) {
-    return _rideAttendeeController.value.contains(item);
   }
 
   /// Stop a running scan and switch to the next state in the scanning process.

@@ -95,16 +95,13 @@ class FileHandler implements IFileHandler {
     } else if (Platform.isIOS) {
       directory = await getApplicationDocumentsDirectory();
     } else {
-      throw Exception('Only Android and IOS are supported');
+      throw UnsupportedError('Only Android and IOS are supported');
     }
 
     if (directory == null) {
-      throw Exception('Could not create file path');
+      throw ArgumentError.notNull('directory');
     }
 
-    final String path =
-        directory.path + Platform.pathSeparator + fileName + extension;
-
-    return File(path);
+    return File(directory.path + Platform.pathSeparator + fileName + extension);
   }
 }

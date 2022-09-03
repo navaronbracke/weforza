@@ -151,7 +151,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => ExportRidePage(rideToExport: selectedRide!.value),
+            builder: (_) => ExportRidePage(rideToExport: selectedRide!),
           ),
         );
         break;

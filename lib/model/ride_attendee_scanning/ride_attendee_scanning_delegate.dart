@@ -92,6 +92,10 @@ class RideAttendeeScanningDelegate {
   /// The [isScanned] parameter indicates if this ride attendee
   /// was found automatically, or if it was manually added.
   void _addRideAttendee(String uuid, {required bool isScanned}) {
+    if (_rideAttendeeController.isClosed) {
+      return;
+    }
+
     final items = _rideAttendeeController.value;
 
     items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
@@ -181,6 +185,18 @@ class RideAttendeeScanningDelegate {
   /// The latter is used to map incoming device scan results to one or more owners.
   Future<void> _prepareScan() {
     return Future.wait([_loadRideAttendees(), _loadActiveMembersWithDevices()]);
+  }
+
+  /// Remove [item] from the selection of ride attendees.
+  void _removeRideAttendee(ScannedRideAttendee item) {
+    if (_rideAttendeeController.isClosed) {
+      return;
+    }
+
+    final currentSelection = _rideAttendeeController.value;
+
+    currentSelection.remove(item);
+    _rideAttendeeController.add(currentSelection);
   }
 
   /// Request permission to check the bluetooth adapter state and

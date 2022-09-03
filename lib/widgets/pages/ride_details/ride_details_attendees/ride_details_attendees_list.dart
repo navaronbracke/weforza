@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -18,49 +17,39 @@ class RideDetailsAttendeesList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ride = ref.watch(selectedRideProvider);
+    final rideAttendees = ref.watch(selectedRideAttendeesProvider);
 
-    return FutureBuilder<List<Member>>(
-      future: ride?.attendees,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return GenericError(text: S.of(context).GenericError);
-            }
-
-            final items = snapshot.data ?? [];
-
-            if (items.isEmpty) {
-              return const RideDetailsAttendeesListEmpty();
-            }
-
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final member = items[index];
-
-                      return RideDetailsAttendeesListItem(
-                        firstName: member.firstname,
-                        lastName: member.lastname,
-                        alias: member.alias,
-                      );
-                    },
-                    itemCount: items.length,
-                  ),
-                ),
-                _ScannedAttendeesBottomBar(
-                  scanned: ride?.value.scannedAttendees,
-                  total: items.length,
-                ),
-              ],
-            );
-
-          default:
-            return const Center(child: PlatformAwareLoadingIndicator());
+    return rideAttendees.when(
+      data: (attendees) {
+        if (attendees.isEmpty) {
+          return const RideDetailsAttendeesListEmpty();
         }
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  final member = attendees[index];
+
+                  return RideDetailsAttendeesListItem(
+                    firstName: member.firstname,
+                    lastName: member.lastname,
+                    alias: member.alias,
+                  );
+                },
+                itemCount: attendees.length,
+              ),
+            ),
+            _ScannedAttendeesBottomBar(
+              scanned: ride?.scannedAttendees,
+              total: attendees.length,
+            ),
+          ],
+        );
       },
+      error: (error, _) => GenericError(text: S.of(context).GenericError),
+      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }
 }

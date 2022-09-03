@@ -78,6 +78,12 @@ class RideAttendeeScanningDelegate {
   /// because then there are multiple valid options.
   final _unresolvedOwners = <Member>{};
 
+  /// Get the list of active members.
+  List<Member> get activeMembers => _activeMembers.values.toList();
+
+  /// Returns whether there are active members.
+  bool get hasActiveMembers => _activeMembers.isNotEmpty;
+
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stateStream => _stateMachine;
 

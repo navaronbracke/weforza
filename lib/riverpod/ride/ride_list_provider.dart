@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 
@@ -12,10 +11,12 @@ final rideListProvider = FutureProvider<List<Ride>>((ref) {
 });
 
 /// This provider provides a stream of changes to the number of rides.
-final rideListCountProvider = StreamProvider<int>((ref) {
+final rideListCountProvider = StreamProvider<int>((ref) async* {
   final repository = ref.read(rideRepositoryProvider);
 
-  final controller = StreamController<int>();
+  final curentRideCount = await repository.getCurrentRideCount();
+
+  final controller = BehaviorSubject.seeded(curentRideCount);
 
   final subscription = repository.getRideCount().listen((event) {
     if (controller.isClosed) {
@@ -30,5 +31,5 @@ final rideListCountProvider = StreamProvider<int>((ref) {
     controller.close();
   });
 
-  return controller.stream;
+  yield* controller.stream;
 });

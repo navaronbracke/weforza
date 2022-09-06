@@ -10,7 +10,7 @@ import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-///This dialog handles the UI for the reset ride calendar confirmation.
+/// This dialog handles the UI for the reset ride calendar confirmation.
 class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({Key? key}) : super(key: key);
 
@@ -68,7 +68,7 @@ class ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.ResetCalendar,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -76,7 +76,7 @@ class ResetRideCalendarDialogState
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              translator.ResetCalendarDialogDescription,
+              translator.ResetRideCalendarDialogDescription,
               softWrap: true,
               style: Theme.of(context).textTheme.subtitle1,
             ),
@@ -110,7 +110,7 @@ class ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.ResetCalendar,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -128,7 +128,7 @@ class ResetRideCalendarDialogState
                   ),
                 ),
                 Text(
-                  translator.ResetCalendarError,
+                  translator.ResetRideCalendarError,
                   softWrap: true,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -157,7 +157,7 @@ class ResetRideCalendarDialogState
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
           child: Text(
-            translator.ResetCalendar,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -191,8 +191,8 @@ class ResetRideCalendarDialogState
 
   Widget _buildIosConfirmDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.ResetCalendar),
-      content: Text(translator.ResetCalendarDialogDescription),
+      title: Text(translator.ResetRideCalendar),
+      content: Text(translator.ResetRideCalendarDescription),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
@@ -209,7 +209,7 @@ class ResetRideCalendarDialogState
 
   Widget _buildIosErrorDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.ResetCalendar),
+      title: Text(translator.ResetRideCalendar),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +222,7 @@ class ResetRideCalendarDialogState
               size: 25,
             ),
           ),
-          Text(translator.ResetCalendarError),
+          Text(translator.ResetRideCalendarError),
         ],
       ),
       actions: [

@@ -15,6 +15,9 @@ abstract class IRideDao {
   /// Delete all rides & attendant records.
   Future<void> deleteRideCalendar();
 
+  /// Get the current amount of rides.
+  Future<int> getCurrentRideCount();
+
   /// Get all rides. This method will load all the stored [Ride]s
   /// and populate their attendee count.
   Future<List<Ride>> getRides();
@@ -83,6 +86,9 @@ class RideDao implements IRideDao {
       await _rideStore.delete(txn, finder: rideFinder);
     });
   }
+
+  @override
+  Future<int> getCurrentRideCount() => _rideStore.count(_database);
 
   @override
   Future<List<Ride>> getRides() async {

@@ -34,6 +34,7 @@ class RideListItem extends ConsumerWidget {
           ),
         ),
         RideListItemAttendeeCounter(
+          key: ValueKey(ride.date),
           counterStyle: itemTextStyle,
           rideDate: ride.date,
         ),

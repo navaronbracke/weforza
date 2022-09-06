@@ -50,6 +50,9 @@ class MemberNameAndAlias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultStyle = DefaultTextStyle.of(context).style;
+    final effectiveFirstLineStyle = defaultStyle.merge(firstLineStyle);
+
     if (isTwoLine) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -62,12 +65,12 @@ class MemberNameAndAlias extends StatelessWidget {
               overflow: overflow,
               text: TextSpan(
                 text: firstName,
-                style: firstLineStyle,
+                style: effectiveFirstLineStyle,
                 children: [
                   if (alias.isNotEmpty)
                     TextSpan(
                       text: " '$alias' ",
-                      style: firstLineStyle.copyWith(
+                      style: effectiveFirstLineStyle.copyWith(
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -79,7 +82,7 @@ class MemberNameAndAlias extends StatelessWidget {
             lastName,
             maxLines: 1,
             overflow: overflow,
-            style: secondLineStyle,
+            style: defaultStyle.merge(secondLineStyle),
           ),
         ],
       );
@@ -89,16 +92,21 @@ class MemberNameAndAlias extends StatelessWidget {
       maxLines: 1,
       overflow: overflow,
       text: alias.isEmpty
-          ? TextSpan(text: '$firstName $lastName', style: firstLineStyle)
+          ? TextSpan(
+              text: '$firstName $lastName',
+              style: effectiveFirstLineStyle,
+            )
           : TextSpan(
               text: firstName,
-              style: firstLineStyle,
+              style: effectiveFirstLineStyle,
               children: [
                 TextSpan(
                   text: " '$alias' ",
-                  style: firstLineStyle.copyWith(fontStyle: FontStyle.italic),
+                  style: effectiveFirstLineStyle.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
-                TextSpan(text: lastName, style: firstLineStyle),
+                TextSpan(text: lastName, style: effectiveFirstLineStyle),
               ],
             ),
     );

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO: fix bug with spaces and italic text
-
 /// This widget displays the first name, alias and last name of a member.
 class MemberNameAndAlias extends StatelessWidget {
   const MemberNameAndAlias({

@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
 import 'package:weforza/widgets/pages/import_members_page.dart';
+import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
 import 'package:weforza/widgets/pages/member_form/member_form.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
@@ -25,6 +27,20 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
   // The input field creates it's own TextEditingController,
   // as it starts with an empty string.
   final BehaviorSubject<String> _queryController = BehaviorSubject.seeded('');
+
+  final _controller = TextEditingController();
+
+  void _onMemberSelected(BuildContext context) {
+    // Clear the search query.
+    _controller.clear();
+
+    // Unfocus the search field before exiting this page.
+    FocusScope.of(context).unfocus();
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const MemberDetailsPage()),
+    );
+  }
 
   /// Filter the given [list] on the current [searchQuery].
   List<Member> _filterOnSearchQuery(List<Member> list, String searchQuery) {
@@ -92,15 +108,32 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           ),
         ],
       ),
-      body: Column(children: [
-        Expanded(
-          child: MemberList(
-            filter: _filterOnSearchQuery,
-            onSearchQueryChanged: _queryController.add,
-            searchQueryStream: _queryController,
-          ),
-        )
-      ]),
+      body: Column(
+        children: [
+          Expanded(
+            child: MemberList(
+              onMemberSelected: () => _onMemberSelected(context),
+              filter: _filterOnSearchQuery,
+              searchQueryStream: _queryController,
+              searchField: TextFormField(
+                controller: _controller,
+                textInputAction: TextInputAction.search,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                autovalidateMode: AutovalidateMode.disabled,
+                onChanged: _queryController.add,
+                decoration: InputDecoration(
+                  suffixIcon: const Icon(Icons.search),
+                  labelText: S.of(context).SearchRiders,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -152,15 +185,26 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(children: [
-          Expanded(
-            child: MemberList(
-              filter: _filterOnSearchQuery,
-              onSearchQueryChanged: _queryController.add,
-              searchQueryStream: _queryController,
+        child: Column(
+          children: [
+            Expanded(
+              child: MemberList(
+                onMemberSelected: () => _onMemberSelected(context),
+                filter: _filterOnSearchQuery,
+                searchQueryStream: _queryController,
+                searchField: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CupertinoSearchTextField(
+                    controller: _controller,
+                    suffixIcon: const Icon(CupertinoIcons.search),
+                    onChanged: _queryController.add,
+                    placeholder: S.of(context).SearchRiders,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -176,6 +220,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
   @override
   void dispose() {
     _queryController.close();
+    _controller.dispose();
     super.dispose();
   }
 }

@@ -5,6 +5,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/selected_member.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 
 /// This provider manages the selected member.
 final selectedMemberProvider =
@@ -26,7 +27,11 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
 
     await ref.read(memberRepositoryProvider).deleteMember(member.value.uuid);
 
+    // Refresh the member list, the collection has one member less.
     ref.refresh(memberListProvider);
+
+    // Remove the stale selected ride. Its attendees are now possibly out of date.
+    ref.read(selectedRideProvider.notifier).setSelectedRide(null);
   }
 
   void setMemberActive(bool value) async {

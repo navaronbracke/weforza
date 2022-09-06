@@ -165,6 +165,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         keyboardType: TextInputType.text,
         autocorrect: false,
         controller: _deviceNameController,
+        onChanged: _delegate.resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
           requiredMessage: translator.DeviceNameRequired,
@@ -190,6 +191,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         keyboardType: TextInputType.text,
         placeholder: translator.DeviceName,
         textInputAction: TextInputAction.done,
+        onChanged: _delegate.resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
           requiredMessage: translator.DeviceNameRequired,

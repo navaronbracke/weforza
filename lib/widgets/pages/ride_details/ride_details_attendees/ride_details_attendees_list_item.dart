@@ -17,11 +17,13 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const style = ApplicationTheme.memberListItemLastNameTextStyle;
+
     return Padding(
       padding: const EdgeInsets.all(4),
       child: MemberNameAndAlias(
-        firstLineStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
-        secondLineStyle: ApplicationTheme.memberListItemLastNameTextStyle,
+        firstLineStyle: style,
+        secondLineStyle: style,
         firstName: firstName,
         lastName: lastName,
         alias: alias,

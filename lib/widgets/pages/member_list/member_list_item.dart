@@ -16,11 +16,10 @@ import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListItem extends ConsumerStatefulWidget {
-  const MemberListItem({
-    super.key,
+  MemberListItem({
     required this.member,
     required this.onPressed,
-  });
+  }) : super(key: ValueKey(member.uuid));
 
   /// The member that is displayed in this item.
   final Member member;

@@ -57,8 +57,7 @@ class RideAttendeeScanningPageState
     _scanProgressBarController = AnimationController(
       duration: Duration(seconds: delegate.settings.scanDuration),
       vsync: this,
-      lowerBound: 1.0,
-      upperBound: 0.0,
+      value: 1.0,
     );
 
     // Setup a subscription that listens to the start of the device scan
@@ -71,8 +70,9 @@ class RideAttendeeScanningPageState
 
       // Start the animation when the scan stream emits the event
       // that indicates that the scan started.
-      if (_scanProgressBarController.status == AnimationStatus.dismissed) {
-        _scanProgressBarController.forward();
+      // The animation starts with a filled progress bar.
+      if (_scanProgressBarController.status == AnimationStatus.completed) {
+        _scanProgressBarController.reverse();
       }
     });
 

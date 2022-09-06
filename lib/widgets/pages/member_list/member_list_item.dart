@@ -13,13 +13,22 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
-import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListItem extends ConsumerStatefulWidget {
-  const MemberListItem({Key? key, required this.member}) : super(key: key);
+  const MemberListItem({
+    super.key,
+    required this.member,
+    required this.onPressed,
+  });
 
+  /// The member that is displayed in this item.
   final Member member;
+
+  /// The onTap handler for this item.
+  ///
+  /// This function is called after the selected member was updated.
+  final void Function() onPressed;
 
   @override
   MemberListItemState createState() => MemberListItemState();
@@ -88,9 +97,7 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
           profileImage: memberProfileImage,
         );
 
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const MemberDetailsPage()),
-        );
+        widget.onPressed();
       },
       behavior: HitTestBehavior.opaque,
       child: Padding(

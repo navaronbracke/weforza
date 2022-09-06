@@ -14,9 +14,6 @@ import 'package:weforza/widgets/pages/member_details/member_devices_list/member_
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-// TODO: use a separate backing list to drive the animated list
-// if deleting devices is broken (i.e. the list does not update properly)
-
 // TODO: can we eliminate the setState() at the bottom and turn this into a ConsumerWidget?
 
 class MemberDevicesList extends ConsumerStatefulWidget {

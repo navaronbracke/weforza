@@ -50,11 +50,19 @@ class RideListItemAttendeeCounterState
   @override
   Widget build(BuildContext context) {
     ref.listen<Ride?>(selectedRideProvider, (previous, next) {
+      // If the selected ride was removed,
+      // or the selected ride is not this ride anymore, abort.
       if (!mounted || next == null || next.date != widget.rideDate) {
         return;
       }
 
-      // Refresh the attendee count if the selected ride was updated.
+      // If the selected ride was set to this ride, abort.
+      // The attendees are already loaded in initState().
+      if (previous?.date != widget.rideDate && next.date == widget.rideDate) {
+        return;
+      }
+
+      // Refresh the attendee count if this ride was updated.
       setState(_getAttendeeCount);
     });
 

@@ -40,8 +40,12 @@ class StopScanButton extends StatelessWidget {
       child: StreamBuilder<bool>(
         stream: delegate.scanner.isScanning,
         builder: (context, snapshot) {
-          final isScanning = snapshot.data!;
+          final isScanning = snapshot.data;
           final translator = S.of(context);
+
+          if (isScanning == null) {
+            return const SizedBox.shrink();
+          }
 
           return ScanButton(
             onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),

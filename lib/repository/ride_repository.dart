@@ -16,6 +16,8 @@ class RideRepository {
 
   Future<void> deleteRideCalendar() => _dao.deleteRideCalendar();
 
+  Future<int> getCurrentRideCount() => _dao.getCurrentRideCount();
+
   Stream<int> getRideCount() => _dao.getRideCount();
 
   Future<List<Ride>> getRides() => _dao.getRides();

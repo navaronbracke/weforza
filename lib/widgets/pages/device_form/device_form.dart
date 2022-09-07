@@ -8,6 +8,7 @@ import 'package:weforza/model/device_form_delegate.dart';
 import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/model/device_type.dart';
 import 'package:weforza/model/device_validator.dart';
+import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
 import 'package:weforza/widgets/pages/device_form/device_form_submit_button.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
@@ -47,7 +48,10 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   void initState() {
     super.initState();
 
-    _delegate = DeviceFormDelegate(ref);
+    _delegate = DeviceFormDelegate(
+      notifier: ref.read(selectedMemberDevicesProvider.notifier),
+    );
+
     final deviceType = widget.device?.type ?? DeviceType.unknown;
 
     _deviceNameController = TextEditingController(text: widget.device?.name);
@@ -73,7 +77,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       }
 
       if (mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pop(model.creationDate == null);
       }
     } catch (_) {
       // Ignore errors, the submit button handles them.

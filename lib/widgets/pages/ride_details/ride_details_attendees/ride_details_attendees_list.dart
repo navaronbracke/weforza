@@ -16,7 +16,6 @@ class RideDetailsAttendeesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ride = ref.watch(selectedRideProvider);
     final rideAttendees = ref.watch(selectedRideAttendeesProvider);
 
     return rideAttendees.when(
@@ -41,10 +40,7 @@ class RideDetailsAttendeesList extends ConsumerWidget {
                 itemCount: attendees.length,
               ),
             ),
-            _ScannedAttendeesBottomBar(
-              scanned: ride?.scannedAttendees,
-              total: attendees.length,
-            ),
+            _ScannedAttendeesBottomBar(total: attendees.length),
           ],
         );
       },
@@ -54,103 +50,97 @@ class RideDetailsAttendeesList extends ConsumerWidget {
   }
 }
 
-class _ScannedAttendeesBottomBar extends StatelessWidget {
-  const _ScannedAttendeesBottomBar({
-    Key? key,
-    required this.total,
-    required this.scanned,
-  }) : super(key: key);
+/// This widget represents the counter at the bottom of the ride attendees list.
+/// This counter displays the total amount of ride attendees
+/// and the number of scanned attendees.
+class _ScannedAttendeesBottomBar extends ConsumerWidget {
+  const _ScannedAttendeesBottomBar({required this.total});
 
   final int total;
 
-  final int? scanned;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scannedAttendees = ref.watch(
+      selectedRideProvider.select((value) => value?.scannedAttendees),
+    );
 
-  Widget _buildAndroidLayout(BuildContext context) {
     final translator = S.of(context);
 
-    return BottomAppBar(
-      color: ApplicationTheme.primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Tooltip(
-              message: translator.Total,
-              child: Row(
-                children: [
-                  const Icon(Icons.people, color: Colors.white),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      '$total',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Expanded(child: Center()),
-            Tooltip(
-              message: translator.Scanned,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Text(
-                      scanned == null ? '-' : '$scanned',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const Icon(Icons.bluetooth_searching, color: Colors.white),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIosLayout() {
-    return CupertinoBottomBar.constrained(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            const Icon(
-              CupertinoIcons.person_2_fill,
-              color: CupertinoColors.activeBlue,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Text(
-                '$total',
-                style: const TextStyle(color: CupertinoColors.activeBlue),
-              ),
-            ),
-            const Expanded(child: Center()),
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Text(
-                scanned == null ? '?' : '$scanned',
-                style: const TextStyle(color: CupertinoColors.activeBlue),
-              ),
-            ),
-            const Icon(
-              Icons.bluetooth_searching,
-              color: CupertinoColors.activeBlue,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIosLayout(),
+      android: () => BottomAppBar(
+        color: ApplicationTheme.primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Tooltip(
+                message: translator.Total,
+                child: Row(
+                  children: [
+                    const Icon(Icons.people, color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        '$total',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Expanded(child: Center()),
+              Tooltip(
+                message: translator.Scanned,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text(
+                        '${scannedAttendees ?? '-'}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.bluetooth_searching,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      ios: () {
+        const textStyle = TextStyle(color: CupertinoColors.activeBlue);
+
+        return CupertinoBottomBar.constrained(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Icon(
+                  CupertinoIcons.person_2_fill,
+                  color: CupertinoColors.activeBlue,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Text('$total', style: textStyle),
+                ),
+                const Expanded(child: Center()),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text('${scannedAttendees ?? '-'}', style: textStyle),
+                ),
+                const Icon(
+                  Icons.bluetooth_searching,
+                  color: CupertinoColors.activeBlue,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

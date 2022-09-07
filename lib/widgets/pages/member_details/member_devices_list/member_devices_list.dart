@@ -7,14 +7,13 @@ import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/device_form/device_form.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/delete_device_button.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_disabled_item.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-
-// TODO: can we eliminate the setState() at the bottom and turn this into a ConsumerWidget?
 
 class MemberDevicesList extends ConsumerStatefulWidget {
   const MemberDevicesList({super.key});
@@ -26,10 +25,34 @@ class MemberDevicesList extends ConsumerStatefulWidget {
 class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
-  void onAddDevicePressed(BuildContext context, String ownerUuid) {
-    Navigator.of(context).push(
+  void onAddDevicePressed(BuildContext context, String ownerUuid) async {
+    final result = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
         builder: (context) => DeviceForm(ownerUuid: ownerUuid),
+      ),
+    );
+
+    final currentState = _listKey.currentState;
+
+    if (!mounted || result == null || !result || currentState == null) {
+      return;
+    }
+
+    currentState.insertItem(0);
+  }
+
+  void onDeviceDeleted(Device device, int index) {
+    final currentState = _listKey.currentState;
+
+    if (!mounted || currentState == null) {
+      return;
+    }
+
+    currentState.removeItem(
+      index,
+      (context, animation) => SizeTransition(
+        sizeFactor: animation,
+        child: MemberDevicesListDisabledItem(device: device),
       ),
     );
   }
@@ -59,10 +82,17 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
           child: AnimatedList(
             key: _listKey,
             initialItemCount: devices.length,
-            itemBuilder: (context, index, animation) => MemberDevicesListItem(
-              device: devices[index],
-              onDelete: () => onDeleteDevice(context, index),
-            ),
+            itemBuilder: (context, index, animation) {
+              final device = devices[index];
+
+              return MemberDevicesListItem(
+                device: device,
+                deleteDeviceButton: DeleteDeviceButton(
+                  index: index,
+                  onDeviceDeleted: () => onDeviceDeleted(device, index),
+                ),
+              );
+            },
           ),
         ),
         PlatformAwareWidget(
@@ -94,40 +124,5 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
         )
       ],
     );
-  }
-
-  Future<void> onDeleteDevice(BuildContext context, int index) async {
-    final device = await ref
-        .read(selectedMemberDevicesProvider.notifier)
-        .deleteDevice(index);
-
-    if (!mounted) {
-      return;
-    }
-
-    // Get rid of the delete dialog.
-    Navigator.of(context).pop();
-
-    final listState = _listKey.currentState;
-
-    if (listState == null) {
-      return;
-    }
-
-    // Remove the device from the animated list.
-    listState.removeItem(
-      index,
-      (context, animation) => SizeTransition(
-        sizeFactor: animation,
-        child: MemberDevicesListDisabledItem(device: device),
-      ),
-    );
-
-    final devicesList = ref.read(selectedMemberDevicesProvider);
-
-    // Switch to the empty list widget.
-    if (devicesList is AsyncData<List<Device>> && devicesList.value.isEmpty) {
-      setState(() {});
-    }
   }
 }

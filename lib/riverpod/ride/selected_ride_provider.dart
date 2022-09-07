@@ -43,8 +43,15 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
     ref.refresh(memberListProvider);
   }
 
-  void setSelectedRide(Ride? ride) {
-    if (state != ride) {
+  /// Set the selected ride to [ride].
+  ///
+  /// If the new ride is equal to the old one, through [==],
+  /// the selected ride is not updated unless [force] is true.
+  ///
+  /// If the new ride is [identical] to the old one,
+  /// the selected ride is not updated,
+  void setSelectedRide(Ride? ride, {bool force = false}) {
+    if (force || state != ride) {
       state = ride;
     }
   }

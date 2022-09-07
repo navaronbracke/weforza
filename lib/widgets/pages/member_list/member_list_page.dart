@@ -76,21 +76,15 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           Consumer(
             builder: (context, ref, child) {
               return IconButton(
-                icon: const Icon(
-                  Icons.person_add,
-                  color: Colors.white,
+                icon: const Icon(Icons.person_add, color: Colors.white),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MemberForm()),
                 ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const MemberForm()),
-                  );
-                },
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.file_download),
-            color: Colors.white,
+            icon: const Icon(Icons.file_download, color: Colors.white),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const ImportMembersPage(),
@@ -98,8 +92,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.file_upload),
-            color: Colors.white,
+            icon: const Icon(Icons.file_upload, color: Colors.white),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const ExportMembersPage(),
@@ -152,11 +145,9 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
             CupertinoIconButton.fromAppTheme(
               icon: CupertinoIcons.person_badge_plus_fill,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MemberForm()),
-                );
-              },
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MemberForm()),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12),

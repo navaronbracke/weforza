@@ -28,10 +28,15 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
     );
 
     if (mounted && updatedRide != null) {
+      final notifier = ref.read(selectedRideProvider.notifier);
+
       // Update the selected ride with its new `scannedAttendees` count.
       // The counter gets updates about this value.
       // The attendees list refreshes when the ride is updated.
-      ref.read(selectedRideProvider.notifier).setSelectedRide(updatedRide);
+      //
+      // Since the amount of manually added attendees can change, even when
+      // [Ride.scannedAttendees] is still the same, this update should be forced.
+      notifier.setSelectedRide(updatedRide, force: true);
 
       // Refresh the ride list so that the attendee counter for this ride
       // updates in the list of rides.

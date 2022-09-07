@@ -7,6 +7,7 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
 /// This class represents the delegate for a Member form.
@@ -72,7 +73,7 @@ class MemberFormDelegate {
     }
   }
 
-  Future<Member> editMember(MemberPayload model) async {
+  Future<void> editMember(MemberPayload model) async {
     _submitController.add(true);
 
     try {
@@ -111,7 +112,16 @@ class MemberFormDelegate {
 
       await repository.updateMember(newMember);
 
-      return newMember;
+      final notifier = ref.read(selectedMemberProvider.notifier);
+
+      // Update the selected member and its profile image.
+      notifier.updateSelectedMember(
+        member: newMember,
+        profileImage: model.profileImage,
+      );
+
+      // An item in the list was updated.
+      ref.refresh(memberListProvider);
     } catch (error) {
       _submitController.addError(error);
 

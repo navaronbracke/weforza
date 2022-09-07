@@ -75,16 +75,12 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     try {
       if (memberUuid == null) {
         await _delegate.addMember(model);
-
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
       } else {
-        final result = await _delegate.editMember(model);
+        await _delegate.editMember(model);
+      }
 
-        if (mounted) {
-          Navigator.of(context).pop(result);
-        }
+      if (mounted) {
+        Navigator.of(context).pop();
       }
     } catch (_) {
       // Ignore errors, the submit button handles them.

@@ -29,35 +29,21 @@ class AsyncProfileImage extends StatelessWidget {
     return FutureBuilder<File?>(
       future: future,
       builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return ProfileImage(
-                icon: icon,
-                image: null,
-                size: size,
-                personInitials: personInitials,
-                iconColor: iconColor,
-                backgroundColor: bgColor,
-              );
-            }
-
-            return ProfileImage(
-              icon: icon,
-              image: snapshot.data,
-              size: size,
-              personInitials: personInitials,
-              iconColor: iconColor,
-              backgroundColor: bgColor,
-            );
-
-          default:
-            return SizedBox(
-              width: size,
-              height: size,
-              child: const Center(child: PlatformAwareLoadingIndicator()),
-            );
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ProfileImage(
+            icon: icon,
+            image: snapshot.data,
+            size: size,
+            personInitials: personInitials,
+            iconColor: iconColor,
+            backgroundColor: bgColor,
+          );
         }
+
+        return SizedBox.square(
+          dimension: size,
+          child: const Center(child: PlatformAwareLoadingIndicator()),
+        );
       },
     );
   }

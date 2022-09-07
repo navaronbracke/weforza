@@ -77,4 +77,25 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
       value: member,
     );
   }
+
+  void updateSelectedMember({
+    required Member member,
+    required Future<File?> profileImage,
+  }) {
+    final currentState = state;
+
+    if (currentState == null) {
+      return;
+    }
+
+    final newState = SelectedMember(
+      attendingCount: currentState.attendingCount,
+      profileImage: profileImage,
+      value: member,
+    );
+
+    if (currentState != newState) {
+      state = newState;
+    }
+  }
 }

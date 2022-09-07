@@ -1,15 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 
 class DeleteDeviceDialog extends ConsumerStatefulWidget {
-  const DeleteDeviceDialog({
-    Key? key,
-    required this.onDelete,
-  }) : super(key: key);
+  const DeleteDeviceDialog({super.key, required this.index});
 
-  final Future<void> Function() onDelete;
+  /// The index of the device that should be deleted.
+  final int index;
 
   @override
   DeleteDeviceDialogState createState() => DeleteDeviceDialogState();
@@ -28,7 +27,13 @@ class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
       errorDescription: translator.GenericError,
       future: future,
       onDeletePressed: () {
-        future = widget.onDelete();
+        final notifier = ref.read(selectedMemberDevicesProvider.notifier);
+
+        future = notifier.deleteDevice(widget.index).then((_) {
+          if (mounted) {
+            Navigator.of(context).pop(true);
+          }
+        });
 
         setState(() {});
       },

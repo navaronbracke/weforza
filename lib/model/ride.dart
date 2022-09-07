@@ -32,6 +32,14 @@ class Ride {
   /// Get the [date] as a `DD-MM-YYYY` formatted string.
   String get dateAsDayMonthYear => '${date.day}-${date.month}-${date.year}';
 
+  /// Create a copy of this object, replacing any non-null values.
+  Ride copyWith({int? scannedAttendees}) {
+    return Ride(
+      date: date,
+      scannedAttendees: scannedAttendees ?? this.scannedAttendees,
+    );
+  }
+
   /// Format the [date] to a given pattern.
   ///
   /// If [shortForm] is true, the date is formatted using [shortDatePattern].

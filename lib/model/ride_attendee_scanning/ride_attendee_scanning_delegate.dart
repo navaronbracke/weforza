@@ -325,10 +325,7 @@ class RideAttendeeScanningDelegate {
         );
       }
 
-      final updatedRide = Ride(
-        date: ride.date,
-        scannedAttendees: scannedAttendees,
-      );
+      final updatedRide = ride.copyWith(scannedAttendees: scannedAttendees);
 
       await rideRepository.updateRide(updatedRide, rideAttendees);
 

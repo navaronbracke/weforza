@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/member.dart';
+import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_details_attendees_list_empty.dart';
@@ -10,135 +11,136 @@ import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class RideDetailsAttendeesList extends StatelessWidget {
-  const RideDetailsAttendeesList({
-    Key? key,
-    required this.future,
-    required this.scannedAttendees,
-  }) : super(key: key);
-
-  final Future<List<Member>>? future;
-  final int? scannedAttendees;
+class RideDetailsAttendeesList extends ConsumerWidget {
+  const RideDetailsAttendeesList({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Member>>(
-      future: future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return GenericError(text: S.of(context).GenericError);
-          } else {
-            if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return const RideDetailsAttendeesListEmpty();
-            } else {
-              final list = snapshot.data!;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final rideAttendees = ref.watch(selectedRideAttendeesProvider);
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        final member = list[index];
-                        return RideDetailsAttendeesListItem(
-                          firstName: member.firstname,
-                          lastName: member.lastname,
-                          alias: member.alias,
-                        );
-                      },
-                      itemCount: snapshot.data!.length,
-                    ),
-                  ),
-                  PlatformAwareWidget(
-                    android: () => _buildAndroidLayout(
-                        context, list.length, scannedAttendees),
-                    ios: () =>
-                        _buildIosLayout(context, list.length, scannedAttendees),
-                  ),
-                ],
-              );
-            }
-          }
-        } else {
-          return const Center(child: PlatformAwareLoadingIndicator());
+    return rideAttendees.when(
+      data: (attendees) {
+        if (attendees.isEmpty) {
+          return const RideDetailsAttendeesListEmpty();
         }
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  final member = attendees[index];
+
+                  return RideDetailsAttendeesListItem(
+                    firstName: member.firstname,
+                    lastName: member.lastname,
+                    alias: member.alias,
+                  );
+                },
+                itemCount: attendees.length,
+              ),
+            ),
+            _ScannedAttendeesBottomBar(total: attendees.length),
+          ],
+        );
       },
+      error: (error, _) => GenericError(text: S.of(context).GenericError),
+      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }
+}
 
-  Widget _buildAndroidLayout(
-      BuildContext context, int total, int? scannedNumber) {
-    return BottomAppBar(
-      color: ApplicationTheme.primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
-            Tooltip(
-              message: S.of(context).RideDetailsTotalAttendeesTooltip,
-              child: Row(
-                children: [
-                  const Icon(Icons.people, color: Colors.white),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text('$total',
-                        style: const TextStyle(color: Colors.white)),
-                  ),
-                ],
-              ),
-            ),
-            const Expanded(child: Center()),
-            Tooltip(
-              message: S.of(context).RideDetailsScannedAttendeesTooltip,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Text(scannedNumber == null ? '-' : '$scannedNumber',
-                        style: const TextStyle(color: Colors.white)),
-                  ),
-                  const Icon(Icons.bluetooth_searching, color: Colors.white),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+/// This widget represents the counter at the bottom of the ride attendees list.
+/// This counter displays the total amount of ride attendees
+/// and the number of scanned attendees.
+class _ScannedAttendeesBottomBar extends ConsumerWidget {
+  const _ScannedAttendeesBottomBar({required this.total});
+
+  final int total;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scannedAttendees = ref.watch(
+      selectedRideProvider.select((value) => value?.scannedAttendees),
     );
-  }
 
-  Widget _buildIosLayout(BuildContext context, int total, int? scannedNumber) {
-    return CupertinoBottomBar.tabBar(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Row(
-          children: [
-            const Icon(
-              CupertinoIcons.person_2_fill,
-              color: CupertinoColors.activeBlue,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Text(
-                '$total',
-                style: const TextStyle(color: CupertinoColors.activeBlue),
+    final translator = S.of(context);
+
+    return PlatformAwareWidget(
+      android: () => BottomAppBar(
+        color: ApplicationTheme.primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Tooltip(
+                message: translator.Total,
+                child: Row(
+                  children: [
+                    const Icon(Icons.people, color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        '$total',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Expanded(child: Center()),
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Text(
-                scannedNumber == null ? '?' : '$scannedNumber',
-                style: const TextStyle(color: CupertinoColors.activeBlue),
+              const Expanded(child: Center()),
+              Tooltip(
+                message: translator.Scanned,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text(
+                        '${scannedAttendees ?? '-'}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.bluetooth_searching,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const Icon(
-              Icons.bluetooth_searching,
-              color: CupertinoColors.activeBlue,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+      ios: () {
+        const textStyle = TextStyle(color: CupertinoColors.activeBlue);
+
+        return CupertinoBottomBar.constrained(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                const Icon(
+                  CupertinoIcons.person_2_fill,
+                  color: CupertinoColors.activeBlue,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Text('$total', style: textStyle),
+                ),
+                const Expanded(child: Center()),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Text('${scannedAttendees ?? '-'}', style: textStyle),
+                ),
+                const Icon(
+                  Icons.bluetooth_searching,
+                  color: CupertinoColors.activeBlue,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

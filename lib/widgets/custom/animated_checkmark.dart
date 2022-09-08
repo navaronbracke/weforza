@@ -21,10 +21,10 @@ class AnimatedCheckmark extends StatefulWidget {
   final Size size;
 
   @override
-  _AnimatedCheckmarkState createState() => _AnimatedCheckmarkState();
+  AnimatedCheckmarkState createState() => AnimatedCheckmarkState();
 }
 
-class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
+class AnimatedCheckmarkState extends State<AnimatedCheckmark>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -44,20 +44,24 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
   }
 
   @override
-  Widget build(BuildContext context) => CustomPaint(
-        size: widget.size,
-        painter: AnimatedPathPainter(
-            animation: _animation,
-            color: widget.color,
-            strokeJoin: widget.strokeJoin,
-            strokeWidth: widget.strokeWidth,
-            strokeCap: widget.strokeCap,
-            createPath: _createPath),
-      );
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: widget.size,
+      painter: AnimatedPathPainter(
+        animation: _animation,
+        color: widget.color,
+        strokeJoin: widget.strokeJoin,
+        strokeWidth: widget.strokeWidth,
+        strokeCap: widget.strokeCap,
+        createPath: _createPath,
+      ),
+    );
+  }
 
   Path _createPath(Size size) {
     final xOffset = size.width * .1;
     final yOffset = -(size.height * .1);
+
     return Path()
       ..moveTo((size.width * .8) + xOffset, (size.height * .2) + yOffset)
       ..lineTo((size.width * .3) + xOffset, size.height + yOffset)

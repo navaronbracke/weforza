@@ -1,48 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget resembles the toggle switch for the 'active' state of a member.
 class MemberActiveToggle extends StatelessWidget {
-  MemberActiveToggle({
-    Key? key,
-    required this.label,
-    required this.stream,
-    required this.onChanged,
-    required this.onErrorBuilder,
-    required this.initialValue,
-  })  : assert(label.isNotEmpty),
-        super(key: key);
-
-  final bool initialValue;
-  final String label;
-  final Stream<bool> stream;
-  final void Function(bool value) onChanged;
-  final Widget Function() onErrorBuilder;
+  const MemberActiveToggle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(label),
+        Text(S.of(context).Active),
         Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: StreamBuilder<bool>(
-            stream: stream,
-            initialData: initialValue,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return onErrorBuilder();
-              }
+          padding: const EdgeInsets.only(left: 4),
+          child: Consumer(
+            builder: (_, ref, child) {
+              final isActive = ref.watch(
+                selectedMemberProvider.select((m) => m!.value.isActiveMember),
+              );
 
               return PlatformAwareWidget(
                 android: () => Switch(
-                  value: snapshot.data!,
-                  onChanged: onChanged,
+                  value: isActive,
+                  onChanged: (value) {
+                    final notifier = ref.read(selectedMemberProvider.notifier);
+
+                    notifier.setMemberActive(value);
+                  },
                 ),
                 ios: () => CupertinoSwitch(
-                  value: snapshot.data!,
-                  onChanged: onChanged,
+                  value: isActive,
+                  onChanged: (value) {
+                    final notifier = ref.read(selectedMemberProvider.notifier);
+
+                    notifier.setMemberActive(value);
+                  },
                 ),
               );
             },

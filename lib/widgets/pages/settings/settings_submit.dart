@@ -1,65 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/settings_bloc.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class SettingsSubmit extends StatefulWidget {
-  const SettingsSubmit({Key? key, required this.bloc}) : super(key: key);
+class SettingsSubmit extends StatelessWidget {
+  const SettingsSubmit({super.key, this.future, required this.onSaveSettings});
 
-  final SettingsBloc bloc;
+  final Future<void>? future;
 
-  @override
-  _SettingsSubmitState createState() => _SettingsSubmitState();
-}
-
-class _SettingsSubmitState extends State<SettingsSubmit> {
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: widget.bloc.saveSettingsFuture,
-      builder: (context, snapshot) {
-        // We did not submit yet, show the submit button.
-        if (snapshot.connectionState == ConnectionState.none) {
-          return _buildSubmitButton();
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return _buildError();
-          } else {
-            return _buildSubmitButton();
-          }
-        } else {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Center(
-              child: PlatformAwareWidget(
-                android: () => const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-                ios: () => const CupertinoActivityIndicator(),
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return PlatformAwareWidget(
-      android: () => IconButton(
-        icon: const Icon(Icons.done, color: Colors.white),
-        onPressed: onSaveSettings,
-      ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: CupertinoIconButton.fromAppTheme(
-          icon: CupertinoIcons.checkmark_alt,
-          onPressed: onSaveSettings,
-        ),
-      ),
-    );
-  }
+  final void Function() onSaveSettings;
 
   Widget _buildError() {
     return Padding(
@@ -77,9 +26,46 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
     );
   }
 
-  void onSaveSettings() {
-    setState(() {
-      widget.bloc.saveSettings();
-    });
+  Widget _buildSubmitButton() {
+    return PlatformAwareWidget(
+      android: () => IconButton(
+        icon: const Icon(Icons.done),
+        onPressed: onSaveSettings,
+      ),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: CupertinoIconButton(
+          icon: CupertinoIcons.checkmark_alt,
+          onPressed: onSaveSettings,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: future,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return _buildSubmitButton();
+          case ConnectionState.done:
+            return snapshot.hasError ? _buildError() : _buildSubmitButton();
+          default:
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Center(
+                child: PlatformAwareWidget(
+                  android: () => const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  ios: () => const CupertinoActivityIndicator(),
+                ),
+              ),
+            );
+        }
+      },
+    );
   }
 }

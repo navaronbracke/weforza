@@ -1,29 +1,49 @@
 import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
-///This class represents a Ride.
+/// This class represents a ride in the ride calendar.
+/// Each ride has a [date] and the number of [scannedAttendees].
 class Ride {
-  Ride({
-    required this.date,
-    this.scannedAttendees,
-  });
+  /// The default constructor.
+  const Ride({required this.date, this.scannedAttendees});
 
-  ///Date formatting patterns
-  static const longDatePattern = 'EEEE d MMMM yyyy';
-  static const shortDatePattern = 'EEE d MMM yyyy';
+  /// Create a ride from the given [date] and [values].
+  factory Ride.of(DateTime date, Map<String, dynamic> values) {
+    return Ride(
+      date: date,
+      scannedAttendees: values['scannedAttendees'] as int?,
+    );
+  }
 
-  /// The Date of the Ride. This is the key for the stored record.
+  /// The date on which this ride occurs in the calendar.
   final DateTime date;
 
   /// The amount of attendees that were automatically scanned for this ride.
-  /// This is a statistical piece of information, that is not exported.
   ///
-  /// For compatibility reasons, this variable is nullable.
-  /// I.e. A new or existing ride without this attribute does not have a value.
-  int? scannedAttendees;
+  /// This variable is purely used for statistics and is not exported.
+  final int? scannedAttendees;
 
-  ///Get [date], but formatted with a day prefix.
-  ///This method can return a short or long format, depending on [shortForm].
+  /// The long date formating pattern for [date].
+  static const longDatePattern = 'EEEE d MMMM yyyy';
+
+  /// The short date formating pattern for [date].
+  static const shortDatePattern = 'EEE d MMM yyyy';
+
+  /// Get the [date] as a `DD-MM-YYYY` formatted string.
+  String get dateAsDayMonthYear => '${date.day}-${date.month}-${date.year}';
+
+  /// Create a copy of this object, replacing any non-null values.
+  Ride copyWith({int? scannedAttendees}) {
+    return Ride(
+      date: date,
+      scannedAttendees: scannedAttendees ?? this.scannedAttendees,
+    );
+  }
+
+  /// Format the [date] to a given pattern.
+  ///
+  /// If [shortForm] is true, the date is formatted using [shortDatePattern].
+  /// Otherwise it is formatted using [longDatePattern].
   String getFormattedDate(BuildContext context, [bool shortForm = true]) {
     return DateFormat(
       shortForm ? shortDatePattern : longDatePattern,
@@ -31,28 +51,23 @@ class Ride {
     ).format(date);
   }
 
-  ///Convert this object to a Map.
-  ///The date is excluded since this is the record's key.
+  /// Convert this ride into an exportable comma separated value string.
+  String toCsv() => dateAsDayMonthYear;
+
+  /// Convert this ride into an exportable JSON object.
+  Map<String, String> toJson() => {'date': dateAsDayMonthYear};
+
+  /// Convert this ride into a map.
+  /// The date is excluded, as that is the key of the record.
   Map<String, dynamic> toMap() => {'scannedAttendees': scannedAttendees};
 
-  ///Create a [Ride] of a Map
-  static Ride of(DateTime date, Map<String, dynamic> values) {
-    return Ride(date: date, scannedAttendees: values['scannedAttendees']);
+  @override
+  bool operator ==(Object other) {
+    return other is Ride &&
+        date == other.date &&
+        scannedAttendees == other.scannedAttendees;
   }
 
   @override
-  bool operator ==(Object other) =>
-      other is Ride &&
-      date == other.date &&
-      scannedAttendees == other.scannedAttendees;
-
-  @override
-  int get hashCode => hashValues(date, scannedAttendees);
-
-  String dateToDDMMYYYY() => '${date.day}-${date.month}-${date.year}';
-
-  // Exporting formats.
-  // Note: scannedAttendees is never exported.
-  Map<String, String> toJson() => {'date': dateToDDMMYYYY()};
-  String toCsv() => dateToDDMMYYYY();
+  int get hashCode => Object.hash(date, scannedAttendees);
 }

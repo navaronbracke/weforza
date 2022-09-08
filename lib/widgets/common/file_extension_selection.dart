@@ -8,18 +8,18 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class FileExtensionSelection extends StatefulWidget {
   const FileExtensionSelection({
     Key? key,
-    required this.onExtensionSelected,
     required this.initialValue,
+    required this.onExtensionSelected,
   }) : super(key: key);
 
-  final void Function(FileExtension value) onExtensionSelected;
   final FileExtension initialValue;
+  final void Function(FileExtension value) onExtensionSelected;
 
   @override
-  _FileExtensionSelectionState createState() => _FileExtensionSelectionState();
+  FileExtensionSelectionState createState() => FileExtensionSelectionState();
 }
 
-class _FileExtensionSelectionState extends State<FileExtensionSelection> {
+class FileExtensionSelectionState extends State<FileExtensionSelection> {
   late FileExtension currentValue;
 
   @override
@@ -29,12 +29,16 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidWidget(context),
-        ios: () => _buildIosWidget(context),
-      );
+  Widget build(BuildContext context) {
+    final translator = S.of(context);
 
-  Widget _buildAndroidWidget(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(translator),
+      ios: () => _buildIosWidget(translator),
+    );
+  }
+
+  Widget _buildAndroidWidget(S translator) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -44,9 +48,9 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           onChanged: onValueChanged,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 2, right: 20),
+          padding: const EdgeInsets.only(right: 20),
           child: Text(
-            S.of(context).FileCsvExtension.toUpperCase(),
+            translator.FileCsvExtension.toUpperCase(),
             style: FileExtension.csv == currentValue
                 ? const TextStyle(color: ApplicationTheme.primaryColor)
                 : null,
@@ -57,36 +61,35 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           groupValue: currentValue,
           onChanged: onValueChanged,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 2),
-          child: Text(
-            S.of(context).FileJsonExtension.toUpperCase(),
-            style: FileExtension.json == currentValue
-                ? const TextStyle(color: ApplicationTheme.primaryColor)
-                : null,
-          ),
-        ),
+        Text(
+          translator.FileJsonExtension.toUpperCase(),
+          style: FileExtension.json == currentValue
+              ? const TextStyle(color: ApplicationTheme.primaryColor)
+              : null,
+        )
       ],
     );
   }
 
-  Widget _buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(S translator) {
     return CupertinoSlidingSegmentedControl<FileExtension>(
       groupValue: currentValue,
       onValueChanged: onValueChanged,
       children: {
-        FileExtension.csv: Text(S.of(context).FileCsvExtension.toUpperCase()),
-        FileExtension.json: Text(S.of(context).FileJsonExtension.toUpperCase()),
+        FileExtension.csv: Text(translator.FileCsvExtension.toUpperCase()),
+        FileExtension.json: Text(translator.FileJsonExtension.toUpperCase()),
       },
     );
   }
 
   void onValueChanged(FileExtension? value) {
-    if (value == null) return; // Should not happen as we have an initial value.
+    if (value == null) {
+      return;
+    }
 
     setState(() {
-      widget.onExtensionSelected(value);
       currentValue = value;
+      widget.onExtensionSelected(currentValue);
     });
   }
 }

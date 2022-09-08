@@ -7,7 +7,8 @@ abstract class ApplicationTheme {
   /// Primary / Secondary Theme colors.
   /// The primary color is defined as a [MaterialColor].
   static const MaterialColor primaryColor = Colors.blue;
-  static final Color secondaryColor = Colors.blue.shade300;
+
+  static const Color secondaryColor = Color(0xFF64B5F6);
 
   /// The color for a calendar day
   /// that is now or in the future, which has no ride.
@@ -60,6 +61,12 @@ abstract class ApplicationTheme {
   /// The text style for the last name of an item in the member list.
   static const memberListItemLastNameTextStyle = TextStyle(fontSize: 14);
 
+  /// The text style for android form errors.
+  static const androidFormErrorStyle = TextStyle(
+    fontSize: 16,
+    color: Colors.red,
+  );
+
   // The text style for iOS form errors.
   static const iosFormErrorStyle = TextStyle(
     fontSize: 14,
@@ -108,29 +115,23 @@ abstract class ApplicationTheme {
     fontStyle: FontStyle.italic,
   );
 
-  static final androidRideAttendeeScanProcessCurrentStepColor =
-      Colors.lightGreen.shade200;
-  static const androidRideAttendeeScanProcessOtherStepColor = Colors.white;
-  static final androidRideAttendeeScanProcessArrowColor =
-      Colors.lightBlue.shade200;
-  static const iosRideAttendeeScanProcessCurrentStepColor =
-      CupertinoColors.activeGreen;
-  static const iosRideAttendeeScanProcessOtherStepColor =
-      CupertinoColors.inactiveGray;
-  static const iosRideAttendeeScanProcessArrowColor =
-      CupertinoColors.activeBlue;
-  static const androidRideAttendeeScanProgressbarColor =
-      Color.fromARGB(255, 98, 204, 98);
-  static const androidRideAttendeeScanProgressbarBackgroundColor =
-      Color.fromARGB(120, 98, 204, 98);
+  static final androidScanStepperCurrentColor = Colors.lightGreen.shade200;
+  static const androidScanStepperOtherColor = Colors.white;
+  static final androidScanStepperArrowColor = Colors.lightBlue.shade200;
 
-  static const Color iosRideAttendeeScanProgressbarColor =
-      CupertinoColors.activeGreen;
-  static final Color iosRideAttendeeScanProgressbarBackgroundColor =
+  static const iosScanStepperCurrentColor = CupertinoColors.activeGreen;
+  static const iosScanStepperOtherColor = CupertinoColors.inactiveGray;
+  static const iosScanStepperArrowColor = CupertinoColors.activeBlue;
+
+  static const androidScanProgressColor = Color.fromARGB(255, 98, 204, 98);
+  static const androidScanProgressBackground = Color.fromARGB(120, 98, 204, 98);
+
+  static const iosScanProgressColor = CupertinoColors.activeGreen;
+  static final iosScanProgressBackground =
       CupertinoColors.activeGreen.withOpacity(0.4);
 
   static const Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
-  static const Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
+  static const Color multipleOwnerColor = Colors.orange;
   static const Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor =
       Colors.red;
   static const Color rideAttendeeScanResultOwnerChoiceRequiredFontColor =
@@ -141,29 +142,23 @@ abstract class ApplicationTheme {
   static const Color androidManualSelectionSaveButtonPrimaryColor =
       Color(0xFF1666a5);
 
-  static const rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(
+  static const multipleOwnersLabelStyle = TextStyle(
     fontStyle: FontStyle.italic,
     fontSize: 12,
-    color: rideAttendeeScanResultMultipleOwnerColor,
+    color: multipleOwnerColor,
   );
 
   static const rideAttendeeScanResultFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 16.0,
   );
-  static const rideAttendeeMultipleOwnersListTooltipStyle = TextStyle(
+  static const multipleOwnersListTooltipStyle = TextStyle(
     fontStyle: FontStyle.italic,
     fontSize: 12,
     color: Colors.grey,
   );
 
   static const Color deleteItemButtonTextColor = Colors.red;
-
-  static final importMembersHeaderExampleTextStyle = TextStyle(
-    fontSize: 12,
-    fontStyle: FontStyle.italic,
-    color: Colors.grey.shade600,
-  );
 
   static const importWarningTextStyle = TextStyle(color: Colors.red);
 
@@ -187,7 +182,7 @@ abstract class ApplicationTheme {
         style: TextButton.styleFrom(
           primary: primaryColor,
           minimumSize: const Size(88, 36),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(2.0)),
           ),
@@ -212,7 +207,7 @@ abstract class ApplicationTheme {
 
   /// The iOS theme.
   static CupertinoThemeData iosTheme() {
-    return CupertinoThemeData(
+    return const CupertinoThemeData(
       primaryColor: primaryColor,
       primaryContrastingColor: secondaryColor,
     );

@@ -1,100 +1,53 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:file/local.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/pages/home_page.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
-import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
-import 'package:weforza/widgets/providers/selectedItemProvider.dart';
+import 'package:weforza/database/database_factory.dart';
+import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/repository/settings_repository.dart';
+import 'package:weforza/riverpod/database/database_provider.dart';
+import 'package:weforza/riverpod/package_info_provider.dart';
+import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/widgets/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Setup the database and other dependencies.
-  await InjectionContainer.initProductionInjector();
 
-  // TODO: remove this delay when upgrading to the next Flutter version
+  // Setup the database at startup.
+  final database = ApplicationDatabase();
+  await database.openDatabase(
+    ApplicationDatabaseFactory(
+      factory: databaseFactoryIo,
+      fileSystem: const LocalFileSystem(),
+    ),
+  );
+
+  // Preload the settings.
+  final settingsRepository = SettingsRepository(
+    SettingsDao(database.getDatabase(), DatabaseTables().settings),
+  );
+  final settings = await settingsRepository.loadApplicationSettings();
+
+  // Preload the package info.
+  final packageInfo = await PackageInfo.fromPlatform();
+
+  // TODO: remove this workaround for a crash with PageView when upgrading to Flutter 3.3
   await Future.delayed(const Duration(milliseconds: 500));
 
-  runApp(const WeForzaApp());
-}
-
-/// This class represents the application.
-class WeForzaApp extends StatefulWidget {
-  const WeForzaApp({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _WeForzaAppState();
-}
-
-class _WeForzaAppState extends State<WeForzaApp> {
-  static const _appName = 'WeForza';
-
-  @override
-  Widget build(BuildContext context) {
-    // Only portrait is supported at the moment.
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
-    return SelectedItemProvider(
-      child: ReloadDataProvider(
-        child: RideAttendeeFutureProvider(
-          child: GestureDetector(
-            child: PlatformAwareWidget(
-              android: () => _buildAndroidWidget(),
-              ios: () => _buildIosWidget(),
-            ),
-            onTap: () {
-              // Enable tap to dismiss the keyboard.
-              FocusScope.of(context).unfocus();
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAndroidWidget() {
-    return MaterialApp(
-      title: _appName,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+  runApp(
+    ProviderScope(
+      overrides: [
+        // Inject the database after it is ready.
+        databaseProvider.overrideWithValue(database),
+        // Inject the preloaded package info.
+        packageInfoProvider.overrideWithValue(packageInfo),
+        // Inject the preloaded settings.
+        settingsProvider.overrideWithValue(StateController(settings)),
       ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: ApplicationTheme.androidTheme(),
-      home: const HomePage(),
-    );
-  }
-
-  Widget _buildIosWidget() {
-    return CupertinoApp(
-      title: _appName,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: ApplicationTheme.iosTheme(),
-      home: const HomePage(),
-    );
-  }
-
-  @override
-  void dispose() {
-    InjectionContainer.get<ApplicationDatabase>().dispose();
-    InjectionContainer.dispose();
-    super.dispose();
-  }
+      child: const WeForzaApp(),
+    ),
+  );
 }

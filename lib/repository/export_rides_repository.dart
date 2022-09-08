@@ -6,5 +6,7 @@ class ExportRidesRepository {
 
   final IExportRidesDao dao;
 
-  Future<Iterable<ExportableRide>> getRides() => dao.getRides();
+  Future<Iterable<ExportableRide>> getRides(DateTime? ride) {
+    return dao.getRides(ride);
+  }
 }

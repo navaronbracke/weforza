@@ -1,83 +1,112 @@
 import 'package:flutter/material.dart';
 
-/// This widget displays the first & last name of a member, combined with the alias in the middle.
+/// This widget displays the first name, alias and last name of a member.
 class MemberNameAndAlias extends StatelessWidget {
-  MemberNameAndAlias({
-    Key? key,
-    required this.firstNameStyle,
-    required this.lastNameStyle,
-    required this.firstName,
-    required this.lastName,
+  const MemberNameAndAlias({
+    super.key,
     required this.alias,
+    required this.firstName,
+    required this.firstLineStyle,
     this.isTwoLine = true,
-  })  : assert(firstName.isNotEmpty && lastName.isNotEmpty),
-        super(key: key);
+    required this.lastName,
+    this.overflow = TextOverflow.ellipsis,
+    required this.secondLineStyle,
+  });
 
-  final String firstName;
-  final String lastName;
+  /// The alias to display.
   final String alias;
-  final TextStyle firstNameStyle;
-  final TextStyle lastNameStyle;
 
-  /// Whether to use the two line variant.
+  /// The style for the text on the first line.
+  ///
+  /// If [isTwoLine] is true, this is the style for the first name and the alias.
+  /// Otherwise this is the style for the first name, alias and last name.
+  final TextStyle firstLineStyle;
+
+  /// The first name to display.
+  final String firstName;
+
+  /// Whether the first name, alias and last name are displayed on two lines.
+  ///
+  /// If this is true, the first name and alias are displayed on one line,
+  /// followed by the last name on a second line.
+  ///
+  /// If this is false, the first name, alias and last name are displayed
+  /// one after another on a single line.
   final bool isTwoLine;
 
-  Widget _buildTwoLineVariant() {
-    final Widget firstNameAndAlias = alias.isEmpty
-        ? Text(
-            firstName,
-            style: firstNameStyle,
-            overflow: TextOverflow.ellipsis,
-          )
-        : Text.rich(
-            TextSpan(text: firstName, style: firstNameStyle, children: [
-              TextSpan(
-                text: " '$alias' ",
-                style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
-              ),
-            ]),
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          );
+  /// The last name to display.
+  final String lastName;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: firstNameAndAlias,
-        ),
-        Text(lastName, style: lastNameStyle, overflow: TextOverflow.ellipsis),
-      ],
-    );
-  }
+  /// The overflow for the text.
+  final TextOverflow overflow;
 
-  Widget _buildOneLineVariant() {
-    return alias.isEmpty
-        ? Text('$firstName $lastName',
-            softWrap: true,
-            style: lastNameStyle,
-            overflow: TextOverflow.ellipsis)
-        : Text.rich(
-            TextSpan(
-                text: firstName,
-                style: lastNameStyle,
-                children: <InlineSpan>[
-                  TextSpan(
-                    text: " '$alias' ",
-                    style: lastNameStyle.copyWith(fontStyle: FontStyle.italic),
-                  ),
-                  TextSpan(
-                    text: lastName,
-                    style: lastNameStyle,
-                  ),
-                ]),
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          );
-  }
+  /// The style for the second line.
+  ///
+  /// If [isTwoLine] is true, this is the style for the last name.
+  /// Otherwise this style is ignored.
+  final TextStyle secondLineStyle;
 
   @override
-  Widget build(BuildContext context) =>
-      isTwoLine ? _buildTwoLineVariant() : _buildOneLineVariant();
+  Widget build(BuildContext context) {
+    final defaultStyle = DefaultTextStyle.of(context).style;
+    final effectiveFirstLineStyle = defaultStyle.merge(firstLineStyle);
+
+    if (isTwoLine) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: RichText(
+              maxLines: 1,
+              overflow: overflow,
+              text: TextSpan(
+                text: firstName,
+                style: effectiveFirstLineStyle,
+                children: [
+                  if (alias.isNotEmpty)
+                    TextSpan(
+                      text: " '$alias' ",
+                      style: effectiveFirstLineStyle.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          Text(
+            lastName,
+            maxLines: 1,
+            overflow: overflow,
+            style: defaultStyle.merge(secondLineStyle),
+          ),
+        ],
+      );
+    }
+
+    return RichText(
+      maxLines: 1,
+      overflow: overflow,
+      text: alias.isEmpty
+          ? TextSpan(
+              text: '$firstName $lastName',
+              style: effectiveFirstLineStyle,
+            )
+          : TextSpan(
+              text: firstName,
+              style: effectiveFirstLineStyle,
+              children: [
+                TextSpan(
+                  text: " '$alias' ",
+                  style: effectiveFirstLineStyle.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                TextSpan(text: lastName, style: effectiveFirstLineStyle),
+              ],
+            ),
+    );
+  }
 }

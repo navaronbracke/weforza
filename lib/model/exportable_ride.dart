@@ -5,9 +5,24 @@ class ExportableRide {
 
   final Iterable<ExportableRideAttendee> attendees;
   final Ride ride;
+
+  void toCsv(StringBuffer buffer) {
+    buffer.writeln(ride.toCsv());
+    for (ExportableRideAttendee attendee in attendees) {
+      buffer.writeln(attendee.toCsv());
+    }
+  }
+
+  Map<String, Object?> toJson() {
+    return {
+      'ride': ride.toJson(),
+      'attendees': attendees.map((attendee) => attendee.toJson()).toList(),
+    };
+  }
 }
 
-///This class represents a RideAttendee in a format that is suitable for exporting inside a [ExportableRide].
+/// This class represents a RideAttendee in a format that is suitable
+/// for exporting inside a [ExportableRide].
 class ExportableRideAttendee {
   ExportableRideAttendee({
     required this.firstName,
@@ -17,11 +32,9 @@ class ExportableRideAttendee {
 
   final String firstName;
   final String lastName;
-  //Members will have aliases in the future, as a replacement for phone numbers.
-  //We add a field for the alias to be future proof.
   final String alias;
 
-  Map<String, dynamic> toJson() {
+  Map<String, Object> toJson() {
     return {'firstName': firstName, 'lastName': lastName, 'alias': alias};
   }
 

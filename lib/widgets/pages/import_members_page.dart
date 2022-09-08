@@ -1,38 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/import_members_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/repository/import_members_repository.dart';
+import 'package:weforza/model/import_members_state.dart';
+import 'package:weforza/riverpod/member/import_members_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
-class ImportMembersPage extends StatefulWidget {
+class ImportMembersPage extends ConsumerStatefulWidget {
   const ImportMembersPage({Key? key}) : super(key: key);
 
   @override
-  _ImportMembersPageState createState() => _ImportMembersPageState();
+  ImportMembersPageState createState() => ImportMembersPageState();
 }
 
-class _ImportMembersPageState extends State<ImportMembersPage> {
-  final ImportMembersBloc bloc = ImportMembersBloc(
-    fileHandler: InjectionContainer.get<IFileHandler>(),
-    repository: InjectionContainer.get<ImportMembersRepository>(),
-  );
+class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
+  final _importController = BehaviorSubject.seeded(ImportMembersState.idle);
 
-  @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
-    );
-  }
+  late final ImportMembersNotifier notifier;
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -54,188 +44,199 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<ImportMembersState>(
-      stream: bloc.importStream,
+      initialData: _importController.value,
+      stream: _importController,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          if (snapshot.error is NoFileChosenError) {
-            return _buildNoFileChosen(context);
-          } else if (snapshot.error is InvalidFileExtensionError) {
-            return _buildInvalidFileExtension(context);
-          } else if (snapshot.error is CsvHeaderMissingError) {
-            return _buildCsvHeaderMissing(context);
-          } else if (snapshot.error is JsonFormatIncompatibleException) {
-            iconBuilder(BuildContext ctx) {
+        final translator = S.of(context);
+
+        final error = snapshot.error;
+
+        final button = _ImportMembersButton(
+          text: translator.ImportMembersPickFile,
+          onTap: () => notifier.importMembers(
+            translator.ImportMembersCsvHeaderRegex,
+            (progress) {
+              if (!_importController.isClosed) {
+                _importController.add(progress);
+              }
+            },
+            (error) {
+              if (!_importController.isClosed) {
+                _importController.addError(error);
+              }
+            },
+          ),
+        );
+
+        if (error is NoFileChosenError) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                translator.ImportMembersPickFileWarning,
+                style: ApplicationTheme.importWarningTextStyle,
+                softWrap: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: button,
+              ),
+            ],
+          );
+        }
+
+        if (error is InvalidFileExtensionError) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                translator.ImportMembersInvalidFileExtension,
+                style: ApplicationTheme.importWarningTextStyle,
+                softWrap: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: button,
+              ),
+            ],
+          );
+        }
+
+        if (error is CsvHeaderMissingError) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                translator.ImportMembersCsvHeaderRequired,
+                style: ApplicationTheme.importWarningTextStyle,
+                softWrap: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: button,
+              ),
+            ],
+          );
+        }
+
+        if (error is JsonFormatIncompatibleException) {
+          return GenericError(
+            text: translator.ImportMembersIncompatibleFileJsonContents,
+            iconBuilder: (context) {
               return PlatformAwareWidget(
                 android: () => Icon(
                   Icons.insert_drive_file,
                   color: ApplicationTheme.listInformationalIconColor,
-                  size: MediaQuery.of(ctx).size.shortestSide * .1,
+                  size: MediaQuery.of(context).size.shortestSide * .1,
                 ),
                 ios: () => Icon(
                   CupertinoIcons.doc_fill,
                   color: ApplicationTheme.listInformationalIconColor,
-                  size: MediaQuery.of(ctx).size.shortestSide * .1,
+                  size: MediaQuery.of(context).size.shortestSide * .1,
                 ),
               );
-            }
+            },
+          );
+        }
 
-            return GenericError(
-              text: S.of(context).ImportMembersIncompatibleFileJsonContents,
-              iconBuilder: iconBuilder,
+        if (error != null) {
+          return GenericError(text: translator.GenericError);
+        }
+
+        switch (snapshot.data!) {
+          case ImportMembersState.idle:
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(''),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: button,
+                ),
+              ],
             );
-          } else {
-            return GenericError(text: S.of(context).GenericError);
-          }
-        } else {
-          switch (snapshot.data) {
-            case ImportMembersState.idle:
-              return _buildPickFileForm(context);
-            case ImportMembersState.pickingFile:
-              return const Center(child: PlatformAwareLoadingIndicator());
-            case ImportMembersState.importing:
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const PlatformAwareLoadingIndicator(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(S.of(context).ImportMembersImporting,
-                        softWrap: true),
+          case ImportMembersState.pickingFile:
+            return const Center(child: PlatformAwareLoadingIndicator());
+          case ImportMembersState.importing:
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const PlatformAwareLoadingIndicator(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    translator.ImportMembersImporting,
+                    softWrap: true,
                   ),
-                ],
-              );
-            case ImportMembersState.done:
-              return Center(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final paintSize = constraints.biggest.shortestSide * .3;
-                    return Center(
-                        child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
+                ),
+              ],
+            );
+          case ImportMembersState.done:
+            return Center(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final paintSize = constraints.biggest.shortestSide * .3;
+                  return Center(
+                    child: SizedBox.square(
+                      dimension: paintSize,
                       child: Center(
                         child: AnimatedCheckmark(
                           color: ApplicationTheme.secondaryColor,
                           size: Size.square(paintSize),
                         ),
                       ),
-                    ));
-                  },
-                ),
-              );
-            default:
-              return GenericError(text: S.of(context).GenericError);
-          }
+                    ),
+                  );
+                },
+              ),
+            );
         }
       },
     );
   }
 
-  void onImportMembers(BuildContext context) {
-    final provider = ReloadDataProvider.of(context);
-    bloc.pickFileAndImportMembers(S.of(context).ImportMembersCsvHeaderRegex,
-        provider.reloadMembers, provider.reloadDevices);
+  @override
+  void initState() {
+    super.initState();
+    notifier = ref.read(importMembersProvider);
   }
 
-  Widget _buildButton(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => TextButton(
-        onPressed: () => onImportMembers(context),
-        child: Text(S.of(context).ImportMembersPickFile),
-      ),
-      ios: () => CupertinoButton.filled(
-        child: Text(
-          S.of(context).ImportMembersPickFile,
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: () => onImportMembers(context),
-      ),
-    );
-  }
-
-  Widget _buildNoFileChosen(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(S.of(context).ImportMembersPickFileWarning,
-            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: _buildButton(context),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInvalidFileExtension(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(S.of(context).ImportMembersInvalidFileExtension,
-            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: _buildButton(context),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCsvHeaderMissing(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(S.of(context).ImportMembersCsvHeaderRequired,
-            style: ApplicationTheme.importWarningTextStyle, softWrap: true),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: _buildButton(context),
-        ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return SizedBox(
-              width: constraints.biggest.shortestSide * .8,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: Text(
-                        S.of(context).ImportMembersCsvHeaderExampleDescription,
-                        style: ApplicationTheme
-                            .importMembersHeaderExampleTextStyle,
-                        softWrap: true),
-                  ),
-                  Text(
-                    S.of(context).ExportMembersCsvHeader,
-                    style: ApplicationTheme.importMembersHeaderExampleTextStyle,
-                    softWrap: true,
-                  )
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPickFileForm(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text(''),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: _buildButton(context),
-        ),
-      ],
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
     );
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    _importController.close();
     super.dispose();
+  }
+}
+
+class _ImportMembersButton extends StatelessWidget {
+  const _ImportMembersButton({
+    Key? key,
+    required this.text,
+    required this.onTap,
+  }) : super(key: key);
+
+  /// The text for the button.
+  final String text;
+
+  /// The onTap handler for the button.
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => TextButton(onPressed: onTap, child: Text(text)),
+      ios: () => CupertinoButton.filled(
+        onPressed: onTap,
+        child: Text(text, style: const TextStyle(color: Colors.white)),
+      ),
+    );
   }
 }

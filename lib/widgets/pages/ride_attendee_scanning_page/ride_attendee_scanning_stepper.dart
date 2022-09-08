@@ -1,90 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-///This Widget represents the stepper at the top of the scanning page.
-///It shows if the user is in the scanning step or the manual assignment step.
+/// This widget represents the stepper at the top of the scanning page.
+/// It displays the two labels of the scanning process,
+/// `Scan` and `Manual`, separated by an arrow.
+/// The currently applicable label is highlighted.
 class RideAttendeeScanningStepper extends StatelessWidget {
-  const RideAttendeeScanningStepper({
-    Key? key,
-    required this.stream,
-  }) : super(key: key);
+  const RideAttendeeScanningStepper({super.key, required this.stream});
 
-  final Stream<bool> stream;
+  /// The stream that indicates the current step in the scanning process.
+  final Stream<RideAttendeeScanningState> stream;
 
   @override
-  Widget build(BuildContext context) => StreamBuilder<bool>(
-        initialData: true,
-        stream: stream,
-        builder: (context, snapshot) => PlatformAwareWidget(
-          android: () => _buildAndroidWidget(context, snapshot.data!),
-          ios: () => _buildIosWidget(context, snapshot.data!),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return StreamBuilder<RideAttendeeScanningState>(
+      stream: stream,
+      builder: (context, snapshot) {
+        // Every step before the manual selection is regarded as part of the
+        // `Scan` label.
+        final isScanningStep =
+            snapshot.data != RideAttendeeScanningState.manualSelection;
+
+        return PlatformAwareWidget(
+          android: () => _buildAndroidWidget(context, isScanningStep),
+          ios: () => _buildIosWidget(context, isScanningStep),
+        );
+      },
+    );
+  }
 
   Widget _buildAndroidWidget(BuildContext context, bool isScanningStep) {
+    final translator = S.of(context);
+
     return Row(
       children: <Widget>[
         Text(
-          S.of(context).RideAttendeeScanningProcessScanLabel.toUpperCase(),
+          translator.Scan.toUpperCase(),
           style: TextStyle(
-              color: isScanningStep
-                  ? ApplicationTheme
-                      .androidRideAttendeeScanProcessCurrentStepColor
-                  : ApplicationTheme
-                      .androidRideAttendeeScanProcessOtherStepColor),
+            color: isScanningStep
+                ? ApplicationTheme.androidScanStepperCurrentColor
+                : ApplicationTheme.androidScanStepperOtherColor,
+          ),
         ),
         SizedBox(
           width: 50,
           child: Center(
-              child: Icon(Icons.arrow_forward_ios,
-                  color: ApplicationTheme
-                      .androidRideAttendeeScanProcessArrowColor)),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: ApplicationTheme.androidScanStepperArrowColor,
+            ),
+          ),
         ),
         Text(
-          S
-              .of(context)
-              .RideAttendeeScanningProcessAddMembersLabel
-              .toUpperCase(),
+          translator.ByHand.toUpperCase(),
           style: TextStyle(
-              color: isScanningStep
-                  ? ApplicationTheme
-                      .androidRideAttendeeScanProcessOtherStepColor
-                  : ApplicationTheme
-                      .androidRideAttendeeScanProcessCurrentStepColor),
+            color: isScanningStep
+                ? ApplicationTheme.androidScanStepperOtherColor
+                : ApplicationTheme.androidScanStepperCurrentColor,
+          ),
         ),
       ],
     );
   }
 
   Widget _buildIosWidget(BuildContext context, bool isScanningStep) {
+    final translator = S.of(context);
+
     return Row(
       children: <Widget>[
-        Text(S.of(context).RideAttendeeScanningProcessScanLabel.toUpperCase(),
-            style: TextStyle(
-                color: isScanningStep
-                    ? ApplicationTheme
-                        .iosRideAttendeeScanProcessCurrentStepColor
-                    : ApplicationTheme
-                        .iosRideAttendeeScanProcessOtherStepColor)),
+        Text(
+          translator.Scan.toUpperCase(),
+          style: TextStyle(
+            color: isScanningStep
+                ? ApplicationTheme.iosScanStepperCurrentColor
+                : ApplicationTheme.iosScanStepperOtherColor,
+          ),
+        ),
         const SizedBox(
           width: 50,
           child: Center(
-            child: Icon(Icons.arrow_forward_ios,
-                color: ApplicationTheme.iosRideAttendeeScanProcessArrowColor),
+            child: Icon(
+              Icons.arrow_forward_ios,
+              color: ApplicationTheme.iosScanStepperArrowColor,
+            ),
           ),
         ),
         Text(
-          S
-              .of(context)
-              .RideAttendeeScanningProcessAddMembersLabel
-              .toUpperCase(),
+          translator.ByHand.toUpperCase(),
           style: TextStyle(
-              color: isScanningStep
-                  ? ApplicationTheme.iosRideAttendeeScanProcessOtherStepColor
-                  : ApplicationTheme
-                      .iosRideAttendeeScanProcessCurrentStepColor),
+            color: isScanningStep
+                ? ApplicationTheme.iosScanStepperOtherColor
+                : ApplicationTheme.iosScanStepperCurrentColor,
+          ),
         ),
       ],
     );

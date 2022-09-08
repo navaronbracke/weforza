@@ -1,55 +1,61 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/reset_ride_calendar_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
-///This dialog handles the UI for the reset ride calendar confirmation.
-class ResetRideCalendarDialog extends StatefulWidget {
+/// This dialog handles the UI for the reset ride calendar confirmation.
+class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({Key? key}) : super(key: key);
 
   @override
-  _ResetRideCalendarDialogState createState() => _ResetRideCalendarDialogState(
-        bloc: ResetRideCalendarBloc(
-          repository: InjectionContainer.get<RideRepository>(),
-        ),
-      );
+  ResetRideCalendarDialogState createState() => ResetRideCalendarDialogState();
 }
 
-class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
-  _ResetRideCalendarDialogState({required this.bloc});
-
-  final ResetRideCalendarBloc bloc;
+class ResetRideCalendarDialogState
+    extends ConsumerState<ResetRideCalendarDialog> {
+  Future<void>? deleteFuture;
 
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
     return FutureBuilder<void>(
-      future: bloc.deleteCalendarFuture,
+      future: deleteFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.none) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidConfirmDialog(context, translator),
-            ios: () => _buildIosConfirmDialog(context, translator),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasError) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidErrorDialog(context, translator),
-            ios: () => _buildIosErrorDialog(context, translator),
-          );
-        } else {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidLoadingDialog(context, translator),
-            ios: () => const CupertinoLoadingDialog(),
-          );
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return PlatformAwareWidget(
+              android: () => _buildAndroidConfirmDialog(context, translator),
+              ios: () => _buildIosConfirmDialog(context, translator),
+            );
+          case ConnectionState.done:
+            return snapshot.hasError
+                ? PlatformAwareWidget(
+                    android: () => _buildAndroidErrorDialog(
+                      context,
+                      translator,
+                    ),
+                    ios: () => _buildIosErrorDialog(context, translator),
+                  )
+                : PlatformAwareWidget(
+                    android: () => _buildAndroidLoadingDialog(
+                      context,
+                      translator,
+                    ),
+                    ios: () => const CupertinoLoadingDialog(),
+                  );
+          default:
+            return PlatformAwareWidget(
+              android: () => _buildAndroidLoadingDialog(context, translator),
+              ios: () => const CupertinoLoadingDialog(),
+            );
         }
       },
     );
@@ -62,7 +68,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -70,7 +76,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Text(
-              translator.SettingsResetRideCalendarDialogDescription,
+              translator.ResetRideCalendarDialogDescription,
               softWrap: true,
               style: Theme.of(context).textTheme.subtitle1,
             ),
@@ -83,13 +89,11 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text(
-                translator.SettingsResetRideCalendarDialogConfirm.toUpperCase(),
-              ),
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
               onPressed: () => _resetCalendar(context),
+              child: Text(translator.Clear.toUpperCase()),
             ),
           ],
         ),
@@ -106,7 +110,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -116,7 +120,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 4),
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
@@ -124,7 +128,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
                   ),
                 ),
                 Text(
-                  translator.SettingsResetRideCalendarErrorMessage,
+                  translator.ResetRideCalendarError,
                   softWrap: true,
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
@@ -153,7 +157,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
           child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
+            translator.ResetRideCalendar,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -187,12 +191,12 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
 
   Widget _buildIosConfirmDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.SettingsResetRideCalendarDialogTitle),
-      content: Text(translator.SettingsResetRideCalendarDialogDescription),
+      title: Text(translator.ResetRideCalendar),
+      content: Text(translator.ResetRideCalendarDescription),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
-          child: Text(translator.SettingsResetRideCalendarDialogConfirm),
+          child: Text(translator.Clear),
           onPressed: () => _resetCalendar(context),
         ),
         CupertinoDialogAction(
@@ -205,7 +209,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
 
   Widget _buildIosErrorDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
-      title: Text(translator.SettingsResetRideCalendarDialogTitle),
+      title: Text(translator.ResetRideCalendar),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -218,7 +222,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
               size: 25,
             ),
           ),
-          Text(translator.SettingsResetRideCalendarErrorMessage),
+          Text(translator.ResetRideCalendarError),
         ],
       ),
       actions: [
@@ -231,15 +235,20 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
   }
 
   void _resetCalendar(BuildContext context) {
-    final reloadDataProvider = ReloadDataProvider.of(context);
+    final repository = ref.read(rideRepositoryProvider);
 
-    setState(() {
-      bloc.deleteRideCalendar(() {
-        reloadDataProvider.reloadRides.value = true;
-        reloadDataProvider.reloadMembers.value = true;
-        // Pop the dialog with a deletion confirmation.
-        Navigator.of(context).pop(true);
-      });
+    deleteFuture = repository.deleteRideCalendar().then((_) {
+      if (!mounted) {
+        return;
+      }
+
+      ref.refresh(rideListProvider);
+      ref.refresh(memberListProvider);
+
+      // Pop the dialog with a deletion confirmation.
+      Navigator.of(context).pop(true);
     });
+
+    setState(() {});
   }
 }

@@ -16,9 +16,6 @@ import 'package:weforza/widgets/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // TODO: remove this delay when upgrading to the next Flutter version
-  await Future.delayed(const Duration(milliseconds: 500));
-
   // Setup the database at startup.
   final database = ApplicationDatabase();
   await database.openDatabase(

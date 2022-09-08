@@ -64,7 +64,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
             onPressed: () => _goToScanningPage(context),
           ),
           PopupMenuButton<RideDetailsPageOptions>(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
+            icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => <PopupMenuEntry<RideDetailsPageOptions>>[
               PopupMenuItem<RideDetailsPageOptions>(
                 value: RideDetailsPageOptions.export,

@@ -76,7 +76,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           Consumer(
             builder: (context, ref, child) {
               return IconButton(
-                icon: const Icon(Icons.person_add, color: Colors.white),
+                icon: const Icon(Icons.person_add),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MemberForm()),
                 ),
@@ -84,7 +84,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.file_download, color: Colors.white),
+            icon: const Icon(Icons.file_download),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const ImportMembersPage(),
@@ -92,7 +92,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.file_upload, color: Colors.white),
+            icon: const Icon(Icons.file_upload),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const ExportMembersPage(),

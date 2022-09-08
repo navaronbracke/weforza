@@ -29,7 +29,7 @@ class SettingsSubmit extends StatelessWidget {
   Widget _buildSubmitButton() {
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: const Icon(Icons.done, color: Colors.white),
+        icon: const Icon(Icons.done),
         onPressed: onSaveSettings,
       ),
       ios: () => Padding(

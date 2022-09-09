@@ -9,11 +9,11 @@ import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 
 /// This provider provides the device dao.
-final deviceDaoProvider = Provider<IDeviceDao>((ref) {
+final deviceDaoProvider = Provider<DeviceDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return DeviceDao(
+  return DeviceDaoImpl(
     database.getDatabase(),
     databaseTables.device,
     databaseTables.member,

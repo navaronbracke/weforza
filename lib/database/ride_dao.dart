@@ -76,14 +76,16 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> deleteRide(DateTime date) async {
+  Future<void> deleteRide(DateTime date) {
     final isoDate = date.toIso8601String();
-    final rideFinder = Finder(filter: Filter.byKey(isoDate));
-    final rideAttendeeFinder = Finder(filter: Filter.equals('date', isoDate));
 
-    await _database.transaction((txn) async {
-      await _rideAttendeeStore.delete(txn, finder: rideAttendeeFinder);
-      await _rideStore.delete(txn, finder: rideFinder);
+    return _database.transaction((txn) async {
+      await _rideAttendeeStore.delete(
+        txn,
+        finder: Finder(filter: Filter.equals('date', isoDate)),
+      );
+
+      await _rideStore.record(isoDate).delete(txn);
     });
   }
 

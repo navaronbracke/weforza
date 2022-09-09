@@ -62,24 +62,27 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async {
-    final finder = Finder(filter: Filter.byKey(member.uuid));
-    if (await _memberStore.findFirst(_database, finder: finder) != null) {
+    final recordRef = _memberStore.record(member.uuid);
+
+    if (await recordRef.exists(_database)) {
       throw ArgumentError('The uuid ${member.uuid} is already in use');
     }
-    await _memberStore.record(member.uuid).add(_database, member.toMap());
+
+    await recordRef.add(_database, member.toMap());
   }
 
   @override
-  Future<void> deleteMember(String uuid) async {
-    //delete the ride attendee records, the member's devices and the member
-    final memberFinder = Finder(filter: Filter.byKey(uuid));
-    final memberRidesFinder = Finder(filter: Filter.equals('attendee', uuid));
-    final memberDeviceFinder = Finder(filter: Filter.equals('owner', uuid));
-
-    await _database.transaction((txn) async {
-      await _memberStore.delete(txn, finder: memberFinder);
-      await _rideAttendeeStore.delete(txn, finder: memberRidesFinder);
-      await _deviceStore.delete(txn, finder: memberDeviceFinder);
+  Future<void> deleteMember(String uuid) {
+    return _database.transaction((txn) async {
+      await _memberStore.record(uuid).delete(txn);
+      await _rideAttendeeStore.delete(
+        txn,
+        finder: Finder(filter: Filter.equals('attendee', uuid)),
+      );
+      await _deviceStore.delete(
+        txn,
+        finder: Finder(filter: Filter.equals('owner', uuid)),
+      );
     });
   }
 
@@ -111,12 +114,8 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<void> updateMember(Member member) async {
-    final finder = Finder(
-      filter: Filter.byKey(member.uuid),
-    );
-
-    await _memberStore.update(_database, member.toMap(), finder: finder);
+  Future<void> updateMember(Member member) {
+    return _memberStore.record(member.uuid).update(_database, member.toMap());
   }
 
   @override

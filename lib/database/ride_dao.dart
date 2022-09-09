@@ -68,8 +68,8 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> deleteRideCalendar() async {
-    await _database.transaction((txn) async {
+  Future<void> deleteRideCalendar() {
+    return _database.transaction((txn) async {
       await _rideAttendeeStore.delete(txn);
       await _rideStore.delete(txn);
     });
@@ -137,14 +137,14 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) async {
+  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
     // The key for the ride record is the ride date as an ISO 8601 date string.
     final rideRecordKey = ride.date.toIso8601String();
     // Find the attendees that have the ride record key as date field.
     final rideAttendeeFinder =
         Finder(filter: Filter.equals('date', rideRecordKey));
 
-    await _database.transaction((txn) async {
+    return _database.transaction((txn) async {
       // Update the ride scanned attendees counter in the record.
       await _rideStore.record(rideRecordKey).update(txn, ride.toMap());
 

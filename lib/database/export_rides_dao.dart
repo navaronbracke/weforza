@@ -1,4 +1,5 @@
 import 'package:sembast/sembast.dart';
+import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/model/exportable_ride.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
@@ -14,10 +15,10 @@ abstract class ExportRidesDao {
 class ExportRidesDaoImpl implements ExportRidesDao {
   ExportRidesDaoImpl(
     this._database,
-    this._memberStore,
-    this._rideAttendeeStore,
-    this._rideStore,
-  );
+    DatabaseTables tables,
+  )   : _memberStore = tables.member,
+        _rideAttendeeStore = tables.rideAttendee,
+        _rideStore = tables.ride;
 
   /// A reference to the database, which is needed by the Store.
   final Database _database;

@@ -4,26 +4,23 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 
-abstract class IExportRidesDao {
+abstract class ExportRidesDao {
   /// Get the exportable rides with their attendees.
   ///
-  /// If a specific [ride] date is given, return only that ride.
+  /// If a specific [ride] date is given, only that ride is returned.
   Future<Iterable<ExportableRide>> getRides(DateTime? ride);
 }
 
-class ExportRidesDao implements IExportRidesDao {
-  ExportRidesDao(
+class ExportRidesDaoImpl implements ExportRidesDao {
+  ExportRidesDaoImpl(
     this._database,
     this._memberStore,
-    this._rideStore,
     this._rideAttendeeStore,
+    this._rideStore,
   );
 
   /// A reference to the database, which is needed by the Store.
   final Database _database;
-
-  /// A reference to the [Ride] store.
-  final StoreRef<String, Map<String, dynamic>> _rideStore;
 
   /// A reference to the [Member] store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
@@ -31,11 +28,17 @@ class ExportRidesDao implements IExportRidesDao {
   /// A reference to the [RideAttendee] store.
   final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
-  Future<void> _fetchAttendees(
-    Map<DateTime, Set<RideAttendee>> attendees,
-    DateTime? ride,
-  ) async {
+  /// A reference to the [Ride] store.
+  final StoreRef<String, Map<String, dynamic>> _rideStore;
+
+  /// Get the ride attendees per ride.
+  ///
+  /// If [ride] is not null, only the attendees of this ride are returned.
+  ///
+  /// Returns a map of ride attendees per ride date.
+  Future<Map<DateTime, Set<RideAttendee>>> _getAttendees(DateTime? ride) async {
     Finder? finder;
+    final attendees = <DateTime, Set<RideAttendee>>{};
 
     // Only look for attendees of the given ride.
     if (ride != null) {
@@ -53,21 +56,28 @@ class ExportRidesDao implements IExportRidesDao {
         attendees[attendee.rideDate] = <RideAttendee>{attendee};
       }
     }
+
+    return attendees;
   }
 
-  Future<void> _fetchMembers(Map<String, Member> members) async {
+  /// Get all the members, mapped to their [Member.uuid].
+  Future<Map<String, Member>> _getMembers() async {
+    final members = <String, Member>{};
+
     final records = await _memberStore.find(_database);
 
     for (final record in records) {
       final member = Member.of(record.key, record.value);
       members[member.uuid] = member;
     }
+
+    return members;
   }
 
-  Future<void> _fetchRides(
-    Map<DateTime, Ride> rides,
-    DateTime? rideDate,
-  ) async {
+  /// Get all the rides, mapped to their date.
+  Future<Map<DateTime, Ride>> _getRides(DateTime? rideDate) async {
+    final rides = <DateTime, Ride>{};
+
     // Get the single ride, using the record ref.
     if (rideDate != null) {
       final recordRef = _rideStore.record(rideDate.toIso8601String());
@@ -76,16 +86,16 @@ class ExportRidesDao implements IExportRidesDao {
       if (value != null) {
         rides[rideDate] = Ride.of(rideDate, value);
       }
+    } else {
+      final records = await _rideStore.find(_database);
 
-      return;
+      for (final record in records) {
+        final ride = Ride.of(DateTime.parse(record.key), record.value);
+        rides[ride.date] = ride;
+      }
     }
 
-    final records = await _rideStore.find(_database);
-
-    for (final record in records) {
-      final ride = Ride.of(DateTime.parse(record.key), record.value);
-      rides[ride.date] = ride;
-    }
+    return rides;
   }
 
   Iterable<ExportableRide> _joinRidesAndAttendees(
@@ -124,17 +134,13 @@ class ExportRidesDao implements IExportRidesDao {
 
   @override
   Future<Iterable<ExportableRide>> getRides(DateTime? ride) async {
-    final attendees = <DateTime, Set<RideAttendee>>{};
-    final members = <String, Member>{};
-    final rides = <DateTime, Ride>{};
+    final attendeesFuture = _getAttendees(ride);
+    final membersFuture = _getMembers();
+    final ridesFuture = _getRides(ride);
 
-    // Fetch the rides, members and attendees in parallel.
-    // This populates the given collections with data.
-    await Future.wait([
-      _fetchAttendees(attendees, ride),
-      _fetchMembers(members),
-      _fetchRides(rides, ride),
-    ]);
+    final attendees = await attendeesFuture;
+    final members = await membersFuture;
+    final rides = await ridesFuture;
 
     return _joinRidesAndAttendees(attendees, members, rides);
   }

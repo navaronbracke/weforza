@@ -1,42 +1,44 @@
 import 'package:sembast/sembast.dart';
+import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/model/settings.dart';
 
-///This class defines a contract for managing application settings.
-abstract class ISettingsDao {
-  /// Read the [Settings] from the database.
-  Future<Settings> readApplicationSettings();
+/// This class represents an interface
+/// to read and write the application settings.
+abstract class SettingsDao {
+  /// Read the current application settings.
+  Future<Settings> read();
 
-  /// Write the given settings to the database.
-  Future<void> writeApplicationSettings(Settings newSettings);
+  /// Write the new [settings].
+  Future<void> write(Settings settings);
 }
 
-class SettingsDao implements ISettingsDao {
-  SettingsDao(this._database, this._settingsStore);
-
-  /// The key for the settings record.
-  static const _settingsKey = 'APPLICATION_SETTINGS';
+/// The default implementation of [SettingsDao].
+class SettingsDaoImpl implements SettingsDao {
+  SettingsDaoImpl(
+    this._database,
+    DatabaseTables tables,
+  ) : _settingsRecordRef = tables.settings.record(_settingsKey);
 
   /// A reference to the database.
   final Database _database;
 
-  /// A  reference to the [Settings] store.
-  final StoreRef<String, Map<String, dynamic>> _settingsStore;
+  /// The record reference for the settings record.
+  final RecordRef<String, Map<String, dynamic>> _settingsRecordRef;
+
+  /// The key for the settings record.
+  static const _settingsKey = 'APPLICATION_SETTINGS';
 
   @override
-  Future<Settings> readApplicationSettings() async {
-    return Settings.of(
-      await _settingsStore.record(_settingsKey).get(_database) ?? {},
-    );
+  Future<Settings> read() async {
+    return Settings.of(await _settingsRecordRef.get(_database) ?? {});
   }
 
   @override
-  Future<void> writeApplicationSettings(Settings newSettings) async {
-    final recordRef = _settingsStore.record(_settingsKey);
-
-    if (await recordRef.exists(_database)) {
-      await recordRef.update(_database, newSettings.toMap());
+  Future<void> write(Settings settings) async {
+    if (await _settingsRecordRef.exists(_database)) {
+      await _settingsRecordRef.update(_database, settings.toMap());
     } else {
-      await recordRef.add(_database, newSettings.toMap());
+      await _settingsRecordRef.add(_database, settings.toMap());
     }
   }
 }

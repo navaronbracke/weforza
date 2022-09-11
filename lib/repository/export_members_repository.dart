@@ -1,36 +1,30 @@
-import 'dart:collection';
-
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/member_dao.dart';
 import 'package:weforza/model/exportable_member.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 
 class ExportMembersRepository {
   ExportMembersRepository(this.deviceDao, this.memberDao);
 
-  final IDeviceDao deviceDao;
-  final IMemberDao memberDao;
-
-  Future<void> _getDevices(HashMap<String, Set<String>> collection) async =>
-      collection.addAll(await deviceDao.getAllDevicesGroupedByOwnerId());
-  Future<void> _getMembers(List<Member> collection) async =>
-      collection.addAll(await memberDao.getMembers(MemberFilterOption.all));
+  final DeviceDao deviceDao;
+  final MemberDao memberDao;
 
   Future<Iterable<ExportableMember>> getMembers() async {
-    final HashMap<String, Set<String>> devicesGroupedByOwner = HashMap();
-    final List<Member> members = [];
+    final membersFuture = memberDao.getMembers(MemberFilterOption.all);
+    final devicesFuture = deviceDao.getAllDevicesGroupedByOwnerId();
 
-    await Future.wait(
-        [_getDevices(devicesGroupedByOwner), _getMembers(members)]);
+    final members = await membersFuture;
+    final devices = await devicesFuture;
 
-    return members.map((member) => ExportableMember(
-          firstName: member.firstname,
-          lastName: member.lastname,
-          alias: member.alias,
-          isActiveMember: member.isActiveMember,
-          devices: devicesGroupedByOwner[member.uuid] ?? <String>{},
-          lastUpdated: member.lastUpdated,
-        ));
+    return members.map(
+      (member) => ExportableMember(
+        firstName: member.firstname,
+        lastName: member.lastname,
+        alias: member.alias,
+        active: member.isActiveMember,
+        devices: devices[member.uuid] ?? <String>{},
+        lastUpdated: member.lastUpdated,
+      ),
+    );
   }
 }

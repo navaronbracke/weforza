@@ -25,7 +25,7 @@ enum FileExtension {
 }
 
 /// This interface provides methods to work with [File]s.
-abstract class IFileHandler {
+abstract class FileHandler {
   /// Pick a profile image from the device gallery.
   /// Returns the [File] that was chosen.
   Future<File?> chooseProfileImageFromGallery();
@@ -42,8 +42,8 @@ abstract class IFileHandler {
   Future<File> createFile(String fileName, String extension);
 }
 
-/// The default implementation of [IFileHandler].
-class FileHandler implements IFileHandler {
+/// The default implementation of [FileHandler].
+class IoFileHandler implements FileHandler {
   @override
   Future<File?> chooseProfileImageFromGallery() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);

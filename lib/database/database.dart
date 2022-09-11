@@ -9,18 +9,17 @@ import 'package:sembast/sembast.dart';
 
 import 'package:weforza/database/database_factory.dart';
 
-///This class wraps a Sembast [Database] and datastore instances along with initializer and close methods.
+/// This class represents the application database.
 class ApplicationDatabase {
   ApplicationDatabase({this.databaseName = 'weforza_database.db'});
 
-  //The database filename.
+  /// The name of the database file.
   final String databaseName;
 
-  // The internal instance of the database.
-  // We can assume that it is created before it is used.
+  /// The internal instance of the database.
   late Database _database;
 
-  ///Get the database instance.
+  /// Get the database instance.
   Database getDatabase() => _database;
 
   // TODO remove this method when migrated to new directory.
@@ -56,7 +55,7 @@ class ApplicationDatabase {
     }
   }
 
-  ///Initialize the database.
+  /// Open the database using the provided [databaseFactory].
   Future<void> openDatabase(ApplicationDatabaseFactory databaseFactory) async {
     final databaseDirectory = await getApplicationSupportDirectory();
     final dbPath = join(databaseDirectory.path, databaseName);
@@ -67,5 +66,6 @@ class ApplicationDatabase {
     _database = await databaseFactory.factory.openDatabase(dbPath);
   }
 
+  /// Close the database.
   void dispose() async => await _database.close();
 }

@@ -8,7 +8,7 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 class RideRepository {
   RideRepository(this._dao);
 
-  final IRideDao _dao;
+  final RideDao _dao;
 
   Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
 
@@ -16,25 +16,23 @@ class RideRepository {
 
   Future<void> deleteRideCalendar() => _dao.deleteRideCalendar();
 
-  Future<int> getCurrentRideCount() => _dao.getCurrentRideCount();
+  Future<List<Member>> getRideAttendees(DateTime date) {
+    return _dao.getRideAttendees(date);
+  }
 
-  Stream<int> getRideCount() => _dao.getRideCount();
+  Future<List<DateTime>> getRideDates() => _dao.getRideDates();
 
   Future<List<Ride>> getRides() => _dao.getRides();
 
-  Future<List<DateTime>> getRideDates() => _dao.getRideDates();
+  Future<int> getRidesCount() => _dao.getRidesCount();
+
+  Future<List<ScannedRideAttendee>> getScanResults(DateTime date) {
+    return _dao.getScanResults(date);
+  }
 
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
     return _dao.updateRide(ride, attendees);
   }
 
-  Future<List<Member>> getRideAttendees(DateTime date) {
-    return _dao.getRideAttendees(date);
-  }
-
-  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
-    DateTime date,
-  ) {
-    return _dao.getRideAttendeesAsScanResults(date);
-  }
+  Stream<int> watchRidesCount() => _dao.watchRidesCount();
 }

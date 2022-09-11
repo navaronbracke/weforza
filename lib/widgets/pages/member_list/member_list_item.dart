@@ -45,7 +45,7 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
       widget.member.profileImageFilePath,
     );
 
-    memberAttendingCount = memberRepository.getAttendingCountForAttendee(
+    memberAttendingCount = memberRepository.getAttendingCount(
       widget.member.uuid,
     );
   }

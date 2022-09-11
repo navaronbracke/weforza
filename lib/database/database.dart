@@ -13,11 +13,10 @@ import 'package:weforza/database/database_factory.dart';
 class ApplicationDatabase {
   ApplicationDatabase({this.databaseName = 'weforza_database.db'});
 
-  // The name of the database file.
+  /// The name of the database file.
   final String databaseName;
 
-  // The internal instance of the database.
-  // We can assume that it is created before it is used.
+  /// The internal instance of the database.
   late Database _database;
 
   /// Get the database instance.

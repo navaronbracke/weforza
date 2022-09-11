@@ -197,7 +197,7 @@ class RideAttendeeScanningDelegate {
 
   /// Get the attendees of the [ride].
   Future<void> _loadRideAttendees() async {
-    final items = await rideRepository.getRideAttendeesAsScanResults(ride.date);
+    final items = await rideRepository.getScanResults(ride.date);
 
     if (_rideAttendeeController.isClosed) {
       return;

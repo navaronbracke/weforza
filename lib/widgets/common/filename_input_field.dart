@@ -8,11 +8,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class FileNameInputField extends StatelessWidget {
   FileNameInputField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.errorController,
     this.padding = const EdgeInsets.symmetric(horizontal: 20),
-  }) : super(key: key);
+  });
 
   /// The controller for the text field.
   final TextEditingController controller;

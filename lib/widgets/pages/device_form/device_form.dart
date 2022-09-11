@@ -16,10 +16,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeviceForm extends ConsumerStatefulWidget {
   const DeviceForm({
-    Key? key,
+    super.key,
     this.device,
     required this.ownerUuid,
-  }) : super(key: key);
+  });
 
   /// The device to edit in this form.
   /// If this is null, a new device will be created instead.

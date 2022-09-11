@@ -9,12 +9,12 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// When the image could not be loaded, the given initials are displayed.
 class AsyncProfileImage extends StatelessWidget {
   const AsyncProfileImage({
-    Key? key,
+    super.key,
     this.personInitials,
     required this.icon,
     required this.future,
     this.size = 40,
-  }) : super(key: key);
+  });
 
   final Future<File?> future;
   final String? personInitials;

@@ -9,7 +9,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 /// This widget represents the list of rides.
 class RideList extends ConsumerWidget {
-  const RideList({Key? key}) : super(key: key);
+  const RideList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

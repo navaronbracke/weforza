@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class CupertinoLoadingDialog extends StatelessWidget {
-  const CupertinoLoadingDialog({Key? key}) : super(key: key);
+  const CupertinoLoadingDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

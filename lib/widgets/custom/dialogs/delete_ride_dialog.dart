@@ -5,7 +5,7 @@ import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 
 class DeleteRideDialog extends ConsumerStatefulWidget {
-  const DeleteRideDialog({Key? key}) : super(key: key);
+  const DeleteRideDialog({super.key});
 
   @override
   DeleteRideDialogState createState() => DeleteRideDialogState();

@@ -7,11 +7,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListFilter extends StatelessWidget {
   const MemberListFilter({
-    Key? key,
+    super.key,
     required this.initialFilter,
     required this.onChanged,
     required this.stream,
-  }) : super(key: key);
+  });
 
   final MemberFilterOption initialFilter;
 

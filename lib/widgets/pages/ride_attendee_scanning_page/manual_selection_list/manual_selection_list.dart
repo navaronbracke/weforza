@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
@@ -8,6 +7,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_button_bar.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_filter_delegate.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_item.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_save_button.dart';
@@ -31,9 +31,7 @@ class ManualSelectionList extends StatefulWidget {
 class _ManualSelectionListState extends State<ManualSelectionList> {
   Future<List<Member>>? _activeMembersFuture;
 
-  final _filtersController = BehaviorSubject.seeded(
-    const ManualSelectionFilterOptions(),
-  );
+  final _filtersController = ManualSelectionFilterDelegate();
 
   Future<void>? _saveAttendeesFuture;
 
@@ -85,16 +83,6 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
     );
   }
 
-  void _onSearchQueryChanged(String newQuery) {
-    _filtersController.add(_filtersController.value.copyWith(query: newQuery));
-  }
-
-  void _onShowScannedResultsChanged(bool newValue) {
-    _filtersController.add(
-      _filtersController.value.copyWith(showScannedResults: newValue),
-    );
-  }
-
   /// Sort the active members on their name and alias.
   Future<List<Member>> _sortActiveMembers() {
     final items = widget.delegate.activeMembers;
@@ -124,7 +112,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             keyboardType: TextInputType.text,
             autocorrect: false,
             autovalidateMode: AutovalidateMode.disabled,
-            onChanged: _onSearchQueryChanged,
+            onChanged: _filtersController.onSearchQueryChanged,
             decoration: InputDecoration(
               suffixIcon: const Icon(Icons.search),
               labelText: translator.SearchRiders,
@@ -137,15 +125,15 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             padding: const EdgeInsets.all(8),
             child: CupertinoSearchTextField(
               suffixIcon: const Icon(CupertinoIcons.search),
-              onChanged: _onSearchQueryChanged,
+              onChanged: _filtersController.onSearchQueryChanged,
               placeholder: translator.SearchRiders,
             ),
           ),
         ),
         Expanded(
           child: StreamBuilder<ManualSelectionFilterOptions>(
-            initialData: _filtersController.value,
-            stream: _filtersController,
+            initialData: _filtersController.currentFilters,
+            stream: _filtersController.filters,
             builder: (context, snapshot) {
               final results = _filterActiveMembers(items, snapshot.data!);
 
@@ -170,9 +158,9 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             onPressed: () => _onSaveRideAttendeesButtonPressed(context),
           ),
           showScannedResultsToggle: ShowScannedResultsToggle(
-            initialValue: _filtersController.value.showScannedResults,
-            onChanged: _onShowScannedResultsChanged,
-            stream: _filtersController.map((f) => f.showScannedResults),
+            initialValue: _filtersController.showScannedResults,
+            onChanged: _filtersController.onShowScannedResultsChanged,
+            stream: _filtersController.showScannedResultsStream,
           ),
         ),
       ],
@@ -203,7 +191,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   @override
   void dispose() {
-    _filtersController.close();
+    _filtersController.dispose();
     super.dispose();
   }
 }

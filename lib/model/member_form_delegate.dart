@@ -117,7 +117,7 @@ class MemberFormDelegate {
       // Update the selected member and its profile image.
       notifier.updateSelectedMember(
         member: newMember,
-        profileImage: model.profileImage,
+        profileImage: profileImage,
       );
 
       // An item in the list was updated.

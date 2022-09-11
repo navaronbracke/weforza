@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a profile image.
 ///
@@ -101,6 +103,62 @@ class ProfileImage extends StatelessWidget {
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
         return frame == null ? placeholder : ClipOval(child: child);
       },
+    );
+  }
+}
+
+/// This widget represents a [ProfileImage]
+/// that adapts its placeholder to the current platform.
+class AdaptiveProfileImage extends StatelessWidget {
+  /// The default constructor.
+  const AdaptiveProfileImage({
+    super.key,
+    this.image,
+    this.personInitials,
+    this.size = 64,
+  });
+
+  /// Create an [AdaptiveProfileImage] from an [imagePath] instead of a file.
+  factory AdaptiveProfileImage.path({
+    Key? key,
+    String? imagePath,
+    String? personInitials,
+    double size = 64,
+  }) {
+    return AdaptiveProfileImage(
+      key: key,
+      image: imagePath == null || imagePath.isEmpty ? null : File(imagePath),
+      personInitials: personInitials,
+      size: size,
+    );
+  }
+
+  /// The image to display.
+  final File? image;
+
+  /// The initials of the person to use as placeholder.
+  final String? personInitials;
+
+  /// The size for this widget.
+  ///
+  /// Defaults to 64.
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => ProfileImage(
+        icon: Icons.person,
+        image: image,
+        personInitials: personInitials,
+        size: size,
+      ),
+      ios: () => ProfileImage(
+        icon: CupertinoIcons.person_fill,
+        image: image,
+        personInitials: personInitials,
+        size: size,
+      ),
     );
   }
 }

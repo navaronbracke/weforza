@@ -6,9 +6,9 @@ import 'package:weforza/theme/app_theme.dart';
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
   const DeviceTypeCarousel({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   /// The controller that manages the currently selected page.
   final PageController controller;

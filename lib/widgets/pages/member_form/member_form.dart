@@ -18,9 +18,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberForm extends ConsumerStatefulWidget {
   const MemberForm({
-    Key? key,
+    super.key,
     this.member,
-  }) : super(key: key);
+  });
 
   /// The member to edit in this form.
   /// If this is null, a new member will be created instead.

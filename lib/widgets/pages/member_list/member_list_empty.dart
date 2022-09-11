@@ -5,7 +5,7 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListEmpty extends StatelessWidget {
-  const MemberListEmpty({Key? key}) : super(key: key);
+  const MemberListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {

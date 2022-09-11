@@ -9,7 +9,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty member devices list.
 class MemberDevicesListEmpty extends StatelessWidget {
-  const MemberDevicesListEmpty({Key? key}) : super(key: key);
+  const MemberDevicesListEmpty({super.key});
 
   void onAddDevicePressed(BuildContext context, String ownerUuid) {
     Navigator.of(context).push(

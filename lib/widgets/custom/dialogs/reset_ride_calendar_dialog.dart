@@ -12,7 +12,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This dialog handles the UI for the reset ride calendar confirmation.
 class ResetRideCalendarDialog extends ConsumerStatefulWidget {
-  const ResetRideCalendarDialog({Key? key}) : super(key: key);
+  const ResetRideCalendarDialog({super.key});
 
   @override
   ResetRideCalendarDialogState createState() => ResetRideCalendarDialogState();

@@ -3,34 +3,37 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
 
-///This [Widget] displays a round profile icon or a placeholder if no image is present.
+/// This widget represents a profile image of a person.
+/// If the profile image could not be loaded,
+/// the [personInitials] are displayed.
+/// If those are null or empty, [icon] is used as a fallback.
 class ProfileImage extends StatelessWidget {
   const ProfileImage({
-    Key? key,
+    super.key,
     this.image,
     this.size = 75,
     required this.icon,
     this.iconColor,
     this.backgroundColor,
     this.personInitials,
-  })  : assert(size > 0),
-        super(key: key);
+  }) : assert(size > 0);
 
-  ///The image to show.
+  /// The profile image to show.
   final File? image;
 
-  ///The icon to use as placeholder
+  /// The icon to use as placeholder if [personInitials] is null or empty.
   final IconData icon;
 
-  ///The width and height of the displayed [Image].
+  /// The size of this widget.
   final double size;
 
-  ///The background color for the placeholder icon's background.
+  /// The background color for [icon].
   final Color? backgroundColor;
 
-  ///The icon color for the placeholder icon.
+  /// The color for [icon].
   final Color? iconColor;
 
+  /// The initials of the person.
   final String? personInitials;
 
   Color _getBackgroundColor(String initials) {

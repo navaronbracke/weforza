@@ -5,7 +5,7 @@ import 'package:weforza/riverpod/member/member_list_provider.dart';
 
 /// This widget represents the title in the member list page.
 class MemberListTitle extends ConsumerWidget {
-  const MemberListTitle({Key? key}) : super(key: key);
+  const MemberListTitle({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

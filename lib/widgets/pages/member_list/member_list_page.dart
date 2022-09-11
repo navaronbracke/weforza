@@ -15,13 +15,12 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the list of members.
 class MemberListPage extends ConsumerStatefulWidget {
-  const MemberListPage({Key? key}) : super(key: key);
+  const MemberListPage({super.key});
 
   @override
   MemberListPageState createState() => MemberListPageState();
 }
 
-///This is the [State] class for [MemberListPage].
 class MemberListPageState extends ConsumerState<MemberListPage> {
   // This controller manages the query stream.
   // The input field creates it's own TextEditingController,

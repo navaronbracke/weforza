@@ -3,15 +3,14 @@ import 'package:weforza/widgets/custom/animated_path_painter.dart';
 
 class AnimatedCheckmark extends StatefulWidget {
   const AnimatedCheckmark({
-    Key? key,
+    super.key,
     this.duration = const Duration(milliseconds: 300),
     required this.color,
     this.strokeWidth = 4.0,
     this.strokeCap = StrokeCap.round,
     this.strokeJoin = StrokeJoin.round,
     required this.size,
-  })  : assert(strokeWidth > 0.0),
-        super(key: key);
+  })  : assert(strokeWidth > 0.0);
 
   final Duration duration;
   final Color color;

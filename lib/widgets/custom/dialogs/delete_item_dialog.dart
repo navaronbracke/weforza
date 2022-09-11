@@ -8,13 +8,13 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeleteItemDialog extends StatelessWidget {
   const DeleteItemDialog({
-    Key? key,
+    super.key,
     required this.description,
     required this.errorDescription,
     required this.future,
     required this.onDeletePressed,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String description;
   final String errorDescription;

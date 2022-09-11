@@ -13,7 +13,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ImportMembersPage extends ConsumerStatefulWidget {
-  const ImportMembersPage({Key? key}) : super(key: key);
+  const ImportMembersPage({super.key});
 
   @override
   ImportMembersPageState createState() => ImportMembersPageState();
@@ -217,11 +217,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
 }
 
 class _ImportMembersButton extends StatelessWidget {
-  const _ImportMembersButton({
-    Key? key,
-    required this.text,
-    required this.onTap,
-  }) : super(key: key);
+  const _ImportMembersButton({required this.text, required this.onTap});
 
   /// The text for the button.
   final String text;

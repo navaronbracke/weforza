@@ -11,7 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the application.
 class WeForzaApp extends ConsumerStatefulWidget {
-  const WeForzaApp({Key? key}) : super(key: key);
+  const WeForzaApp({super.key});
 
   @override
   WeForzaAppState createState() => WeForzaAppState();

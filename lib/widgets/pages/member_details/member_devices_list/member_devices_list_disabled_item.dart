@@ -6,9 +6,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListDisabledItem extends StatelessWidget {
   const MemberDevicesListDisabledItem({
-    Key? key,
+    super.key,
     required this.device,
-  }) : super(key: key);
+  });
 
   final Device device;
 
@@ -32,9 +32,9 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
     );
   }
 
-  //During deletion we shouldn't show the edit button.
-  //However simply 'removing the button' might look ugly.
-  //Hence we show whitespace instead, that is the size of the button.
+  // During deletion we shouldn't show the edit button.
+  // However simply 'removing the button' might look ugly.
+  // Hence we show whitespace instead, that is the size of the button.
   Widget _buildButtonWhitespace() {
     return PlatformAwareWidget(
       android: () => SizedBox.fromSize(size: const Size.square(40)),

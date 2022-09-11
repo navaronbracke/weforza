@@ -6,19 +6,20 @@ import 'package:weforza/widgets/pages/ride_list/ride_list_page.dart';
 import 'package:weforza/widgets/pages/settings/settings_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-///This [Widget] represents the app landing page.
-///It allows navigating between [RideListPage] and [MemberListPage].
+/// The home page of the application.
+/// This page provides access to the ride list page, the member list page
+/// and the settings page.
+///
+/// By default the ride list page is shown.
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-///This is the [State] class for [HomePage].
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  ///The selected index.
   int _selectedIndex = 0;
 
   late PageController _pageController;
@@ -42,19 +43,19 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidWidget(context),
-        ios: () => _buildIosWidget(context),
-      );
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
+    );
+  }
 
   Widget _buildPageView() {
     return PageView(
       controller: _pageController,
-      onPageChanged: (page) {
-        setState(() {
-          _selectedIndex = page;
-        });
-      },
+      onPageChanged: (page) => setState(() {
+        _selectedIndex = page;
+      }),
       children: _pages,
     );
   }
@@ -65,9 +66,11 @@ class _HomePageState extends State<HomePage>
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
-          _pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut);
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
         },
         items: [
           BottomNavigationBarItem(
@@ -89,35 +92,36 @@ class _HomePageState extends State<HomePage>
 
   Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: _buildPageView(),
-            ),
-            CupertinoTabBar(
-              currentIndex: _selectedIndex,
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.directions_bike),
-                  label: S.of(context).Rides,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(CupertinoIcons.person_2_fill),
-                  label: S.of(context).Riders,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(CupertinoIcons.settings),
-                  label: S.of(context).Settings,
-                ),
-              ],
-              onTap: (index) {
-                _pageController.animateToPage(index,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut);
-              },
-            )
-          ],
-        ));
+      resizeToAvoidBottomInset: false,
+      child: Column(
+        children: <Widget>[
+          Expanded(child: _buildPageView()),
+          CupertinoTabBar(
+            currentIndex: _selectedIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.directions_bike),
+                label: S.of(context).Rides,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(CupertinoIcons.person_2_fill),
+                label: S.of(context).Riders,
+              ),
+              BottomNavigationBarItem(
+                icon: const Icon(CupertinoIcons.settings),
+                label: S.of(context).Settings,
+              ),
+            ],
+            onTap: (index) {
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
+          )
+        ],
+      ),
+    );
   }
 }

@@ -14,7 +14,7 @@ class SelectedMember {
   final Future<int> attendingCount;
 
   /// The profile image of [value].
-  final Future<File?>? profileImage;
+  final File? profileImage;
 
   /// The member that was selected.
   final Member value;

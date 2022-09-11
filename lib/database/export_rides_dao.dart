@@ -20,7 +20,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
         _rideAttendeeStore = tables.rideAttendee,
         _rideStore = tables.ride;
 
-  /// A reference to the database, which is needed by the Store.
+  /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Member] store.

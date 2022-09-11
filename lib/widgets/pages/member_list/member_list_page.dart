@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
 import 'package:weforza/widgets/pages/import_members_page.dart';
@@ -22,12 +22,9 @@ class MemberListPage extends ConsumerStatefulWidget {
 }
 
 class MemberListPageState extends ConsumerState<MemberListPage> {
-  // This controller manages the query stream.
-  // The input field creates it's own TextEditingController,
-  // as it starts with an empty string.
-  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded('');
-
   final _controller = TextEditingController();
+
+  final _searchController = DebounceSearchDelegate();
 
   void _onMemberSelected(BuildContext context) {
     // Clear the search query.
@@ -106,14 +103,14 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             child: MemberList(
               onMemberSelected: () => _onMemberSelected(context),
               filter: _filterOnSearchQuery,
-              searchQueryStream: _queryController,
+              searchQueryStream: _searchController.searchQuery,
               searchField: TextFormField(
                 controller: _controller,
                 textInputAction: TextInputAction.search,
                 keyboardType: TextInputType.text,
                 autocorrect: false,
                 autovalidateMode: AutovalidateMode.disabled,
-                onChanged: _queryController.add,
+                onChanged: _searchController.onQueryChanged,
                 decoration: InputDecoration(
                   suffixIcon: const Icon(Icons.search),
                   labelText: S.of(context).SearchRiders,
@@ -181,13 +178,13 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
               child: MemberList(
                 onMemberSelected: () => _onMemberSelected(context),
                 filter: _filterOnSearchQuery,
-                searchQueryStream: _queryController,
+                searchQueryStream: _searchController.searchQuery,
                 searchField: Padding(
                   padding: const EdgeInsets.all(8),
                   child: CupertinoSearchTextField(
                     controller: _controller,
                     suffixIcon: const Icon(CupertinoIcons.search),
-                    onChanged: _queryController.add,
+                    onChanged: _searchController.onQueryChanged,
                     placeholder: S.of(context).SearchRiders,
                   ),
                 ),
@@ -209,7 +206,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
 
   @override
   void dispose() {
-    _queryController.close();
+    _searchController.dispose();
     _controller.dispose();
     super.dispose();
   }

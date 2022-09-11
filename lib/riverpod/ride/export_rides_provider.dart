@@ -21,7 +21,7 @@ class ExportRidesProvider {
 
   final ExportRidesRepository exportRidesRepository;
 
-  final IFileHandler fileHandler;
+  final FileHandler fileHandler;
 
   /// Save the given [ExportableRide]s to the given file.
   /// The extension determines how the data is structured inside the file.

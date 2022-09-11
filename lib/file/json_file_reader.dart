@@ -40,7 +40,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
         firstName: firstName,
         lastName: lastName,
         alias: alias,
-        isActiveMember: isActive,
+        active: isActive,
         devices: deviceNames
             .where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName))
             .toSet(),

@@ -38,14 +38,14 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
   late final Future<File?> memberProfileImage;
 
   void getProfileImageAndAttendingCount(
-    IFileHandler fileHander,
+    FileHandler fileHander,
     MemberRepository memberRepository,
   ) {
     memberProfileImage = fileHander.loadProfileImageFromDisk(
       widget.member.profileImageFilePath,
     );
 
-    memberAttendingCount = memberRepository.getAttendingCountForAttendee(
+    memberAttendingCount = memberRepository.getAttendingCount(
       widget.member.uuid,
     );
   }

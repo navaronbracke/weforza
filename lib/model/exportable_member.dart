@@ -1,4 +1,5 @@
 import 'package:weforza/extensions/date_extension.dart';
+import 'package:weforza/model/importable_member.dart';
 
 /// This class represents an exportable member.
 ///
@@ -32,6 +33,15 @@ class ExportableMember {
 
   /// The timestamp that indicates the last update of this member.
   final DateTime lastUpdated;
+
+  /// Get the import key for this importable member.
+  ImportableMemberKey get importKey {
+    return ImportableMemberKey(
+      alias: alias,
+      firstName: firstName,
+      lastName: lastName,
+    );
+  }
 
   /// Convert this object to a comma separated string.
   String toCsv() {

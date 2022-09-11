@@ -6,7 +6,7 @@ import 'package:weforza/model/member.dart';
 class SelectedMember {
   const SelectedMember({
     required this.attendingCount,
-    required this.profileImage,
+    this.profileImage,
     required this.value,
   });
 
@@ -14,7 +14,7 @@ class SelectedMember {
   final Future<int> attendingCount;
 
   /// The profile image of [value].
-  final Future<File?> profileImage;
+  final Future<File?>? profileImage;
 
   /// The member that was selected.
   final Member value;

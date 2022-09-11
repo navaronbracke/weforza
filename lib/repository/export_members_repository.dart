@@ -21,7 +21,7 @@ class ExportMembersRepository {
         firstName: member.firstname,
         lastName: member.lastname,
         alias: member.alias,
-        isActiveMember: member.isActiveMember,
+        active: member.isActiveMember,
         devices: devices[member.uuid] ?? <String>{},
         lastUpdated: member.lastUpdated,
       ),

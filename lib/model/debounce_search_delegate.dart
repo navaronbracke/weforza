@@ -16,6 +16,9 @@ class DebounceSearchDelegate {
   /// The debounce time for the stream events.
   final Duration debounceTime;
 
+  /// Get the current query.
+  String get currentQuery => _controller.value;
+
   /// Add a new [value] to the search query stream.
   void onQueryChanged(String value) {
     if (_controller.isClosed || _controller.value == value) {

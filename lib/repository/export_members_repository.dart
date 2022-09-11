@@ -7,7 +7,7 @@ class ExportMembersRepository {
   ExportMembersRepository(this.deviceDao, this.memberDao);
 
   final DeviceDao deviceDao;
-  final IMemberDao memberDao;
+  final MemberDao memberDao;
 
   Future<Iterable<ExportableMember>> getMembers() async {
     final membersFuture = memberDao.getMembers(MemberFilterOption.all);

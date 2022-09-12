@@ -61,7 +61,7 @@ class DeviceDaoImpl implements DeviceDao {
   Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
     return _memberStore.record(ownerId).update(
       txn,
-      {'lastUpdated': DateTime.now().toUtc().toStringWithoutMilliseconds()},
+      {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
     );
   }
 

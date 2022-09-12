@@ -45,7 +45,7 @@ class MemberDetailsPage extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  final member = ref.read(selectedMemberProvider)!.value;
+                  final member = ref.read(selectedMemberProvider)!;
 
                   _goToEditMemberPage(context, member);
                 },
@@ -95,7 +95,7 @@ class MemberDetailsPage extends StatelessWidget {
                     return CupertinoIconButton(
                       icon: CupertinoIcons.pencil,
                       onPressed: () {
-                        final member = ref.read(selectedMemberProvider)!.value;
+                        final member = ref.read(selectedMemberProvider)!;
 
                         _goToEditMemberPage(context, member);
                       },

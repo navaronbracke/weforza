@@ -20,7 +20,7 @@ class ProfileImage extends StatelessWidget {
     this.iconColor,
     this.image,
     this.personInitials,
-    this.size = 64,
+    this.size = 40,
   });
 
   /// The background color for [icon].
@@ -40,7 +40,7 @@ class ProfileImage extends StatelessWidget {
 
   /// The size of this widget.
   ///
-  /// Defaults to 64.
+  /// Defaults to 40.
   final double size;
 
   Widget _buildPlaceholder() {
@@ -115,7 +115,7 @@ class AdaptiveProfileImage extends StatelessWidget {
     super.key,
     this.image,
     this.personInitials,
-    this.size = 64,
+    this.size = 40,
   });
 
   /// Create an [AdaptiveProfileImage] from an [imagePath] instead of a file.
@@ -123,7 +123,7 @@ class AdaptiveProfileImage extends StatelessWidget {
     Key? key,
     String? imagePath,
     String? personInitials,
-    double size = 64,
+    double size = 40,
   }) {
     return AdaptiveProfileImage(
       key: key,
@@ -141,7 +141,7 @@ class AdaptiveProfileImage extends StatelessWidget {
 
   /// The size for this widget.
   ///
-  /// Defaults to 64.
+  /// Defaults to 40.
   final double size;
 
   @override

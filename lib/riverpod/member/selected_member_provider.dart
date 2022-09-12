@@ -1,19 +1,16 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/selected_member.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 
 /// This provider manages the selected member.
 final selectedMemberProvider =
-    StateNotifierProvider<SelectedMemberNotifier, SelectedMember?>(
+    StateNotifierProvider<SelectedMemberNotifier, Member?>(
   SelectedMemberNotifier.new,
 );
 
-class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
+class SelectedMemberNotifier extends StateNotifier<Member?> {
   SelectedMemberNotifier(this.ref) : super(null);
 
   final Ref ref;
@@ -25,7 +22,7 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
       return Future.error(ArgumentError.notNull('selected member'));
     }
 
-    await ref.read(memberRepositoryProvider).deleteMember(member.value.uuid);
+    await ref.read(memberRepositoryProvider).deleteMember(member.uuid);
 
     // Refresh the member list, the collection has one member less.
     ref.refresh(memberListProvider);
@@ -37,27 +34,23 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
   void setMemberActive(bool value) async {
     final member = state;
 
-    if (member == null || member.value.isActiveMember == value) {
+    if (member == null || member.isActiveMember == value) {
       return;
     }
 
     try {
       final repository = ref.read(memberRepositoryProvider);
 
-      await repository.setMemberActive(member.value.uuid, value);
+      await repository.setMemberActive(member.uuid, value);
 
-      state = SelectedMember(
-        attendingCount: member.attendingCount,
-        profileImage: member.profileImage,
-        value: Member(
-          alias: member.value.alias,
-          firstname: member.value.firstname,
-          isActiveMember: value,
-          lastUpdated: DateTime.now(),
-          lastname: member.value.lastname,
-          profileImageFilePath: member.value.profileImageFilePath,
-          uuid: member.value.uuid,
-        ),
+      state = Member(
+        alias: member.alias,
+        firstname: member.firstname,
+        isActiveMember: value,
+        lastUpdated: DateTime.now(),
+        lastname: member.lastname,
+        profileImageFilePath: member.profileImageFilePath,
+        uuid: member.uuid,
       );
 
       ref.refresh(memberListProvider);
@@ -66,33 +59,9 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
     }
   }
 
-  void setSelectedMember({
-    required Future<int> attendingCount,
-    required Member member,
-    File? profileImage,
-  }) {
-    state = SelectedMember(
-      attendingCount: attendingCount,
-      profileImage: profileImage,
-      value: member,
-    );
-  }
-
-  void updateSelectedMember({required Member member, File? profileImage}) {
-    final currentState = state;
-
-    if (currentState == null) {
-      return;
-    }
-
-    final newState = SelectedMember(
-      attendingCount: currentState.attendingCount,
-      profileImage: profileImage,
-      value: member,
-    );
-
-    if (currentState != newState) {
-      state = newState;
+  void setSelectedMember(Member member) {
+    if (state != member) {
+      state = member;
     }
   }
 }

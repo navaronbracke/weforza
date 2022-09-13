@@ -124,13 +124,13 @@ class ImportMembersDaoImpl implements ImportMembersDao {
         // Add a new member and add the devices of this member.
         newMembers.add(
           Member(
-            uuid: newUuid,
-            firstname: exportedMember.firstName,
-            lastname: exportedMember.lastName,
+            active: exportedMember.active,
             alias: exportedMember.alias,
-            isActiveMember: exportedMember.active,
+            firstName: exportedMember.firstName,
+            lastName: exportedMember.lastName,
             lastUpdated: exportedMember.lastUpdated,
             profileImageFilePath: null,
+            uuid: newUuid,
           ),
         );
 

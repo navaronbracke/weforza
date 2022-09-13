@@ -124,11 +124,11 @@ class _ScanResultsListItem extends StatelessWidget {
         ),
         MemberNameAndAlias(
           alias: owner.alias,
-          firstName: owner.firstname,
           firstLineStyle: textStyle,
-          lastName: owner.lastname,
-          secondLineStyle: textStyle,
+          firstName: owner.firstName,
           isTwoLine: false,
+          lastName: owner.lastName,
+          secondLineStyle: textStyle,
         ),
       ],
     );

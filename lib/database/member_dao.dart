@@ -153,7 +153,7 @@ class MemberDaoImpl implements MemberDao {
         _database,
         {
           'active': value,
-          'lastUpdated': DateTime.now().toUtc().toStringWithoutMilliseconds()
+          'lastUpdated': DateTime.now().toStringWithoutMilliseconds()
         },
       );
     }

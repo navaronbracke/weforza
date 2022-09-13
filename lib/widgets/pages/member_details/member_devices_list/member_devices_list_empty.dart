@@ -57,7 +57,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
                       onPressed: () {
                         final selectedMember = ref.read(selectedMemberProvider);
 
-                        onAddDevicePressed(context, selectedMember!.value.uuid);
+                        onAddDevicePressed(context, selectedMember!.uuid);
                       },
                       child: Text(translator.AddDevice),
                     ),
@@ -65,7 +65,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
                       onPressed: () {
                         final selectedMember = ref.read(selectedMemberProvider);
 
-                        onAddDevicePressed(context, selectedMember!.value.uuid);
+                        onAddDevicePressed(context, selectedMember!.uuid);
                       },
                       child: Text(
                         translator.AddDevice,

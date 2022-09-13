@@ -57,11 +57,11 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         return true;
       }
 
-      if (item.firstname.toLowerCase().contains(query)) {
+      if (item.firstName.toLowerCase().contains(query)) {
         return true;
       }
 
-      if (item.lastname.toLowerCase().contains(query)) {
+      if (item.lastName.toLowerCase().contains(query)) {
         return true;
       }
 

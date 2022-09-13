@@ -19,6 +19,7 @@ class ProfileImage extends StatelessWidget {
     required this.icon,
     this.iconColor,
     this.image,
+    this.loading,
     this.personInitials,
     this.size = 40,
   });
@@ -34,6 +35,11 @@ class ProfileImage extends StatelessWidget {
 
   /// The profile image to show.
   final File? image;
+
+  /// The widget that is displayed when the image is loading.
+  /// If this is null, the [personInitials] are displayed.
+  /// If those are also null, the [icon] is displayed.
+  final Widget? loading;
 
   /// The initials of the person.
   final String? personInitials;
@@ -101,7 +107,7 @@ class ProfileImage extends StatelessWidget {
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) => placeholder,
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        return frame == null ? placeholder : ClipOval(child: child);
+        return frame == null ? loading ?? placeholder : ClipOval(child: child);
       },
     );
   }

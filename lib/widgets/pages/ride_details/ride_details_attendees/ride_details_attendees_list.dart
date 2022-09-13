@@ -32,8 +32,8 @@ class RideDetailsAttendeesList extends ConsumerWidget {
                   final member = attendees[index];
 
                   return RideDetailsAttendeesListItem(
-                    firstName: member.firstname,
-                    lastName: member.lastname,
+                    firstName: member.firstName,
+                    lastName: member.lastName,
                     alias: member.alias,
                   );
                 },

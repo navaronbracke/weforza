@@ -35,7 +35,7 @@ class DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
           // Pop both the dialog and the detail screen.
           navigator.pop();
           navigator.pop();
-        }).catchError(Future.error);
+        }).catchError((error) => Future.error(error));
 
         setState(() {});
       },

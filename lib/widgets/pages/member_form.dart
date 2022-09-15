@@ -76,12 +76,12 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
       _future = _delegate
           .addMember(model)
           .then((_) => navigator.pop())
-          .catchError(Future.error);
+          .catchError((error) => Future.error(error));
     } else {
       _future = _delegate
           .editMember(model)
           .then((_) => navigator.pop())
-          .catchError(Future.error);
+          .catchError((error) => Future.error(error));
     }
 
     setState(() {});

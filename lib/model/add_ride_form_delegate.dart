@@ -10,9 +10,10 @@ class AddRideFormDelegate {
   AddRideFormDelegate(this.ref) {
     final repository = ref.read(rideRepositoryProvider);
 
-    _initializeFuture = repository.getRideDates().then<void>((rides) {
-      _existingRides.addAll(rides);
-    }).catchError(Future.error);
+    _initializeFuture = repository
+        .getRideDates()
+        .then(_existingRides.addAll)
+        .catchError(Future.error);
   }
 
   final WidgetRef ref;

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_form_delegate.dart';
@@ -9,8 +10,8 @@ import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/model/device_type.dart';
 import 'package:weforza/model/device_validator.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
+import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
-import 'package:weforza/widgets/pages/device_form/device_form_submit_button.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -44,6 +45,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
   late final DeviceFormDelegate _delegate;
 
+  Future<void>? _future;
+
   @override
   void initState() {
     super.initState();
@@ -58,8 +61,9 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     _deviceTypeController = PageController(initialPage: deviceType.index);
   }
 
-  /// This function handles the submit of a valid form.
-  void _onFormSubmitted(BuildContext context) async {
+  void onFormSubmitted(BuildContext context) {
+    final navigator = Navigator.of(context);
+
     final selectedDeviceType = _deviceTypeController.page!.toInt();
 
     final model = DevicePayload(
@@ -69,20 +73,17 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       type: DeviceType.values[selectedDeviceType],
     );
 
-    try {
-      if (model.creationDate == null) {
-        await _delegate.addDevice(model);
-      } else {
-        await _delegate.editDevice(model);
-      }
-
-      if (mounted) {
-        Navigator.of(context).pop(model.creationDate == null);
-      }
-    } catch (_) {
-      // Ignore errors, the submit button handles them.
-      // Errors are only thrown to not end up in the block after await.
+    if (model.creationDate == null) {
+      _future = _delegate.addDevice(model).then((_) {
+        navigator.pop(model.creationDate == null);
+      });
+    } else {
+      _future = _delegate.editDevice(model).then((_) {
+        navigator.pop(model.creationDate == null);
+      });
     }
+
+    setState(() {});
   }
 
   /// Validate the iOS form inputs.
@@ -165,7 +166,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         keyboardType: TextInputType.text,
         autocorrect: false,
         controller: _deviceNameController,
-        onChanged: _delegate.resetSubmit,
+        onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
           requiredMessage: translator.DeviceNameRequired,
@@ -191,7 +192,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         keyboardType: TextInputType.text,
         placeholder: translator.DeviceName,
         textInputAction: TextInputAction.done,
-        onChanged: _delegate.resetSubmit,
+        onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
           requiredMessage: translator.DeviceNameRequired,
@@ -205,6 +206,14 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     );
   }
 
+  Widget _buildErrorMessage(Object error, S translator) {
+    if (error is DeviceExistsException) {
+      return Text(translator.DeviceExists);
+    }
+
+    return Text(translator.GenericError);
+  }
+
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
@@ -212,29 +221,35 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
     return PlatformAwareWidget(
-      android: () => DeviceFormSubmitButton(
-        initialData: _delegate.isSubmitting,
+      android: () => FormSubmitButton(
+        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+        label: submitButtonLabel,
+        future: _future,
         onPressed: () {
           final formState = _formKey.currentState;
 
           if (formState != null && formState.validate()) {
-            _onFormSubmitted(context);
+            onFormSubmitted(context);
           }
         },
-        stream: _delegate.isSubmittingStream,
-        submitButtonLabel: submitButtonLabel,
       ),
-      ios: () => DeviceFormSubmitButton(
-        initialData: _delegate.isSubmitting,
+      ios: () => FormSubmitButton(
+        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+        label: submitButtonLabel,
+        future: _future,
         onPressed: () {
           if (_validateCupertinoForm()) {
-            _onFormSubmitted(context);
+            onFormSubmitted(context);
           }
         },
-        stream: _delegate.isSubmittingStream,
-        submitButtonLabel: submitButtonLabel,
       ),
     );
+  }
+
+  void _resetSubmit(String _) {
+    setState(() {
+      _future = null;
+    });
   }
 
   @override
@@ -247,7 +262,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
   @override
   void dispose() {
-    _delegate.dispose();
     _deviceNameController.dispose();
     _deviceNameFocusNode.dispose();
     _deviceNameErrorController.close();

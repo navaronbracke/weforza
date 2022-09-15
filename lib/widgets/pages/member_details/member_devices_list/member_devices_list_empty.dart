@@ -13,9 +13,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
 
   void onAddDevicePressed(BuildContext context, String ownerUuid) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DeviceForm(ownerUuid: ownerUuid),
-      ),
+      MaterialPageRoute(builder: (context) => DeviceForm(ownerUuid: ownerUuid)),
     );
   }
 

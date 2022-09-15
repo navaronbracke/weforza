@@ -33,7 +33,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   final _filtersController = ManualSelectionFilterDelegate();
 
-  Future<void>? _saveAttendeesFuture;
+  Future<void>? _saveFuture;
 
   List<Member> _filterActiveMembers(
     List<Member> items,
@@ -73,14 +73,14 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   void _onSaveRideAttendeesButtonPressed(BuildContext context) {
-    _saveAttendeesFuture = widget.delegate.saveRideAttendeeSelection().then(
+    _saveFuture = widget.delegate.saveRideAttendeeSelection().then<void>(
       (updatedRide) {
         if (mounted) {
           // Return back to the ride detail page.
           Navigator.of(context).pop(updatedRide);
         }
       },
-    );
+    ).catchError(Future.error);
   }
 
   /// Sort the active members on their name and alias.
@@ -154,7 +154,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         ManualSelectionButtonBar(
           delegate: widget.delegate,
           saveButton: ManualSelectionSaveButton(
-            future: _saveAttendeesFuture,
+            future: _saveFuture,
             onPressed: () => _onSaveRideAttendeesButtonPressed(context),
           ),
           showScannedResultsToggle: ShowScannedResultsToggle(

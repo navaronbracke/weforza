@@ -237,7 +237,7 @@ class ResetRideCalendarDialogState
   void _resetCalendar(BuildContext context) {
     final repository = ref.read(rideRepositoryProvider);
 
-    deleteFuture = repository.deleteRideCalendar().then<void>((_) {
+    deleteFuture = repository.deleteRideCalendar().then((_) {
       if (!mounted) {
         return;
       }
@@ -247,7 +247,7 @@ class ResetRideCalendarDialogState
 
       // Pop the dialog with a deletion confirmation.
       Navigator.of(context).pop(true);
-    }).catchError((error) => Future.error(error));
+    });
 
     setState(() {});
   }

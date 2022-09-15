@@ -73,14 +73,14 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   void _onSaveRideAttendeesButtonPressed(BuildContext context) {
-    _saveFuture = widget.delegate.saveRideAttendeeSelection().then<void>(
+    _saveFuture = widget.delegate.saveRideAttendeeSelection().then(
       (updatedRide) {
         if (mounted) {
           // Return back to the ride detail page.
           Navigator.of(context).pop(updatedRide);
         }
       },
-    ).catchError((error) => Future.error(error));
+    );
   }
 
   /// Sort the active members on their name and alias.

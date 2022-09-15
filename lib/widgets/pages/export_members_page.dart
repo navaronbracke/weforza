@@ -52,7 +52,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
         _filenameErrorController.add(translator.FileExists);
       }
 
-      rethrow;
+      return Future.error(error);
     }
   }
 

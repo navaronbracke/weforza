@@ -56,7 +56,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
         _filenameErrorController.add(translator.FileExists);
       }
 
-      rethrow;
+      return Future.error(error);
     }
   }
 

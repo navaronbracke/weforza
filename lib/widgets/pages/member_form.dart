@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_form_delegate.dart';
@@ -11,8 +12,8 @@ import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/model/member_validator.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
-import 'package:weforza/widgets/pages/member_form/member_form_submit_button.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -48,6 +49,8 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
   late final MemberFormDelegate _delegate;
   late final ProfileImagePickerDelegate _profileImageDelegate;
 
+  Future<void>? _future;
+
   /// Validate the iOS form inputs.
   bool _validateCupertinoForm() {
     final firstNameError = _firstNameErrorController.value;
@@ -59,8 +62,8 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
         aliasError.isEmpty;
   }
 
-  /// This function handles the submit of a valid form.
-  void _onFormSubmitted(BuildContext context) async {
+  void onFormSubmitted(BuildContext context) {
+    final navigator = Navigator.of(context);
     final memberUuid = widget.member?.uuid;
 
     final model = MemberPayload(
@@ -72,20 +75,13 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
       uuid: memberUuid,
     );
 
-    try {
-      if (memberUuid == null) {
-        await _delegate.addMember(model);
-      } else {
-        await _delegate.editMember(model);
-      }
-
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-    } catch (_) {
-      // Ignore errors, the submit button handles them.
-      // Errors are only thrown to not end up in the block after await.
+    if (memberUuid == null) {
+      _future = _delegate.addMember(model).then((_) => navigator.pop());
+    } else {
+      _future = _delegate.editMember(model).then((_) => navigator.pop());
     }
+
+    setState(() {});
   }
 
   @override
@@ -150,7 +146,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                     controller: _firstNameController,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
-                    onChanged: _delegate.resetSubmit,
+                    onChanged: _resetSubmit,
                     validator: (value) => validateFirstOrLastName(
                       value: value,
                       requiredMessage: strings.FirstNameRequired,
@@ -179,7 +175,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                     controller: _lastNameController,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
-                    onChanged: _delegate.resetSubmit,
+                    onChanged: _resetSubmit,
                     validator: (value) => validateFirstOrLastName(
                       value: value,
                       requiredMessage: strings.LastNameRequired,
@@ -205,7 +201,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                   controller: _aliasController,
                   autocorrect: false,
                   keyboardType: TextInputType.text,
-                  onChanged: _delegate.resetSubmit,
+                  onChanged: _resetSubmit,
                   validator: (value) => validateAlias(
                     value: value,
                     maxLengthMessage: strings.AliasMaxLength(
@@ -219,22 +215,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 24),
-                  child: Center(
-                    child: MemberFormSubmitButton(
-                      initialData: _delegate.isSubmitting,
-                      onPressed: () {
-                        final formState = _formKey.currentState;
-
-                        if (formState != null && formState.validate()) {
-                          _onFormSubmitted(context);
-                        }
-                      },
-                      stream: _delegate.isSubmittingStream,
-                      submitButtonLabel: widget.member == null
-                          ? strings.AddMemberSubmit
-                          : strings.EditMember,
-                    ),
-                  ),
+                  child: Center(child: _buildSubmitButton(context)),
                 ),
               ],
             ),
@@ -280,7 +261,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                       autocorrect: false,
                       keyboardType: TextInputType.text,
                       errorController: _firstNameErrorController,
-                      onChanged: _delegate.resetSubmit,
+                      onChanged: _resetSubmit,
                       validator: (value) => validateFirstOrLastName(
                         value: value,
                         requiredMessage: strings.FirstNameRequired,
@@ -304,7 +285,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                       autocorrect: false,
                       keyboardType: TextInputType.text,
                       errorController: _lastNameErrorController,
-                      onChanged: _delegate.resetSubmit,
+                      onChanged: _resetSubmit,
                       validator: (value) => validateFirstOrLastName(
                         value: value,
                         requiredMessage: strings.LastNameRequired,
@@ -327,7 +308,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                       keyboardType: TextInputType.text,
                       placeholder: strings.Alias,
                       errorController: _aliasErrorController,
-                      onChanged: _delegate.resetSubmit,
+                      onChanged: _resetSubmit,
                       validator: (value) => validateAlias(
                         value: value,
                         maxLengthMessage: strings.AliasMaxLength(
@@ -342,20 +323,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 12, bottom: 24),
-                    child: Center(
-                      child: MemberFormSubmitButton(
-                        initialData: _delegate.isSubmitting,
-                        onPressed: () {
-                          if (_validateCupertinoForm()) {
-                            _onFormSubmitted(context);
-                          }
-                        },
-                        stream: _delegate.isSubmittingStream,
-                        submitButtonLabel: widget.member == null
-                            ? strings.AddMemberSubmit
-                            : strings.EditMember,
-                      ),
-                    ),
+                    child: Center(child: _buildSubmitButton(context)),
                   ),
                 ],
               ),
@@ -364,6 +332,57 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
         ),
       ),
     );
+  }
+
+  Widget _buildErrorMessage(Object error, S translator) {
+    if (error is MemberExistsException) {
+      return Text(translator.MemberAlreadyExists);
+    }
+
+    return Text(translator.GenericError);
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    final translator = S.of(context);
+
+    final submitButtonLabel = widget.member == null
+        ? translator.AddMemberSubmit
+        : translator.EditMember;
+
+    return PlatformAwareWidget(
+      android: () => FormSubmitButton(
+        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+        label: submitButtonLabel,
+        future: _future,
+        onPressed: () {
+          final formState = _formKey.currentState;
+
+          if (formState != null && formState.validate()) {
+            onFormSubmitted(context);
+          }
+        },
+      ),
+      ios: () => FormSubmitButton(
+        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+        label: submitButtonLabel,
+        future: _future,
+        onPressed: () {
+          if (_validateCupertinoForm()) {
+            onFormSubmitted(context);
+          }
+        },
+      ),
+    );
+  }
+
+  void _resetSubmit(String _) {
+    if (_future == null) {
+      return;
+    }
+
+    setState(() {
+      _future = null;
+    });
   }
 
   @override
@@ -386,7 +405,6 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     _firstNameErrorController.close();
     _lastNameErrorController.close();
     _aliasErrorController.close();
-    _delegate.dispose();
     super.dispose();
   }
 }

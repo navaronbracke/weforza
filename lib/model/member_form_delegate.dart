@@ -35,7 +35,7 @@ class MemberFormDelegate {
     }
 
     final image = await model.profileImage.catchError(
-      (_) => Future<File?>.value(null),
+      (_) => Future<File?>.value(),
     );
 
     final member = Member(
@@ -73,7 +73,7 @@ class MemberFormDelegate {
     }
 
     final profileImage = await model.profileImage.catchError((error) {
-      return Future<File?>.value(null);
+      return Future<File?>.value();
     });
 
     final newMember = Member(

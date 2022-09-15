@@ -10,9 +10,9 @@ class AddRideFormDelegate {
   AddRideFormDelegate(this.ref) {
     final repository = ref.read(rideRepositoryProvider);
 
-    _initializeFuture = repository.getRideDates().then((rides) {
+    _initializeFuture = repository.getRideDates().then<void>((rides) {
       _existingRides.addAll(rides);
-    });
+    }).catchError(Future.error);
   }
 
   final WidgetRef ref;
@@ -112,11 +112,15 @@ class AddRideFormDelegate {
 
     final items = rides.map((date) => Ride(date: date)).toList();
 
-    _submitFuture = ref.read(rideRepositoryProvider).addRides(items).then((_) {
-      ref.refresh(rideListProvider);
+    _submitFuture = ref.read(rideRepositoryProvider).addRides(items).then<void>(
+      (_) {
+        ref.refresh(rideListProvider);
+        _savingSelection = false;
+      },
+    ).catchError((error) {
       _savingSelection = false;
-    }).catchError((_) {
-      _savingSelection = false;
+
+      return Future.error(error);
     });
   }
 

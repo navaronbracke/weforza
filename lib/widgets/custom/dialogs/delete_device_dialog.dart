@@ -33,7 +33,7 @@ class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
           if (mounted) {
             Navigator.of(context).pop(true);
           }
-        }).catchError(Future.error);
+        }).catchError((error) => Future.error(error));
 
         setState(() {});
       },

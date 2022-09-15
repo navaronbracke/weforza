@@ -80,7 +80,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
           Navigator.of(context).pop(updatedRide);
         }
       },
-    ).catchError(Future.error);
+    ).catchError((error) => Future.error(error));
   }
 
   /// Sort the active members on their name and alias.

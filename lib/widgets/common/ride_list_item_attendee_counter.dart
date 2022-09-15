@@ -39,7 +39,7 @@ class RideListItemAttendeeCounterState
         .read(rideRepositoryProvider)
         .getRideAttendees(widget.rideDate)
         .then((value) => value.length)
-        .catchError(Future<int>.error);
+        .catchError((error) => Future<int>.error(error));
   }
 
   @override

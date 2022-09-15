@@ -177,7 +177,7 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
             if (mounted) {
               Navigator.of(context).pop();
             }
-          }).catchError(Future.error),
+          }).catchError((error) => Future.error(error)),
           builder: (context, submitSnapshot) {
             final translator = S.of(context);
 

@@ -78,9 +78,11 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       _future = _delegate
           .addDevice(model)
           .then((_) => navigator.pop(true))
-          .catchError(Future.error);
+          .catchError((error) => Future.error(error));
     } else {
-      _future = _delegate.editDevice(model).catchError(Future.error);
+      _future = _delegate
+          .editDevice(model)
+          .catchError((error) => Future.error(error));
     }
 
     setState(() {});

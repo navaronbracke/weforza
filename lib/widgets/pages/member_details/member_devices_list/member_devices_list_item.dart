@@ -5,7 +5,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
-import 'package:weforza/widgets/pages/device_form/device_form.dart';
+import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 

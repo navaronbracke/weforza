@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/pages/device_form/device_form.dart';
+import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty member devices list.

@@ -7,7 +7,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
 import 'package:weforza/widgets/pages/import_members_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
-import 'package:weforza/widgets/pages/member_form/member_form.dart';
+import 'package:weforza/widgets/pages/member_form.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';

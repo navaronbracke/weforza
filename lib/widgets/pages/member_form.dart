@@ -18,10 +18,7 @@ import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberForm extends ConsumerStatefulWidget {
-  const MemberForm({
-    super.key,
-    this.member,
-  });
+  const MemberForm({super.key, this.member});
 
   /// The member to edit in this form.
   /// If this is null, a new member will be created instead.
@@ -76,9 +73,15 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
 
     if (memberUuid == null) {
-      _future = _delegate.addMember(model).then((_) => navigator.pop());
+      _future = _delegate
+          .addMember(model)
+          .then((_) => navigator.pop())
+          .catchError(Future.error);
     } else {
-      _future = _delegate.editMember(model).then((_) => navigator.pop());
+      _future = _delegate
+          .editMember(model)
+          .then((_) => navigator.pop())
+          .catchError(Future.error);
     }
 
     setState(() {});

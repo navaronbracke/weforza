@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/repository/member_repository.dart';
@@ -10,7 +11,7 @@ import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
 /// This class represents the delegate for a Member form.
-class MemberFormDelegate {
+class MemberFormDelegate with ArtificialDelay {
   MemberFormDelegate(
     this.ref,
   ) : repository = ref.read(memberRepositoryProvider);
@@ -37,6 +38,13 @@ class MemberFormDelegate {
       uuid: _uuidGenerator.v4(),
     );
 
+    // Allow the event loop some time to add an error handler.
+    // When the database has almost no data, this future completes even before
+    // the event loop could schedule a new frame,
+    // which results in an unhandled exception in the FutureBuilder.
+    //
+    // This also gives the loading indicator some time to appear properly.
+    await waitForDelay();
     await repository.addMember(member);
 
     ref.refresh(memberListProvider);
@@ -64,6 +72,13 @@ class MemberFormDelegate {
       uuid: uuid,
     );
 
+    // Allow the event loop some time to add an error handler.
+    // When the database has almost no data, this future completes even before
+    // the event loop could schedule a new frame,
+    // which results in an unhandled exception in the FutureBuilder.
+    //
+    // This also gives the loading indicator some time to appear properly.
+    await waitForDelay();
     await repository.updateMember(newMember);
 
     final notifier = ref.read(selectedMemberProvider.notifier);

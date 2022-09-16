@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/repository/device_repository.dart';
@@ -50,12 +49,6 @@ class SelectedMemberDevicesNotifier
       return Future.error(StateError('The devices list was not loaded yet'));
     }
 
-    final exists = await repository.deviceExists(model.name, model.ownerId);
-
-    if (exists) {
-      return Future.error(DeviceExistsException());
-    }
-
     final device = Device(
       creationDate: DateTime.now(),
       name: model.name,
@@ -103,16 +96,6 @@ class SelectedMemberDevicesNotifier
 
     if (creationDate == null) {
       return Future.error(ArgumentError.notNull('creationDate'));
-    }
-
-    final exists = await repository.deviceExists(
-      model.name,
-      model.ownerId,
-      creationDate,
-    );
-
-    if (exists) {
-      return Future.error(DeviceExistsException());
     }
 
     final newDevice = Device(

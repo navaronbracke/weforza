@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/device.dart';
 
@@ -77,7 +78,11 @@ class DeviceDaoImpl implements DeviceDao {
   }
 
   @override
-  Future<void> addDevice(Device device) {
+  Future<void> addDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId)) {
+      return Future.error(DeviceExistsException());
+    }
+
     return _database.transaction((txn) async {
       await _deviceStore
           .record(device.creationDate.toIso8601String())
@@ -142,13 +147,17 @@ class DeviceDaoImpl implements DeviceDao {
   }
 
   @override
-  Future<void> updateDevice(Device newDevice) {
+  Future<void> updateDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
+      return Future.error(DeviceExistsException());
+    }
+
     return _database.transaction((txn) async {
-      final key = newDevice.creationDate.toIso8601String();
+      final key = device.creationDate.toIso8601String();
 
-      await _deviceStore.record(key).update(txn, newDevice.toMap());
+      await _deviceStore.record(key).update(txn, device.toMap());
 
-      await _updateOwnerLastUpdated(newDevice.ownerId, txn);
+      await _updateOwnerLastUpdated(device.ownerId, txn);
     });
   }
 }

@@ -8,20 +8,6 @@ abstract class DeviceDao {
   /// Add the given [device].
   Future<void> addDevice(Device device);
 
-  /// Check whether a device exists.
-  ///
-  /// If [creationDate] is null, this method returns whether a device exists
-  /// with the given [deviceName] and [ownerUuid].
-  ///
-  /// If [creationDate] is not null, this method returns whether a device exists
-  /// with the given [deviceName], [ownerUuid] and a creation date
-  /// that is *different* from the given creation date.
-  Future<bool> deviceExists(
-    String deviceName,
-    String ownerUuid, [
-    DateTime? creationDate,
-  ]);
-
   /// Get the list of all devices.
   Future<List<Device>> getAllDevices();
 
@@ -57,6 +43,31 @@ class DeviceDaoImpl implements DeviceDao {
   /// A reference to the member store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
+  /// Check whether a device exists.
+  ///
+  /// If [creationDate] is null, this method returns whether a device exists
+  /// with the given [deviceName] and [ownerUuid].
+  ///
+  /// If [creationDate] is not null, this method returns whether a device exists
+  /// with the given [deviceName], [ownerUuid] and a creation date
+  /// that is *different* from the given creation date.
+  Future<bool> _deviceExists(
+    String deviceName,
+    String ownerUuid, [
+    DateTime? creationDate,
+  ]) async {
+    final finder = Finder(
+      filter: Filter.and([
+        Filter.equals('deviceName', deviceName),
+        Filter.equals('owner', ownerUuid),
+        if (creationDate != null)
+          Filter.notEquals(Field.key, creationDate.toIso8601String())
+      ]),
+    );
+
+    return await _deviceStore.findFirst(_database, finder: finder) != null;
+  }
+
   /// Update the `lastUpdated` field of the owner of a given device.
   Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
     return _memberStore.record(ownerId).update(
@@ -74,24 +85,6 @@ class DeviceDaoImpl implements DeviceDao {
 
       await _updateOwnerLastUpdated(device.ownerId, txn);
     });
-  }
-
-  @override
-  Future<bool> deviceExists(
-    String deviceName,
-    String ownerUuid, [
-    DateTime? creationDate,
-  ]) async {
-    final finder = Finder(
-      filter: Filter.and([
-        Filter.equals('deviceName', deviceName),
-        Filter.equals('owner', ownerUuid),
-        if (creationDate != null)
-          Filter.notEquals(Field.key, creationDate.toIso8601String())
-      ]),
-    );
-
-    return await _deviceStore.findFirst(_database, finder: finder) != null;
   }
 
   @override

@@ -32,21 +32,22 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   Stream<bool> get isScanning => _fBlInstance.isScanning;
 
   @override
-  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) =>
-      _fBlInstance
-          .scan(
-            allowDuplicates: false,
-            scanMode: ScanMode.balanced,
-            timeout: Duration(seconds: scanDurationInSeconds),
-          )
-          .map(
-            (result) => BluetoothPeripheral(
-              id: result.device.id.id,
-              // Trim the whitespace off.
-              // This could otherwise cause matching issues later on.
-              deviceName: result.device.name.trim(),
-            ),
-          );
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
+    return _fBlInstance
+        .scan(
+          allowDuplicates: false,
+          scanMode: ScanMode.balanced,
+          timeout: Duration(seconds: scanDurationInSeconds),
+        )
+        .map(
+          (result) => BluetoothPeripheral(
+            id: result.device.id.id,
+            // Trim the whitespace off.
+            // This could otherwise cause matching issues later on.
+            deviceName: result.device.name.trim(),
+          ),
+        );
+  }
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();

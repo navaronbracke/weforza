@@ -54,7 +54,9 @@ class AnimatedPathPainter extends CustomPainter {
 
       if (nextLength > length) {
         path.addPath(
-            metric.extractPath(0.0, length - currentLength), Offset.zero);
+          metric.extractPath(0.0, length - currentLength),
+          Offset.zero,
+        );
         break;
       } else {
         // There might be a more efficient way of extracting an entire path
@@ -67,12 +69,14 @@ class AnimatedPathPainter extends CustomPainter {
   }
 
   Path _createAnimatedPath(Path originalPath, double animationPercent) {
-    // ComputeMetrics can only be iterated once!
+    // `computeMetrics()` can only be iterated once!
     final totalLength = originalPath
         .computeMetrics()
         .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
 
     return _extractPathUntilLength(
-        originalPath, totalLength * animationPercent);
+      originalPath,
+      totalLength * animationPercent,
+    );
   }
 }

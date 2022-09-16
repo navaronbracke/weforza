@@ -8,14 +8,6 @@ class DeviceRepository {
 
   Future<void> addDevice(Device device) => _dao.addDevice(device);
 
-  Future<bool> deviceExists(
-    String deviceName,
-    String ownerUuid, [
-    DateTime? creationDate,
-  ]) {
-    return _dao.deviceExists(deviceName, ownerUuid, creationDate);
-  }
-
   Future<List<Device>> getAllDevices() => _dao.getAllDevices();
 
   Future<List<Device>> getOwnerDevices(String uuid) {

@@ -33,7 +33,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   final _filtersController = ManualSelectionFilterDelegate();
 
-  Future<void>? _saveAttendeesFuture;
+  Future<void>? _saveFuture;
 
   List<Member> _filterActiveMembers(
     List<Member> items,
@@ -73,7 +73,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   void _onSaveRideAttendeesButtonPressed(BuildContext context) {
-    _saveAttendeesFuture = widget.delegate.saveRideAttendeeSelection().then(
+    _saveFuture = widget.delegate.saveRideAttendeeSelection().then(
       (updatedRide) {
         if (mounted) {
           // Return back to the ride detail page.
@@ -154,7 +154,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         ManualSelectionButtonBar(
           delegate: widget.delegate,
           saveButton: ManualSelectionSaveButton(
-            future: _saveAttendeesFuture,
+            future: _saveFuture,
             onPressed: () => _onSaveRideAttendeesButtonPressed(context),
           ),
           showScannedResultsToggle: ShowScannedResultsToggle(

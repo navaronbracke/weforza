@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/member.dart';
@@ -19,21 +20,6 @@ abstract class MemberDao {
 
   /// Get the list of members that satisfy the given [filter].
   Future<List<Member>> getMembers(MemberFilterOption filter);
-
-  /// Check whether a member exists.
-  ///
-  /// If [uuid] is null, this method returns whether a member exists
-  /// with the given [firstname], [lastname] and [alias].
-  ///
-  /// If [uuid] is not null, this method returns whether a member exists
-  /// with the given [firstname], [lastname], [alias] and a uuid
-  /// that is *different* from the given uuid.
-  Future<bool> memberExists(
-    String firstname,
-    String lastname,
-    String alias, [
-    String? uuid,
-  ]);
 
   /// Toggle the active state of the member with the given [uuid].
   Future<void> setMemberActive(String uuid, bool value);
@@ -62,12 +48,51 @@ class MemberDaoImpl implements MemberDao {
   /// A reference to the [RideAttendee] store.
   final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
+  /// Check whether a member exists.
+  ///
+  /// If [uuid] is null, this method returns whether a member exists
+  /// with the given [firstName], [lastName] and [alias].
+  ///
+  /// If [uuid] is not null, this method returns whether a member exists
+  /// with the given [firstName], [lastName], [alias] and a uuid
+  /// that is *different* from the given uuid.
+  Future<bool> _memberExists(
+    String firstName,
+    String lastName,
+    String alias, [
+    String? uuid,
+  ]) async {
+    final filters = [
+      Filter.equals('firstname', firstName),
+      Filter.equals('lastname', lastName),
+      Filter.equals('alias', alias),
+    ];
+
+    if (uuid != null && uuid.isNotEmpty) {
+      filters.add(Filter.notEquals(Field.key, uuid));
+    }
+
+    final finder = Finder(filter: Filter.and(filters));
+
+    return await _memberStore.findFirst(_database, finder: finder) != null;
+  }
+
   @override
   Future<void> addMember(Member member) async {
     final recordRef = _memberStore.record(member.uuid);
 
     if (await recordRef.exists(_database)) {
-      throw ArgumentError('The uuid ${member.uuid} is already in use');
+      return Future.error(
+        ArgumentError('The uuid ${member.uuid} is already in use'),
+      );
+    }
+
+    final alias = member.alias;
+    final firstName = member.firstName;
+    final lastName = member.lastName;
+
+    if (await _memberExists(firstName, lastName, alias)) {
+      return Future.error(MemberExistsException());
     }
 
     await recordRef.add(_database, member.toMap());
@@ -123,28 +148,6 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<bool> memberExists(
-    String firstname,
-    String lastname,
-    String alias, [
-    String? uuid,
-  ]) async {
-    final filters = [
-      Filter.equals('firstname', firstname),
-      Filter.equals('lastname', lastname),
-      Filter.equals('alias', alias),
-    ];
-
-    if (uuid != null && uuid.isNotEmpty) {
-      filters.add(Filter.notEquals(Field.key, uuid));
-    }
-
-    final finder = Finder(filter: Filter.and(filters));
-
-    return await _memberStore.findFirst(_database, finder: finder) != null;
-  }
-
-  @override
   Future<void> setMemberActive(String uuid, bool value) async {
     final record = _memberStore.record(uuid);
 
@@ -160,7 +163,16 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> updateMember(Member member) {
-    return _memberStore.record(member.uuid).update(_database, member.toMap());
+  Future<void> updateMember(Member member) async {
+    final alias = member.alias;
+    final firstName = member.firstName;
+    final lastName = member.lastName;
+    final uuid = member.uuid;
+
+    if (await _memberExists(firstName, lastName, alias, uuid)) {
+      return Future.error(MemberExistsException());
+    }
+
+    await _memberStore.record(member.uuid).update(_database, member.toMap());
   }
 }

@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/device.dart';
 
@@ -7,20 +8,6 @@ import 'package:weforza/model/device.dart';
 abstract class DeviceDao {
   /// Add the given [device].
   Future<void> addDevice(Device device);
-
-  /// Check whether a device exists.
-  ///
-  /// If [creationDate] is null, this method returns whether a device exists
-  /// with the given [deviceName] and [ownerUuid].
-  ///
-  /// If [creationDate] is not null, this method returns whether a device exists
-  /// with the given [deviceName], [ownerUuid] and a creation date
-  /// that is *different* from the given creation date.
-  Future<bool> deviceExists(
-    String deviceName,
-    String ownerUuid, [
-    DateTime? creationDate,
-  ]);
 
   /// Get the list of all devices.
   Future<List<Device>> getAllDevices();
@@ -57,27 +44,15 @@ class DeviceDaoImpl implements DeviceDao {
   /// A reference to the member store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
-  /// Update the `lastUpdated` field of the owner of a given device.
-  Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
-    return _memberStore.record(ownerId).update(
-      txn,
-      {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
-    );
-  }
-
-  @override
-  Future<void> addDevice(Device device) {
-    return _database.transaction((txn) async {
-      await _deviceStore
-          .record(device.creationDate.toIso8601String())
-          .add(txn, device.toMap());
-
-      await _updateOwnerLastUpdated(device.ownerId, txn);
-    });
-  }
-
-  @override
-  Future<bool> deviceExists(
+  /// Check whether a device exists.
+  ///
+  /// If [creationDate] is null, this method returns whether a device exists
+  /// with the given [deviceName] and [ownerUuid].
+  ///
+  /// If [creationDate] is not null, this method returns whether a device exists
+  /// with the given [deviceName], [ownerUuid] and a creation date
+  /// that is *different* from the given creation date.
+  Future<bool> _deviceExists(
     String deviceName,
     String ownerUuid, [
     DateTime? creationDate,
@@ -92,6 +67,29 @@ class DeviceDaoImpl implements DeviceDao {
     );
 
     return await _deviceStore.findFirst(_database, finder: finder) != null;
+  }
+
+  /// Update the `lastUpdated` field of the owner of a given device.
+  Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
+    return _memberStore.record(ownerId).update(
+      txn,
+      {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
+    );
+  }
+
+  @override
+  Future<void> addDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId)) {
+      return Future.error(DeviceExistsException());
+    }
+
+    return _database.transaction((txn) async {
+      await _deviceStore
+          .record(device.creationDate.toIso8601String())
+          .add(txn, device.toMap());
+
+      await _updateOwnerLastUpdated(device.ownerId, txn);
+    });
   }
 
   @override
@@ -149,13 +147,17 @@ class DeviceDaoImpl implements DeviceDao {
   }
 
   @override
-  Future<void> updateDevice(Device newDevice) {
+  Future<void> updateDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
+      return Future.error(DeviceExistsException());
+    }
+
     return _database.transaction((txn) async {
-      final key = newDevice.creationDate.toIso8601String();
+      final key = device.creationDate.toIso8601String();
 
-      await _deviceStore.record(key).update(txn, newDevice.toMap());
+      await _deviceStore.record(key).update(txn, device.toMap());
 
-      await _updateOwnerLastUpdated(newDevice.ownerId, txn);
+      await _updateOwnerLastUpdated(device.ownerId, txn);
     });
   }
 }

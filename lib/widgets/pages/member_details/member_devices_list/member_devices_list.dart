@@ -6,7 +6,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/pages/device_form/device_form.dart';
+import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/delete_device_button.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_disabled_item.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';

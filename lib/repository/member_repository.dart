@@ -20,15 +20,6 @@ class MemberRepository {
     return _dao.getMembers(filter);
   }
 
-  Future<bool> memberExists(
-    String firstname,
-    String lastname,
-    String alias, [
-    String? uuid,
-  ]) {
-    return _dao.memberExists(firstname, lastname, alias, uuid);
-  }
-
   Future<void> setMemberActive(String uuid, bool value) {
     return _dao.setMemberActive(uuid, value);
   }

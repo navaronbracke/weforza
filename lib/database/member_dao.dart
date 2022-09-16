@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/member.dart';
@@ -86,6 +87,14 @@ class MemberDaoImpl implements MemberDao {
       );
     }
 
+    final alias = member.alias;
+    final firstName = member.firstName;
+    final lastName = member.lastName;
+
+    if (await _memberExists(firstName, lastName, alias)) {
+      return Future.error(MemberExistsException());
+    }
+
     await recordRef.add(_database, member.toMap());
   }
 
@@ -154,7 +163,16 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> updateMember(Member member) {
-    return _memberStore.record(member.uuid).update(_database, member.toMap());
+  Future<void> updateMember(Member member) async {
+    final alias = member.alias;
+    final firstName = member.firstName;
+    final lastName = member.lastName;
+    final uuid = member.uuid;
+
+    if (await _memberExists(firstName, lastName, alias, uuid)) {
+      return Future.error(MemberExistsException());
+    }
+
+    await _memberStore.record(member.uuid).update(_database, member.toMap());
   }
 }

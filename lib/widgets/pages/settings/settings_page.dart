@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings.dart';
@@ -21,29 +22,30 @@ class SettingsPage extends ConsumerStatefulWidget {
   SettingsPageState createState() => SettingsPageState();
 }
 
-class SettingsPageState extends ConsumerState<SettingsPage> {
+class SettingsPageState extends ConsumerState<SettingsPage>
+    with ArtificialDelay {
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
   late final BehaviorSubject<double> scanDurationController;
 
   Future<void>? _saveSettingsFuture;
 
-  Future<void> saveSettings() {
-    // Use an artificial delay to make it look smoother.
-    return Future.delayed(const Duration(milliseconds: 500), () {
-      final newSettings = Settings(
-        scanDuration: scanDurationController.value.floor(),
-        memberListFilter: memberFilterController.value,
-      );
+  Future<void> saveSettings() async {
+    // Use an artificial delay to give the loading indicator some time to appear.
+    await waitForDelay();
 
-      final repository = ref.read(settingsRepositoryProvider);
+    final newSettings = Settings(
+      scanDuration: scanDurationController.value.floor(),
+      memberListFilter: memberFilterController.value,
+    );
 
-      return repository.write(newSettings).then((_) {
-        if (mounted) {
-          ref.read(settingsProvider.notifier).state = newSettings;
-        }
-      });
-    });
+    final repository = ref.read(settingsRepositoryProvider);
+
+    await repository.write(newSettings);
+
+    if (mounted) {
+      ref.read(settingsProvider.notifier).state = newSettings;
+    }
   }
 
   @override

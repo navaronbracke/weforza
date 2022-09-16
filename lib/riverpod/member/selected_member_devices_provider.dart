@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/repository/device_repository.dart';
@@ -47,13 +46,7 @@ class SelectedMemberDevicesNotifier
   /// Add a device to the list of devices.
   Future<void> addDevice(DevicePayload model) async {
     if (state is! AsyncData<List<Device>>) {
-      throw StateError('The devices list was not loaded yet');
-    }
-
-    final exists = await repository.deviceExists(model.name, model.ownerId);
-
-    if (exists) {
-      throw DeviceExistsException();
+      return Future.error(StateError('The devices list was not loaded yet'));
     }
 
     final device = Device(
@@ -75,7 +68,7 @@ class SelectedMemberDevicesNotifier
   /// Delete the device at [index].
   Future<void> deleteDevice(int index) async {
     if (state is! AsyncData<List<Device>>) {
-      throw StateError('The devices list was not loaded yet');
+      return Future.error(StateError('The devices list was not loaded yet'));
     }
 
     final newDevices = List.of(state.value!);
@@ -96,23 +89,13 @@ class SelectedMemberDevicesNotifier
   /// Edit the given device.
   Future<void> editDevice(DevicePayload model) async {
     if (state is! AsyncData<List<Device>>) {
-      throw StateError('The devices list was not loaded yet');
+      return Future.error(StateError('The devices list was not loaded yet'));
     }
 
     final creationDate = model.creationDate;
 
     if (creationDate == null) {
-      throw ArgumentError.notNull('creationDate');
-    }
-
-    final exists = await repository.deviceExists(
-      model.name,
-      model.ownerId,
-      creationDate,
-    );
-
-    if (exists) {
-      throw DeviceExistsException();
+      return Future.error(ArgumentError.notNull('creationDate'));
     }
 
     final newDevice = Device(
@@ -135,7 +118,7 @@ class SelectedMemberDevicesNotifier
     );
 
     if (index == -1) {
-      throw ArgumentError.value(index);
+      return Future.error(ArgumentError.value(index));
     }
 
     newDevices[index] = newDevice;

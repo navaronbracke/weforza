@@ -1,79 +1,95 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class FormSubmitButton extends StatelessWidget {
+/// This widget represents a submit button for a form layout.
+class FormSubmitButton extends StatefulWidget {
   const FormSubmitButton({
     super.key,
-    required this.initialData,
+    required this.errorMessageBuilder,
+    this.future,
+    required this.label,
     required this.onPressed,
-    required this.stream,
-    required this.submitButtonLabel,
   });
 
-  final bool initialData;
+  /// The builder that builds the error message.
+  final Widget Function(Object error) errorMessageBuilder;
 
+  /// The future that represents the submit computation.
+  final Future<void>? future;
+
+  /// The label for the submit button.
+  final String label;
+
+  /// The onPressed handler for the button.
   final void Function() onPressed;
 
-  final Stream<bool> stream;
+  @override
+  State<FormSubmitButton> createState() => _FormSubmitButtonState();
+}
 
-  final String submitButtonLabel;
+class _FormSubmitButtonState extends State<FormSubmitButton> {
+  void _onSubmitButtonPressed() {
+    widget.onPressed();
 
-  String translateError(Object error, S translator) {
-    return translator.GenericError;
-  }
-
-  Widget _buildButtonAndErrorMessage(
-    Widget button, {
-    String errorMessage = '',
-  }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Text(errorMessage),
-        ),
-        button,
-      ],
-    );
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: initialData,
-      stream: stream,
+    return FutureBuilder<void>(
+      future: widget.future,
       builder: (context, snapshot) {
-        final error = snapshot.error;
-        final submitting = snapshot.data ?? false;
+        const loading = PlatformAwareLoadingIndicator();
 
         final button = PlatformAwareWidget(
           android: () => ElevatedButton(
-            onPressed: onPressed,
-            child: Text(submitButtonLabel),
+            onPressed: _onSubmitButtonPressed,
+            child: Text(widget.label),
           ),
           ios: () => CupertinoButton.filled(
-            onPressed: onPressed,
+            onPressed: _onSubmitButtonPressed,
             child: Text(
-              submitButtonLabel,
+              widget.label,
               style: const TextStyle(color: Colors.white),
             ),
           ),
         );
 
-        if (error != null) {
-          return _buildButtonAndErrorMessage(
-            button,
-            errorMessage: translateError(error, S.of(context)),
-          );
-        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Text(''),
+                ),
+                button,
+              ],
+            );
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return loading;
+          case ConnectionState.done:
+            final exception = snapshot.error;
 
-        return submitting
-            ? const PlatformAwareLoadingIndicator()
-            : _buildButtonAndErrorMessage(button);
+            if (exception != null) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: widget.errorMessageBuilder(exception),
+                  ),
+                  button,
+                ],
+              );
+            }
+
+            return loading;
+        }
       },
     );
   }

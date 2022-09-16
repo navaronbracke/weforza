@@ -106,7 +106,7 @@ class IoFileHandler implements FileHandler {
     }
 
     if (directory == null) {
-      throw ArgumentError.notNull('directory');
+      return Future.error(ArgumentError.notNull('directory'));
     }
 
     return File(directory.path + Platform.pathSeparator + fileName + extension);

@@ -112,7 +112,7 @@ class _ClearRideSelectionButton extends StatelessWidget {
             onPressed: delegate.clearSelection,
           ),
           ios: () => CupertinoIconButton(
-            idleColor: CupertinoColors.destructiveRed,
+            color: CupertinoColors.systemRed,
             icon: CupertinoIcons.xmark_rectangle_fill,
             onPressed: delegate.clearSelection,
           ),

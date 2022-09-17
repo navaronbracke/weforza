@@ -16,7 +16,7 @@ class DatePicker extends StatelessWidget {
     required this.delegate,
     required this.forwardButton,
     this.headerPadding = EdgeInsets.zero,
-    required this.monthStyle,
+    this.monthStyle,
     this.showWeekdays = false,
     required this.weekDayWidth,
     required this.weekPadding,
@@ -45,7 +45,7 @@ class DatePicker extends StatelessWidget {
   final EdgeInsets headerPadding;
 
   /// The style for the calendar month text in the header.
-  final TextStyle monthStyle;
+  final TextStyle? monthStyle;
 
   /// Whether to show the days of the week above the days of the month.
   final bool showWeekdays;
@@ -95,7 +95,7 @@ class _DatePickerHeader extends StatelessWidget {
     required this.backButton,
     required this.forwardButton,
     required this.monthStream,
-    required this.style,
+    this.style,
   });
 
   /// The button that navigates back one month when tapped.
@@ -108,7 +108,7 @@ class _DatePickerHeader extends StatelessWidget {
   final Stream<Jiffy> monthStream;
 
   /// The style for the month text.
-  final TextStyle style;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {

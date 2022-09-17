@@ -8,6 +8,7 @@ import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the list of unresolved owners
 /// that is shown after a device scan has ended.
@@ -118,21 +119,18 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
       widget.item.uuid,
     );
 
+    const theme = AppTheme.memberListItem;
+
     if (selectedAttendee != null) {
       backgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle =
-          ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-        color: Colors.white,
-      );
-      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-        color: Colors.white,
-      );
+      firstNameStyle = theme.firstNameStyle.copyWith(color: Colors.white);
+      lastNameStyle = theme.lastNameStyle.copyWith(color: Colors.white);
 
       return;
     }
 
-    firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
-    lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
+    firstNameStyle = theme.firstNameStyle;
+    lastNameStyle = theme.lastNameStyle;
   }
 
   @override

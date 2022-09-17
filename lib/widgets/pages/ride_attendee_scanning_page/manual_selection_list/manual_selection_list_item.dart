@@ -8,6 +8,7 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents an item in the manual selection list.
 class ManualSelectionListItem extends ConsumerStatefulWidget {
@@ -109,14 +110,9 @@ class _ManualSelectionListItemState
 
     // The text color uses the Theme's default when unselected.
     final textColor = isSelected ? Colors.white : null;
-    final firstNameStyle =
-        ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
-      color: textColor,
-    );
-    final lastNameStyle =
-        ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-      color: textColor,
-    );
+    const theme = AppTheme.memberListItem;
+    final firstNameStyle = theme.firstNameStyle.copyWith(color: textColor);
+    final lastNameStyle = theme.lastNameStyle.copyWith(color: textColor);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,

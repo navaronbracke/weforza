@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class MemberName extends ConsumerWidget {
   const MemberName({super.key});
@@ -20,12 +20,14 @@ class MemberName extends ConsumerWidget {
       selectedMemberProvider.select((value) => value!.alias),
     );
 
+    const theme = AppTheme.memberListItem;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           firstName,
-          style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+          style: theme.firstNameStyle.copyWith(
             fontSize: 25,
             fontWeight: FontWeight.w500,
           ),
@@ -33,15 +35,13 @@ class MemberName extends ConsumerWidget {
         ),
         Text(
           lastName,
-          style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
-            fontSize: 20,
-          ),
+          style: theme.lastNameStyle.copyWith(fontSize: 20),
           overflow: TextOverflow.ellipsis,
         ),
         if (alias.isNotEmpty)
           Text(
             "'$alias'",
-            style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(
+            style: theme.lastNameStyle.copyWith(
               fontSize: 15,
               fontStyle: FontStyle.italic,
             ),

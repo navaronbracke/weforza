@@ -10,12 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== Device Picker Theme
-
-  static const Color deviceIconColor = Colors.blue;
-  static final Color deviceTypePickerDotColor = Colors.blue.shade100;
-  static const Color deviceTypePickerCurrentDotColor = Colors.blue;
-
   // ==== DeviceListTheme
 
   /// The member devices list header + button color for android.

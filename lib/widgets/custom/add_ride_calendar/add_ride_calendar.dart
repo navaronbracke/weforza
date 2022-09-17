@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/add_ride_form_delegate.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.dart';
@@ -28,13 +29,9 @@ class AddRideCalendar extends StatelessWidget {
           color: theme.changeMonthButton,
           onPressed: calendarDelegate.goBackOneMonth,
         ),
-        ios: () => Padding(
-          // The left chevron is more to the left.
-          padding: const EdgeInsets.only(left: 8),
-          child: CupertinoIconButton(
-            icon: Icons.arrow_back_ios,
-            onPressed: calendarDelegate.goBackOneMonth,
-          ),
+        ios: () => CupertinoIconButton(
+          icon: CupertinoIcons.chevron_left,
+          onPressed: calendarDelegate.goBackOneMonth,
         ),
       ),
       constraints: const BoxConstraints(maxHeight: 364),
@@ -57,12 +54,9 @@ class AddRideCalendar extends StatelessWidget {
           color: theme.changeMonthButton,
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
-        ios: () => Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: CupertinoIconButton(
-            icon: Icons.arrow_forward_ios,
-            onPressed: calendarDelegate.goForwardOneMonth,
-          ),
+        ios: () => CupertinoIconButton(
+          icon: CupertinoIcons.chevron_right,
+          onPressed: calendarDelegate.goForwardOneMonth,
         ),
       ),
       weekDayWidth: weekDayWidth,

@@ -145,25 +145,19 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
                 MaterialPageRoute(builder: (context) => const MemberForm()),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: CupertinoIconButton(
-                icon: CupertinoIcons.arrow_down_doc_fill,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ImportMembersPage(),
-                  ),
+            CupertinoIconButton(
+              icon: CupertinoIcons.arrow_down_doc_fill,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ImportMembersPage(),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12),
-              child: CupertinoIconButton(
-                icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ExportMembersPage(),
-                  ),
+            CupertinoIconButton(
+              icon: CupertinoIcons.arrow_up_doc_fill,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ExportMembersPage(),
                 ),
               ),
             ),

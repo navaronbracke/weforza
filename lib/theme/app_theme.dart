@@ -10,103 +10,7 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  /// The color for a calendar day
-  /// that is now or in the future, which has no ride.
-  static const Color rideCalendarFutureDayNoRideFontColor = Colors.black;
-
-  /// The font color for a calendar day, except for future days without rides.
-  static const Color rideCalendarDayFontColor = Colors.white;
-
-  static final Color rideCalendarFutureDayWithRideBackgroundColor =
-      Colors.blue.shade700;
-  static final Color rideCalendarSelectedDayBackgroundColor =
-      Colors.blue.shade200;
-  static final Color rideCalendarPastDayWithoutRideBackgroundColor =
-      Colors.grey.shade400;
-  static final Color rideCalendarPastDayWithRideBackgroundColor =
-      Colors.grey.shade700;
-
-  /// The font color for the ride calendar header.
-  static const Color rideCalendarHeaderColor = Colors.black;
-
-  /// The color for a choice arrow.
-  static const Color choiceArrowIdleColor = Colors.black;
-
-  /// The pressed color for a choice arrow.
-  static const Color choiceArrowOnPressedColor = Colors.black45;
-
-  /// The profile image placeholder's icon color.
-  static const Color profileImagePlaceholderIconColor = Colors.white;
-
-  /// The profile image placeholder icon's background color.
-  static final Color profileImagePlaceholderIconBackgroundColor =
-      Colors.blue.shade700;
-
-  /// The text style for a person's initials.
-  static const TextStyle personInitialsTextStyle = TextStyle(
-    fontFamily: 'Roboto',
-    color: Colors.white,
-  );
-
-  /// The background color for an unselected ride attendee.
-  static const Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
-
-  /// The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Colors.blue.shade700;
-
-  /// The text style for the first name of an item in the member list.
-  static const TextStyle memberListItemFirstNameTextStyle =
-      TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
-
-  /// The text style for the last name of an item in the member list.
-  static const memberListItemLastNameTextStyle = TextStyle(fontSize: 14);
-
-  /// The text style for android form errors.
-  static const androidFormErrorStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.red,
-  );
-
-  // The text style for iOS form errors.
-  static const iosFormErrorStyle = TextStyle(
-    fontSize: 14,
-    color: CupertinoColors.destructiveRed,
-  );
-
-  /// The text style for iOS buttons.
-  static const TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
-
-  static const androidRideAttendeeListCounterTextStyle = TextStyle(
-    fontSize: 14.0,
-    color: Colors.white,
-  );
-
-  static const Color deviceIconColor = Colors.blue;
-  static final Color deviceTypePickerDotColor = Colors.blue.shade100;
-  static const Color deviceTypePickerCurrentDotColor = Colors.blue;
-
-  /// The member devices list header + button color for android.
-  static const Color memberDevicesListHeaderAddDeviceButtonColor = Colors.blue;
-
-  /// The member devices list header + button colors for IOS.
-  static const memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blue;
-  static final memberDevicesListHeaderAddDeviceButtonPressedColor =
-      Colors.blue.shade100;
-  static const memberDevicesListHeaderTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-  );
-
-  /// The member device item edit button color for android.
-  static final Color memberDevicesListEditDeviceColor = Colors.blue.shade300;
-
-  /// The member device item edit button colors for IOS.
-  static final memberDevicesListEditDeviceIdleColor = Colors.blue.shade300;
-  static final memberDevicesListEditDevicePressedColor = Colors.blue.shade100;
-
-  /// This color is used for Icons in lists that show some information
-  /// when there is nothing to show.
-  static const Color listInformationalIconColor = primaryColor;
+  // ==== Settings theme
 
   static const settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final settingsScanSliderThumbColor = Colors.blue.shade300;
@@ -114,6 +18,13 @@ abstract class ApplicationTheme {
     fontSize: 12,
     fontStyle: FontStyle.italic,
   );
+
+  static const appVersionTextStyle = TextStyle(
+    fontStyle: FontStyle.italic,
+    fontSize: 12,
+  );
+
+  // ==== Scan Theme + Stepper sub theme
 
   static final androidScanStepperCurrentColor = Colors.lightGreen.shade200;
   static const androidScanStepperOtherColor = Colors.white;
@@ -148,6 +59,9 @@ abstract class ApplicationTheme {
     color: multipleOwnerColor,
   );
 
+  /// The background color for a selected ride attendee.
+  static final Color rideAttendeeSelectedBackgroundColor = Colors.blue.shade700;
+
   static const rideAttendeeScanResultFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 16.0,
@@ -158,18 +72,39 @@ abstract class ApplicationTheme {
     color: Colors.grey,
   );
 
+  // ==== Miscellaneous stuff
+
+  /// This color is used for Icons in lists that show some information
+  /// when there is nothing to show.
+  static const Color listInformationalIconColor = primaryColor;
+
   static const Color deleteItemButtonTextColor = Colors.red;
 
   static const importWarningTextStyle = TextStyle(color: Colors.red);
 
   static const Color importMembersDoneIconColor = Colors.green;
 
-  static const appVersionTextStyle = TextStyle(
-    fontStyle: FontStyle.italic,
-    fontSize: 12,
+  static const Color rideListItemEvenMonthColor = Colors.blue;
+
+  /// The text style for android form errors.
+  static const androidFormErrorStyle = TextStyle(
+    fontSize: 16,
+    color: Colors.red,
   );
 
-  static const Color rideListItemEvenMonthColor = Colors.blue;
+  // The text style for iOS form errors.
+  static const iosFormErrorStyle = TextStyle(
+    fontSize: 14,
+    color: CupertinoColors.destructiveRed,
+  );
+
+  /// The text style for iOS buttons.
+  static const TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
+
+  static const androidRideAttendeeListCounterTextStyle = TextStyle(
+    fontSize: 14.0,
+    color: Colors.white,
+  );
 
   /// The Android theme.
   static ThemeData androidTheme() {

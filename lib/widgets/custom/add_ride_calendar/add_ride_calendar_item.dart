@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/model/add_ride_form_delegate.dart';
-import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class AddRideCalendarItem extends StatelessWidget {
   const AddRideCalendarItem({
@@ -20,41 +20,35 @@ class AddRideCalendarItem extends StatelessWidget {
   final double size;
 
   Color? _computeBackgroundColor() {
+    const theme = AppTheme.rideCalendar;
+
     if (delegate.isBeforeToday(date)) {
       // A day in the past that has a ride.
       if (delegate.isScheduled(date)) {
         // The ride was scheduled in the current session.
         if (delegate.isScheduled(date, inCurrentSession: true)) {
-          return ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+          return theme.selectedDay;
         }
 
-        return ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
+        return theme.pastRide;
       }
 
       // A day in the past that doesn't have a ride.
-      return ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
+      return theme.pastDay;
     }
 
     // A day in the future (or today) that has a ride scheduled.
     if (delegate.isScheduled(date)) {
       // The ride was scheduled in the current session.
       if (delegate.isScheduled(date, inCurrentSession: true)) {
-        return ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+        return theme.selectedDay;
       }
 
-      return ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
+      return theme.futureRide;
     }
 
     // A day in the future (or today) that doesn't have a ride.
     return null;
-  }
-
-  Color _computeFontColor() {
-    if (delegate.isBeforeToday(date) || delegate.isScheduled(date)) {
-      return ApplicationTheme.rideCalendarDayFontColor;
-    }
-
-    return ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
   }
 
   @override
@@ -63,7 +57,11 @@ class AddRideCalendarItem extends StatelessWidget {
       initialData: delegate.currentSelection,
       stream: delegate.selection,
       builder: (context, _) {
+        const theme = AppTheme.rideCalendar;
         final backgroundColor = _computeBackgroundColor();
+        final style = delegate.isBeforeToday(date) || delegate.isScheduled(date)
+            ? theme.scheduledDayStyle
+            : theme.selectableDayStyle;
 
         return GestureDetector(
           onTap: () => delegate.onDaySelected(date),
@@ -77,7 +75,7 @@ class AddRideCalendarItem extends StatelessWidget {
               child: Center(
                 child: Text(
                   '${date.day}',
-                  style: TextStyle(color: _computeFontColor()),
+                  style: style,
                   textAlign: TextAlign.center,
                 ),
               ),

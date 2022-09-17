@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a profile image.
 ///
@@ -74,8 +74,8 @@ class ProfileImage extends StatelessWidget {
       child: Center(
         child: Text(
           personInitials!.toUpperCase(),
-          style: ApplicationTheme.personInitialsTextStyle.copyWith(
-            fontSize: .5 * size,
+          style: AppTheme.profileImagePlaceholder.initialsStyle.copyWith(
+            fontSize: size / 2,
           ),
         ),
       ),

@@ -98,9 +98,6 @@ abstract class ApplicationTheme {
     color: CupertinoColors.destructiveRed,
   );
 
-  /// The text style for iOS buttons.
-  static const TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
-
   static const androidRideAttendeeListCounterTextStyle = TextStyle(
     fontSize: 14.0,
     color: Colors.white,

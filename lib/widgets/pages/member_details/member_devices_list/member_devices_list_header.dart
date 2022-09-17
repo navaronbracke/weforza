@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class MemberDevicesListHeader extends StatelessWidget {
   const MemberDevicesListHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    const theme = AppTheme.memberDevicesList;
+    final child = Text(S.of(context).Devices, style: theme.headerStyle);
+
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.only(top: 4),
-        child: Text(
-          S.of(context).Devices,
-          style: ApplicationTheme.memberDevicesListHeaderTextStyle,
-        ),
+        child: child,
       ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Text(
-          S.of(context).Devices,
-          style: ApplicationTheme.memberDevicesListHeaderTextStyle,
-        ),
-      ),
+      ios: () => Padding(padding: const EdgeInsets.only(top: 12), child: child),
     );
   }
 }

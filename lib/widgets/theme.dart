@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
   /// The device type picker theme.
   static const deviceTypePicker = DeviceTypePickerTheme();
+
+  /// The member devices list theme.
+  static const memberDevicesList = MemberDeviceListTheme();
 
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
@@ -24,6 +28,21 @@ class DeviceTypePickerTheme {
 
   /// The color for an unselected device type.
   final Color unselectedColor = const Color(0xFFBBDEFB);
+}
+
+/// This class represents the theme for the member devices list.
+class MemberDeviceListTheme {
+  const MemberDeviceListTheme();
+
+  /// The color for the edit device button on Android.
+  /// iOS uses a [CupertinoColors] value to resolve a color.
+  final Color androidEditDeviceButtonColor = const Color(0xFF64B5F6);
+
+  /// The text style for the member devices list header.
+  final TextStyle headerStyle = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
 }
 
 /// This class defines the theme for member list items.

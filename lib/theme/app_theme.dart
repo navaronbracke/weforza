@@ -10,27 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== DeviceListTheme
-
-  /// The member devices list header + button color for android.
-  static const Color memberDevicesListHeaderAddDeviceButtonColor = Colors.blue;
-
-  /// The member devices list header + button colors for IOS.
-  static const memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blue;
-  static final memberDevicesListHeaderAddDeviceButtonPressedColor =
-      Colors.blue.shade100;
-  static const memberDevicesListHeaderTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-  );
-
-  /// The member device item edit button color for android.
-  static final Color memberDevicesListEditDeviceColor = Colors.blue.shade300;
-
-  /// The member device item edit button colors for IOS.
-  static final memberDevicesListEditDeviceIdleColor = Colors.blue.shade300;
-  static final memberDevicesListEditDevicePressedColor = Colors.blue.shade100;
-
   // ==== Settings theme
 
   static const settingsOptionHeaderStyle = TextStyle(fontSize: 14);

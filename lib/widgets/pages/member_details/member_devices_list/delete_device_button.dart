@@ -37,22 +37,19 @@ class DeleteDeviceButton extends StatelessWidget {
           }
         },
       ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(left: 4),
-        child: CupertinoIconButton(
-          icon: CupertinoIcons.delete,
-          idleColor: CupertinoColors.destructiveRed,
-          onPressed: () async {
-            final result = await showCupertinoDialog<bool>(
-              context: context,
-              builder: (_) => DeleteDeviceDialog(index: index),
-            );
+      ios: () => CupertinoIconButton(
+        color: CupertinoColors.systemRed,
+        icon: CupertinoIcons.delete,
+        onPressed: () async {
+          final result = await showCupertinoDialog<bool>(
+            context: context,
+            builder: (_) => DeleteDeviceDialog(index: index),
+          );
 
-            if (result ?? false) {
-              onDeviceDeleted();
-            }
-          },
-        ),
+          if (result ?? false) {
+            onDeviceDeleted();
+          }
+        },
       ),
     );
   }

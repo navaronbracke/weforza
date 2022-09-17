@@ -109,7 +109,7 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
-  late Color backgroundColor;
+  Color? backgroundColor;
   late TextStyle firstNameStyle;
   late TextStyle lastNameStyle;
 
@@ -131,7 +131,6 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
       return;
     }
 
-    backgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
     firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
     lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
   }

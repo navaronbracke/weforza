@@ -10,12 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  /// The text style for a person's initials.
-  static const TextStyle personInitialsTextStyle = TextStyle(
-    fontFamily: 'Roboto',
-    color: Colors.white,
-  );
-
   /// The background color for an unselected ride attendee.
   static const Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
 

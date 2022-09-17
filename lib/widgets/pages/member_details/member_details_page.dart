@@ -103,7 +103,7 @@ class MemberDetailsPage extends StatelessWidget {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16),
+                  padding: const EdgeInsets.only(left: 8),
                   child: CupertinoIconButton(
                     icon: CupertinoIcons.delete,
                     onPressed: () => showCupertinoDialog(

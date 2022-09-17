@@ -119,7 +119,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                   onPressed: () => _goToScanningPage(context),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 12),
+                  padding: const EdgeInsets.only(left: 8),
                   child: CupertinoIconButton(
                     icon: CupertinoIcons.ellipsis_vertical,
                     onPressed: () => _showCupertinoModalBottomPopup(context),

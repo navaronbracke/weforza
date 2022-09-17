@@ -29,12 +29,9 @@ class AddRideCalendar extends StatelessWidget {
           color: theme.changeMonthButton,
           onPressed: calendarDelegate.goBackOneMonth,
         ),
-        ios: () => Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: CupertinoIconButton(
-            icon: CupertinoIcons.chevron_left,
-            onPressed: calendarDelegate.goBackOneMonth,
-          ),
+        ios: () => CupertinoIconButton(
+          icon: CupertinoIcons.chevron_left,
+          onPressed: calendarDelegate.goBackOneMonth,
         ),
       ),
       constraints: const BoxConstraints(maxHeight: 364),
@@ -57,12 +54,9 @@ class AddRideCalendar extends StatelessWidget {
           color: theme.changeMonthButton,
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
-        ios: () => Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: CupertinoIconButton(
-            icon: CupertinoIcons.chevron_right,
-            onPressed: calendarDelegate.goForwardOneMonth,
-          ),
+        ios: () => CupertinoIconButton(
+          icon: CupertinoIcons.chevron_right,
+          onPressed: calendarDelegate.goForwardOneMonth,
         ),
       ),
       weekDayWidth: weekDayWidth,

@@ -10,31 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  /// The color for a calendar day
-  /// that is now or in the future, which has no ride.
-  static const Color rideCalendarFutureDayNoRideFontColor = Colors.black;
-
-  /// The font color for a calendar day, except for future days without rides.
-  static const Color rideCalendarDayFontColor = Colors.white;
-
-  static final Color rideCalendarFutureDayWithRideBackgroundColor =
-      Colors.blue.shade700;
-  static final Color rideCalendarSelectedDayBackgroundColor =
-      Colors.blue.shade200;
-  static final Color rideCalendarPastDayWithoutRideBackgroundColor =
-      Colors.grey.shade400;
-  static final Color rideCalendarPastDayWithRideBackgroundColor =
-      Colors.grey.shade700;
-
-  /// The font color for the ride calendar header.
-  static const Color rideCalendarHeaderColor = Colors.black;
-
-  /// The color for a choice arrow.
-  static const Color choiceArrowIdleColor = Colors.black;
-
-  /// The pressed color for a choice arrow.
-  static const Color choiceArrowOnPressedColor = Colors.black45;
-
   /// The profile image placeholder's icon color.
   static const Color profileImagePlaceholderIconColor = Colors.white;
 

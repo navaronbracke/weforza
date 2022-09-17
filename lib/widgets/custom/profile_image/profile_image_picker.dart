@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   const ProfileImagePicker({
@@ -88,14 +88,14 @@ class _AsyncProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor;
+    const theme = AppTheme.profileImagePlaceholder;
 
     return FutureBuilder<File?>(
       future: future,
       builder: (context, snapshot) => ProfileImage(
-        backgroundColor: bgColor,
+        backgroundColor: theme.backgroundColor,
         icon: icon,
-        iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
+        iconColor: theme.iconColor,
         image: snapshot.data,
         loading: loading,
         size: size,

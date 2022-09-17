@@ -118,12 +118,9 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                   icon: Icons.bluetooth_searching,
                   onPressed: () => _goToScanningPage(context),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: CupertinoIconButton(
-                    icon: CupertinoIcons.ellipsis_vertical,
-                    onPressed: () => _showCupertinoModalBottomPopup(context),
-                  ),
+                CupertinoIconButton(
+                  icon: CupertinoIcons.ellipsis_vertical,
+                  onPressed: () => _showCupertinoModalBottomPopup(context),
                 ),
               ],
             ),

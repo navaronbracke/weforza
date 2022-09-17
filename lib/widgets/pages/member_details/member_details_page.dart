@@ -102,14 +102,12 @@ class MemberDetailsPage extends StatelessWidget {
                     );
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: CupertinoIconButton(
-                    icon: CupertinoIcons.delete,
-                    onPressed: () => showCupertinoDialog(
-                      context: context,
-                      builder: (_) => const DeleteMemberDialog(),
-                    ),
+                CupertinoIconButton(
+                  color: CupertinoColors.systemRed,
+                  icon: CupertinoIcons.delete,
+                  onPressed: () => showCupertinoDialog(
+                    context: context,
+                    builder: (_) => const DeleteMemberDialog(),
                   ),
                 ),
               ],

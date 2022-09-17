@@ -2,11 +2,28 @@ import 'package:flutter/material.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
+  /// The member list item theme.
+  static const memberListItem = MemberListItemTheme();
+
   /// The profile image placeholder theme.
   static const profileImagePlaceholder = ProfileImagePlaceholderTheme();
 
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
+}
+
+/// This class defines the theme for member list items.
+class MemberListItemTheme {
+  const MemberListItemTheme();
+
+  /// The text style for the first name.
+  final TextStyle firstNameStyle = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// The text style for the last name.
+  final TextStyle lastNameStyle = const TextStyle(fontSize: 14);
 }
 
 /// This class represents the theme for the profile image placeholder.

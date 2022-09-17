@@ -192,7 +192,7 @@ class ResetRideCalendarDialogState
   Widget _buildIosConfirmDialog(BuildContext context, S translator) {
     return CupertinoAlertDialog(
       title: Text(translator.ResetRideCalendar),
-      content: Text(translator.ResetRideCalendarDescription),
+      content: Text(translator.ResetRideCalendarDialogDescription),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,

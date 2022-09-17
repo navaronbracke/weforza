@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class MemberDevicesListItem extends StatelessWidget {
   const MemberDevicesListItem({
@@ -91,7 +91,7 @@ class _EditDeviceButton extends ConsumerWidget {
       android: () => IconButton(
         icon: Icon(
           Icons.edit,
-          color: ApplicationTheme.memberDevicesListEditDeviceColor,
+          color: AppTheme.memberDevicesList.androidEditDeviceButtonColor,
         ),
         onPressed: () => _onEditDevicePressed(context, ref),
       ),

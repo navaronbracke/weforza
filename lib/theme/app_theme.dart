@@ -10,9 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  /// The background color for an unselected ride attendee.
-  static const Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
-
   /// The background color for a selected ride attendee.
   static final Color rideAttendeeSelectedBackgroundColor = Colors.blue.shade700;
 

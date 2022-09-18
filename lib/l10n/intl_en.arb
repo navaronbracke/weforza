@@ -124,5 +124,5 @@
 	"Uncheck": "Uncheck",
 	"UncheckRiderDescription": "Are you sure that you want to uncheck this rider?",
 	"UncheckRiderTitle": "Uncheck rider",
-	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners. You can select the attending owners here."
+	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners.\nYou can select the attending owners here."
 }

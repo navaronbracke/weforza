@@ -101,7 +101,7 @@ class DeleteItemDialog extends StatelessWidget {
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
-                    color: AppTheme.desctructiveAction.androidColor,
+                    color: AppTheme.desctructiveAction.androidErrorStyle.color,
                   ),
                 ),
                 Text(

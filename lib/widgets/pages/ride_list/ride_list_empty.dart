@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
 class RideListEmpty extends StatelessWidget {
   const RideListEmpty({super.key});
@@ -11,9 +11,9 @@ class RideListEmpty extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            Icons.directions_bike,
-            color: ApplicationTheme.listInformationalIconColor,
+          PlatformAwareIcon(
+            androidIcon: Icons.directions_bike,
+            iosIcon: Icons.directions_bike,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           Padding(

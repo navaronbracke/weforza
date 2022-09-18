@@ -5,10 +5,10 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This dialog handles the UI for the reset ride calendar confirmation.
 class ResetRideCalendarDialog extends ConsumerStatefulWidget {
@@ -89,9 +89,7 @@ class ResetRideCalendarDialogState
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                primary: ApplicationTheme.deleteItemButtonTextColor,
-              ),
+              style: AppTheme.desctructiveAction.textButtonTheme,
               onPressed: () => _resetCalendar(context),
               child: Text(translator.Clear.toUpperCase()),
             ),
@@ -119,12 +117,12 @@ class ResetRideCalendarDialogState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
-                    color: ApplicationTheme.deleteItemButtonTextColor,
+                    color: AppTheme.desctructiveAction.androidColor,
                   ),
                 ),
                 Text(

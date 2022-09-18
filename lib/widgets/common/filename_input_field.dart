@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/validation_label.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class FileNameInputField extends StatelessWidget {
   FileNameInputField({
@@ -112,11 +112,14 @@ class FileNameInputField extends StatelessWidget {
           PlatformAwareWidget(
             android: () => ValidationLabel(
               stream: errorController,
-              style: ApplicationTheme.androidFormErrorStyle,
+              style: AppTheme.desctructiveAction.androidErrorStyle,
             ),
             ios: () => ValidationLabel(
               stream: errorController,
-              style: ApplicationTheme.iosFormErrorStyle,
+              style: const TextStyle(
+                color: CupertinoColors.destructiveRed,
+                fontSize: 14,
+              ),
             ),
           ),
         ],

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class DeleteItemDialog extends StatelessWidget {
   const DeleteItemDialog({
@@ -50,9 +50,7 @@ class DeleteItemDialog extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              style: TextButton.styleFrom(
-                primary: ApplicationTheme.deleteItemButtonTextColor,
-              ),
+              style: AppTheme.desctructiveAction.textButtonTheme,
               onPressed: onDeletePressed,
               child: Text(translator.Delete.toUpperCase()),
             ),
@@ -98,12 +96,12 @@ class DeleteItemDialog extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
-                    color: ApplicationTheme.deleteItemButtonTextColor,
+                    color: AppTheme.desctructiveAction.androidErrorStyle.color,
                   ),
                 ),
                 Text(

@@ -54,6 +54,10 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       // Emit unknown devices as fallback.
       yield BluetoothPeripheral(id: '$i', deviceName: 'Device $i');
     }
+
+    if (!_scanningController.isClosed) {
+      _scanningController.add(false);
+    }
   }
 
   @override

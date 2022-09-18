@@ -5,9 +5,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/pages/home_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This class represents the application.
 class WeForzaApp extends ConsumerStatefulWidget {
@@ -50,7 +50,7 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      theme: ApplicationTheme.androidTheme(),
+      theme: AppTheme.androidTheme,
       home: const HomePage(),
     );
   }
@@ -64,7 +64,7 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      theme: ApplicationTheme.iosTheme(),
+      theme: AppTheme.iosTheme,
       home: const HomePage(),
     );
   }

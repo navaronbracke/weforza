@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the base for a generic scan error.
@@ -10,17 +11,21 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// and a secondary action button.
 class _GenericScanErrorBase extends StatelessWidget {
   const _GenericScanErrorBase({
+    required this.androidIcon,
     required this.errorMessage,
-    required this.iconBuilder,
+    required this.iosIcon,
     required this.primaryButton,
     this.secondaryButton,
   });
 
+  /// The icon for Android.
+  final IconData androidIcon;
+
   /// The error message to display.
   final String errorMessage;
 
-  /// The builder for the icon.
-  final Widget Function(double size) iconBuilder;
+  /// The icon for iOS.
+  final IconData iosIcon;
 
   /// The primary button that is displayed under the [errorMessage].
   final Widget primaryButton;
@@ -30,12 +35,14 @@ class _GenericScanErrorBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = MediaQuery.of(context).size.shortestSide * .1;
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        iconBuilder(iconSize),
+        PlatformAwareIcon(
+          androidIcon: androidIcon,
+          iosIcon: iosIcon,
+          size: MediaQuery.of(context).size.shortestSide * .1,
+        ),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
@@ -73,12 +80,9 @@ class BluetoothDisabledError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
+      androidIcon: Icons.bluetooth_disabled,
       errorMessage: translator.ScanAbortedBluetoothDisabled,
-      iconBuilder: (iconSize) => Icon(
-        Icons.bluetooth_disabled,
-        color: ApplicationTheme.listInformationalIconColor,
-        size: iconSize,
-      ),
+      iosIcon: Icons.bluetooth_disabled,
       primaryButton: PlatformAwareWidget(
         android: () => ElevatedButton(
           onPressed: () => AppSettings.openBluetoothSettings(),
@@ -118,19 +122,9 @@ class GenericScanError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
+      androidIcon: Icons.warning,
       errorMessage: translator.GenericError,
-      iconBuilder: (iconSize) => PlatformAwareWidget(
-        android: () => Icon(
-          Icons.warning,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: iconSize,
-        ),
-        ios: () => Icon(
-          CupertinoIcons.exclamationmark_triangle_fill,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: iconSize,
-        ),
-      ),
+      iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
       primaryButton: PlatformAwareWidget(
         android: () => ElevatedButton(
           child: Text(translator.GoBackToDetailPage),
@@ -159,19 +153,9 @@ class PermissionDeniedError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
+      androidIcon: Icons.warning,
       errorMessage: translator.ScanAbortedPermissionDenied,
-      iconBuilder: (iconSize) => PlatformAwareWidget(
-        android: () => Icon(
-          Icons.warning,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: iconSize,
-        ),
-        ios: () => Icon(
-          CupertinoIcons.exclamationmark_triangle_fill,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: iconSize,
-        ),
-      ),
+      iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
       primaryButton: PlatformAwareWidget(
         android: () => ElevatedButton(
           child: Text(translator.GoToSettings),

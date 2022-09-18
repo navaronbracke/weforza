@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
 class MemberListEmpty extends StatelessWidget {
   const MemberListEmpty({super.key});
@@ -12,17 +11,10 @@ class MemberListEmpty extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        PlatformAwareWidget(
-          android: () => Icon(
-            Icons.people,
-            color: ApplicationTheme.listInformationalIconColor,
-            size: MediaQuery.of(context).size.shortestSide * .1,
-          ),
-          ios: () => Icon(
-            CupertinoIcons.person_2_fill,
-            color: ApplicationTheme.listInformationalIconColor,
-            size: MediaQuery.of(context).size.shortestSide * .1,
-          ),
+        PlatformAwareIcon(
+          androidIcon: Icons.people,
+          iosIcon: CupertinoIcons.person_2_fill,
+          size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, left: 16, right: 16),

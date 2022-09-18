@@ -8,14 +8,9 @@ abstract class ApplicationTheme {
   /// The primary color is defined as a [MaterialColor].
   static const MaterialColor primaryColor = Colors.blue;
 
-  static const Color secondaryColor = Color(0xFF64B5F6);
-
-  // ==== Miscellaneous stuff
-
   /// The Android theme.
   static ThemeData androidTheme() {
     return ThemeData(
-      splashColor: secondaryColor.withAlpha(150),
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
@@ -40,17 +35,13 @@ abstract class ApplicationTheme {
           ),
         ),
       ),
-      colorScheme: ColorScheme.fromSwatch(
-        primarySwatch: primaryColor,
-      ).copyWith(secondary: secondaryColor),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: primaryColor),
     );
   }
 
   /// The iOS theme.
   static CupertinoThemeData iosTheme() {
-    return const CupertinoThemeData(
-      primaryColor: primaryColor,
-      primaryContrastingColor: secondaryColor,
-    );
+    // TODO: use active blue
+    return const CupertinoThemeData(primaryColor: primaryColor);
   }
 }

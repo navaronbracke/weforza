@@ -2,7 +2,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -105,7 +104,7 @@ class BluetoothDisabledError extends StatelessWidget {
           onPressed: onRetry,
           child: Text(
             translator.RetryScan,
-            style: const TextStyle(color: ApplicationTheme.primaryColor),
+            style: const TextStyle(color: CupertinoColors.activeBlue),
           ),
         ),
       ),
@@ -177,7 +176,7 @@ class PermissionDeniedError extends StatelessWidget {
         ios: () => CupertinoButton(
           child: Text(
             translator.GoBack,
-            style: const TextStyle(color: ApplicationTheme.primaryColor),
+            style: const TextStyle(color: CupertinoColors.activeBlue),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),

@@ -149,19 +149,15 @@ class ScanProgressIndicatorTheme {
 class ScanStepperTheme {
   const ScanStepperTheme({
     required this.active,
-    required this.arrowColor,
-    required this.arrowIcon,
+    required this.arrow,
     required this.inactive,
   });
 
   /// The color for the active step.
   final Color active;
 
-  /// The color for the arrow that separates steps in the stepper.
-  final Color arrowColor;
-
   /// The icon for the arrow.
-  final IconData arrowIcon;
+  final Icon arrow;
 
   /// The color for inactive steps.
   final Color inactive;
@@ -171,21 +167,20 @@ class ScanStepperTheme {
 class ScanStepperThemes {
   const ScanStepperThemes();
 
-  // //Icons.arrow_forward_ios
-
   /// The theme for the Android stepper.
   final android = const ScanStepperTheme(
     active: Color(0xFFC5E1A5),
-    arrowColor: Color(0xFF81D4FA),
-    arrowIcon: Icons.arrow_forward_ios_rounded,
+    arrow: Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF81D4FA)),
     inactive: Colors.white,
   );
 
   /// The theme for the iOS stepper.
   final ios = const ScanStepperTheme(
     active: CupertinoColors.activeGreen,
-    arrowColor: CupertinoColors.activeBlue,
-    arrowIcon: CupertinoIcons.chevron_forward,
+    arrow: Icon(
+      CupertinoIcons.chevron_forward,
+      color: CupertinoColors.activeBlue,
+    ),
     inactive: CupertinoColors.inactiveGray,
   );
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a progress indicator for a device scan.
 class ScanProgressIndicator extends StatelessWidget {
@@ -39,21 +39,28 @@ class ScanProgressIndicator extends StatelessWidget {
                 final progress = animationController.value;
 
                 return PlatformAwareWidget(
-                  android: () => LinearProgressIndicator(
-                    backgroundColor:
-                        ApplicationTheme.androidScanProgressBackground,
-                    value: progress,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      ApplicationTheme.androidScanProgressColor,
-                    ),
-                  ),
-                  ios: () => LinearProgressIndicator(
-                    backgroundColor: ApplicationTheme.iosScanProgressBackground,
-                    value: progress,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      ApplicationTheme.iosScanProgressColor,
-                    ),
-                  ),
+                  android: () {
+                    final theme = AppTheme.scanProgressIndicator.android;
+
+                    return LinearProgressIndicator(
+                      backgroundColor: theme.backgroundColor,
+                      value: progress,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        theme.progressColor,
+                      ),
+                    );
+                  },
+                  ios: () {
+                    final theme = AppTheme.scanProgressIndicator.ios;
+
+                    return LinearProgressIndicator(
+                      backgroundColor: theme.backgroundColor,
+                      value: progress,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        theme.progressColor,
+                      ),
+                    );
+                  },
                 );
               },
             ),

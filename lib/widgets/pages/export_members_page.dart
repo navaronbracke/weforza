@@ -6,7 +6,6 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/export_members_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
 import 'package:weforza/widgets/common/filename_input_field.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -115,22 +114,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
               return GenericError(text: translator.GenericError);
             }
 
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final paintSize = constraints.biggest.shortestSide * .3;
-                return Center(
-                  child: SizedBox.square(
-                    dimension: paintSize,
-                    child: Center(
-                      child: AnimatedCheckmark(
-                        color: ApplicationTheme.secondaryColor,
-                        size: Size.square(paintSize),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
+            return const AdaptiveAnimatedCheckmark();
         }
       },
     );

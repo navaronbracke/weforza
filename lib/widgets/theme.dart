@@ -274,7 +274,7 @@ class RideAttendeeScanResultThemes {
       fontSize: 12,
       color: CupertinoColors.activeOrange,
     ),
-    selectedBackgroundColor: Color(0xFF0071A4),
+    selectedBackgroundColor: CupertinoColors.activeBlue,
     singleOwnerColor: CupertinoColors.activeBlue,
   );
 }

@@ -29,7 +29,12 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             color: isScanningStep ? theme.active : theme.inactive,
           ),
         ),
-        Icon(theme.arrowIcon, color: theme.arrowColor, size: 48),
+        SizedBox(
+          width: 40,
+          child: Center(
+            child: Icon(theme.arrowIcon, color: theme.arrowColor),
+          ),
+        ),
         Text(
           translator.ByHand.toUpperCase(),
           style: TextStyle(

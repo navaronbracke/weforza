@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the scan results list
 /// for the ride attendee scanning page.
@@ -61,7 +61,27 @@ class _ScanResultsListItem extends StatelessWidget {
 
   final ScannedDevice device;
 
-  Widget _buildMultipleOwnersListItem(String amountOfOwnersLabel) {
+  Widget _buildMultipleOwnersListItem(BuildContext context, int ownersLength) {
+    IconData icon;
+    TextStyle style;
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        icon = Icons.people;
+        final theme = AppTheme.rideAttendeeScanResult.android;
+        style = theme.multipleOwnersLabelStyle;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        icon = CupertinoIcons.person_2_fill;
+        final theme = AppTheme.rideAttendeeScanResult.ios;
+        style = theme.multipleOwnersLabelStyle;
+        break;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -71,16 +91,7 @@ class _ScanResultsListItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 4),
-                child: PlatformAwareWidget(
-                  android: () => const Icon(
-                    Icons.people,
-                    color: ApplicationTheme.multipleOwnerColor,
-                  ),
-                  ios: () => const Icon(
-                    CupertinoIcons.person_2_fill,
-                    color: ApplicationTheme.multipleOwnerColor,
-                  ),
-                ),
+                child: Icon(icon, color: style.color),
               ),
               SelectableText(
                 device.name,
@@ -92,35 +103,45 @@ class _ScanResultsListItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4),
           child: Text(
-            amountOfOwnersLabel,
-            style: ApplicationTheme.multipleOwnersLabelStyle,
+            S.of(context).AmountOfRidersWithDeviceName(ownersLength),
+            style: style,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSingleOwnerListItem() {
+  Widget _buildSingleOwnerListItem(BuildContext context) {
     final owner = device.owners.first;
-    const textStyle = TextStyle(
-      color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
-      fontWeight: FontWeight.bold,
-    );
+    TextStyle textStyle;
+    Widget icon;
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        textStyle = TextStyle(
+          color: AppTheme.rideAttendeeScanResult.android.singleOwnerColor,
+          fontWeight: FontWeight.bold,
+        );
+        icon = Icon(Icons.person, color: textStyle.color);
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        textStyle = TextStyle(
+          color: AppTheme.rideAttendeeScanResult.ios.singleOwnerColor,
+          fontWeight: FontWeight.bold,
+        );
+        icon = Icon(CupertinoIcons.person_fill, color: textStyle.color);
+        break;
+    }
 
     return Row(
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: PlatformAwareWidget(
-            android: () => const Icon(
-              Icons.person,
-              color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
-            ),
-            ios: () => const Icon(
-              CupertinoIcons.person_fill,
-              color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
-            ),
-          ),
+          child: icon,
         ),
         MemberNameAndAlias(
           alias: owner.alias,
@@ -142,9 +163,18 @@ class _ScanResultsListItem extends StatelessWidget {
       case 0:
         child = Row(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(right: 4),
-              child: Icon(Icons.device_unknown, color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: PlatformAwareWidget(
+                android: () => const Icon(
+                  Icons.device_unknown,
+                  color: Colors.grey,
+                ),
+                ios: () => const Icon(
+                  Icons.device_unknown,
+                  color: CupertinoColors.systemGrey,
+                ),
+              ),
             ),
             SelectableText(
               device.name,
@@ -154,12 +184,10 @@ class _ScanResultsListItem extends StatelessWidget {
         );
         break;
       case 1:
-        child = _buildSingleOwnerListItem();
+        child = _buildSingleOwnerListItem(context);
         break;
       default:
-        child = _buildMultipleOwnersListItem(
-          S.of(context).AmountOfRidersWithDeviceName(device.owners.length),
-        );
+        child = _buildMultipleOwnersListItem(context, device.owners.length);
         break;
     }
 

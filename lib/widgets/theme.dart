@@ -18,6 +18,12 @@ abstract class AppTheme {
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
 
+  /// The theme for the scan progress indicator.
+  static const scanProgressIndicator = ScanProgressIndicatorTheme();
+
+  /// The theme for the scan stepper.
+  static const scanStepper = ScanStepperThemes();
+
   /// The theme for the settings page.
   static const settings = SettingsTheme();
 }
@@ -105,6 +111,83 @@ class RideCalendarTheme {
 
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);
+}
+
+/// This class represents the data for a [ScanProgressIndicatorTheme] sub theme.
+class _ScanProgressIndicatorTheme {
+  const _ScanProgressIndicatorTheme({
+    required this.backgroundColor,
+    required this.progressColor,
+  });
+
+  /// The background color for the progress indicator.
+  final Color backgroundColor;
+
+  /// The color for the progress in the progress indicator.
+  final Color progressColor;
+}
+
+/// This class represents the theme for a scan progress indicator.
+class ScanProgressIndicatorTheme {
+  const ScanProgressIndicatorTheme();
+
+  /// The theme for the Android progress indicator.
+  final android = const _ScanProgressIndicatorTheme(
+    backgroundColor: Color(0x7862CC62),
+    progressColor: Color(0xFF62CC62),
+  );
+
+  /// The theme for the iOS progress indicator.
+  final ios = const _ScanProgressIndicatorTheme(
+    // This color is equal to `systemGreen.withOpacity(0.4)`
+    backgroundColor: Color(0x6634C759),
+    progressColor: CupertinoColors.systemGreen,
+  );
+}
+
+/// This class represents the data for a [ScanStepperTheme] sub theme.
+class ScanStepperTheme {
+  const ScanStepperTheme({
+    required this.active,
+    required this.arrowColor,
+    required this.arrowIcon,
+    required this.inactive,
+  });
+
+  /// The color for the active step.
+  final Color active;
+
+  /// The color for the arrow that separates steps in the stepper.
+  final Color arrowColor;
+
+  /// The icon for the arrow.
+  final IconData arrowIcon;
+
+  /// The color for inactive steps.
+  final Color inactive;
+}
+
+/// This class represents the theme for a scan stepper.
+class ScanStepperThemes {
+  const ScanStepperThemes();
+
+  // //Icons.arrow_forward_ios
+
+  /// The theme for the Android stepper.
+  final android = const ScanStepperTheme(
+    active: Color(0xFFC5E1A5),
+    arrowColor: Color(0xFF81D4FA),
+    arrowIcon: Icons.arrow_forward_ios_rounded,
+    inactive: Colors.white,
+  );
+
+  /// The theme for the iOS stepper.
+  final ios = const ScanStepperTheme(
+    active: CupertinoColors.activeGreen,
+    arrowColor: CupertinoColors.activeBlue,
+    arrowIcon: CupertinoIcons.chevron_forward,
+    inactive: CupertinoColors.inactiveGray,
+  );
 }
 
 /// This class represents the theme for the settings page.

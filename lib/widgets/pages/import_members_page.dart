@@ -11,6 +11,7 @@ import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class ImportMembersPage extends ConsumerStatefulWidget {
   const ImportMembersPage({super.key});
@@ -30,6 +31,24 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
         title: Text(S.of(context).ImportMembersPageTitle),
       ),
       body: Center(child: _buildBody(context)),
+    );
+  }
+
+  Widget _buildErrorMessage(String errorMessage) {
+    return PlatformAwareWidget(
+      android: () => Text(
+        errorMessage,
+        softWrap: true,
+        style: AppTheme.desctructiveAction.androidErrorStyle,
+      ),
+      ios: () => Text(
+        errorMessage,
+        softWrap: true,
+        style: const TextStyle(
+          color: CupertinoColors.destructiveRed,
+          fontSize: 14,
+        ),
+      ),
     );
   }
 
@@ -72,11 +91,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                translator.ImportMembersPickFileWarning,
-                style: ApplicationTheme.importWarningTextStyle,
-                softWrap: true,
-              ),
+              _buildErrorMessage(translator.ImportMembersPickFileWarning),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: button,
@@ -89,11 +104,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                translator.ImportMembersInvalidFileExtension,
-                style: ApplicationTheme.importWarningTextStyle,
-                softWrap: true,
-              ),
+              _buildErrorMessage(translator.ImportMembersInvalidFileExtension),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: button,
@@ -106,11 +117,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                translator.ImportMembersCsvHeaderRequired,
-                style: ApplicationTheme.importWarningTextStyle,
-                softWrap: true,
-              ),
+              _buildErrorMessage(translator.ImportMembersCsvHeaderRequired),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: button,

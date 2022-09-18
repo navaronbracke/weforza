@@ -17,6 +17,9 @@ abstract class AppTheme {
 
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
+
+  /// The theme for the settings page.
+  static const settings = SettingsTheme();
 }
 
 /// This class represents the theme for the device type picker.
@@ -102,4 +105,18 @@ class RideCalendarTheme {
 
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);
+}
+
+/// This class represents the theme for the settings page.
+class SettingsTheme {
+  const SettingsTheme();
+
+  /// The text style for the header of a settings option.
+  final TextStyle optionHeaderStyle = const TextStyle(fontSize: 14);
+
+  /// The text style for the description below a settings option.
+  final TextStyle optionDescriptionStyle = const TextStyle(
+    fontSize: 12,
+    fontStyle: FontStyle.italic,
+  );
 }

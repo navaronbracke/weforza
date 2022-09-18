@@ -10,20 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== Settings theme
-
-  static const settingsOptionHeaderStyle = TextStyle(fontSize: 14);
-  static final settingsScanSliderThumbColor = Colors.blue.shade300;
-  static const settingsResetRideCalendarDescriptionTextStyle = TextStyle(
-    fontSize: 12,
-    fontStyle: FontStyle.italic,
-  );
-
-  static const appVersionTextStyle = TextStyle(
-    fontStyle: FontStyle.italic,
-    fontSize: 12,
-  );
-
   // ==== Scan Theme + Stepper sub theme
 
   static final androidScanStepperCurrentColor = Colors.lightGreen.shade200;
@@ -76,7 +62,8 @@ abstract class ApplicationTheme {
 
   /// This color is used for Icons in lists that show some information
   /// when there is nothing to show.
-  static const Color listInformationalIconColor = primaryColor;
+  static const Color listInformationalIconColor =
+      primaryColor; // TODO: remove and use primary color
 
   static const Color deleteItemButtonTextColor = Colors.red;
 
@@ -84,6 +71,7 @@ abstract class ApplicationTheme {
 
   static const Color importMembersDoneIconColor = Colors.green;
 
+  // TODO: remove an use primary color
   static const Color rideListItemEvenMonthColor = Colors.blue;
 
   /// The text style for android form errors.

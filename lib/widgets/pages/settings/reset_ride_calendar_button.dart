@@ -6,12 +6,14 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/dialogs/reset_ride_calendar_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class ResetRideCalendarButton extends ConsumerWidget {
   const ResetRideCalendarButton({super.key});
 
   Widget _buildButton(BuildContext context, {bool enabled = true}) {
     final translator = S.of(context);
+    const theme = AppTheme.settings;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -46,15 +48,12 @@ class ResetRideCalendarButton extends ConsumerWidget {
         PlatformAwareWidget(
           android: () => Text(
             translator.ResetRideCalendarDescription,
-            style:
-                ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+            style: theme.optionDescriptionStyle,
             textAlign: TextAlign.center,
           ),
           ios: () => Text(
             translator.ResetRideCalendarDescription,
-            style: ApplicationTheme
-                .settingsResetRideCalendarDescriptionTextStyle
-                .copyWith(fontSize: 14),
+            style: theme.optionDescriptionStyle.copyWith(fontSize: 14),
             textAlign: TextAlign.center,
           ),
         ),

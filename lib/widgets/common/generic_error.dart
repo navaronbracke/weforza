@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
 /// This class represents a generic error widget.
 ///
@@ -9,36 +8,16 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class GenericError extends StatelessWidget {
   GenericError({
     super.key,
+    this.androidIcon,
+    this.iosIcon,
     required this.text,
-    this.iconBuilder,
-  })  : assert(text.isNotEmpty);
+  }) : assert(text.isNotEmpty);
+
+  final IconData? androidIcon;
+
+  final IconData? iosIcon;
 
   final String text;
-  final Widget Function(BuildContext context)? iconBuilder;
-
-  /// Build a Widget that serves as the icon.
-  /// Returns the result of [iconBuilder]
-  /// or a default warning icon.
-  Widget _buildIcon(BuildContext context) {
-    final builder = iconBuilder;
-
-    if (builder != null) {
-      return builder(context);
-    }
-
-    return PlatformAwareWidget(
-      android: () => Icon(
-        Icons.warning,
-        color: ApplicationTheme.listInformationalIconColor,
-        size: MediaQuery.of(context).size.shortestSide * .1,
-      ),
-      ios: () => Icon(
-        CupertinoIcons.exclamationmark_triangle_fill,
-        color: ApplicationTheme.listInformationalIconColor,
-        size: MediaQuery.of(context).size.shortestSide * .1,
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +25,11 @@ class GenericError extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _buildIcon(context),
+          PlatformAwareIcon(
+            androidIcon: androidIcon ?? Icons.warning,
+            iosIcon: iosIcon ?? CupertinoIcons.exclamationmark_triangle_fill,
+            size: MediaQuery.of(context).size.shortestSide * .1,
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(text),

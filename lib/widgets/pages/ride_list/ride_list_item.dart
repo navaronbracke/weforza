@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/ride_list_item_attendee_counter.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -13,29 +13,38 @@ class RideListItem extends ConsumerWidget {
 
   final Ride ride;
 
-  TextStyle get itemTextStyle {
+  Color? _getMonthColor(BuildContext context) {
     if (ride.date.month % 2 == 0) {
-      return const TextStyle(
-        color: ApplicationTheme.rideListItemEvenMonthColor,
-      );
+      switch (Theme.of(context).platform) {
+        case TargetPlatform.android:
+        case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
+          return Colors.blue;
+        case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
+          return CupertinoColors.activeBlue;
+      }
     }
 
-    return const TextStyle();
+    return null;
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final style = TextStyle(color: _getMonthColor(context));
+
     final content = Row(
       children: <Widget>[
         Expanded(
           child: Text(
             ride.getFormattedDate(context, false),
-            style: itemTextStyle,
+            style: style,
           ),
         ),
         RideListItemAttendeeCounter(
           key: ValueKey(ride.date),
-          counterStyle: itemTextStyle,
+          counterStyle: style,
           rideDate: ride.date,
         ),
       ],

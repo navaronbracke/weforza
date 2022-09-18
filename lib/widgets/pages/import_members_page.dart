@@ -121,21 +121,9 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
 
         if (error is JsonFormatIncompatibleException) {
           return GenericError(
+            androidIcon: Icons.insert_drive_file,
+            iosIcon: CupertinoIcons.doc_fill,
             text: translator.ImportMembersIncompatibleFileJsonContents,
-            iconBuilder: (context) {
-              return PlatformAwareWidget(
-                android: () => Icon(
-                  Icons.insert_drive_file,
-                  color: ApplicationTheme.listInformationalIconColor,
-                  size: MediaQuery.of(context).size.shortestSide * .1,
-                ),
-                ios: () => Icon(
-                  CupertinoIcons.doc_fill,
-                  color: ApplicationTheme.listInformationalIconColor,
-                  size: MediaQuery.of(context).size.shortestSide * .1,
-                ),
-              );
-            },
           );
         }
 

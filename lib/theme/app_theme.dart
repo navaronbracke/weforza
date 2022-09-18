@@ -12,19 +12,11 @@ abstract class ApplicationTheme {
 
   // ==== Miscellaneous stuff
 
-  /// This color is used for Icons in lists that show some information
-  /// when there is nothing to show.
-  static const Color listInformationalIconColor =
-      primaryColor; // TODO: remove and use primary color
-
   static const Color deleteItemButtonTextColor = Colors.red;
 
   static const importWarningTextStyle = TextStyle(color: Colors.red);
 
   static const Color importMembersDoneIconColor = Colors.green;
-
-  // TODO: remove an use primary color
-  static const Color rideListItemEvenMonthColor = Colors.blue;
 
   /// The text style for android form errors.
   static const androidFormErrorStyle = TextStyle(

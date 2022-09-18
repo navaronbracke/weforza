@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty member devices list.
@@ -24,22 +24,13 @@ class MemberDevicesListEmpty extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final size = constraints.biggest;
-
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              PlatformAwareWidget(
-                android: () => Icon(
-                  Icons.devices_other,
-                  color: ApplicationTheme.listInformationalIconColor,
-                  size: size.shortestSide * .1,
-                ),
-                ios: () => Icon(
-                  Icons.devices_other,
-                  color: ApplicationTheme.listInformationalIconColor,
-                  size: size.shortestSide * .1,
-                ),
+              PlatformAwareIcon(
+                androidIcon: Icons.devices_other,
+                iosIcon: Icons.devices_other,
+                size: constraints.biggest.shortestSide * .1,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),

@@ -5,7 +5,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
@@ -28,6 +27,29 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
 
 class _ManualSelectionListItemState
     extends ConsumerState<ManualSelectionListItem> {
+  BoxDecoration? _getDecoration(BuildContext context, bool isSelected) {
+    if (isSelected) {
+      RideAttendeeScanResultTheme theme;
+
+      switch (Theme.of(context).platform) {
+        case TargetPlatform.android:
+        case TargetPlatform.fuchsia:
+        case TargetPlatform.linux:
+        case TargetPlatform.windows:
+          theme = AppTheme.rideAttendeeScanResult.android;
+          break;
+        case TargetPlatform.iOS:
+        case TargetPlatform.macOS:
+          theme = AppTheme.rideAttendeeScanResult.ios;
+          break;
+      }
+
+      return BoxDecoration(color: theme.selectedBackgroundColor);
+    }
+
+    return null;
+  }
+
   /// Show a confirmation dialog for unselecting a scanned item.
   /// Unselecting a scanned item is a destructive operation since it reduces
   /// the amount of items that have been automatically resolved during a device scan.
@@ -102,12 +124,6 @@ class _ManualSelectionListItemState
       isScanned = selectedRideAttendee.isScanned;
     }
 
-    final decoration = isSelected
-        ? BoxDecoration(
-            color: ApplicationTheme.rideAttendeeSelectedBackgroundColor,
-          )
-        : null;
-
     // The text color uses the Theme's default when unselected.
     final textColor = isSelected ? Colors.white : null;
     const theme = AppTheme.memberListItem;
@@ -132,7 +148,7 @@ class _ManualSelectionListItemState
         setState(() {});
       },
       child: Container(
-        decoration: decoration,
+        decoration: _getDecoration(context, isSelected),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(
           children: [

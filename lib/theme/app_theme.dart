@@ -10,36 +10,7 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== Settings theme
-
-  static const settingsOptionHeaderStyle = TextStyle(fontSize: 14);
-  static final settingsScanSliderThumbColor = Colors.blue.shade300;
-  static const settingsResetRideCalendarDescriptionTextStyle = TextStyle(
-    fontSize: 12,
-    fontStyle: FontStyle.italic,
-  );
-
-  static const appVersionTextStyle = TextStyle(
-    fontStyle: FontStyle.italic,
-    fontSize: 12,
-  );
-
-  // ==== Scan Theme + Stepper sub theme
-
-  static final androidScanStepperCurrentColor = Colors.lightGreen.shade200;
-  static const androidScanStepperOtherColor = Colors.white;
-  static final androidScanStepperArrowColor = Colors.lightBlue.shade200;
-
-  static const iosScanStepperCurrentColor = CupertinoColors.activeGreen;
-  static const iosScanStepperOtherColor = CupertinoColors.inactiveGray;
-  static const iosScanStepperArrowColor = CupertinoColors.activeBlue;
-
-  static const androidScanProgressColor = Color.fromARGB(255, 98, 204, 98);
-  static const androidScanProgressBackground = Color.fromARGB(120, 98, 204, 98);
-
-  static const iosScanProgressColor = CupertinoColors.activeGreen;
-  static final iosScanProgressBackground =
-      CupertinoColors.activeGreen.withOpacity(0.4);
+  // ==== Scan Theme
 
   static const Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
   static const Color multipleOwnerColor = Colors.orange;
@@ -76,7 +47,8 @@ abstract class ApplicationTheme {
 
   /// This color is used for Icons in lists that show some information
   /// when there is nothing to show.
-  static const Color listInformationalIconColor = primaryColor;
+  static const Color listInformationalIconColor =
+      primaryColor; // TODO: remove and use primary color
 
   static const Color deleteItemButtonTextColor = Colors.red;
 
@@ -84,6 +56,7 @@ abstract class ApplicationTheme {
 
   static const Color importMembersDoneIconColor = Colors.green;
 
+  // TODO: remove an use primary color
   static const Color rideListItemEvenMonthColor = Colors.blue;
 
   /// The text style for android form errors.
@@ -97,9 +70,6 @@ abstract class ApplicationTheme {
     fontSize: 14,
     color: CupertinoColors.destructiveRed,
   );
-
-  /// The text style for iOS buttons.
-  static const TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
 
   static const androidRideAttendeeListCounterTextStyle = TextStyle(
     fontSize: 14.0,

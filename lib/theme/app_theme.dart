@@ -12,29 +12,6 @@ abstract class ApplicationTheme {
 
   // ==== Miscellaneous stuff
 
-  static const Color deleteItemButtonTextColor = Colors.red;
-
-  static const importWarningTextStyle = TextStyle(color: Colors.red);
-
-  static const Color importMembersDoneIconColor = Colors.green;
-
-  /// The text style for android form errors.
-  static const androidFormErrorStyle = TextStyle(
-    fontSize: 16,
-    color: Colors.red,
-  );
-
-  // The text style for iOS form errors.
-  static const iosFormErrorStyle = TextStyle(
-    fontSize: 14,
-    color: CupertinoColors.destructiveRed,
-  );
-
-  static const androidRideAttendeeListCounterTextStyle = TextStyle(
-    fontSize: 14.0,
-    color: Colors.white,
-  );
-
   /// The Android theme.
   static ThemeData androidTheme() {
     return ThemeData(
@@ -48,7 +25,7 @@ abstract class ApplicationTheme {
           minimumSize: const Size(88, 36),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            borderRadius: BorderRadius.all(Radius.circular(2)),
           ),
         ),
       ),

@@ -6,6 +6,9 @@ abstract class AppTheme {
   /// The device type picker theme.
   static const deviceTypePicker = DeviceTypePickerTheme();
 
+  /// The theme for the bottom bar on the manual selection.
+  static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();
+
   /// The member devices list theme.
   static const memberDevicesList = MemberDeviceListTheme();
 
@@ -14,6 +17,9 @@ abstract class AppTheme {
 
   /// The profile image placeholder theme.
   static const profileImagePlaceholder = ProfileImagePlaceholderTheme();
+
+  /// The ride attendee scan results theme.
+  static const rideAttendeeScanResult = RideAttendeeScanResultThemes();
 
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
@@ -37,6 +43,21 @@ class DeviceTypePickerTheme {
 
   /// The color for an unselected device type.
   final Color unselectedColor = const Color(0xFFBBDEFB);
+}
+
+/// This class represents the theme for the bottom bar
+/// on the manual ride attendee selection page.
+///
+/// This theme is only used on Android, as iOS uses the system defaults to
+/// style its widgets.
+class ManualSelectionBottomBarTheme {
+  const ManualSelectionBottomBarTheme();
+
+  /// The primary color for the save button.
+  final Color saveButtonColor = const Color(0xFF1666a5);
+
+  /// The active track color for the filter switch.
+  final Color switchActiveTrackColor = const Color(0xFF81D4FA);
 }
 
 /// This class represents the theme for the member devices list.
@@ -196,5 +217,64 @@ class SettingsTheme {
   final TextStyle optionDescriptionStyle = const TextStyle(
     fontSize: 12,
     fontStyle: FontStyle.italic,
+  );
+}
+
+/// This class represents the data for a [RideAttendeeScanResultThemes] sub theme.
+class RideAttendeeScanResultTheme {
+  const RideAttendeeScanResultTheme({
+    required this.multipleOwnersDescriptionStyle,
+    required this.multipleOwnersLabelStyle,
+    required this.selectedBackgroundColor,
+    required this.singleOwnerColor,
+  });
+
+  /// The style for the multiple owners description label.
+  final TextStyle multipleOwnersDescriptionStyle;
+
+  /// The style for the multiple owners label.
+  final TextStyle multipleOwnersLabelStyle;
+
+  /// The background color for a selected item.
+  final Color selectedBackgroundColor;
+
+  /// The color for a scan result that has a single owner.
+  final Color singleOwnerColor;
+}
+
+/// This class represents the theme for ride attendee scan results.
+class RideAttendeeScanResultThemes {
+  const RideAttendeeScanResultThemes();
+
+  /// The scan result theme for Android.
+  final android = const RideAttendeeScanResultTheme(
+    multipleOwnersDescriptionStyle: TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: Colors.grey,
+    ),
+    multipleOwnersLabelStyle: TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: Colors.orange,
+    ),
+    selectedBackgroundColor: Color(0xFF1976D2),
+    singleOwnerColor: Colors.blue,
+  );
+
+  /// The scan result theme for iOS.
+  final ios = const RideAttendeeScanResultTheme(
+    multipleOwnersDescriptionStyle: TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: CupertinoColors.systemGrey,
+    ),
+    multipleOwnersLabelStyle: TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: CupertinoColors.activeOrange,
+    ),
+    selectedBackgroundColor: Color(0xFF0071A4),
+    singleOwnerColor: CupertinoColors.activeBlue,
   );
 }

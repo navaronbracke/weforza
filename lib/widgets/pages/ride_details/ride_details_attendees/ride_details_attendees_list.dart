@@ -112,8 +112,6 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
         ),
       ),
       ios: () {
-        const textStyle = TextStyle(color: CupertinoColors.activeBlue);
-
         return CupertinoBottomBar.constrained(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -125,12 +123,12 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 4),
-                  child: Text('$total', style: textStyle),
+                  child: Text('$total'),
                 ),
                 const Expanded(child: Center()),
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
-                  child: Text('${scannedAttendees ?? '-'}', style: textStyle),
+                  child: Text('${scannedAttendees ?? '-'}'),
                 ),
                 const Icon(
                   Icons.bluetooth_searching,

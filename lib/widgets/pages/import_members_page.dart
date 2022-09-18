@@ -6,7 +6,6 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import_members_state.dart';
 import 'package:weforza/riverpod/member/import_members_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -167,24 +166,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
               ],
             );
           case ImportMembersState.done:
-            return Center(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final paintSize = constraints.biggest.shortestSide * .3;
-                  return Center(
-                    child: SizedBox.square(
-                      dimension: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.secondaryColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
+            return const AdaptiveAnimatedCheckmark();
         }
       },
     );

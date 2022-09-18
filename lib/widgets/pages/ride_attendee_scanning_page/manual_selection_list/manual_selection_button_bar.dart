@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -22,9 +21,9 @@ class ManualSelectionButtonBar extends StatelessWidget {
 
   final Widget showScannedResultsToggle;
 
-  Widget _buildAndroidLayout() {
+  Widget _buildAndroidLayout(BuildContext context) {
     return BottomAppBar(
-      color: ApplicationTheme.primaryColor,
+      color: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
         child: Column(
@@ -84,7 +83,7 @@ class ManualSelectionButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: _buildAndroidLayout,
+      android: () => _buildAndroidLayout(context),
       ios: _buildIosLayout,
     );
   }

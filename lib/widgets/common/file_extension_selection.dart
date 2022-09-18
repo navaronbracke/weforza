@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class FileExtensionSelection extends StatefulWidget {
@@ -30,15 +29,17 @@ class FileExtensionSelectionState extends State<FileExtensionSelection> {
 
   @override
   Widget build(BuildContext context) {
-    final translator = S.of(context);
-
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(translator),
-      ios: () => _buildIosWidget(translator),
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
     );
   }
 
-  Widget _buildAndroidWidget(S translator) {
+  Widget _buildAndroidWidget(BuildContext context) {
+    final translator = S.of(context);
+
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -52,7 +53,7 @@ class FileExtensionSelectionState extends State<FileExtensionSelection> {
           child: Text(
             translator.FileCsvExtension.toUpperCase(),
             style: FileExtension.csv == currentValue
-                ? const TextStyle(color: ApplicationTheme.primaryColor)
+                ? TextStyle(color: primaryColor)
                 : null,
           ),
         ),
@@ -64,14 +65,16 @@ class FileExtensionSelectionState extends State<FileExtensionSelection> {
         Text(
           translator.FileJsonExtension.toUpperCase(),
           style: FileExtension.json == currentValue
-              ? const TextStyle(color: ApplicationTheme.primaryColor)
+              ? TextStyle(color: primaryColor)
               : null,
         )
       ],
     );
   }
 
-  Widget _buildIosWidget(S translator) {
+  Widget _buildIosWidget(BuildContext context) {
+    final translator = S.of(context);
+
     return CupertinoSlidingSegmentedControl<FileExtension>(
       groupValue: currentValue,
       onValueChanged: onValueChanged,

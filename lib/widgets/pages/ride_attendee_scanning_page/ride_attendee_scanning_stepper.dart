@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the stepper at the top of the scanning page.
 /// It displays the two labels of the scanning process,
@@ -13,6 +13,32 @@ class RideAttendeeScanningStepper extends StatelessWidget {
 
   /// The stream that indicates the current step in the scanning process.
   final Stream<RideAttendeeScanningState> stream;
+
+  Widget _buildStepper(
+    BuildContext context,
+    ScanStepperTheme theme,
+    bool isScanningStep,
+  ) {
+    final translator = S.of(context);
+
+    return Row(
+      children: [
+        Text(
+          translator.Scan.toUpperCase(),
+          style: TextStyle(
+            color: isScanningStep ? theme.active : theme.inactive,
+          ),
+        ),
+        SizedBox(width: 40, child: Center(child: theme.arrow)),
+        Text(
+          translator.ByHand.toUpperCase(),
+          style: TextStyle(
+            color: !isScanningStep ? theme.active : theme.inactive,
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,78 +51,18 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             snapshot.data != RideAttendeeScanningState.manualSelection;
 
         return PlatformAwareWidget(
-          android: () => _buildAndroidWidget(context, isScanningStep),
-          ios: () => _buildIosWidget(context, isScanningStep),
+          android: () => _buildStepper(
+            context,
+            AppTheme.scanStepper.android,
+            isScanningStep,
+          ),
+          ios: () => _buildStepper(
+            context,
+            AppTheme.scanStepper.ios,
+            isScanningStep,
+          ),
         );
       },
-    );
-  }
-
-  Widget _buildAndroidWidget(BuildContext context, bool isScanningStep) {
-    final translator = S.of(context);
-
-    return Row(
-      children: <Widget>[
-        Text(
-          translator.Scan.toUpperCase(),
-          style: TextStyle(
-            color: isScanningStep
-                ? ApplicationTheme.androidScanStepperCurrentColor
-                : ApplicationTheme.androidScanStepperOtherColor,
-          ),
-        ),
-        SizedBox(
-          width: 50,
-          child: Center(
-            child: Icon(
-              Icons.arrow_forward_ios,
-              color: ApplicationTheme.androidScanStepperArrowColor,
-            ),
-          ),
-        ),
-        Text(
-          translator.ByHand.toUpperCase(),
-          style: TextStyle(
-            color: isScanningStep
-                ? ApplicationTheme.androidScanStepperOtherColor
-                : ApplicationTheme.androidScanStepperCurrentColor,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context, bool isScanningStep) {
-    final translator = S.of(context);
-
-    return Row(
-      children: <Widget>[
-        Text(
-          translator.Scan.toUpperCase(),
-          style: TextStyle(
-            color: isScanningStep
-                ? ApplicationTheme.iosScanStepperCurrentColor
-                : ApplicationTheme.iosScanStepperOtherColor,
-          ),
-        ),
-        const SizedBox(
-          width: 50,
-          child: Center(
-            child: Icon(
-              Icons.arrow_forward_ios,
-              color: ApplicationTheme.iosScanStepperArrowColor,
-            ),
-          ),
-        ),
-        Text(
-          translator.ByHand.toUpperCase(),
-          style: TextStyle(
-            color: isScanningStep
-                ? ApplicationTheme.iosScanStepperOtherColor
-                : ApplicationTheme.iosScanStepperCurrentColor,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class ScanDurationOption extends StatelessWidget {
@@ -38,12 +40,24 @@ class ScanDurationOption extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
-              child: Slider.adaptive(
-                value: currentScanDuration,
-                onChanged: onChanged,
-                min: minScanDuration,
-                max: maxScanDuration,
-                divisions: 5,
+              child: PlatformAwareWidget(
+                android: () => Slider(
+                  value: currentScanDuration,
+                  onChanged: onChanged,
+                  min: minScanDuration,
+                  max: maxScanDuration,
+                  divisions: 5,
+                ),
+                ios: () => SizedBox(
+                  width: double.infinity,
+                  child: CupertinoSlider(
+                    value: currentScanDuration,
+                    onChanged: onChanged,
+                    min: minScanDuration,
+                    max: maxScanDuration,
+                    divisions: 5,
+                  ),
+                ),
               ),
             ),
             Center(child: Text('${currentScanDuration.floor()}s')),

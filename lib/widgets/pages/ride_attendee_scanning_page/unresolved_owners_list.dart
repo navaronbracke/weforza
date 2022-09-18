@@ -3,7 +3,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
@@ -35,6 +34,25 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
     return Future.value(filtered);
   }
 
+  TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {
+    RideAttendeeScanResultTheme theme;
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        theme = AppTheme.rideAttendeeScanResult.android;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        theme = AppTheme.rideAttendeeScanResult.ios;
+        break;
+    }
+
+    return theme.multipleOwnersDescriptionStyle;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -61,7 +79,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
                 child: Center(
                   child: Text(
                     translator.UnresolvedOwnersDescription,
-                    style: ApplicationTheme.multipleOwnersListTooltipStyle,
+                    style: _getMultipleOwnersListDescriptionStyle(context),
                     softWrap: true,
                     textAlign: TextAlign.center,
                   ),
@@ -110,37 +128,59 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
-  Color? backgroundColor;
-  late TextStyle firstNameStyle;
-  late TextStyle lastNameStyle;
+  Color _getSelectedBackgroundColor(BuildContext context) {
+    RideAttendeeScanResultTheme theme;
 
-  void _setColors() {
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        theme = AppTheme.rideAttendeeScanResult.android;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        theme = AppTheme.rideAttendeeScanResult.ios;
+        break;
+    }
+
+    return theme.selectedBackgroundColor;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final selectedAttendee = widget.delegate.getSelectedRideAttendee(
       widget.item.uuid,
     );
 
     const theme = AppTheme.memberListItem;
 
-    if (selectedAttendee != null) {
-      backgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = theme.firstNameStyle.copyWith(color: Colors.white);
-      lastNameStyle = theme.lastNameStyle.copyWith(color: Colors.white);
+    TextStyle firstNameStyle = theme.firstNameStyle;
+    TextStyle lastNameStyle = theme.lastNameStyle;
 
-      return;
+    if (selectedAttendee != null) {
+      firstNameStyle = firstNameStyle.copyWith(color: Colors.white);
+      lastNameStyle = lastNameStyle.copyWith(color: Colors.white);
     }
 
-    firstNameStyle = theme.firstNameStyle;
-    lastNameStyle = theme.lastNameStyle;
-  }
+    Widget child = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: MemberNameAndAlias(
+        alias: widget.item.alias,
+        firstLineStyle: firstNameStyle,
+        firstName: widget.item.firstName,
+        lastName: widget.item.lastName,
+        secondLineStyle: lastNameStyle,
+      ),
+    );
 
-  @override
-  void initState() {
-    super.initState();
-    _setColors();
-  }
+    if (selectedAttendee != null) {
+      child = DecoratedBox(
+        decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)),
+        child: child,
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -158,19 +198,9 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
           return;
         }
 
-        setState(() => _setColors());
+        setState(() {});
       },
-      child: Container(
-        decoration: BoxDecoration(color: backgroundColor),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: MemberNameAndAlias(
-          alias: widget.item.alias,
-          firstLineStyle: firstNameStyle,
-          firstName: widget.item.firstName,
-          lastName: widget.item.lastName,
-          secondLineStyle: lastNameStyle,
-        ),
-      ),
+      child: child,
     );
   }
 }

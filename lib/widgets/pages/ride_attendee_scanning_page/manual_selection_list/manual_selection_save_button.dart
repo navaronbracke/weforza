@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the save button for the manual selection page.
 class ManualSelectionSaveButton extends StatefulWidget {
@@ -85,8 +85,7 @@ class _SaveButton extends StatelessWidget {
       android: () => ElevatedButtonTheme(
           data: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              primary:
-                  ApplicationTheme.androidManualSelectionSaveButtonPrimaryColor,
+              primary: AppTheme.manualSelectionBottomBar.saveButtonColor,
               onPrimary: Colors.white,
             ),
           ),

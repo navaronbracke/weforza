@@ -5,9 +5,6 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a button for the ride attendee scanning page.
-///
-/// On iOS this button offsets itself
-/// to avoid a bottom notch in the device display.
 class ScanButton extends StatelessWidget {
   const ScanButton({super.key, required this.onPressed, required this.text});
 
@@ -17,12 +14,23 @@ class ScanButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: () => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: PlatformAwareWidget(
+          android: () => ElevatedButton(
+            onPressed: onPressed,
+            child: Text(text),
+          ),
+          ios: () => CupertinoButton.filled(
+            onPressed: onPressed,
+            child: Text(
+              text,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
       ),
-      ios: () => _CupertinoScanButton(onPressed: onPressed, text: text),
     );
   }
 }

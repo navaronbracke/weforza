@@ -37,7 +37,7 @@ abstract class AppTheme {
   static final desctructiveAction = DestructiveActionTheme();
 
   /// The device type picker theme.
-  static const deviceTypePicker = DeviceTypePickerTheme();
+  static final deviceTypePicker = DeviceTypePickerThemes();
 
   /// The [CupertinoThemeData] for the [CupertinoApp].
   static const iosTheme = CupertinoThemeData(
@@ -87,15 +87,35 @@ class DestructiveActionTheme {
   final textButtonTheme = TextButton.styleFrom(primary: Colors.red);
 }
 
-/// This class represents the theme for the device type picker.
+/// THis class represents the data for [DeviceTypePickerThemes].
 class DeviceTypePickerTheme {
-  const DeviceTypePickerTheme();
+  const DeviceTypePickerTheme({
+    required this.selectedColor,
+    required this.unselectedColor,
+  });
 
   /// The color for a selected device type.
-  final Color selectedColor = Colors.blue;
+  final Color selectedColor;
 
   /// The color for an unselected device type.
-  final Color unselectedColor = const Color(0xFFBBDEFB);
+  final Color unselectedColor;
+}
+
+/// This class represents the theme for the device type picker.
+class DeviceTypePickerThemes {
+  DeviceTypePickerThemes();
+
+  /// The device type picker theme for Android.
+  final android = DeviceTypePickerTheme(
+    selectedColor: Colors.blue,
+    unselectedColor: Colors.blue.shade100,
+  );
+
+  /// The device type picker theme for iOS.
+  final ios = const DeviceTypePickerTheme(
+    selectedColor: CupertinoColors.activeBlue,
+    unselectedColor: CupertinoColors.systemTeal,
+  );
 }
 
 /// This class represents the theme for the bottom bar

@@ -84,6 +84,8 @@ class DeleteItemDialog extends StatelessWidget {
   Widget _buildAndroidErrorDialog(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
+    final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
+
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -101,7 +103,7 @@ class DeleteItemDialog extends StatelessWidget {
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
-                    color: AppTheme.desctructiveAction.androidErrorStyle.color,
+                    color: errorStyle.color,
                   ),
                 ),
                 Text(

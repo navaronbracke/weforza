@@ -20,12 +20,11 @@ class DeleteDeviceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
+
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: AppTheme.desctructiveAction.androidErrorStyle.color,
-        ),
+        icon: Icon(Icons.delete, color: errorStyle.color),
         onPressed: () async {
           final result = await showDialog<bool>(
             context: context,

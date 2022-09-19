@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device_type.dart';
+import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
-  const DeviceTypeCarousel({
-    super.key,
-    required this.controller,
-  });
+  const DeviceTypeCarousel({super.key, required this.controller});
 
   /// The controller that manages the currently selected page.
   final PageController controller;
@@ -20,10 +18,9 @@ class DeviceTypeCarousel extends StatelessWidget {
           child: Center(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return Icon(
-                  deviceType.icon,
-                  color: AppTheme.deviceTypePicker.selectedColor,
+                return DeviceIcon(
                   size: constraints.biggest.shortestSide * .9,
+                  type: deviceType,
                 );
               },
             ),
@@ -39,22 +36,6 @@ class DeviceTypeCarousel extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildPageDot(bool isCurrentPage) {
-    const theme = AppTheme.deviceTypePicker;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Container(
-        width: 12,
-        height: 12,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(6)),
-          color: isCurrentPage ? theme.selectedColor : theme.unselectedColor,
-        ),
-      ),
     );
   }
 
@@ -85,7 +66,7 @@ class DeviceTypeCarousel extends StatelessWidget {
                 final children = <Widget>[];
 
                 for (int i = 0; i < DeviceType.values.length; i++) {
-                  children.add(_buildPageDot(i == page));
+                  children.add(_DeviceTypeCarouselDot(selected: i == page));
                 }
 
                 return Row(
@@ -97,6 +78,42 @@ class DeviceTypeCarousel extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _DeviceTypeCarouselDot extends StatelessWidget {
+  const _DeviceTypeCarouselDot({required this.selected});
+
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    DeviceTypePickerTheme theme;
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        theme = AppTheme.deviceTypePicker.android;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        theme = AppTheme.deviceTypePicker.ios;
+        break;
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+          color: selected ? theme.selectedColor : theme.unselectedColor,
+        ),
+      ),
     );
   }
 }

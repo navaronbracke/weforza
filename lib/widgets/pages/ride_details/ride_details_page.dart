@@ -14,6 +14,7 @@ import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_d
 import 'package:weforza/widgets/pages/ride_details/ride_details_title.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsPage extends ConsumerStatefulWidget {
   const RideDetailsPage({super.key});
@@ -59,6 +60,8 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   Widget _buildAndroidLayout(BuildContext context) {
     final translator = S.of(context);
 
+    final style = AppTheme.desctructiveAction.androidDefaultErrorStyle;
+
     return Scaffold(
       appBar: AppBar(
         title: const RideDetailsTitle(),
@@ -81,11 +84,8 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
               PopupMenuItem<RideDetailsPageOptions>(
                 value: RideDetailsPageOptions.delete,
                 child: ListTile(
-                  leading: const Icon(Icons.delete, color: Colors.red),
-                  title: Text(
-                    translator.Delete,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+                  leading: Icon(Icons.delete, color: style.color),
+                  title: Text(translator.Delete, style: style),
                 ),
               ),
             ],

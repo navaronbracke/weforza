@@ -96,11 +96,9 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
                   itemCount: items.length,
                 ),
               ),
-              Center(
-                child: ScanButton(
-                  onPressed: () => widget.delegate.continueToManualSelection(),
-                  text: translator.Continue,
-                ),
+              ScanButton(
+                onPressed: widget.delegate.continueToManualSelection,
+                text: translator.Continue,
               ),
             ],
           );

@@ -75,54 +75,53 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   }
 
   Widget _buildDevicesList(BuildContext context, List<Device> devices) {
-    return Column(
-      children: <Widget>[
-        const MemberDevicesListHeader(),
-        Expanded(
-          child: AnimatedList(
-            key: _listKey,
-            initialItemCount: devices.length,
-            itemBuilder: (context, index, animation) {
-              final device = devices[index];
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          const MemberDevicesListHeader(),
+          Expanded(
+            child: AnimatedList(
+              key: _listKey,
+              initialItemCount: devices.length,
+              itemBuilder: (context, index, animation) {
+                final device = devices[index];
 
-              return MemberDevicesListItem(
-                device: device,
-                deleteDeviceButton: DeleteDeviceButton(
-                  index: index,
-                  onDeviceDeleted: () => onDeviceDeleted(device, index),
-                ),
-              );
-            },
-          ),
-        ),
-        PlatformAwareWidget(
-          android: () => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: TextButton(
-              onPressed: () {
-                final selectedMember = ref.read(selectedMemberProvider);
-
-                onAddDevicePressed(context, selectedMember!.uuid);
+                return MemberDevicesListItem(
+                  device: device,
+                  deleteDeviceButton: DeleteDeviceButton(
+                    index: index,
+                    onDeviceDeleted: () => onDeviceDeleted(device, index),
+                  ),
+                );
               },
-              child: Text(S.of(context).AddDevice),
             ),
           ),
-          ios: () => Padding(
-            padding: const EdgeInsets.only(top: 4, bottom: 12),
-            child: CupertinoButton.filled(
-              onPressed: () {
-                final selectedMember = ref.read(selectedMemberProvider);
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: PlatformAwareWidget(
+              android: () => TextButton(
+                onPressed: () {
+                  final selectedMember = ref.read(selectedMemberProvider);
 
-                onAddDevicePressed(context, selectedMember!.uuid);
-              },
-              child: Text(
-                S.of(context).AddDevice,
-                style: const TextStyle(color: Colors.white),
+                  onAddDevicePressed(context, selectedMember!.uuid);
+                },
+                child: Text(S.of(context).AddDevice),
+              ),
+              ios: () => CupertinoButton.filled(
+                onPressed: () {
+                  final selectedMember = ref.read(selectedMemberProvider);
+
+                  onAddDevicePressed(context, selectedMember!.uuid);
+                },
+                child: Text(
+                  S.of(context).AddDevice,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
-        )
-      ],
+        ],
+      ),
     );
   }
 }

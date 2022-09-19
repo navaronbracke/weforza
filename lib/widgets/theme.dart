@@ -90,7 +90,7 @@ class DestructiveActionTheme {
   final textButtonTheme = TextButton.styleFrom(primary: Colors.red);
 }
 
-/// THis class represents the data for [DeviceTypePickerThemes].
+/// This class represents the data for [DeviceTypePickerThemes].
 class DeviceTypePickerTheme {
   const DeviceTypePickerTheme({
     required this.selectedColor,

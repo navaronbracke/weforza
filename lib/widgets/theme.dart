@@ -183,9 +183,6 @@ class ProfileImagePlaceholderTheme {
 class RideCalendarTheme {
   const RideCalendarTheme();
 
-  /// The color for the change month buttons in the header.
-  final Color changeMonthButton = Colors.black;
-
   /// The color for a planned ride that is in the future.
   final Color futureRide = const Color(0xFF1976D2);
 

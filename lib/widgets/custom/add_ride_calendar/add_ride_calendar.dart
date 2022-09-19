@@ -5,7 +5,6 @@ import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.
 import 'package:weforza/widgets/custom/date_picker/date_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class AddRideCalendar extends StatelessWidget {
   const AddRideCalendar({super.key, required this.delegate});
@@ -15,7 +14,6 @@ class AddRideCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final calendarDelegate = delegate.calendarDelegate;
-    const theme = AppTheme.rideCalendar;
 
     const double dayItemPadding = 4;
     const double dayItemSize = 40;
@@ -26,7 +24,6 @@ class AddRideCalendar extends StatelessWidget {
       backButton: PlatformAwareWidget(
         android: () => IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: theme.changeMonthButton,
           onPressed: calendarDelegate.goBackOneMonth,
         ),
         ios: () => CupertinoIconButton(
@@ -51,7 +48,6 @@ class AddRideCalendar extends StatelessWidget {
       forwardButton: PlatformAwareWidget(
         android: () => IconButton(
           icon: const Icon(Icons.arrow_forward),
-          color: theme.changeMonthButton,
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
         ios: () => CupertinoIconButton(

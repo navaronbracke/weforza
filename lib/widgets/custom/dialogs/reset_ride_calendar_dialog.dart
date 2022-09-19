@@ -102,6 +102,8 @@ class ResetRideCalendarDialogState
   }
 
   Widget _buildAndroidErrorDialog(BuildContext context, S translator) {
+    final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
+
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -122,7 +124,7 @@ class ResetRideCalendarDialogState
                   child: Icon(
                     Icons.error_outline,
                     size: 30,
-                    color: AppTheme.desctructiveAction.androidErrorStyle.color,
+                    color: errorStyle.color,
                   ),
                 ),
                 Text(

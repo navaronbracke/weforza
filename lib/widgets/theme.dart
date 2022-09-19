@@ -37,7 +37,7 @@ abstract class AppTheme {
   static final desctructiveAction = DestructiveActionTheme();
 
   /// The device type picker theme.
-  static const deviceTypePicker = DeviceTypePickerTheme();
+  static final deviceTypePicker = DeviceTypePickerThemes();
 
   /// The [CupertinoThemeData] for the [CupertinoApp].
   static const iosTheme = CupertinoThemeData(
@@ -74,8 +74,11 @@ abstract class AppTheme {
 
 /// This class represents the theme for destructive action buttons.
 class DestructiveActionTheme {
-  /// The text style for Android error messages.
-  final androidErrorStyle = const TextStyle(
+  /// The default text style for Android error messages.
+  final androidDefaultErrorStyle = const TextStyle(color: Colors.red);
+
+  /// The medium text style for Android error messages.
+  final androidMediumErrorStyle = const TextStyle(
     fontSize: 16,
     color: Colors.red,
   );
@@ -87,15 +90,35 @@ class DestructiveActionTheme {
   final textButtonTheme = TextButton.styleFrom(primary: Colors.red);
 }
 
-/// This class represents the theme for the device type picker.
+/// This class represents the data for [DeviceTypePickerThemes].
 class DeviceTypePickerTheme {
-  const DeviceTypePickerTheme();
+  const DeviceTypePickerTheme({
+    required this.selectedColor,
+    required this.unselectedColor,
+  });
 
   /// The color for a selected device type.
-  final Color selectedColor = Colors.blue;
+  final Color selectedColor;
 
   /// The color for an unselected device type.
-  final Color unselectedColor = const Color(0xFFBBDEFB);
+  final Color unselectedColor;
+}
+
+/// This class represents the theme for the device type picker.
+class DeviceTypePickerThemes {
+  DeviceTypePickerThemes();
+
+  /// The device type picker theme for Android.
+  final android = DeviceTypePickerTheme(
+    selectedColor: Colors.blue,
+    unselectedColor: Colors.blue.shade100,
+  );
+
+  /// The device type picker theme for iOS.
+  final ios = const DeviceTypePickerTheme(
+    selectedColor: CupertinoColors.activeBlue,
+    unselectedColor: CupertinoColors.systemTeal,
+  );
 }
 
 /// This class represents the theme for the bottom bar
@@ -163,9 +186,6 @@ class ProfileImagePlaceholderTheme {
 class RideCalendarTheme {
   const RideCalendarTheme();
 
-  /// The color for the change month buttons in the header.
-  final Color changeMonthButton = Colors.black;
-
   /// The color for a planned ride that is in the future.
   final Color futureRide = const Color(0xFF1976D2);
 
@@ -179,9 +199,6 @@ class RideCalendarTheme {
   /// regardless if this day is in the past, in the future
   /// or in the current selection of days.
   final TextStyle scheduledDayStyle = const TextStyle(color: Colors.white);
-
-  /// The text style for a day that can be scheduled.
-  final TextStyle selectableDayStyle = const TextStyle(color: Colors.black);
 
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);

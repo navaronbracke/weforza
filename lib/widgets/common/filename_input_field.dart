@@ -112,7 +112,7 @@ class FileNameInputField extends StatelessWidget {
           PlatformAwareWidget(
             android: () => ValidationLabel(
               stream: errorController,
-              style: AppTheme.desctructiveAction.androidErrorStyle,
+              style: AppTheme.desctructiveAction.androidMediumErrorStyle,
             ),
             ios: () => ValidationLabel(
               stream: errorController,

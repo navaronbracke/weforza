@@ -20,7 +20,7 @@ class SettingsSubmit extends StatelessWidget {
         ),
         ios: () => const Icon(
           CupertinoIcons.exclamationmark_triangle_fill,
-          color: Colors.orange,
+          color: CupertinoColors.activeOrange,
         ),
       ),
     );

@@ -89,7 +89,7 @@ class _ManualSelectionListItemState
                 child: Text(
                   translator.Uncheck,
                   textAlign: TextAlign.end,
-                  style: const TextStyle(color: Colors.red),
+                  style: AppTheme.desctructiveAction.androidDefaultErrorStyle,
                 ),
                 onPressed: () => Navigator.of(context).pop(true),
               ),

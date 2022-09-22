@@ -97,31 +97,25 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: MemberList(
-              onMemberSelected: () => _onMemberSelected(context),
-              filter: _filterOnSearchQuery,
-              searchQueryStream: _searchController.searchQuery,
-              searchField: TextFormField(
-                controller: _controller,
-                textInputAction: TextInputAction.search,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                autovalidateMode: AutovalidateMode.disabled,
-                onChanged: _searchController.onQueryChanged,
-                decoration: InputDecoration(
-                  suffixIcon: const Icon(Icons.search),
-                  labelText: S.of(context).SearchRiders,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                ),
-              ),
-            ),
-          )
-        ],
+      body: MemberList(
+        onMemberSelected: () => _onMemberSelected(context),
+        filter: _filterOnSearchQuery,
+        searchQueryStream: _searchController.searchQuery,
+        searchField: TextFormField(
+          controller: _controller,
+          textInputAction: TextInputAction.search,
+          keyboardType: TextInputType.text,
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.disabled,
+          onChanged: _searchController.onQueryChanged,
+          decoration: InputDecoration(
+            suffixIcon: const Icon(Icons.search),
+            labelText: S.of(context).SearchRiders,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+          ),
+        ),
       ),
     );
   }
@@ -166,25 +160,19 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: MemberList(
-                onMemberSelected: () => _onMemberSelected(context),
-                filter: _filterOnSearchQuery,
-                searchQueryStream: _searchController.searchQuery,
-                searchField: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: CupertinoSearchTextField(
-                    controller: _controller,
-                    suffixIcon: const Icon(CupertinoIcons.search),
-                    onChanged: _searchController.onQueryChanged,
-                    placeholder: S.of(context).SearchRiders,
-                  ),
-                ),
-              ),
+        child: MemberList(
+          onMemberSelected: () => _onMemberSelected(context),
+          filter: _filterOnSearchQuery,
+          searchQueryStream: _searchController.searchQuery,
+          searchField: Padding(
+            padding: const EdgeInsets.all(8),
+            child: CupertinoSearchTextField(
+              controller: _controller,
+              suffixIcon: const Icon(CupertinoIcons.search),
+              onChanged: _searchController.onQueryChanged,
+              placeholder: S.of(context).SearchRiders,
             ),
-          ],
+          ),
         ),
       ),
     );

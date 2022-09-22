@@ -4,6 +4,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
+import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_button_bar.dart';
@@ -104,66 +105,68 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   Widget _buildActiveMembersList(BuildContext context, List<Member> items) {
     final translator = S.of(context);
 
-    return Column(
-      children: <Widget>[
-        PlatformAwareWidget(
-          android: () => TextFormField(
-            textInputAction: TextInputAction.search,
-            keyboardType: TextInputType.text,
-            autocorrect: false,
-            autovalidateMode: AutovalidateMode.disabled,
-            onChanged: _filtersController.onSearchQueryChanged,
-            decoration: InputDecoration(
-              suffixIcon: const Icon(Icons.search),
-              labelText: translator.SearchRiders,
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-            ),
-          ),
-          ios: () => Padding(
-            padding: const EdgeInsets.all(8),
-            child: CupertinoSearchTextField(
-              suffixIcon: const Icon(CupertinoIcons.search),
+    return FocusAbsorber(
+      child: Column(
+        children: <Widget>[
+          PlatformAwareWidget(
+            android: () => TextFormField(
+              textInputAction: TextInputAction.search,
+              keyboardType: TextInputType.text,
+              autocorrect: false,
+              autovalidateMode: AutovalidateMode.disabled,
               onChanged: _filtersController.onSearchQueryChanged,
-              placeholder: translator.SearchRiders,
+              decoration: InputDecoration(
+                suffixIcon: const Icon(Icons.search),
+                labelText: translator.SearchRiders,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+              ),
+            ),
+            ios: () => Padding(
+              padding: const EdgeInsets.all(8),
+              child: CupertinoSearchTextField(
+                suffixIcon: const Icon(CupertinoIcons.search),
+                onChanged: _filtersController.onSearchQueryChanged,
+                placeholder: translator.SearchRiders,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: StreamBuilder<ManualSelectionFilterOptions>(
-            initialData: _filtersController.currentFilters,
-            stream: _filtersController.filters,
-            builder: (context, snapshot) {
-              final results = _filterActiveMembers(items, snapshot.data!);
+          Expanded(
+            child: StreamBuilder<ManualSelectionFilterOptions>(
+              initialData: _filtersController.currentFilters,
+              stream: _filtersController.filters,
+              builder: (context, snapshot) {
+                final results = _filterActiveMembers(items, snapshot.data!);
 
-              if (results.isEmpty) {
-                return const RiderSearchFilterEmpty();
-              }
+                if (results.isEmpty) {
+                  return const RiderSearchFilterEmpty();
+                }
 
-              return ListView.builder(
-                itemBuilder: (context, index) => ManualSelectionListItem(
-                  delegate: widget.delegate,
-                  item: results[index],
-                ),
-                itemCount: results.length,
-              );
-            },
+                return ListView.builder(
+                  itemBuilder: (context, index) => ManualSelectionListItem(
+                    delegate: widget.delegate,
+                    item: results[index],
+                  ),
+                  itemCount: results.length,
+                );
+              },
+            ),
           ),
-        ),
-        ManualSelectionButtonBar(
-          delegate: widget.delegate,
-          saveButton: ManualSelectionSaveButton(
-            future: _saveFuture,
-            onPressed: () => _onSaveRideAttendeesButtonPressed(context),
+          ManualSelectionButtonBar(
+            delegate: widget.delegate,
+            saveButton: ManualSelectionSaveButton(
+              future: _saveFuture,
+              onPressed: () => _onSaveRideAttendeesButtonPressed(context),
+            ),
+            showScannedResultsToggle: ShowScannedResultsToggle(
+              initialValue: _filtersController.showScannedResults,
+              onChanged: _filtersController.onShowScannedResultsChanged,
+              stream: _filtersController.showScannedResultsStream,
+            ),
           ),
-          showScannedResultsToggle: ShowScannedResultsToggle(
-            initialValue: _filtersController.showScannedResults,
-            onChanged: _filtersController.onShowScannedResultsChanged,
-            stream: _filtersController.showScannedResultsStream,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

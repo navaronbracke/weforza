@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_empty.dart';
@@ -43,30 +44,32 @@ class MemberList extends ConsumerWidget {
           return const Center(child: MemberListEmpty());
         }
 
-        return Column(
-          children: [
-            searchField,
-            Expanded(
-              child: StreamBuilder<String>(
-                stream: searchQueryStream,
-                builder: (context, snapshot) {
-                  final results = filter(items, snapshot.data ?? '');
+        return FocusAbsorber(
+          child: Column(
+            children: [
+              searchField,
+              Expanded(
+                child: StreamBuilder<String>(
+                  stream: searchQueryStream,
+                  builder: (context, snapshot) {
+                    final results = filter(items, snapshot.data ?? '');
 
-                  if (results.isEmpty) {
-                    return const RiderSearchFilterEmpty();
-                  }
+                    if (results.isEmpty) {
+                      return const RiderSearchFilterEmpty();
+                    }
 
-                  return ListView.builder(
-                    itemCount: results.length,
-                    itemBuilder: (_, index) => MemberListItem(
-                      member: results[index],
-                      onPressed: onMemberSelected,
-                    ),
-                  );
-                },
+                    return ListView.builder(
+                      itemCount: results.length,
+                      itemBuilder: (_, index) => MemberListItem(
+                        member: results[index],
+                        onPressed: onMemberSelected,
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
       error: (error, stackTrace) => GenericError(text: translator.GenericError),

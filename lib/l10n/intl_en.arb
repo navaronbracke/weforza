@@ -94,7 +94,7 @@
 	"PastDayNoRide": "Past Day Without Ride",
 	"PastDayWithRide": "Past Day With Ride",
 	"ResetRideCalendar": "Reset Calendar",
-	"ResetRideCalendarDescription": "This will remove all rides.\nThe attendances will be reset to zero.",
+	"ResetRideCalendarDescription": "Resetting the ride calendar will remove all the rides.\nThe attendances of all the riders will be reset to zero.",
 	"ResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
 	"ResetRideCalendarError": "Could not reset the ride calendar",
 	"RetryScan": "Retry Scan",

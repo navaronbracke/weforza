@@ -9,6 +9,10 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),
+    chipTheme: const ChipThemeData(
+      selectedColor: Colors.blue,
+      secondaryLabelStyle: TextStyle(color: Colors.white),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue,
@@ -67,9 +71,6 @@ abstract class AppTheme {
 
   /// The theme for the scan stepper.
   static const scanStepper = ScanStepperThemes();
-
-  /// The theme for the settings page.
-  static const settings = SettingsTheme();
 }
 
 /// This class represents the theme for destructive action buttons.
@@ -275,20 +276,6 @@ class ScanStepperThemes {
       color: CupertinoColors.activeBlue,
     ),
     inactive: CupertinoColors.inactiveGray,
-  );
-}
-
-/// This class represents the theme for the settings page.
-class SettingsTheme {
-  const SettingsTheme();
-
-  /// The text style for the header of a settings option.
-  final TextStyle optionHeaderStyle = const TextStyle(fontSize: 14);
-
-  /// The text style for the description below a settings option.
-  final TextStyle optionDescriptionStyle = const TextStyle(
-    fontSize: 12,
-    fontStyle: FontStyle.italic,
   );
 }
 

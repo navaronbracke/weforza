@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class MemberListFilter extends StatelessWidget {
   const MemberListFilter({
@@ -22,91 +21,72 @@ class MemberListFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
-    const theme = AppTheme.settings;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          translator.SettingsRiderFilterHeader,
-          style: theme.optionHeaderStyle,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-          child: StreamBuilder<MemberFilterOption>(
-            initialData: initialFilter,
-            stream: stream,
-            builder: (context, snapshot) {
-              final currentFilter = snapshot.data!;
+    return StreamBuilder<MemberFilterOption>(
+      initialData: initialFilter,
+      stream: stream,
+      builder: (context, snapshot) {
+        final currentFilter = snapshot.data!;
 
-              return PlatformAwareWidget(
-                android: () => Row(
-                  children: [
-                    ChoiceChip(
-                      label: Text(translator.All),
-                      selected: currentFilter == MemberFilterOption.all,
-                      onSelected: (selected) {
-                        if (selected) {
-                          onChanged(MemberFilterOption.all);
-                        }
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: ChoiceChip(
-                        label: Text(translator.Active),
-                        selected: currentFilter == MemberFilterOption.active,
-                        onSelected: (selected) {
-                          if (selected) {
-                            onChanged(MemberFilterOption.active);
-                          }
-                        },
-                      ),
-                    ),
-                    ChoiceChip(
-                      label: Text(translator.Inactive),
-                      selected: currentFilter == MemberFilterOption.inactive,
-                      onSelected: (selected) {
-                        if (selected) {
-                          onChanged(MemberFilterOption.inactive);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                ios: () => CupertinoSlidingSegmentedControl<MemberFilterOption>(
-                  groupValue: currentFilter,
-                  onValueChanged: (MemberFilterOption? value) {
-                    if (value != null) {
-                      onChanged(value);
+        return PlatformAwareWidget(
+          android: () => Row(
+            children: [
+              ChoiceChip(
+                label: Text(translator.All),
+                selected: currentFilter == MemberFilterOption.all,
+                onSelected: (selected) {
+                  if (selected) {
+                    onChanged(MemberFilterOption.all);
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ChoiceChip(
+                  label: Text(translator.Active),
+                  selected: currentFilter == MemberFilterOption.active,
+                  onSelected: (selected) {
+                    if (selected) {
+                      onChanged(MemberFilterOption.active);
                     }
                   },
-                  children: {
-                    MemberFilterOption.all: Text(translator.All.toUpperCase()),
-                    MemberFilterOption.active: Text(
-                      translator.Active.toUpperCase(),
-                    ),
-                    MemberFilterOption.inactive: Text(
-                      translator.Inactive.toUpperCase(),
-                    ),
-                  },
                 ),
-              );
+              ),
+              ChoiceChip(
+                label: Text(translator.Inactive),
+                selected: currentFilter == MemberFilterOption.inactive,
+                onSelected: (selected) {
+                  if (selected) {
+                    onChanged(MemberFilterOption.inactive);
+                  }
+                },
+              ),
+            ],
+          ),
+          ios: () => CupertinoSlidingSegmentedControl<MemberFilterOption>(
+            groupValue: currentFilter,
+            onValueChanged: (MemberFilterOption? value) {
+              if (value != null) {
+                onChanged(value);
+              }
+            },
+            children: {
+              MemberFilterOption.all: SizedBox(
+                width: 88,
+                child: Center(child: Text(translator.All)),
+              ),
+              MemberFilterOption.active: SizedBox(
+                width: 88,
+                child: Center(child: Text(translator.Active)),
+              ),
+              MemberFilterOption.inactive: SizedBox(
+                width: 88,
+                child: Center(child: Text(translator.Inactive)),
+              ),
             },
           ),
-        ),
-        PlatformAwareWidget(
-          android: () => Text(
-            translator.SettingsRiderFilterDescription,
-            style: theme.optionDescriptionStyle,
-          ),
-          ios: () => Text(
-            translator.SettingsRiderFilterDescription,
-            style: theme.optionDescriptionStyle.copyWith(fontSize: 14),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

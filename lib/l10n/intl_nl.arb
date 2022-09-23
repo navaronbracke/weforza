@@ -102,7 +102,7 @@
 	"RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",
 	"RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
 	"RiderListFilter": "Rennerslijst Filter",
-	"RiderListFilterDescription": "Filter renners in de rennerslijst, op basis van hun status",
+	"RiderListFilterDescription": "Deze filter bepaalt welke renners er getoond worden in het renners-overzicht.",
 	"Riders": "Renners",
 	"RidersListTitle": "Renners ({amount})",
 	"Rides": "Ritten",

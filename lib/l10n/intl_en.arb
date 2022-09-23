@@ -98,6 +98,7 @@
 	"ResetRideCalendarDialogDescription": "Are you sure that you want to remove all the rides?",
 	"ResetRideCalendarError": "Could not reset the ride calendar",
 	"RetryScan": "Retry Scan",
+	"RideCalendar": "Ride calendar",
 	"RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",
 	"RideDetailsNoAttendees": "This ride has no attendants",
 	"Riders": "Riders",

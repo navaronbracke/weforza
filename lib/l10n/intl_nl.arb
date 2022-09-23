@@ -13,7 +13,6 @@
 	"AliasMaxLength": "Een alias mag niet langer zijn dan {maxLength} karakters",
 	"All": "Alle",
 	"AmountOfRidersWithDeviceName": "{amount} renners hebben een toestel met deze naam",
-	"AppVersionNumber": "Versie: {version}",
 	"ByHand": "Manueel",
 	"Cancel": "Annuleren",
 	"Clear": "Resetten",
@@ -124,5 +123,6 @@
 	"Uncheck": "Afvinken",
 	"UncheckRiderDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
 	"UncheckRiderTitle": "Renner afvinken",
-	"UnresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars.\nU kan de aanwezige eigenaars hier selecteren."
+	"UnresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars.\nU kan de aanwezige eigenaars hier selecteren.",
+	"Version": "Versie"
 }

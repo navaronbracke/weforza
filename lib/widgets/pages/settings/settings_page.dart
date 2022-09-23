@@ -70,64 +70,178 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   }
 
   Widget _buildAndroidWidget(S translator) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(translator.Settings),
         actions: <Widget>[_buildSubmitButton()],
       ),
-      body: _buildBody(translator),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ScanDurationOption(
+                        initialValue: scanDurationController.value,
+                        onChanged: scanDurationController.add,
+                        stream: scanDurationController,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            translator.RiderListFilter,
+                            style: textTheme.titleMedium,
+                          ),
+                          MemberListFilter(
+                            initialFilter: memberFilterController.value,
+                            onChanged: memberFilterController.add,
+                            stream: memberFilterController,
+                          ),
+                          Text(
+                            translator.RiderListFilterDescription,
+                            style: textTheme.bodySmall?.copyWith(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24, left: 12, right: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const ResetRideCalendarButton(),
+                  Text(
+                    translator.ResetRideCalendarDescription,
+                    style: textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+            AppVersion(
+              builder: (version) => Text(
+                '${translator.Version} $version',
+                style: textTheme.bodySmall?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildIosWidget(S translator) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(translator.Settings),
-              ),
-            ),
-            SizedBox(width: 40, child: Center(child: _buildSubmitButton())),
-          ],
-        ),
-        transitionBetweenRoutes: false,
-      ),
-      child: SafeArea(child: _buildBody(translator)),
-    );
-  }
-
-  Widget _buildBody(S translator) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ScanDurationOption(
-                    initialScanDuration: scanDurationController.value,
-                    onChanged: scanDurationController.add,
-                    stream: scanDurationController,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: MemberListFilter(
-                      initialFilter: memberFilterController.value,
-                      onChanged: memberFilterController.add,
-                      stream: memberFilterController,
-                    ),
-                  ),
-                ],
-              ),
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      child: CustomScrollView(
+        slivers: [
+          CupertinoSliverNavigationBar(
+            backgroundColor: CupertinoColors.systemGroupedBackground,
+            border: null,
+            largeTitle: Text(translator.Settings),
+            transitionBetweenRoutes: false,
+            trailing: SizedBox(
+              width: 40,
+              child: Center(child: _buildSubmitButton()),
             ),
           ),
-          const ResetRideCalendarButton(),
-          const AppVersion(),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                switch (index) {
+                  case 0:
+                    return CupertinoFormSection.insetGrouped(
+                      header: Text(translator.ScanSettings.toUpperCase()),
+                      children: [
+                        ScanDurationOption(
+                          initialValue: scanDurationController.value,
+                          onChanged: scanDurationController.add,
+                          stream: scanDurationController,
+                        ),
+                      ],
+                    );
+                  case 1:
+                    return CupertinoFormSection.insetGrouped(
+                      header: Text(translator.Riders.toUpperCase()),
+                      footer: Text(translator.RiderListFilterDescription),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(6),
+                          child: Center(
+                            child: MemberListFilter(
+                              initialFilter: memberFilterController.value,
+                              onChanged: memberFilterController.add,
+                              stream: memberFilterController,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  case 2:
+                    return CupertinoFormSection.insetGrouped(
+                      header: Text(translator.RideCalendar.toUpperCase()),
+                      footer: Text(translator.ResetRideCalendarDescription),
+                      children: const [
+                        CupertinoFormRow(
+                          padding: EdgeInsetsDirectional.only(
+                            start: 20,
+                            end: 6,
+                          ),
+                          prefix: ResetRideCalendarButton(),
+                          child: SizedBox.shrink(),
+                        ),
+                      ],
+                    );
+                  case 3:
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 32),
+                      child: CupertinoFormSection.insetGrouped(
+                        children: [
+                          CupertinoFormRow(
+                            prefix: Text(translator.Version),
+                            child: AppVersion(
+                              builder: (version) {
+                                return Text(
+                                  version,
+                                  style: const TextStyle(
+                                    color: CupertinoColors.systemGrey,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  default:
+                    return null;
+                }
+              },
+              childCount: 4,
+            ),
+          ),
         ],
       ),
     );

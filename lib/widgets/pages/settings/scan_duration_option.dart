@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the scan duration slider.
 ///
@@ -53,7 +52,7 @@ class ScanDurationOption extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(
               translator.ScanDuration,
-              style: AppTheme.settings.android.optionHeaderStyle,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           StreamBuilder<double>(

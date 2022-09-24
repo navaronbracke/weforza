@@ -56,6 +56,9 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     super.initState();
     final settings = ref.read(settingsProvider);
 
+    excludedTermsController = BehaviorSubject.seeded(
+      settings.excludedTermsFilter,
+    );
     memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
     scanDurationController = BehaviorSubject.seeded(
       settings.scanDuration.toDouble(),

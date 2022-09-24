@@ -170,6 +170,57 @@ class RideAttendeeScanningDelegate {
     _stateMachine.add(state);
   }
 
+  /// Check whether a given [BluetoothPeripheral.deviceName]
+  /// should be accepted as a scan result.
+  ///
+  /// Returns false for device names that are empty,
+  /// or consist only of whitespace.
+  ///
+  /// Returns false for device names that contain any value of the
+  /// [Settings.excludedTermsFilter] values.
+  ///
+  /// Returns true for unknown devices.
+  ///
+  /// Returns true for devices with multiple possible owners.
+  ///
+  /// Returns true for devices with a single owner,
+  /// if said owner was not (yet) scanned during the currently running scan.
+  ///
+  /// Returns false for devices with a single owner,
+  /// if said owner was already scanned during the currently running scan.
+  bool _includeScanResult(BluetoothPeripheral device) {
+    final deviceName = device.deviceName;
+
+    if (deviceName.trim().isEmpty) {
+      return false;
+    }
+
+    final excludedTerms = settings.excludedTermsFilter;
+
+    if (excludedTerms.isNotEmpty) {
+      for (final excludedTerm in excludedTerms) {
+        if (deviceName.contains(excludedTerm)) {
+          return false;
+        }
+      }
+    }
+
+    final owners = _deviceOwners[deviceName];
+
+    // It's an unknown device, or a device with multiple possible owners.
+    if (owners == null || owners.isEmpty || owners.length > 1) {
+      return true;
+    }
+
+    // It's a device with exactly one owner.
+    // Only include it if the owner wasn't scanned yet.
+    // The value of `isScanned` is irrelevant,
+    // since it is excluded from the `operator==` implementation.
+    return !_rideAttendeeController.value.contains(
+      ScannedRideAttendee(uuid: owners.first, isScanned: false),
+    );
+  }
+
   /// Load the active members and their devices.
   Future<void> _loadActiveMembersWithDevices() async {
     final activeMembers = await memberRepository.getMembers(
@@ -397,27 +448,10 @@ class RideAttendeeScanningDelegate {
 
       _changeState(RideAttendeeScanningState.scanning);
 
-      scanner.scanForDevices(settings.scanDuration).where((device) {
-        // Ignore devices with empty names.
-        if (device.deviceName.isEmpty) {
-          return false;
-        }
-
-        final owners = _deviceOwners[device.deviceName];
-
-        // It's an unknown device, or a device with multiple possible owners.
-        if (owners == null || owners.isEmpty || owners.length > 1) {
-          return true;
-        }
-
-        // It's a device with exactly one owner.
-        // Only include it if the owner wasn't scanned yet.
-        // The value of `isScanned` is irrelevant,
-        // since it is excluded from the `operator==` implementation.
-        return !_rideAttendeeController.value.contains(
-          ScannedRideAttendee(uuid: owners.first, isScanned: false),
-        );
-      }).listen(
+      scanner
+          .scanForDevices(settings.scanDuration)
+          .where(_includeScanResult)
+          .listen(
         _addScannedDevice,
         onError: (error) {
           // Ignore errors from individual events.

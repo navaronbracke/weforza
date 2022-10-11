@@ -1,4 +1,5 @@
 import 'package:rxdart/subjects.dart';
+import 'package:weforza/generated/l10n.dart';
 
 /// This class represents a delegate
 /// that will manage the excluded terms for the scan filter.
@@ -9,6 +10,9 @@ class ExcludedTermsDelegate {
   }) : _termsController = BehaviorSubject.seeded(initialValue);
 
   final BehaviorSubject<List<String>> _termsController;
+
+  /// The max length for an excluded term.
+  final int maxLength = 16;
 
   /// Get the stream of excluded terms.
   Stream<List<String>> get stream => _termsController;
@@ -47,6 +51,25 @@ class ExcludedTermsDelegate {
 
   /// Checks whether the given [value] already exists in the list of terms.
   bool exists(String value) => _termsController.value.contains(value);
+
+  /// Validates the given [term].
+  ///
+  /// Returns an error message if the term is invalid, or null otherwise.
+  String? validateTerm(String? term, S translator) {
+    if (term == null || term.trim().isEmpty) {
+      return translator.KeywordRequired;
+    }
+
+    if (term.length > maxLength) {
+      return translator.KeywordMaxLength(maxLength);
+    }
+
+    if (exists(term)) {
+      return translator.KeywordExists;
+    }
+
+    return null;
+  }
 
   /// Dispose of this delegate.
   void dispose() {

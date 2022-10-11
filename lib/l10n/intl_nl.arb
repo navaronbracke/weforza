@@ -83,6 +83,7 @@
 	"Inactive": "Inactief",
 	"InvalidFilename": "Ongeldige bestandsnaam",
 	"KeywordExists": "Dit sleutelwoord bestaat al",
+	"KeywordMaxLength": "Een sleutelwoord mag niet langer zijn dan {maxLength} karakters",
 	"KeywordRequired": "Een sleutelwoord mag niet leeg zijn",
 	"LastName": "Familienaam",
 	"LastNameBlank": "Familienaam mag niet enkel witruimte zijn",

@@ -10,14 +10,10 @@ class AddExcludedTermInputField extends StatelessWidget {
   const AddExcludedTermInputField({
     super.key,
     required this.excludedTermsDelegate,
-    required this.textEditingController,
   });
 
   /// The delegate that manages the excluded terms.
   final ExcludedTermsDelegate excludedTermsDelegate;
-
-  /// The controller for the text field.
-  final TextEditingController textEditingController;
 
   void _onEditingComplete(BuildContext context) {
     final formState = Form.of(context);
@@ -26,11 +22,17 @@ class AddExcludedTermInputField extends StatelessWidget {
       return;
     }
 
-    excludedTermsDelegate.addTerm(textEditingController.text);
-    textEditingController.clear();
-
-    // Reset the form, otherwise the empty text field shows a validation error.
+    // Add a term by saving the form and reset the form afterwards.
+    formState.save();
     formState.reset();
+  }
+
+  void _onSaved(String? value) {
+    if (value == null) {
+      return;
+    }
+
+    excludedTermsDelegate.addTerm(value);
   }
 
   @override
@@ -43,10 +45,10 @@ class AddExcludedTermInputField extends StatelessWidget {
         builder: (context) {
           return PlatformAwareWidget(
             android: () => TextFormField(
-              controller: textEditingController,
               decoration: InputDecoration(hintText: translator.AddKeyword),
               keyboardType: TextInputType.text,
               onEditingComplete: () => _onEditingComplete(context),
+              onSaved: _onSaved,
               maxLength: excludedTermsDelegate.maxLength,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               maxLines: 1,
@@ -57,10 +59,10 @@ class AddExcludedTermInputField extends StatelessWidget {
               ),
             ),
             ios: () => CupertinoTextFormFieldRow(
-              controller: textEditingController,
               keyboardType: TextInputType.text,
               maxLines: 1,
               onEditingComplete: () => _onEditingComplete(context),
+              onSaved: _onSaved,
               padding: const EdgeInsets.all(6),
               placeholder: translator.AddKeyword,
               textInputAction: TextInputAction.done,

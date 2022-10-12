@@ -63,7 +63,8 @@ class AddExcludedTermInputField extends StatelessWidget {
               maxLines: 1,
               onEditingComplete: () => _onEditingComplete(context),
               onSaved: _onSaved,
-              padding: const EdgeInsets.all(6),
+              // The excluded terms have a 15 margin on their border.
+              padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
               placeholder: translator.AddKeyword,
               textInputAction: TextInputAction.done,
               validator: (value) => excludedTermsDelegate.validateTerm(

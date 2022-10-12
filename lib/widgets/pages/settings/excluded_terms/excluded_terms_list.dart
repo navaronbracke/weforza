@@ -13,8 +13,8 @@ class ExcludedTermsList extends StatelessWidget {
     required this.delegate,
   });
 
-  /// The function that computes the decoration for a given index.
-  final BoxDecoration Function(int index, List<String> items)? decorator;
+  /// The function that decorates a given child.
+  final Widget? Function(Widget, int, List<String>)? decorator;
 
   /// The delegate that provides the list of terms.
   final ExcludedTermsDelegate delegate;
@@ -45,13 +45,7 @@ class ExcludedTermsList extends StatelessWidget {
                 term: term,
               );
 
-              final decoration = decorator?.call(index, terms);
-
-              if (decoration == null) {
-                return child;
-              }
-
-              return DecoratedBox(decoration: decoration, child: child);
+              return decorator?.call(child, index, terms) ?? child;
             },
             childCount: terms.length,
           ),

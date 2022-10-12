@@ -25,7 +25,9 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 class SettingsPageState extends ConsumerState<SettingsPage>
     with ArtificialDelay {
-  late final ExcludedTermsDelegate excludedTermsController;
+  final excludedTermsController = TextEditingController();
+
+  late final ExcludedTermsDelegate excludedTermsDelegate;
 
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
@@ -38,7 +40,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     await waitForDelay();
 
     final newSettings = Settings(
-      excludedTermsFilter: excludedTermsController.terms.toSet(),
+      excludedTermsFilter: excludedTermsDelegate.terms.toSet(),
       scanDuration: scanDurationController.value.floor(),
       memberListFilter: memberFilterController.value,
     );
@@ -57,7 +59,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     super.initState();
     final settings = ref.read(settingsProvider);
 
-    excludedTermsController = ExcludedTermsDelegate(
+    excludedTermsDelegate = ExcludedTermsDelegate(
       initialValue: settings.excludedTermsFilter.toList(),
     );
     memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
@@ -271,6 +273,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   @override
   void dispose() {
     excludedTermsController.dispose();
+    excludedTermsDelegate.dispose();
     memberFilterController.close();
     scanDurationController.close();
     super.dispose();

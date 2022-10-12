@@ -1,16 +1,20 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.
+///
+/// This widget should be placed inside a [CustomScrollView].
 class ExcludedTermsList extends StatelessWidget {
   const ExcludedTermsList({
     super.key,
-    required this.builder,
+    this.decorator,
     required this.delegate,
   });
 
-  /// The builder that builds the list of excluded terms.
-  final Widget Function(List<String> items) builder;
+  /// The function that computes the decoration for a given index.
+  final BoxDecoration Function(int index, List<String> items)? decorator;
 
   /// The delegate that provides the list of terms.
   final ExcludedTermsDelegate delegate;
@@ -20,7 +24,39 @@ class ExcludedTermsList extends StatelessWidget {
     return StreamBuilder<List<String>>(
       initialData: delegate.terms,
       stream: delegate.stream,
-      builder: (context, snapshot) => builder(snapshot.data ?? []),
+      builder: (context, snapshot) {
+        final terms = snapshot.data ?? [];
+
+        if (terms.isEmpty) {
+          return const SliverToBoxAdapter(
+            child: ExcludedTermsListEmpty(),
+          );
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final term = terms[index];
+
+              final child = EditExcludedTermInputField(
+                key: ValueKey(term),
+                delegate: delegate,
+                index: index,
+                term: term,
+              );
+
+              final decoration = decorator?.call(index, terms);
+
+              if (decoration == null) {
+                return child;
+              }
+
+              return DecoratedBox(decoration: decoration, child: child);
+            },
+            childCount: terms.length,
+          ),
+        );
+      },
     );
   }
 }

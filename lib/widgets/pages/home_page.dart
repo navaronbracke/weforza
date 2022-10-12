@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage>
   final _pages = [
     const RideListPage(),
     const MemberListPage(),
-    const SettingsPage()
+    const SettingsPage(),
   ];
 
   @override
@@ -50,19 +50,29 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _buildPageView() {
+  Widget _buildPageView(BuildContext context) {
     return PageView(
       controller: _pageController,
-      onPageChanged: (page) => setState(() {
-        _selectedIndex = page;
-      }),
+      onPageChanged: (page) {
+        // When switching pages in the page view, the old page gives up focus.
+        // The member list page has a search field,
+        // and the settings page has several text fields.
+        // Only the ride list page has nothing that can have keyboard focus.
+        if (_selectedIndex != 0) {
+          FocusScope.of(context).unfocus();
+        }
+
+        setState(() {
+          _selectedIndex = page;
+        });
+      },
       children: _pages,
     );
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
-      body: _buildPageView(),
+      body: _buildPageView(context),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -95,7 +105,7 @@ class _HomePageState extends State<HomePage>
       resizeToAvoidBottomInset: false,
       child: Column(
         children: <Widget>[
-          Expanded(child: _buildPageView()),
+          Expanded(child: _buildPageView(context)),
           CupertinoTabBar(
             currentIndex: _selectedIndex,
             items: [

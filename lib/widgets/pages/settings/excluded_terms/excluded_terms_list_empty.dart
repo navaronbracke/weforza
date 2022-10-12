@@ -16,7 +16,7 @@ class ExcludedTermsListEmpty extends StatelessWidget {
         padding: const EdgeInsets.all(4),
         child: Text(
           text,
-          style: Theme.of(context).textTheme.labelSmall,
+          style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.center,
         ),
       ),

@@ -86,78 +86,82 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(translator.Settings),
-        actions: <Widget>[_buildSubmitButton()],
+        actions: [_buildSubmitButton()],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: ScanDurationOption(
-                        initialValue: scanDurationController.value,
-                        onChanged: scanDurationController.add,
-                        stream: scanDurationController,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            translator.RiderListFilter,
-                            style: textTheme.titleMedium,
-                          ),
-                          MemberListFilter(
-                            initialFilter: memberFilterController.value,
-                            onChanged: memberFilterController.add,
-                            stream: memberFilterController,
-                          ),
-                          Text(
-                            translator.RiderListFilterDescription,
-                            style: textTheme.bodySmall?.copyWith(
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+      body: _SettingsPageScrollView(
+        addExcludedTermInputField: SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: SliverToBoxAdapter(
+            child: AddExcludedTermInputField(
+              excludedTermsDelegate: excludedTermsDelegate,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 24, left: 12, right: 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const ResetRideCalendarButton(),
-                  Text(
-                    translator.ResetRideCalendarDescription,
-                    style: textTheme.bodySmall?.copyWith(
-                      fontStyle: FontStyle.italic,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+          ),
+        ),
+        excludedTermsList: ExcludedTermsList(delegate: excludedTermsDelegate),
+        memberListFilter: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                translator.RiderListFilter,
+                style: textTheme.titleMedium,
               ),
-            ),
-            AppVersion(
-              builder: (version) => Text(
-                '${translator.Version} $version',
+              MemberListFilter(
+                initialFilter: memberFilterController.value,
+                onChanged: memberFilterController.add,
+                stream: memberFilterController,
+              ),
+              Text(
+                translator.RiderListFilterDescription,
                 style: textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),
               ),
+            ],
+          ),
+        ),
+        resetRideCalendarButton: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const ResetRideCalendarButton(),
+              Text(
+                translator.ResetRideCalendarDescription,
+                style: textTheme.bodySmall?.copyWith(
+                  fontStyle: FontStyle.italic,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+        scanDurationOption: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
+          child: ScanDurationOption(
+            initialValue: scanDurationController.value,
+            onChanged: scanDurationController.add,
+            stream: scanDurationController,
+          ),
+        ),
+        version: SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: AppVersion(
+                builder: (version) => Text(
+                  '${translator.Version} $version',
+                  style: textTheme.bodySmall?.copyWith(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -277,18 +281,20 @@ class SettingsPageState extends ConsumerState<SettingsPage>
             ),
           ],
         ),
-        version: CupertinoFormSection.insetGrouped(
-          children: [
-            CupertinoFormRow(
-              prefix: Text(translator.Version),
-              child: AppVersion(
-                builder: (version) => Text(
-                  version,
-                  style: const TextStyle(color: CupertinoColors.systemGrey),
+        version: SliverToBoxAdapter(
+          child: CupertinoFormSection.insetGrouped(
+            children: [
+              CupertinoFormRow(
+                prefix: Text(translator.Version),
+                child: AppVersion(
+                  builder: (version) => Text(
+                    version,
+                    style: const TextStyle(color: CupertinoColors.systemGrey),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -362,12 +368,8 @@ class _SettingsPageScrollView extends StatelessWidget {
         ),
         addExcludedTermInputField,
         excludedTermsList,
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            resetRideCalendarButton,
-            version,
-          ]),
-        ),
+        SliverToBoxAdapter(child: resetRideCalendarButton),
+        version,
       ],
     );
   }

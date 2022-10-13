@@ -153,6 +153,7 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
             return IconButton(
               icon: Icon(Icons.delete, color: style.color),
               onPressed: () => _showDeleteTermDialog(context),
+              padding: EdgeInsets.zero,
             );
           }
 
@@ -165,6 +166,8 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
       android: () => TextFormField(
         buildCounter: _buildCounter,
         decoration: InputDecoration(
+          border: InputBorder.none,
+          filled: true,
           hintText: placeholder,
           suffixIcon: suffixIcon,
         ),
@@ -176,6 +179,7 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
         maxLength: widget.delegate.maxLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         maxLines: 1,
+        textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.done,
         validator: (value) => widget.delegate.validateTerm(
           value,

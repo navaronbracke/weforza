@@ -144,12 +144,20 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
     } else {
       decoration = const BoxDecoration();
       initialValue = widget.delegate.terms[index];
-      suffixIcon = IconButton(
-        icon: Icon(
-          Icons.delete,
-          color: AppTheme.desctructiveAction.androidDefaultErrorStyle.color,
-        ),
-        onPressed: () => _showDeleteTermDialog(context),
+      suffixIcon = AnimatedBuilder(
+        animation: focusNode,
+        builder: (context, child) {
+          if (focusNode.hasFocus) {
+            final style = AppTheme.desctructiveAction.androidDefaultErrorStyle;
+
+            return IconButton(
+              icon: Icon(Icons.delete, color: style.color),
+              onPressed: () => _showDeleteTermDialog(context),
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
       );
     }
 

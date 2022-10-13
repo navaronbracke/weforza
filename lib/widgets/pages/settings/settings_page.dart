@@ -134,7 +134,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
           ),
         ),
         resetRideCalendarButton: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(24, 56, 24, 0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

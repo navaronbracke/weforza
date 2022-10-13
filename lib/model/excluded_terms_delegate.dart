@@ -66,7 +66,7 @@ class ExcludedTermsDelegate {
   /// and now matches another term in the list of terms, besides itself.
   /// Returns null otherwise.
   String? validateTerm(String? term, S translator, {String? originalValue}) {
-    if (term == null || term.trim().isEmpty) {
+    if (term == null || term.isEmpty) {
       return translator.DisallowedWordRequired;
     }
 

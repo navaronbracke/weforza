@@ -65,17 +65,17 @@ class ExcludedTermsDelegate {
   /// Returns null otherwise.
   String? validateTerm(String? term, S translator, {String? originalValue}) {
     if (term == null || term.trim().isEmpty) {
-      return translator.KeywordRequired;
+      return translator.DisallowedWordRequired;
     }
 
     if (term.length > maxLength) {
-      return translator.KeywordMaxLength(maxLength);
+      return translator.DisallowedWordMaxLength(maxLength);
     }
 
     // If the term is equal to the original value,
     // then the term is equal to itself, which is allowed.
     if (term != originalValue && exists(term)) {
-      return translator.KeywordExists;
+      return translator.DisallowedWordExists;
     }
 
     return null;

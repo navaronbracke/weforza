@@ -16,7 +16,12 @@ class ExcludedTermsListFooter extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Text(description, style: theme.textTheme.bodySmall);
+        return Text(
+          description,
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontStyle: FontStyle.italic,
+          ),
+        );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Text(

@@ -9,7 +9,7 @@ class ExcludedTermsListEmpty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = S.of(context).NoKeywords;
+    final text = S.of(context).NoDisallowedWords;
 
     return PlatformAwareWidget(
       android: () => Padding(

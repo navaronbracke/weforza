@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.
@@ -38,11 +38,10 @@ class ExcludedTermsList extends StatelessWidget {
             (context, index) {
               final term = terms[index];
 
-              final child = EditExcludedTermInputField(
+              final child = ExcludedTermInputField(
                 key: ValueKey(term),
                 delegate: delegate,
                 index: index,
-                term: term,
               );
 
               return decorator?.call(child, index, terms) ?? child;

@@ -11,8 +11,9 @@ import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
@@ -92,12 +93,11 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: SliverToBoxAdapter(
-            child: AddExcludedTermInputField(
-              excludedTermsDelegate: excludedTermsDelegate,
-            ),
+            child: ExcludedTermInputField(delegate: excludedTermsDelegate),
           ),
         ),
         excludedTermsList: ExcludedTermsList(delegate: excludedTermsDelegate),
+        excludedTermsListFooter: const ExcludedTermsListFooter(),
         memberListFilter: Padding(
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
           child: Column(
@@ -188,9 +188,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 ),
                 color: CupertinoColors.secondarySystemGroupedBackground,
               ),
-              child: AddExcludedTermInputField(
-                excludedTermsDelegate: excludedTermsDelegate,
-              ),
+              child: ExcludedTermInputField(delegate: excludedTermsDelegate),
             ),
           ),
         ),

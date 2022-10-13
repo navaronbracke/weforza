@@ -228,6 +228,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
             delegate: excludedTermsDelegate,
           ),
         ),
+        excludedTermsListFooter: const Padding(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          child: ExcludedTermsListFooter(),
+        ),
         memberListFilter: CupertinoFormSection.insetGrouped(
           header: Text(translator.Riders.toUpperCase()),
           footer: Text(translator.RiderListFilterDescription),
@@ -327,6 +331,7 @@ class _SettingsPageScrollView extends StatelessWidget {
   const _SettingsPageScrollView({
     required this.addExcludedTermInputField,
     required this.excludedTermsList,
+    required this.excludedTermsListFooter,
     required this.memberListFilter,
     this.navigationBar,
     required this.resetRideCalendarButton,
@@ -339,6 +344,9 @@ class _SettingsPageScrollView extends StatelessWidget {
 
   /// The widget that represents the list of excluded terms.
   final Widget excludedTermsList;
+
+  /// The widget that represents the footer for the excluded terms list.
+  final Widget excludedTermsListFooter;
 
   /// The widget that represents the member list filter.
   final Widget memberListFilter;
@@ -368,7 +376,12 @@ class _SettingsPageScrollView extends StatelessWidget {
         ),
         addExcludedTermInputField,
         excludedTermsList,
-        SliverToBoxAdapter(child: resetRideCalendarButton),
+        SliverList(
+          delegate: SliverChildListDelegate.fixed([
+            excludedTermsListFooter,
+            resetRideCalendarButton,
+          ]),
+        ),
         version,
       ],
     );

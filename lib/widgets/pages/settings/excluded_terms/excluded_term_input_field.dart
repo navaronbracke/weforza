@@ -52,13 +52,13 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
   final focusNode = FocusNode();
 
   /// Build the invisible counter. The max length is enforced by the text field.
-  Widget _buildCounter(
+  Widget? _buildCounter(
     BuildContext context, {
     required int currentLength,
     required bool isFocused,
     required int? maxLength,
   }) {
-    return const SizedBox.shrink();
+    return null;
   }
 
   void _handleFocusChange() {
@@ -166,9 +166,9 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
       android: () => TextFormField(
         buildCounter: _buildCounter,
         decoration: InputDecoration(
-          border: InputBorder.none,
-          filled: true,
+          border: const UnderlineInputBorder(),
           hintText: placeholder,
+          isDense: true,
           suffixIcon: suffixIcon,
         ),
         focusNode: focusNode,

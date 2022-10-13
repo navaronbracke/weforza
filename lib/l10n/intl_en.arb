@@ -46,6 +46,7 @@
 	"DisallowedWordMaxLength": "A disallowed word can't be longer than {maxLength} characters",
 	"DisallowedWordNoWhitespace": "A disallowed word can't contain spaces",
 	"DisallowedWordRequired": "A disallowed word cannot be empty",
+	"DisallowedWords": "Disallowed words",
 	"DisallowedWordsDescription": "Devices that contain a disallowed word are not shown in the scan results.",
 	"EditDevice": "Edit Device",
 	"EditDisallowedWord": "Edit disallowed word",

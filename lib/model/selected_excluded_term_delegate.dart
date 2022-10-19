@@ -4,13 +4,21 @@ import 'package:weforza/model/selected_excluded_term.dart';
 /// This class represents a delegate that manages
 /// the currently selected excluded term.
 class SelectedExcludedTermDelegate {
-  final _controller = BehaviorSubject<SelectedExcludedTerm>();
+  final _controller = BehaviorSubject<SelectedExcludedTerm?>();
 
   /// Get the currently selected term.
   SelectedExcludedTerm? get selectedTerm => _controller.valueOrNull;
 
   /// Get the stream of changes to the currently selected term.
-  Stream<SelectedExcludedTerm> get stream => _controller;
+  Stream<SelectedExcludedTerm?> get stream => _controller;
+
+  /// Clear the current selection.
+  void clearSelection() {
+    final previous = _controller.valueOrNull;
+
+    _controller.add(null);
+    previous?.dispose(); // Clean up the old selection value.
+  }
 
   /// Set the selected term.
   void setSelectdTerm(String value) {

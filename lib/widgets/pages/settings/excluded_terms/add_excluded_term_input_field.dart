@@ -7,7 +7,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_inpu
 /// This widget represents the input field for adding an excluded term.
 ///
 /// It manages a text field that resets itself when it loses focus.
-class AddExcludedTermInputField extends StatefulWidget {
+class AddExcludedTermInputField extends StatelessWidget {
   /// The default constructor.
   const AddExcludedTermInputField({
     super.key,
@@ -29,36 +29,16 @@ class AddExcludedTermInputField extends StatefulWidget {
   /// The global key that is used to validate the text field.
   final GlobalKey<FormFieldState<String>> formKey;
 
-  @override
-  State<AddExcludedTermInputField> createState() =>
-      _AddExcludedTermInputFieldState();
-}
-
-class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
-  void _handleFocusChange() {
-    if (widget.focusNode.hasPrimaryFocus) {
-      return;
-    }
-
-    widget.formKey.currentState?.reset();
-  }
-
   void _onEditingComplete() {
-    final formState = widget.formKey.currentState;
+    final formState = formKey.currentState;
 
     if (formState == null || !formState.validate()) {
       return;
     }
 
-    widget.delegate.addTerm(formState.value!);
-    widget.controller.clear();
+    delegate.addTerm(formState.value!);
+    controller.clear();
     formState.reset();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.focusNode.addListener(_handleFocusChange);
   }
 
   @override
@@ -66,19 +46,13 @@ class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
     final translator = S.of(context);
 
     return ExcludedTermInputField.editable(
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      maxLength: widget.delegate.maxLength,
+      controller: controller,
+      focusNode: focusNode,
+      maxLength: delegate.maxLength,
       onEditingComplete: _onEditingComplete,
-      textFieldKey: widget.formKey,
-      validator: (value) => widget.delegate.validateTerm(value, translator),
+      textFieldKey: formKey,
+      validator: (value) => delegate.validateTerm(value, translator),
       placeholder: translator.AddDisallowedWord,
     );
-  }
-
-  @override
-  void dispose() {
-    widget.focusNode.removeListener(_handleFocusChange);
-    super.dispose();
   }
 }

@@ -116,7 +116,11 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         ),
         excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          sliver: ExcludedTermsList(delegate: excludedTermsDelegate),
+          sliver: ExcludedTermsList(
+            delegate: excludedTermsDelegate,
+            selectedTermTextFieldKey: selectedExcludedTermFormKey,
+            selectionDelegate: selectedExcludedTermDelegate,
+          ),
         ),
         excludedTermsListFooter: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, top: 12),
@@ -224,6 +228,9 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: ExcludedTermsList(
+            delegate: excludedTermsDelegate,
+            selectedTermTextFieldKey: selectedExcludedTermFormKey,
+            selectionDelegate: selectedExcludedTermDelegate,
             decorator: (child, index, terms) {
               BorderRadius borderRadius = BorderRadius.zero;
 
@@ -252,7 +259,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 ),
               );
             },
-            delegate: excludedTermsDelegate,
           ),
         ),
         excludedTermsListFooter: const Padding(

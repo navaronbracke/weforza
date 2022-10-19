@@ -13,11 +13,11 @@ class ExcludedTermInputField extends StatelessWidget {
     required FocusNode this.focusNode,
     required int this.maxLength,
     required void Function() this.onEditingComplete,
+    this.onTap,
     this.placeholder,
     required GlobalKey<FormFieldState<String>> this.textFieldKey,
     required String? Function(String? value) this.validator,
   })  : initialValue = null,
-        onTap = null,
         readOnly = false;
 
   /// The constructor for a read-only text field.

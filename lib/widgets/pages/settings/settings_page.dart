@@ -42,6 +42,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   late final BehaviorSubject<double> scanDurationController;
 
   final selectedExcludedTermDelegate = SelectedExcludedTermDelegate();
+  final selectedExcludedTermFormKey = GlobalKey<FormFieldState<String>>();
 
   Future<void>? _saveSettingsFuture;
 

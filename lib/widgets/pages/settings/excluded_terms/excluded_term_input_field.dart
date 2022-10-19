@@ -1,55 +1,68 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/excluded_terms_delegate.dart';
-import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:flutter/services.dart' show MaxLengthEnforcement;
+
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
-/// This widget represents the input field for adding or editing an excluded term.
+/// This widget represents the base input field for an excluded term.
 class ExcludedTermInputField extends StatelessWidget {
-  const ExcludedTermInputField({
+  /// The constructor for an editable text field.
+  const ExcludedTermInputField.editable({
     super.key,
-    required this.delegate,
-    this.index,
-  });
+    required TextEditingController this.controller,
+    required FocusNode this.focusNode,
+    required int this.maxLength,
+    required void Function() this.onEditingComplete,
+    this.placeholder,
+    required GlobalKey<FormFieldState<String>> this.textFieldKey,
+    required String? Function(String? value) this.validator,
+  })  : initialValue = null,
+        onTap = null,
+        readOnly = false;
 
-  /// The delegate that manages the excluded terms.
-  final ExcludedTermsDelegate delegate;
+  /// The constructor for a read-only text field.
+  const ExcludedTermInputField.readOnly({
+    super.key,
+    required String this.initialValue,
+    required void Function() this.onTap,
+  })  : controller = null,
+        focusNode = null,
+        onEditingComplete = null,
+        maxLength = null,
+        placeholder = null,
+        readOnly = true,
+        textFieldKey = null,
+        validator = null;
 
-  /// The index of the term that should be edited.
-  ///
-  /// If this is null,
-  /// a new term will be created when the text field is submitted.
-  final int? index;
+  /// The controller for the text field.
+  final TextEditingController? controller;
 
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: _ExcludedTermInputField(delegate: delegate, index: index),
-    );
-  }
-}
+  /// The focus node for the text field.
+  final FocusNode? focusNode;
 
-class _ExcludedTermInputField extends StatefulWidget {
-  const _ExcludedTermInputField({
-    required this.delegate,
-    this.index,
-  });
+  /// The initial value for the text field.
+  final String? initialValue;
 
-  final ExcludedTermsDelegate delegate;
+  /// The max length for the text field.
+  final int? maxLength;
 
-  final int? index;
+  /// The function that is called when editing is finalized.
+  final void Function()? onEditingComplete;
 
-  @override
-  State<_ExcludedTermInputField> createState() =>
-      _ExcludedTermInputFieldState();
-}
+  /// The function that is called when the text field is tapped.
+  final void Function()? onTap;
 
-class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
-  final focusNode = FocusNode();
+  /// The placeholder text for the text field when it is empty.
+  final String? placeholder;
+
+  /// Whether the text field is read-only.
+  final bool readOnly;
+
+  /// The global key that is used to validate the text field.
+  final GlobalKey<FormFieldState<String>>? textFieldKey;
+
+  /// The validator function for the text field.
+  final String? Function(String? value)? validator;
 
   /// Build the invisible counter. The max length is enforced by the text field.
   Widget? _buildCounter(
@@ -61,190 +74,51 @@ class _ExcludedTermInputFieldState extends State<_ExcludedTermInputField> {
     return null;
   }
 
-  void _handleFocusChange() {
-    if (!focusNode.hasFocus) {
-      final formState = Form.of(context);
-
-      if (formState == null) {
-        return;
-      }
-
-      if (widget.index == null) {
-        formState.reset(); // Reset back to empty
-      } else {
-        // Submit the edit, if it is valid.
-        if (formState.validate()) {
-          formState.save();
-        }
-
-        formState.reset();
-      }
-    }
-  }
-
-  void _onEditingComplete(BuildContext context) {
-    final formState = Form.of(context);
-
-    if (formState == null || !formState.validate()) {
-      return;
-    }
-
-    formState.save();
-    formState.reset();
-  }
-
-  /// Save the form, which either adds a new term or edits an existing term,
-  /// depending on the initial state.
-  void _onSaved(String? value) {
-    if (value == null) {
-      return;
-    }
-
-    final index = widget.index;
-
-    if (index == null) {
-      widget.delegate.addTerm(value);
-    } else {
-      widget.delegate.editTerm(value, index);
-    }
-  }
-
-  void _showDeleteTermDialog(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        break; // TODO: show material dialog
-      case TargetPlatform.iOS:
-        break; // TODO: show cupertino dialog
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        break;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    focusNode.addListener(_handleFocusChange);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final translator = S.of(context);
-    final index = widget.index;
-
-    BoxDecoration? decoration;
-    String? initialValue;
-    String? placeholder;
-    Widget? suffixIcon;
-
-    if (index == null) {
-      placeholder = translator.AddDisallowedWord;
-    } else {
-      decoration = const BoxDecoration();
-      initialValue = widget.delegate.terms[index];
-      suffixIcon = AnimatedBuilder(
-        animation: focusNode,
-        builder: (context, child) {
-          if (focusNode.hasFocus) {
-            final style = AppTheme.desctructiveAction.androidDefaultErrorStyle;
-
-            return IconButton(
-              icon: Icon(Icons.delete, color: style.color),
-              onPressed: () => _showDeleteTermDialog(context),
-              padding: EdgeInsets.zero,
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
-      );
-    }
-
     return PlatformAwareWidget(
       android: () => TextFormField(
+        key: textFieldKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         buildCounter: _buildCounter,
+        controller: controller,
         decoration: InputDecoration(
           border: const UnderlineInputBorder(),
           hintText: placeholder,
           isDense: true,
-          suffixIcon: suffixIcon,
         ),
         focusNode: focusNode,
         initialValue: initialValue,
         keyboardType: TextInputType.text,
-        onEditingComplete: () => _onEditingComplete(context),
-        onSaved: _onSaved,
-        maxLength: widget.delegate.maxLength,
+        maxLength: maxLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         maxLines: 1,
+        onEditingComplete: onEditingComplete,
+        onTap: onTap,
+        readOnly: readOnly,
         textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.done,
-        validator: (value) => widget.delegate.validateTerm(
-          value,
-          translator,
-          originalValue: initialValue,
-        ),
+        validator: validator,
       ),
-      ios: () {
-        Widget child = CupertinoTextFormFieldRow(
-          decoration: decoration,
-          focusNode: focusNode,
-          initialValue: initialValue,
-          keyboardType: TextInputType.text,
-          maxLength: widget.delegate.maxLength,
-          maxLines: 1,
-          onEditingComplete: () => _onEditingComplete(context),
-          onSaved: _onSaved,
-          // The excluded terms have a 15 margin on their border.
-          padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
-          placeholder: placeholder,
-          textInputAction: TextInputAction.done,
-          validator: (value) => widget.delegate.validateTerm(
-            value,
-            translator,
-            originalValue: initialValue,
-          ),
-        );
-
-        if (index != null) {
-          child = Row(
-            children: [
-              Expanded(child: child),
-              AnimatedBuilder(
-                animation: focusNode,
-                builder: (context, child) {
-                  if (focusNode.hasFocus) {
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: CupertinoIconButton(
-                        color: CupertinoColors.systemRed,
-                        icon: CupertinoIcons.delete,
-                        onPressed: () => _showDeleteTermDialog(context),
-                      ),
-                    );
-                  }
-
-                  // Reserve the vertical space for the delete button.
-                  return const SizedBox(
-                    height: kMinInteractiveDimensionCupertino,
-                  );
-                },
-              ),
-            ],
-          );
-        }
-
-        return child;
-      },
+      ios: () => CupertinoTextFormFieldRow(
+        key: textFieldKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        controller: controller,
+        decoration: const BoxDecoration(),
+        focusNode: focusNode,
+        initialValue: initialValue,
+        keyboardType: TextInputType.text,
+        maxLength: maxLength,
+        maxLines: 1,
+        onEditingComplete: onEditingComplete,
+        onTap: onTap,
+        // The excluded terms have a 15 margin on their border.
+        padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
+        placeholder: placeholder,
+        readOnly: readOnly,
+        textInputAction: TextInputAction.done,
+        validator: validator,
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    focusNode.removeListener(_handleFocusChange);
-    focusNode.dispose();
-    super.dispose();
   }
 }

@@ -6,12 +6,13 @@ import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/selected_excluded_term_delegate.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
@@ -39,6 +40,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
   late final BehaviorSubject<double> scanDurationController;
+
+  final selectedExcludedTermDelegate = SelectedExcludedTermDelegate();
 
   Future<void>? _saveSettingsFuture;
 
@@ -348,6 +351,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     excludedTermsDelegate.dispose();
     memberFilterController.close();
     scanDurationController.close();
+    selectedExcludedTermDelegate.dispose();
     super.dispose();
   }
 }

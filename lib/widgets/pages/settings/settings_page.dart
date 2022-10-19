@@ -79,6 +79,16 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     scanDurationController = BehaviorSubject.seeded(
       settings.scanDuration.toDouble(),
     );
+
+    addTermFocusNode.addListener(_handleAddTermFocusChange);
+  }
+
+  void _handleAddTermFocusChange() {
+    if (addTermFocusNode.hasPrimaryFocus) {
+      return;
+    }
+
+    addTermFormKey.currentState?.reset();
   }
 
   @override
@@ -100,7 +110,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         title: Text(translator.Settings),
         actions: [_buildSubmitButton()],
       ),
-      body: _SettingsPageScrollView(
+      body: SettingsPageScrollView(
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: SliverToBoxAdapter(
@@ -367,6 +377,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   @override
   void dispose() {
     addTermController.dispose();
+    addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
     memberFilterController.close();

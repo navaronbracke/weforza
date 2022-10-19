@@ -45,8 +45,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   final selectedExcludedTermDelegate = SelectedExcludedTermDelegate();
   final selectedExcludedTermFormKey = GlobalKey<FormFieldState<String>>();
 
-  final scrollController = ScrollController();
-
   Future<void>? _saveSettingsFuture;
 
   Future<void> saveSettings() async {
@@ -102,7 +100,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         actions: [_buildSubmitButton()],
       ),
       body: _SettingsPageScrollView(
-        scrollController: scrollController,
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: SliverToBoxAdapter(
@@ -222,7 +219,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       child: _SettingsPageScrollView(
-        scrollController: scrollController,
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: SliverToBoxAdapter(
@@ -374,7 +370,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     excludedTermsDelegate.dispose();
     memberFilterController.close();
     scanDurationController.close();
-    scrollController.dispose();
     selectedExcludedTermDelegate.dispose();
     super.dispose();
   }
@@ -390,7 +385,6 @@ class _SettingsPageScrollView extends StatelessWidget {
     this.navigationBar,
     required this.resetRideCalendarButton,
     required this.scanDurationOption,
-    required this.scrollController,
     required this.version,
   });
 
@@ -418,16 +412,12 @@ class _SettingsPageScrollView extends StatelessWidget {
   /// The widget that displays the scan duration option.
   final Widget scanDurationOption;
 
-  /// The scroll controller for the scrollview.
-  final ScrollController scrollController;
-
   /// The widget that displays the app version information.
   final Widget version;
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      controller: scrollController,
       slivers: [
         if (navigationBar != null) navigationBar!,
         SliverList(

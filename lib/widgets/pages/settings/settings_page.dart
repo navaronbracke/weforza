@@ -205,6 +205,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
       key: ValueKey(term),
       delegate: excludedTermsDelegate,
       index: index,
+      onSelected: selectedExcludedTermDelegate.setSelectedTerm,
       selectionDelegate: selectedExcludedTermDelegate,
       term: term,
       textFormFieldKey: selectedExcludedTermFormKey,

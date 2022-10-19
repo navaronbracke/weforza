@@ -21,7 +21,7 @@ class SelectedExcludedTermDelegate {
   }
 
   /// Set the selected term.
-  void setSelectdTerm(String value) {
+  void setSelectedTerm(String value) {
     final previousValue = selectedTerm;
 
     // If the same value is selected,

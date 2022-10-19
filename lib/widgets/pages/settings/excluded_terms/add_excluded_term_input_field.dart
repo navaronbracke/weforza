@@ -51,6 +51,7 @@ class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
     }
 
     widget.delegate.addTerm(formState.value!);
+    widget.controller.clear();
     formState.reset();
   }
 

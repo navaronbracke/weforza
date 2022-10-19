@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show TextSelection;
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/model/selected_excluded_term.dart';
 
@@ -35,6 +36,13 @@ class SelectedExcludedTermDelegate {
     // from the previous text field,
     // and attaches a new controller and focus node to the field of the new value.
     _controller.add(SelectedExcludedTerm(value));
+
+    // Request focus for the new selection,
+    // and move the cursor to the end of the text.
+    _controller.valueOrNull?.focusNode.requestFocus();
+    _controller.valueOrNull?.controller.selection = TextSelection.collapsed(
+      offset: value.length,
+    );
 
     // Dispose the now orphaned controller and focus node from the previous term.
     previousValue?.dispose();

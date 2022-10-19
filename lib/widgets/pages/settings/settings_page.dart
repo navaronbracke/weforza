@@ -20,6 +20,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_lis
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
 import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -218,7 +219,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
-      child: _SettingsPageScrollView(
+      child: SettingsPageScrollView(
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: SliverToBoxAdapter(
@@ -372,71 +373,5 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     scanDurationController.close();
     selectedExcludedTermDelegate.dispose();
     super.dispose();
-  }
-}
-
-class _SettingsPageScrollView extends StatelessWidget {
-  const _SettingsPageScrollView({
-    required this.addExcludedTermInputField,
-    required this.excludedTermsList,
-    required this.excludedTermsListFooter,
-    this.excludedTermsListHeader,
-    required this.memberListFilter,
-    this.navigationBar,
-    required this.resetRideCalendarButton,
-    required this.scanDurationOption,
-    required this.version,
-  });
-
-  /// The widget that represents the input field for adding a new excluded term.
-  final Widget addExcludedTermInputField;
-
-  /// The widget that represents the list of excluded terms.
-  final Widget excludedTermsList;
-
-  /// The widget that represents the footer for the excluded terms list.
-  final Widget excludedTermsListFooter;
-
-  /// The widget that represents the header for the excluded terms list.
-  final Widget? excludedTermsListHeader;
-
-  /// The widget that represents the member list filter.
-  final Widget memberListFilter;
-
-  /// The sliver navigation bar that is placed first in the scrollview.
-  final Widget? navigationBar;
-
-  /// The widget that displays the reset ride calendar button.
-  final Widget resetRideCalendarButton;
-
-  /// The widget that displays the scan duration option.
-  final Widget scanDurationOption;
-
-  /// The widget that displays the app version information.
-  final Widget version;
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        if (navigationBar != null) navigationBar!,
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            memberListFilter,
-            scanDurationOption,
-            if (excludedTermsListHeader != null) excludedTermsListHeader!,
-          ]),
-        ),
-        addExcludedTermInputField,
-        excludedTermsList,
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            excludedTermsListFooter,
-            resetRideCalendarButton,
-          ]),
-        ),
-        version,
-      ],
-    );
   }
 }

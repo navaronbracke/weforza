@@ -114,6 +114,14 @@ class _EditExcludedTermInputFieldState
     formState.reset();
   }
 
+  String? _validateTerm(BuildContext context, String? value) {
+    return widget.delegate.validateTerm(
+      value,
+      S.of(context),
+      originalValue: widget.term,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SelectedExcludedTerm?>(
@@ -132,11 +140,7 @@ class _EditExcludedTermInputFieldState
                 maxLength: widget.delegate.maxLength,
                 onEditingComplete: _onEditingComplete,
                 textFieldKey: widget.textFormFieldKey,
-                validator: (value) => widget.delegate.validateTerm(
-                  value,
-                  S.of(context),
-                  originalValue: widget.term,
-                ),
+                validator: (value) => _validateTerm(context, value),
               ),
               _EditExcludedTermInputFieldButtonBar(
                 controller: selectedValue.controller,
@@ -144,6 +148,7 @@ class _EditExcludedTermInputFieldState
                 onDeletePressed: _onDeletePressed,
                 onUndoPressed: widget.selectionDelegate.clearSelection,
                 term: widget.term,
+                validator: _validateTerm,
               ),
             ],
           );
@@ -170,6 +175,7 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
     required this.onDeletePressed,
     required this.onUndoPressed,
     required this.term,
+    required this.validator,
   });
 
   /// The controller that provides updates about the current text editing value.
@@ -186,6 +192,9 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
   /// The current value of the term.
   final String term;
+
+  /// The validator for the term value.
+  final String? Function(BuildContext context, String? value) validator;
 
   @override
   Widget build(BuildContext context) {
@@ -212,19 +221,16 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       builder: (context, child) {
         final currentValue = controller.value;
 
-        final confirmButton = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: PlatformAwareWidget(
-            android: () => IconButton(
-              color: Colors.blue,
-              icon: const Icon(Icons.check),
-              onPressed: () => onConfirmPressed(currentValue),
-            ),
-            ios: () => CupertinoIconButton(
-              color: CupertinoColors.activeBlue,
-              icon: CupertinoIcons.checkmark_alt,
-              onPressed: () => onConfirmPressed(currentValue),
-            ),
+        Widget confirmButton = PlatformAwareWidget(
+          android: () => IconButton(
+            color: Colors.blue,
+            icon: const Icon(Icons.check),
+            onPressed: () => onConfirmPressed(currentValue),
+          ),
+          ios: () => CupertinoIconButton(
+            color: CupertinoColors.activeBlue,
+            icon: CupertinoIcons.checkmark_alt,
+            onPressed: () => onConfirmPressed(currentValue),
           ),
         );
 
@@ -252,10 +258,29 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
           );
         }
 
+        // Hide the confirm button if the value is invalid.
+        if (validator(context, currentValue.text) != null) {
+          confirmButton = PlatformAwareWidget(
+            android: () => const SizedBox.square(
+              dimension: kMinInteractiveDimension,
+            ),
+            ios: () => const SizedBox.square(
+              dimension: kMinInteractiveDimensionCupertino,
+            ),
+          );
+        }
+
         return Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [undoButton, confirmButton, child!],
+          children: [
+            undoButton,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: confirmButton,
+            ),
+            child!,
+          ],
         );
       },
     );

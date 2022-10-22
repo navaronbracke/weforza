@@ -146,7 +146,7 @@ class _EditExcludedTermInputFieldState
                 controller: selectedValue.controller,
                 onConfirmPressed: _onConfirmPressed,
                 onDeletePressed: _onDeletePressed,
-                onUndoPressed: widget.selectionDelegate.clearSelection,
+                onUndoPressed: widget.selectionDelegate.undoPendingEdit,
                 term: widget.term,
                 validator: _validateTerm,
               ),

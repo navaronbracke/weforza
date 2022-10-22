@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart' show TextSelection;
+import 'package:flutter/widgets.dart' show TextSelection, TextEditingValue;
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/model/selected_excluded_term.dart';
 
@@ -50,6 +50,22 @@ class SelectedExcludedTermDelegate {
 
     // Dispose the now orphaned controller and focus node from the previous term.
     previousValue?.dispose();
+  }
+
+  /// Undo the pending edit, but preserve the selected item.
+  void undoPendingEdit() {
+    final previousValue = selectedTerm;
+
+    if (previousValue == null) {
+      return;
+    }
+
+    // Reset the text editing value back to the original,
+    // and keep the cursor at the end of the text.
+    previousValue.controller.value = TextEditingValue(
+      text: previousValue.value,
+      selection: TextSelection.collapsed(offset: previousValue.value.length),
+    );
   }
 
   /// Dispose of this delegate.

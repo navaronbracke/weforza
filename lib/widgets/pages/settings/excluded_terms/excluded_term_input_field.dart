@@ -15,6 +15,7 @@ class ExcludedTermInputField extends StatelessWidget {
     required void Function() this.onEditingComplete,
     this.onTap,
     this.placeholder,
+    this.suffix,
     required GlobalKey<FormFieldState<String>> this.textFieldKey,
     required String? Function(String? value) this.validator,
   })  : initialValue = null,
@@ -31,6 +32,7 @@ class ExcludedTermInputField extends StatelessWidget {
         maxLength = null,
         placeholder = null,
         readOnly = true,
+        suffix = null,
         textFieldKey = null,
         validator = null;
 
@@ -57,6 +59,9 @@ class ExcludedTermInputField extends StatelessWidget {
 
   /// Whether the text field is read-only.
   final bool readOnly;
+
+  /// The suffix for the text field.
+  final Widget? suffix;
 
   /// The global key that is used to validate the text field.
   final GlobalKey<FormFieldState<String>>? textFieldKey;
@@ -86,6 +91,7 @@ class ExcludedTermInputField extends StatelessWidget {
           border: const UnderlineInputBorder(),
           hintText: placeholder,
           isDense: true,
+          suffixIcon: suffix,
         ),
         focusNode: focusNode,
         initialValue: initialValue,
@@ -100,25 +106,33 @@ class ExcludedTermInputField extends StatelessWidget {
         textInputAction: TextInputAction.done,
         validator: validator,
       ),
-      ios: () => CupertinoTextFormFieldRow(
-        key: textFieldKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        controller: controller,
-        decoration: const BoxDecoration(),
-        focusNode: focusNode,
-        initialValue: initialValue,
-        keyboardType: TextInputType.text,
-        maxLength: maxLength,
-        maxLines: 1,
-        onEditingComplete: onEditingComplete,
-        onTap: onTap,
-        // The excluded terms have a 15 margin on their border.
-        padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
-        placeholder: placeholder,
-        readOnly: readOnly,
-        textInputAction: TextInputAction.done,
-        validator: validator,
-      ),
+      ios: () {
+        final child = CupertinoTextFormFieldRow(
+          key: textFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: controller,
+          decoration: const BoxDecoration(),
+          focusNode: focusNode,
+          initialValue: initialValue,
+          keyboardType: TextInputType.text,
+          maxLength: maxLength,
+          maxLines: 1,
+          onEditingComplete: onEditingComplete,
+          onTap: onTap,
+          // The excluded terms have a 15 margin on their border.
+          padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
+          placeholder: placeholder,
+          readOnly: readOnly,
+          textInputAction: TextInputAction.done,
+          validator: validator,
+        );
+
+        if (suffix == null) {
+          return child;
+        }
+
+        return Row(children: [Expanded(child: child), suffix!]);
+      },
     );
   }
 }

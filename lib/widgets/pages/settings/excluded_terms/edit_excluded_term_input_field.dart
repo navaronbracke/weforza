@@ -221,54 +221,34 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       builder: (context, child) {
         final currentValue = controller.value;
 
-        Widget confirmButton = PlatformAwareWidget(
+        final isValid = validator(context, currentValue.text) == null;
+
+        final confirmButton = PlatformAwareWidget(
           android: () => IconButton(
             color: Colors.blue,
             icon: const Icon(Icons.check),
-            onPressed: () => onConfirmPressed(currentValue),
+            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
           ),
           ios: () => CupertinoIconButton(
             color: CupertinoColors.activeBlue,
             icon: CupertinoIcons.checkmark_alt,
-            onPressed: () => onConfirmPressed(currentValue),
+            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
           ),
         );
 
-        Widget undoButton = PlatformAwareWidget(
+        // The undo button is disabled if the value is the same.
+        final undoButton = PlatformAwareWidget(
           android: () => IconButton(
-            icon: const Icon(Icons.undo, color: Colors.black),
-            onPressed: onUndoPressed,
+            color: Colors.black,
+            icon: const Icon(Icons.undo),
+            onPressed: currentValue.text == term ? null : onUndoPressed,
           ),
           ios: () => CupertinoIconButton(
             color: CupertinoColors.black,
             icon: CupertinoIcons.arrow_counterclockwise,
-            onPressed: onUndoPressed,
+            onPressed: currentValue.text == term ? null : onUndoPressed,
           ),
         );
-
-        // Hide the undo button if the value is the same.
-        if (currentValue.text == term) {
-          undoButton = PlatformAwareWidget(
-            android: () => const SizedBox.square(
-              dimension: kMinInteractiveDimension,
-            ),
-            ios: () => const SizedBox.square(
-              dimension: kMinInteractiveDimensionCupertino,
-            ),
-          );
-        }
-
-        // Hide the confirm button if the value is invalid.
-        if (validator(context, currentValue.text) != null) {
-          confirmButton = PlatformAwareWidget(
-            android: () => const SizedBox.square(
-              dimension: kMinInteractiveDimension,
-            ),
-            ios: () => const SizedBox.square(
-              dimension: kMinInteractiveDimensionCupertino,
-            ),
-          );
-        }
 
         return Row(
           mainAxisSize: MainAxisSize.min,

@@ -35,8 +35,8 @@ class PlatformAwareIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => Icon(androidIcon, color: androidColor, size: size),
-      ios: () => Icon(iosIcon, color: iosColor, size: size),
+      android: (_) => Icon(androidIcon, color: androidColor, size: size),
+      ios: (_) => Icon(iosIcon, color: iosColor, size: size),
     );
   }
 }

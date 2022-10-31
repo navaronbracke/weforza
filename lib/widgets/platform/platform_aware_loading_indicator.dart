@@ -9,8 +9,8 @@ class PlatformAwareLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => const CircularProgressIndicator(),
-      ios: () => const CupertinoActivityIndicator(),
+      android: (_) => const CircularProgressIndicator(),
+      ios: (_) => const CupertinoActivityIndicator(),
     );
   }
 }

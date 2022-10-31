@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/theme.dart';
 
-// TODO: remove the showDialog() / showCupertinoDialog() uses in the rest of the app
-// TODO: rewrite the old dialogs to use the new dialogs defined below
-
 /// Show a dialog widget that adapts itself to the current platform.
 ///
 /// If [barrierDismissible] is false, tapping the barrier
@@ -57,7 +54,7 @@ class WeforzaAlertDialog extends StatelessWidget {
   /// Construct a [WeforzaAlertDialog] that uses a confirm and cancel button.
   factory WeforzaAlertDialog.defaultButtons({
     required String confirmButtonLabel,
-    required String description,
+    required Widget description,
     required bool isDestructive,
     required void Function() onConfirmPressed,
     required String title,
@@ -89,7 +86,9 @@ class WeforzaAlertDialog extends StatelessWidget {
   final Widget Function(BuildContext, TargetPlatform) confirmButtonBuilder;
 
   /// The description for the dialog.
-  final String description;
+  ///
+  /// This is usually a [Text] widget.
+  final Widget description;
 
   /// The title for the dialog.
   final String title;
@@ -171,14 +170,14 @@ class WeforzaAlertDialog extends StatelessWidget {
         return AlertDialog(
           actions: actions,
           actionsAlignment: actionsAlignment,
-          content: Text(description, softWrap: true),
+          content: description,
           title: Text(title, softWrap: true),
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return CupertinoAlertDialog(
           actions: actions,
-          content: Text(description, softWrap: true),
+          content: description,
           title: Text(title, softWrap: true),
         );
     }
@@ -203,11 +202,15 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
   final String confirmButtonLabel;
 
   /// The description for the dialog.
-  final String description;
+  ///
+  /// This is usually a [Text] widget.
+  final Widget description;
 
   /// The description that is displayed when [future]
   /// returned an error.
-  final String errorDescription;
+  ///
+  /// This is usually a [Text] widget.
+  final Widget errorDescription;
 
   /// The future that represents the underlying asynchronous action.
   final Future<T>? future;
@@ -219,7 +222,9 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
   final void Function() onConfirmPressed;
 
   /// The description that is used when [future] is computing its result.
-  final String pendingDescription;
+  ///
+  /// This is usually a [Text] widget.
+  final Widget pendingDescription;
 
   /// The title for the dialog.
   final String title;

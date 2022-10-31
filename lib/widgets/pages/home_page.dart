@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
+      android: _buildAndroidWidget,
+      ios: _buildIosWidget,
     );
   }
 

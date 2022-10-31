@@ -164,7 +164,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         ),
         resetRideCalendarButton: const Padding(
           padding: EdgeInsets.fromLTRB(24, 56, 24, 0),
-          child: ResetRideCalendarButton(),
+          child: Center(child: ResetRideCalendarButton()),
         ),
         scanDurationOption: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),

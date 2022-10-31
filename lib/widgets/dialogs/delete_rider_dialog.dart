@@ -32,7 +32,7 @@ class _DeleteRiderDialogState extends ConsumerState<DeleteRiderDialog> {
             return;
           }
 
-          // Pop both the dialog and the detail screen.
+          // Pop both the dialog and the rider detail screen.
           navigator.pop();
           navigator.pop();
         });

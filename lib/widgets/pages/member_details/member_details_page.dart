@@ -5,7 +5,8 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_member_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/member_name.dart';
@@ -22,6 +23,13 @@ class MemberDetailsPage extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => MemberForm(member: member)),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context) {
+    showWeforzaDialog(
+      context,
+      builder: (_) => const DeleteRiderDialog(),
     );
   }
 
@@ -54,10 +62,7 @@ class MemberDetailsPage extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () => showDialog(
-              context: context,
-              builder: (_) => const DeleteMemberDialog(),
-            ),
+            onPressed: () => _showDeleteDialog(context),
           ),
         ],
       ),
@@ -105,10 +110,7 @@ class MemberDetailsPage extends StatelessWidget {
                 CupertinoIconButton(
                   color: CupertinoColors.systemRed,
                   icon: CupertinoIcons.delete,
-                  onPressed: () => showCupertinoDialog(
-                    context: context,
-                    builder: (_) => const DeleteMemberDialog(),
-                  ),
+                  onPressed: () => _showDeleteDialog(context),
                 ),
               ],
             ),

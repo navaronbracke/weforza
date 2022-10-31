@@ -60,7 +60,6 @@ class WeforzaAlertDialog extends StatelessWidget {
     required String title,
   }) {
     return WeforzaAlertDialog(
-      actionsAlignment: null,
       cancelButtonBuilder: defaultCancelButton,
       confirmButtonBuilder: (context, platform) => _buildDefaultConfirmButton(
         context,
@@ -291,7 +290,6 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
           },
           child: WeforzaAlertDialog(
             actionsAlignment: MainAxisAlignment.center,
-            cancelButtonBuilder: null,
             confirmButtonBuilder: _buildPendingAction,
             description: pendingDescription,
             title: title,

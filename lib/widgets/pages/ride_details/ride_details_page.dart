@@ -7,7 +7,8 @@ import 'package:weforza/model/ride_details_page_options.dart';
 import 'package:weforza/riverpod/member/selected_member_attending_count_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_ride_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_ride_dialog.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_page.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_details_attendees_list.dart';
@@ -132,27 +133,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   }
 
   void _onDeleteRideOptionSelected(BuildContext context) {
-    final targetPlatform = Theme.of(context).platform;
-
-    switch (targetPlatform) {
-      case TargetPlatform.android:
-        showDialog(
-          context: context,
-          builder: (_) => const DeleteRideDialog(),
-        );
-        break;
-      case TargetPlatform.iOS:
-        showCupertinoDialog(
-          context: context,
-          builder: (_) => const DeleteRideDialog(),
-        );
-        break;
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        break;
-    }
+    showWeforzaDialog(context, builder: (_) => const DeleteRideDialog());
   }
 
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {

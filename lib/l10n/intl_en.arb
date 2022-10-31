@@ -27,6 +27,8 @@
 	"DeleteRide": "Delete Ride",
 	"DeleteRider": "Delete Rider",
 	"DeleteRiderDescription": "Are you sure that you want to delete this rider?",
+	"DeleteRiderErrorDescription": "Something went wrong while trying to delete the rider",
+	"DeleteRiderPendingDescription": "The rider is being deleted",
 	"DeselectRider": "Deselect Rider",
 	"Details": "Details",
 	"DeviceCadenceMeter": "Cadence meter",

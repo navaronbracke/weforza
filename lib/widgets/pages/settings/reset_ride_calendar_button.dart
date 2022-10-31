@@ -20,12 +20,12 @@ class ResetRideCalendarButton extends ConsumerWidget {
 
   Widget _buildButton(BuildContext context, {bool enabled = true}) {
     return PlatformAwareWidget(
-      android: () => ElevatedButton(
+      android: (context) => ElevatedButton(
         style: AppTheme.desctructiveAction.elevatedButtonTheme,
         onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
         child: Text(S.of(context).ResetRideCalendar),
       ),
-      ios: () => CupertinoButton(
+      ios: (context) => CupertinoButton(
         borderRadius: BorderRadius.zero,
         padding: EdgeInsets.zero,
         onPressed: enabled ? () => _showResetCalendarDialog(context) : null,

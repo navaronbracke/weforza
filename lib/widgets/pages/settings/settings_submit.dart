@@ -14,11 +14,11 @@ class SettingsSubmit extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: PlatformAwareWidget(
-        android: () => Icon(
+        android: (_) => Icon(
           Icons.warning,
           color: Colors.orange.shade200,
         ),
-        ios: () => const Icon(
+        ios: (_) => const Icon(
           CupertinoIcons.exclamationmark_triangle_fill,
           color: CupertinoColors.activeOrange,
         ),
@@ -28,11 +28,11 @@ class SettingsSubmit extends StatelessWidget {
 
   Widget _buildSubmitButton() {
     return PlatformAwareWidget(
-      android: () => IconButton(
+      android: (_) => IconButton(
         icon: const Icon(Icons.done),
         onPressed: onSaveSettings,
       ),
-      ios: () => CupertinoIconButton(
+      ios: (_) => CupertinoIconButton(
         icon: CupertinoIcons.checkmark_alt,
         onPressed: onSaveSettings,
       ),
@@ -54,10 +54,10 @@ class SettingsSubmit extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: Center(
                 child: PlatformAwareWidget(
-                  android: () => const CircularProgressIndicator(
+                  android: (_) => const CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-                  ios: () => const CupertinoActivityIndicator(),
+                  ios: (_) => const CupertinoActivityIndicator(),
                 ),
               ),
             );

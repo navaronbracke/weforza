@@ -64,7 +64,7 @@ class WeforzaAlertDialog extends StatelessWidget {
   }) {
     return WeforzaAlertDialog(
       actionsAlignment: null,
-      cancelButtonBuilder: _buildDefaultCancelButton,
+      cancelButtonBuilder: defaultCancelButton,
       confirmButtonBuilder: (context, platform) => _buildDefaultConfirmButton(
         context,
         isDestructive,
@@ -94,7 +94,11 @@ class WeforzaAlertDialog extends StatelessWidget {
   /// The title for the dialog.
   final String title;
 
-  static Widget _buildDefaultCancelButton(
+  /// Build the default cancel button.
+  ///
+  /// Returns a button with the default `Cancel` label
+  /// that closes the dialog when pressed.
+  static Widget defaultCancelButton(
     BuildContext context,
     TargetPlatform platform,
   ) {

@@ -48,7 +48,7 @@ class ManualSelectionButtonBar extends StatelessWidget {
     );
   }
 
-  Widget _buildIosLayout() {
+  Widget _buildIosLayout(BuildContext context) {
     return CupertinoBottomBar(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -83,7 +83,7 @@ class ManualSelectionButtonBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
+      android: _buildAndroidLayout,
       ios: _buildIosLayout,
     );
   }
@@ -135,8 +135,8 @@ class _RidersIcon extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 4),
       child: PlatformAwareWidget(
-        android: () => const Icon(Icons.people, color: Colors.white),
-        ios: () => const Icon(
+        android: (_) => const Icon(Icons.people, color: Colors.white),
+        ios: (_) => const Icon(
           CupertinoIcons.person_2_fill,
           color: CupertinoColors.activeBlue,
         ),
@@ -157,7 +157,7 @@ class _ScannedRidersLabel extends StatelessWidget {
     const textAlign = TextAlign.right;
 
     return PlatformAwareWidget(
-      android: () => Text(
+      android: (_) => Text(
         label,
         maxLines: maxLines,
         overflow: overflow,
@@ -165,7 +165,7 @@ class _ScannedRidersLabel extends StatelessWidget {
         style: const TextStyle(color: Colors.white),
         textAlign: textAlign,
       ),
-      ios: () => Text(
+      ios: (_) => Text(
         label,
         maxLines: maxLines,
         overflow: overflow,

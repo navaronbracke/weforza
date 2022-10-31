@@ -41,15 +41,13 @@ Future<T?> showWeforzaDialog<T>(
 /// This widget represents an alert dialog
 /// that adapts itself to the current platform.
 class WeforzaAlertDialog extends StatelessWidget {
-  /// The default constructor.
-  const WeforzaAlertDialog({
-    super.key,
-    this.actionsAlignment,
+  /// The private constructor.
+  const WeforzaAlertDialog._({
     this.cancelButtonBuilder,
     required this.confirmButtonBuilder,
     required this.description,
     required this.title,
-  });
+  }) : actionsAlignment = null;
 
   /// Construct a [WeforzaAlertDialog] that uses a confirm and cancel button.
   factory WeforzaAlertDialog.defaultButtons({
@@ -59,7 +57,7 @@ class WeforzaAlertDialog extends StatelessWidget {
     required void Function() onConfirmPressed,
     required String title,
   }) {
-    return WeforzaAlertDialog(
+    return WeforzaAlertDialog._(
       cancelButtonBuilder: defaultCancelButton,
       confirmButtonBuilder: (context, platform) => _buildDefaultConfirmButton(
         context,
@@ -72,6 +70,15 @@ class WeforzaAlertDialog extends StatelessWidget {
       title: title,
     );
   }
+
+  /// Construct a [WeforzaAlertDialog] that uses a single button.
+  const WeforzaAlertDialog.singleButton({
+    super.key,
+    this.actionsAlignment,
+    required this.confirmButtonBuilder,
+    required this.description,
+    required this.title,
+  }) : cancelButtonBuilder = null;
 
   /// The alignment for the dialog actions.
   ///
@@ -288,7 +295,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
           onTap: () {
             // Consume the onTap gesture.
           },
-          child: WeforzaAlertDialog(
+          child: WeforzaAlertDialog.singleButton(
             actionsAlignment: MainAxisAlignment.center,
             confirmButtonBuilder: _buildPendingAction,
             description: pendingDescription,
@@ -312,7 +319,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
             final error = snapshot.error;
 
             if (error != null) {
-              return WeforzaAlertDialog(
+              return WeforzaAlertDialog.singleButton(
                 confirmButtonBuilder: _buildDismissErrorAction,
                 description: errorDescription,
                 title: title,

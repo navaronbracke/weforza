@@ -347,7 +347,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
         : translator.EditMember;
 
     return PlatformAwareWidget(
-      android: () => FormSubmitButton(
+      android: (context) => FormSubmitButton(
         errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
         label: submitButtonLabel,
         future: _future,
@@ -359,7 +359,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
           }
         },
       ),
-      ios: () => FormSubmitButton(
+      ios: (context) => FormSubmitButton(
         errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
         label: submitButtonLabel,
         future: _future,
@@ -385,8 +385,8 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIOSLayout(context),
+      android: _buildAndroidLayout,
+      ios: _buildIOSLayout,
     );
   }
 

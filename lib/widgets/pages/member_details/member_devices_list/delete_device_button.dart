@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_device_dialog.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
@@ -18,6 +19,17 @@ class DeleteDeviceButton extends StatelessWidget {
   /// The handler that is invoked after a device was deleted.
   final void Function() onDeviceDeleted;
 
+  void _onDeletePressed(BuildContext context) async {
+    final result = await showWeforzaDialog<bool>(
+      context,
+      builder: (_) => DeleteDeviceDialog(index: index),
+    );
+
+    if (result ?? false) {
+      onDeviceDeleted();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
@@ -25,30 +37,12 @@ class DeleteDeviceButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => IconButton(
         icon: Icon(Icons.delete, color: errorStyle.color),
-        onPressed: () async {
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (_) => DeleteDeviceDialog(index: index),
-          );
-
-          if (result ?? false) {
-            onDeviceDeleted();
-          }
-        },
+        onPressed: () => _onDeletePressed(context),
       ),
       ios: () => CupertinoIconButton(
         color: CupertinoColors.systemRed,
         icon: CupertinoIcons.delete,
-        onPressed: () async {
-          final result = await showCupertinoDialog<bool>(
-            context: context,
-            builder: (_) => DeleteDeviceDialog(index: index),
-          );
-
-          if (result ?? false) {
-            onDeviceDeleted();
-          }
-        },
+        onPressed: () => _onDeletePressed(context),
       ),
     );
   }

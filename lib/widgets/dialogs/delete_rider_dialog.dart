@@ -2,16 +2,17 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
-class DeleteMemberDialog extends ConsumerStatefulWidget {
-  const DeleteMemberDialog({super.key});
+/// This widget represents a dialog for deleting a rider.
+class DeleteRiderDialog extends ConsumerStatefulWidget {
+  const DeleteRiderDialog({super.key});
 
   @override
-  DeleteMemberDialogState createState() => DeleteMemberDialogState();
+  ConsumerState<DeleteRiderDialog> createState() => _DeleteRiderDialogState();
 }
 
-class DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
+class _DeleteRiderDialogState extends ConsumerState<DeleteRiderDialog> {
   Future<void>? future;
 
   @override
@@ -19,26 +20,27 @@ class DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      title: translator.DeleteRider,
-      description: translator.MemberDeleteDialogDescription,
-      errorDescription: translator.GenericError,
+      description: translator.DeleteRiderDescription,
+      errorDescription: translator.DeleteRiderErrorDescription,
       future: future,
       onDeletePressed: () {
         final notifier = ref.read(selectedMemberProvider.notifier);
+        final navigator = Navigator.of(context);
 
         future = notifier.deleteMember().then((_) {
           if (!mounted) {
             return;
           }
 
-          final navigator = Navigator.of(context);
-          // Pop both the dialog and the detail screen.
+          // Pop both the dialog and the rider detail screen.
           navigator.pop();
           navigator.pop();
         });
 
         setState(() {});
       },
+      pendingDescription: translator.DeleteRiderPendingDescription,
+      title: translator.DeleteRider,
     );
   }
 }

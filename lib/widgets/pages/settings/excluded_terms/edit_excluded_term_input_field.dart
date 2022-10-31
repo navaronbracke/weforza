@@ -4,7 +4,8 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/selected_excluded_term.dart';
 import 'package:weforza/model/selected_excluded_term_delegate.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_excluded_term_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -72,34 +73,13 @@ class _EditExcludedTermInputFieldState
   }
 
   void _onDeletePressed(BuildContext context) async {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        final result = await showDialog<bool>(
-          context: context,
-          builder: (context) => DeleteExcludedTermDialog(term: widget.term),
-        );
+    final result = await showWeforzaDialog<bool>(
+      context,
+      builder: (_) => DeleteExcludedTermDialog(term: widget.term),
+    );
 
-        if (result ?? false) {
-          widget.delegate.deleteTerm(widget.term);
-        }
-
-        break;
-      case TargetPlatform.iOS:
-        final result = await showCupertinoDialog<bool>(
-          context: context,
-          builder: (context) => DeleteExcludedTermDialog(term: widget.term),
-        );
-
-        if (result ?? false) {
-          widget.delegate.deleteTerm(widget.term);
-        }
-
-        break;
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        break;
+    if (result ?? false) {
+      widget.delegate.deleteTerm(widget.term);
     }
   }
 

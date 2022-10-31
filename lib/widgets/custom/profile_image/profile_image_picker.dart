@@ -47,13 +47,13 @@ class ProfileImagePicker extends StatelessWidget {
           onTap: delegate.pickImage,
           onLongPress: delegate.clearImage,
           child: PlatformAwareWidget(
-            android: () => _AsyncProfileImage(
+            android: (_) => _AsyncProfileImage(
               future: value.image,
               icon: Icons.camera_alt,
               loading: loading,
               size: size,
             ),
-            ios: () => _AsyncProfileImage(
+            ios: (_) => _AsyncProfileImage(
               future: value.image,
               icon: CupertinoIcons.camera_fill,
               loading: loading,

@@ -12,7 +12,7 @@ class ExcludedTermsListEmpty extends StatelessWidget {
     final text = S.of(context).NoDisallowedWords;
 
     return PlatformAwareWidget(
-      android: () => Padding(
+      android: (context) => Padding(
         padding: const EdgeInsets.all(4),
         child: Text(
           text,
@@ -20,7 +20,7 @@ class ExcludedTermsListEmpty extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-      ios: () {
+      ios: (context) {
         final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
 
         return Container(

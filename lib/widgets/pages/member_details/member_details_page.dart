@@ -36,8 +36,8 @@ class MemberDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIOSLayout(context),
+      android: _buildAndroidLayout,
+      ios: _buildIOSLayout,
     );
   }
 

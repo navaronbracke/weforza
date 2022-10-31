@@ -166,11 +166,11 @@ class _ScanResultsListItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 4),
               child: PlatformAwareWidget(
-                android: () => const Icon(
+                android: (_) => const Icon(
                   Icons.device_unknown,
                   color: Colors.grey,
                 ),
-                ios: () => const Icon(
+                ios: (_) => const Icon(
                   Icons.device_unknown,
                   color: CupertinoColors.systemGrey,
                 ),

@@ -182,7 +182,7 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       animation: controller,
       // The delete button is always shown.
       child: PlatformAwareWidget(
-        android: () {
+        android: (context) {
           return IconButton(
             icon: Icon(
               Icons.delete,
@@ -192,7 +192,7 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
             padding: EdgeInsets.zero,
           );
         },
-        ios: () => CupertinoIconButton(
+        ios: (context) => CupertinoIconButton(
           color: CupertinoColors.systemRed,
           icon: CupertinoIcons.delete,
           onPressed: () => onDeletePressed(context),
@@ -204,12 +204,12 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         final isValid = validator(context, currentValue.text) == null;
 
         final confirmButton = PlatformAwareWidget(
-          android: () => IconButton(
+          android: (_) => IconButton(
             color: Colors.blue,
             icon: const Icon(Icons.check),
             onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
           ),
-          ios: () => CupertinoIconButton(
+          ios: (_) => CupertinoIconButton(
             color: CupertinoColors.activeBlue,
             icon: CupertinoIcons.checkmark_alt,
             onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
@@ -218,12 +218,12 @@ class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
         // The undo button is disabled if the value is the same.
         final undoButton = PlatformAwareWidget(
-          android: () => IconButton(
+          android: (_) => IconButton(
             color: Colors.black,
             icon: const Icon(Icons.undo),
             onPressed: currentValue.text == term ? null : onUndoPressed,
           ),
-          ios: () => CupertinoIconButton(
+          ios: (_) => CupertinoIconButton(
             color: CupertinoColors.black,
             icon: CupertinoIcons.arrow_counterclockwise,
             onPressed: currentValue.text == term ? null : onUndoPressed,

@@ -35,11 +35,11 @@ class DeleteDeviceButton extends StatelessWidget {
     final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
 
     return PlatformAwareWidget(
-      android: () => IconButton(
+      android: (context) => IconButton(
         icon: Icon(Icons.delete, color: errorStyle.color),
         onPressed: () => _onDeletePressed(context),
       ),
-      ios: () => CupertinoIconButton(
+      ios: (context) => CupertinoIconButton(
         color: CupertinoColors.systemRed,
         icon: CupertinoIcons.delete,
         onPressed: () => _onDeletePressed(context),

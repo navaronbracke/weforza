@@ -158,7 +158,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final translator = S.of(context);
 
     return PlatformAwareWidget(
-      android: () => TextFormField(
+      android: (_) => TextFormField(
         focusNode: _deviceNameFocusNode,
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.text,
@@ -183,7 +183,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
-      ios: () => CupertinoFormField(
+      ios: (_) => CupertinoFormField(
         controller: _deviceNameController,
         errorController: _deviceNameErrorController,
         focusNode: _deviceNameFocusNode,
@@ -219,7 +219,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
     return PlatformAwareWidget(
-      android: () => FormSubmitButton(
+      android: (context) => FormSubmitButton(
         errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
         label: submitButtonLabel,
         future: _future,
@@ -231,7 +231,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
           }
         },
       ),
-      ios: () => FormSubmitButton(
+      ios: (context) => FormSubmitButton(
         errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
         label: submitButtonLabel,
         future: _future,
@@ -257,8 +257,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIosLayout(context),
+      android: _buildAndroidLayout,
+      ios: _buildIosLayout,
     );
   }
 

@@ -30,8 +30,8 @@ class FileExtensionSelectionState extends State<FileExtensionSelection> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
+      android: _buildAndroidWidget,
+      ios: _buildIosWidget,
     );
   }
 

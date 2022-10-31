@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
 class DeleteDeviceDialog extends ConsumerStatefulWidget {
   const DeleteDeviceDialog({super.key, required this.index});
@@ -11,10 +11,10 @@ class DeleteDeviceDialog extends ConsumerStatefulWidget {
   final int index;
 
   @override
-  DeleteDeviceDialogState createState() => DeleteDeviceDialogState();
+  ConsumerState<DeleteDeviceDialog> createState() => _DeleteDeviceDialogState();
 }
 
-class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
+class _DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
   Future<void>? future;
 
   @override
@@ -22,21 +22,24 @@ class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      title: translator.DeleteDevice,
       description: translator.DeleteDeviceDescription,
-      errorDescription: translator.GenericError,
+      errorDescription: translator.DeleteDeviceErrorDescription,
       future: future,
       onDeletePressed: () {
         final notifier = ref.read(selectedMemberDevicesProvider.notifier);
 
         future = notifier.deleteDevice(widget.index).then((_) {
           if (mounted) {
+            // Emit a result that indicates that the device was deleted,
+            // so that it can be removed from the list of devices.
             Navigator.of(context).pop(true);
           }
         });
 
         setState(() {});
       },
+      pendingDescription: translator.DeleteDevicePendingDescription,
+      title: translator.DeleteDevice,
     );
   }
 }

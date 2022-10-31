@@ -28,11 +28,11 @@ class ManualSelectionListEmpty extends StatelessWidget {
           ),
         ),
         PlatformAwareWidget(
-          android: () => ElevatedButton(
+          android: (context) => ElevatedButton(
             child: Text(translator.GoBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          ios: () => CupertinoButton.filled(
+          ios: (context) => CupertinoButton.filled(
             child: Text(
               translator.GoBack,
               style: const TextStyle(color: Colors.white),

@@ -31,7 +31,7 @@ class ShowScannedResultsToggle extends StatelessWidget {
         final showScannedResults = snapshot.data!;
 
         return PlatformAwareWidget(
-          android: () {
+          android: (_) {
             const theme = AppTheme.manualSelectionBottomBar;
 
             return Switch(
@@ -41,7 +41,7 @@ class ShowScannedResultsToggle extends StatelessWidget {
               value: showScannedResults,
             );
           },
-          ios: () => CupertinoSwitch(
+          ios: (_) => CupertinoSwitch(
             onChanged: onChanged,
             value: showScannedResults,
           ),

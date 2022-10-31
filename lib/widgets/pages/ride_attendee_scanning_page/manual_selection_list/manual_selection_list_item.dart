@@ -5,6 +5,8 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
+import 'package:weforza/widgets/dialogs/unselect_scanned_rider_dialog.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents an item in the manual selection list.
@@ -76,7 +78,14 @@ class _ManualSelectionListItemState
 
         final accepted = await widget.delegate.toggleSelectionForActiveMember(
           ScannedRideAttendee(uuid: widget.item.uuid, isScanned: isScanned),
-          () => _showConfirmUnselectingScannedItemDialog(context),
+          () async {
+            final result = await showWeforzaDialog<bool>(
+              context,
+              builder: (_) => const UnselectScannedRiderDialog(),
+            );
+
+            return result ?? false;
+          },
         );
 
         if (!mounted || !accepted) {

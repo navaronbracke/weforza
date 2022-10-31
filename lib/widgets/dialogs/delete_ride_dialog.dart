@@ -2,16 +2,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
+import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
 class DeleteRideDialog extends ConsumerStatefulWidget {
   const DeleteRideDialog({super.key});
 
   @override
-  DeleteRideDialogState createState() => DeleteRideDialogState();
+  ConsumerState<DeleteRideDialog> createState() => _DeleteRideDialogState();
 }
 
-class DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
+class _DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
   Future<void>? future;
 
   @override
@@ -19,26 +19,27 @@ class DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      title: translator.DeleteRide,
-      description: translator.RideDeleteDialogDescription,
-      errorDescription: translator.GenericError,
+      description: translator.DeleteRideDescription,
+      errorDescription: translator.DeleteRideErrorDescription,
       future: future,
       onDeletePressed: () {
         final notifier = ref.read(selectedRideProvider.notifier);
+        final navigator = Navigator.of(context);
 
         future = notifier.deleteRide().then((_) {
           if (!mounted) {
             return;
           }
 
-          final navigator = Navigator.of(context);
-          // Pop both the dialog and the detail screen.
+          // Pop both the dialog and the ride detail screen.
           navigator.pop();
           navigator.pop();
         });
 
         setState(() {});
       },
+      pendingDescription: translator.DeleteRidePendingDescription,
+      title: translator.DeleteRide,
     );
   }
 }

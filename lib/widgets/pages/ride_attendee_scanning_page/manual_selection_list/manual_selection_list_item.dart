@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
+import 'package:weforza/widgets/dialogs/unselect_scanned_rider_dialog.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents an item in the manual selection list.
@@ -50,66 +50,6 @@ class _ManualSelectionListItemState
     return null;
   }
 
-  /// Show a confirmation dialog for unselecting a scanned item.
-  /// Unselecting a scanned item is a destructive operation since it reduces
-  /// the amount of items that have been automatically resolved during a device scan.
-  ///
-  /// Therefor showing a dialog is preferred over just allowing the item to be unselected.
-  Future<bool?> _showConfirmUnselectingScannedItemDialog(BuildContext context) {
-    final translator = S.of(context);
-
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.iOS:
-        return showCupertinoDialog<bool>(
-          context: context,
-          builder: (_) => CupertinoAlertDialog(
-            title: Text(translator.UncheckRiderTitle),
-            content: Text(translator.UncheckRiderDescription),
-            actions: [
-              CupertinoDialogAction(
-                isDestructiveAction: true,
-                child: Text(translator.Uncheck),
-                onPressed: () => Navigator.of(context).pop(true),
-              ),
-              CupertinoDialogAction(
-                child: Text(translator.Cancel),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-            ],
-          ),
-        );
-      case TargetPlatform.android:
-        return showDialog<bool>(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(translator.UncheckRiderTitle),
-            content: Text(translator.UncheckRiderDescription),
-            actions: [
-              TextButton(
-                child: Text(
-                  translator.Uncheck,
-                  textAlign: TextAlign.end,
-                  style: AppTheme.desctructiveAction.androidDefaultErrorStyle,
-                ),
-                onPressed: () => Navigator.of(context).pop(true),
-              ),
-              TextButton(
-                child: Text(translator.Cancel, textAlign: TextAlign.end),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-            ],
-          ),
-        );
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.macOS:
-      case TargetPlatform.windows:
-        // For unsupported platforms,
-        // allow deselecting the item without a dialog.
-        return Future<bool?>.value();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
@@ -138,7 +78,14 @@ class _ManualSelectionListItemState
 
         final accepted = await widget.delegate.toggleSelectionForActiveMember(
           ScannedRideAttendee(uuid: widget.item.uuid, isScanned: isScanned),
-          () => _showConfirmUnselectingScannedItemDialog(context),
+          () async {
+            final result = await showWeforzaDialog<bool>(
+              context,
+              builder: (_) => const UnselectScannedRiderDialog(),
+            );
+
+            return result ?? false;
+          },
         );
 
         if (!mounted || !accepted) {

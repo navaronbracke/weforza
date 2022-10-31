@@ -12,11 +12,14 @@ class MemberDevicesListHeader extends StatelessWidget {
     final child = Text(S.of(context).Devices, style: theme.headerStyle);
 
     return PlatformAwareWidget(
-      android: () => Padding(
+      android: (_) => Padding(
         padding: const EdgeInsets.only(top: 4),
         child: child,
       ),
-      ios: () => Padding(padding: const EdgeInsets.only(top: 12), child: child),
+      ios: (_) => Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: child,
+      ),
     );
   }
 }

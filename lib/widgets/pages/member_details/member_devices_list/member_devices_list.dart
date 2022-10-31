@@ -99,7 +99,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: PlatformAwareWidget(
-              android: () => TextButton(
+              android: (context) => TextButton(
                 onPressed: () {
                   final selectedMember = ref.read(selectedMemberProvider);
 
@@ -107,7 +107,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
                 },
                 child: Text(S.of(context).AddDevice),
               ),
-              ios: () => CupertinoButton.filled(
+              ios: (context) => CupertinoButton.filled(
                 onPressed: () {
                   final selectedMember = ref.read(selectedMemberProvider);
 

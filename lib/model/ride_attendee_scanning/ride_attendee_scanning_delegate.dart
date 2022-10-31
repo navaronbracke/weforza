@@ -503,7 +503,7 @@ class RideAttendeeScanningDelegate {
   /// Returns whether the selection was updated.
   Future<bool> toggleSelectionForActiveMember(
     ScannedRideAttendee item,
-    Future<bool?> Function() requestUnselectConfirmation,
+    Future<bool> Function() requestUnselectConfirmation,
   ) async {
     if (_selectionLocked) {
       return false;
@@ -523,7 +523,7 @@ class RideAttendeeScanningDelegate {
       final confirmation = await requestUnselectConfirmation();
 
       // Abort when the confirmation was negative.
-      if (confirmation == null || !confirmation) {
+      if (!confirmation) {
         return false;
       }
     }

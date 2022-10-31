@@ -150,12 +150,12 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
     );
 
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(
+      android: (context) => _buildAndroidLayout(
         context,
         scannedAttendees: scannedAttendees,
         total: total,
       ),
-      ios: () => _buildIosLayout(
+      ios: (context) => _buildIosLayout(
         context,
         scannedAttendees: scannedAttendees,
         total: total,

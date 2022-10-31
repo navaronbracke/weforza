@@ -22,11 +22,11 @@ class AddRideCalendar extends StatelessWidget {
 
     return DatePicker(
       backButton: PlatformAwareWidget(
-        android: () => IconButton(
+        android: (_) => IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: calendarDelegate.goBackOneMonth,
         ),
-        ios: () => CupertinoIconButton(
+        ios: (_) => CupertinoIconButton(
           icon: CupertinoIcons.chevron_left,
           onPressed: calendarDelegate.goBackOneMonth,
         ),
@@ -46,11 +46,11 @@ class AddRideCalendar extends StatelessWidget {
       },
       delegate: calendarDelegate,
       forwardButton: PlatformAwareWidget(
-        android: () => IconButton(
+        android: (_) => IconButton(
           icon: const Icon(Icons.arrow_forward),
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
-        ios: () => CupertinoIconButton(
+        ios: (_) => CupertinoIconButton(
           icon: CupertinoIcons.chevron_right,
           onPressed: calendarDelegate.goForwardOneMonth,
         ),

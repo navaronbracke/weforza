@@ -44,7 +44,7 @@ class ScanDurationOption extends StatelessWidget {
     final translator = S.of(context);
 
     return PlatformAwareWidget(
-      android: () => Column(
+      android: (context) => Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -69,7 +69,7 @@ class ScanDurationOption extends StatelessWidget {
           Center(child: _buildCurrentDurationLabel()),
         ],
       ),
-      ios: () => CupertinoFormRow(
+      ios: (_) => CupertinoFormRow(
         helper: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Row(

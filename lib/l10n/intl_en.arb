@@ -24,7 +24,7 @@
 	"DeleteDeviceErrorDescription": "Something went wrong while trying to delete the device",
 	"DeleteDevicePendingDescription": "The device is being deleted",
 	"DeleteDisallowedWord": "Delete disallowed word",
-	"DeleteDisallowedWordDescription": "Are you sure that you want to delete the disallowed word '{term}'?",
+	"DeleteDisallowedWordDescription": "Are you sure that you want to delete the disallowed word '|term|' ?",
 	"DeleteRide": "Delete Ride",
 	"DeleteRideDescription": "Are you sure that you want to delete this ride?",
 	"DeleteRideErrorDescription": "Something went wrong while trying to delete the ride",

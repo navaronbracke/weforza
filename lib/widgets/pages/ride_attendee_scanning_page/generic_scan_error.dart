@@ -83,11 +83,11 @@ class BluetoothDisabledError extends StatelessWidget {
       errorMessage: translator.ScanAbortedBluetoothDisabled,
       iosIcon: Icons.bluetooth_disabled,
       primaryButton: PlatformAwareWidget(
-        android: () => ElevatedButton(
+        android: (_) => ElevatedButton(
           onPressed: () => AppSettings.openBluetoothSettings(),
           child: Text(translator.GoToSettings),
         ),
-        ios: () => CupertinoButton.filled(
+        ios: (_) => CupertinoButton.filled(
           onPressed: () => AppSettings.openBluetoothSettings(),
           child: Text(
             translator.GoToSettings,
@@ -96,11 +96,11 @@ class BluetoothDisabledError extends StatelessWidget {
         ),
       ),
       secondaryButton: PlatformAwareWidget(
-        android: () => TextButton(
+        android: (_) => TextButton(
           onPressed: onRetry,
           child: Text(translator.RetryScan),
         ),
-        ios: () => CupertinoButton(
+        ios: (_) => CupertinoButton(
           onPressed: onRetry,
           child: Text(
             translator.RetryScan,
@@ -125,11 +125,11 @@ class GenericScanError extends StatelessWidget {
       errorMessage: translator.GenericError,
       iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
       primaryButton: PlatformAwareWidget(
-        android: () => ElevatedButton(
+        android: (context) => ElevatedButton(
           child: Text(translator.GoBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        ios: () => CupertinoButton.filled(
+        ios: (context) => CupertinoButton.filled(
           child: Text(
             translator.GoBackToDetailPage,
             style: const TextStyle(color: Colors.white),
@@ -156,11 +156,11 @@ class PermissionDeniedError extends StatelessWidget {
       errorMessage: translator.ScanAbortedPermissionDenied,
       iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
       primaryButton: PlatformAwareWidget(
-        android: () => ElevatedButton(
+        android: (_) => ElevatedButton(
           child: Text(translator.GoToSettings),
           onPressed: () => AppSettings.openAppSettings(),
         ),
-        ios: () => CupertinoButton.filled(
+        ios: (_) => CupertinoButton.filled(
           child: Text(
             translator.GoToSettings,
             style: const TextStyle(color: Colors.white),
@@ -169,11 +169,11 @@ class PermissionDeniedError extends StatelessWidget {
         ),
       ),
       secondaryButton: PlatformAwareWidget(
-        android: () => TextButton(
+        android: (context) => TextButton(
           child: Text(translator.GoBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        ios: () => CupertinoButton(
+        ios: (context) => CupertinoButton(
           child: Text(
             translator.GoBack,
             style: const TextStyle(color: CupertinoColors.activeBlue),

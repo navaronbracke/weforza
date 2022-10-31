@@ -181,8 +181,8 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
+      android: _buildAndroidWidget,
+      ios: _buildIosWidget,
     );
   }
 

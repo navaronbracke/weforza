@@ -29,7 +29,7 @@ class MemberListFilter extends StatelessWidget {
         final currentFilter = snapshot.data!;
 
         return PlatformAwareWidget(
-          android: () => Row(
+          android: (_) => Row(
             children: [
               ChoiceChip(
                 label: Text(translator.All),
@@ -63,7 +63,7 @@ class MemberListFilter extends StatelessWidget {
               ),
             ],
           ),
-          ios: () => CupertinoSlidingSegmentedControl<MemberFilterOption>(
+          ios: (_) => CupertinoSlidingSegmentedControl<MemberFilterOption>(
             groupValue: currentFilter,
             onValueChanged: (MemberFilterOption? value) {
               if (value != null) {

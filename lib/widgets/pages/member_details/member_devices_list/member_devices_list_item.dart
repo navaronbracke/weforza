@@ -54,11 +54,11 @@ class MemberDevicesListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => Padding(
+      android: (context) => Padding(
         padding: const EdgeInsets.only(left: 8, right: 4, bottom: 4),
         child: _buildItem(context),
       ),
-      ios: () => Padding(
+      ios: (context) => Padding(
         padding: const EdgeInsets.fromLTRB(4, 16, 16, 16),
         child: _buildItem(context),
       ),
@@ -88,14 +88,14 @@ class _EditDeviceButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformAwareWidget(
-      android: () => IconButton(
+      android: (context) => IconButton(
         icon: Icon(
           Icons.edit,
           color: AppTheme.memberDevicesList.androidEditDeviceButtonColor,
         ),
         onPressed: () => _onEditDevicePressed(context, ref),
       ),
-      ios: () => CupertinoIconButton(
+      ios: (context) => CupertinoIconButton(
         onPressed: () => _onEditDevicePressed(context, ref),
         icon: CupertinoIcons.pencil,
       ),

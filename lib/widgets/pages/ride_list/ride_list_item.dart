@@ -53,8 +53,8 @@ class RideListItem extends ConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       child: PlatformAwareWidget(
-        android: () => ListTile(title: content),
-        ios: () => Padding(
+        android: (_) => ListTile(title: content),
+        ios: (_) => Padding(
           padding: const EdgeInsets.all(12),
           child: content,
         ),

@@ -29,12 +29,12 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
     ]);
 
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(),
-      ios: () => _buildIosWidget(),
+      android: _buildAndroidWidget,
+      ios: _buildIosWidget,
     );
   }
 
-  Widget _buildAndroidWidget() {
+  Widget _buildAndroidWidget(BuildContext context) {
     return MaterialApp(
       title: _appName,
       localizationsDelegates: const [
@@ -49,7 +49,7 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
     );
   }
 
-  Widget _buildIosWidget() {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoApp(
       title: _appName,
       localizationsDelegates: const [

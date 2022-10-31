@@ -13,10 +13,10 @@ class PlatformAwareWidget extends StatelessWidget {
   });
 
   /// The builder that is invoked for [TargetPlatform.android].
-  final Widget Function() android;
+  final WidgetBuilder android;
 
   /// The builder that is invoked for [TargetPlatform.iOS].
-  final Widget Function() ios;
+  final WidgetBuilder ios;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class PlatformAwareWidget extends StatelessWidget {
 
     switch (targetPlatform) {
       case TargetPlatform.android:
-        return android();
+        return android(context);
       case TargetPlatform.iOS:
-        return ios();
+        return ios(context);
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.macOS:

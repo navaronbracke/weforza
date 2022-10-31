@@ -45,14 +45,14 @@ class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
         }
 
         final loadingIndicator = PlatformAwareWidget(
-          android: () => const SizedBox.square(
+          android: (_) => const SizedBox.square(
             dimension: 30,
             child: CircularProgressIndicator(
               color: Colors.white,
               strokeWidth: 3,
             ),
           ),
-          ios: () => const CupertinoActivityIndicator(),
+          ios: (_) => const CupertinoActivityIndicator(),
         );
 
         if (snapshot.connectionState == ConnectionState.done) {
@@ -82,7 +82,7 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () {
+      android: (_) {
         final style = ElevatedButton.styleFrom(
           backgroundColor: AppTheme.manualSelectionBottomBar.saveButtonColor,
           foregroundColor: Colors.white,
@@ -93,7 +93,7 @@ class _SaveButton extends StatelessWidget {
           child: ElevatedButton(onPressed: onPressed, child: Text(text)),
         );
       },
-      ios: () => CupertinoButton.filled(
+      ios: (_) => CupertinoButton.filled(
         onPressed: onPressed,
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Text(

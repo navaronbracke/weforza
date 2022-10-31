@@ -23,7 +23,7 @@ class MemberActiveToggle extends StatelessWidget {
               );
 
               return PlatformAwareWidget(
-                android: () => Switch(
+                android: (_) => Switch(
                   value: isActive,
                   onChanged: (value) {
                     final notifier = ref.read(selectedMemberProvider.notifier);
@@ -31,7 +31,7 @@ class MemberActiveToggle extends StatelessWidget {
                     notifier.setMemberActive(value);
                   },
                 ),
-                ios: () => CupertinoSwitch(
+                ios: (_) => CupertinoSwitch(
                   value: isActive,
                   onChanged: (value) {
                     final notifier = ref.read(selectedMemberProvider.notifier);

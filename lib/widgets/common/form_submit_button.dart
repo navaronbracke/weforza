@@ -44,11 +44,11 @@ class _FormSubmitButtonState extends State<FormSubmitButton> {
         const loading = PlatformAwareLoadingIndicator();
 
         final button = PlatformAwareWidget(
-          android: () => ElevatedButton(
+          android: (_) => ElevatedButton(
             onPressed: _onSubmitButtonPressed,
             child: Text(widget.label),
           ),
-          ios: () => CupertinoButton.filled(
+          ios: (_) => CupertinoButton.filled(
             onPressed: _onSubmitButtonPressed,
             child: Text(
               widget.label,

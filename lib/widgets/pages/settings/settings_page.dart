@@ -95,8 +95,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   Widget build(BuildContext context) {
     return FocusAbsorber(
       child: PlatformAwareWidget(
-        android: () => _buildAndroidWidget(context),
-        ios: () => _buildIosWidget(context),
+        android: _buildAndroidWidget,
+        ios: _buildIosWidget,
       ),
     );
   }

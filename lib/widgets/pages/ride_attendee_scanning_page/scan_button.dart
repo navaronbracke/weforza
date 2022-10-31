@@ -16,14 +16,14 @@ class ScanButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: PlatformAwareWidget(
-        android: () => Padding(
+        android: (_) => Padding(
           padding: const EdgeInsets.only(top: 16, bottom: 32),
           child: ElevatedButton(
             onPressed: onPressed,
             child: Text(text),
           ),
         ),
-        ios: () => Padding(
+        ios: (_) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: CupertinoButton.filled(
             onPressed: onPressed,

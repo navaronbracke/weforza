@@ -37,8 +37,8 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
   // Hence we show whitespace instead, that is the size of the button.
   Widget _buildButtonWhitespace() {
     return PlatformAwareWidget(
-      android: () => SizedBox.fromSize(size: const Size.square(40)),
-      ios: () => SizedBox.fromSize(size: const Size.square(24)),
+      android: (_) => SizedBox.fromSize(size: const Size.square(40)),
+      ios: (_) => SizedBox.fromSize(size: const Size.square(24)),
     );
   }
 }

@@ -51,12 +51,12 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             snapshot.data != RideAttendeeScanningState.manualSelection;
 
         return PlatformAwareWidget(
-          android: () => _buildStepper(
+          android: (context) => _buildStepper(
             context,
             AppTheme.scanStepper.android,
             isScanningStep,
           ),
-          ios: () => _buildStepper(
+          ios: (context) => _buildStepper(
             context,
             AppTheme.scanStepper.ios,
             isScanningStep,

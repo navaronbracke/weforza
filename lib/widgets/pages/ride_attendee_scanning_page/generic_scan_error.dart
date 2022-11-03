@@ -5,31 +5,26 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents the base for a generic scan error.
-/// It presents an icon, an error message, a primary action button
-/// and a secondary action button.
 class _GenericScanErrorBase extends StatelessWidget {
   const _GenericScanErrorBase({
-    required this.androidIcon,
-    required this.errorMessage,
-    required this.iosIcon,
+    this.errorMessage,
+    required this.icon,
     required this.primaryButton,
     this.secondaryButton,
   });
 
-  /// The icon for Android.
-  final IconData androidIcon;
-
   /// The error message to display.
-  final String errorMessage;
+  ///
+  /// If this is null, [S.GenericError] is used.
+  final String? errorMessage;
 
-  /// The icon for iOS.
-  final IconData iosIcon;
+  /// The icon that is shown above the [errorMessage].
+  final Widget icon;
 
-  /// The primary button that is displayed under the [errorMessage].
+  /// The button for the primary action.
   final Widget primaryButton;
 
-  /// The secondary button that is placed next to the [primaryButton].
+  /// The button for the secondary action.
   final Widget? secondaryButton;
 
   @override
@@ -37,29 +32,31 @@ class _GenericScanErrorBase extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        PlatformAwareIcon(
-          androidIcon: androidIcon,
-          iosIcon: iosIcon,
-          size: MediaQuery.of(context).size.shortestSide * .1,
+        IconTheme(
+          data: IconThemeData(
+            size: MediaQuery.of(context).size.shortestSide * .1,
+          ),
+          child: icon,
         ),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
             child: Text(
-              errorMessage,
+              errorMessage ?? S.of(context).GenericError,
               textAlign: TextAlign.center,
               softWrap: true,
             ),
           ),
         ),
-        Wrap(
+        OverflowBar(
+          alignment: MainAxisAlignment.center,
+          overflowAlignment: OverflowBarAlignment.center,
+          overflowDirection: VerticalDirection.up,
+          overflowSpacing: 16,
           spacing: 8,
-          runSpacing: 8,
-          alignment: WrapAlignment.center,
-          direction: Axis.horizontal,
           children: [
-            primaryButton,
             if (secondaryButton != null) secondaryButton!,
+            primaryButton,
           ],
         ),
       ],
@@ -79,9 +76,11 @@ class BluetoothDisabledError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
-      androidIcon: Icons.bluetooth_disabled,
       errorMessage: translator.ScanAbortedBluetoothDisabled,
-      iosIcon: Icons.bluetooth_disabled,
+      icon: const PlatformAwareIcon(
+        androidIcon: Icons.bluetooth_disabled,
+        iosIcon: Icons.bluetooth_disabled,
+      ),
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
           onPressed: () => AppSettings.openBluetoothSettings(),
@@ -121,9 +120,10 @@ class GenericScanError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
-      androidIcon: Icons.warning,
-      errorMessage: translator.GenericError,
-      iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+      icon: const PlatformAwareIcon(
+        androidIcon: Icons.warning,
+        iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+      ),
       primaryButton: PlatformAwareWidget(
         android: (context) => ElevatedButton(
           child: Text(translator.GoBackToDetailPage),
@@ -152,9 +152,11 @@ class PermissionDeniedError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
-      androidIcon: Icons.warning,
       errorMessage: translator.ScanAbortedPermissionDenied,
-      iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+      icon: const PlatformAwareIcon(
+        androidIcon: Icons.warning,
+        iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+      ),
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
           child: Text(translator.GoToSettings),

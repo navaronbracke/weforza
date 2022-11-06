@@ -41,10 +41,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
         body: Center(child: _buildBody()),
       ),
       ios: (context) => CupertinoPageScaffold(
-        backgroundColor: CupertinoColors.systemGroupedBackground,
         navigationBar: CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.systemGroupedBackground,
-          border: null,
           middle: title,
           transitionBetweenRoutes: false,
         ),
@@ -179,18 +176,19 @@ class _ImportRidersButton extends StatelessWidget {
       ios: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CupertinoFormSection.insetGrouped(
-            children: [
-              CupertinoFormRow(
-                error: errorMessage == null ? null : Text(errorMessage!),
-                child: Center(
-                  child: CupertinoButton(
-                    onPressed: onPressed,
-                    child: Text(label),
-                  ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CupertinoFormRow(
+              error: errorMessage == null
+                  ? null
+                  : Text(errorMessage!, textAlign: TextAlign.center),
+              child: Center(
+                child: CupertinoButton(
+                  onPressed: onPressed,
+                  child: Text(label),
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),

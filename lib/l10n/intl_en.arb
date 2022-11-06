@@ -91,6 +91,8 @@
 	"HelpWithImporting": "Help with importing",
 	"ImportRiders": "Import Riders",
 	"ImportRidersCsvHeaderRequired": "A header is required for .csv files",
+	"ImportRidersCsvHeaderRequiredAnswer": "The header is used to validate the amount of columns in the file.",
+	"ImportRidersCsvHeaderRequiredQuestion": "Why does a CSV file need a header?",
 	"ImportRidersFileRequired": "Please choose a file to import riders from",
 	"ImportRidersProcessingFile": "Importing riders from file",
 	"Inactive": "Inactive",

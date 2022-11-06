@@ -91,6 +91,8 @@
 	"HelpWithImporting": "Hulp bij importeren",
 	"ImportRiders": "Renners Importeren",
 	"ImportRidersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht",
+	"ImportRidersCsvHeaderRequiredAnswer": "De hoofding wordt gebruikt om het aantal kolommen in het bestand te valideren.",
+	"ImportRidersCsvHeaderRequiredQuestion": "Waarom moet dit CSV bestand een hoofding hebben?",
 	"ImportRidersFileRequired": "Gelieve een bestand te selecteren om renners uit te importeren",
 	"ImportRidersProcessingFile": "Renners importeren van bestand",
 	"Inactive": "Inactief",

@@ -88,6 +88,7 @@
 	"GoBack": "Keer Terug",
 	"GoBackToDetailPage": "Terug naar detailpagina",
 	"GoToSettings": "Naar Instellingen",
+	"HelpWithImporting": "Hulp bij importeren",
 	"ImportRiders": "Renners Importeren",
 	"ImportRidersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht",
 	"ImportRidersFileRequired": "Gelieve een bestand te selecteren om renners uit te importeren",

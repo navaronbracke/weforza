@@ -88,6 +88,7 @@
 	"GoBack": "Go Back",
 	"GoBackToDetailPage": "Return to detail page",
 	"GoToSettings": "Go to Settings",
+	"HelpWithImporting": "Help with importing",
 	"ImportRiders": "Import Riders",
 	"ImportRidersCsvHeaderRequired": "A header is required for .csv files",
 	"ImportRidersFileRequired": "Please choose a file to import riders from",

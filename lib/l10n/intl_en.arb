@@ -88,7 +88,6 @@
 	"GoBackToDetailPage": "Return to detail page",
 	"GoToSettings": "Go to Settings",
 	"ImportRiders": "Import Riders",
-	"ImportRidersCsvHeaderRegex": "(firstname),(lastname),(alias),(active),(last_updated),(devices)(.*)",
 	"ImportRidersCsvHeaderRequired": "A header is required for .csv files",
 	"ImportRidersFileRequired": "Please choose a file to import riders from",
 	"Inactive": "Inactive",

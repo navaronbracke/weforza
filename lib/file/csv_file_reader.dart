@@ -9,11 +9,9 @@ import 'package:weforza/model/member.dart';
 
 /// This class implements a line reader for CSV files.
 class CsvFileReader implements ImportMembersFileReader<String> {
-  CsvFileReader({
-    required this.headerRegex,
-  }) : assert(headerRegex.isNotEmpty);
+  CsvFileReader({required this.headerRegex});
 
-  final String headerRegex;
+  final RegExp headerRegex;
 
   @override
   Future<void> processData(
@@ -98,7 +96,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     }
 
     // Check that the header is present.
-    if (!RegExp('^$headerRegex\$').hasMatch(lines.first.toLowerCase())) {
+    if (!headerRegex.hasMatch(lines.first)) {
       return Future.error(CsvHeaderMissingError());
     }
 

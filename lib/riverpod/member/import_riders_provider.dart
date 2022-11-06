@@ -7,17 +7,17 @@ import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/file/import_members_file_reader.dart';
 import 'package:weforza/file/json_file_reader.dart';
 import 'package:weforza/model/exportable_member.dart';
-import 'package:weforza/model/import_members_state.dart';
+import 'package:weforza/model/import_riders_state.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/import_members_repository_provider.dart';
 
-final importMembersProvider = Provider(ImportMembersNotifier.new);
+final importRidersProvider = Provider(ImportRidersNotifier.new);
 
-class ImportMembersNotifier {
-  ImportMembersNotifier(this.ref);
+class ImportRidersNotifier {
+  ImportRidersNotifier(this.ref);
 
-  /// The CSV file header format for importing members
+  /// The CSV file header format for importing riders
   /// requires 6 mandatory cells in the following order:
   /// 1) first name
   /// 2) last name
@@ -82,7 +82,7 @@ class ImportMembersNotifier {
     return exports;
   }
 
-  Future<Iterable<ExportableMember>> _readMemberDataFromFile(File file) {
+  Future<Iterable<ExportableMember>> _readRiderDataFromFile(File file) {
     if (file.path.endsWith(FileExtension.csv.ext)) {
       return _readFile<String>(
         file,
@@ -97,23 +97,23 @@ class ImportMembersNotifier {
     return Future.error(InvalidFileExtensionError());
   }
 
-  void importMembers(
-    void Function(ImportMembersState progress) onProgress,
+  void importRiders(
+    void Function(ImportRidersState progress) onProgress,
     void Function(Object error) onError,
   ) async {
     try {
-      onProgress(ImportMembersState.pickingFile);
+      onProgress(ImportRidersState.pickingFile);
 
       final fileHandler = ref.read(fileHandlerProvider);
 
       final file = await fileHandler.chooseImportMemberDatasourceFile();
 
-      onProgress(ImportMembersState.importing);
+      onProgress(ImportRidersState.importing);
 
-      final members = await _readMemberDataFromFile(file);
+      final members = await _readRiderDataFromFile(file);
 
       if (members.isEmpty) {
-        onProgress(ImportMembersState.done);
+        onProgress(ImportRidersState.done);
 
         return;
       }
@@ -123,7 +123,7 @@ class ImportMembersNotifier {
       await repository.saveMembersWithDevices(members);
 
       ref.refresh(memberListProvider);
-      onProgress(ImportMembersState.done);
+      onProgress(ImportRidersState.done);
     } catch (error) {
       onError(error);
     }

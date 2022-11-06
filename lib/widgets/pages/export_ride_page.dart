@@ -33,19 +33,19 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
 
   Future<void>? _exportFuture;
 
-  FileExtension _fileExtension = FileExtension.csv;
+  final _fileExtensionController = BehaviorSubject.seeded(FileExtension.csv);
 
-  void onSelectFileExtension(FileExtension value) {
-    if (_fileExtension != value) {
+  void onSelectFileExtension(FileExtension? value) {
+    if (value != null && _fileExtensionController.value != value) {
       _filenameErrorController.add('');
-      _fileExtension = value;
+      _fileExtensionController.add(value);
     }
   }
 
   Future<void> _submitForm(S translator) {
     try {
       return exportProvider.exportRidesWithAttendees(
-        fileExtension: _fileExtension.ext,
+        fileExtension: _fileExtensionController.value.ext,
         fileName: _filenameController.text,
         ride: widget.rideToExport?.date,
       );
@@ -151,7 +151,8 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
               padding: const EdgeInsets.only(bottom: 8),
               child: FileExtensionSelection(
                 onExtensionSelected: onSelectFileExtension,
-                initialValue: FileExtension.csv,
+                initialValue: _fileExtensionController.value,
+                stream: _fileExtensionController,
               ),
             ),
             PlatformAwareWidget(
@@ -214,6 +215,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
   @override
   void dispose() {
     _filenameController.dispose();
+    _fileExtensionController.close();
     _filenameErrorController.close();
     super.dispose();
   }

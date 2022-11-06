@@ -11,7 +11,11 @@ import 'package:weforza/model/member.dart';
 class CsvFileReader implements ImportMembersFileReader<String> {
   CsvFileReader({required this.headerRegex});
 
+  /// The regex that validates the structure of the CSV header line.
   final RegExp headerRegex;
+
+  /// The minimum required cell count for data lines in the CSV file.
+  final int minimumCellCount = 5;
 
   @override
   Future<void> processData(
@@ -22,7 +26,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
     // If the line doesn't have enough cells
     // to fill the required fields, skip it.
-    if (values.length < 5) {
+    if (values.length < minimumCellCount) {
       return;
     }
 
@@ -67,8 +71,10 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     // Besides First Name, Last Name, Alias, Active, Last Update
     // there are more values.
     // These are the device names: Device1, Device2,... , DeviceN
-    if (values.length > 5) {
-      devices.addAll(values.sublist(5).where(Device.deviceNameRegex.hasMatch));
+    if (values.length > minimumCellCount) {
+      devices.addAll(values
+          .sublist(minimumCellCount)
+          .where(Device.deviceNameRegex.hasMatch));
     }
 
     collection.add(

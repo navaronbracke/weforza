@@ -34,7 +34,7 @@ class Member implements Comparable<Member> {
   /// allows hyphens, apostrophes and spaces,
   /// and requires a length between 1 and 50.
   static final personNameAndAliasRegex = RegExp(
-    r"^([\p{Letter}\s]|['-]){1,50}$",
+    r"^([\p{L}\s]|['-]){1,50}$",
     unicode: true,
   );
 

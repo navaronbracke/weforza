@@ -5,7 +5,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_members_page.dart';
-import 'package:weforza/widgets/pages/import_members_page.dart';
+import 'package:weforza/widgets/pages/import_riders_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
 import 'package:weforza/widgets/pages/member_form.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
@@ -83,7 +83,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             icon: const Icon(Icons.file_download),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const ImportMembersPage(),
+                builder: (context) => const ImportRidersPage(),
               ),
             ),
           ),
@@ -143,7 +143,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
               icon: CupertinoIcons.arrow_down_doc_fill,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const ImportMembersPage(),
+                  builder: (context) => const ImportRidersPage(),
                 ),
               ),
             ),

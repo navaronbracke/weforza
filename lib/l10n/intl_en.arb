@@ -90,6 +90,7 @@
 	"ImportRiders": "Import Riders",
 	"ImportRidersCsvHeaderRequired": "A header is required for .csv files",
 	"ImportRidersFileRequired": "Please choose a file to import riders from",
+	"ImportRidersProcessingFile": "Importing riders from file",
 	"Inactive": "Inactive",
 	"InvalidFilename": "Invalid filename",
 	"LastName": "Last Name",

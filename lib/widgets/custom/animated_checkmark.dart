@@ -66,7 +66,7 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
     return Path()
       ..moveTo((size.width * .8) + xOffset, (size.height * .2) + yOffset)
       ..lineTo((size.width * .3) + xOffset, size.height + yOffset)
-      ..lineTo(xOffset, (size.height * .8) + yOffset);
+      ..lineTo(size.width * .15, (size.height * .8) + yOffset);
   }
 
   Color _resolveColor(BuildContext context) {

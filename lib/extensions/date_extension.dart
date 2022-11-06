@@ -4,7 +4,7 @@ extension ToStringNoMillis on DateTime {
   String toStringWithoutMilliseconds() {
     final String s = toString();
 
-    // Strip the milliseconds.
-    return s.substring(0, s.length - 5);
+    // Strip the milliseconds and the trailing Z for UTC dates.
+    return s.substring(0, s.length - (isUtc ? 5 : 4));
   }
 }

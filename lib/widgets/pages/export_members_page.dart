@@ -25,16 +25,16 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _filenameController = TextEditingController();
+  final _fileExtensionController = BehaviorSubject.seeded(FileExtension.csv);
 
   Future<void>? _exportFuture;
-  FileExtension _fileExtension = FileExtension.csv;
 
   final _filenameErrorController = BehaviorSubject.seeded('');
 
-  void onSelectFileExtension(FileExtension extension) {
-    if (_fileExtension != extension) {
+  void onSelectFileExtension(FileExtension? value) {
+    if (value != null && _fileExtensionController.value != value) {
       _filenameErrorController.add('');
-      _fileExtension = extension;
+      _fileExtensionController.add(value);
     }
   }
 
@@ -42,7 +42,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     try {
       return exportProvider.exportMembers(
         csvHeader: translator.ExportMembersCsvHeader,
-        fileExtension: _fileExtension.ext,
+        fileExtension: _fileExtensionController.value.ext,
         fileName: _filenameController.text,
       );
     } catch (error) {
@@ -137,7 +137,8 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
               padding: const EdgeInsets.only(bottom: 8),
               child: FileExtensionSelection(
                 onExtensionSelected: onSelectFileExtension,
-                initialValue: FileExtension.csv,
+                initialValue: _fileExtensionController.value,
+                stream: _fileExtensionController,
               ),
             ),
             PlatformAwareWidget(
@@ -185,6 +186,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   void dispose() {
     _filenameController.dispose();
     _filenameErrorController.close();
+    _fileExtensionController.close();
     super.dispose();
   }
 }

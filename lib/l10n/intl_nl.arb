@@ -90,6 +90,7 @@
 	"ImportRiders": "Renners Importeren",
 	"ImportRidersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht",
 	"ImportRidersFileRequired": "Gelieve een bestand te selecteren om renners uit te importeren",
+	"ImportRidersProcessingFile": "Renners importeren van bestand",
 	"Inactive": "Inactief",
 	"InvalidFilename": "Ongeldige bestandsnaam",
 	"LastName": "Familienaam",

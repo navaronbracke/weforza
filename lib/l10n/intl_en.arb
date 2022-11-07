@@ -61,7 +61,7 @@
 	"EditDisallowedWord": "Edit disallowed word",
 	"EditMember": "Edit Rider",
 	"Export": "Export",
-	"ExportMembersCsvHeader": "firstname,lastname,alias,active,last_updated,devices",
+	"ExportMembersCsvHeader": "firstname,lastname,alias,active,last_updated_on,devices",
 	"ExportMembersTitle": "Export Riders",
 	"ExportRide": "Export Ride",
 	"ExportRideFileNamePlaceholder": "ride_{date}",

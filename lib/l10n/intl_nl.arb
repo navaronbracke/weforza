@@ -90,7 +90,7 @@
 	"GoToSettings": "Naar Instellingen",
 	"HelpWithImporting": "Hulp bij importeren",
 	"ImportRiders": "Renners Importeren",
-	"ImportRidersCsvHeaderLayoutAnswer": "De hoofding van een CSV bestand verdeelt het document in de volgende 6 kolommen:\n\nvoornaam, achternaam, alias, actief, laatste update, toestellen",
+	"ImportRidersCsvHeaderLayoutAnswer": "De hoofding bestaat uit de volgende kolommen:\n\nvoornaam, achternaam, alias, actief, laatste update, toestellen",
 	"ImportRidersCsvHeaderLayoutQuestion": "Hoe ziet zo een hoofding er precies uit?",
 	"ImportRidersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht",
 	"ImportRidersCsvHeaderRequiredAnswer": "De hoofding wordt gebruikt om het aantal kolommen in het bestand te valideren.",

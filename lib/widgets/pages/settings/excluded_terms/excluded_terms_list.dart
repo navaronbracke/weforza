@@ -37,6 +37,7 @@ class ExcludedTermsList extends StatelessWidget {
           return SliverToBoxAdapter(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 addTermInputField,
                 const ExcludedTermsListEmpty(),

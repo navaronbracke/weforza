@@ -13,7 +13,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
   const EditExcludedTermInputFieldButtonBar({
     super.key,
     required this.controller,
-    required this.onConfirmPressed,
+    required this.onCommitValidTerm,
     required this.onDeletePressed,
     required this.onUndoPressed,
     required this.term,
@@ -23,8 +23,8 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
   /// The controller that provides updates about the current text editing value.
   final ValueNotifier<TextEditingValue> controller;
 
-  /// The onTap handler for the confirm button.
-  final void Function(String value) onConfirmPressed;
+  /// The function that is called when a valid term is committed.
+  final void Function(String value) onCommitValidTerm;
 
   /// The onTap handler for the delete button.
   final void Function(BuildContext context) onDeletePressed;
@@ -70,12 +70,12 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
           android: (_) => IconButton(
             color: Colors.blue,
             icon: const Icon(Icons.check),
-            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
+            onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),
           ios: (_) => CupertinoIconButton(
             color: CupertinoColors.activeBlue,
             icon: CupertinoIcons.checkmark_alt,
-            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
+            onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),
         );
 

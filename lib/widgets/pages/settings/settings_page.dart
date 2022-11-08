@@ -6,7 +6,6 @@ import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
-import 'package:weforza/model/selected_excluded_term_delegate.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
@@ -42,9 +41,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
   late final BehaviorSubject<double> scanDurationController;
-
-  final selectedExcludedTermDelegate = SelectedExcludedTermDelegate();
-  final selectedExcludedTermFormKey = GlobalKey<FormFieldState<String>>();
 
   Future<void>? _saveSettingsFuture;
 
@@ -111,18 +107,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         actions: [_buildSubmitButton()],
       ),
       body: SettingsPageScrollView(
-        addExcludedTermInputField: SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          sliver: SliverToBoxAdapter(
-            child: AddExcludedTermInputField(
-              controller: addTermController,
-              delegate: excludedTermsDelegate,
-              focusNode: addTermFocusNode,
-              formKey: addTermFormKey,
-              onTap: selectedExcludedTermDelegate.clearSelection,
-            ),
-          ),
-        ),
         excludedTermsListHeader: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
           child: ExcludedTermsListHeader(),
@@ -130,8 +114,15 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: ExcludedTermsList(
-            delegate: excludedTermsDelegate,
+            addTermInputField: AddExcludedTermInputField(
+              controller: addTermController,
+              delegate: excludedTermsDelegate,
+              focusNode: addTermFocusNode,
+              formKey: addTermFormKey,
+            ),
             builder: _buildExcludedTermItem,
+            initialData: excludedTermsDelegate.terms,
+            stream: excludedTermsDelegate.stream,
           ),
         ),
         excludedTermsListFooter: const Padding(
@@ -199,13 +190,9 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     final term = terms[index];
 
     return EditExcludedTermInputField(
-      key: ValueKey(term),
       delegate: excludedTermsDelegate,
       index: index,
-      onSelected: selectedExcludedTermDelegate.setSelectedTerm,
-      selectionDelegate: selectedExcludedTermDelegate,
       term: term,
-      textFormFieldKey: selectedExcludedTermFormKey,
     );
   }
 
@@ -219,10 +206,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       child: SettingsPageScrollView(
-        addExcludedTermInputField: SliverPadding(
+        excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: SliverToBoxAdapter(
-            child: DecoratedBox(
+          sliver: ExcludedTermsList(
+            addTermInputField: DecoratedBox(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -235,15 +222,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 delegate: excludedTermsDelegate,
                 focusNode: addTermFocusNode,
                 formKey: addTermFormKey,
-                onTap: selectedExcludedTermDelegate.clearSelection,
               ),
             ),
-          ),
-        ),
-        excludedTermsList: SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: ExcludedTermsList(
-            delegate: excludedTermsDelegate,
+            initialData: excludedTermsDelegate.terms,
+            stream: excludedTermsDelegate.stream,
             builder: (items, index) {
               BorderRadius borderRadius = BorderRadius.zero;
 
@@ -371,7 +353,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     excludedTermsDelegate.dispose();
     memberFilterController.close();
     scanDurationController.close();
-    selectedExcludedTermDelegate.dispose();
     super.dispose();
   }
 }

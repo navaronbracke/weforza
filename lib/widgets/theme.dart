@@ -264,7 +264,6 @@ class RideAttendeeScanResultTheme {
   const RideAttendeeScanResultTheme({
     required this.multipleOwnersDescriptionStyle,
     required this.multipleOwnersLabelStyle,
-    required this.selectedBackgroundColor,
   });
 
   /// The style for the multiple owners description label.
@@ -272,9 +271,6 @@ class RideAttendeeScanResultTheme {
 
   /// The style for the multiple owners label.
   final TextStyle multipleOwnersLabelStyle;
-
-  /// The background color for a selected item.
-  final Color selectedBackgroundColor;
 }
 
 /// This class represents the theme for ride attendee scan results.
@@ -293,7 +289,6 @@ class RideAttendeeScanResultThemes {
       fontSize: 12,
       color: Colors.orange,
     ),
-    selectedBackgroundColor: Color(0xFF1976D2),
   );
 
   /// The scan result theme for iOS.
@@ -308,6 +303,5 @@ class RideAttendeeScanResultThemes {
       fontSize: 12,
       color: CupertinoColors.activeOrange,
     ),
-    selectedBackgroundColor: CupertinoColors.activeBlue,
   );
 }

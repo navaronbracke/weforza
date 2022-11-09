@@ -57,9 +57,6 @@ abstract class AppTheme {
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
 
-  /// The ride attendee scan results theme.
-  static const rideAttendeeScanResult = RideAttendeeScanResultThemes();
-
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
 
@@ -273,35 +270,4 @@ class RideAttendeeScanResultTheme {
   final TextStyle multipleOwnersLabelStyle;
 }
 
-/// This class represents the theme for ride attendee scan results.
-class RideAttendeeScanResultThemes {
-  const RideAttendeeScanResultThemes();
-
-  /// The scan result theme for Android.
-  final android = const RideAttendeeScanResultTheme(
-    multipleOwnersDescriptionStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: Colors.grey,
-    ),
-    multipleOwnersLabelStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: Colors.orange,
-    ),
-  );
-
-  /// The scan result theme for iOS.
-  final ios = const RideAttendeeScanResultTheme(
-    multipleOwnersDescriptionStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: CupertinoColors.systemGrey,
-    ),
-    multipleOwnersLabelStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: CupertinoColors.activeOrange,
-    ),
-  );
-}
+// color = grey for description & orange for multiple owners

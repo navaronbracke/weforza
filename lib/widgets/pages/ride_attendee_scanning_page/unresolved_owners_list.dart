@@ -36,22 +36,22 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
   }
 
   TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {
-    RideAttendeeScanResultTheme theme;
+    Color color;
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        theme = AppTheme.rideAttendeeScanResult.android;
+        color = Colors.grey;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        theme = AppTheme.rideAttendeeScanResult.ios;
+        color = CupertinoColors.systemGrey;
         break;
     }
 
-    return theme.multipleOwnersDescriptionStyle;
+    return TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: color);
   }
 
   @override

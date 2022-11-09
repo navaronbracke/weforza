@@ -53,9 +53,6 @@ abstract class AppTheme {
   /// The theme for the bottom bar on the manual selection.
   static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();
 
-  /// The member devices list theme.
-  static const memberDevicesList = MemberDeviceListTheme();
-
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
 
@@ -113,21 +110,6 @@ class ManualSelectionBottomBarTheme {
 
   /// The active track color for the filter switch.
   final Color switchActiveTrackColor = const Color(0xFF81D4FA);
-}
-
-/// This class represents the theme for the member devices list.
-class MemberDeviceListTheme {
-  const MemberDeviceListTheme();
-
-  /// The color for the edit device button on Android.
-  /// iOS uses a [CupertinoColors] value to resolve a color.
-  final Color androidEditDeviceButtonColor = const Color(0xFF64B5F6);
-
-  /// The text style for the member devices list header.
-  final TextStyle headerStyle = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-  );
 }
 
 /// This class defines the theme for member list items.

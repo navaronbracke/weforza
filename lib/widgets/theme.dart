@@ -67,17 +67,6 @@ abstract class AppTheme {
   static const scanStepper = ScanStepperThemes();
 }
 
-/// This class represents the theme for destructive action buttons.
-class DestructiveActionTheme {
-  /// The theme for destructive [ElevatedButton]s.
-  final elevatedButtonTheme = ElevatedButton.styleFrom(
-    backgroundColor: Colors.red,
-  );
-
-  /// The theme for destructive [TextButton]s.
-  final textButtonTheme = TextButton.styleFrom(foregroundColor: Colors.red);
-}
-
 /// This class represents the data for [DeviceTypePickerThemes].
 class DeviceTypePickerTheme {
   const DeviceTypePickerTheme({
@@ -246,19 +235,3 @@ class ScanStepperThemes {
     inactive: CupertinoColors.inactiveGray,
   );
 }
-
-/// This class represents the data for a [RideAttendeeScanResultThemes] sub theme.
-class RideAttendeeScanResultTheme {
-  const RideAttendeeScanResultTheme({
-    required this.multipleOwnersDescriptionStyle,
-    required this.multipleOwnersLabelStyle,
-  });
-
-  /// The style for the multiple owners description label.
-  final TextStyle multipleOwnersDescriptionStyle;
-
-  /// The style for the multiple owners label.
-  final TextStyle multipleOwnersLabelStyle;
-}
-
-// color = grey for description & orange for multiple owners

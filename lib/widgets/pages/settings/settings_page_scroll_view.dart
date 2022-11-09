@@ -5,7 +5,6 @@ class SettingsPageScrollView extends StatelessWidget {
   /// The default constructor.
   const SettingsPageScrollView({
     super.key,
-    required this.addExcludedTermInputField,
     required this.excludedTermsList,
     required this.excludedTermsListFooter,
     this.excludedTermsListHeader,
@@ -15,9 +14,6 @@ class SettingsPageScrollView extends StatelessWidget {
     required this.scanDurationOption,
     required this.version,
   });
-
-  /// The widget that represents the input field for adding a new excluded term.
-  final Widget addExcludedTermInputField;
 
   /// The widget that represents the list of excluded terms.
   final Widget excludedTermsList;
@@ -55,7 +51,6 @@ class SettingsPageScrollView extends StatelessWidget {
             if (excludedTermsListHeader != null) excludedTermsListHeader!,
           ]),
         ),
-        addExcludedTermInputField,
         excludedTermsList,
         SliverList(
           delegate: SliverChildListDelegate.fixed([

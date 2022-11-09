@@ -6,7 +6,6 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the scan results list
 /// for the ride attendee scanning page.
@@ -63,7 +62,7 @@ class _ScanResultsListItem extends StatelessWidget {
 
   Widget _buildMultipleOwnersListItem(BuildContext context, int ownersLength) {
     IconData icon;
-    TextStyle style;
+    Color color;
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
@@ -71,16 +70,20 @@ class _ScanResultsListItem extends StatelessWidget {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         icon = Icons.people;
-        final theme = AppTheme.rideAttendeeScanResult.android;
-        style = theme.multipleOwnersLabelStyle;
+        color = Colors.orange;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         icon = CupertinoIcons.person_2_fill;
-        final theme = AppTheme.rideAttendeeScanResult.ios;
-        style = theme.multipleOwnersLabelStyle;
+        color = CupertinoColors.activeOrange;
         break;
     }
+
+    final textStyle = TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: color,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +94,7 @@ class _ScanResultsListItem extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 4),
-                child: Icon(icon, color: style.color),
+                child: Icon(icon, color: textStyle.color),
               ),
               SelectableText(
                 device.name,
@@ -104,7 +107,7 @@ class _ScanResultsListItem extends StatelessWidget {
           padding: const EdgeInsets.only(left: 4),
           child: Text(
             S.of(context).AmountOfRidersWithDeviceName(ownersLength),
-            style: style,
+            style: textStyle,
           ),
         ),
       ],

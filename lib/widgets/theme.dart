@@ -34,7 +34,7 @@ abstract class AppTheme {
         ),
       ),
     ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
   );
 
   /// The theme for destructive actions, such as delete buttons.

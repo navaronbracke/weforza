@@ -69,9 +69,6 @@ abstract class AppTheme {
 
 /// This class represents the theme for destructive action buttons.
 class DestructiveActionTheme {
-  /// The default text style for Android error messages.
-  final androidDefaultErrorStyle = const TextStyle(color: Colors.red);
-
   /// The medium text style for Android error messages.
   final androidMediumErrorStyle = const TextStyle(
     fontSize: 16,

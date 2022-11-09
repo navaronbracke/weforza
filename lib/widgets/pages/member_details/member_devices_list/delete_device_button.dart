@@ -4,7 +4,6 @@ import 'package:weforza/widgets/dialogs/delete_device_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class DeleteDeviceButton extends StatelessWidget {
   const DeleteDeviceButton({
@@ -32,11 +31,9 @@ class DeleteDeviceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorStyle = AppTheme.desctructiveAction.androidDefaultErrorStyle;
-
     return PlatformAwareWidget(
       android: (context) => IconButton(
-        icon: Icon(Icons.delete, color: errorStyle.color),
+        icon: Icon(Icons.delete, color: Theme.of(context).errorColor),
         onPressed: () => _onDeletePressed(context),
       ),
       ios: (context) => CupertinoIconButton(

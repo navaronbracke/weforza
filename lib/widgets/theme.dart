@@ -39,7 +39,7 @@ abstract class AppTheme {
         ),
       ),
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+    colorScheme: colorScheme,
   );
 
   /// The color scheme for the MaterialApp.

@@ -34,11 +34,11 @@ abstract class AppTheme {
         ),
       ),
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+    colorScheme: colorScheme,
   );
 
-  /// The theme for destructive actions, such as delete buttons.
-  static final desctructiveAction = DestructiveActionTheme();
+  /// The color scheme for the MaterialApp.
+  static final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
 
   /// The device type picker theme.
   static final deviceTypePicker = DeviceTypePickerThemes();

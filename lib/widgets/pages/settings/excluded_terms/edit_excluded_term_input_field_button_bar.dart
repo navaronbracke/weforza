@@ -63,13 +63,13 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         final isValid = validator(context, currentValue) == null;
 
         final confirmButton = PlatformAwareWidget(
-          android: (_) => IconButton(
-            color: Colors.blue,
+          android: (context) => IconButton(
+            color: Theme.of(context).primaryColor,
             icon: const Icon(Icons.check),
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),
-          ios: (_) => CupertinoIconButton(
-            color: CupertinoColors.activeBlue,
+          ios: (context) => CupertinoIconButton(
+            color: CupertinoTheme.of(context).primaryColor,
             icon: CupertinoIcons.checkmark_alt,
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),

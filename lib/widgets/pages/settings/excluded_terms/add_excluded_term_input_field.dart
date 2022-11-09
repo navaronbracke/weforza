@@ -93,13 +93,13 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
         }
 
         return PlatformAwareWidget(
-          android: (_) => IconButton(
-            color: Colors.blue,
+          android: (context) => IconButton(
+            color: Theme.of(context).primaryColor,
             icon: const Icon(Icons.check),
             onPressed: onTap,
           ),
-          ios: (_) => CupertinoIconButton(
-            color: CupertinoColors.activeBlue,
+          ios: (context) => CupertinoIconButton(
+            color: CupertinoTheme.of(context).primaryColor,
             icon: CupertinoIcons.checkmark_alt,
             onPressed: onTap,
           ),

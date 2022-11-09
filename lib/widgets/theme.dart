@@ -9,9 +9,11 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),
-    chipTheme: const ChipThemeData(
-      selectedColor: Colors.blue,
-      secondaryLabelStyle: TextStyle(color: Colors.white),
+    chipTheme: ChipThemeData(
+      checkmarkColor: Colors.white,
+      selectedColor: colorScheme.primary,
+      secondaryLabelStyle: const TextStyle(color: Colors.white),
+      side: BorderSide(color: colorScheme.primary),
     ),
     extensions: <ThemeExtension>[
       DestructiveButtons(errorColor: colorScheme.error),

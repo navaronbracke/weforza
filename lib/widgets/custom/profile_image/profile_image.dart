@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a profile image.
 ///
@@ -15,23 +14,15 @@ class ProfileImage extends StatelessWidget {
   /// The default constructor.
   const ProfileImage({
     super.key,
-    this.backgroundColor,
     required this.icon,
-    this.iconColor,
     this.image,
     this.loading,
     this.personInitials,
     this.size = 40,
   });
 
-  /// The background color for [icon].
-  final Color? backgroundColor;
-
   /// The icon to use as placeholder if [personInitials] is null or empty.
   final IconData icon;
-
-  /// The color for [icon].
-  final Color? iconColor;
 
   /// The profile image to show.
   final File? image;
@@ -49,8 +40,36 @@ class ProfileImage extends StatelessWidget {
   /// Defaults to 40.
   final double size;
 
-  Widget _buildPlaceholder() {
+  Widget _buildPlaceholder(BuildContext context) {
     final initials = personInitials;
+    final theme = Theme.of(context);
+    List<Color> backgroundColors;
+    Color placeholderBackgroundColor;
+
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        backgroundColors = Colors.primaries;
+        placeholderBackgroundColor = theme.primaryColor;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        backgroundColors = [
+          CupertinoColors.systemBlue,
+          CupertinoColors.systemGreen,
+          CupertinoColors.systemIndigo,
+          CupertinoColors.systemOrange,
+          CupertinoColors.systemPink,
+          CupertinoColors.systemPurple,
+          CupertinoColors.systemRed,
+          CupertinoColors.systemTeal,
+          CupertinoColors.systemYellow,
+        ];
+        placeholderBackgroundColor = CupertinoTheme.of(context).primaryColor;
+        break;
+    }
 
     if (initials == null || initials.isEmpty) {
       return Container(
@@ -58,9 +77,11 @@ class ProfileImage extends StatelessWidget {
         width: size,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(size / 2)),
-          color: backgroundColor,
+          color: placeholderBackgroundColor,
         ),
-        child: Center(child: Icon(icon, color: iconColor, size: .7 * size)),
+        child: Center(
+          child: Icon(icon, color: Colors.white, size: .7 * size),
+        ),
       );
     }
 
@@ -69,32 +90,30 @@ class ProfileImage extends StatelessWidget {
       width: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(size / 2)),
-        color: _getBackgroundColor(initials),
+        color: _getBackgroundColor(initials, backgroundColors),
       ),
       child: Center(
         child: Text(
           personInitials!.toUpperCase(),
-          style: AppTheme.profileImagePlaceholder.initialsStyle.copyWith(
-            fontSize: size / 2,
-          ),
+          style: TextStyle(color: Colors.white, fontSize: size / 2),
         ),
       ),
     );
   }
 
-  Color _getBackgroundColor(String initials) {
+  Color _getBackgroundColor(String initials, List<Color> colors) {
     int index = initials.codeUnitAt(0);
 
     if (initials.length == 2) {
       index += initials.codeUnitAt(1);
     }
 
-    return Colors.primaries[index % Colors.primaries.length];
+    return colors[index % colors.length];
   }
 
   @override
   Widget build(BuildContext context) {
-    final placeholder = _buildPlaceholder();
+    final placeholder = _buildPlaceholder(context);
 
     if (image == null) {
       return placeholder;

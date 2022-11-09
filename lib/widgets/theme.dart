@@ -57,9 +57,6 @@ abstract class AppTheme {
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
 
-  /// The profile image placeholder theme.
-  static const profileImagePlaceholder = ProfileImagePlaceholderTheme();
-
   /// The ride attendee scan results theme.
   static const rideAttendeeScanResult = RideAttendeeScanResultThemes();
 
@@ -166,23 +163,6 @@ class MemberListItemTheme {
 
   /// The text style for the last name.
   final TextStyle lastNameStyle = const TextStyle(fontSize: 14);
-}
-
-/// This class represents the theme for the profile image placeholder.
-class ProfileImagePlaceholderTheme {
-  const ProfileImagePlaceholderTheme();
-
-  /// The background color for the profile image placeholder.
-  final Color backgroundColor = const Color(0xFF1976D2);
-
-  /// The icon color for the profile image placeholder.
-  final Color iconColor = Colors.white;
-
-  /// The text style for the displayed initials.
-  final TextStyle initialsStyle = const TextStyle(
-    fontFamily: 'Roboto',
-    color: Colors.white,
-  );
 }
 
 /// This class represents the theme for the ride calendar date picker.

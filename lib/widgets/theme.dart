@@ -69,12 +69,6 @@ abstract class AppTheme {
 
 /// This class represents the theme for destructive action buttons.
 class DestructiveActionTheme {
-  /// The medium text style for Android error messages.
-  final androidMediumErrorStyle = const TextStyle(
-    fontSize: 16,
-    color: Colors.red,
-  );
-
   /// The theme for destructive [ElevatedButton]s.
   final elevatedButtonTheme = ElevatedButton.styleFrom(
     backgroundColor: Colors.red,

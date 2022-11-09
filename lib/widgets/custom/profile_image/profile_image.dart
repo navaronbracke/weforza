@@ -56,8 +56,9 @@ class ProfileImage extends StatelessWidget {
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
+        // CupertinoColors.systemBlue is excluded, to prevent contrast issues
+        // with CupertinoTheme.primaryColor
         backgroundColors = [
-          CupertinoColors.systemBlue,
           CupertinoColors.systemGreen,
           CupertinoColors.systemIndigo,
           CupertinoColors.systemOrange,

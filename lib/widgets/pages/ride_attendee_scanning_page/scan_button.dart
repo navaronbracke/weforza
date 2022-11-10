@@ -27,10 +27,7 @@ class ScanButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: CupertinoButton.filled(
             onPressed: onPressed,
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.white),
-            ),
+            child: Text(text),
           ),
         ),
       ),

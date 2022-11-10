@@ -101,10 +101,7 @@ class BluetoothDisabledError extends StatelessWidget {
         ),
         ios: (_) => CupertinoButton(
           onPressed: onRetry,
-          child: Text(
-            translator.RetryScan,
-            style: const TextStyle(color: CupertinoColors.activeBlue),
-          ),
+          child: Text(translator.RetryScan),
         ),
       ),
     );
@@ -176,10 +173,7 @@ class PermissionDeniedError extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         ios: (context) => CupertinoButton(
-          child: Text(
-            translator.GoBack,
-            style: const TextStyle(color: CupertinoColors.activeBlue),
-          ),
+          child: Text(translator.GoBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

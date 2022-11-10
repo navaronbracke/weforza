@@ -69,7 +69,6 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),
           ios: (context) => CupertinoIconButton(
-            color: CupertinoTheme.of(context).primaryColor,
             icon: CupertinoIcons.checkmark_alt,
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),

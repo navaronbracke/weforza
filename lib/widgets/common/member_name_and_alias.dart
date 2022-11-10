@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 
 /// This widget displays the first name, alias and last name of a member.
 class MemberNameAndAlias extends StatelessWidget {
-  const MemberNameAndAlias({
+  const MemberNameAndAlias.singleLine({
     super.key,
     required this.alias,
     required this.firstName,
+    required this.lastName,
+    this.overflow = TextOverflow.ellipsis,
+    required TextStyle style,
+  })  : _isTwoLine = false,
+        firstLineStyle = style,
+        secondLineStyle = const TextStyle();
+
+  const MemberNameAndAlias.twoLines({
+    super.key,
+    required this.alias,
     required this.firstLineStyle,
-    this.isTwoLine = true,
+    required this.firstName,
     required this.lastName,
     this.overflow = TextOverflow.ellipsis,
     required this.secondLineStyle,
-  });
+  }) : _isTwoLine = true;
 
   /// The alias to display.
   final String alias;
@@ -32,7 +42,7 @@ class MemberNameAndAlias extends StatelessWidget {
   ///
   /// If this is false, the first name, alias and last name are displayed
   /// one after another on a single line.
-  final bool isTwoLine;
+  final bool _isTwoLine;
 
   /// The last name to display.
   final String lastName;
@@ -41,9 +51,6 @@ class MemberNameAndAlias extends StatelessWidget {
   final TextOverflow overflow;
 
   /// The style for the second line.
-  ///
-  /// If [isTwoLine] is true, this is the style for the last name.
-  /// Otherwise this style is ignored.
   final TextStyle secondLineStyle;
 
   @override
@@ -51,7 +58,7 @@ class MemberNameAndAlias extends StatelessWidget {
     final defaultStyle = DefaultTextStyle.of(context).style;
     final effectiveFirstLineStyle = defaultStyle.merge(firstLineStyle);
 
-    if (isTwoLine) {
+    if (_isTwoLine) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

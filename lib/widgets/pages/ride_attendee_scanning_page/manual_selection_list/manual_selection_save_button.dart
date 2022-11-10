@@ -96,10 +96,7 @@ class _SaveButton extends StatelessWidget {
       ios: (_) => CupertinoButton.filled(
         onPressed: onPressed,
         padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
-        ),
+        child: Text(text),
       ),
     );
   }

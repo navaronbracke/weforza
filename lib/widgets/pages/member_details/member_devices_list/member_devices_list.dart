@@ -113,10 +113,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
 
                   onAddDevicePressed(context, selectedMember!.uuid);
                 },
-                child: Text(
-                  S.of(context).AddDevice,
-                  style: const TextStyle(color: Colors.white),
-                ),
+                child: Text(S.of(context).AddDevice),
               ),
             ),
           ),

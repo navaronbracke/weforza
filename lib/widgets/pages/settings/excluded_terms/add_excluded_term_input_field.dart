@@ -99,7 +99,6 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
             onPressed: onTap,
           ),
           ios: (context) => CupertinoIconButton(
-            color: CupertinoTheme.of(context).primaryColor,
             icon: CupertinoIcons.checkmark_alt,
             onPressed: onTap,
           ),

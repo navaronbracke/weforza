@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device_type.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
@@ -89,18 +89,25 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DeviceTypePickerTheme theme;
+    Color color;
 
-    switch (Theme.of(context).platform) {
+    final theme = Theme.of(context);
+
+    switch (theme.platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        theme = AppTheme.deviceTypePicker.android;
+        color = selected
+            ? theme.primaryColor
+            : theme.disabledColor.withOpacity(0.2);
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        theme = AppTheme.deviceTypePicker.ios;
+        final cupertinoTheme = CupertinoTheme.of(context);
+        color = selected
+            ? cupertinoTheme.primaryColor
+            : CupertinoColors.systemGrey4;
         break;
     }
 
@@ -111,7 +118,7 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
         height: 12,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(6)),
-          color: selected ? theme.selectedColor : theme.unselectedColor,
+          color: color,
         ),
       ),
     );

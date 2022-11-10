@@ -108,7 +108,7 @@ class _ManualSelectionListItemState
               ),
             ),
             Expanded(
-              child: MemberNameAndAlias(
+              child: MemberNameAndAlias.twoLines(
                 alias: widget.item.alias,
                 firstLineStyle: firstNameStyle,
                 firstName: widget.item.firstName,

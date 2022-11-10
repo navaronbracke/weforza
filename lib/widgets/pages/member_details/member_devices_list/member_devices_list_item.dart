@@ -92,8 +92,8 @@ class _EditDeviceButton extends ConsumerWidget {
         onPressed: () => _onEditDevicePressed(context, ref),
       ),
       ios: (context) => CupertinoIconButton(
-        onPressed: () => _onEditDevicePressed(context, ref),
         icon: CupertinoIcons.pencil,
+        onPressed: () => _onEditDevicePressed(context, ref),
       ),
     );
   }

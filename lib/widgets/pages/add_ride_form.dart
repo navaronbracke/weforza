@@ -149,7 +149,7 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
           android: (_) => ElevatedButton(onPressed: onTap, child: Text(label)),
           ios: (_) => CupertinoButton.filled(
             onPressed: onTap,
-            child: Text(label, style: const TextStyle(color: Colors.white)),
+            child: Text(label),
           ),
         ),
       ],

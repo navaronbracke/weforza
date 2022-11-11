@@ -50,10 +50,7 @@ class _FormSubmitButtonState extends State<FormSubmitButton> {
           ),
           ios: (_) => CupertinoButton.filled(
             onPressed: _onSubmitButtonPressed,
-            child: Text(
-              widget.label,
-              style: const TextStyle(color: Colors.white),
-            ),
+            child: Text(widget.label),
           ),
         );
 

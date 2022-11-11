@@ -15,15 +15,17 @@ class RideListItem extends ConsumerWidget {
 
   Color? _getMonthColor(BuildContext context) {
     if (ride.date.month % 2 == 0) {
-      switch (Theme.of(context).platform) {
+      final theme = Theme.of(context);
+
+      switch (theme.platform) {
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          return Colors.blue;
+          return theme.primaryColor;
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
-          return CupertinoColors.activeBlue;
+          return CupertinoTheme.of(context).primaryColor;
       }
     }
 

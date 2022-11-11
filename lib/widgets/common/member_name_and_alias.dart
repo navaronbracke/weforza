@@ -11,7 +11,7 @@ class MemberNameAndAlias extends StatelessWidget {
     required TextStyle style,
   })  : _isTwoLine = false,
         firstLineStyle = style,
-        secondLineStyle = const TextStyle();
+        secondLineStyle = null;
 
   const MemberNameAndAlias.twoLines({
     super.key,
@@ -51,7 +51,7 @@ class MemberNameAndAlias extends StatelessWidget {
   final TextOverflow overflow;
 
   /// The style for the second line.
-  final TextStyle secondLineStyle;
+  final TextStyle? secondLineStyle;
 
   @override
   Widget build(BuildContext context) {

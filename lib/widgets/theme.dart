@@ -13,6 +13,9 @@ abstract class AppTheme {
       selectedColor: Colors.blue,
       secondaryLabelStyle: TextStyle(color: Colors.white),
     ),
+    extensions: <ThemeExtension>[
+      DestructiveButtons(errorColor: colorScheme.error),
+    ],
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue,
@@ -37,8 +40,8 @@ abstract class AppTheme {
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
   );
 
-  /// The theme for destructive actions, such as delete buttons.
-  static final desctructiveAction = DestructiveActionTheme();
+  /// The color scheme for the MaterialApp.
+  static final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
 
   /// The device type picker theme.
   static final deviceTypePicker = DeviceTypePickerThemes();
@@ -65,17 +68,6 @@ abstract class AppTheme {
 
   /// The theme for the scan stepper.
   static const scanStepper = ScanStepperThemes();
-}
-
-/// This class represents the theme for destructive action buttons.
-class DestructiveActionTheme {
-  /// The theme for destructive [ElevatedButton]s.
-  final elevatedButtonTheme = ElevatedButton.styleFrom(
-    backgroundColor: Colors.red,
-  );
-
-  /// The theme for destructive [TextButton]s.
-  final textButtonTheme = TextButton.styleFrom(foregroundColor: Colors.red);
 }
 
 /// This class represents the data for [DeviceTypePickerThemes].
@@ -245,4 +237,43 @@ class ScanStepperThemes {
     ),
     inactive: CupertinoColors.inactiveGray,
   );
+}
+
+/// This class defines a theme extension for destructive Material buttons.
+@immutable
+class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
+  DestructiveButtons({
+    this.errorColor,
+  })  : elevatedButtonStyle = ElevatedButton.styleFrom(
+          backgroundColor: errorColor,
+        ),
+        textButtonStyle = TextButton.styleFrom(foregroundColor: errorColor);
+
+  /// The style for destructive [ElevatedButton]s.
+  final ButtonStyle elevatedButtonStyle;
+
+  /// The color that is used to create the [ButtonStyle]s.
+  final Color? errorColor;
+
+  /// The style for destructive [TextButton]s.
+  final ButtonStyle textButtonStyle;
+
+  @override
+  DestructiveButtons copyWith({Color? errorColor}) {
+    return DestructiveButtons(errorColor: errorColor);
+  }
+
+  @override
+  ThemeExtension<DestructiveButtons> lerp(
+    ThemeExtension<DestructiveButtons>? other,
+    double t,
+  ) {
+    if (other is! DestructiveButtons) {
+      return this;
+    }
+
+    return DestructiveButtons(
+      errorColor: Color.lerp(errorColor, other.errorColor, t),
+    );
+  }
 }

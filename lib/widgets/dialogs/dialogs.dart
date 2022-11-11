@@ -140,11 +140,11 @@ class WeforzaAlertDialog extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+        final styles = Theme.of(context).extension<DestructiveButtons>()!;
+
         return TextButton(
           onPressed: onPressed,
-          style: isDestructive
-              ? AppTheme.desctructiveAction.textButtonTheme
-              : null,
+          style: isDestructive ? styles.textButtonStyle : null,
           child: Text(label),
         );
       case TargetPlatform.iOS:

@@ -82,17 +82,14 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (_) {
-        final style = ElevatedButton.styleFrom(
+      android: (_) => ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
           backgroundColor: AppTheme.manualSelectionBottomBar.saveButtonColor,
           foregroundColor: Colors.white,
-        );
-
-        return ElevatedButtonTheme(
-          data: ElevatedButtonThemeData(style: style),
-          child: ElevatedButton(onPressed: onPressed, child: Text(text)),
-        );
-      },
+        ),
+        child: Text(text),
+      ),
       ios: (_) => CupertinoButton.filled(
         onPressed: onPressed,
         padding: const EdgeInsets.symmetric(horizontal: 24),

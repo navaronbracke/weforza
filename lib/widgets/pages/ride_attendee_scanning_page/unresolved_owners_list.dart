@@ -160,7 +160,7 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
 
     Widget child = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: MemberNameAndAlias(
+      child: MemberNameAndAlias.twoLines(
         alias: widget.item.alias,
         firstLineStyle: firstNameStyle,
         firstName: widget.item.firstName,

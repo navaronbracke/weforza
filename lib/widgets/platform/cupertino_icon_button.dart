@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 class CupertinoIconButton extends StatelessWidget {
   const CupertinoIconButton({
     super.key,
-    this.color = CupertinoColors.activeBlue,
+    this.color,
     required this.icon,
     required this.onPressed,
     this.size = kMinInteractiveDimensionCupertino,
@@ -12,8 +12,8 @@ class CupertinoIconButton extends StatelessWidget {
 
   /// The color for the icon.
   ///
-  /// Defaults to [CupertinoColors.activeBlue].
-  final Color color;
+  /// Defaults to [CupertinoThemeData.primaryColor] if null.
+  final Color? color;
 
   /// The icon for the button.
   final IconData icon;
@@ -35,7 +35,9 @@ class CupertinoIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Icon(
         icon,
-        color: onPressed == null ? CupertinoColors.placeholderText : color,
+        color: onPressed == null
+            ? CupertinoColors.placeholderText
+            : color ?? CupertinoTheme.of(context).primaryColor,
       ),
     );
   }

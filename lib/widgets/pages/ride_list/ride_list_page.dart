@@ -60,10 +60,10 @@ class RideListPage extends StatelessWidget {
               ),
             ),
             CupertinoIconButton(
+              icon: CupertinoIcons.arrow_up_doc_fill,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const ExportRidePage()),
               ),
-              icon: CupertinoIcons.arrow_up_doc_fill,
             ),
           ],
         ),

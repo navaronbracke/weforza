@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the button bar for an [EditExcludedTermInputField].
 ///
@@ -48,10 +47,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       // The delete button is always shown.
       child: PlatformAwareWidget(
         android: (context) => IconButton(
-          icon: Icon(
-            Icons.delete,
-            color: AppTheme.desctructiveAction.androidDefaultErrorStyle.color,
-          ),
+          icon: Icon(Icons.delete, color: Theme.of(context).errorColor),
           onPressed: () => onDeletePressed(context),
           padding: EdgeInsets.zero,
         ),

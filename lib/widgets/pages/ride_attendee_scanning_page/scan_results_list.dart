@@ -148,13 +148,11 @@ class _ScanResultsListItem extends StatelessWidget {
           padding: const EdgeInsets.only(right: 4),
           child: Icon(icon, color: textStyle.color),
         ),
-        MemberNameAndAlias(
+        MemberNameAndAlias.singleLine(
           alias: owner.alias,
-          firstLineStyle: textStyle,
           firstName: owner.firstName,
-          isTwoLine: false,
           lastName: owner.lastName,
-          secondLineStyle: textStyle,
+          style: textStyle,
         ),
       ],
     );

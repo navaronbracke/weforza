@@ -61,11 +61,15 @@ class _ManualSelectionListItemState
       isScanned = selectedRideAttendee.isScanned;
     }
 
-    // The text color uses the Theme's default when unselected.
-    final textColor = isSelected ? Colors.white : null;
     const theme = AppTheme.memberListItem;
-    final firstNameStyle = theme.firstNameStyle.copyWith(color: textColor);
-    final lastNameStyle = theme.lastNameStyle.copyWith(color: textColor);
+
+    TextStyle firstNameStyle = theme.firstNameStyle;
+    TextStyle lastNameStyle = theme.lastNameStyle;
+
+    if (isSelected) {
+      firstNameStyle = firstNameStyle.copyWith(color: Colors.white);
+      lastNameStyle = lastNameStyle.copyWith(color: Colors.white);
+    }
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -104,7 +108,7 @@ class _ManualSelectionListItemState
               ),
             ),
             Expanded(
-              child: MemberNameAndAlias(
+              child: MemberNameAndAlias.twoLines(
                 alias: widget.item.alias,
                 firstLineStyle: firstNameStyle,
                 firstName: widget.item.firstName,

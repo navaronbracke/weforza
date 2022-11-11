@@ -27,10 +27,7 @@ class MemberName extends ConsumerWidget {
       children: <Widget>[
         Text(
           firstName,
-          style: theme.firstNameStyle.copyWith(
-            fontSize: 25,
-            fontWeight: FontWeight.w500,
-          ),
+          style: theme.firstNameStyle.copyWith(fontSize: 25),
           overflow: TextOverflow.ellipsis,
         ),
         Text(

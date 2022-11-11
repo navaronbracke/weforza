@@ -7,7 +7,6 @@ import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   const ProfileImagePicker({
@@ -88,14 +87,10 @@ class _AsyncProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const theme = AppTheme.profileImagePlaceholder;
-
     return FutureBuilder<File?>(
       future: future,
       builder: (context, snapshot) => ProfileImage(
-        backgroundColor: theme.backgroundColor,
         icon: icon,
-        iconColor: theme.iconColor,
         image: snapshot.data,
         loading: loading,
         size: size,

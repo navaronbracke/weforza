@@ -1,6 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a progress indicator for a device scan.
 class ScanProgressIndicator extends StatelessWidget {
@@ -16,6 +16,14 @@ class ScanProgressIndicator extends StatelessWidget {
 
   /// The stream that indicates if there is a running scan.
   final Stream<bool> isScanning;
+
+  Widget _buildProgressIndicator(double progress, Color color) {
+    return LinearProgressIndicator(
+      backgroundColor: color.withOpacity(0.4),
+      value: progress,
+      valueColor: AlwaysStoppedAnimation<Color>(color),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,28 +47,14 @@ class ScanProgressIndicator extends StatelessWidget {
                 final progress = animationController.value;
 
                 return PlatformAwareWidget(
-                  android: (_) {
-                    final theme = AppTheme.scanProgressIndicator.android;
-
-                    return LinearProgressIndicator(
-                      backgroundColor: theme.backgroundColor,
-                      value: progress,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.progressColor,
-                      ),
-                    );
-                  },
-                  ios: (_) {
-                    final theme = AppTheme.scanProgressIndicator.ios;
-
-                    return LinearProgressIndicator(
-                      backgroundColor: theme.backgroundColor,
-                      value: progress,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        theme.progressColor,
-                      ),
-                    );
-                  },
+                  android: (_) => _buildProgressIndicator(
+                    progress,
+                    Colors.green,
+                  ),
+                  ios: (_) => _buildProgressIndicator(
+                    progress,
+                    CupertinoColors.systemGreen,
+                  ),
                 );
               },
             ),

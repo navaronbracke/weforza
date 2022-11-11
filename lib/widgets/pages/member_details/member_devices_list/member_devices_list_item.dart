@@ -7,7 +7,6 @@ import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class MemberDevicesListItem extends StatelessWidget {
   const MemberDevicesListItem({
@@ -89,10 +88,7 @@ class _EditDeviceButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformAwareWidget(
       android: (context) => IconButton(
-        icon: Icon(
-          Icons.edit,
-          color: AppTheme.memberDevicesList.androidEditDeviceButtonColor,
-        ),
+        icon: Icon(Icons.edit, color: Theme.of(context).primaryColor),
         onPressed: () => _onEditDevicePressed(context, ref),
       ),
       ios: (context) => CupertinoIconButton(

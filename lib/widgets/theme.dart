@@ -57,9 +57,6 @@ abstract class AppTheme {
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
 
-  /// The ride attendee scan results theme.
-  static const rideAttendeeScanResult = RideAttendeeScanResultThemes();
-
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
 
@@ -256,64 +253,5 @@ class ScanStepperThemes {
       color: CupertinoColors.activeBlue,
     ),
     inactive: CupertinoColors.inactiveGray,
-  );
-}
-
-/// This class represents the data for a [RideAttendeeScanResultThemes] sub theme.
-class RideAttendeeScanResultTheme {
-  const RideAttendeeScanResultTheme({
-    required this.multipleOwnersDescriptionStyle,
-    required this.multipleOwnersLabelStyle,
-    required this.selectedBackgroundColor,
-    required this.singleOwnerColor,
-  });
-
-  /// The style for the multiple owners description label.
-  final TextStyle multipleOwnersDescriptionStyle;
-
-  /// The style for the multiple owners label.
-  final TextStyle multipleOwnersLabelStyle;
-
-  /// The background color for a selected item.
-  final Color selectedBackgroundColor;
-
-  /// The color for a scan result that has a single owner.
-  final Color singleOwnerColor;
-}
-
-/// This class represents the theme for ride attendee scan results.
-class RideAttendeeScanResultThemes {
-  const RideAttendeeScanResultThemes();
-
-  /// The scan result theme for Android.
-  final android = const RideAttendeeScanResultTheme(
-    multipleOwnersDescriptionStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: Colors.grey,
-    ),
-    multipleOwnersLabelStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: Colors.orange,
-    ),
-    selectedBackgroundColor: Color(0xFF1976D2),
-    singleOwnerColor: Colors.blue,
-  );
-
-  /// The scan result theme for iOS.
-  final ios = const RideAttendeeScanResultTheme(
-    multipleOwnersDescriptionStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: CupertinoColors.systemGrey,
-    ),
-    multipleOwnersLabelStyle: TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: CupertinoColors.activeOrange,
-    ),
-    selectedBackgroundColor: CupertinoColors.activeBlue,
-    singleOwnerColor: CupertinoColors.activeBlue,
   );
 }

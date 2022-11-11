@@ -169,10 +169,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
                 },
               ),
               ios: (_) => CupertinoButton.filled(
-                child: Text(
-                  translator.Export,
-                  style: const TextStyle(color: Colors.white),
-                ),
+                child: Text(translator.Export),
                 onPressed: () {
                   if (_filenameErrorController.value.isEmpty) {
                     _exportFuture = _submitForm(translator);

@@ -141,7 +141,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 style: textTheme.titleMedium,
               ),
               Theme(
-                // TODO: remove when useMaterial3 is true in MaterialApp
                 data: ThemeData(useMaterial3: true, chipTheme: theme.chipTheme),
                 child: MemberListFilter(
                   initialFilter: memberFilterController.value,

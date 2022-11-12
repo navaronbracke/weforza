@@ -20,28 +20,25 @@ class MemberName extends ConsumerWidget {
       selectedMemberProvider.select((value) => value!.alias),
     );
 
-    const theme = AppTheme.memberListItem;
+    const textTheme = AppTheme.riderTextTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           firstName,
-          style: theme.firstNameStyle.copyWith(fontSize: 25),
+          style: textTheme.firstNameLargeStyle,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
           lastName,
-          style: theme.lastNameStyle.copyWith(fontSize: 20),
+          style: textTheme.lastNameLargeStyle,
           overflow: TextOverflow.ellipsis,
         ),
         if (alias.isNotEmpty)
           Text(
             "'$alias'",
-            style: theme.lastNameStyle.copyWith(
-              fontSize: 15,
-              fontStyle: FontStyle.italic,
-            ),
+            style: textTheme.aliasStyle,
             overflow: TextOverflow.ellipsis,
           ),
       ],

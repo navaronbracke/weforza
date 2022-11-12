@@ -61,10 +61,10 @@ class _ManualSelectionListItemState
       isScanned = selectedRideAttendee.isScanned;
     }
 
-    const theme = AppTheme.memberListItem;
+    const textTheme = AppTheme.riderTextTheme;
 
-    TextStyle firstNameStyle = theme.firstNameStyle;
-    TextStyle lastNameStyle = theme.lastNameStyle;
+    TextStyle firstNameStyle = textTheme.firstNameStyle;
+    TextStyle lastNameStyle = textTheme.lastNameStyle;
 
     if (isSelected) {
       firstNameStyle = firstNameStyle.copyWith(color: Colors.white);

@@ -57,10 +57,9 @@ class AddRideCalendarItem extends StatelessWidget {
       initialData: delegate.currentSelection,
       stream: delegate.selection,
       builder: (context, _) {
-        const theme = AppTheme.rideCalendar;
         final backgroundColor = _computeBackgroundColor();
         final style = delegate.isBeforeToday(date) || delegate.isScheduled(date)
-            ? theme.scheduledDayStyle
+            ? const TextStyle(color: Colors.white)
             : null;
 
         return GestureDetector(

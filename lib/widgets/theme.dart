@@ -39,7 +39,7 @@ abstract class AppTheme {
         ),
       ),
     ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+    colorScheme: colorScheme,
   );
 
   /// The color scheme for the MaterialApp.
@@ -95,6 +95,8 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
     );
   }
 }
+
+// TODO: deprecate this theme (blocked on Material 3 switch & bottom app bar)
 
 /// This class represents the theme for the bottom bar
 /// on the manual ride attendee selection page.

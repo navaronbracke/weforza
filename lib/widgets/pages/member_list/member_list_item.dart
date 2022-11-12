@@ -24,7 +24,7 @@ class MemberListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const theme = AppTheme.memberListItem;
+    const textTheme = AppTheme.riderTextTheme;
 
     return GestureDetector(
       onTap: () {
@@ -49,10 +49,10 @@ class MemberListItem extends ConsumerWidget {
             Expanded(
               child: MemberNameAndAlias.twoLines(
                 alias: member.alias,
-                firstLineStyle: theme.firstNameStyle,
+                firstLineStyle: textTheme.firstNameStyle,
                 firstName: member.firstName,
                 lastName: member.lastName,
-                secondLineStyle: theme.lastNameStyle,
+                secondLineStyle: textTheme.lastNameStyle,
               ),
             ),
             Padding(

@@ -22,7 +22,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
         firstName: firstName,
         lastName: lastName,
         alias: alias,
-        style: AppTheme.memberListItem.lastNameStyle,
+        style: AppTheme.riderTextTheme.lastNameStyle,
       ),
     );
   }

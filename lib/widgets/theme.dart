@@ -53,9 +53,6 @@ abstract class AppTheme {
   /// The theme for the bottom bar on the manual selection.
   static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();
 
-  /// The ride calendar theme.
-  static const rideCalendar = RideCalendarTheme();
-
   /// The text theme for rider names.
   static const riderTextTheme = RiderTextTheme();
 }
@@ -116,19 +113,57 @@ class ManualSelectionBottomBarTheme {
 
 /// This class represents the theme for the ride calendar date picker.
 class RideCalendarTheme {
-  const RideCalendarTheme();
+  const RideCalendarTheme._({
+    required this.futureRide,
+    required this.pastDay,
+    required this.pastRide,
+    required this.selection,
+  });
 
-  /// The color for a planned ride that is in the future.
-  final Color futureRide = const Color(0xFF1976D2);
+  /// Construct a [RideCalendarTheme] for the current [ThemeData.platform].
+  ///
+  /// The given [context] is used to look up the target platform.
+  ///
+  /// Returns a [RideCalendarTheme] with a palette of colors
+  /// adapted to the current platform.
+  factory RideCalendarTheme.fromPlatform(BuildContext context) {
+    final theme = Theme.of(context);
 
-  /// The color for a day that is in the past, which had no ride scheduled.
-  final Color pastDay = const Color(0xFFBDBDBD);
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return RideCalendarTheme._(
+          futureRide: theme.primaryColor.withOpacity(0.4),
+          pastDay: Colors.grey.shade400,
+          pastRide: Colors.grey.shade700,
+          selection: theme.colorScheme.primary,
+        );
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        final primaryColor = CupertinoTheme.of(context).primaryColor;
 
-  /// The color for a day that is in the past, which had a ride scheduled.
-  final Color pastRide = const Color(0xFF616161);
+        return RideCalendarTheme._(
+          futureRide: primaryColor.withOpacity(0.4),
+          pastDay: CupertinoColors.systemGrey4,
+          pastRide: CupertinoColors.inactiveGray,
+          selection: primaryColor,
+        );
+    }
+  }
 
-  /// The color for a day that is currently selected.
-  final Color selectedDay = const Color(0xFF90CAF9);
+  /// The color for a ride that is in the future.
+  final Color futureRide;
+
+  /// The color for a day in the past, which did not have a ride planned.
+  final Color pastDay;
+
+  /// The color for a ride that is in the past.
+  final Color pastRide;
+
+  /// The color for currently selected days.
+  final Color selection;
 }
 
 /// This class defines the text theme for rider names.

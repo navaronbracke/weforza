@@ -5,6 +5,7 @@ import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.
 import 'package:weforza/widgets/custom/date_picker/date_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendar extends StatelessWidget {
   const AddRideCalendar({super.key, required this.delegate});
@@ -19,6 +20,8 @@ class AddRideCalendar extends StatelessWidget {
     const double dayItemSize = 40;
     // A weekday is as wide as a single day item and its horizontal padding.
     const double weekDayWidth = (dayItemPadding * 2) + dayItemSize;
+
+    final theme = RideCalendarTheme.fromPlatform(context);
 
     return DatePicker(
       backButton: PlatformAwareWidget(
@@ -40,6 +43,7 @@ class AddRideCalendar extends StatelessWidget {
                   date: date,
                   delegate: delegate,
                   size: dayItemSize,
+                  theme: theme,
                 )
               : const SizedBox.square(dimension: dayItemSize),
         );

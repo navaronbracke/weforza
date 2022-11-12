@@ -58,9 +58,6 @@ abstract class AppTheme {
 
   /// The text theme for rider names.
   static const riderTextTheme = RiderTextTheme();
-
-  /// The theme for the scan stepper.
-  static const scanStepper = ScanStepperThemes();
 }
 
 /// This class defines a theme extension for destructive Material buttons.
@@ -162,44 +159,4 @@ class RiderTextTheme {
 
   /// The style for rider last names.
   final TextStyle lastNameStyle = const TextStyle(fontSize: 14);
-}
-
-/// This class represents the data for a [ScanStepperTheme] sub theme.
-class ScanStepperTheme {
-  const ScanStepperTheme({
-    required this.active,
-    required this.arrow,
-    required this.inactive,
-  });
-
-  /// The color for the active step.
-  final Color active;
-
-  /// The icon for the arrow.
-  final Icon arrow;
-
-  /// The color for inactive steps.
-  final Color inactive;
-}
-
-/// This class represents the theme for a scan stepper.
-class ScanStepperThemes {
-  const ScanStepperThemes();
-
-  /// The theme for the Android stepper.
-  final android = const ScanStepperTheme(
-    active: Color(0xFFC5E1A5),
-    arrow: Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF81D4FA)),
-    inactive: Colors.white,
-  );
-
-  /// The theme for the iOS stepper.
-  final ios = const ScanStepperTheme(
-    active: CupertinoColors.activeGreen,
-    arrow: Icon(
-      CupertinoIcons.chevron_forward,
-      color: CupertinoColors.activeBlue,
-    ),
-    inactive: CupertinoColors.inactiveGray,
-  );
 }

@@ -47,7 +47,6 @@
 	"DeviceUnknown": "Unknown",
 	"DeviceWatch": "Watch",
 	"Devices": "Devices",
-	"DevicesListNoDevices": "No devices to show",
 	"DisallowedWordExists": "This disallowed word already exists",
 	"DisallowedWordMaxLength": "A disallowed word can't be longer than {maxLength} characters",
 	"DisallowedWordNoWhitespace": "A disallowed word can't contain spaces",

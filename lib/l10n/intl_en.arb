@@ -64,7 +64,7 @@
 	"ExportRides": "Export Rides",
 	"ExportingAllRides": "Exporting all rides",
 	"ExportingRide": "Exporting ride",
-	"ExportingMembersDescription": "Exporting riders and devices",
+	"ExportingRiders": "Exporting riders",
 	"FileCsvExtension": "csv",
 	"FileExists": "This file already exists",
 	"FileJsonExtension": "json",

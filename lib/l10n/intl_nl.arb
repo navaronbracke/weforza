@@ -64,7 +64,7 @@
 	"ExportRides": "Ritten Exporteren",
 	"ExportingAllRides": "Alle ritten exporteren",
 	"ExportingRide": "Rit exporteren",
-	"ExportingMembersDescription": "Renners en toestellen exporteren",
+	"ExportingRiders": "Renners exporteren",
 	"FileCsvExtension": "csv",
 	"FileExists": "Dit bestand bestaat al",
 	"FileJsonExtension": "json",

@@ -112,7 +112,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.member == null ? strings.AddMemberTitle : strings.EditMember,
+          widget.member == null ? strings.NewRider : strings.EditRider,
         ),
       ),
       body: SingleChildScrollView(
@@ -228,7 +228,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(
-          widget.member == null ? strings.AddMemberTitle : strings.EditMember,
+          widget.member == null ? strings.NewRider : strings.EditRider,
         ),
         transitionBetweenRoutes: false,
       ),
@@ -333,7 +333,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
 
   Widget _buildErrorMessage(Object error, S translator) {
     if (error is MemberExistsException) {
-      return Text(translator.MemberAlreadyExists);
+      return Text(translator.RiderExists);
     }
 
     return Text(translator.GenericError);
@@ -342,9 +342,8 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
-    final submitButtonLabel = widget.member == null
-        ? translator.AddMemberSubmit
-        : translator.EditMember;
+    final submitButtonLabel =
+        widget.member == null ? translator.AddRider : translator.EditRider;
 
     return PlatformAwareWidget(
       android: (context) => FormSubmitButton(

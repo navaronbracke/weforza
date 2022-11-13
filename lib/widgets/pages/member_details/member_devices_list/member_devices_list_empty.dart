@@ -35,7 +35,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                 child: Text(
-                  translator.MemberDetailsNoDevices,
+                  translator.RiderNoDevices,
                   textAlign: TextAlign.center,
                 ),
               ),

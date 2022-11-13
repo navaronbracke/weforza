@@ -74,7 +74,7 @@
 	"FilenameRequired": "A filename is required",
 	"FilenameWhitespace": "A filename can't be only whitespace",
 	"Filter": "Filter",
-	"FirstName": "First Name",
+	"FirstName": "First name",
 	"FirstNameBlank": "A first name can't be only whitespace",
 	"FirstNameIllegalCharacters": "A first name can only contain letters, spaces, ' or -",
 	"FirstNameMaxLength": "A first name can't be longer than {maxLength} characters",

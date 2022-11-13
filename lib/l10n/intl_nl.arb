@@ -108,7 +108,7 @@
 	"PickFileJsonIncompatible": "Het gekozen .json bestand is incompatibel",
 	"PickFileJsonOrCsvRequired": "Enkel .csv of .json bestanden zijn toegelaten",
 	"Reset": "Resetten",
-	"ResetRideCalendar": "Kalender Resetten",
+	"ResetRideCalendar": "Rittenkalender resetten",
 	"ResetRideCalendarDescription": "Bent u zeker dat u de rittenkalender wil resetten?\n\nDit zal alle ritten verwijderen en de aanwezigheden van alle renners worden gereset.",
 	"ResetRideCalendarErrorDescription": "Er liep iets fout bij het resetten van de rittenkalender",
 	"ResetRideCalendarPendingDescription": "De rittenkalender wordt gereset",

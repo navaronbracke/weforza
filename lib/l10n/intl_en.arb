@@ -40,7 +40,7 @@
 	"DeviceNameBlank": "A device name can't be only whitespace",
 	"DeviceNameCannotContainComma": "A device name cannot contain a comma",
 	"DeviceNameMaxLength": "A device name can't be longer than {maxLength} characters",
-	"DeviceNameRequired": "Device name is required",
+	"DeviceNameRequired": "A device name is required",
 	"DevicePhone": "Phone",
 	"DevicePowerMeter": "Power meter",
 	"DevicePulseMonitor": "Pulse monitor",

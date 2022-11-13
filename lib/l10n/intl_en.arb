@@ -112,7 +112,7 @@
 	"ResetRideCalendarDescription": "Are you sure that you want to reset the ride calendar?\n\nThis will remove all the rides and the attendances of all riders will be reset.",
 	"ResetRideCalendarErrorDescription": "Something went wrong while trying to reset the ride calendar",
 	"ResetRideCalendarPendingDescription": "Resetting the ride calendar",
-	"RetryScan": "Retry Scan",
+	"RetryScan": "Retry scan",
 	"RideCalendar": "Ride calendar",
 	"RideDetailsNoAttendees": "This ride has no attendants",
 	"RiderListFilter": "Rider List Filter",

@@ -28,7 +28,7 @@ class AddRideFormState extends ConsumerState<AddRideForm> {
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).AddRideTitle),
+        title: Text(S.of(context).NewRide),
         actions: [_ClearRideSelectionButton(delegate)],
       ),
       body: _buildBody(),
@@ -38,7 +38,7 @@ class AddRideFormState extends ConsumerState<AddRideForm> {
   Widget _buildIosLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).AddRideTitle),
+        middle: Text(S.of(context).NewRide),
         transitionBetweenRoutes: false,
         trailing: _ClearRideSelectionButton(delegate),
       ),
@@ -183,7 +183,7 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
             switch (submitSnapshot.connectionState) {
               case ConnectionState.none:
                 return _buildButton(
-                  label: translator.AddRideSubmit,
+                  label: translator.AddSelection,
                   onTap: hasSelection ? _onSubmitPressed : null,
                 );
               case ConnectionState.active:
@@ -193,7 +193,7 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
                 if (submitSnapshot.hasError) {
                   return _buildButton(
                     errorMessage: translator.GenericError,
-                    label: translator.AddRideSubmit,
+                    label: translator.AddSelection,
                     onTap: hasSelection ? _onSubmitPressed : null,
                   );
                 }

@@ -237,7 +237,7 @@ class _DatePickerMonth extends StatelessWidget {
     required this.weekPadding,
   });
 
-  /// All the days for this month view.
+  /// The days for this month.
   final List<Widget> days;
 
   /// The padding for a single week.

@@ -6,27 +6,16 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeleteDeviceButton extends StatelessWidget {
-  const DeleteDeviceButton({
-    super.key,
-    required this.index,
-    required this.onDeviceDeleted,
-  });
+  const DeleteDeviceButton({super.key, required this.index});
 
   /// The index of the device to delete.
   final int index;
 
-  /// The handler that is invoked after a device was deleted.
-  final void Function() onDeviceDeleted;
-
   void _onDeletePressed(BuildContext context) async {
-    final result = await showWeforzaDialog<bool>(
+    await showWeforzaDialog<void>(
       context,
       builder: (_) => DeleteDeviceDialog(index: index),
     );
-
-    if (result ?? false) {
-      onDeviceDeleted();
-    }
   }
 
   @override

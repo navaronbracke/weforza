@@ -58,7 +58,7 @@ class MemberDevicesListItem extends StatelessWidget {
         child: _buildItem(context),
       ),
       ios: (context) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 16, 16, 16),
+        padding: const EdgeInsets.only(left: 4, right: 16),
         child: _buildItem(context),
       ),
     );

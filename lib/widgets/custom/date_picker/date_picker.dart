@@ -89,62 +89,6 @@ class DatePicker extends StatelessWidget {
   }
 }
 
-/// This class represents the month header for a [DatePicker].
-class _DatePickerHeader extends StatelessWidget {
-  const _DatePickerHeader({
-    required this.backButton,
-    required this.forwardButton,
-    required this.monthStream,
-    this.style,
-  });
-
-  /// The button that navigates back one month when tapped.
-  final Widget backButton;
-
-  /// The button that navigates forward one month when tapped.
-  final Widget forwardButton;
-
-  /// The stream that provides updates about the current month.
-  final Stream<Jiffy> monthStream;
-
-  /// The style for the month text.
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: StreamBuilder<Jiffy>(
-        stream: monthStream,
-        builder: (context, snapshot) {
-          final month = snapshot.data?.dateTime;
-
-          if (month == null) {
-            return const SizedBox(height: 50);
-          }
-
-          final languageCode = Localizations.localeOf(context).languageCode;
-
-          return Row(
-            children: [
-              backButton,
-              Expanded(
-                child: Center(
-                  child: Text(
-                    DateFormat.MMMM(languageCode).add_y().format(month),
-                    style: style,
-                  ),
-                ),
-              ),
-              forwardButton,
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
 /// This class represents the body for a [DatePicker].
 /// This body is placed under the [_DatePickerHeader].
 class _DatePickerBody extends StatelessWidget {
@@ -225,6 +169,68 @@ class _DatePickerBody extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// This class represents the month header for a [DatePicker].
+class _DatePickerHeader extends StatelessWidget {
+  const _DatePickerHeader({
+    required this.backButton,
+    required this.forwardButton,
+    this.height = 50,
+    required this.monthStream,
+    this.style,
+  });
+
+  /// The button that navigates back one month when tapped.
+  final Widget backButton;
+
+  /// The button that navigates forward one month when tapped.
+  final Widget forwardButton;
+
+  /// The height for the month header.
+  ///
+  /// Defaults to 50.
+  final double height;
+
+  /// The stream that provides updates about the current month.
+  final Stream<Jiffy> monthStream;
+
+  /// The style for the month text.
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      child: StreamBuilder<Jiffy>(
+        stream: monthStream,
+        builder: (context, snapshot) {
+          final month = snapshot.data?.dateTime;
+
+          if (month == null) {
+            return SizedBox(height: height);
+          }
+
+          final languageCode = Localizations.localeOf(context).languageCode;
+
+          return Row(
+            children: [
+              backButton,
+              Expanded(
+                child: Center(
+                  child: Text(
+                    DateFormat.MMMM(languageCode).add_y().format(month),
+                    style: style,
+                  ),
+                ),
+              ),
+              forwardButton,
+            ],
+          );
+        },
+      ),
     );
   }
 }

@@ -14,7 +14,8 @@ description: The WeForza App
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.3 <3.0.0"
+  # TODO: bump dart to a stable release once the next Flutter stable release is available
+  sdk: ">=2.19.0-444.1.beta <3.0.0"
 
 dependencies:
   flutter:

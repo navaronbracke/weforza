@@ -121,6 +121,7 @@ class DatePicker extends StatelessWidget {
 class _DatePickerBody extends StatelessWidget {
   const _DatePickerBody({
     required this.dayBuilder,
+    required this.dayItemSize,
     required this.delegate,
     required this.showWeekdays,
     required this.weekDayStyle,
@@ -128,6 +129,8 @@ class _DatePickerBody extends StatelessWidget {
   });
 
   final DatePickerDayBuilder dayBuilder;
+
+  final Size dayItemSize;
 
   final DatePickerDelegate delegate;
 
@@ -137,7 +140,7 @@ class _DatePickerBody extends StatelessWidget {
 
   final double weekSpacing;
 
-  Widget _buildWeekdaysHeader(DateFormat dateFormat, Size dayItemSize) {
+  Widget _buildWeekdaysHeader(DateFormat dateFormat) {
     // This list contains the first monday - sunday of the year 1970.
     final weekDays = [
       DateTime(1970, 1, 5),
@@ -187,8 +190,12 @@ class _DatePickerBody extends StatelessWidget {
 
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),
-                  days: days.map((date) {
-                    return dayBuilder(date, date.month == currentMonth.month);
+                  days: days.map((day) {
+                    return dayBuilder(
+                      day,
+                      day.month == currentMonth.month,
+                      dayItemSize,
+                    );
                   }).toList(),
                   weekSpacing: weekSpacing,
                 );

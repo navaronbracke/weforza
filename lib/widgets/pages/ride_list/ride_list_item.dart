@@ -14,7 +14,7 @@ class RideListItem extends ConsumerWidget {
   final Ride ride;
 
   Color? _getMonthColor(BuildContext context) {
-    if (ride.date.month % 2 == 0) {
+    if (ride.date.month.isEven) {
       final theme = Theme.of(context);
 
       switch (theme.platform) {

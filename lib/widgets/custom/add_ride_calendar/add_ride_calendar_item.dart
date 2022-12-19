@@ -18,7 +18,7 @@ class AddRideCalendarItem extends StatelessWidget {
   final AddRideFormDelegate delegate;
 
   /// The size of this calendar item.
-  final double size;
+  final Size size;
 
   /// The theme for this ride calendar item.
   final RideCalendarTheme theme;
@@ -65,18 +65,21 @@ class AddRideCalendarItem extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => delegate.onDaySelected(date),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: _computeBackgroundColor(),
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-            ),
-            child: SizedBox.square(
-              dimension: size,
-              child: Center(
-                child: Text(
-                  '${date.day}',
-                  style: style,
-                  textAlign: TextAlign.center,
+          child: SizedBox.fromSize(
+            size: size,
+            child: Padding(
+              padding: theme.padding,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: _computeBackgroundColor(),
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                ),
+                child: Center(
+                  child: Text(
+                    '${date.day}',
+                    style: style,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),

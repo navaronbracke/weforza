@@ -115,7 +115,7 @@ class FileNameInputField extends StatelessWidget {
               return ValidationLabel(
                 stream: errorController,
                 style: theme.textTheme.labelMedium!.copyWith(
-                  color: theme.errorColor,
+                  color: theme.colorScheme.error,
                 ),
               );
             },

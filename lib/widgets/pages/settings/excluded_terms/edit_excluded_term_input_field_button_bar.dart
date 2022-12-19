@@ -47,7 +47,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       // The delete button is always shown.
       child: PlatformAwareWidget(
         android: (context) => IconButton(
-          icon: Icon(Icons.delete, color: Theme.of(context).errorColor),
+          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
           onPressed: () => onDeletePressed(context),
           padding: EdgeInsets.zero,
         ),

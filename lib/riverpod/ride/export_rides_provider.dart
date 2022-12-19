@@ -67,7 +67,7 @@ class ExportRidesProvider {
 
     final file = await fileHandler.createFile(fileName, fileExtension);
 
-    if (await file.exists()) {
+    if (file.existsSync()) {
       return Future.error(FileExistsException());
     }
 

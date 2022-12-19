@@ -65,18 +65,21 @@ class AddRideCalendarItem extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => delegate.onDaySelected(date),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: _computeBackgroundColor(),
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-            ),
-            child: SizedBox.fromSize(
-              size: size,
-              child: Center(
-                child: Text(
-                  '${date.day}',
-                  style: style,
-                  textAlign: TextAlign.center,
+          child: SizedBox.fromSize(
+            size: size,
+            child: Padding(
+              padding: theme.padding,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: _computeBackgroundColor(),
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                ),
+                child: Center(
+                  child: Text(
+                    '${date.day}',
+                    style: style,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),

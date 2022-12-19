@@ -70,7 +70,6 @@ class ExcludedTermInputField extends StatelessWidget {
         keyboardType: TextInputType.text,
         maxLength: maxLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        maxLines: 1,
         onEditingComplete: onEditingComplete,
         textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.done,
@@ -85,7 +84,6 @@ class ExcludedTermInputField extends StatelessWidget {
           focusNode: focusNode,
           keyboardType: TextInputType.text,
           maxLength: maxLength,
-          maxLines: 1,
           onEditingComplete: onEditingComplete,
           // The excluded terms have a 15 margin on their border.
           padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),

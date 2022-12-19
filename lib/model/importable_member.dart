@@ -7,7 +7,10 @@ class ImportableMemberKey {
     required this.firstName,
     required this.lastName,
     required this.alias,
-  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(
+          firstName.isNotEmpty && lastName.isNotEmpty,
+          'The first name and last name of an importable member should not be empty',
+        );
 
   final String firstName;
   final String lastName;

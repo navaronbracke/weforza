@@ -14,7 +14,7 @@ class RideListItem extends ConsumerWidget {
   final Ride ride;
 
   Color? _getMonthColor(BuildContext context) {
-    if (ride.date.month % 2 == 0) {
+    if (ride.date.month.isEven) {
       final theme = Theme.of(context);
 
       switch (theme.platform) {
@@ -40,7 +40,7 @@ class RideListItem extends ConsumerWidget {
       children: <Widget>[
         Expanded(
           child: Text(
-            ride.getFormattedDate(context, false),
+            ride.getFormattedDate(context, shortForm: false),
             style: style,
           ),
         ),

@@ -161,7 +161,9 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             ),
             showScannedResultsToggle: ShowScannedResultsToggle(
               initialValue: _filtersController.showScannedResults,
-              onChanged: _filtersController.onShowScannedResultsChanged,
+              onChanged: (bool value) {
+                _filtersController.onShowScannedResultsChanged(value: value);
+              },
               stream: _filtersController.showScannedResultsStream,
             ),
           ),

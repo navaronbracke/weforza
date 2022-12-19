@@ -44,7 +44,10 @@ class _AddRideCalendarHeaderButton extends StatelessWidget {
     this.onPressed,
     this.buttonSize,
     this.axis,
-  ) : assert(axis == AxisDirection.left || axis == AxisDirection.right);
+  ) : assert(
+          axis == AxisDirection.left || axis == AxisDirection.right,
+          'The axis should be AxisDirection.left or AxisDirection.right',
+        );
 
   final AxisDirection axis;
 

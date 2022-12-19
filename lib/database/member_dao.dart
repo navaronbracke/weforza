@@ -22,7 +22,7 @@ abstract class MemberDao {
   Future<List<Member>> getMembers(MemberFilterOption filter);
 
   /// Toggle the active state of the member with the given [uuid].
-  Future<void> setMemberActive(String uuid, bool value);
+  Future<void> setMemberActive(String uuid, {required bool value});
 
   /// Update the given [member].
   Future<void> updateMember(Member member);
@@ -148,7 +148,7 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> setMemberActive(String uuid, bool value) async {
+  Future<void> setMemberActive(String uuid, {required bool value}) async {
     final record = _memberStore.record(uuid);
 
     if (await record.exists(_database)) {

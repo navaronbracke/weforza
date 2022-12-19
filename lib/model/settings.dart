@@ -6,7 +6,10 @@ class Settings {
     this.excludedTermsFilter = const {},
     this.memberListFilter = MemberFilterOption.all,
     this.scanDuration = 20,
-  }) : assert(scanDuration > 0);
+  }) : assert(
+          scanDuration > 0,
+          'A scan duration should be greater than zero',
+        );
 
   factory Settings.of(Map<String, Object?> values) {
     final excludedTermsFilter = values['excludedTermsFilter'] as List?;

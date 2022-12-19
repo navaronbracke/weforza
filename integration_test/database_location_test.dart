@@ -56,7 +56,7 @@ class FakeDatabaseFactory implements DatabaseFactory {
   Future<void> deleteDatabase(String path) async {
     final File database = fileSystem.file(path);
 
-    if (await database.exists()) {
+    if (database.existsSync()) {
       await database.delete();
     }
   }
@@ -71,7 +71,7 @@ class FakeDatabaseFactory implements DatabaseFactory {
   }) async {
     final File storage = fileSystem.file(path);
 
-    if (await storage.exists()) {
+    if (storage.existsSync()) {
       return FakeDatabase(path: storage.path, version: version ?? 1);
     }
 

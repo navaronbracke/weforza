@@ -44,7 +44,7 @@ class Ride {
   ///
   /// If [shortForm] is true, the date is formatted using [shortDatePattern].
   /// Otherwise it is formatted using [longDatePattern].
-  String getFormattedDate(BuildContext context, [bool shortForm = true]) {
+  String getFormattedDate(BuildContext context, {bool shortForm = true}) {
     return DateFormat(
       shortForm ? shortDatePattern : longDatePattern,
       Localizations.localeOf(context).languageCode,

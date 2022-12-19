@@ -117,6 +117,7 @@ class ManualSelectionBottomBarTheme {
 class RideCalendarTheme {
   const RideCalendarTheme._({
     required this.futureRide,
+    this.padding = const EdgeInsets.all(4),
     required this.pastDay,
     required this.pastRide,
     required this.selection,
@@ -128,7 +129,10 @@ class RideCalendarTheme {
   ///
   /// Returns a [RideCalendarTheme] with a palette of colors
   /// adapted to the current platform.
-  factory RideCalendarTheme.fromPlatform(BuildContext context) {
+  factory RideCalendarTheme.fromPlatform(
+    BuildContext context, {
+    EdgeInsets padding = const EdgeInsets.all(4),
+  }) {
     final theme = Theme.of(context);
 
     switch (theme.platform) {
@@ -138,6 +142,7 @@ class RideCalendarTheme {
       case TargetPlatform.windows:
         return RideCalendarTheme._(
           futureRide: theme.primaryColor.withOpacity(0.4),
+          padding: padding,
           pastDay: Colors.grey.shade400,
           pastRide: Colors.grey.shade700,
           selection: theme.colorScheme.primary,
@@ -148,6 +153,7 @@ class RideCalendarTheme {
 
         return RideCalendarTheme._(
           futureRide: primaryColor.withOpacity(0.4),
+          padding: padding,
           pastDay: CupertinoColors.systemGrey4,
           pastRide: CupertinoColors.inactiveGray,
           selection: primaryColor,
@@ -157,6 +163,11 @@ class RideCalendarTheme {
 
   /// The color for a ride that is in the future.
   final Color futureRide;
+
+  /// The padding around a single day item.
+  ///
+  /// Defaults to 4.0 on all sides.
+  final EdgeInsets padding;
 
   /// The color for a day in the past, which did not have a ride planned.
   final Color pastDay;

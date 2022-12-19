@@ -31,7 +31,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
     ref.read(selectedRideProvider.notifier).setSelectedRide(null);
   }
 
-  void setMemberActive(bool value) async {
+  void setMemberActive({required bool value}) async {
     final member = state;
 
     if (member == null || member.active == value) {
@@ -41,7 +41,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
     try {
       final repository = ref.read(memberRepositoryProvider);
 
-      await repository.setMemberActive(member.uuid, value);
+      await repository.setMemberActive(member.uuid, value: value);
 
       state = Member(
         active: value,

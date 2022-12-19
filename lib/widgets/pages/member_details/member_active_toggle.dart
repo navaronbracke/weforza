@@ -28,7 +28,7 @@ class MemberActiveToggle extends StatelessWidget {
                   onChanged: (value) {
                     final notifier = ref.read(selectedMemberProvider.notifier);
 
-                    notifier.setMemberActive(value);
+                    notifier.setMemberActive(value: value);
                   },
                 ),
                 ios: (_) => CupertinoSwitch(
@@ -36,7 +36,7 @@ class MemberActiveToggle extends StatelessWidget {
                   onChanged: (value) {
                     final notifier = ref.read(selectedMemberProvider.notifier);
 
-                    notifier.setMemberActive(value);
+                    notifier.setMemberActive(value: value);
                   },
                 ),
               );

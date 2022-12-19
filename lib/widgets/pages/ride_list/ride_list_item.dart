@@ -40,7 +40,7 @@ class RideListItem extends ConsumerWidget {
       children: <Widget>[
         Expanded(
           child: Text(
-            ride.getFormattedDate(context, false),
+            ride.getFormattedDate(context, shortForm: false),
             style: style,
           ),
         ),

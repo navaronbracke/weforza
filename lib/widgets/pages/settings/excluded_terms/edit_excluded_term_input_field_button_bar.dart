@@ -10,13 +10,13 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// and an undo button to revert the pending edit.
 class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
   const EditExcludedTermInputFieldButtonBar({
-    super.key,
     required this.controller,
     required this.onCommitValidTerm,
     required this.onDeletePressed,
     required this.onUndoPressed,
     required this.term,
     required this.validator,
+    super.key,
   });
 
   /// The controller that provides updates about the current text editing value.

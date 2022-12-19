@@ -1,146 +1,244 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
+/// This typedef defines the signature for the [DatePicker]'s day builder.
+///
+/// The `date` is the day that will be built.
+/// The `isCurrentMonth` flag indicates if the `date`
+/// is in the currently selected month.
+/// The `size` is the computed layout [Size] for the day item.
+typedef DatePickerDayBuilder = Widget Function(
+  DateTime date,
+  bool isCurrentMonth,
+  Size size,
+);
+
+/// This typedef defines the signature
+/// for the [DatePicker]'s forward and back button builder.
+///
+/// The `onPressed` callback is the handler for the button's onPressed function.
+/// The `buttonSize` is the size for the button.
+/// The `axis` will be either [AxisDirection.left] or [AxisDirection.right].
+typedef DatePickerHeaderButtonBuilder = Widget Function(
+  void Function() onPressed,
+  double buttonSize,
+  AxisDirection axis,
+);
+
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
   /// The default constructor.
   const DatePicker({
     super.key,
-    required this.backButton,
-    required this.constraints,
+    required this.computeDaySize,
     required this.dayBuilder,
     required this.delegate,
-    required this.forwardButton,
-    this.headerPadding = EdgeInsets.zero,
+    this.headerBottomPadding = 0.0,
+    required this.headerButtonBuilder,
     this.monthStyle,
+    this.padding = EdgeInsets.zero,
     this.showWeekdays = false,
-    required this.weekDayWidth,
-    required this.weekPadding,
+    this.weekDayStyle = const TextStyle(fontSize: 16, height: 1),
+    this.weekSpacing = 0.0,
   });
 
-  /// The widget that represents the button to go back one month.
-  /// This widget is placed in the left corner of the calendar header.
-  final Widget backButton;
+  /// The function that computes the [Size] of individual day items.
+  ///
+  /// This function recieves the minimum and maximum size `constraints`
+  /// for the day items.
+  final Size Function(BoxConstraints constraints) computeDaySize;
 
-  /// The constraints for the entire calendar.
-  final BoxConstraints constraints;
-
-  /// The builder that creates a widget for a given `date`.
-  /// The `isCurrentMonth` argument indicates if the `date`
-  /// is within the currently selected month.
-  final Widget Function(DateTime date, bool isCurrentMonth) dayBuilder;
+  /// The builder that creates a [Widget] for a given day.
+  ///
+  /// This function receives the day to build,
+  /// whether the given day is in the currently selected month,
+  /// and the size for the day item.
+  final DatePickerDayBuilder dayBuilder;
 
   /// The delegate that manages the date picker.
   final DatePickerDelegate delegate;
 
-  /// The widget that represents the button to go forward one month.
-  /// This widget is placed in the right corner of the calendar header.
-  final Widget forwardButton;
+  /// The bottom padding for the calendar header.
+  ///
+  /// Defaults to zero.
+  final double headerBottomPadding;
 
-  /// The padding for the calendar header.
-  final EdgeInsets headerPadding;
+  /// The builder for the header forward and back buttons.
+  ///
+  /// This function receives the `onPressed` callback for the button,
+  /// the size for the button, and the axis direction for the icon.
+  final DatePickerHeaderButtonBuilder headerButtonBuilder;
 
   /// The style for the calendar month text in the header.
   final TextStyle? monthStyle;
 
+  /// The padding for the entire calendar.
+  ///
+  /// Defaults to [EdgeInsets.zero].
+  final EdgeInsets padding;
+
   /// Whether to show the days of the week above the days of the month.
+  ///
+  /// Defaults to false.
   final bool showWeekdays;
 
-  /// The width for a weekday in the weekday header.
+  /// The [TextStyle] for the weekday labels.
   ///
-  /// It is recommended that the weekdays
-  /// and the days of the month have an equal width.
-  final double weekDayWidth;
+  /// This text style should have a non-null [TextStyle.fontSize] and [TextStyle.height].
+  ///
+  /// Defaults to a [TextStyle] with a fontSize of 16 and a height factor of 1.
+  final TextStyle weekDayStyle;
 
-  /// The padding for a single week in the calendar.
-  final EdgeInsets weekPadding;
+  /// The spacing between weeks in the calendar.
+  ///
+  /// Defaults to zero.
+  final double weekSpacing;
+
+  /// Compute the total height for the date picker.
+  /// The total height is the sum of:
+  /// - [headerHeight]
+  /// - [headerBottomPadding]
+  /// - the height of the weekday labels
+  /// - the total height of all weeks
+  /// - the total vertical spacing between all weeks
+  ///
+  /// The calendar always shows `6` weeks.
+  double _computeHeight(Size dayItemSize, double headerHeight) {
+    // The calendar always shows six weeks.
+    // The last week does not get any bottom padding.
+    final totalWeekSpacing = weekSpacing == 0 ? 0 : 5 * weekSpacing;
+    final totalWeekHeight = 6 * dayItemSize.height;
+
+    final totalHeaderHeight = headerHeight + headerBottomPadding;
+
+    double weekDayHeight = 0.0;
+
+    if (showWeekdays) {
+      final weekDayFontSize = weekDayStyle.fontSize;
+      final weekDayLineHeight = weekDayStyle.height;
+
+      assert(
+        weekDayFontSize != null && weekDayLineHeight != null,
+        'The fontSize and height of `weekDayStyle` is required if showWeekdays is true',
+      );
+
+      weekDayHeight = weekDayFontSize! * weekDayLineHeight!;
+    }
+
+    return totalHeaderHeight +
+        totalWeekHeight +
+        totalWeekSpacing +
+        weekDayHeight;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: constraints,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: headerPadding,
+    double minInteractiveDimension;
+
+    // Get the minimum recommended size per platform.
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        minInteractiveDimension = kMinInteractiveDimension;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        minInteractiveDimension = kMinInteractiveDimensionCupertino;
+        break;
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final constraintWidth = constraints.biggest.width;
+        // The max size for day items is equal to filling the constraint width.
+        final maxSize = constraintWidth / 7;
+
+        // Compute the minimum size for a day item.
+        // If the constraint with is smaller than the recommended min size,
+        // scale the minimum to fit the screen.
+        final minSize = constraintWidth < minInteractiveDimension * 7
+            ? maxSize
+            : minInteractiveDimension;
+
+        final Size dayItemSize = computeDaySize(
+          BoxConstraints(
+            maxHeight: maxSize,
+            maxWidth: maxSize,
+            minHeight: minSize,
+            minWidth: minSize,
+          ),
+        );
+
+        // Center the header within the weeks of the calendar.
+        // Otherwise the forward & back button extend too far out.
+        Widget header = Center(
+          child: SizedBox(
+            width: dayItemSize.width * 7,
             child: _DatePickerHeader(
-              backButton: backButton,
-              forwardButton: forwardButton,
+              backButton: headerButtonBuilder(
+                delegate.goBackOneMonth,
+                minInteractiveDimension,
+                AxisDirection.left,
+              ),
+              forwardButton: headerButtonBuilder(
+                delegate.goForwardOneMonth,
+                minInteractiveDimension,
+                AxisDirection.right,
+              ),
+              initialMonth: delegate.currentCalendarMonth,
               monthStream: delegate.monthStream,
               style: monthStyle,
             ),
           ),
-          Expanded(
-            child: _DatePickerBody(
-              dayBuilder: dayBuilder,
-              delegate: delegate,
-              showWeekdays: showWeekdays,
-              weekDayWidth: weekDayWidth,
-              weekPadding: weekPadding,
+        );
+
+        if (headerBottomPadding > 0) {
+          header = Padding(
+            padding: EdgeInsets.only(bottom: headerBottomPadding),
+            child: header,
+          );
+        }
+
+        Widget calendar = Column(
+          children: <Widget>[
+            header,
+            Expanded(
+              child: _DatePickerBody(
+                dayBuilder: dayBuilder,
+                dayItemSize: dayItemSize,
+                delegate: delegate,
+                showWeekdays: showWeekdays,
+                weekDayStyle: weekDayStyle,
+                weekSpacing: weekSpacing,
+              ),
+            ),
+          ],
+        );
+
+        if (padding != EdgeInsets.zero) {
+          calendar = Padding(
+            padding: padding,
+            child: calendar,
+          );
+        }
+
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: _computeHeight(
+              dayItemSize,
+              minInteractiveDimension, // The header is as tall as its buttons.
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-/// This class represents the month header for a [DatePicker].
-class _DatePickerHeader extends StatelessWidget {
-  const _DatePickerHeader({
-    required this.backButton,
-    required this.forwardButton,
-    required this.monthStream,
-    this.style,
-  });
-
-  /// The button that navigates back one month when tapped.
-  final Widget backButton;
-
-  /// The button that navigates forward one month when tapped.
-  final Widget forwardButton;
-
-  /// The stream that provides updates about the current month.
-  final Stream<Jiffy> monthStream;
-
-  /// The style for the month text.
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: StreamBuilder<Jiffy>(
-        stream: monthStream,
-        builder: (context, snapshot) {
-          final month = snapshot.data?.dateTime;
-
-          if (month == null) {
-            return const SizedBox(height: 50);
-          }
-
-          final languageCode = Localizations.localeOf(context).languageCode;
-
-          return Row(
-            children: [
-              backButton,
-              Expanded(
-                child: Center(
-                  child: Text(
-                    DateFormat.MMMM(languageCode).add_y().format(month),
-                    style: style,
-                  ),
-                ),
-              ),
-              forwardButton,
-            ],
-          );
-        },
-      ),
+          child: calendar,
+        );
+      },
     );
   }
 }
@@ -150,21 +248,24 @@ class _DatePickerHeader extends StatelessWidget {
 class _DatePickerBody extends StatelessWidget {
   const _DatePickerBody({
     required this.dayBuilder,
+    required this.dayItemSize,
     required this.delegate,
     required this.showWeekdays,
-    required this.weekDayWidth,
-    required this.weekPadding,
+    required this.weekDayStyle,
+    required this.weekSpacing,
   });
 
-  final Widget Function(DateTime date, bool isCurrentMonth) dayBuilder;
+  final DatePickerDayBuilder dayBuilder;
+
+  final Size dayItemSize;
 
   final DatePickerDelegate delegate;
 
   final bool showWeekdays;
 
-  final double weekDayWidth;
+  final TextStyle weekDayStyle;
 
-  final EdgeInsets weekPadding;
+  final double weekSpacing;
 
   Widget _buildWeekdaysHeader(DateFormat dateFormat) {
     // This list contains the first monday - sunday of the year 1970.
@@ -182,8 +283,10 @@ class _DatePickerBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: weekDays.map((DateTime date) {
         return SizedBox(
-          width: weekDayWidth,
-          child: Center(child: Text(dateFormat.format(date))),
+          width: dayItemSize.width,
+          child: Center(
+            child: Text(dateFormat.format(date), style: weekDayStyle),
+          ),
         );
       }).toList(),
     );
@@ -209,16 +312,19 @@ class _DatePickerBody extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: delegate.calendarPageCount,
               itemBuilder: (context, index) {
+                final currentMonth = delegate.currentCalendarMonth.dateTime;
                 final days = delegate.computeDaysForMonth();
-
-                final currentMonth = delegate.currentCalendarMonth;
 
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),
-                  days: days.map((date) {
-                    return dayBuilder(date, date.month == currentMonth.month);
+                  days: days.map((day) {
+                    return dayBuilder(
+                      day,
+                      day.month == currentMonth.month,
+                      dayItemSize,
+                    );
                   }).toList(),
-                  weekPadding: weekPadding,
+                  weekSpacing: weekSpacing,
                 );
               },
             ),
@@ -229,23 +335,80 @@ class _DatePickerBody extends StatelessWidget {
   }
 }
 
+/// This class represents the month header for a [DatePicker].
+class _DatePickerHeader extends StatelessWidget {
+  const _DatePickerHeader({
+    required this.backButton,
+    required this.forwardButton,
+    required this.initialMonth,
+    required this.monthStream,
+    this.style,
+  });
+
+  /// The button that navigates back one month when tapped.
+  final Widget backButton;
+
+  /// The button that navigates forward one month when tapped.
+  final Widget forwardButton;
+
+  /// The initial month for the header.
+  final Jiffy initialMonth;
+
+  /// The stream that provides updates about the current month.
+  final Stream<Jiffy> monthStream;
+
+  /// The style for the month text.
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<Jiffy>(
+      initialData: initialMonth,
+      stream: monthStream,
+      builder: (context, snapshot) {
+        final month = snapshot.data?.dateTime;
+        final languageCode = Localizations.localeOf(context).languageCode;
+
+        return Row(
+          children: [
+            backButton,
+            Expanded(
+              child: Center(
+                child: Text(
+                  month == null
+                      ? ''
+                      : DateFormat.MMMM(languageCode).add_y().format(month),
+                  style: style,
+                ),
+              ),
+            ),
+            forwardButton,
+          ],
+        );
+      },
+    );
+  }
+}
+
 /// This widget represents the days of a single month in a [DatePicker].
 class _DatePickerMonth extends StatelessWidget {
   const _DatePickerMonth({
     required super.key,
     required this.days,
-    required this.weekPadding,
+    required this.weekSpacing,
   });
 
-  /// All the days for this month view.
+  /// The days for this month.
   final List<Widget> days;
 
-  /// The padding for a single week.
-  final EdgeInsets weekPadding;
+  /// The spacing between weeks.
+  final double weekSpacing;
 
   /// Iterate over the [days] and build the rows that represent the weeks.
   List<Widget> _buildCalendarRows() {
     final weeks = <Widget>[];
+
+    int weekCounter = 1;
 
     while (days.isNotEmpty) {
       final children = <Widget>[];
@@ -257,15 +420,21 @@ class _DatePickerMonth extends StatelessWidget {
         children.add(days.removeAt(0));
       }
 
-      weeks.add(
-        Padding(
-          padding: weekPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          ),
-        ),
+      Widget week = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
       );
+
+      // Only the last week does not get bottom spacing.
+      if (weekSpacing > 0 && weekCounter < 6) {
+        week = Padding(
+          padding: EdgeInsets.only(bottom: weekSpacing),
+          child: week,
+        );
+      }
+
+      weeks.add(week);
+      weekCounter += 1;
     }
 
     return weeks;

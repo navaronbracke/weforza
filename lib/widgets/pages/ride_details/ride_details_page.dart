@@ -60,7 +60,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   Widget _buildAndroidLayout(BuildContext context) {
     final translator = S.of(context);
 
-    final errorColor = Theme.of(context).errorColor;
+    final errorColor = Theme.of(context).colorScheme.error;
 
     return Scaffold(
       appBar: AppBar(

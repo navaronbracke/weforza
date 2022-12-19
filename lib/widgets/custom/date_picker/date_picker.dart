@@ -166,6 +166,7 @@ class DatePicker extends StatelessWidget {
         Widget header = _DatePickerHeader(
           backButton: backButton,
           forwardButton: forwardButton,
+              initialMonth: delegate.currentCalendarMonth,
           monthStream: delegate.monthStream,
           style: monthStyle,
         );
@@ -278,7 +279,7 @@ class _DatePickerBody extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: delegate.calendarPageCount,
               itemBuilder: (context, index) {
-                final currentMonth = delegate.currentCalendarMonth;
+                final currentMonth = delegate.currentCalendarMonth.dateTime;
                 final days = delegate.computeDaysForMonth();
 
                 return _DatePickerMonth(
@@ -306,6 +307,7 @@ class _DatePickerHeader extends StatelessWidget {
   const _DatePickerHeader({
     required this.backButton,
     required this.forwardButton,
+    required this.initialMonth,
     required this.monthStream,
     this.style,
   });
@@ -316,6 +318,9 @@ class _DatePickerHeader extends StatelessWidget {
   /// The button that navigates forward one month when tapped.
   final Widget forwardButton;
 
+  /// The initial month for the header.
+  final Jiffy initialMonth;
+
   /// The stream that provides updates about the current month.
   final Stream<Jiffy> monthStream;
 
@@ -325,6 +330,7 @@ class _DatePickerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Jiffy>(
+      initialData: initialMonth,
       stream: monthStream,
       builder: (context, snapshot) {
         final month = snapshot.data?.dateTime;

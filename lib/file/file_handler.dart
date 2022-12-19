@@ -65,7 +65,7 @@ class IoFileHandler implements FileHandler {
 
     final image = File(path);
 
-    return await image.exists() ? image : null;
+    return image.existsSync() ? image : null;
   }
 
   @override

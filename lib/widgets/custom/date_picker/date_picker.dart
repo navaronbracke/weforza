@@ -21,10 +21,12 @@ typedef DatePickerDayBuilder = Widget Function(
 /// This typedef defines the signature
 /// for the [DatePicker]'s forward and back button builder.
 ///
+/// The `onPressed` callback is the handler for the button's onPressed function.
+/// The `buttonSize` is the size for the button.
 /// The `axis` will be either [AxisDirection.left] or [AxisDirection.right].
 typedef DatePickerHeaderButtonBuilder = Widget Function(
   void Function() onPressed,
-  double iconSize,
+  double buttonSize,
   AxisDirection axis,
 );
 
@@ -52,6 +54,10 @@ class DatePicker extends StatelessWidget {
   final Size Function(BoxConstraints constraints) computeDaySize;
 
   /// The builder that creates a [Widget] for a given day.
+  ///
+  /// This function receives the day to build,
+  /// whether the given day is in the currently selected month,
+  /// and the size for the day item.
   final DatePickerDayBuilder dayBuilder;
 
   /// The delegate that manages the date picker.
@@ -63,6 +69,9 @@ class DatePicker extends StatelessWidget {
   final double headerBottomPadding;
 
   /// The builder for the header forward and back buttons.
+  ///
+  /// This function receives the `onPressed` callback for the button,
+  /// the size for the button, and the axis direction for the icon.
   final DatePickerHeaderButtonBuilder headerButtonBuilder;
 
   /// The style for the calendar month text in the header.

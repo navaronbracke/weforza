@@ -68,7 +68,7 @@ dependencies:
   device_info_plus: ^4.1.2
 
   # For shared state management.
-  flutter_riverpod: ^2.0.0-dev.9
+  flutter_riverpod: ^2.1.1
 
   file: ^6.1.4
 

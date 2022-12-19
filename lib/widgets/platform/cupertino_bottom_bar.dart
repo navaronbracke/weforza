@@ -36,7 +36,6 @@ class CupertinoBottomBar extends StatelessWidget {
           darkColor: Color(0x29000000),
         ),
         width: 0.0, // One physical pixel.
-        style: BorderStyle.solid,
       ),
     );
 

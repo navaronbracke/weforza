@@ -8,7 +8,7 @@ final selectedMemberAttendingCountProvider = FutureProvider<int?>((ref) {
   final repository = ref.read(memberRepositoryProvider);
 
   if (member == null) {
-    return Future.value(null);
+    return Future.value();
   }
 
   return repository.getAttendingCount(member.uuid);

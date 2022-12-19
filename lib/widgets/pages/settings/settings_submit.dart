@@ -4,7 +4,11 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsSubmit extends StatelessWidget {
-  const SettingsSubmit({super.key, this.future, required this.onSaveSettings});
+  const SettingsSubmit({
+    required this.onSaveSettings,
+    super.key,
+    this.future,
+  });
 
   final Future<void>? future;
 

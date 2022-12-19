@@ -4,15 +4,15 @@ import 'package:flutter/widgets.dart';
 class SettingsPageScrollView extends StatelessWidget {
   /// The default constructor.
   const SettingsPageScrollView({
-    super.key,
     required this.excludedTermsList,
     required this.excludedTermsListFooter,
-    this.excludedTermsListHeader,
     required this.memberListFilter,
-    this.navigationBar,
     required this.resetRideCalendarButton,
     required this.scanDurationOption,
     required this.version,
+    super.key,
+    this.excludedTermsListHeader,
+    this.navigationBar,
   });
 
   /// The widget that represents the list of excluded terms.

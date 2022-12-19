@@ -18,27 +18,29 @@ typedef DatePickerDayBuilder = Widget Function(
   Size size,
 );
 
+/// This typedef defines the signature
+/// for the [DatePicker]'s forward and back button builder.
+typedef DatePickerHeaderButtonBuilder = Widget Function(
+  void Function() onPressed,
+  double iconSize,
+);
+
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
   /// The default constructor.
   const DatePicker({
     super.key,
-    required this.backButton,
     required this.computeDaySize,
     required this.dayBuilder,
     required this.delegate,
-    required this.forwardButton,
     this.headerBottomPadding = 0.0,
+    required this.headerButtonBuilder,
     this.monthStyle,
     this.padding = EdgeInsets.zero,
     this.showWeekdays = false,
     this.weekDayStyle = const TextStyle(fontSize: 16, height: 1),
     this.weekSpacing = 0.0,
   });
-
-  /// The widget that represents the button to go back one month.
-  /// This widget is placed in the left corner of the calendar header.
-  final Widget backButton;
 
   /// The function that computes the [Size] of individual day items.
   ///
@@ -52,14 +54,13 @@ class DatePicker extends StatelessWidget {
   /// The delegate that manages the date picker.
   final DatePickerDelegate delegate;
 
-  /// The widget that represents the button to go forward one month.
-  /// This widget is placed in the right corner of the calendar header.
-  final Widget forwardButton;
-
   /// The bottom padding for the calendar header.
   ///
   /// Defaults to zero.
   final double headerBottomPadding;
+
+  /// The builder for the header forward and back buttons.
+  final DatePickerHeaderButtonBuilder headerButtonBuilder;
 
   /// The style for the calendar month text in the header.
   final TextStyle? monthStyle;
@@ -95,7 +96,7 @@ class DatePicker extends StatelessWidget {
   /// - the total vertical spacing between all weeks
   ///
   /// The calendar always shows `6` weeks.
-  double _computeHeight(Size dayItemSize) {
+  double _computeHeight(Size dayItemSize, double headerHeight) {
     // The calendar always shows six weeks.
     // The last week does not get any bottom padding.
     final totalWeekSpacing = weekSpacing == 0 ? 0 : 5 * weekSpacing;
@@ -169,8 +170,14 @@ class DatePicker extends StatelessWidget {
           child: SizedBox(
             width: dayItemSize.width * 7,
             child: _DatePickerHeader(
-              backButton: backButton,
-              forwardButton: forwardButton,
+              backButton: headerButtonBuilder(
+                delegate.goBackOneMonth,
+                minInteractiveDimension,
+              ),
+              forwardButton: headerButtonBuilder(
+                delegate.goForwardOneMonth,
+                minInteractiveDimension,
+              ),
               initialMonth: delegate.currentCalendarMonth,
               monthStream: delegate.monthStream,
               style: monthStyle,
@@ -209,7 +216,12 @@ class DatePicker extends StatelessWidget {
         }
 
         return ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: _computeHeight(dayItemSize)),
+          constraints: BoxConstraints(
+            maxHeight: _computeHeight(
+              dayItemSize,
+              minInteractiveDimension, // The header is as tall as its buttons.
+            ),
+          ),
           child: calendar,
         );
       },

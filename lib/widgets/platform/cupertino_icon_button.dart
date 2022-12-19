@@ -8,7 +8,10 @@ class CupertinoIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.size = kMinInteractiveDimensionCupertino,
-  }) : assert(size >= kMinInteractiveDimensionCupertino);
+  }) : assert(
+          size >= kMinInteractiveDimensionCupertino,
+          'The size of a CupertinoIconButton should be at least `kMinInteractiveDimensionCupertino`',
+        );
 
   /// The color for the icon.
   ///

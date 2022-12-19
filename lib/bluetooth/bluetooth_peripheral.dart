@@ -3,7 +3,10 @@ class BluetoothPeripheral {
   BluetoothPeripheral({
     required this.deviceName,
     required this.id,
-  }) : assert(id.isNotEmpty);
+  }) : assert(
+          id.isNotEmpty,
+          'The id of a Bluetooth peripheral cannot be empty',
+        );
 
   /// The name of the device.
   final String deviceName;

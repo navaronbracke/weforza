@@ -20,8 +20,8 @@ class MemberRepository {
     return _dao.getMembers(filter);
   }
 
-  Future<void> setMemberActive(String uuid, bool value) {
-    return _dao.setMemberActive(uuid, value);
+  Future<void> setMemberActive(String uuid, {required bool value}) {
+    return _dao.setMemberActive(uuid, value: value);
   }
 
   Future<void> updateMember(Member member) => _dao.updateMember(member);

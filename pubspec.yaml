@@ -35,10 +35,12 @@ dependencies:
 
   # For OS-specific directory paths.
   path_provider: ^2.0.11
+
+  # Path utilities for URI's and the like.
   path: ^1.8.1
 
   # UUID generator for globally unique ids.
-  uuid: ^3.0.6
+  uuid: ^3.0.7
 
   # The intl package provides translation utilities.
   intl: ^0.17.0
@@ -70,6 +72,8 @@ dependencies:
   # For shared state management.
   flutter_riverpod: ^2.1.1
 
+  # Provides an injectable file system abstraction.
+  # Used by tests.
   file: ^6.1.4
 
 dev_dependencies:
@@ -88,10 +92,6 @@ dev_dependencies:
   
   test: any
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

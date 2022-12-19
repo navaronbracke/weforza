@@ -4,12 +4,12 @@ import 'dart:io';
 class MemberPayload {
   /// The default constructor.
   const MemberPayload({
-    this.activeMember = true,
     required this.alias,
     required this.firstName,
     required this.lastName,
     required this.profileImage,
     required this.uuid,
+    this.activeMember = true,
   });
 
   /// Whether this member is an active member.

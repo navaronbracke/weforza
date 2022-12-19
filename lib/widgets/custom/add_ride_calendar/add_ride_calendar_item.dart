@@ -4,11 +4,11 @@ import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendarItem extends StatelessWidget {
   const AddRideCalendarItem({
-    super.key,
     required this.date,
     required this.delegate,
     required this.size,
     required this.theme,
+    super.key,
   });
 
   /// The date for the calendar item.

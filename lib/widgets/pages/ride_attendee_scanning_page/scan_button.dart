@@ -6,7 +6,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a button for the ride attendee scanning page.
 class ScanButton extends StatelessWidget {
-  const ScanButton({super.key, required this.onPressed, required this.text});
+  const ScanButton({
+    required this.onPressed,
+    required this.text,
+    super.key,
+  });
 
   final void Function() onPressed;
 
@@ -37,7 +41,10 @@ class ScanButton extends StatelessWidget {
 
 /// This widget represents a button that stops a scan.
 class StopScanButton extends StatelessWidget {
-  const StopScanButton({super.key, required this.delegate});
+  const StopScanButton({
+    required this.delegate,
+    super.key,
+  });
 
   /// The delegate that manages the running scan.
   final RideAttendeeScanningDelegate delegate;

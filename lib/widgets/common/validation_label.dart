@@ -4,18 +4,18 @@ import 'package:flutter/widgets.dart';
 class ValidationLabel extends StatelessWidget {
   /// The default constructor.
   const ValidationLabel({
-    super.key,
     required this.stream,
     required this.style,
+    super.key,
     this.mainAxisAlignment = MainAxisAlignment.end,
     this.heightWhenEmpty,
   });
 
   /// The value constructor accepts a [message] as input.
   ValidationLabel.value({
-    Key? key,
     required TextStyle style,
     required String message,
+    Key? key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.end,
   }) : this(
           key: key,

@@ -74,7 +74,10 @@ class _MemberAttendingCount extends StatelessWidget {
 
 /// This widget represents the attending count for a member list item.
 class MemberListItemAttendingCount extends ConsumerWidget {
-  const MemberListItemAttendingCount({super.key, required this.member});
+  const MemberListItemAttendingCount({
+    required this.member,
+    super.key,
+  });
 
   final Member member;
 

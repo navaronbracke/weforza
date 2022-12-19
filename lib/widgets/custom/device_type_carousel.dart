@@ -6,7 +6,10 @@ import 'package:weforza/widgets/common/device_icon.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
-  const DeviceTypeCarousel({super.key, required this.controller});
+  const DeviceTypeCarousel({
+    required this.controller,
+    super.key,
+  });
 
   /// The controller that manages the currently selected page.
   final PageController controller;

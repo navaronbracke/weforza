@@ -28,7 +28,10 @@ class ExportableRideAttendee {
     required this.firstName,
     required this.lastName,
     this.alias = '',
-  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(
+          firstName.isNotEmpty && lastName.isNotEmpty,
+          'The first name and last name of an exportable ride attendee should not be empty',
+        );
 
   final String firstName;
   final String lastName;

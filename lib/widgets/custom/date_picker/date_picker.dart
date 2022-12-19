@@ -24,6 +24,7 @@ class DatePicker extends StatelessWidget {
   const DatePicker({
     super.key,
     required this.backButton,
+    required this.computeDaySize,
     required this.dayBuilder,
     required this.delegate,
     required this.forwardButton,
@@ -40,8 +41,11 @@ class DatePicker extends StatelessWidget {
   /// This widget is placed in the left corner of the calendar header.
   final Widget backButton;
 
-  /// The constraints for the entire calendar.
-  final BoxConstraints constraints;
+  /// The function that computes the [Size] of individual day items.
+  ///
+  /// This function recieves the minimum and maximum size `constraints`
+  /// for the day items.
+  final Size Function(BoxConstraints constraints) computeDaySize;
 
   /// The builder that creates a [Widget] for a given day.
   final DatePickerDayBuilder dayBuilder;

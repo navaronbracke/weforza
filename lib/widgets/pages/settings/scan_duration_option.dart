@@ -10,10 +10,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// to indicate the current value in seconds.
 class ScanDurationOption extends StatelessWidget {
   const ScanDurationOption({
-    super.key,
     required this.initialValue,
     required this.onChanged,
     required this.stream,
+    super.key,
   });
 
   /// The initially selected scan duration, in seconds.

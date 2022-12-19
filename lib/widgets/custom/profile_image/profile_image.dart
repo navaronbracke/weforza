@@ -13,8 +13,8 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class ProfileImage extends StatelessWidget {
   /// The default constructor.
   const ProfileImage({
-    super.key,
     required this.icon,
+    super.key,
     this.image,
     this.loading,
     this.personInitials,

@@ -12,11 +12,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class AddExcludedTermInputField extends StatelessWidget {
   /// The default constructor.
   const AddExcludedTermInputField({
-    super.key,
     required this.controller,
     required this.delegate,
     required this.focusNode,
     required this.formKey,
+    super.key,
   });
 
   /// The controller for the text field.

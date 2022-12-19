@@ -59,8 +59,8 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
   Widget _buildAndroidLayout(
     BuildContext context, {
-    int? scannedAttendees,
     required int total,
+    int? scannedAttendees,
   }) {
     final translator = S.of(context);
 
@@ -112,8 +112,8 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
   Widget _buildIosLayout(
     BuildContext context, {
-    int? scannedAttendees,
     required int total,
+    int? scannedAttendees,
   }) {
     return CupertinoBottomBar.constrained(
       child: Padding(

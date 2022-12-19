@@ -6,9 +6,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class ScanProgressIndicator extends StatelessWidget {
   /// The default constructor.
   const ScanProgressIndicator({
-    super.key,
     required this.animationController,
     required this.isScanning,
+    super.key,
   });
 
   /// The controller that drives the progress bar animation.

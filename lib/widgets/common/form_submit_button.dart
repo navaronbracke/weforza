@@ -6,11 +6,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a submit button for a form layout.
 class FormSubmitButton extends StatefulWidget {
   const FormSubmitButton({
-    super.key,
     required this.errorMessageBuilder,
-    this.future,
     required this.label,
     required this.onPressed,
+    super.key,
+    this.future,
   });
 
   /// The builder that builds the error message.

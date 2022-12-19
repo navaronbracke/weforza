@@ -15,8 +15,8 @@ import 'package:weforza/widgets/theme.dart';
 /// Returns a future that resolves with the result that the dialog returned.
 Future<T?> showWeforzaDialog<T>(
   BuildContext context, {
-  bool barrierDismissible = true,
   required WidgetBuilder builder,
+  bool barrierDismissible = true,
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
@@ -43,10 +43,10 @@ Future<T?> showWeforzaDialog<T>(
 class WeforzaAlertDialog extends StatelessWidget {
   /// The private constructor.
   const WeforzaAlertDialog._({
-    this.cancelButtonBuilder,
     required this.confirmButtonBuilder,
     required this.description,
     required this.title,
+    this.cancelButtonBuilder,
   }) : actionsAlignment = null;
 
   /// Construct a [WeforzaAlertDialog] that uses a confirm and cancel button.
@@ -73,11 +73,11 @@ class WeforzaAlertDialog extends StatelessWidget {
 
   /// Construct a [WeforzaAlertDialog] that uses a single button.
   const WeforzaAlertDialog.singleButton({
-    super.key,
-    this.actionsAlignment,
     required this.confirmButtonBuilder,
     required this.description,
     required this.title,
+    super.key,
+    this.actionsAlignment,
   }) : cancelButtonBuilder = null;
 
   /// The alignment for the dialog actions.
@@ -193,15 +193,15 @@ class WeforzaAlertDialog extends StatelessWidget {
 /// This widget represents an [WeforzaAlertDialog] for an asynchronous action.
 class WeforzaAsyncActionDialog<T> extends StatelessWidget {
   const WeforzaAsyncActionDialog({
-    super.key,
     required this.confirmButtonLabel,
     required this.description,
     required this.errorDescription,
     required this.future,
-    this.isDestructive = false,
     required this.onConfirmPressed,
     required this.pendingDescription,
     required this.title,
+    this.isDestructive = false,
+    super.key,
   });
 
   /// The label for the confirm button.

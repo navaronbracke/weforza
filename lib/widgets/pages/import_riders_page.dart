@@ -139,9 +139,9 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
 
 class _ImportRidersButton extends StatelessWidget {
   const _ImportRidersButton({
-    this.errorMessage,
     required this.label,
     required this.onPressed,
+    this.errorMessage,
   });
 
   /// The error message that is displayed above the button.

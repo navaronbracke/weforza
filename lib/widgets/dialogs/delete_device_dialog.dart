@@ -5,7 +5,10 @@ import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
 class DeleteDeviceDialog extends ConsumerStatefulWidget {
-  const DeleteDeviceDialog({super.key, required this.index});
+  const DeleteDeviceDialog({
+    required this.index,
+    super.key,
+  });
 
   /// The index of the device that should be deleted.
   final int index;

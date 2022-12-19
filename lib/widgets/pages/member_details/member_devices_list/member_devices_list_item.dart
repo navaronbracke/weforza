@@ -10,9 +10,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListItem extends StatelessWidget {
   const MemberDevicesListItem({
-    super.key,
     required this.deleteDeviceButton,
     required this.device,
+    super.key,
   });
 
   /// The button that deletes [device] from the list of devices when pressed.

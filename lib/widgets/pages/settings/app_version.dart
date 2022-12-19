@@ -4,7 +4,10 @@ import 'package:weforza/riverpod/package_info_provider.dart';
 
 /// This widget represents the app version display.
 class AppVersion extends ConsumerWidget {
-  const AppVersion({super.key, required this.builder});
+  const AppVersion({
+    required this.builder,
+    super.key,
+  });
 
   final Widget Function(String version) builder;
 

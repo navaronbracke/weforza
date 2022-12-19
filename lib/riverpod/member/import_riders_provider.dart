@@ -122,7 +122,7 @@ class ImportRidersNotifier {
 
       await repository.saveMembersWithDevices(members);
 
-      ref.refresh(memberListProvider);
+      ref.invalidate(memberListProvider);
       onProgress(ImportRidersState.done);
     } catch (error) {
       onError(error);

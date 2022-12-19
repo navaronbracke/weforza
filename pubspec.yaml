@@ -53,11 +53,8 @@ dependencies:
   # Jiffy provides better support for manipulating dates than the current Dart spec.
   jiffy: ^5.0.0
 
-  # RxDart provides extensions to Dart Streams.
-  rxdart: ^0.27.4
-
-  # This package provides platform independent file picking.
-  file_picker: ^5.0.1
+  # package_info_plus provides access to app specific information such as build number & version.
+  package_info_plus: ^3.0.2
 
   # Path utilities for URI's and the like.
   path: ^1.8.1

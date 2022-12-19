@@ -137,7 +137,7 @@ class _DatePickerBody extends StatelessWidget {
 
   final double weekSpacing;
 
-  Widget _buildWeekdaysHeader(DateFormat dateFormat) {
+  Widget _buildWeekdaysHeader(DateFormat dateFormat, Size dayItemSize) {
     // This list contains the first monday - sunday of the year 1970.
     final weekDays = [
       DateTime(1970, 1, 5),
@@ -153,8 +153,10 @@ class _DatePickerBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: weekDays.map((DateTime date) {
         return SizedBox(
-          width: weekDayWidth,
-          child: Center(child: Text(dateFormat.format(date))),
+          width: dayItemSize.width,
+          child: Center(
+            child: Text(dateFormat.format(date), style: weekDayStyle),
+          ),
         );
       }).toList(),
     );

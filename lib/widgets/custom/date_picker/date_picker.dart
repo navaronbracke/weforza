@@ -20,9 +20,12 @@ typedef DatePickerDayBuilder = Widget Function(
 
 /// This typedef defines the signature
 /// for the [DatePicker]'s forward and back button builder.
+///
+/// The `axis` will be either [AxisDirection.left] or [AxisDirection.right].
 typedef DatePickerHeaderButtonBuilder = Widget Function(
   void Function() onPressed,
   double iconSize,
+  AxisDirection axis,
 );
 
 /// This widget represents a date picker.
@@ -173,10 +176,12 @@ class DatePicker extends StatelessWidget {
               backButton: headerButtonBuilder(
                 delegate.goBackOneMonth,
                 minInteractiveDimension,
+                AxisDirection.left,
               ),
               forwardButton: headerButtonBuilder(
                 delegate.goForwardOneMonth,
                 minInteractiveDimension,
+                AxisDirection.right,
               ),
               initialMonth: delegate.currentCalendarMonth,
               monthStream: delegate.monthStream,

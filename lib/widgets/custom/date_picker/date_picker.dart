@@ -34,12 +34,12 @@ typedef DatePickerHeaderButtonBuilder = Widget Function(
 class DatePicker extends StatelessWidget {
   /// The default constructor.
   const DatePicker({
-    super.key,
     required this.computeDaySize,
     required this.dayBuilder,
     required this.delegate,
-    this.headerBottomPadding = 0.0,
     required this.headerButtonBuilder,
+    super.key,
+    this.headerBottomPadding = 0.0,
     this.monthStyle,
     this.padding = EdgeInsets.zero,
     this.showWeekdays = false,

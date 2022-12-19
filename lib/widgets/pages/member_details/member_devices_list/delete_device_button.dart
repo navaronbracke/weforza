@@ -6,7 +6,10 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeleteDeviceButton extends StatelessWidget {
-  const DeleteDeviceButton({super.key, required this.index});
+  const DeleteDeviceButton({
+    required this.index,
+    super.key,
+  });
 
   /// The index of the device to delete.
   final int index;

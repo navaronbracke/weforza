@@ -83,11 +83,11 @@ class BluetoothDisabledError extends StatelessWidget {
       ),
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
-          onPressed: () => AppSettings.openBluetoothSettings(),
+          onPressed: AppSettings.openBluetoothSettings,
           child: Text(translator.GoToSettings),
         ),
         ios: (_) => CupertinoButton.filled(
-          onPressed: () => AppSettings.openBluetoothSettings(),
+          onPressed: AppSettings.openBluetoothSettings,
           child: Text(translator.GoToSettings),
         ),
       ),
@@ -150,12 +150,12 @@ class PermissionDeniedError extends StatelessWidget {
       ),
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
+          onPressed: AppSettings.openAppSettings,
           child: Text(translator.GoToSettings),
-          onPressed: () => AppSettings.openAppSettings(),
         ),
         ios: (_) => CupertinoButton.filled(
+          onPressed: AppSettings.openAppSettings,
           child: Text(translator.GoToSettings),
-          onPressed: () => AppSettings.openAppSettings(),
         ),
       ),
       secondaryButton: PlatformAwareWidget(

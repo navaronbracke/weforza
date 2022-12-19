@@ -42,7 +42,7 @@ void main() async {
         // Inject the preloaded package info.
         packageInfoProvider.overrideWithValue(packageInfo),
         // Inject the preloaded settings.
-        settingsProvider.overrideWithValue(StateController(settings)),
+        settingsProvider.overrideWith((ref) => settings),
       ],
       child: const WeForzaApp(),
     ),

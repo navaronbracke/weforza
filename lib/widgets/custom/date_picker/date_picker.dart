@@ -42,13 +42,15 @@ class DatePicker extends StatelessWidget {
   /// This widget is placed in the right corner of the calendar header.
   final Widget forwardButton;
 
+  /// The bottom padding for the calendar header.
+  ///
+  /// Defaults to zero.
+  final double headerBottomPadding;
+
   /// The height for the calendar header.
   ///
   /// Defaults to 50.
   final double headerHeight;
-
-  /// The padding for the calendar header.
-  final EdgeInsets headerPadding;
 
   /// The style for the calendar month text in the header.
   final TextStyle? monthStyle;

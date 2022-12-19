@@ -31,8 +31,8 @@ class DatePicker extends StatelessWidget {
     this.monthStyle,
     this.padding = EdgeInsets.zero,
     this.showWeekdays = false,
-    required this.weekDayWidth,
-    required this.weekPadding,
+    this.weekDayStyle = const TextStyle(fontSize: 16, height: 1),
+    this.weekSpacing = 0.0,
   });
 
   /// The widget that represents the button to go back one month.
@@ -71,16 +71,58 @@ class DatePicker extends StatelessWidget {
   final EdgeInsets padding;
 
   /// Whether to show the days of the week above the days of the month.
+  ///
+  /// Defaults to false.
   final bool showWeekdays;
 
-  /// The width for a weekday in the weekday header.
+  /// The [TextStyle] for the weekday labels.
   ///
-  /// It is recommended that the weekdays
-  /// and the days of the month have an equal width.
-  final double weekDayWidth;
+  /// This text style should have a non-null [TextStyle.fontSize] and [TextStyle.height].
+  ///
+  /// Defaults to a [TextStyle] with a fontSize of 16 and a height factor of 1.
+  final TextStyle weekDayStyle;
 
-  /// The padding for a single week in the calendar.
-  final EdgeInsets weekPadding;
+  /// The spacing between weeks in the calendar.
+  ///
+  /// Defaults to zero.
+  final double weekSpacing;
+
+  /// Compute the total height for the date picker.
+  /// The total height is the sum of:
+  /// - [headerHeight]
+  /// - [headerBottomPadding]
+  /// - the height of the weekday labels
+  /// - the total height of all weeks
+  /// - the total vertical spacing between all weeks
+  ///
+  /// The calendar always shows `6` weeks.
+  double _computeHeight(Size dayItemSize) {
+    // The calendar always shows six weeks.
+    // The last week does not get any bottom padding.
+    final totalWeekSpacing = weekSpacing == 0 ? 0 : 5 * weekSpacing;
+    final totalWeekHeight = 6 * dayItemSize.height;
+
+    final totalHeaderHeight = headerHeight + headerBottomPadding;
+
+    double weekDayHeight = 0.0;
+
+    if (showWeekdays) {
+      final weekDayFontSize = weekDayStyle.fontSize;
+      final weekDayLineHeight = weekDayStyle.height;
+
+      assert(
+        weekDayFontSize != null && weekDayLineHeight != null,
+        'The fontSize and height of `weekDayStyle` is required if showWeekdays is true',
+      );
+
+      weekDayHeight = weekDayFontSize! * weekDayLineHeight!;
+    }
+
+    return totalHeaderHeight +
+        totalWeekHeight +
+        totalWeekSpacing +
+        weekDayHeight;
+  }
 
   @override
   Widget build(BuildContext context) {

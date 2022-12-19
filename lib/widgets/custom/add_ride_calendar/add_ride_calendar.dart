@@ -16,11 +16,6 @@ class AddRideCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final calendarDelegate = delegate.calendarDelegate;
 
-    const double dayItemPadding = 4;
-    const double dayItemSize = 40;
-    // A weekday is as wide as a single day item and its horizontal padding.
-    const double weekDayWidth = (dayItemPadding * 2) + dayItemSize;
-
     final theme = RideCalendarTheme.fromPlatform(context);
 
     return DatePicker(
@@ -34,19 +29,19 @@ class AddRideCalendar extends StatelessWidget {
           onPressed: calendarDelegate.goBackOneMonth,
         ),
       ),
-      constraints: const BoxConstraints(maxHeight: 364),
-      dayBuilder: (DateTime date, bool isCurrentMonth) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: dayItemPadding),
-          child: isCurrentMonth
-              ? AddRideCalendarItem(
-                  date: date,
-                  delegate: delegate,
-                  size: dayItemSize,
-                  theme: theme,
-                )
-              : const SizedBox.square(dimension: dayItemSize),
-        );
+      // Use the smallest size for now.
+      computeDaySize: (constraints) => constraints.smallest,
+      dayBuilder: (day, isCurrentMonth, size) {
+        if (isCurrentMonth) {
+          return AddRideCalendarItem(
+            date: day,
+            delegate: delegate,
+            size: size,
+            theme: theme,
+          );
+        }
+
+        return SizedBox.fromSize(size: size);
       },
       delegate: calendarDelegate,
       forwardButton: PlatformAwareWidget(
@@ -59,8 +54,6 @@ class AddRideCalendar extends StatelessWidget {
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
       ),
-      weekDayWidth: weekDayWidth,
-      weekPadding: const EdgeInsets.symmetric(vertical: dayItemPadding),
       showWeekdays: true,
     );
   }

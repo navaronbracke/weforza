@@ -18,7 +18,7 @@ class AddRideCalendarItem extends StatelessWidget {
   final AddRideFormDelegate delegate;
 
   /// The size of this calendar item.
-  final double size;
+  final Size size;
 
   /// The theme for this ride calendar item.
   final RideCalendarTheme theme;
@@ -70,8 +70,8 @@ class AddRideCalendarItem extends StatelessWidget {
               color: _computeBackgroundColor(),
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
-            child: SizedBox.square(
-              dimension: size,
+            child: SizedBox.fromSize(
+              size: size,
               child: Center(
                 child: Text(
                   '${date.day}',

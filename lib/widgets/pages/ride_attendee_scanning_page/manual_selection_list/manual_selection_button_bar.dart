@@ -9,10 +9,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// at the bottom of the manual selection list.
 class ManualSelectionButtonBar extends StatelessWidget {
   const ManualSelectionButtonBar({
-    super.key,
     required this.delegate,
     required this.saveButton,
     required this.showScannedResultsToggle,
+    super.key,
   });
 
   final RideAttendeeScanningDelegate delegate;

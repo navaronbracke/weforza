@@ -10,9 +10,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   const ProfileImagePicker({
-    super.key,
     required this.delegate,
     required this.size,
+    super.key,
   });
 
   final ProfileImagePickerDelegate delegate;
@@ -67,10 +67,10 @@ class ProfileImagePicker extends StatelessWidget {
 
 class _AsyncProfileImage extends StatelessWidget {
   const _AsyncProfileImage({
-    this.future,
     required this.icon,
     required this.loading,
     required this.size,
+    this.future,
   });
 
   /// The future that represents the loading of the image.

@@ -134,8 +134,8 @@ class _AddRideFormSubmitButton extends StatefulWidget {
 
 class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
   Widget _buildButton({
-    String errorMessage = '',
     required String label,
+    String errorMessage = '',
     void Function()? onTap,
   }) {
     return Column(

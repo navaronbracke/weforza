@@ -7,7 +7,10 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendar extends StatelessWidget {
-  const AddRideCalendar({super.key, required this.delegate});
+  const AddRideCalendar({
+    required this.delegate,
+    super.key,
+  });
 
   final AddRideFormDelegate delegate;
 

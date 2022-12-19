@@ -9,9 +9,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// `Scan` and `Manual`, separated by an arrow.
 class RideAttendeeScanningStepper extends StatelessWidget {
   const RideAttendeeScanningStepper({
-    super.key,
     required this.alignment,
     required this.stream,
+    super.key,
   });
 
   /// The alignment for the children of the stepper.

@@ -25,7 +25,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
     await ref.read(memberRepositoryProvider).deleteMember(member.uuid);
 
     // Refresh the member list, the collection has one member less.
-    ref.refresh(memberListProvider);
+    ref.invalidate(memberListProvider);
 
     // Remove the stale selected ride. Its attendees are now possibly out of date.
     ref.read(selectedRideProvider.notifier).setSelectedRide(null);
@@ -53,7 +53,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
         uuid: member.uuid,
       );
 
-      ref.refresh(memberListProvider);
+      ref.invalidate(memberListProvider);
     } catch (error) {
       // Errors are ignored.
     }

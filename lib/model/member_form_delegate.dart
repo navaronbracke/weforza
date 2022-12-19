@@ -47,7 +47,7 @@ class MemberFormDelegate with ArtificialDelay {
     await waitForDelay();
     await repository.addMember(member);
 
-    ref.refresh(memberListProvider);
+    ref.invalidate(memberListProvider);
   }
 
   /// Edit an existing member.
@@ -87,6 +87,6 @@ class MemberFormDelegate with ArtificialDelay {
     notifier.setSelectedMember(newMember);
 
     // An item in the list was updated.
-    ref.refresh(memberListProvider);
+    ref.invalidate(memberListProvider);
   }
 }

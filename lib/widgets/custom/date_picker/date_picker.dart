@@ -18,6 +18,7 @@ class DatePicker extends StatelessWidget {
     this.headerHeight = 50,
     this.headerPadding = EdgeInsets.zero,
     this.monthStyle,
+    this.padding = EdgeInsets.zero,
     this.showWeekdays = false,
     required this.weekDayWidth,
     required this.weekPadding,
@@ -54,6 +55,11 @@ class DatePicker extends StatelessWidget {
 
   /// The style for the calendar month text in the header.
   final TextStyle? monthStyle;
+
+  /// The padding for the entire calendar.
+  ///
+  /// Defaults to [EdgeInsets.zero].
+  final EdgeInsets padding;
 
   /// Whether to show the days of the week above the days of the month.
   final bool showWeekdays;

@@ -43,7 +43,7 @@ class RideAttendee {
   int get hashCode => Object.hash(rideDate, uuid, isScanned);
 
   @override
-  bool operator ==(other) {
+  bool operator ==(Object other) {
     return other is RideAttendee &&
         rideDate == other.rideDate &&
         uuid == other.uuid &&

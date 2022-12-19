@@ -289,7 +289,7 @@ class RideAttendeeScanningDelegate {
 
     if (Platform.isAndroid) {
       final androidInfo = await deviceInfo.androidInfo;
-      final androidVersion = androidInfo.version.sdkInt!;
+      final androidVersion = androidInfo.version.sdkInt;
 
       // Android <12 uses the legacy permissions.
       if (androidVersion < 31) {

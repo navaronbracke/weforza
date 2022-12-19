@@ -47,8 +47,8 @@ class _ResetRideCalendarDialogState
 
           // Refresh the rides since they have been deleted.
           // Refresh the members since their attendances have been reset.
-          ref.refresh(rideListProvider);
-          ref.refresh(memberListProvider);
+          ref.invalidate(rideListProvider);
+          ref.invalidate(memberListProvider);
 
           // Close the dialog after refreshing the data.
           Navigator.of(context).pop();

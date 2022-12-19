@@ -46,7 +46,7 @@ class ManualSelectionFilterDelegate {
   }
 
   /// Change the value for the show scanned results filter.
-  void onShowScannedResultsChanged(bool value) {
+  void onShowScannedResultsChanged({required bool value}) {
     _showScannedResultsController.add(value);
   }
 

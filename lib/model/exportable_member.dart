@@ -14,7 +14,10 @@ class ExportableMember {
     required this.firstName,
     required this.lastName,
     required this.lastUpdated,
-  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(
+          firstName.isNotEmpty && lastName.isNotEmpty,
+          'The first name and last name of an exportable member should not be empty',
+        );
 
   /// Whether this member is an active member.
   final bool active;

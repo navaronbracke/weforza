@@ -9,11 +9,14 @@ class Device {
     required this.name,
     required this.ownerId,
     this.type = DeviceType.unknown,
-  }) : assert(ownerId.isNotEmpty && name.isNotEmpty);
+  }) : assert(
+          ownerId.isNotEmpty && name.isNotEmpty,
+          'The owner id and device name of a device should not be empty',
+        );
 
   /// Create a device from the given [key] and [values].
   factory Device.of(String key, Map<String, dynamic> values) {
-    assert(key.isNotEmpty);
+    assert(key.isNotEmpty, 'The creation date of a device cannot be empty');
 
     return Device(
       creationDate: DateTime.parse(key),

@@ -12,7 +12,10 @@ class AnimatedCheckmark extends StatefulWidget {
     this.strokeCap = StrokeCap.round,
     this.strokeJoin = StrokeJoin.round,
     this.strokeWidth = 4.0,
-  }) : assert(strokeWidth > 0.0);
+  }) : assert(
+          strokeWidth > 0.0,
+          'The stroke width should be greater than zero',
+        );
 
   /// The color for the stroke.
   ///

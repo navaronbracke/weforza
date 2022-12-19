@@ -26,17 +26,13 @@ enum FileExtension {
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Pick a profile image from the device gallery.
-  /// Returns the [File] that was chosen.
-  Future<File?> chooseProfileImageFromGallery();
-
-  /// Load a profile image from the given [path].
-  /// Returns the [File] if it exists, or null otherwise.
-  Future<File?> loadProfileImageFromDisk(String? path);
-
   /// Choose the file to use as datasource
   /// for importing members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
+
+  /// Pick a profile image from the device gallery.
+  /// Returns the [File] that was chosen.
+  Future<File?> chooseProfileImageFromGallery();
 
   /// Create a file with the given [fileName] and [extension].
   Future<File> createFile(String fileName, String extension);
@@ -44,30 +40,6 @@ abstract class FileHandler {
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
-  @override
-  Future<File?> chooseProfileImageFromGallery() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    if (result == null || result.files.isEmpty) {
-      return null;
-    }
-
-    final path = result.files.first.path;
-
-    return path == null ? null : File(path);
-  }
-
-  @override
-  Future<File?> loadProfileImageFromDisk(String? path) async {
-    if (path == null || path.isEmpty) {
-      return null;
-    }
-
-    final image = File(path);
-
-    return await image.exists() ? image : null;
-  }
-
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
     final result = await FilePicker.platform.pickFiles(
@@ -91,6 +63,19 @@ class IoFileHandler implements FileHandler {
     }
 
     return File(chosenFile.path!);
+  }
+
+  @override
+  Future<File?> chooseProfileImageFromGallery() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result == null || result.files.isEmpty) {
+      return null;
+    }
+
+    final path = result.files.first.path;
+
+    return path == null ? null : File(path);
   }
 
   @override

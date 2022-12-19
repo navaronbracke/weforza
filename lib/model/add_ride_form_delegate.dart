@@ -112,7 +112,7 @@ class AddRideFormDelegate {
 
     _submitFuture = ref.read(rideRepositoryProvider).addRides(items).then<void>(
       (_) {
-        ref.refresh(rideListProvider);
+        ref.invalidate(rideListProvider);
         _savingSelection = false;
       },
     ).catchError((error) {

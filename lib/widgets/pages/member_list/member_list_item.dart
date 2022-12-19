@@ -33,7 +33,7 @@ class MemberListItem extends ConsumerWidget {
 
         notifier.setSelectedMember(member);
 
-        ref.refresh(selectedMemberDevicesProvider);
+        ref.invalidate(selectedMemberDevicesProvider);
 
         onPressed();
       },

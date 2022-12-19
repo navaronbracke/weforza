@@ -7,10 +7,10 @@ import 'package:weforza/widgets/theme.dart';
 /// the scanned results on the manual selection page.
 class ShowScannedResultsToggle extends StatelessWidget {
   const ShowScannedResultsToggle({
-    super.key,
     required this.initialValue,
     required this.onChanged,
     required this.stream,
+    super.key,
   });
 
   /// The initial value for the toggle switch.

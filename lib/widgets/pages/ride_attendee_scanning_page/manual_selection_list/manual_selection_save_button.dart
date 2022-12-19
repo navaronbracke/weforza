@@ -7,9 +7,9 @@ import 'package:weforza/widgets/theme.dart';
 /// This widget represents the save button for the manual selection page.
 class ManualSelectionSaveButton extends StatefulWidget {
   const ManualSelectionSaveButton({
+    required this.onPressed,
     super.key,
     this.future,
-    required this.onPressed,
   });
 
   /// The Future that represents the save attendees computation.

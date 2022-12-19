@@ -5,7 +5,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a platform aware indefinite progress indicator
 /// with a label underneath.
 class ProgressIndicatorWithLabel extends StatelessWidget {
-  const ProgressIndicatorWithLabel({super.key, required this.label});
+  const ProgressIndicatorWithLabel({
+    required this.label,
+    super.key,
+  });
 
   final String label;
 

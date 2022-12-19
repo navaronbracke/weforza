@@ -14,7 +14,10 @@ import 'package:weforza/widgets/theme.dart';
 /// that is shown after a device scan has ended.
 class UnresolvedOwnersList extends StatefulWidget {
   /// The default constructor.
-  const UnresolvedOwnersList({super.key, required this.delegate});
+  const UnresolvedOwnersList({
+    required this.delegate,
+    super.key,
+  });
 
   final RideAttendeeScanningDelegate delegate;
 

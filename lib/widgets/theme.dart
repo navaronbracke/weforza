@@ -117,10 +117,10 @@ class ManualSelectionBottomBarTheme {
 class RideCalendarTheme {
   const RideCalendarTheme._({
     required this.futureRide,
-    this.padding = const EdgeInsets.all(4),
     required this.pastDay,
     required this.pastRide,
     required this.selection,
+    this.padding = const EdgeInsets.all(4),
   });
 
   /// Construct a [RideCalendarTheme] for the current [ThemeData.platform].

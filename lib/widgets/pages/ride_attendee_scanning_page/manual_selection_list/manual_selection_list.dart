@@ -20,7 +20,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// after the device scan has ended,
 /// and any conflicts with unresolved owners have been corrected.
 class ManualSelectionList extends StatefulWidget {
-  const ManualSelectionList({super.key, required this.delegate});
+  const ManualSelectionList({
+    required this.delegate,
+    super.key,
+  });
 
   /// The delegate that manages the list of active members.
   final RideAttendeeScanningDelegate delegate;

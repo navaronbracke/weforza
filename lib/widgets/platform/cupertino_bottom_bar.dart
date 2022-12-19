@@ -4,13 +4,17 @@ import 'package:flutter/cupertino.dart';
 /// with theming similar to a [CupertinoTabBar].
 class CupertinoBottomBar extends StatelessWidget {
   /// The default constructor.
-  const CupertinoBottomBar({super.key, required this.child, this.height});
+  const CupertinoBottomBar({
+    required this.child,
+    super.key,
+    this.height,
+  });
 
   /// Create a [CupertinoBottomBar] with a height
   /// equal to that of a [CupertinoTabBar].
   const CupertinoBottomBar.constrained({
-    Key? key,
     required Widget child,
+    Key? key,
   }) : this(key: key, child: child, height: _kTabBarHeight);
 
   /// The child for this widget.

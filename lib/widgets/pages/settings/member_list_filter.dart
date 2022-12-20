@@ -18,22 +18,6 @@ class MemberListFilter extends StatelessWidget {
 
   final Stream<MemberFilterOption> stream;
 
-  Widget _buildChip({
-    required MemberFilterOption groupValue,
-    required Widget label,
-    required MemberFilterOption value,
-  }) {
-    return ChoiceChip(
-      label: label,
-      selected: groupValue == value,
-      onSelected: (selected) {
-        if (selected) {
-          onChanged(value);
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
@@ -45,27 +29,36 @@ class MemberListFilter extends StatelessWidget {
         final currentFilter = snapshot.data!;
 
         return PlatformAwareWidget(
-          android: (_) => Row(
-            children: [
-              _buildChip(
-                groupValue: currentFilter,
-                label: Text(translator.All),
-                value: MemberFilterOption.all,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: _buildChip(
-                  groupValue: currentFilter,
+          android: (_) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SegmentedButton<MemberFilterOption>(
+              showSelectedIcon: false,
+              segments: <ButtonSegment<MemberFilterOption>>[
+                ButtonSegment(
+                  icon: const Icon(Icons.people),
+                  label: Text(translator.All),
+                  value: MemberFilterOption.all,
+                ),
+                ButtonSegment(
+                  icon: const Icon(Icons.directions_bike),
                   label: Text(translator.Active),
                   value: MemberFilterOption.active,
                 ),
-              ),
-              _buildChip(
-                groupValue: currentFilter,
-                label: Text(translator.Inactive),
-                value: MemberFilterOption.inactive,
-              ),
-            ],
+                ButtonSegment(
+                  icon: const Icon(Icons.block),
+                  label: Text(translator.Inactive),
+                  value: MemberFilterOption.inactive,
+                ),
+              ],
+              selected: <MemberFilterOption>{currentFilter},
+              onSelectionChanged: (selectedSegments) {
+                if (selectedSegments.isEmpty) {
+                  return;
+                }
+
+                onChanged(selectedSegments.first);
+              },
+            ),
           ),
           ios: (_) => CupertinoSlidingSegmentedControl<MemberFilterOption>(
             groupValue: currentFilter,

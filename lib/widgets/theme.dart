@@ -12,6 +12,11 @@ abstract class AppTheme {
     extensions: <ThemeExtension>[
       DestructiveButtons(errorColor: colorScheme.error),
     ],
+    navigationBarTheme: NavigationBarThemeData(
+      // The default is secondaryContainer,
+      // which is a little harder to see.
+      indicatorColor: colorScheme.primaryContainer,
+    ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith((states) {

@@ -7,7 +7,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
-import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_button_bar.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_bottom_bar.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_filter_delegate.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list_item.dart';
@@ -156,7 +156,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
               },
             ),
           ),
-          ManualSelectionButtonBar(
+          ManualSelectionBottomBar(
             delegate: widget.delegate,
             saveButton: ManualSelectionSaveButton(
               future: _saveFuture,

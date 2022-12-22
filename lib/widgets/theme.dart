@@ -12,6 +12,11 @@ abstract class AppTheme {
     extensions: <ThemeExtension>[
       DestructiveButtons(errorColor: colorScheme.error),
     ],
+    navigationBarTheme: NavigationBarThemeData(
+      // The default is secondaryContainer,
+      // which is a little harder to see.
+      indicatorColor: colorScheme.primaryContainer,
+    ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith((states) {
@@ -62,9 +67,6 @@ abstract class AppTheme {
     primaryColor: CupertinoColors.activeBlue,
   );
 
-  /// The theme for the bottom bar on the manual selection.
-  static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();
-
   /// The text theme for rider names.
   static const riderTextTheme = RiderTextTheme();
 }
@@ -106,23 +108,6 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
       errorColor: Color.lerp(errorColor, other.errorColor, t),
     );
   }
-}
-
-// TODO: deprecate this theme (blocked on Material 3 switch & bottom app bar)
-
-/// This class represents the theme for the bottom bar
-/// on the manual ride attendee selection page.
-///
-/// This theme is only used on Android, as iOS uses the system defaults to
-/// style its widgets.
-class ManualSelectionBottomBarTheme {
-  const ManualSelectionBottomBarTheme();
-
-  /// The primary color for the save button.
-  final Color saveButtonColor = const Color(0xFF1666a5);
-
-  /// The active track color for the filter switch.
-  final Color switchActiveTrackColor = const Color(0xFF81D4FA);
 }
 
 /// This class represents the theme for the ride calendar date picker.

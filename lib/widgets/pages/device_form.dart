@@ -45,8 +45,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
   late final DeviceFormDelegate _delegate;
 
-  Future<void>? _future;
-
   @override
   void initState() {
     super.initState();
@@ -74,17 +72,10 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     );
 
     if (model.creationDate == null) {
-      _future = _delegate.addDevice(model).then((_) => navigator.pop());
+      _delegate.addDevice(model, whenComplete: navigator.pop);
     } else {
-      _future = _delegate.editDevice(model).then((_) => navigator.pop());
+      _delegate.editDevice(model, whenComplete: navigator.pop);
     }
-
-    setState(() {});
-  }
-
-  /// Validate the iOS form inputs.
-  bool _validateCupertinoForm() {
-    return _deviceNameErrorController.value.isEmpty;
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -201,7 +192,13 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     );
   }
 
-  Widget _buildErrorMessage(Object error, S translator) {
+  Widget _buildErrorMessage(BuildContext context, Object? error) {
+    if (error == null) {
+      return const Text('');
+    }
+
+    final translator = S.of(context);
+
     if (error is DeviceExistsException) {
       return Text(translator.DeviceExists);
     }
@@ -212,14 +209,14 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
-    final submitButtonLabel =
+    final label =
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
     return PlatformAwareWidget(
-      android: (context) => FormSubmitButton(
-        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
-        label: submitButtonLabel,
-        future: _future,
+      android: (context) => FormSubmitButton<void>(
+        delegate: _delegate,
+        errorBuilder: _buildErrorMessage,
+        label: label,
         onPressed: () {
           final formState = _formKey.currentState;
 
@@ -228,12 +225,12 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
           }
         },
       ),
-      ios: (context) => FormSubmitButton(
-        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
-        label: submitButtonLabel,
-        future: _future,
+      ios: (context) => FormSubmitButton<void>(
+        delegate: _delegate,
+        errorBuilder: _buildErrorMessage,
+        label: label,
         onPressed: () {
-          if (_validateCupertinoForm()) {
+          if (_deviceNameErrorController.value.isEmpty) {
             onFormSubmitted(context);
           }
         },
@@ -241,15 +238,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     );
   }
 
-  void _resetSubmit(String _) {
-    if (_future == null) {
-      return;
-    }
-
-    setState(() {
-      _future = null;
-    });
-  }
+  void _resetSubmit(String _) => _delegate.reset();
 
   @override
   Widget build(BuildContext context) {
@@ -261,6 +250,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
   @override
   void dispose() {
+    _delegate.dispose();
     _deviceNameController.dispose();
     _deviceNameFocusNode.dispose();
     _deviceNameErrorController.close();

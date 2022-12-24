@@ -1,92 +1,83 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents a submit button for a form layout.
-class FormSubmitButton extends StatefulWidget {
+/// This widget represents a submit button for a form.
+class FormSubmitButton<T> extends StatelessWidget {
   const FormSubmitButton({
-    required this.errorMessageBuilder,
+    required this.delegate,
+    required this.errorBuilder,
     required this.label,
     required this.onPressed,
     super.key,
-    this.future,
   });
 
-  /// The builder that builds the error message.
-  final Widget Function(Object error) errorMessageBuilder;
+  /// The provider that will be watched for changes in the async computation.
+  final AsyncComputationDelegate<T> delegate;
 
-  /// The future that represents the submit computation.
-  final Future<void>? future;
+  /// The builder for the error message.
+  ///
+  /// If `error` is null, the button is in the idle state.
+  final Widget Function(BuildContext context, Object? error) errorBuilder;
 
-  /// The label for the submit button.
+  /// The label for the button.
   final String label;
 
-  /// The onPressed handler for the button.
+  /// The onTap handler for the button.
   final void Function() onPressed;
 
   @override
-  State<FormSubmitButton> createState() => _FormSubmitButtonState();
-}
-
-class _FormSubmitButtonState extends State<FormSubmitButton> {
-  void _onSubmitButtonPressed() {
-    widget.onPressed();
-
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: widget.future,
+    final button = PlatformAwareWidget(
+      android: (_) => ElevatedButton(
+        onPressed: onPressed,
+        child: Text(label),
+      ),
+      ios: (_) => CupertinoButton.filled(
+        onPressed: onPressed,
+        child: Text(label),
+      ),
+    );
+
+    const loading = PlatformAwareLoadingIndicator();
+
+    return StreamBuilder<AsyncValue<T>?>(
+      initialData: delegate.currentState,
+      stream: delegate.stream,
       builder: (context, snapshot) {
-        const loading = PlatformAwareLoadingIndicator();
+        final value = snapshot.data;
 
-        final button = PlatformAwareWidget(
-          android: (_) => ElevatedButton(
-            onPressed: _onSubmitButtonPressed,
-            child: Text(widget.label),
-          ),
-          ios: (_) => CupertinoButton.filled(
-            onPressed: _onSubmitButtonPressed,
-            child: Text(widget.label),
-          ),
-        );
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 4),
-                  child: Text(''),
-                ),
-                button,
-              ],
-            );
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return loading;
-          case ConnectionState.done:
-            final exception = snapshot.error;
-
-            if (exception != null) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: widget.errorMessageBuilder(exception),
-                  ),
-                  button,
-                ],
-              );
-            }
-
-            return loading;
+        if (value == null) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: errorBuilder(context, null),
+              ),
+              button,
+            ],
+          );
         }
+
+        return value.when(
+          // The submit button does not have a done state.
+          data: (value) => loading,
+          error: (error, stackTrace) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: errorBuilder(context, error),
+              ),
+              button,
+            ],
+          ),
+          loading: () => loading,
+        );
       },
     );
   }

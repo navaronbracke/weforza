@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// This class provides an [AsyncValue] that wraps an underlying computation.
 ///
@@ -9,12 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// If the value is an [AsyncLoading], the computation is ongoing.
 /// If the value is an [AsyncError], the computation has failed with an error.
 /// If the value is an [AsyncValue], the computation has completed successfully.
-///
-/// Implementations of this class
-/// are typically used with [StateNotifierProvider.autoDispose].
-abstract class AsyncComputationNotifier<T>
-    extends StateNotifier<AsyncValue<T>?> {
-  AsyncComputationNotifier() : super(null);
+abstract class AsyncComputationDelegate<T> {
+  final _controller = BehaviorSubject<AsyncValue<T>?>();
+
+  AsyncValue<T>? get currentState => _controller.valueOrNull;
+
+  bool get mounted => !_controller.isClosed;
+
+  Stream<AsyncValue<T>?> get stream => _controller;
 
   /// Check whether a new computation can be started,
   /// and transition to the [AsyncLoading] state.
@@ -22,18 +25,27 @@ abstract class AsyncComputationNotifier<T>
   /// Returns whether the computation can be started.
   @protected
   bool canStartComputation() {
+    final state = _controller.valueOrNull;
+
     if (state != null && state is! AsyncError) {
       return false;
     }
 
-    state = const AsyncLoading();
+    _controller.add(const AsyncLoading());
 
     return true;
   }
 
   /// Reset the computation state back to the idle state.
   void reset() {
-    state = null;
+    _controller.add(null);
+  }
+
+  @protected
+  void setDone(T data) {
+    if (mounted) {
+      _controller.add(AsyncData(data));
+    }
   }
 
   /// Set the current state to a new [AsyncError]
@@ -41,7 +53,13 @@ abstract class AsyncComputationNotifier<T>
   @protected
   void setError(Object error, StackTrace stackTrace) {
     if (mounted) {
-      state = AsyncError(error, stackTrace);
+      _controller.add(AsyncError(error, stackTrace));
     }
+  }
+
+  /// Dispose of this delegate.
+  @mustCallSuper
+  void dispose() {
+    _controller.close();
   }
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:weforza/extensions/artificial_delay_mixin.dart';
+import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/repository/member_repository.dart';
@@ -11,7 +11,7 @@ import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
 /// This class represents the delegate for a Member form.
-class MemberFormDelegate with ArtificialDelay {
+class MemberFormDelegate extends AsyncComputationDelegate<void> {
   MemberFormDelegate(
     this.ref,
   ) : repository = ref.read(memberRepositoryProvider);
@@ -23,7 +23,15 @@ class MemberFormDelegate with ArtificialDelay {
   final _uuidGenerator = const Uuid();
 
   /// Add a new member.
-  Future<void> addMember(MemberPayload model) async {
+  /// The [whenComplete] function is called if the operation was successful.
+  void addMember(
+    MemberPayload model, {
+    required void Function() whenComplete,
+  }) async {
+    if (!canStartComputation()) {
+      return;
+    }
+
     final image = await model.profileImage.catchError(
       (_) => Future<File?>.value(),
     );
@@ -38,55 +46,65 @@ class MemberFormDelegate with ArtificialDelay {
       uuid: _uuidGenerator.v4(),
     );
 
-    // Allow the event loop some time to add an error handler.
-    // When the database has almost no data, this future completes even before
-    // the event loop could schedule a new frame,
-    // which results in an unhandled exception in the FutureBuilder.
-    //
-    // This also gives the loading indicator some time to appear properly.
-    await waitForDelay();
-    await repository.addMember(member);
+    try {
+      await repository.addMember(member);
 
-    ref.invalidate(memberListProvider);
+      if (mounted) {
+        ref.invalidate(memberListProvider);
+        setDone(null);
+        whenComplete();
+      }
+    } catch (error, stackTrace) {
+      setError(error, stackTrace);
+    }
   }
 
   /// Edit an existing member.
-  Future<void> editMember(MemberPayload model) async {
-    final uuid = model.uuid;
-
-    if (uuid == null) {
-      return Future.error(ArgumentError.notNull('uuid'));
+  /// The [whenComplete] function is called if the operation was successful.
+  void editMember(
+    MemberPayload model, {
+    required void Function() whenComplete,
+  }) async {
+    if (!canStartComputation()) {
+      return;
     }
 
-    final profileImage = await model.profileImage.catchError((error) {
-      return Future<File?>.value();
-    });
+    try {
+      final uuid = model.uuid;
 
-    final newMember = Member(
-      active: model.activeMember,
-      alias: model.alias,
-      firstName: model.firstName,
-      lastName: model.lastName,
-      lastUpdated: DateTime.now(),
-      profileImageFilePath: profileImage?.path,
-      uuid: uuid,
-    );
+      if (uuid == null) {
+        throw ArgumentError.notNull('uuid');
+      }
 
-    // Allow the event loop some time to add an error handler.
-    // When the database has almost no data, this future completes even before
-    // the event loop could schedule a new frame,
-    // which results in an unhandled exception in the FutureBuilder.
-    //
-    // This also gives the loading indicator some time to appear properly.
-    await waitForDelay();
-    await repository.updateMember(newMember);
+      final profileImage = await model.profileImage.catchError((error) {
+        return Future<File?>.value();
+      });
 
-    final notifier = ref.read(selectedMemberProvider.notifier);
+      final newMember = Member(
+        active: model.activeMember,
+        alias: model.alias,
+        firstName: model.firstName,
+        lastName: model.lastName,
+        lastUpdated: DateTime.now(),
+        profileImageFilePath: profileImage?.path,
+        uuid: uuid,
+      );
 
-    // Update the selected member.
-    notifier.setSelectedMember(newMember);
+      await repository.updateMember(newMember);
 
-    // An item in the list was updated.
-    ref.invalidate(memberListProvider);
+      if (mounted) {
+        final notifier = ref.read(selectedMemberProvider.notifier);
+
+        // Update the selected member.
+        notifier.setSelectedMember(newMember);
+
+        // An item in the list was updated.
+        ref.invalidate(memberListProvider);
+        setDone(null);
+        whenComplete();
+      }
+    } catch (error, stackTrace) {
+      setError(error, stackTrace);
+    }
   }
 }

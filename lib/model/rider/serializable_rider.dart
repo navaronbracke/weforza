@@ -35,7 +35,7 @@ class SerializableRider {
 
   /// Get the identifying serialization key for this rider.
   SerializableRiderKey get key {
-    return SerializableRiderKey._(
+    return SerializableRiderKey(
       alias: alias,
       firstName: firstName,
       lastName: lastName,
@@ -71,7 +71,7 @@ class SerializableRider {
 ///
 /// This class is typically used as a key in a [Map].
 class SerializableRiderKey {
-  SerializableRiderKey._({
+  SerializableRiderKey({
     required this.alias,
     required this.firstName,
     required this.lastName,

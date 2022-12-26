@@ -13,14 +13,14 @@ import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class ExportMembersPage extends ConsumerStatefulWidget {
-  const ExportMembersPage({super.key});
+class ExportRidersPage extends ConsumerStatefulWidget {
+  const ExportRidersPage({super.key});
 
   @override
-  ExportMembersPageState createState() => ExportMembersPageState();
+  ConsumerState<ExportRidersPage> createState() => _ExportRidersPageState();
 }
 
-class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
+class _ExportRidersPageState extends ConsumerState<ExportRidersPage> {
   late final ExportMembersProvider exportProvider;
 
   final GlobalKey<FormState> _formKey = GlobalKey();

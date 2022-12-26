@@ -32,7 +32,7 @@ class ImportRidersJsonReader
 
       final regex = Member.personNameAndAliasRegex;
 
-      // If the first name, last name or alias are invalid, skip this chunk.
+      // If the first name, last name or alias is invalid, skip this chunk.
       if (!regex.hasMatch(firstName) ||
           !regex.hasMatch(lastName) ||
           alias.isNotEmpty && !regex.hasMatch(alias)) {

@@ -68,6 +68,7 @@
 	"FileCsvExtension": "csv",
 	"FileExists": "This file already exists",
 	"FileJsonExtension": "json",
+	"FileMalformed": "The chosen file is incompatible",
 	"Filename": "Filename",
 	"FilenameMaxLength": "A filename can't be longer than {maxLength} characters",
 	"FilenameRequired": "A filename is required",

@@ -68,6 +68,7 @@
 	"FileCsvExtension": "csv",
 	"FileExists": "Dit bestand bestaat al",
 	"FileJsonExtension": "json",
+	"FileMalformed": "Het gekozen bestand is incompatibel",
 	"Filename": "Bestandsnaam",
 	"FilenameMaxLength": "Een bestandsnaam mag niet langer zijn dan {maxLength} karakters",
 	"FilenameRequired": "Een bestandsnaam is verplicht",

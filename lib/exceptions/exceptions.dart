@@ -1,3 +1,13 @@
+import 'package:weforza/file/file_handler.dart';
+
+/// An exception that is thrown when a data source is malformed.
+class DataSourceMalformedException extends FormatException {
+  const DataSourceMalformedException(this.fileType, super.message);
+
+  /// The file type of the invalid data source.
+  final FileExtension fileType;
+}
+
 /// An exception that is thrown when a device already exists.
 class DeviceExistsException implements Exception {}
 

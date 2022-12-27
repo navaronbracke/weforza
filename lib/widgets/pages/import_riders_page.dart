@@ -45,15 +45,14 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
   }
 
   Widget _buildBody() {
-    return StreamBuilder<ImportRidersState>(
-      initialData: _importController.value,
-      stream: _importController,
-      builder: (context, snapshot) {
-        final translator = S.of(context);
-        final buttonLabel = translator.PickFile;
-
-        final error = snapshot.error;
-        final data = snapshot.data;
+    return Center(
+      child: StreamBuilder<ImportRidersState>(
+        initialData: delegate.currentState,
+        stream: delegate.stream,
+        builder: (context, snapshot) {
+          final translator = S.of(context);
+          final buttonLabel = translator.PickFile;
+          final error = snapshot.error;
 
         if (error is NoFileChosenError) {
           return _ImportRidersButton(

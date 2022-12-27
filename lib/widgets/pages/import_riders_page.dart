@@ -87,26 +87,29 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
           );
         }
 
-        if (error != null || data == null) {
-          return GenericError(text: translator.GenericError);
-        }
+          final data = snapshot.data;
 
-        switch (data) {
-          case ImportRidersState.done:
-            return const AdaptiveAnimatedCheckmark();
-          case ImportRidersState.idle:
-            return _ImportRidersButton(
-              label: buttonLabel,
-              onPressed: _onImportRidersPressed,
-            );
-          case ImportRidersState.importing:
-            return ProgressIndicatorWithLabel(
-              label: translator.ImportRidersProcessingFile,
-            );
-          case ImportRidersState.pickingFile:
-            return const PlatformAwareLoadingIndicator();
-        }
-      },
+          if (error != null || data == null) {
+            return GenericError(text: translator.GenericError);
+          }
+
+          switch (data) {
+            case ImportRidersState.done:
+              return const AdaptiveAnimatedCheckmark();
+            case ImportRidersState.idle:
+              return _ImportRidersButton(
+                label: buttonLabel,
+                onPressed: _onImportRidersPressed,
+              );
+            case ImportRidersState.importing:
+              return ProgressIndicatorWithLabel(
+                label: translator.ImportRidersProcessingFile,
+              );
+            case ImportRidersState.pickingFile:
+              return const PlatformAwareLoadingIndicator();
+          }
+        },
+      ),
     );
   }
 

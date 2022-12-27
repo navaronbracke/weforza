@@ -72,7 +72,7 @@ class ImportRidersDelegate {
   /// The [whenComplete] handler is called
   /// when the riders are imported successfully.
   ///
-  /// If no file was chosen a [NoFileChosenError] is emitted through [stream].
+  /// If no file was chosen a [FileRequiredException] is emitted through [stream].
   /// If the chosen file has an invalid file format,
   /// a [InvalidFileExtensionError] is emitted through the [stream].
   ///
@@ -88,7 +88,7 @@ class ImportRidersDelegate {
       }
 
       if (file == null) {
-        _controller.addError(NoFileChosenError());
+        _controller.addError(FileRequiredException());
 
         return;
       }

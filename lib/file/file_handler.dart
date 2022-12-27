@@ -28,7 +28,10 @@ abstract class FileHandler {
 
   /// Choose the file to use as data source
   /// for importing riders and their devices.
-  Future<File> pickImportRidersDataSource();
+  ///
+  /// Returns the chosen file or null if no file was chosen.
+  /// Throws a [InvalidFileExtensionError] if a file with an invalid file type was chosen.
+  Future<File?> pickImportRidersDataSource();
 }
 
 /// The default implementation of [FileHandler].
@@ -66,14 +69,14 @@ class IoFileHandler implements FileHandler {
   }
 
   @override
-  Future<File> pickImportRidersDataSource() async {
+  Future<File?> pickImportRidersDataSource() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: <String>['csv', 'json'],
     );
 
     if (result == null || result.files.isEmpty) {
-      return Future.error(NoFileChosenError());
+      return null;
     }
 
     final chosenFile = result.files.first;

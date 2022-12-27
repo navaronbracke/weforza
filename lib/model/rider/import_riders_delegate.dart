@@ -64,7 +64,7 @@ class ImportRidersDelegate {
       );
     }
 
-    return Future.error(InvalidFileExtensionError());
+    return Future.error(UnsupportedFileFormatError());
   }
 
   /// Import riders from a chosen file.
@@ -73,8 +73,8 @@ class ImportRidersDelegate {
   /// when the riders are imported successfully.
   ///
   /// If no file was chosen a [FileRequiredException] is emitted through [stream].
-  /// If the chosen file has an invalid file format,
-  /// a [InvalidFileExtensionError] is emitted through the [stream].
+  /// If the chosen file is of an unsupported format,
+  /// an [UnsupportedFileFormatError] is emitted through the [stream].
   ///
   /// If the chosen file is malformed, a [FormatException] is emitted through the [stream].
   void importRiders({required void Function() whenComplete}) async {

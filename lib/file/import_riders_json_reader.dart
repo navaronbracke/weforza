@@ -62,9 +62,19 @@ class ImportRidersJsonReader
     final fileContent = await file.readAsString();
 
     try {
-      final Map<String, dynamic> json = jsonDecode(fileContent);
+      // The supported formats are Map<String, dynamic> & List<dynamic>.
+      final Object json = jsonDecode(fileContent);
 
-      return (json['riders'] as List).cast<Map<String, dynamic>>();
+      if (json is Map<String, dynamic>) {
+        return (json['riders'] as List).cast<Map<String, dynamic>>();
+      }
+
+      // If the JSON format is a list instead of a map, try to cast it.
+      if (json is List<dynamic>) {
+        return json.cast<Map<String, dynamic>>();
+      }
+
+      throw const FormatException('Unexpected JSON format');
     } catch (e) {
       throw const DataSourceMalformedException(
         FileExtension.json,

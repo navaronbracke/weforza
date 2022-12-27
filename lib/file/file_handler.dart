@@ -26,45 +26,20 @@ enum FileExtension {
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Choose the file to use as datasource
-  /// for importing members and their devices.
-  Future<File> chooseImportMemberDatasourceFile();
-
   /// Pick a profile image from the device gallery.
   /// Returns the [File] that was chosen.
   Future<File?> chooseProfileImageFromGallery();
 
   /// Create a file with the given [fileName] and [extension].
   Future<File> createFile(String fileName, String extension);
+
+  /// Choose the file to use as data source
+  /// for importing riders and their devices.
+  Future<File> pickImportRidersDataSource();
 }
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
-  @override
-  Future<File> chooseImportMemberDatasourceFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: <String>['csv', 'json'],
-    );
-
-    if (result == null || result.files.isEmpty) {
-      return Future.error(NoFileChosenError());
-    }
-
-    final chosenFile = result.files.first;
-    final ext = chosenFile.extension;
-
-    if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
-      return Future.error(InvalidFileExtensionError());
-    }
-
-    if (chosenFile.path == null) {
-      return Future.error(InvalidFileExtensionError());
-    }
-
-    return File(chosenFile.path!);
-  }
-
   @override
   Future<File?> chooseProfileImageFromGallery() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
@@ -95,5 +70,30 @@ class IoFileHandler implements FileHandler {
     }
 
     return File(directory.path + Platform.pathSeparator + fileName + extension);
+  }
+
+  @override
+  Future<File> pickImportRidersDataSource() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: <String>['csv', 'json'],
+    );
+
+    if (result == null || result.files.isEmpty) {
+      return Future.error(NoFileChosenError());
+    }
+
+    final chosenFile = result.files.first;
+    final ext = chosenFile.extension;
+
+    if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
+      return Future.error(InvalidFileExtensionError());
+    }
+
+    if (chosenFile.path == null) {
+      return Future.error(InvalidFileExtensionError());
+    }
+
+    return File(chosenFile.path!);
   }
 }

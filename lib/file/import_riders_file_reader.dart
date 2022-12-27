@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:weforza/model/rider/serializable_rider.dart';
 
-/// This interface defines a file reader for importing a rider datasource file.
+/// This interface defines a file reader for importing a rider data source file.
 abstract class ImportRidersFileReader<T> {
   /// Process the given [chunk].
   ///

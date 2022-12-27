@@ -12,6 +12,6 @@ abstract class ImportRidersFileReader<T> {
   /// Read the given file.
   /// Returns the file contents in readable chunks.
   ///
-  /// Throws a [DataSourceMalformedException] if the file is malformed.
+  /// Throws a [FormatException] if the file is malformed.
   Future<List<T>> readFile(File file);
 }

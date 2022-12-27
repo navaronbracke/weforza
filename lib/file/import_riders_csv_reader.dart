@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
@@ -153,10 +151,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     // Check that the header is present. The header is required for CSV files,
     // otherwise there is no way to determine where the actual data starts.
     if (!headerRegex.hasMatch(lines.first)) {
-      throw const DataSourceMalformedException(
-        FileExtension.csv,
-        'The header of the CSV file is malformed',
-      );
+      throw const FormatException('The header of the CSV file is malformed');
     }
 
     // Return the lines, without the header.

@@ -6,22 +6,15 @@ import 'package:weforza/exceptions/exceptions.dart';
 
 /// This enum defines the supported file extensions for importing and exporting.
 enum FileExtension {
-  csv(),
-  json();
+  csv('.csv'),
+  json('.json');
 
-  const FileExtension();
+  const FileExtension(this.value);
 
-  /// Get the actual file extension for this extension type.
+  /// The value for the file extension.
   ///
-  /// The returned extension includes a leading dot.
-  String get ext {
-    switch (this) {
-      case FileExtension.json:
-        return '.json';
-      case FileExtension.csv:
-        return '.csv';
-    }
-  }
+  /// This value includes a leading dot.
+  final String value;
 }
 
 /// This interface provides methods to work with [File]s.

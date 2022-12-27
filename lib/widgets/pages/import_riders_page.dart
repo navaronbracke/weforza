@@ -54,21 +54,21 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
           final buttonLabel = translator.PickFile;
           final error = snapshot.error;
 
-        if (error is NoFileChosenError) {
-          return _ImportRidersButton(
-            errorMessage: translator.ImportRidersFileRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
+          if (error is UnsupportedFileFormatError) {
+            return _ImportRidersButton(
+              errorMessage: translator.OnlyCsvOrJsonAllowed,
+              label: buttonLabel,
+              onPressed: _onImportRidersPressed,
+            );
+          }
 
-        if (error is InvalidFileExtensionError) {
-          return _ImportRidersButton(
-            errorMessage: translator.PickFileJsonOrCsvRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
+          if (error is FileRequiredException) {
+            return _ImportRidersButton(
+              errorMessage: translator.ImportRidersFileRequired,
+              label: buttonLabel,
+              onPressed: _onImportRidersPressed,
+            );
+          }
 
         if (error is CsvHeaderMissingError) {
           return _ImportRidersButton(

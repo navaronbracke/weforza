@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import_riders_state.dart';
 import 'package:weforza/model/rider/import_riders_delegate.dart';
@@ -70,21 +69,13 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
             );
           }
 
-        if (error is CsvHeaderMissingError) {
-          return _ImportRidersButton(
-            errorMessage: translator.ImportRidersCsvHeaderRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
-
-        if (error is JsonFormatIncompatibleException) {
-          return _ImportRidersButton(
-            errorMessage: translator.PickFileJsonIncompatible,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
+          if (error is FormatException) {
+            return _ImportRidersButton(
+              errorMessage: translator.FileMalformed,
+              label: buttonLabel,
+              onPressed: _onImportRidersPressed,
+            );
+          }
 
           final data = snapshot.data;
 
@@ -143,7 +134,7 @@ class _ImportRidersButton extends StatelessWidget {
     this.errorMessage,
   });
 
-  /// The error message that is displayed above the button.
+  /// The error message that is displayed below the button.
   final String? errorMessage;
 
   /// The text for the button.
@@ -185,7 +176,7 @@ class _ImportRidersButton extends StatelessWidget {
             child: CupertinoFormRow(
               error: errorMessage == null
                   ? null
-                  : Text(errorMessage!, textAlign: TextAlign.center),
+                  : Center(child: Text(errorMessage!)),
               child: Center(
                 child: CupertinoButton(
                   onPressed: onPressed,

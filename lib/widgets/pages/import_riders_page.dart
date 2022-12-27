@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import_riders_state.dart';
-import 'package:weforza/riverpod/member/import_riders_provider.dart';
+import 'package:weforza/model/rider/import_riders_delegate.dart';
+import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/serialize_riders_repository_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/progress_indicator_with_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
@@ -20,32 +23,24 @@ class ImportRidersPage extends ConsumerStatefulWidget {
 }
 
 class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
-  late final ImportRidersNotifier notifier;
+  late final ImportRidersDelegate delegate;
 
-  final _importController = BehaviorSubject.seeded(ImportRidersState.idle);
+  void _onImportRidersPressed() {
+    delegate.importRiders(
+      whenComplete: () {
+        if (mounted) {
+          ref.invalidate(memberListProvider);
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(importRidersProvider);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final title = Text(S.of(context).ImportRiders);
-
-    return PlatformAwareWidget(
-      android: (context) => Scaffold(
-        appBar: AppBar(title: title),
-        body: Center(child: _buildBody()),
-      ),
-      ios: (context) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: title,
-          transitionBetweenRoutes: false,
-        ),
-        child: Center(child: _buildBody()),
-      ),
+    delegate = ImportRidersDelegate(
+      ref.read(fileHandlerProvider),
+      ref.read(serializeRidersRepositoryProvider),
     );
   }
 
@@ -115,24 +110,26 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
     );
   }
 
-  void _onImportRidersPressed() {
-    notifier.importRiders(
-      (progress) {
-        if (!_importController.isClosed) {
-          _importController.add(progress);
-        }
-      },
-      (error) {
-        if (!_importController.isClosed) {
-          _importController.addError(error);
-        }
-      },
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: (context) => Scaffold(
+        appBar: AppBar(title: Text(S.of(context).ImportRiders)),
+        body: _buildBody(),
+      ),
+      ios: (context) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(S.of(context).ImportRiders),
+          transitionBetweenRoutes: false,
+        ),
+        child: _buildBody(),
+      ),
     );
   }
 
   @override
   void dispose() {
-    _importController.close();
+    delegate.dispose();
     super.dispose();
   }
 }

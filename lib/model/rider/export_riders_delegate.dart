@@ -65,7 +65,7 @@ class ExportRidersDelegate extends AsyncComputationDelegate<void> {
     }
 
     try {
-      final file = await fileHandler.createFile(fileName, fileExtension.ext);
+      final file = await fileHandler.createFile(fileName, fileExtension.value);
 
       if (file.existsSync()) {
         throw FileExistsException();

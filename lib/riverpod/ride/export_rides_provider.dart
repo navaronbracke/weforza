@@ -52,7 +52,7 @@ class ExportRidesProvider {
       return;
     }
 
-    return Future.error(InvalidFileExtensionError());
+    return Future.error(UnsupportedFileFormatError());
   }
 
   /// Export the rides and their attendees.

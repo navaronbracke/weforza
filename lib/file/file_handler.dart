@@ -30,7 +30,7 @@ abstract class FileHandler {
   /// for importing riders and their devices.
   ///
   /// Returns the chosen file or null if no file was chosen.
-  /// Throws a [InvalidFileExtensionError] if a file with an invalid file type was chosen.
+  /// Throws an [UnsupportedFileFormatError] if a file with an unsupported file type was chosen.
   Future<File?> pickImportRidersDataSource();
 }
 
@@ -83,11 +83,11 @@ class IoFileHandler implements FileHandler {
     final ext = chosenFile.extension;
 
     if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
-      return Future.error(InvalidFileExtensionError());
+      return Future.error(UnsupportedFileFormatError());
     }
 
     if (chosenFile.path == null) {
-      return Future.error(InvalidFileExtensionError());
+      return Future.error(UnsupportedFileFormatError());
     }
 
     return File(chosenFile.path!);

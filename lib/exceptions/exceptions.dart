@@ -4,12 +4,13 @@ class DeviceExistsException implements Exception {}
 /// An exception that is thrown when a [File] already exists.
 class FileExistsException implements Exception {}
 
-class InvalidFileExtensionError extends ArgumentError {
-  InvalidFileExtensionError() : super('Invalid file extension.');
+/// An exception that is thrown when a file is required, but it was not provided.
+class FileRequiredException extends ArgumentError {
+  FileRequiredException() : super('file');
 }
 
-class NoFileChosenError extends ArgumentError {
-  NoFileChosenError() : super.notNull('No file was chosen.');
+class InvalidFileExtensionError extends ArgumentError {
+  InvalidFileExtensionError() : super('Invalid file extension.');
 }
 
 /// An exception that is thrown when a rider already exists.

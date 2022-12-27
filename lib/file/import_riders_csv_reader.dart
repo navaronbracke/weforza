@@ -10,18 +10,57 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 /// This class represents an [ImportRidersFileReader]
 /// that handles the CSV format.
 class ImportRidersCsvReader implements ImportRidersFileReader<String> {
+  /// The default constructor.
+  ///
+  /// The cell [delimiter] defaults to a comma.
+  factory ImportRidersCsvReader({String delimiter = ','}) {
+    // A single cell can contain unicode letters, dashes and hyphens.
+    const cellMatcher = r'([\p{L}_-])+';
+
+    final regexBuilder = StringBuffer('^'); // Match the start of the string.
+
+    for (int i = 0; i < requiredHeaderColumns; i++) {
+      // Match each required cell in the header.
+      regexBuilder.write(cellMatcher);
+
+      // Each cell, except the last cell, should contain the delimiter.
+      if (i != requiredHeaderColumns - 1) {
+        regexBuilder.write(delimiter);
+      }
+    }
+
+    // Everything after the last cell is ignored.
+    regexBuilder.write(r'(.*)$');
+
+    return ImportRidersCsvReader._(
+      headerRegex: RegExp(regexBuilder.toString(), unicode: true),
+    );
+  }
+
+  /// The private constructor.
   const ImportRidersCsvReader._({required this.headerRegex});
 
-  /// The minimum expected amount of columns for a valid data source.
+  /// The minimum expected amount of columns for a valid line of data.
   ///
-  /// A CSV file is considered a valid import data source
+  /// A line is only valid if it contains the following columns:
   /// if and only if it has the following columns:
   /// Column 1: First Name
   /// Column 2: Last Name
   /// Column 3: Alias (This cell can be empty)
   /// Column 4: Active
   /// Column 5: Last Updated On
-  static const requiredColumns = 5;
+  static const requiredDataColumns = 5;
+
+  /// The minimum expected amount of columns for a valid header line.
+  ///
+  /// A header line is only valid if it contains the following columns:
+  /// Column 1: First Name
+  /// Column 2: Last Name
+  /// Column 3: Alias (This cell can be empty)
+  /// Column 4: Active
+  /// Column 5: Last Updated On
+  /// Column 6: Devices
+  static const requiredHeaderColumns = 6;
 
   /// The regular expression that validates the first line in the input file.
   final RegExp headerRegex;
@@ -34,7 +73,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     final List<String> cells = chunk.split(',');
 
     // Skip this line if it does not have enough cells.
-    if (cells.length < requiredColumns) {
+    if (cells.length < requiredDataColumns) {
       return;
     }
 
@@ -80,9 +119,9 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
 
     // Any remaining cells after the required cells are parsed as device names.
     // Any invalid device names are skipped.
-    if (cells.length > requiredColumns) {
+    if (cells.length > requiredDataColumns) {
       devices.addAll(cells
-          .sublist(requiredColumns)
+          .sublist(requiredDataColumns)
           .where(Device.deviceNameRegex.hasMatch));
     }
 

@@ -23,8 +23,8 @@ abstract class FileHandler {
   /// Returns the [File] that was chosen.
   Future<File?> chooseProfileImageFromGallery();
 
-  /// Create a file with the given [fileName] and [extension].
-  Future<File> createFile(String fileName, String extension);
+  /// Create a file with the given [fileName].
+  Future<File> createFile(String fileName);
 
   /// Choose the file to use as data source
   /// for importing riders and their devices.
@@ -50,7 +50,7 @@ class IoFileHandler implements FileHandler {
   }
 
   @override
-  Future<File> createFile(String fileName, String extension) async {
+  Future<File> createFile(String fileName) async {
     Directory? directory;
 
     if (Platform.isAndroid) {
@@ -65,7 +65,7 @@ class IoFileHandler implements FileHandler {
       return Future.error(ArgumentError.notNull('directory'));
     }
 
-    return File(directory.path + Platform.pathSeparator + fileName + extension);
+    return File(directory.path + Platform.pathSeparator + fileName);
   }
 
   @override

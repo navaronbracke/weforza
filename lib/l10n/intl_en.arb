@@ -60,6 +60,7 @@
 	"ExportRide": "Export ride",
 	"ExportRideFileNamePlaceholder": "ride_{date}",
 	"ExportRiders": "Export riders",
+	"ExportRidersDefaultFileName": "riders",
 	"ExportRidersCsvHeader": "firstname,lastname,alias,active,last_updated_on,devices",
 	"ExportRides": "Export rides",
 	"ExportingAllRides": "Exporting all rides",

@@ -6,6 +6,7 @@ import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/file/import_riders_json_reader.dart';
+import 'package:weforza/model/export_file_format.dart';
 import 'package:weforza/model/import_riders_state.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 import 'package:weforza/repository/serialize_riders_repository.dart';
@@ -50,14 +51,14 @@ class ImportRidersDelegate {
   ///
   /// Throws a [FormatException] if the file is malformed.
   Future<Iterable<SerializableRider>> _readRidersFromFile(File file) {
-    if (file.path.endsWith(FileExtension.csv.value)) {
+    if (file.path.endsWith(ExportFileFormat.csv.formatExtension)) {
       return _readFileWithReader<String>(
         file,
         reader: ImportRidersCsvReader(),
       );
     }
 
-    if (file.path.endsWith(FileExtension.json.value)) {
+    if (file.path.endsWith(ExportFileFormat.json.formatExtension)) {
       return _readFileWithReader<Map<String, dynamic>>(
         file,
         reader: ImportRidersJsonReader(),

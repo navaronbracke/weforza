@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
+import 'package:weforza/model/export_file_format.dart';
 import 'package:weforza/model/exportable_ride.dart';
 import 'package:weforza/repository/export_rides_repository.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
@@ -23,14 +24,16 @@ class ExportRidesProvider {
 
   final FileHandler fileHandler;
 
+  // TODO: use export file format enum instead of string for extension
+
   /// Save the given [ExportableRide]s to the given file.
-  /// The extension determines how the data is structured inside the file.
+  /// The [formatExtension] determines how the data is structured inside the file.
   Future<void> _saveRidesToFile(
     File file,
-    String extension,
+    String formatExtension,
     Iterable<ExportableRide> rides,
   ) async {
-    if (extension == FileExtension.csv.value) {
+    if (formatExtension == ExportFileFormat.csv.formatExtension) {
       final buffer = StringBuffer();
 
       for (final exportedRide in rides) {
@@ -42,7 +45,7 @@ class ExportRidesProvider {
       return;
     }
 
-    if (extension == FileExtension.json.value) {
+    if (formatExtension == ExportFileFormat.json.formatExtension) {
       final Map<String, Object?> data = {
         'rides': rides.map((e) => e.toJson()).toList()
       };
@@ -60,17 +63,17 @@ class ExportRidesProvider {
   /// If [ride] is not null, only this ride is exported.
   Future<void> exportRidesWithAttendees({
     required String fileName,
-    required String fileExtension,
+    required String fileFormatExtension,
     DateTime? ride,
   }) async {
     final rides = await exportRidesRepository.getRides(ride);
 
-    final file = await fileHandler.getFile('$fileName$fileExtension');
+    final file = await fileHandler.getFile('$fileName$fileFormatExtension');
 
     if (file.existsSync()) {
       return Future.error(FileExistsException());
     }
 
-    await _saveRidesToFile(file, fileExtension, rides);
+    await _saveRidesToFile(file, fileFormatExtension, rides);
   }
 }

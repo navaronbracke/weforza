@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// This widget represents a [CupertinoTextField] that has a validation message.
+@Deprecated('Use the CupertinoFormFieldRow widget instead')
 class CupertinoFormField extends StatelessWidget {
   const CupertinoFormField({
     required this.controller,

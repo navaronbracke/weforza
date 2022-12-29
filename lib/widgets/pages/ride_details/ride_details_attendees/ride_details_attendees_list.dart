@@ -44,7 +44,7 @@ class RideDetailsAttendeesList extends ConsumerWidget {
           ],
         );
       },
-      error: (error, _) => GenericError(text: S.of(context).GenericError),
+      error: (error, _) => const Center(child: GenericError()),
       loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }

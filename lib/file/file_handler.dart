@@ -4,19 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
-/// This enum defines the supported file extensions for importing and exporting.
-enum FileExtension {
-  csv('.csv'),
-  json('.json');
-
-  const FileExtension(this.value);
-
-  /// The value for the file extension.
-  ///
-  /// This value includes a leading dot.
-  final String value;
-}
-
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
   /// Pick a profile image from the device gallery.

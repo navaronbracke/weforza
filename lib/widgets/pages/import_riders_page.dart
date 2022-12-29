@@ -80,7 +80,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
           final data = snapshot.data;
 
           if (error != null || data == null) {
-            return GenericError(text: translator.GenericError);
+            return const Center(child: GenericError());
           }
 
           switch (data) {

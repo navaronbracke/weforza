@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/ride_list/ride_list_empty.dart';
@@ -26,9 +25,7 @@ class RideList extends ConsumerWidget {
           itemBuilder: (context, index) => RideListItem(ride: items[index]),
         );
       },
-      error: (error, stackTrace) {
-        return GenericError(text: S.of(context).GenericError);
-      },
+      error: (error, stackTrace) => const Center(child: GenericError()),
       loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }

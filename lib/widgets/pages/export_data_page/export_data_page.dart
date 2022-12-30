@@ -186,7 +186,7 @@ class ExportDataPage extends StatelessWidget {
           prefix: Text(translator.FileFormat),
           child: fileFormatSelection,
         ),
-        CupertinoButton.filled(
+        CupertinoButton(
           onPressed: onPressed,
           child: Text(translator.Export),
         ),

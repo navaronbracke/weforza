@@ -61,7 +61,7 @@
 	"ExportRideFileNamePlaceholder": "rit_{date}",
 	"ExportRiders": "Renners exporteren",
 	"ExportRidersCsvHeader": "voornaam,achternaam,alias,actief,datum_laatste_update,toestellen",
-	"ExportRidersDefaultFileName": "renners",
+	"ExportRidersDefaultFileName": "renners.csv",
 	"ExportRides": "Ritten exporteren",
 	"ExportingAllRides": "Alle ritten exporteren",
 	"ExportingRide": "Rit exporteren",

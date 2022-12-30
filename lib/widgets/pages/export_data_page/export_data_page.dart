@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/export/export_delegate.dart';
+import 'package:weforza/model/export_file_format.dart';
+import 'package:weforza/widgets/common/export_file_format_selection.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -12,14 +15,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage extends StatelessWidget {
   ExportDataPage({
+    required this.delegate,
     required this.exportingLabel,
-    required this.fileExistsLabel,
-    required this.fileFormatSelection,
-    required this.fileNameController,
-    required this.fileNameFormFieldKey,
-    required this.initialData,
     required this.onPressed,
-    required this.stream,
     required this.title,
     super.key,
   }) : inputFormatters = [
@@ -30,34 +28,17 @@ class ExportDataPage extends StatelessWidget {
   /// The maximum length for the file name input field.
   static const int maxLength = 80;
 
+  /// The delegate that handles the export.
+  final ExportDelegate delegate;
+
   /// The label that is used as description for the exporting indicator.
   final String exportingLabel;
-
-  /// The label that displays error messages when a file already exists.
-  ///
-  /// Typically an [ExportFileNameExistsLabel].
-  final Widget fileExistsLabel;
-
-  /// The widget that represents the file format selection.
-  final Widget fileFormatSelection;
-
-  /// The controller for the file name input field.
-  final TextEditingController fileNameController;
-
-  /// The [Key] for the file name input field.
-  final GlobalKey<FormFieldState<String>> fileNameFormFieldKey;
-
-  /// The initial data that is used when [stream] has not yet delivered an event.
-  final AsyncValue<void>? initialData;
 
   /// The input formatters for the file name input field.
   final List<TextInputFormatter> inputFormatters;
 
   /// The onPressed handler for the export button.
   final void Function() onPressed;
-
-  /// The [Stream] that provides updates about the export state.
-  final Stream<AsyncValue<void>?> stream;
 
   /// The title for the page.
   final String title;
@@ -75,23 +56,17 @@ class ExportDataPage extends StatelessWidget {
             child: TextFormField(
               autocorrect: false,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: fileNameController,
+              controller: delegate.fileNameController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                 labelText: translator.FileName,
               ),
               inputFormatters: inputFormatters,
-              key: fileNameFormFieldKey,
+              key: delegate.fileNameKey,
               keyboardType: TextInputType.text,
               maxLength: maxLength,
               textInputAction: TextInputAction.done,
-              validator: (fileName) {
-                if (fileName == null || fileName.isEmpty) {
-                  return translator.FileNameRequired;
-                }
-
-                return null;
-              },
+              validator: (fileName) => _validateFileName(fileName, translator),
             ),
           ),
           Padding(
@@ -104,7 +79,11 @@ class ExportDataPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
-                fileFormatSelection,
+                ExportFileFormatSelection(
+                  initialValue: delegate.currentFileFormat,
+                  onFormatSelected: delegate.setFileFormat,
+                  stream: delegate.fileFormatStream,
+                ),
               ],
             ),
           ),
@@ -133,8 +112,8 @@ class ExportDataPage extends StatelessWidget {
     required Widget loadingIndicator,
   }) {
     return StreamBuilder<AsyncValue<void>?>(
-      initialData: initialData,
-      stream: stream,
+      initialData: delegate.currentState,
+      stream: delegate.stream,
       builder: (context, snapshot) {
         final value = snapshot.data;
 
@@ -167,24 +146,22 @@ class ExportDataPage extends StatelessWidget {
         CupertinoTextFormFieldRow(
           autocorrect: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: fileNameController,
+          controller: delegate.fileNameController,
           inputFormatters: inputFormatters,
-          key: fileNameFormFieldKey,
+          key: delegate.fileNameKey,
           keyboardType: TextInputType.text,
           maxLength: maxLength,
           placeholder: translator.FileName,
           textInputAction: TextInputAction.done,
-          validator: (fileName) {
-            if (fileName == null || fileName.isEmpty) {
-              return translator.FileNameRequired;
-            }
-
-            return null;
-          },
+          validator: (fileName) => _validateFileName(fileName, translator),
         ),
         CupertinoFormRow(
           prefix: Text(translator.FileFormat),
-          child: fileFormatSelection,
+          child: ExportFileFormatSelection(
+            initialValue: delegate.currentFileFormat,
+            onFormatSelected: delegate.setFileFormat,
+            stream: delegate.fileFormatStream,
+          ),
         ),
         CupertinoButton(
           onPressed: onPressed,

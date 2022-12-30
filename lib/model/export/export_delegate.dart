@@ -94,8 +94,28 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       return;
     }
 
-    // Reset the file name field error message if a new file format was selected.
-    fileNameKey.currentState?.reset();
+    final oldFileExtension = _fileFormatController.value.formatExtension;
+    final fileName = fileNameController.text;
+
+    // If a new file format is selected,
+    // and the current filename ends with the old file extension,
+    // then replace the old file extension in the file name with the new one.
+    if (fileName.endsWith(oldFileExtension)) {
+      final fileNameWithNoExtension = fileName.substring(
+        0,
+        fileName.length - oldFileExtension.length,
+      );
+
+      final newFileName = fileNameWithNoExtension + value.formatExtension;
+
+      fileNameController.value = TextEditingValue(
+        text: newFileName,
+        selection: TextSelection.collapsed(offset: newFileName.length),
+      );
+    }
+
+    // If a new file format was selected,
+    // the `File Exists` message may be outdated.
     _fileExistsController.add(false);
     _fileFormatController.add(value);
   }

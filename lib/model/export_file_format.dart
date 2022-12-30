@@ -1,12 +1,18 @@
 /// This enum defines the supported file formats for exporting data.
 enum ExportFileFormat {
-  csv('.csv'),
-  json('.json');
+  /// The CSV export format.
+  csv,
 
-  const ExportFileFormat(this.formatExtension);
+  /// The JSON export format.
+  json;
 
-  /// The file extension for this file format.
+  /// Get the file extension for this file format.
   ///
   /// This value includes a leading dot.
-  final String formatExtension;
+  String get formatExtension => '.$name';
+
+  /// Get the name of this file format in uppercase.
+  ///
+  /// This value does **not** include a leading dot.
+  String get asUpperCase => name.toUpperCase();
 }

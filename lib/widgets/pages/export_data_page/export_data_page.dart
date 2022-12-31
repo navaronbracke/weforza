@@ -194,6 +194,10 @@ class ExportDataPage extends StatelessWidget {
       );
     }
 
+    if (delegate.fileExists(fileName)) {
+      return translator.FileNameExists;
+    }
+
     return null;
   }
 

@@ -15,7 +15,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a page for exporting a piece of data.
-class ExportDataPage extends StatelessWidget {
+class ExportDataPage<T> extends StatelessWidget {
   ExportDataPage({
     required this.delegate,
     required this.onPressed,
@@ -30,7 +30,7 @@ class ExportDataPage extends StatelessWidget {
   static const int maxLength = 80;
 
   /// The delegate that handles the export.
-  final ExportDelegate delegate;
+  final ExportDelegate<T> delegate;
 
   /// The input formatters for the file name input field.
   final List<TextInputFormatter> inputFormatters;

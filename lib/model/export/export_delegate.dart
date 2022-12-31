@@ -15,13 +15,24 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     required String initialFileName,
   }) : fileNameController = TextEditingController(text: initialFileName);
 
-  /// This controller keeps track of whether a file with a given name already exists.
-  final _fileExistsController = BehaviorSubject.seeded(false);
-
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
+
+  /// The name of the last file that is known to exist.
+  ///
+  /// When the [File.existsSync] method determines that a given file name already exists,
+  /// then this field is set to that file name.
+  ///
+  /// When the file name is validated using the relevant validator function,
+  /// it invokes [fileExists] with the current file name,
+  /// which checks equality against this field.
+  ///
+  /// If a new file format is set using [setFileFormat],
+  /// then this field is reset, since the old value is no longer valid
+  /// because the extension in the file name has changed.
+  String? _lastExistingFileName;
 
   /// The file handler that will manage the underlying file.
   final FileHandler fileHandler;
@@ -34,9 +45,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the currently selected file format.
   ExportFileFormat get currentFileFormat => _fileFormatController.value;
-
-  /// Get the current state of the file exists flag.
-  bool get fileExists => _fileExistsController.value;
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
@@ -67,10 +75,12 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
       final file = await fileHandler.getFile(fileName);
 
+      // If the file exists, set the last file name
+      // of which it is known that it exists,
+      // and revalidate the form to trigger the validation message.
       if (file.existsSync()) {
-        if (!_fileExistsController.isClosed) {
-          _fileExistsController.add(true);
-        }
+        _lastExistingFileName = fileName;
+        fileNameKey.currentState?.validate();
 
         throw FileExistsException();
       }
@@ -81,6 +91,15 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     } catch (error, stackTrace) {
       setError(error, stackTrace);
     }
+  }
+
+  /// Returns whether the given [fileName] matches the [_lastExistingFileName].
+  bool fileExists(String fileName) {
+    if (_lastExistingFileName == null) {
+      return false;
+    }
+
+    return _lastExistingFileName == fileName;
   }
 
   /// Set the selected file format to [value].
@@ -113,7 +132,9 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     // If a new file format was selected,
     // the `File Exists` message may be outdated.
-    _fileExistsController.add(false);
+    _lastExistingFileName = null;
+    fileNameKey.currentState?.validate();
+
     _fileFormatController.add(value);
   }
 
@@ -127,7 +148,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    _fileExistsController.close();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

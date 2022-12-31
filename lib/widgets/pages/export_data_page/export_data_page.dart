@@ -191,7 +191,6 @@ class ExportDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());
     const genericErrorIndicator = Center(child: GenericError());
-    const loadingIndicator = PlatformAwareLoadingIndicator();
     final exportLabel = S.of(context).Export;
 
     return PlatformAwareWidget(
@@ -203,7 +202,7 @@ class ExportDataPage extends StatelessWidget {
             child: _buildAndroidForm(
               context,
               child: isExporting
-                  ? loadingIndicator
+                  ? const PlatformAwareLoadingIndicator()
                   : ElevatedButton(
                       onPressed: onPressed,
                       child: Text(exportLabel),
@@ -214,28 +213,42 @@ class ExportDataPage extends StatelessWidget {
           genericErrorIndicator: genericErrorIndicator,
         ),
       ),
-      ios: (context) => CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        navigationBar: CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.systemGroupedBackground,
-          border: null,
-          middle: Text(title),
-          transitionBetweenRoutes: false,
-        ),
-        child: _buildBody(
-          builder: (context, {bool isExporting = false}) => _buildIosForm(
-            context,
-            child: isExporting
-                ? loadingIndicator
-                : CupertinoButton(
-                    onPressed: onPressed,
-                    child: Text(exportLabel),
-                  ),
+      ios: (context) {
+        final backgroundColor = CupertinoDynamicColor.resolve(
+          CupertinoColors.systemGroupedBackground,
+          context,
+        );
+
+        return CupertinoPageScaffold(
+          backgroundColor: backgroundColor,
+          resizeToAvoidBottomInset: false,
+          navigationBar: CupertinoNavigationBar(
+            backgroundColor: backgroundColor,
+            border: null,
+            middle: Text(title),
+            transitionBetweenRoutes: false,
           ),
-          doneIndicator: doneIndicator,
-          genericErrorIndicator: genericErrorIndicator,
-        ),
-      ),
+          child: _buildBody(
+            builder: (context, {bool isExporting = false}) => _buildIosForm(
+              context,
+              child: isExporting
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: SizedBox(
+                        height: kMinInteractiveDimensionCupertino,
+                        child: Center(child: CupertinoActivityIndicator()),
+                      ),
+                    )
+                  : CupertinoButton(
+                      onPressed: onPressed,
+                      child: Text(exportLabel),
+                    ),
+            ),
+            doneIndicator: doneIndicator,
+            genericErrorIndicator: genericErrorIndicator,
+          ),
+        );
+      },
     );
   }
 }

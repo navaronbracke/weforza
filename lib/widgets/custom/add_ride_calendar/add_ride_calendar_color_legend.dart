@@ -6,34 +6,56 @@ import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 class AddRideCalendarColorLegend extends StatelessWidget {
   const AddRideCalendarColorLegend({super.key});
 
-  /// Build a row in the color legend.
-  Widget _buildLegendRow({
+  /// The size of the dot next to a label.
+  final double dotSize = 12;
+
+  /// The max lines for a label of a legend item.
+  final int labelMaxLines = 2;
+
+  /// The text style for a label of a legend item.
+  ///
+  /// This style has a fixed [TextStyle.height], so that the total height of
+  /// a label item can be computed by the [labelMaxHeight] getter.
+  final TextStyle labelStyle = const TextStyle(fontSize: 14, height: 1);
+
+  /// Get the max height of the label of a legend item.
+  double get labelMaxHeight => labelStyle.fontSize! * labelMaxLines;
+
+  /// Build an item in the color legend.
+  Widget _buildLegendItem({
     required Color color,
+    required AxisDirection dotDirection,
     required String label,
-    EdgeInsets? padding,
   }) {
-    final child = Row(
-      children: [
-        Container(
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            color: color,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(label, softWrap: true),
-        ),
-      ],
+    final dot = Container(
+      height: dotSize,
+      width: dotSize,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        color: color,
+      ),
     );
 
-    if (padding != null) {
-      return Padding(padding: padding, child: child);
-    }
-
-    return child;
+    return Row(
+      children: [
+        if (dotDirection == AxisDirection.left) dot,
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              label,
+              softWrap: true,
+              style: labelStyle,
+              textAlign: dotDirection == AxisDirection.right
+                  ? TextAlign.right
+                  : TextAlign.left,
+              maxLines: labelMaxLines,
+            ),
+          ),
+        ),
+        if (dotDirection == AxisDirection.right) dot,
+      ],
+    );
   }
 
   @override
@@ -41,31 +63,57 @@ class AddRideCalendarColorLegend extends StatelessWidget {
     final translator = S.of(context);
     final theme = RideCalendarTheme.fromPlatform(context);
 
-    return IntrinsicWidth(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _buildLegendRow(
-            color: theme.selection,
-            label: translator.CurrentSelection,
-            padding: const EdgeInsets.only(bottom: 4),
+    final rowHeight = labelMaxHeight;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: rowHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildLegendItem(
+                  color: theme.selection,
+                  dotDirection: AxisDirection.right,
+                  label: translator.CurrentSelection,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildLegendItem(
+                  color: theme.futureRide,
+                  dotDirection: AxisDirection.left,
+                  label: translator.FutureRide,
+                ),
+              ),
+            ],
           ),
-          _buildLegendRow(
-            color: theme.futureRide,
-            label: translator.FutureRide,
-            padding: const EdgeInsets.only(bottom: 4),
+        ),
+        const SizedBox(height: 4),
+        SizedBox(
+          height: rowHeight,
+          child: Row(
+            children: [
+              Expanded(
+                child: _buildLegendItem(
+                  color: theme.pastRide,
+                  dotDirection: AxisDirection.right,
+                  label: translator.PastDayWithRide,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _buildLegendItem(
+                  color: theme.pastDay,
+                  dotDirection: AxisDirection.left,
+                  label: translator.PastDayNoRide,
+                ),
+              ),
+            ],
           ),
-          _buildLegendRow(
-            color: theme.pastRide,
-            label: translator.PastDayWithRide,
-            padding: const EdgeInsets.only(bottom: 4),
-          ),
-          _buildLegendRow(
-            color: theme.pastDay,
-            label: translator.PastDayNoRide,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

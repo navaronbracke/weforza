@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import_riders_state.dart';
-import 'package:weforza/riverpod/member/import_riders_provider.dart';
+import 'package:weforza/model/rider/import_riders_delegate.dart';
+import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/serialize_riders_repository_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/progress_indicator_with_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
@@ -20,119 +22,111 @@ class ImportRidersPage extends ConsumerStatefulWidget {
 }
 
 class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
-  late final ImportRidersNotifier notifier;
+  late final ImportRidersDelegate delegate;
 
-  final _importController = BehaviorSubject.seeded(ImportRidersState.idle);
+  void _onImportRidersPressed() {
+    delegate.importRiders(
+      whenComplete: () {
+        if (mounted) {
+          ref.invalidate(memberListProvider);
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(importRidersProvider);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final title = Text(S.of(context).ImportRiders);
-
-    return PlatformAwareWidget(
-      android: (context) => Scaffold(
-        appBar: AppBar(title: title),
-        body: Center(child: _buildBody()),
-      ),
-      ios: (context) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: title,
-          transitionBetweenRoutes: false,
-        ),
-        child: Center(child: _buildBody()),
-      ),
+    delegate = ImportRidersDelegate(
+      ref.read(fileHandlerProvider),
+      ref.read(serializeRidersRepositoryProvider),
     );
   }
 
   Widget _buildBody() {
-    return StreamBuilder<ImportRidersState>(
-      initialData: _importController.value,
-      stream: _importController,
-      builder: (context, snapshot) {
-        final translator = S.of(context);
-        final buttonLabel = translator.PickFile;
+    return Center(
+      child: StreamBuilder<ImportRidersState>(
+        initialData: delegate.currentState,
+        stream: delegate.stream,
+        builder: (context, snapshot) {
+          final translator = S.of(context);
+          final buttonLabel = translator.PickFile;
+          final error = snapshot.error;
 
-        final error = snapshot.error;
-        final data = snapshot.data;
-
-        if (error is NoFileChosenError) {
-          return _ImportRidersButton(
-            errorMessage: translator.ImportRidersFileRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
-
-        if (error is InvalidFileExtensionError) {
-          return _ImportRidersButton(
-            errorMessage: translator.PickFileJsonOrCsvRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
-
-        if (error is CsvHeaderMissingError) {
-          return _ImportRidersButton(
-            errorMessage: translator.ImportRidersCsvHeaderRequired,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
-
-        if (error is JsonFormatIncompatibleException) {
-          return _ImportRidersButton(
-            errorMessage: translator.PickFileJsonIncompatible,
-            label: buttonLabel,
-            onPressed: _onImportRidersPressed,
-          );
-        }
-
-        if (error != null || data == null) {
-          return GenericError(text: translator.GenericError);
-        }
-
-        switch (data) {
-          case ImportRidersState.done:
-            return const AdaptiveAnimatedCheckmark();
-          case ImportRidersState.idle:
+          if (error is UnsupportedFileFormatError) {
             return _ImportRidersButton(
+              errorMessage: translator.OnlyCsvOrJsonAllowed,
               label: buttonLabel,
               onPressed: _onImportRidersPressed,
             );
-          case ImportRidersState.importing:
-            return ProgressIndicatorWithLabel(
-              label: translator.ImportRidersProcessingFile,
+          }
+
+          if (error is FileRequiredException) {
+            return _ImportRidersButton(
+              errorMessage: translator.ImportRidersFileRequired,
+              label: buttonLabel,
+              onPressed: _onImportRidersPressed,
             );
-          case ImportRidersState.pickingFile:
-            return const PlatformAwareLoadingIndicator();
-        }
-      },
+          }
+
+          if (error is FormatException) {
+            return _ImportRidersButton(
+              errorMessage: translator.FileMalformed,
+              label: buttonLabel,
+              onPressed: _onImportRidersPressed,
+            );
+          }
+
+          final data = snapshot.data;
+
+          if (error != null || data == null) {
+            return Center(
+              child: GenericErrorWithBackButton(
+                message: translator.ImportRidersGenericErrorMessage,
+              ),
+            );
+          }
+
+          switch (data) {
+            case ImportRidersState.done:
+              return const AdaptiveAnimatedCheckmark();
+            case ImportRidersState.idle:
+              return _ImportRidersButton(
+                label: buttonLabel,
+                onPressed: _onImportRidersPressed,
+              );
+            case ImportRidersState.importing:
+              return ProgressIndicatorWithLabel(
+                label: translator.ImportRidersProcessingFile,
+              );
+            case ImportRidersState.pickingFile:
+              return const PlatformAwareLoadingIndicator();
+          }
+        },
+      ),
     );
   }
 
-  void _onImportRidersPressed() {
-    notifier.importRiders(
-      (progress) {
-        if (!_importController.isClosed) {
-          _importController.add(progress);
-        }
-      },
-      (error) {
-        if (!_importController.isClosed) {
-          _importController.addError(error);
-        }
-      },
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: (context) => Scaffold(
+        appBar: AppBar(title: Text(S.of(context).ImportRiders)),
+        body: _buildBody(),
+      ),
+      ios: (context) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(S.of(context).ImportRiders),
+          transitionBetweenRoutes: false,
+        ),
+        child: _buildBody(),
+      ),
     );
   }
 
   @override
   void dispose() {
-    _importController.close();
+    delegate.dispose();
     super.dispose();
   }
 }
@@ -144,7 +138,7 @@ class _ImportRidersButton extends StatelessWidget {
     this.errorMessage,
   });
 
-  /// The error message that is displayed above the button.
+  /// The error message that is displayed below the button.
   final String? errorMessage;
 
   /// The text for the button.
@@ -186,7 +180,7 @@ class _ImportRidersButton extends StatelessWidget {
             child: CupertinoFormRow(
               error: errorMessage == null
                   ? null
-                  : Text(errorMessage!, textAlign: TextAlign.center),
+                  : Center(child: Text(errorMessage!)),
               child: Center(
                 child: CupertinoButton(
                   onPressed: onPressed,

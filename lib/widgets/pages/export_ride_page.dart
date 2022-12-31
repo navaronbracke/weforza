@@ -45,7 +45,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
   Future<void> _submitForm(S translator) {
     try {
       return exportProvider.exportRidesWithAttendees(
-        fileExtension: _fileExtensionController.value.ext,
+        fileExtension: _fileExtensionController.value.value,
         fileName: _filenameController.text,
         ride: widget.rideToExport?.date,
       );
@@ -125,7 +125,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
             }
 
             if (error != null) {
-              return GenericError(text: translator.GenericError);
+              return const Center(child: GenericError());
             }
 
             return const AdaptiveAnimatedCheckmark();

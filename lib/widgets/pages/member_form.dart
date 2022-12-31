@@ -331,7 +331,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
 
     final translator = S.of(context);
 
-    if (error is MemberExistsException) {
+    if (error is RiderExistsException) {
       return Text(translator.RiderExists);
     }
 

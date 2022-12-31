@@ -84,7 +84,13 @@ class ExportDataPage extends StatelessWidget {
               ],
             ),
           ),
-          child,
+          Theme(
+            data: ThemeData(
+              useMaterial3: true,
+              colorScheme: AppTheme.colorScheme,
+            ),
+            child: child,
+          ),
         ],
       ),
     );
@@ -211,6 +217,10 @@ class ExportDataPage extends StatelessWidget {
                   ? const PlatformAwareLoadingIndicator()
                   : ElevatedButton(
                       onPressed: onPressed,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.colorScheme.primary,
+                        foregroundColor: Colors.white,
+                      ),
                       child: Text(exportLabel),
                     ),
             ),

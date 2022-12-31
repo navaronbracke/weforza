@@ -11,6 +11,7 @@ import 'package:weforza/model/device_type.dart';
 import 'package:weforza/model/device_validator.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
+import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -200,10 +201,10 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final translator = S.of(context);
 
     if (error is DeviceExistsException) {
-      return Text(translator.DeviceExists);
+      return GenericErrorLabel(message: translator.DeviceExists);
     }
 
-    return Text(translator.GenericError);
+    return GenericErrorLabel(message: translator.GenericError);
   }
 
   Widget _buildSubmitButton(BuildContext context) {

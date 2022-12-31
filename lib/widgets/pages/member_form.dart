@@ -13,6 +13,7 @@ import 'package:weforza/model/member_validator.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
+import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -332,10 +333,10 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     final translator = S.of(context);
 
     if (error is RiderExistsException) {
-      return Text(translator.RiderExists);
+      return GenericErrorLabel(message: translator.RiderExists);
     }
 
-    return Text(translator.GenericError);
+    return GenericErrorLabel(message: translator.GenericError);
   }
 
   Widget _buildSubmitButton(BuildContext context) {

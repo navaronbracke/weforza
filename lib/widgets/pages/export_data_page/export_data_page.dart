@@ -66,13 +66,17 @@ class ExportDataPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: const EdgeInsets.only(top: 24, bottom: 40),
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    translator.FileFormat,
-                    style: Theme.of(context).textTheme.labelMedium,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 8),
+                    child: Text(
+                      translator.FileFormat,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      maxLines: 2,
+                    ),
                   ),
                 ),
                 ExportFileFormatSelection(

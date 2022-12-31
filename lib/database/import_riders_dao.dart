@@ -13,18 +13,16 @@ abstract class ImportRidersDao {
 
 /// The default implementation of [ImportRidersDao].
 class ImportRidersDaoImpl implements ImportRidersDao {
-  ImportRidersDaoImpl(this._database, DatabaseTables tables)
-      : _deviceStore = tables.device,
-        _riderStore = tables.member;
+  ImportRidersDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Device] store.
-  final StoreRef<String, Map<String, dynamic>> _deviceStore;
+  final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Rider] store.
-  final StoreRef<String, Map<String, dynamic>> _riderStore;
+  final _riderStore = DatabaseTables.member;
 
   /// Get all the existing devices.
   /// Returns a map of device names per owner uuid.

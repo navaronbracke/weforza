@@ -13,24 +13,19 @@ abstract class ExportRidesDao {
 }
 
 class ExportRidesDaoImpl implements ExportRidesDao {
-  ExportRidesDaoImpl(
-    this._database,
-    DatabaseTables tables,
-  )   : _memberStore = tables.member,
-        _rideAttendeeStore = tables.rideAttendee,
-        _rideStore = tables.ride;
+  ExportRidesDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Member] store.
-  final StoreRef<String, Map<String, dynamic>> _memberStore;
+  final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
-  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
+  final _rideAttendeeStore = DatabaseTables.rideAttendee;
 
   /// A reference to the [Ride] store.
-  final StoreRef<String, Map<String, dynamic>> _rideStore;
+  final _rideStore = DatabaseTables.ride;
 
   /// Get the ride attendees per ride.
   ///

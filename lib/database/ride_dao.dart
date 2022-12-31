@@ -40,22 +40,19 @@ abstract class RideDao {
 
 /// The default implementation of [RideDao].
 class RideDaoImpl implements RideDao {
-  RideDaoImpl(this._database, DatabaseTables tables)
-      : _memberStore = tables.member,
-        _rideAttendeeStore = tables.rideAttendee,
-        _rideStore = tables.ride;
+  RideDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Member] store.
-  final StoreRef<String, Map<String, dynamic>> _memberStore;
+  final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
-  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
+  final _rideAttendeeStore = DatabaseTables.rideAttendee;
 
   /// A reference to the [Ride] store.
-  final StoreRef<String, Map<String, dynamic>> _rideStore;
+  final _rideStore = DatabaseTables.ride;
 
   @override
   Future<void> addRides(List<Ride> rides) async {

@@ -31,22 +31,19 @@ abstract class MemberDao {
 /// This class represents the default implementation of [MemberDao].
 class MemberDaoImpl implements MemberDao {
   /// The default constructor.
-  MemberDaoImpl(this._database, DatabaseTables tables)
-      : _deviceStore = tables.device,
-        _memberStore = tables.member,
-        _rideAttendeeStore = tables.rideAttendee;
+  MemberDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Device] store.
-  final StoreRef<String, Map<String, dynamic>> _deviceStore;
+  final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Member] store.
-  final StoreRef<String, Map<String, dynamic>> _memberStore;
+  final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
-  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
+  final _rideAttendeeStore = DatabaseTables.rideAttendee;
 
   /// Check whether a member exists.
   ///

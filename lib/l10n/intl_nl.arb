@@ -84,6 +84,7 @@
 	"GoToSettings": "Naar instellingen",
 	"ImportRiders": "Renners importeren",
 	"ImportRidersFileRequired": "Gelieve een bestand te selecteren om renners uit te importeren",
+	"ImportRidersGenericErrorMessage": "Er liep iets fout bij het importeren",
 	"ImportRidersProcessingFile": "Renners importeren van bestand",
 	"Inactive": "Inactief",
 	"LastName": "Achternaam",

@@ -16,7 +16,6 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class ExportDataPage extends StatelessWidget {
   ExportDataPage({
     required this.delegate,
-    required this.exportingLabel,
     required this.onPressed,
     required this.title,
     super.key,
@@ -31,9 +30,6 @@ class ExportDataPage extends StatelessWidget {
   /// The delegate that handles the export.
   final ExportDelegate delegate;
 
-  /// The label that is used as description for the exporting indicator.
-  final String exportingLabel;
-
   /// The input formatters for the file name input field.
   final List<TextInputFormatter> inputFormatters;
 
@@ -43,7 +39,7 @@ class ExportDataPage extends StatelessWidget {
   /// The title for the page.
   final String title;
 
-  Widget _buildAndroidForm(BuildContext context) {
+  Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
     return Padding(
@@ -87,10 +83,7 @@ class ExportDataPage extends StatelessWidget {
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: onPressed,
-            child: Text(translator.Export),
-          ),
+          child,
         ],
       ),
     );
@@ -98,18 +91,16 @@ class ExportDataPage extends StatelessWidget {
 
   /// Build the body of the export page.
   ///
-  /// The [child] is the widget that is used as the file name input form.
-  /// The [doneIndicator] is shown when the export has finished successfully.
-  /// The [loadingIndicator] is shown when the export is ongoing.
+  /// The [builder] function is used to build the form when the export has not started yet,
+  /// or when the export failed with a [FileExistsException].
+  /// If the export failed because of a different error,
+  /// the [genericErrorIndicator] is displayed.
   ///
-  /// If the export failed and the error is an instance of [FileExistsException],
-  /// then the [child] is displayed as is, since the [fileExistsLabel]
-  /// handles those errors. The [genericErrorIndicator] is displayed for all other errors.
+  /// The [doneIndicator] is shown when the export has finished successfully.
   Widget _buildBody({
-    required Widget child,
+    required Widget Function(BuildContext context, {bool isExporting}) builder,
     required Widget doneIndicator,
     required Widget genericErrorIndicator,
-    required Widget loadingIndicator,
   }) {
     return StreamBuilder<AsyncValue<void>?>(
       initialData: delegate.currentState,
@@ -118,27 +109,25 @@ class ExportDataPage extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null) {
-          return child;
+          return builder(context, isExporting: false);
         }
 
         return value.when(
           data: (_) => doneIndicator,
           error: (error, stackTrace) {
-            // If the export fails because a file with the given name already exists,
-            // an error message is provided by the `fileExistsLabel` widget.
             if (error is FileExistsException) {
-              return child;
+              return builder(context, isExporting: false);
             }
 
             return genericErrorIndicator;
           },
-          loading: () => loadingIndicator,
+          loading: () => builder(context, isExporting: true),
         );
       },
     );
   }
 
-  Widget _buildIosForm(BuildContext context) {
+  Widget _buildIosForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
     return CupertinoFormSection.insetGrouped(
@@ -164,10 +153,7 @@ class ExportDataPage extends StatelessWidget {
             stream: delegate.fileFormatStream,
           ),
         ),
-        CupertinoButton(
-          onPressed: onPressed,
-          child: Text(translator.Export),
-        ),
+        child,
       ],
     );
   }
@@ -205,28 +191,27 @@ class ExportDataPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());
     const genericErrorIndicator = Center(child: GenericError());
-    final loadingIndicator = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 4),
-            child: PlatformAwareLoadingIndicator(),
-          ),
-          Text(exportingLabel), // TODO: fix label style
-        ],
-      ),
-    );
+    const loadingIndicator = PlatformAwareLoadingIndicator();
+    final exportLabel = S.of(context).Export;
 
     return PlatformAwareWidget(
       android: (context) => Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(title: Text(title)),
         body: _buildBody(
-          child: Center(child: _buildAndroidForm(context)),
+          builder: (context, {bool isExporting = false}) => Center(
+            child: _buildAndroidForm(
+              context,
+              child: isExporting
+                  ? loadingIndicator
+                  : ElevatedButton(
+                      onPressed: onPressed,
+                      child: Text(exportLabel),
+                    ),
+            ),
+          ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
-          loadingIndicator: loadingIndicator,
         ),
       ),
       ios: (context) => CupertinoPageScaffold(
@@ -238,10 +223,17 @@ class ExportDataPage extends StatelessWidget {
           transitionBetweenRoutes: false,
         ),
         child: _buildBody(
-          child: _buildIosForm(context),
+          builder: (context, {bool isExporting = false}) => _buildIosForm(
+            context,
+            child: isExporting
+                ? loadingIndicator
+                : CupertinoButton(
+                    onPressed: onPressed,
+                    child: Text(exportLabel),
+                  ),
+          ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
-          loadingIndicator: loadingIndicator,
         ),
       ),
     );

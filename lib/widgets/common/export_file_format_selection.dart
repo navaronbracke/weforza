@@ -32,45 +32,34 @@ class ExportFileFormatSelection extends StatelessWidget {
 
         return PlatformAwareWidget(
           android: (context) {
-            final primaryColor = Theme.of(context).primaryColor;
-
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Radio<ExportFileFormat>(
+            return SegmentedButton<ExportFileFormat>(
+              showSelectedIcon: false,
+              segments: <ButtonSegment<ExportFileFormat>>[
+                ButtonSegment(
+                  label: Text(ExportFileFormat.csv.asUpperCase),
                   value: ExportFileFormat.csv,
-                  groupValue: currentValue,
-                  onChanged: onFormatSelected,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Text(
-                    'CSV',
-                    style: ExportFileFormat.csv == currentValue
-                        ? TextStyle(color: primaryColor)
-                        : null,
-                  ),
-                ),
-                Radio<ExportFileFormat>(
+                ButtonSegment(
+                  label: Text(ExportFileFormat.json.asUpperCase),
                   value: ExportFileFormat.json,
-                  groupValue: currentValue,
-                  onChanged: onFormatSelected,
                 ),
-                Text(
-                  'JSON',
-                  style: ExportFileFormat.json == currentValue
-                      ? TextStyle(color: primaryColor)
-                      : null,
-                )
               ],
+              selected: <ExportFileFormat>{currentValue},
+              onSelectionChanged: (selectedSegments) {
+                if (selectedSegments.isEmpty) {
+                  return;
+                }
+
+                onFormatSelected(selectedSegments.first);
+              },
             );
           },
           ios: (_) => CupertinoSlidingSegmentedControl<ExportFileFormat>(
             groupValue: currentValue,
             onValueChanged: onFormatSelected,
-            children: const {
-              ExportFileFormat.csv: Text('CSV'),
-              ExportFileFormat.json: Text('JSON'),
+            children: {
+              ExportFileFormat.csv: Text(ExportFileFormat.csv.asUpperCase),
+              ExportFileFormat.json: Text(ExportFileFormat.json.asUpperCase),
             },
           ),
         );

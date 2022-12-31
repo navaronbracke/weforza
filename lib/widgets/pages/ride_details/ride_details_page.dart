@@ -9,7 +9,7 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/dialogs/delete_ride_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
-import 'package:weforza/widgets/pages/export_ride_page.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_page.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_details_attendees_list.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_title.dart';
@@ -147,7 +147,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => ExportRidePage(rideToExport: selectedRide!),
+            builder: (_) => ExportRidePage(selectedRide: selectedRide!),
           ),
         );
         break;

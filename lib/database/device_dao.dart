@@ -31,18 +31,16 @@ abstract class DeviceDao {
 
 /// This class represents the default implementation of [DeviceDao].
 class DeviceDaoImpl implements DeviceDao {
-  DeviceDaoImpl(this._database, DatabaseTables tables)
-      : _deviceStore = tables.device,
-        _memberStore = tables.member;
+  DeviceDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the device store.
-  final StoreRef<String, Map<String, dynamic>> _deviceStore;
+  final _deviceStore = DatabaseTables.device;
 
   /// A reference to the member store.
-  final StoreRef<String, Map<String, dynamic>> _memberStore;
+  final _memberStore = DatabaseTables.member;
 
   /// Check whether a device exists.
   ///

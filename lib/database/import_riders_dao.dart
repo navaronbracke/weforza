@@ -53,9 +53,9 @@ class ImportRidersDaoImpl implements ImportRidersDao {
 
     for (final record in records) {
       final key = SerializableRiderKey(
-        alias: record.value['alias'],
-        firstName: record.value['firstname'],
-        lastName: record.value['lastname'],
+        alias: record.value['alias'] as String,
+        firstName: record.value['firstname'] as String,
+        lastName: record.value['lastname'] as String,
       );
 
       if (collection[key] == null) {

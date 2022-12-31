@@ -243,36 +243,3 @@ class ExportDataPage extends StatelessWidget {
     );
   }
 }
-
-/// This widget represents a validation label that displays a 'File exists'
-/// message based on the state of its [stream].
-class _ExportFileNameExistsLabel extends StatelessWidget {
-  const _ExportFileNameExistsLabel({
-    required this.initialData,
-    required this.stream,
-    this.style,
-  });
-
-  final bool initialData;
-
-  final Stream<bool> stream;
-
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: initialData,
-      stream: stream,
-      builder: (context, snapshot) {
-        final exists = snapshot.data ?? false;
-
-        return Text(
-          exists ? S.of(context).FileNameExists : '',
-          maxLines: 2,
-          style: style,
-        );
-      },
-    );
-  }
-}

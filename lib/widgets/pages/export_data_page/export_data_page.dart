@@ -7,10 +7,12 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/model/export_file_format.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
+import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage extends StatelessWidget {
@@ -119,19 +121,21 @@ class ExportDataPage extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null) {
-          return builder(context, isExporting: false);
+          return FocusAbsorber(child: builder(context, isExporting: false));
         }
 
         return value.when(
           data: (_) => doneIndicator,
           error: (error, stackTrace) {
             if (error is FileExistsException) {
-              return builder(context, isExporting: false);
+              return FocusAbsorber(child: builder(context, isExporting: false));
             }
 
             return genericErrorIndicator;
           },
-          loading: () => builder(context, isExporting: true),
+          loading: () => FocusAbsorber(
+            child: builder(context, isExporting: true),
+          ),
         );
       },
     );

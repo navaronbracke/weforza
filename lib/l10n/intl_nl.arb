@@ -57,6 +57,7 @@
 	"EditDisallowedWord": "Verboden woord bewerken",
 	"EditRider": "Renner bewerken",
 	"Export": "Exporteren",
+	"ExportGenericErrorMessage": "Er liep iets fout bij het exporteren",
 	"ExportRide": "Rit exporteren",
 	"ExportRideFileNamePlaceholder": "rit_{date}",
 	"ExportRiders": "Renners exporteren",

@@ -38,9 +38,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// Get the current state of the file exists flag.
   bool get fileExists => _fileExistsController.value;
 
-  /// Get the [Stream] of file exists changes.
-  Stream<bool> get fileExistsStream => _fileExistsController;
-
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
 

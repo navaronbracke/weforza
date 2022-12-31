@@ -1,21 +1,19 @@
-class CsvHeaderMissingError extends ArgumentError {
-  CsvHeaderMissingError() : super.value('A csv file requires a header line.');
-}
-
+/// An exception that is thrown when a device already exists.
 class DeviceExistsException implements Exception {}
 
+/// An exception that is thrown when a [File] already exists.
 class FileExistsException implements Exception {}
 
-class InvalidFileExtensionError extends ArgumentError {
-  InvalidFileExtensionError() : super('Invalid file extension.');
+/// An exception that is thrown when a file is required, but it was not provided.
+class FileRequiredException extends ArgumentError {
+  FileRequiredException() : super('file');
 }
 
-class JsonFormatIncompatibleException extends ArgumentError {
-  JsonFormatIncompatibleException() : super('The given json is incompatible.');
-}
+/// An exception that is thrown when a rider already exists.
+class RiderExistsException implements Exception {}
 
-class MemberExistsException implements Exception {}
-
-class NoFileChosenError extends ArgumentError {
-  NoFileChosenError() : super.notNull('No file was chosen.');
+/// An exception that is thrown when a [File] was provided,
+/// but the given file format is not supported.
+class UnsupportedFileFormatError extends ArgumentError {
+  UnsupportedFileFormatError() : super('File format not supported');
 }

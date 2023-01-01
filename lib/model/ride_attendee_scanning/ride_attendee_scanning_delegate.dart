@@ -447,6 +447,8 @@ class RideAttendeeScanningDelegate {
           // Ignore errors from individual events.
           // Otherwise the next scan results might be dropped.
         },
+        // Don't stop scanning even if an event was an error.
+        cancelOnError: false,
       );
     } catch (error) {
       if (!_stateMachine.isClosed) {

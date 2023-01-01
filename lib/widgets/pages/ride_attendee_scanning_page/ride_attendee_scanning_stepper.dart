@@ -9,13 +9,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// `Scan` and `Manual`, separated by an arrow.
 class RideAttendeeScanningStepper extends StatelessWidget {
   const RideAttendeeScanningStepper({
-    required this.alignment,
     required this.stream,
     super.key,
   });
-
-  /// The alignment for the children of the stepper.
-  final MainAxisAlignment alignment;
 
   /// The stream that indicates the current step in the scanning process.
   final Stream<RideAttendeeScanningState> stream;
@@ -39,7 +35,6 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             const inactiveColor = Colors.white;
 
             return Row(
-              mainAxisAlignment: alignment,
               children: [
                 Text(
                   scanLabel,
@@ -62,7 +57,6 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             const inactiveColor = CupertinoColors.inactiveGray;
 
             return Row(
-              mainAxisAlignment: alignment,
               children: [
                 Text(
                   scanLabel,

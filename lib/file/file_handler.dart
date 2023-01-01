@@ -52,7 +52,7 @@ class IoFileHandler implements FileHandler {
     }
 
     if (directory == null) {
-      return Future.error(ArgumentError.notNull('directory'));
+      throw ArgumentError.notNull('directory');
     }
 
     return File(directory.path + Platform.pathSeparator + fileName);
@@ -73,11 +73,11 @@ class IoFileHandler implements FileHandler {
     final ext = chosenFile.extension;
 
     if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
-      return Future.error(UnsupportedFileFormatError());
+      throw UnsupportedFileFormatError();
     }
 
     if (chosenFile.path == null) {
-      return Future.error(UnsupportedFileFormatError());
+      throw UnsupportedFileFormatError();
     }
 
     return File(chosenFile.path!);

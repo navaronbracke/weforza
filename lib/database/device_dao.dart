@@ -78,7 +78,7 @@ class DeviceDaoImpl implements DeviceDao {
   @override
   Future<void> addDevice(Device device) async {
     if (await _deviceExists(device.name, device.ownerId)) {
-      return Future.error(DeviceExistsException());
+      throw DeviceExistsException();
     }
 
     return _database.transaction((txn) async {
@@ -147,7 +147,7 @@ class DeviceDaoImpl implements DeviceDao {
   @override
   Future<void> updateDevice(Device device) async {
     if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
-      return Future.error(DeviceExistsException());
+      throw DeviceExistsException();
     }
 
     return _database.transaction((txn) async {

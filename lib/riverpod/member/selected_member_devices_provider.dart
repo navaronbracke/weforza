@@ -46,7 +46,7 @@ class SelectedMemberDevicesNotifier
   /// Add a device to the list of devices.
   Future<void> addDevice(DevicePayload model) async {
     if (state is! AsyncData<List<Device>>) {
-      return Future.error(StateError('The devices list was not loaded yet'));
+      throw StateError('The devices list was not loaded yet');
     }
 
     final device = Device(
@@ -68,7 +68,7 @@ class SelectedMemberDevicesNotifier
   /// Delete the device at [index].
   Future<void> deleteDevice(int index) async {
     if (state is! AsyncData<List<Device>>) {
-      return Future.error(StateError('The devices list was not loaded yet'));
+      throw StateError('The devices list was not loaded yet');
     }
 
     final newDevices = List.of(state.value!);
@@ -89,13 +89,13 @@ class SelectedMemberDevicesNotifier
   /// Edit the given device.
   Future<void> editDevice(DevicePayload model) async {
     if (state is! AsyncData<List<Device>>) {
-      return Future.error(StateError('The devices list was not loaded yet'));
+      throw StateError('The devices list was not loaded yet');
     }
 
     final creationDate = model.creationDate;
 
     if (creationDate == null) {
-      return Future.error(ArgumentError.notNull('creationDate'));
+      throw ArgumentError.notNull('creationDate');
     }
 
     final newDevice = Device(
@@ -118,7 +118,7 @@ class SelectedMemberDevicesNotifier
     );
 
     if (index == -1) {
-      return Future.error(ArgumentError.value(index));
+      throw ArgumentError.value(index);
     }
 
     newDevices[index] = newDevice;

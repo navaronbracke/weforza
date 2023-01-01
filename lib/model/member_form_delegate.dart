@@ -1,20 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/repository/member_repository.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
 /// This class represents the delegate for a Member form.
 class MemberFormDelegate extends AsyncComputationDelegate<void> {
-  MemberFormDelegate(
-    this.ref,
-  ) : repository = ref.read(memberRepositoryProvider);
-
-  final WidgetRef ref;
+  MemberFormDelegate({
+    required this.repository,
+  });
 
   final MemberRepository repository;
 
@@ -44,7 +38,6 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
       await repository.addMember(member);
 
       if (mounted) {
-        ref.invalidate(memberListProvider);
         setDone(null);
         whenComplete();
       }
@@ -53,11 +46,12 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
     }
   }
 
-  /// Edit an existing member.
-  /// The [whenComplete] function is called if the operation was successful.
+  /// Edit an existing rider.
+  /// When the rider was updated successfully,
+  /// the [whenComplete] function is called with the updated rider.
   void editMember(
     MemberPayload model, {
-    required void Function() whenComplete,
+    required void Function(Member updatedRider) whenComplete,
   }) async {
     if (!canStartComputation()) {
       return;
@@ -70,7 +64,7 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
         throw ArgumentError.notNull('uuid');
       }
 
-      final newMember = Member(
+      final updatedRider = Member(
         active: model.activeMember,
         alias: model.alias,
         firstName: model.firstName,
@@ -80,18 +74,11 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
         uuid: uuid,
       );
 
-      await repository.updateMember(newMember);
+      await repository.updateMember(updatedRider);
 
       if (mounted) {
-        final notifier = ref.read(selectedMemberProvider.notifier);
-
-        // Update the selected member.
-        notifier.setSelectedMember(newMember);
-
-        // An item in the list was updated.
-        ref.invalidate(memberListProvider);
         setDone(null);
-        whenComplete();
+        whenComplete(updatedRider);
       }
     } catch (error, stackTrace) {
       setError(error, stackTrace);

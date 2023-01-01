@@ -9,9 +9,13 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// `Scan` and `Manual`, separated by an arrow.
 class RideAttendeeScanningStepper extends StatelessWidget {
   const RideAttendeeScanningStepper({
+    required this.initialData,
     required this.stream,
     super.key,
   });
+
+  /// The initial data for the [StreamBuilder].
+  final RideAttendeeScanningState initialData;
 
   /// The stream that indicates the current step in the scanning process.
   final Stream<RideAttendeeScanningState> stream;
@@ -19,6 +23,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<RideAttendeeScanningState>(
+      initialData: initialData,
       stream: stream,
       builder: (context, snapshot) {
         // Every step before the manual selection should highlight the `Scan` label.

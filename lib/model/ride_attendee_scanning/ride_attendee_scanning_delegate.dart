@@ -98,6 +98,9 @@ class RideAttendeeScanningDelegate {
     return _rideAttendeeController.map((value) => value.length);
   }
 
+  /// Get the current state of the state machine.
+  RideAttendeeScanningState get currentState => _stateMachine.value;
+
   /// Returns whether there are active members.
   bool get hasActiveMembers => _activeMembers.isNotEmpty;
 

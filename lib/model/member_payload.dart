@@ -25,7 +25,7 @@ class MemberPayload {
   final String lastName;
 
   /// The file that represents the member's profile image.
-  final Future<File?> profileImage;
+  final File? profileImage;
 
   /// The uuid of the member, or null if the member should be created.
   final String? uuid;

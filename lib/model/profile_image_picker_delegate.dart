@@ -1,82 +1,52 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/file_handler.dart';
 
-/// This delegate manages selecting profile images for members.
+/// This delegate provides an interface for selecting profile images.
 class ProfileImagePickerDelegate {
   ProfileImagePickerDelegate({
     required this.fileHandler,
-    required Future<File?> currentImage,
-  })  : _image = currentImage,
-        _imageController = BehaviorSubject<SelectProfileImageState>.seeded(
-          SelectProfileImageState(
-            image: currentImage,
-            selecting: false,
-          ),
-        );
+    required File? initialValue,
+  }) : _controller = BehaviorSubject.seeded(AsyncValue.data(initialValue));
 
   /// The file handler for this delegate.
   final FileHandler fileHandler;
 
-  final BehaviorSubject<SelectProfileImageState> _imageController;
-
-  /// The selected profile image.
-  Future<File?> _image;
+  /// The controller that manages the selected file.
+  final BehaviorSubject<AsyncValue<File?>> _controller;
 
   /// Get the selected image.
-  Future<File?> get image => _image;
+  AsyncValue<File?> get selectedImage => _controller.value;
 
-  Stream<SelectProfileImageState> get stream => _imageController;
-
-  SelectProfileImageState get current => _imageController.value;
+  /// Get the [Stream] of file selection changes.
+  Stream<AsyncValue<File?>> get stream => _controller;
 
   /// Clear the selected image.
-  void clearImage() {
-    _imageController.add(
-      SelectProfileImageState(image: Future.value(), selecting: true),
-    );
-    _image = Future.value();
-    _imageController.add(
-      SelectProfileImageState(image: _image, selecting: false),
-    );
+  void clear() {
+    _controller.add(const AsyncValue.data(null));
   }
 
-  /// Set the selected image.
-  void pickImage() async {
+  /// Select a new image from the photo gallery.
+  void selectImageFromGallery() async {
     try {
-      _imageController.add(
-        SelectProfileImageState(image: Future.value(), selecting: true),
-      );
+      _controller.add(const AsyncLoading());
 
       final file = await fileHandler.chooseProfileImageFromGallery();
 
-      _image = Future.value(file);
-
-      _imageController.add(
-        SelectProfileImageState(image: _image, selecting: false),
-      );
-    } catch (error) {
-      _imageController.addError(error);
+      if (!_controller.isClosed) {
+        _controller.add(AsyncValue.data(file));
+      }
+    } catch (error, stackTrace) {
+      if (!_controller.isClosed) {
+        _controller.add(AsyncValue.error(error, stackTrace));
+      }
     }
   }
 
   /// Dispose of this delegate.
   void dispose() {
-    _imageController.close();
+    _controller.close();
   }
-}
-
-/// The selection state for a profile image picker.
-class SelectProfileImageState {
-  SelectProfileImageState({
-    required this.image,
-    required this.selecting,
-  });
-
-  /// Whether the user is still busy selecting an image.
-  final bool selecting;
-
-  /// The Future that resolves to the selected File.
-  final Future<File?> image;
 }

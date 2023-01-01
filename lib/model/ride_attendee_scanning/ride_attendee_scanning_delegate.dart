@@ -377,9 +377,7 @@ class RideAttendeeScanningDelegate {
   /// Returns the updated ride.
   Future<Ride> saveRideAttendeeSelection() async {
     if (_selectionLocked) {
-      return Future.error(
-        StateError('Cannot save the selection when it is locked.'),
-      );
+      throw StateError('Cannot save the selection when it is locked.');
     }
 
     _selectionLocked = true;
@@ -413,7 +411,7 @@ class RideAttendeeScanningDelegate {
         _stateMachine.addError(error);
       }
 
-      return Future.error(error);
+      rethrow;
     } finally {
       // Finally, unlock the selection.
       _selectionLocked = false;

@@ -50,7 +50,7 @@ class ImportRidersDelegate {
   /// Returns the collection of [SerializableRider]s.
   ///
   /// Throws a [FormatException] if the file is malformed.
-  Future<Iterable<SerializableRider>> _readRidersFromFile(File file) {
+  Future<Iterable<SerializableRider>> _readRidersFromFile(File file) async {
     if (file.path.endsWith(ExportFileFormat.csv.formatExtension)) {
       return _readFileWithReader<String>(
         file,
@@ -65,7 +65,7 @@ class ImportRidersDelegate {
       );
     }
 
-    return Future.error(UnsupportedFileFormatError());
+    throw UnsupportedFileFormatError();
   }
 
   /// Import riders from a chosen file.

@@ -28,7 +28,7 @@ class FakeDatabase implements Database {
   final String path;
 
   @override
-  Future close() => Future.value();
+  Future close() async {}
 
   @override
   Future<T> transaction<T>(

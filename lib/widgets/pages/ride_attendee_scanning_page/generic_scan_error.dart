@@ -163,11 +163,11 @@ class PermissionDeniedError extends StatelessWidget {
       ),
       secondaryButton: PlatformAwareWidget(
         android: (context) => TextButton(
-          child: Text(translator.GoBack),
+          child: Text(translator.GoBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
         ios: (context) => CupertinoButton(
-          child: Text(translator.GoBack),
+          child: Text(translator.GoBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

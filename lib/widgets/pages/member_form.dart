@@ -85,9 +85,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
 
     _profileImageDelegate = ProfileImagePickerDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      currentImage: Future.value(
-        profileImagePath == null ? null : File(profileImagePath),
-      ),
+      initialValue: profileImagePath == null ? null : File(profileImagePath),
     );
 
     _delegate = MemberFormDelegate(ref);

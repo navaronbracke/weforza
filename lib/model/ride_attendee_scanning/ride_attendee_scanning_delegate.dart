@@ -343,9 +343,21 @@ class RideAttendeeScanningDelegate {
     return true;
   }
 
+  /// Scroll the manual selection label into view.
+  void _scrollToManualSelectionLabel() {
+    if (_stepperScrollController.hasClients) {
+      _stepperScrollController.animateTo(
+        _stepperScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
+  }
+
   /// Go to the manual selection screen.
   void continueToManualSelection() {
     _stateMachine.setState(RideAttendeeScanningState.manualSelection);
+    _scrollToManualSelectionLabel();
   }
 
   /// Get the scanned device at the given [index].
@@ -389,6 +401,10 @@ class RideAttendeeScanningDelegate {
         : RideAttendeeScanningState.unresolvedOwnersSelection;
 
     _stateMachine.setState(newState);
+
+    if (newState == RideAttendeeScanningState.manualSelection) {
+      _scrollToManualSelectionLabel();
+    }
   }
 
   /// Save the current selection of ride attendees.

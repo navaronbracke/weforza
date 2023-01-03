@@ -62,7 +62,9 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() {
-    _scanningController.add(false);
+    if (!_scanningController.isClosed) {
+      _scanningController.add(false);
+    }
 
     return Future<void>.value();
   }

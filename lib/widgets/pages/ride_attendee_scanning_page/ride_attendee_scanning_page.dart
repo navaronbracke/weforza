@@ -44,6 +44,7 @@ class RideAttendeeScanningPageState
       rideRepository: ref.read(rideRepositoryProvider),
       scanner: ref.read(bluetoothProvider),
       settings: ref.read(settingsProvider),
+      vsync: this,
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to inset it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
@@ -58,7 +59,8 @@ class RideAttendeeScanningPageState
       appBar: AppBar(
         title: RideAttendeeScanningStepper(
           initialData: delegate.currentState,
-          stream: delegate.stateStream,
+          scrollController: delegate.stepperScrollController,
+          stream: delegate.stream,
         ),
       ),
       body: _buildBody(),
@@ -67,7 +69,8 @@ class RideAttendeeScanningPageState
 
   Widget _buildBody() {
     return StreamBuilder<RideAttendeeScanningState>(
-      stream: delegate.stateStream,
+      initialData: delegate.currentState,
+      stream: delegate.stream,
       builder: (context, snapshot) {
         final state = snapshot.data;
 
@@ -92,7 +95,7 @@ class RideAttendeeScanningPageState
             return ScanResultsList(
               delegate: delegate,
               progressBar: ScanProgressIndicator(
-                animationController: _scanProgressBarController,
+                animationController: delegate.progressBarController,
                 isScanning: delegate.scanner.isScanning,
               ),
               scanResultsListKey: _scanResultsKey,
@@ -111,7 +114,8 @@ class RideAttendeeScanningPageState
         transitionBetweenRoutes: false,
         middle: RideAttendeeScanningStepper(
           initialData: delegate.currentState,
-          stream: delegate.stateStream,
+          scrollController: delegate.stepperScrollController,
+          stream: delegate.stream,
         ),
       ),
       child: SafeArea(

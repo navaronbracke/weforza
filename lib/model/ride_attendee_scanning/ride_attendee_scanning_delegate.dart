@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
@@ -9,6 +11,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
+import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate_state_machine.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
@@ -28,7 +31,14 @@ class RideAttendeeScanningDelegate {
     required this.rideRepository,
     required this.scanner,
     required this.settings,
-  });
+    required TickerProvider vsync,
+  }) : _scanProgressBarController = AnimationController(
+          duration: Duration(seconds: settings.scanDuration),
+          vsync: vsync,
+          value: 1.0,
+        ) {
+    _startScanningSubscription = scanner.isScanning.listen(_listenToScanStart);
+  }
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -69,15 +79,22 @@ class RideAttendeeScanningDelegate {
   /// This list contains the devices that were scanned.
   final _scannedDevices = <ScannedDevice>[];
 
+  /// The controller for the scanning progress bar.
+  final AnimationController _scanProgressBarController;
+
   /// This flag is a mutex that locks the ride attendee selection
   /// when the selection is being saved.
   /// When this flag is true, the selection should not be modified.
   bool _selectionLocked = false;
 
+  /// The subscription that listens to the start of the Bluetooth scan.
+  StreamSubscription<bool>? _startScanningSubscription;
+
   /// The state machine for the scanning page.
-  final _stateMachine = BehaviorSubject.seeded(
-    RideAttendeeScanningState.requestPermissions,
-  );
+  final _stateMachine = RideAttendeeScanningDelegateStateMachine();
+
+  /// The scroll controller for the scanning page stepper.
+  final _stepperScrollController = ScrollController();
 
   /// This set will contain all the owners
   /// that could not be resolved automatically.
@@ -98,11 +115,20 @@ class RideAttendeeScanningDelegate {
     return _rideAttendeeController.map((value) => value.length);
   }
 
+  /// Get the current state of the state machine.
+  RideAttendeeScanningState get currentState => _stateMachine.currentState;
+
   /// Returns whether there are active members.
   bool get hasActiveMembers => _activeMembers.isNotEmpty;
 
+  /// Get the controller for the scan progress bar.
+  AnimationController get progressBarController => _scanProgressBarController;
+
+  /// Get the scroll controller for the scan stepper.
+  ScrollController get stepperScrollController => _stepperScrollController;
+
   /// Get the stream of state changes for the scan process.
-  Stream<RideAttendeeScanningState> get stateStream => _stateMachine;
+  Stream<RideAttendeeScanningState> get stream => _stateMachine.stateStream;
 
   /// Add the given [uuid] as a new ride attendee.
   ///
@@ -148,15 +174,6 @@ class RideAttendeeScanningDelegate {
     _scannedDevices.insert(0, ScannedDevice(deviceName, [...?owners]));
 
     onDeviceFound(device);
-  }
-
-  /// Switch to the new [state].
-  void _changeState(RideAttendeeScanningState state) {
-    if (_stateMachine.isClosed || _stateMachine.value == state) {
-      return;
-    }
-
-    _stateMachine.add(state);
   }
 
   /// Check whether a given [BluetoothPeripheral.deviceName]
@@ -208,6 +225,19 @@ class RideAttendeeScanningDelegate {
     return !_rideAttendeeController.value.contains(
       ScannedRideAttendee(uuid: owners.first, isScanned: false),
     );
+  }
+
+  /// Listen to the start signal of the Bluetooth scan
+  /// and start decreasing the progress in the progress bar.
+  void _listenToScanStart(bool isScanning) {
+    if (_stateMachine.isClosed || !isScanning) {
+      return;
+    }
+
+    // Start decreasing the progress when the scan starts.
+    if (_scanProgressBarController.status == AnimationStatus.completed) {
+      _scanProgressBarController.reverse();
+    }
   }
 
   /// Load the active members and their devices.
@@ -313,9 +343,21 @@ class RideAttendeeScanningDelegate {
     return true;
   }
 
+  /// Scroll the manual selection label into view.
+  void _scrollToManualSelectionLabel() {
+    if (_stepperScrollController.hasClients) {
+      _stepperScrollController.animateTo(
+        _stepperScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
+  }
+
   /// Go to the manual selection screen.
   void continueToManualSelection() {
-    _changeState(RideAttendeeScanningState.manualSelection);
+    _stateMachine.setState(RideAttendeeScanningState.manualSelection);
+    _scrollToManualSelectionLabel();
   }
 
   /// Get the scanned device at the given [index].
@@ -358,7 +400,11 @@ class RideAttendeeScanningDelegate {
         ? RideAttendeeScanningState.manualSelection
         : RideAttendeeScanningState.unresolvedOwnersSelection;
 
-    _changeState(newState);
+    _stateMachine.setState(newState);
+
+    if (newState == RideAttendeeScanningState.manualSelection) {
+      _scrollToManualSelectionLabel();
+    }
   }
 
   /// Save the current selection of ride attendees.
@@ -395,14 +441,10 @@ class RideAttendeeScanningDelegate {
 
       return updatedRide;
     } catch (error) {
-      // Pipe the error to the state machine.
-      if (!_stateMachine.isClosed) {
-        _stateMachine.addError(error);
-      }
+      _stateMachine.setSaveScanResultsError();
 
       rethrow;
     } finally {
-      // Finally, unlock the selection.
       _selectionLocked = false;
     }
   }
@@ -416,7 +458,7 @@ class RideAttendeeScanningDelegate {
       final hasPermission = await _requestScanPermission();
 
       if (!hasPermission) {
-        _changeState(RideAttendeeScanningState.permissionDenied);
+        _stateMachine.setState(RideAttendeeScanningState.permissionDenied);
 
         return;
       }
@@ -424,16 +466,16 @@ class RideAttendeeScanningDelegate {
       final bluetoothEnabled = await scanner.isBluetoothEnabled();
 
       if (!bluetoothEnabled) {
-        _changeState(RideAttendeeScanningState.bluetoothDisabled);
+        _stateMachine.setState(RideAttendeeScanningState.bluetoothDisabled);
 
         return;
       }
 
-      _changeState(RideAttendeeScanningState.startingScan);
+      _stateMachine.setState(RideAttendeeScanningState.startingScan);
 
       await _prepareScan();
 
-      _changeState(RideAttendeeScanningState.scanning);
+      _stateMachine.setState(RideAttendeeScanningState.scanning);
 
       scanner
           .scanForDevices(settings.scanDuration)
@@ -444,11 +486,11 @@ class RideAttendeeScanningDelegate {
           // Ignore errors from individual events.
           // Otherwise the next scan results might be dropped.
         },
+        // Don't stop scanning even if an event was an error.
+        cancelOnError: false,
       );
     } catch (error) {
-      if (!_stateMachine.isClosed) {
-        _stateMachine.addError(error);
-      }
+      _stateMachine.setStartScanError();
     }
   }
 
@@ -456,17 +498,19 @@ class RideAttendeeScanningDelegate {
   ///
   /// Returns whether the scan was stopped successfully.
   Future<bool> stopScan() async {
-    _changeState(RideAttendeeScanningState.stoppingScan);
+    // Return early if the scanner does not have to be stopped.
+    if (!_stateMachine.shouldStopScanner) {
+      return true;
+    }
+
+    _stateMachine.setState(RideAttendeeScanningState.stoppingScan);
 
     try {
       await scanner.stopScan();
 
       return true;
     } catch (error) {
-      if (!_stateMachine.isClosed) {
-        // If stopping the scan failed, pipe the error through the state machine.
-        _stateMachine.addError(error);
-      }
+      _stateMachine.setStopScanError();
 
       return false;
     }
@@ -509,7 +553,6 @@ class RideAttendeeScanningDelegate {
     if (item.isScanned) {
       final confirmation = await requestUnselectConfirmation();
 
-      // Abort when the confirmation was negative.
       if (!confirmation) {
         return false;
       }
@@ -538,11 +581,12 @@ class RideAttendeeScanningDelegate {
 
   /// Dispose of this delegate.
   void dispose() {
-    // Close the state machine first,
-    // so that `_stateMachine.isClosed` can be used
-    // to check if this delegate was disposed.
-    _stateMachine.close();
+    _stateMachine.dispose();
     _rideAttendeeController.close();
     scanner.dispose();
+    _startScanningSubscription?.cancel();
+    _startScanningSubscription = null;
+    _scanProgressBarController.dispose();
+    _stepperScrollController.dispose();
   }
 }

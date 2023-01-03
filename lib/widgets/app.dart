@@ -2,22 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/widgets/pages/home_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This class represents the application.
-class WeForzaApp extends ConsumerStatefulWidget {
+class WeForzaApp extends StatelessWidget {
   const WeForzaApp({super.key});
 
-  @override
-  WeForzaAppState createState() => WeForzaAppState();
-}
-
-class WeForzaAppState extends ConsumerState<WeForzaApp> {
   static const _appName = 'WeForza';
 
   @override
@@ -29,43 +22,29 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
     ]);
 
     return PlatformAwareWidget(
-      android: _buildAndroidWidget,
-      ios: _buildIosWidget,
+      android: (_) => MaterialApp(
+        title: _appName,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        theme: AppTheme.androidTheme,
+        home: const HomePage(),
+      ),
+      ios: (_) => CupertinoApp(
+        title: _appName,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        theme: AppTheme.iosTheme,
+        home: const HomePage(),
+      ),
     );
-  }
-
-  Widget _buildAndroidWidget(BuildContext context) {
-    return MaterialApp(
-      title: _appName,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: AppTheme.androidTheme,
-      home: const HomePage(),
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context) {
-    return CupertinoApp(
-      title: _appName,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      theme: AppTheme.iosTheme,
-      home: const HomePage(),
-    );
-  }
-
-  @override
-  void dispose() {
-    ref.read(databaseProvider).dispose();
-    super.dispose();
   }
 }

@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a submit button for a form.
 class FormSubmitButton<T> extends StatelessWidget {
@@ -31,18 +30,8 @@ class FormSubmitButton<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final button = PlatformAwareWidget(
-      android: (_) => ElevatedButton(
-        onPressed: onPressed,
-        child: Text(label),
-      ),
-      ios: (_) => CupertinoButton.filled(
-        onPressed: onPressed,
-        child: Text(label),
-      ),
-    );
-
-    const loading = PlatformAwareLoadingIndicator();
+    final button = FixedHeightSubmitButton(label: label, onPressed: onPressed);
+    const loadingIndicator = FixedHeightSubmitButton.loading();
 
     return StreamBuilder<AsyncValue<T>?>(
       initialData: delegate.currentState,
@@ -65,7 +54,7 @@ class FormSubmitButton<T> extends StatelessWidget {
 
         return value.when(
           // The submit button does not have a done state.
-          data: (value) => loading,
+          data: (value) => loadingIndicator,
           error: (error, stackTrace) => Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -76,9 +65,72 @@ class FormSubmitButton<T> extends StatelessWidget {
               button,
             ],
           ),
-          loading: () => loading,
+          loading: () => loadingIndicator,
         );
       },
     );
+  }
+}
+
+/// This widget represents a submit button
+/// that preserves its height when transitioning to its [loading] state.
+class FixedHeightSubmitButton extends StatelessWidget {
+  /// Construct a [FixedHeightSubmitButton] in the idle state.
+  ///
+  /// If [onPressed] is null, the button will be disabled.
+  const FixedHeightSubmitButton({
+    required this.label,
+    super.key,
+    this.onPressed,
+  }) : loading = false;
+
+  /// Construct a [FixedHeightSubmitButton] in the loading state.
+  const FixedHeightSubmitButton.loading({super.key})
+      : label = '',
+        loading = true,
+        onPressed = null;
+
+  /// The label for the submit button.
+  final String label;
+
+  /// Whether the button should show its loading indicator.
+  ///
+  /// If this is false, the submit button is shown instead.
+  final bool loading;
+
+  /// The onPressed handler for the button.
+  ///
+  /// If this is null, the button will be disabled.
+  final void Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return loading
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.colorScheme.primary,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text(label),
+              );
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return loading
+            ? const Padding(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: SizedBox(
+                  height: kMinInteractiveDimensionCupertino,
+                  child: Center(child: CupertinoActivityIndicator()),
+                ),
+              )
+            : CupertinoButton(onPressed: onPressed, child: Text(label));
+    }
   }
 }

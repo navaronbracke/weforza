@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
@@ -13,7 +12,6 @@ import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
-import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeviceForm extends ConsumerStatefulWidget {
@@ -39,8 +37,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
   late final TextEditingController _deviceNameController;
   late final PageController _deviceTypeController;
-
-  final _deviceNameErrorController = BehaviorSubject.seeded('');
 
   final _deviceNameFocusNode = FocusNode();
 
@@ -174,7 +170,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       ),
       ios: (_) => CupertinoFormField(
         controller: _deviceNameController,
-        errorController: _deviceNameErrorController,
         focusNode: _deviceNameFocusNode,
         keyboardType: TextInputType.text,
         placeholder: translator.DeviceName,
@@ -256,7 +251,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     _delegate.dispose();
     _deviceNameController.dispose();
     _deviceNameFocusNode.dispose();
-    _deviceNameErrorController.close();
     _deviceTypeController.dispose();
     super.dispose();
   }

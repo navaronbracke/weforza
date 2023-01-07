@@ -8,9 +8,9 @@ import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/model/export_file_format.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
+import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
-import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
@@ -205,7 +205,7 @@ class ExportDataPage<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());
     final translator = S.of(context);
-    final exportLabel = translator.Export;
+    final label = translator.Export;
     final genericErrorIndicator = Center(
       child: GenericErrorWithBackButton(
         message: translator.ExportGenericErrorMessage,
@@ -220,15 +220,8 @@ class ExportDataPage<T> extends StatelessWidget {
           builder: (context, {bool isExporting = false}) => _buildAndroidForm(
             context,
             child: isExporting
-                ? const PlatformAwareLoadingIndicator()
-                : ElevatedButton(
-                    onPressed: onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.colorScheme.primary,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: Text(exportLabel),
-                  ),
+                ? const FixedHeightSubmitButton.loading()
+                : FixedHeightSubmitButton(label: label, onPressed: onPressed),
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
@@ -253,17 +246,8 @@ class ExportDataPage<T> extends StatelessWidget {
             builder: (context, {bool isExporting = false}) => _buildIosForm(
               context,
               child: isExporting
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4),
-                      child: SizedBox(
-                        height: kMinInteractiveDimensionCupertino,
-                        child: Center(child: CupertinoActivityIndicator()),
-                      ),
-                    )
-                  : CupertinoButton(
-                      onPressed: onPressed,
-                      child: Text(exportLabel),
-                    ),
+                  ? const FixedHeightSubmitButton.loading()
+                  : FixedHeightSubmitButton(label: label, onPressed: onPressed),
             ),
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,

@@ -6,7 +6,7 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_form_delegate.dart';
-import 'package:weforza/model/device_payload.dart';
+import 'package:weforza/model/device_model.dart';
 import 'package:weforza/model/device_type.dart';
 import 'package:weforza/model/device_validator.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
@@ -65,7 +65,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     final selectedDeviceType = _deviceTypeController.page!.toInt();
 
-    final model = DevicePayload(
+    final model = DeviceModel(
       creationDate: widget.device?.creationDate,
       name: _deviceNameController.text,
       ownerId: widget.ownerUuid,
@@ -213,6 +213,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final label =
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
+    // TODO: the platform aware widget can be removed once the event handler is
+    // a single implementation
     return PlatformAwareWidget(
       android: (context) => FormSubmitButton<void>(
         delegate: _delegate,

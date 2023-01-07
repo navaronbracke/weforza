@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/model/device_payload.dart';
+import 'package:weforza/model/device_model.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
@@ -44,7 +44,7 @@ class SelectedMemberDevicesNotifier
   final DeviceRepository repository;
 
   /// Add a device to the list of devices.
-  Future<void> addDevice(DevicePayload model) async {
+  Future<void> addDevice(DeviceModel model) async {
     if (state is! AsyncData<List<Device>>) {
       throw StateError('The devices list was not loaded yet');
     }
@@ -87,7 +87,7 @@ class SelectedMemberDevicesNotifier
   }
 
   /// Edit the given device.
-  Future<void> editDevice(DevicePayload model) async {
+  Future<void> editDevice(DeviceModel model) async {
     if (state is! AsyncData<List<Device>>) {
       throw StateError('The devices list was not loaded yet');
     }

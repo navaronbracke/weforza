@@ -1,12 +1,12 @@
 import 'package:uuid/uuid.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/member_payload.dart';
+import 'package:weforza/model/rider_model.dart';
 import 'package:weforza/repository/member_repository.dart';
 
-/// This class represents the delegate for a Member form.
-class MemberFormDelegate extends AsyncComputationDelegate<void> {
-  MemberFormDelegate({
+/// This class represents the delegate for the rider form.
+class RiderFormDelegate extends AsyncComputationDelegate<void> {
+  RiderFormDelegate({
     required this.repository,
   });
 
@@ -14,17 +14,17 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
 
   final _uuidGenerator = const Uuid();
 
-  /// Add a new member.
+  /// Add a new rider.
   /// The [whenComplete] function is called if the operation was successful.
-  void addMember(
-    MemberPayload model, {
+  void addRider(
+    RiderModel model, {
     required void Function() whenComplete,
   }) async {
     if (!canStartComputation()) {
       return;
     }
 
-    final member = Member(
+    final rider = Member(
       active: true,
       alias: model.alias,
       firstName: model.firstName,
@@ -35,7 +35,7 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
     );
 
     try {
-      await repository.addMember(member);
+      await repository.addMember(rider);
 
       if (mounted) {
         setDone(null);
@@ -49,8 +49,8 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
   /// Edit an existing rider.
   /// When the rider was updated successfully,
   /// the [whenComplete] function is called with the updated rider.
-  void editMember(
-    MemberPayload model, {
+  void editRider(
+    RiderModel model, {
     required void Function(Member updatedRider) whenComplete,
   }) async {
     if (!canStartComputation()) {
@@ -65,7 +65,7 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
       }
 
       final updatedRider = Member(
-        active: model.activeMember,
+        active: model.active,
         alias: model.alias,
         firstName: model.firstName,
         lastName: model.lastName,

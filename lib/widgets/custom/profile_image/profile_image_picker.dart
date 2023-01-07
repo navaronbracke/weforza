@@ -70,3 +70,85 @@ class ProfileImagePicker extends StatelessWidget {
     );
   }
 }
+
+/// This widget represents a placeholder for the [ProfileImagePicker]
+/// that displays an iOS-style grey circular shape
+/// with a clipped person icon in the middle.
+class _CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
+  const _CupertinoProfileImagePickerPlaceholder({required this.size});
+
+  /// The size for the placeholder.
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final borderWidth = size / 16;
+
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        children: [
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemGrey2,
+              borderRadius: BorderRadius.all(
+                Radius.circular(size / 2),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Transform.translate(
+              offset: Offset(0, borderWidth),
+              child: Icon(
+                CupertinoIcons.person_solid,
+                color: Colors.white,
+                size: size,
+              ),
+            ),
+          ),
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: CupertinoColors.systemGrey2,
+                width: borderWidth,
+              ),
+              borderRadius: BorderRadius.all(
+                Radius.circular(size / 2),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// This widget represents a placeholder for the [ProfileImagePicker]
+/// that displays a Material-style circular shape
+/// with a person icon in the middle.
+class _MaterialProfileImagePickerPlaceholder extends StatelessWidget {
+  const _MaterialProfileImagePickerPlaceholder({required this.size});
+
+  /// The size of the placeholder.
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+        color: Colors.grey.shade500,
+      ),
+      child: Center(
+        child: Icon(Icons.person, color: Colors.white, size: .7 * size),
+      ),
+    );
+  }
+}

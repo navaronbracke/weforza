@@ -31,13 +31,25 @@ class ProfileImagePickerDelegate {
   /// Select a new image from the photo gallery.
   void selectImageFromGallery() async {
     try {
+      final previousFile = _controller.value.valueOrNull;
+
       _controller.add(const AsyncLoading());
 
       final file = await fileHandler.chooseProfileImageFromGallery();
 
-      if (!_controller.isClosed) {
-        _controller.add(AsyncValue.data(file));
+      if (_controller.isClosed) {
+        return;
       }
+
+      // If the result is null, but there was a previous file,
+      // use hte previous file as result.
+      if (previousFile != null && file == null) {
+        _controller.add(AsyncValue.data(previousFile));
+
+        return;
+      }
+
+      _controller.add(AsyncValue.data(file));
     } catch (error, stackTrace) {
       if (!_controller.isClosed) {
         _controller.add(AsyncValue.error(error, stackTrace));

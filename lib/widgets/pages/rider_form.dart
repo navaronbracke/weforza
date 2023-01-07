@@ -111,7 +111,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     _profileImageDelegate = ProfileImagePickerDelegate(
       fileHandler: ref.read(fileHandlerProvider),
       initialValue:
-          profileImageFile?.existsSync() ?? false ? null : profileImageFile,
+          profileImageFile?.existsSync() ?? false ? profileImageFile : null,
     );
 
     _delegate = RiderFormDelegate(

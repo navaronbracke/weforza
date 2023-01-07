@@ -71,6 +71,85 @@ class ProfileImagePicker extends StatelessWidget {
   }
 }
 
+/// This widget represents an action button for the button bar in a [ProfileImagePicker].
+///
+/// This button will use the minimum recommended size for interactive elements.
+class ProfileImagePickerActionButton extends StatelessWidget {
+  const ProfileImagePickerActionButton({
+    required this.androidIcon,
+    required this.iosIcon,
+    required this.onPressed,
+    this.isDestructive = false,
+    super.key,
+  });
+
+  /// The icon for the Android button.
+  final IconData androidIcon;
+
+  /// The icon for the iOS button.
+  final IconData iosIcon;
+
+  /// Whether this button represents a destructive action.
+  final bool isDestructive;
+
+  /// The onPressed handler for the button.
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    Color backgroundColor;
+    IconData icon;
+    double size;
+
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        backgroundColor =
+            isDestructive ? theme.colorScheme.error : theme.colorScheme.primary;
+        icon = androidIcon;
+        size = kMinInteractiveDimension;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        backgroundColor = isDestructive
+            ? CupertinoColors.destructiveRed
+            : CupertinoTheme.of(context).primaryColor;
+        icon = iosIcon;
+        size = kMinInteractiveDimensionCupertino;
+        break;
+    }
+
+    final decorationSize = size * 0.75;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onPressed,
+      child: SizedBox.square(
+        dimension: size,
+        child: Center(
+          child: Container(
+            width: decorationSize,
+            height: decorationSize,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(decorationSize / 2),
+              ),
+            ),
+            child: Center(
+              child: Icon(icon, color: Colors.white, size: decorationSize / 2),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// This widget represents a placeholder for the [ProfileImagePicker]
 /// that displays an iOS-style grey circular shape
 /// with a clipped person icon in the middle.

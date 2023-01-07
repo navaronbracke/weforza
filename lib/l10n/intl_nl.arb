@@ -107,6 +107,7 @@
 	"PastDayWithRide": "Gepasseerde rit",
 	"PickFile": "Kies een bestand",
 	"RemovePhoto": "Foto verwijderen",
+	"RemovePhotoDescription": "Bent u zeker dat u de foto voor deze renner wil verwijderen?",
 	"Reset": "Resetten",
 	"ResetRideCalendar": "Rittenkalender resetten",
 	"ResetRideCalendarDescription": "Bent u zeker dat u de rittenkalender wil resetten?\n\nDit zal alle ritten verwijderen en de aanwezigheden van alle renners worden gereset.",

@@ -149,10 +149,13 @@ class _ProfileImagePickerButton extends StatelessWidget {
       android: (context) {
         final styles = Theme.of(context).extension<DestructiveButtons>()!;
 
-        return TextButton(
-          onPressed: onPressed,
-          style: isDestructive ? styles.textButtonStyle : null,
-          child: Text(label),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: TextButton(
+            onPressed: onPressed,
+            style: isDestructive ? styles.textButtonStyle : null,
+            child: Text(label),
+          ),
         );
       },
       ios: (_) => CupertinoButton(

@@ -98,9 +98,17 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   Widget _buildIosLayout(BuildContext context) {
     final translator = S.of(context);
 
+    final backgroundColor = CupertinoDynamicColor.resolve(
+      CupertinoColors.systemGroupedBackground,
+      context,
+    );
+
     return CupertinoPageScaffold(
+      backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: backgroundColor,
+        border: null,
         middle: Text(
           widget.device == null ? translator.AddDevice : translator.EditDevice,
         ),

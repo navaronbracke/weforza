@@ -8,6 +8,7 @@ import 'package:weforza/widgets/theme.dart';
 class FormSubmitButton<T> extends StatelessWidget {
   const FormSubmitButton({
     required this.delegate,
+    required this.errorBuilder,
     required this.label,
     required this.onPressed,
     super.key,
@@ -16,16 +17,40 @@ class FormSubmitButton<T> extends StatelessWidget {
   /// The provider that will be watched for changes in the async computation.
   final AsyncComputationDelegate<T> delegate;
 
+  /// The builder for the error message.
+  ///
+  /// If `error` is null, the button is in the idle state.
+  final Widget Function(BuildContext context, Object? error) errorBuilder;
+
   /// The label for the button.
   final String label;
 
   /// The onTap handler for the button.
   final void Function() onPressed;
 
+  Widget _wrapWithErrorMessage({
+    required Widget child,
+    required Widget errorMessage,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: errorMessage,
+        ),
+        child,
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final button = FixedHeightSubmitButton(label: label, onPressed: onPressed);
-    const loadingIndicator = FixedHeightSubmitButton.loading();
+    final loadingIndicator = _wrapWithErrorMessage(
+      child: const FixedHeightSubmitButton.loading(),
+      errorMessage: errorBuilder(context, null),
+    );
 
     return StreamBuilder<AsyncValue<T>?>(
       initialData: delegate.currentState,
@@ -34,13 +59,19 @@ class FormSubmitButton<T> extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null) {
-          return button;
+          return _wrapWithErrorMessage(
+            child: button,
+            errorMessage: errorBuilder(context, null),
+          );
         }
 
         return value.when(
           // The submit button does not have a done state.
           data: (value) => loadingIndicator,
-          error: (error, stackTrace) => button,
+          error: (error, stackTrace) => _wrapWithErrorMessage(
+            child: button,
+            errorMessage: errorBuilder(context, error),
+          ),
           loading: () => loadingIndicator,
         );
       },

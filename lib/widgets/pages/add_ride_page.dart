@@ -53,7 +53,13 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
                   padding: EdgeInsets.only(top: 4),
                   child: AddRideCalendarColorLegend(),
                 ),
-                _buildSubmitButton(),
+                _AddRideSubmitButton(
+                  initialSelection: _delegate.currentSelection,
+                  initialState: _delegate.currentState,
+                  onPressed: () => onSubmitPressed(context),
+                  selectionStream: _delegate.selectionStream,
+                  stateStream: _delegate.stream,
+                ),
               ],
             );
           case ConnectionState.active:
@@ -77,38 +83,6 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
         }
 
         return button;
-      },
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return StreamBuilder<AsyncValue<void>?>(
-      initialData: _delegate.currentState,
-      stream: _delegate.stream,
-      builder: (context, snapshot) {
-        final value = snapshot.data;
-
-        const loadingIndicator = PlatformAwareLoadingIndicator();
-
-        if (value == null) {
-          return _AddRideSubmitButton(
-            initialData: _delegate.currentSelection,
-            onPressed: () => onSubmitPressed(context),
-            stream: _delegate.selectionStream,
-          );
-        }
-
-        return value.when(
-          // The submit button does not have a done state.
-          data: (value) => loadingIndicator,
-          error: (error, stackTrace) => _AddRideSubmitButton(
-            initialData: _delegate.currentSelection,
-            onPressed: () => onSubmitPressed(context),
-            stream: _delegate.selectionStream,
-            error: error,
-          ),
-          loading: () => loadingIndicator,
-        );
       },
     );
   }
@@ -165,37 +139,61 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
   }
 }
 
-/// This widget represents the interactable submit button for the form.
-///
-/// This button is disabled when the selection is empty.
 class _AddRideSubmitButton extends StatelessWidget {
   const _AddRideSubmitButton({
-    required this.initialData,
+    required this.initialSelection,
+    required this.initialState,
     required this.onPressed,
-    required this.stream,
-    this.error,
+    required this.selectionStream,
+    required this.stateStream,
   });
 
-  /// The error that was returned by the submit.
-  final Object? error;
+  /// The initial selection of the rides that should be added.
+  final Set<DateTime> initialSelection;
 
-  /// The initial selection.
-  final Set<DateTime>? initialData;
+  /// The initial state for the button.
+  final AsyncValue<void>? initialState;
 
   /// The onPressed handler for the button.
   final void Function() onPressed;
 
-  /// The [Stream] of selection changes.
-  final Stream<Set<DateTime>> stream;
+  /// The stream of ride selection changes.
+  final Stream<Set<DateTime>> selectionStream;
 
-  @override
-  Widget build(BuildContext context) {
-    final translator = S.of(context);
+  /// The stream of state changes for the button.
+  final Stream<AsyncValue<void>?> stateStream;
 
-    String errorMessage = '';
+  Widget _buildButton({required bool showButton, String errorMessage = ''}) {
+    Widget button;
 
-    if (error != null) {
-      errorMessage = translator.GenericError;
+    if (showButton) {
+      button = StreamBuilder<Set<DateTime>>(
+        initialData: initialSelection,
+        stream: selectionStream,
+        builder: (context, snapshot) {
+          final hasSelection = snapshot.data?.isNotEmpty ?? false;
+          final translator = S.of(context);
+
+          return PlatformAwareWidget(
+            android: (_) => ElevatedButton(
+              onPressed: hasSelection ? onPressed : null,
+              child: Text(translator.AddSelection),
+            ),
+            ios: (_) => CupertinoButton.filled(
+              onPressed: hasSelection ? onPressed : null,
+              child: Text(translator.AddSelection),
+            ),
+          );
+        },
+      );
+    } else {
+      button = PlatformAwareWidget(
+        android: (_) => const CircularProgressIndicator(),
+        ios: (_) => const SizedBox(
+          height: 48,
+          child: Center(child: CupertinoActivityIndicator()),
+        ),
+      );
     }
 
     return Column(
@@ -205,25 +203,33 @@ class _AddRideSubmitButton extends StatelessWidget {
           padding: const EdgeInsets.only(top: 12, bottom: 4),
           child: GenericErrorLabel(message: errorMessage),
         ),
-        StreamBuilder<Set<DateTime>>(
-          initialData: initialData,
-          stream: stream,
-          builder: (_, snapshot) {
-            final hasSelection = snapshot.data?.isNotEmpty ?? false;
-
-            return PlatformAwareWidget(
-              android: (_) => ElevatedButton(
-                onPressed: hasSelection ? onPressed : null,
-                child: Text(translator.AddSelection),
-              ),
-              ios: (_) => CupertinoButton.filled(
-                onPressed: hasSelection ? onPressed : null,
-                child: Text(translator.AddSelection),
-              ),
-            );
-          },
-        ),
+        button,
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<AsyncValue<void>?>(
+      initialData: initialState,
+      stream: stateStream,
+      builder: (context, snapshot) {
+        final future = snapshot.data;
+
+        if (future == null) {
+          return _buildButton(showButton: true);
+        }
+
+        return future.when(
+          // The submit button does not have a done state.
+          data: (_) => _buildButton(showButton: false),
+          error: (error, stackTrace) => _buildButton(
+            showButton: true,
+            errorMessage: S.of(context).GenericError,
+          ),
+          loading: () => _buildButton(showButton: false),
+        );
+      },
     );
   }
 }

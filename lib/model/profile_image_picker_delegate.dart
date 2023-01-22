@@ -35,7 +35,7 @@ class ProfileImagePickerDelegate {
 
       _controller.add(const AsyncLoading());
 
-      final file = await fileHandler.chooseProfileImageFromGallery();
+      final file = await fileHandler.pickProfileImage(ImageSource.gallery);
 
       if (_controller.isClosed) {
         return;

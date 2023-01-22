@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Pick a profile image from the device gallery.
-  /// Returns the [File] that was chosen.
-  Future<File?> chooseProfileImageFromGallery();
-
   /// Get a [File] with the given [fileName].
   ///
   /// Returns a reference to the [File].
@@ -22,23 +19,14 @@ abstract class FileHandler {
   /// Returns the chosen file or null if no file was chosen.
   /// Throws an [UnsupportedFileFormatError] if a file with an unsupported file type was chosen.
   Future<File?> pickImportRidersDataSource();
+
+  /// Pick a profile image from the given [source].
+  /// Returns the [File] that was chosen.
+  Future<File?> pickProfileImage(ImageSource source);
 }
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
-  @override
-  Future<File?> chooseProfileImageFromGallery() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
-
-    if (result == null || result.files.isEmpty) {
-      return null;
-    }
-
-    final path = result.files.first.path;
-
-    return path == null ? null : File(path);
-  }
-
   @override
   Future<File> getFile(String fileName) async {
     Directory? directory;
@@ -81,5 +69,32 @@ class IoFileHandler implements FileHandler {
     }
 
     return File(chosenFile.path!);
+  }
+
+  @override
+  Future<File?> pickProfileImage(ImageSource source) async {
+    final file = await ImagePicker().pickImage(
+      maxHeight: 320,
+      maxWidth: 320,
+      requestFullMetadata: false,
+      source: source,
+    );
+
+    if (file == null) {
+      return null;
+    }
+
+    switch (source) {
+      case ImageSource.camera:
+        // Get a new file handle
+        // for a file with the same name in the documents directory.
+        final destinationFile = await getFile(file.name);
+
+        await file.saveTo(destinationFile.path);
+
+        return destinationFile;
+      case ImageSource.gallery:
+        return File(file.path);
+    }
   }
 }

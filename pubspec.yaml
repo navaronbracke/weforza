@@ -50,6 +50,9 @@ dependencies:
   # For shared state management.
   flutter_riverpod: ^2.1.1
 
+  # For picking images from the camera / gallery.
+  image_picker: ^0.8.6+1
+
   # The intl package provides translation utilities.
   intl: ^0.17.0
 

@@ -61,27 +61,55 @@ class GenericError extends StatelessWidget {
 /// This class represents an error label
 /// that uses the default error style for the current platform.
 class GenericErrorLabel extends StatelessWidget {
-  const GenericErrorLabel({required this.message, super.key});
+  const GenericErrorLabel({
+    required this.message,
+    this.androidPadding = EdgeInsets.zero,
+    this.iosPadding = EdgeInsets.zero,
+    super.key,
+  });
 
+  /// The padding to apply to the Android layout.
+  final EdgeInsetsGeometry androidPadding;
+
+  /// The padding to apply to the iOS layout.
+  final EdgeInsetsGeometry iosPadding;
+
+  /// The message to display.
   final String message;
 
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (context) => DefaultTextStyle(
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.error,
-          fontSize: 14,
-        ),
-        child: Text(message),
-      ),
-      ios: (_) => DefaultTextStyle(
-        style: const TextStyle(
-          color: CupertinoColors.destructiveRed,
-          fontWeight: FontWeight.w500,
-        ),
-        child: Text(message),
-      ),
+      android: (context) {
+        final child = DefaultTextStyle(
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.error,
+            fontSize: 14,
+          ),
+          child: Text(message),
+        );
+
+        if (androidPadding != EdgeInsets.zero) {
+          return Padding(padding: androidPadding, child: child);
+        }
+
+        return child;
+      },
+      ios: (_) {
+        final child = DefaultTextStyle(
+          style: const TextStyle(
+            color: CupertinoColors.destructiveRed,
+            fontWeight: FontWeight.w500,
+          ),
+          child: Text(message),
+        );
+
+        if (iosPadding != EdgeInsets.zero) {
+          return Padding(padding: iosPadding, child: child);
+        }
+
+        return child;
+      },
     );
   }
 }

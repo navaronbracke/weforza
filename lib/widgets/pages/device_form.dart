@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
@@ -13,7 +12,6 @@ import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
-import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeviceForm extends ConsumerStatefulWidget {
@@ -35,12 +33,10 @@ class DeviceForm extends ConsumerStatefulWidget {
 }
 
 class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
-  final _formKey = GlobalKey<FormState>();
+  final _deviceNameKey = GlobalKey<FormFieldState<String>>();
 
   late final TextEditingController _deviceNameController;
   late final PageController _deviceTypeController;
-
-  final _deviceNameErrorController = BehaviorSubject.seeded('');
 
   final _deviceNameFocusNode = FocusNode();
 
@@ -61,6 +57,12 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   void onFormSubmitted(BuildContext context) {
+    final formState = _deviceNameKey.currentState;
+
+    if (formState == null || !formState.validate()) {
+      return;
+    }
+
     final navigator = Navigator.of(context);
 
     final selectedDeviceType = _deviceTypeController.page!.toInt();
@@ -89,16 +91,46 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
           widget.device == null ? translator.AddDevice : translator.EditDevice,
         ),
       ),
-      body: _buildBody(context),
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate.fixed([
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: DeviceTypeCarousel(
+                  controller: _deviceTypeController,
+                  height: 120,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildDeviceNameInput(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16, bottom: 24),
+                child: Center(child: _buildSubmitButton(context)),
+              ),
+            ]),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildIosLayout(BuildContext context) {
     final translator = S.of(context);
 
+    final backgroundColor = CupertinoDynamicColor.resolve(
+      CupertinoColors.systemGroupedBackground,
+      context,
+    );
+
     return CupertinoPageScaffold(
+      backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: backgroundColor,
+        border: null,
         middle: Text(
           widget.device == null ? translator.AddDevice : translator.EditDevice,
         ),
@@ -106,40 +138,32 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildBody(context),
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Flexible(
-          flex: 3,
-          child: DeviceTypeCarousel(controller: _deviceTypeController),
-        ),
-        Flexible(
-          flex: 8,
-          child: Column(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  child: _buildDeviceNameInput(context),
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                CupertinoFormSection.insetGrouped(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: DeviceTypeCarousel(
+                        controller: _deviceTypeController,
+                        height: 120,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 24),
-                child: Center(child: _buildSubmitButton(context)),
-              ),
-            ],
-          ),
+                CupertinoFormSection.insetGrouped(
+                  children: [
+                    _buildDeviceNameInput(context),
+                    _buildSubmitButton(context),
+                  ],
+                ),
+              ]),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -148,6 +172,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     return PlatformAwareWidget(
       android: (_) => TextFormField(
+        key: _deviceNameKey,
         focusNode: _deviceNameFocusNode,
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.text,
@@ -172,13 +197,15 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
-      ios: (_) => CupertinoFormField(
+      ios: (_) => CupertinoTextFormFieldRow(
+        key: _deviceNameKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: _deviceNameController,
-        errorController: _deviceNameErrorController,
         focusNode: _deviceNameFocusNode,
         keyboardType: TextInputType.text,
         placeholder: translator.DeviceName,
         textInputAction: TextInputAction.done,
+        maxLength: Device.nameMaxLength,
         onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
@@ -194,17 +221,25 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   Widget _buildErrorMessage(BuildContext context, Object? error) {
+    const iOSPadding = EdgeInsetsDirectional.only(start: 20, top: 6, end: 6);
+
     if (error == null) {
-      return const Text('');
+      return const GenericErrorLabel(message: '', iosPadding: iOSPadding);
     }
 
     final translator = S.of(context);
 
     if (error is DeviceExistsException) {
-      return GenericErrorLabel(message: translator.DeviceExists);
+      return GenericErrorLabel(
+        message: translator.DeviceExists,
+        iosPadding: iOSPadding,
+      );
     }
 
-    return GenericErrorLabel(message: translator.GenericError);
+    return GenericErrorLabel(
+      message: translator.GenericError,
+      iosPadding: iOSPadding,
+    );
   }
 
   Widget _buildSubmitButton(BuildContext context) {
@@ -213,31 +248,11 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final label =
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
-    // TODO: the platform aware widget can be removed once the event handler is
-    // a single implementation
-    return PlatformAwareWidget(
-      android: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: label,
-        onPressed: () {
-          final formState = _formKey.currentState;
-
-          if (formState != null && formState.validate()) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
-      ios: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: label,
-        onPressed: () {
-          if (_deviceNameErrorController.value.isEmpty) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
+    return FormSubmitButton<void>(
+      delegate: _delegate,
+      errorBuilder: _buildErrorMessage,
+      label: label,
+      onPressed: () => onFormSubmitted(context),
     );
   }
 
@@ -256,7 +271,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     _delegate.dispose();
     _deviceNameController.dispose();
     _deviceNameFocusNode.dispose();
-    _deviceNameErrorController.close();
     _deviceTypeController.dispose();
     super.dispose();
   }

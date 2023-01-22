@@ -28,10 +28,29 @@ class FormSubmitButton<T> extends StatelessWidget {
   /// The onTap handler for the button.
   final void Function() onPressed;
 
+  Widget _wrapWithErrorMessage({
+    required Widget child,
+    required Widget errorMessage,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: errorMessage,
+        ),
+        child,
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final button = FixedHeightSubmitButton(label: label, onPressed: onPressed);
-    const loadingIndicator = FixedHeightSubmitButton.loading();
+    final loadingIndicator = _wrapWithErrorMessage(
+      child: const FixedHeightSubmitButton.loading(),
+      errorMessage: errorBuilder(context, null),
+    );
 
     return StreamBuilder<AsyncValue<T>?>(
       initialData: delegate.currentState,
@@ -40,30 +59,18 @@ class FormSubmitButton<T> extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: errorBuilder(context, null),
-              ),
-              button,
-            ],
+          return _wrapWithErrorMessage(
+            child: button,
+            errorMessage: errorBuilder(context, null),
           );
         }
 
         return value.when(
           // The submit button does not have a done state.
           data: (value) => loadingIndicator,
-          error: (error, stackTrace) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: errorBuilder(context, error),
-              ),
-              button,
-            ],
+          error: (error, stackTrace) => _wrapWithErrorMessage(
+            child: button,
+            errorMessage: errorBuilder(context, error),
           ),
           loading: () => loadingIndicator,
         );

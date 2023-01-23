@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
@@ -16,7 +15,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
-import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
+import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
@@ -37,7 +36,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   late final ExcludedTermsDelegate excludedTermsDelegate;
 
-  late final BehaviorSubject<MemberFilterOption> memberFilterController;
+  late final RiderFilterDelegate riderFilterDelegate;
 
   late final ScanDurationDelegate scanDurationDelegate;
 
@@ -77,7 +76,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           .map((t) => ExcludedTerm(term: t))
           .toList(),
     );
-    memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
+    riderFilterDelegate = RiderFilterDelegate(
+      initialValue: settings.memberListFilter,
+    );
     scanDurationDelegate = ScanDurationDelegate(
       initialValue: settings.scanDuration.toDouble(),
     );
@@ -151,11 +152,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   useMaterial3: true,
                   segmentedButtonTheme: theme.segmentedButtonTheme,
                 ),
-                child: MemberListFilter(
-                  initialFilter: memberFilterController.value,
-                  onChanged: memberFilterController.add,
-                  stream: memberFilterController,
-                ),
+                child: RiderListFilter(delegate: riderFilterDelegate),
               ),
               Text(
                 translator.RidersListFilterDescription,
@@ -276,11 +273,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             Padding(
               padding: const EdgeInsets.all(6),
               child: Center(
-                child: MemberListFilter(
-                  initialFilter: memberFilterController.value,
-                  onChanged: memberFilterController.add,
-                  stream: memberFilterController,
-                ),
+                child: RiderListFilter(delegate: riderFilterDelegate),
               ),
             ),
           ],
@@ -354,7 +347,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
-    memberFilterController.close();
+    riderFilterDelegate.dispose();
     scanDurationDelegate.dispose();
     super.dispose();
   }

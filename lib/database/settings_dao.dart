@@ -1,6 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
-import 'package:weforza/model/settings.dart';
+import 'package:weforza/model/settings/settings.dart';
 
 /// This class represents an interface
 /// to read and write the application settings.

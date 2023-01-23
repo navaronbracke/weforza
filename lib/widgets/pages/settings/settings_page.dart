@@ -48,8 +48,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     // Use an artificial delay to give the loading indicator some time to appear.
     await Future.delayed(const Duration(milliseconds: 500));
 
+    // Grab the committed term values.
+    final terms = excludedTermsDelegate.terms.map((t) => t.term).toSet();
+
     final newSettings = Settings(
-      excludedTermsFilter: excludedTermsDelegate.terms.toSet(),
+      excludedTermsFilter: terms,
       scanDuration: scanDurationController.value.floor(),
       memberListFilter: memberFilterController.value,
     );
@@ -69,7 +72,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final settings = ref.read(settingsProvider);
 
     excludedTermsDelegate = ExcludedTermsDelegate(
-      initialValue: settings.excludedTermsFilter.toList(),
+      initialValue: settings.excludedTermsFilter
+          .map((t) => ExcludedTerm(term: t))
+          .toList(),
     );
     memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
     scanDurationController = BehaviorSubject.seeded(
@@ -193,13 +198,13 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<String> terms, int index) {
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
       delegate: excludedTermsDelegate,
       index: index,
-      term: term,
+      excludedTerm: term,
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.
@@ -17,17 +18,17 @@ class ExcludedTermsList extends StatelessWidget {
   final Widget addTermInputField;
 
   /// The builder function that builds the individual terms.
-  final Widget Function(List<String> items, int index) builder;
+  final Widget Function(List<ExcludedTerm> items, int index) builder;
 
   /// The initial list of terms.
-  final List<String> initialData;
+  final List<ExcludedTerm> initialData;
 
   /// The stream that provides updates to the list of terms.
-  final Stream<List<String>> stream;
+  final Stream<List<ExcludedTerm>> stream;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<String>>(
+    return StreamBuilder<List<ExcludedTerm>>(
       initialData: initialData,
       stream: stream,
       builder: (context, snapshot) {

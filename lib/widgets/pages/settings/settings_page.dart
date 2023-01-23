@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
-import 'package:weforza/model/settings.dart';
+import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';

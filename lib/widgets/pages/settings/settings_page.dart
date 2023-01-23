@@ -15,8 +15,8 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
-import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
+import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
 import 'package:weforza/widgets/pages/settings/settings_submit.dart';

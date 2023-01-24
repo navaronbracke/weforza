@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:weforza/model/deferred_save_delegate.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 
@@ -13,6 +15,8 @@ class ScanDurationDelegate extends DeferredSaveDelegate<double> {
 
   @override
   void saveValue(double value) {
-    // TODO: implement partial save of scan duration
+    unawaited(_settingsDelegate.saveScanDuration(value.floor()).catchError((_) {
+      // If the scan duration value could not be saved, do nothing.
+    }));
   }
 }

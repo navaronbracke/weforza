@@ -40,18 +40,23 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    final settings = ref.read(settingsProvider);
+
+    final settingsDelegate = ref.read(settingsProvider.notifier);
+    final currentSettings = ref.read(settingsProvider);
 
     excludedTermsDelegate = ExcludedTermsDelegate(
-      initialValue: settings.excludedTermsFilter
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.excludedTermsFilter
           .map((t) => ExcludedTerm(term: t))
           .toList(),
     );
     riderFilterDelegate = RiderFilterDelegate(
-      initialValue: settings.memberListFilter,
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.memberListFilter,
     );
     scanDurationDelegate = ScanDurationDelegate(
-      initialValue: settings.scanDuration.toDouble(),
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.scanDuration.toDouble(),
     );
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);

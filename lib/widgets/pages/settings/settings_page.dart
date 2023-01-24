@@ -5,8 +5,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
-import 'package:weforza/model/settings/settings.dart';
-import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
@@ -19,7 +17,6 @@ import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
-import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -39,32 +36,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   late final RiderFilterDelegate riderFilterDelegate;
 
   late final ScanDurationDelegate scanDurationDelegate;
-
-  Future<void>? _saveSettingsFuture;
-
-  Future<void> saveSettings() async {
-    // TODO: remove the delay once the changes are saved automatically
-
-    // Use an artificial delay to give the loading indicator some time to appear.
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // Grab the committed term values.
-    final terms = excludedTermsDelegate.terms.map((t) => t.term).toSet();
-
-    final newSettings = Settings(
-      excludedTermsFilter: terms,
-      scanDuration: scanDurationController.value.floor(),
-      memberListFilter: memberFilterController.value,
-    );
-
-    final repository = ref.read(settingsRepositoryProvider);
-
-    await repository.write(newSettings);
-
-    if (mounted) {
-      ref.read(settingsProvider.notifier).state = newSettings;
-    }
-  }
 
   @override
   void initState() {
@@ -110,10 +81,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(translator.Settings),
-        actions: [_buildSubmitButton()],
-      ),
+      appBar: AppBar(title: Text(translator.Settings)),
       body: SettingsPageScrollView(
         excludedTermsListHeader: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
@@ -283,10 +251,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           border: null,
           largeTitle: Text(translator.Settings),
           transitionBetweenRoutes: false,
-          trailing: SizedBox(
-            width: 40,
-            child: Center(child: _buildSubmitButton()),
-          ),
         ),
         resetRideCalendarButton: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
@@ -324,20 +288,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    // Use a stateful builder to avoid having to rebuild the entire page.
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return SettingsSubmit(
-          future: _saveSettingsFuture,
-          onSaveSettings: () => setState(() {
-            _saveSettingsFuture = saveSettings();
-          }),
-        );
-      },
     );
   }
 

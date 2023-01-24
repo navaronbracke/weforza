@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/riverpod/settings_provider.dart';
 
 /// This class represents a single excluded term.
 ///
@@ -48,8 +49,10 @@ class ExcludedTerm implements Comparable<ExcludedTerm> {
 class ExcludedTermsDelegate {
   /// The default constructor.
   ExcludedTermsDelegate({
+    required SettingsNotifier settingsDelegate,
     List<ExcludedTerm> initialValue = const [],
-  }) : _termsController = BehaviorSubject.seeded(initialValue);
+  })  : _settingsDelegate = settingsDelegate,
+        _termsController = BehaviorSubject.seeded(initialValue);
 
   final BehaviorSubject<List<ExcludedTerm>> _termsController;
 
@@ -58,11 +61,23 @@ class ExcludedTermsDelegate {
 
   final whitespaceMatcher = RegExp(r'\s');
 
+  final SettingsNotifier _settingsDelegate;
+
   /// Get the stream of excluded terms.
   Stream<List<ExcludedTerm>> get stream => _termsController;
 
   /// Get the current list of terms.
   List<ExcludedTerm> get terms => _termsController.value;
+
+  /// Save the given [terms].
+  void _saveTerms(List<ExcludedTerm> terms) {
+    // Grab the committed term values.
+    final values = terms.map((t) => t.term).toSet();
+
+    unawaited(_settingsDelegate.saveExcludedTerms(values).catchError((_) {
+      // If the terms could not be saved, do nothing.
+    }));
+  }
 
   /// Add the given [value] to the list of terms.
   ///
@@ -75,6 +90,7 @@ class ExcludedTermsDelegate {
     terms.sort((a, b) => a.compareTo(b));
 
     _termsController.add(terms);
+    _saveTerms(terms);
   }
 
   /// Delete the given [value] from the list of terms.
@@ -83,6 +99,7 @@ class ExcludedTermsDelegate {
 
     if (terms.remove(value)) {
       _termsController.add(terms);
+      _saveTerms(terms);
 
       // Dispose the underlying controller by the end of the current frame,
       // so that a consumer has time to detach from it.
@@ -100,6 +117,7 @@ class ExcludedTermsDelegate {
     terms.sort((a, b) => a.compareTo(b));
 
     _termsController.add(terms);
+    _saveTerms(terms);
   }
 
   /// Validates the given [term].

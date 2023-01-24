@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:weforza/model/member_filter_option.dart';
 
 /// This class defines the persistent application settings.
@@ -35,6 +36,19 @@ class Settings {
   /// Defaults to 20 seconds.
   final int scanDuration;
 
+  /// Create a copy of this object, replacing any non-null values.
+  Settings copyWith({
+    Set<String>? excludedTermsFilter,
+    MemberFilterOption? memberListFilter,
+    int? scanDuration,
+  }) {
+    return Settings(
+      excludedTermsFilter: excludedTermsFilter ?? this.excludedTermsFilter,
+      memberListFilter: memberListFilter ?? this.memberListFilter,
+      scanDuration: scanDuration ?? this.scanDuration,
+    );
+  }
+
   /// Convert this object to a Map.
   Map<String, dynamic> toMap() {
     return {
@@ -42,5 +56,25 @@ class Settings {
       'memberListFilter': memberListFilter.index,
       'scanDuration': scanDuration,
     };
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      scanDuration,
+      memberListFilter,
+      Object.hashAll(excludedTermsFilter),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Settings &&
+        scanDuration == other.scanDuration &&
+        memberListFilter == other.memberListFilter &&
+        const SetEquality<String>().equals(
+          excludedTermsFilter,
+          other.excludedTermsFilter,
+        );
   }
 }

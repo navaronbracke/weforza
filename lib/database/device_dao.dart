@@ -39,8 +39,8 @@ class DeviceDaoImpl implements DeviceDao {
   /// A reference to the device store.
   final _deviceStore = DatabaseTables.device;
 
-  /// A reference to the member store.
-  final _memberStore = DatabaseTables.member;
+  /// A reference to the rider store.
+  final _riderStore = DatabaseTables.rider;
 
   /// Check whether a device exists.
   ///
@@ -69,7 +69,7 @@ class DeviceDaoImpl implements DeviceDao {
 
   /// Update the `lastUpdated` field of the owner of a given device.
   Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
-    return _memberStore.record(ownerId).update(
+    return _riderStore.record(ownerId).update(
       txn,
       {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
     );

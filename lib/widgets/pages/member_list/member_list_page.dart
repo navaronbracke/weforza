@@ -46,10 +46,10 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       return list;
     }
 
-    return list.where((member) {
-      final firstName = member.firstName.toLowerCase();
-      final lastName = member.lastName.toLowerCase();
-      final alias = member.alias.toLowerCase();
+    return list.where((rider) {
+      final firstName = rider.firstName.toLowerCase();
+      final lastName = rider.lastName.toLowerCase();
+      final alias = rider.alias.toLowerCase();
 
       if (firstName.contains(query) || lastName.contains(query)) {
         return true;

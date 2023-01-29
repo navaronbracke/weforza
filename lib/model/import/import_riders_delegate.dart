@@ -7,7 +7,7 @@ import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/file/import_riders_json_reader.dart';
 import 'package:weforza/model/export_file_format.dart';
-import 'package:weforza/model/import_riders_state.dart';
+import 'package:weforza/model/import/import_riders_state.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 import 'package:weforza/repository/serialize_riders_repository.dart';
 

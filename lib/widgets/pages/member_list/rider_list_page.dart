@@ -6,22 +6,22 @@ import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
 import 'package:weforza/widgets/pages/import_riders_page.dart';
-import 'package:weforza/widgets/pages/member_list/member_list.dart';
-import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
+import 'package:weforza/widgets/pages/member_list/rider_list.dart';
+import 'package:weforza/widgets/pages/member_list/rider_list_title.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_details_page.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents the list of members.
-class MemberListPage extends ConsumerStatefulWidget {
-  const MemberListPage({super.key});
+/// This widget represents the list of riders.
+class RiderListPage extends ConsumerStatefulWidget {
+  const RiderListPage({super.key});
 
   @override
-  MemberListPageState createState() => MemberListPageState();
+  ConsumerState<RiderListPage> createState() => _RiderListPageState();
 }
 
-class MemberListPageState extends ConsumerState<MemberListPage> {
+class _RiderListPageState extends ConsumerState<RiderListPage> {
   final _controller = TextEditingController();
 
   final _searchController = DebounceSearchDelegate();
@@ -67,7 +67,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const MemberListTitle(),
+        title: const RiderListTitle(),
         actions: <Widget>[
           Consumer(
             builder: (context, ref, child) {
@@ -97,8 +97,8 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
           ),
         ],
       ),
-      body: MemberList(
-        onMemberSelected: () => _onMemberSelected(context),
+      body: RiderList(
+        onRiderSelected: () => _onMemberSelected(context),
         filter: _filterOnSearchQuery,
         searchQueryStream: _searchController.searchQuery,
         searchField: TextFormField(
@@ -130,7 +130,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             const Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 8),
-                child: MemberListTitle(),
+                child: RiderListTitle(),
               ),
             ),
             CupertinoIconButton(
@@ -160,8 +160,8 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: MemberList(
-          onMemberSelected: () => _onMemberSelected(context),
+        child: RiderList(
+          onRiderSelected: () => _onMemberSelected(context),
           filter: _filterOnSearchQuery,
           searchQueryStream: _searchController.searchQuery,
           searchField: Padding(

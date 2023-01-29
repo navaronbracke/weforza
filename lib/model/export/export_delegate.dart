@@ -5,7 +5,7 @@ import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/model/export_file_format.dart';
+import 'package:weforza/model/export/export_file_format.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {

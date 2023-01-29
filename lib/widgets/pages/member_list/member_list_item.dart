@@ -16,7 +16,7 @@ class MemberListItem extends ConsumerWidget {
   }) : super(key: ValueKey(member.uuid));
 
   /// The member that is displayed in this item.
-  final Member member;
+  final Rider member;
 
   /// The onTap handler for this item.
   ///

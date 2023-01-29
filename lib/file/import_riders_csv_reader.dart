@@ -82,7 +82,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     final lastName = cells[1];
     final alias = cells[2];
 
-    final regex = Member.personNameAndAliasRegex;
+    final regex = Rider.personNameAndAliasRegex;
 
     // If the first name, last name or alias is invalid, skip this chunk.
     if (!regex.hasMatch(firstName) ||

@@ -79,7 +79,7 @@ class MemberListItemAttendingCount extends ConsumerWidget {
     super.key,
   });
 
-  final Member member;
+  final Rider member;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

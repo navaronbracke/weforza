@@ -8,5 +8,5 @@ class ScannedDevice {
   final String name;
 
   /// The possible owners of the scanned device.
-  final List<Member> owners;
+  final List<Rider> owners;
 }

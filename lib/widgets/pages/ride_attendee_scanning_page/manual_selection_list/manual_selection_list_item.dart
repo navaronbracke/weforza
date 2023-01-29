@@ -19,7 +19,7 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
 
   final RideAttendeeScanningDelegate delegate;
 
-  final Member item;
+  final Rider item;
 
   @override
   ConsumerState<ManualSelectionListItem> createState() =>

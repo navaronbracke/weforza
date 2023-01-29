@@ -33,14 +33,14 @@ class ManualSelectionList extends StatefulWidget {
 }
 
 class _ManualSelectionListState extends State<ManualSelectionList> {
-  Future<List<Member>>? _activeMembersFuture;
+  Future<List<Rider>>? _activeMembersFuture;
 
   final _filtersController = ManualSelectionFilterDelegate();
 
   Future<void>? _saveFuture;
 
-  List<Member> _filterActiveMembers(
-    List<Member> items,
+  List<Rider> _filterActiveMembers(
+    List<Rider> items,
     ManualSelectionFilterOptions filters,
   ) {
     return items.where((item) {
@@ -88,10 +88,10 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   /// Sort the active members on their name and alias.
-  Future<List<Member>> _sortActiveMembers() async {
+  Future<List<Rider>> _sortActiveMembers() async {
     final items = widget.delegate.activeMembers;
 
-    items.sort((Member m1, Member m2) => m1.compareTo(m2));
+    items.sort((Rider m1, Rider m2) => m1.compareTo(m2));
 
     return items;
   }
@@ -105,7 +105,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
     }
   }
 
-  Widget _buildActiveMembersList(BuildContext context, List<Member> items) {
+  Widget _buildActiveMembersList(BuildContext context, List<Rider> items) {
     final translator = S.of(context);
 
     return FocusAbsorber(
@@ -178,7 +178,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   @override
   Widget build(BuildContext context) {
     if (widget.delegate.hasActiveMembers) {
-      return FutureBuilder<List<Member>>(
+      return FutureBuilder<List<Rider>>(
         future: _activeMembersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {

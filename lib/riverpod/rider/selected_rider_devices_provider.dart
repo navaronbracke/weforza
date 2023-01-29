@@ -2,24 +2,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/repository/device_repository.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 
-/// This provider provides the devices of the selected member.
-final selectedMemberDevicesProvider = StateNotifierProvider<
-    SelectedMemberDevicesNotifier, AsyncValue<List<Device>>>((ref) {
-  final uuid = ref.watch(selectedMemberProvider.select((m) => m?.uuid));
+/// This provider provides the devices of the selected rider.
+final selectedRiderDevicesProvider = StateNotifierProvider<
+    SelectedRiderDevicesNotifier, AsyncValue<List<Device>>>((ref) {
+  final uuid = ref.watch(selectedRiderProvider.select((r) => r?.uuid));
   final repository = ref.read(deviceRepositoryProvider);
 
-  return SelectedMemberDevicesNotifier(
+  return SelectedRiderDevicesNotifier(
     repository: repository,
     uuid: uuid,
   );
 });
 
-class SelectedMemberDevicesNotifier
+class SelectedRiderDevicesNotifier
     extends StateNotifier<AsyncValue<List<Device>>> {
-  SelectedMemberDevicesNotifier({
+  SelectedRiderDevicesNotifier({
     required this.repository,
     String? uuid,
   }) : super(const AsyncLoading()) {

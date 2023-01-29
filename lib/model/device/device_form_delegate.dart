@@ -1,13 +1,13 @@
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/device/device_model.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.
 class DeviceFormDelegate extends AsyncComputationDelegate<void> {
   DeviceFormDelegate({required this.notifier});
 
   /// The notifier that handles adding and editing devices.
-  final SelectedMemberDevicesNotifier notifier;
+  final SelectedRiderDevicesNotifier notifier;
 
   /// Add a new device.
   /// The [whenComplete] function is called if the operation was successful.

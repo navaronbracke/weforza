@@ -6,8 +6,8 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import/import_riders_delegate.dart';
 import 'package:weforza/model/import/import_riders_state.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/serialize_riders_repository_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/progress_indicator_with_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
@@ -28,7 +28,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
     delegate.importRiders(
       whenComplete: () {
         if (mounted) {
-          ref.invalidate(memberListProvider);
+          ref.invalidate(riderListProvider);
         }
       },
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
@@ -53,9 +53,9 @@ class MemberDetailsPage extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  final member = ref.read(selectedMemberProvider)!;
+                  final rider = ref.read(selectedRiderProvider)!;
 
-                  _goToEditMemberPage(context, member);
+                  _goToEditMemberPage(context, rider);
                 },
               );
             },
@@ -100,9 +100,9 @@ class MemberDetailsPage extends StatelessWidget {
                     return CupertinoIconButton(
                       icon: CupertinoIcons.pencil,
                       onPressed: () {
-                        final member = ref.read(selectedMemberProvider)!;
+                        final rider = ref.read(selectedRiderProvider)!;
 
-                        _goToEditMemberPage(context, member);
+                        _goToEditMemberPage(context, rider);
                       },
                     );
                   },

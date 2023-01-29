@@ -11,9 +11,9 @@ import 'package:weforza/model/rider/rider_form_delegate.dart';
 import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/model/rider/rider_validator.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
@@ -53,7 +53,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     }
 
     final navigator = Navigator.of(context);
-    final memberUuid = widget.rider?.uuid;
+    final riderUuid = widget.rider?.uuid;
 
     final model = RiderModel(
       active: widget.rider?.active ?? true,
@@ -61,24 +61,24 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
       profileImage: _profileImageDelegate.selectedImage.valueOrNull,
-      uuid: memberUuid,
+      uuid: riderUuid,
     );
 
-    if (memberUuid == null) {
+    if (riderUuid == null) {
       _delegate.addRider(model, whenComplete: () {
         // A new item was added to the list.
-        ref.invalidate(memberListProvider);
+        ref.invalidate(riderListProvider);
         navigator.pop();
       });
     } else {
-      final notifier = ref.read(selectedMemberProvider.notifier);
+      final notifier = ref.read(selectedRiderProvider.notifier);
 
       _delegate.editRider(model, whenComplete: (updatedRider) {
         // Update the selected rider.
         notifier.setSelectedMember(updatedRider);
 
         // An item in the list was updated.
-        ref.invalidate(memberListProvider);
+        ref.invalidate(riderListProvider);
         navigator.pop();
       });
     }

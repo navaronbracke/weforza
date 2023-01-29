@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device/device.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';

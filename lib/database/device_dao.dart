@@ -2,7 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device/device.dart';
 
 /// This class defines an interface to work with devices.
 abstract class DeviceDao {

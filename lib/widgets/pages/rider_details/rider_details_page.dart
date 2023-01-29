@@ -7,19 +7,19 @@ import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
-import 'package:weforza/widgets/pages/member_details/member_devices_list/rider_devices_list.dart';
-import 'package:weforza/widgets/pages/member_details/rider_active_toggle.dart';
-import 'package:weforza/widgets/pages/member_details/rider_name.dart';
-import 'package:weforza/widgets/pages/member_details/rider_profile_image.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_active_toggle.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_devices_list/rider_devices_list.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_name.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_profile_image.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the detail page for a [Rider].
-class MemberDetailsPage extends StatelessWidget {
-  const MemberDetailsPage({super.key});
+class RiderDetailsPage extends StatelessWidget {
+  const RiderDetailsPage({super.key});
 
-  void _goToEditMemberPage(BuildContext context, Rider rider) {
+  void _goToEditRiderPage(BuildContext context, Rider rider) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RiderForm(rider: rider)),
@@ -55,7 +55,7 @@ class MemberDetailsPage extends StatelessWidget {
                 onPressed: () {
                   final rider = ref.read(selectedRiderProvider)!;
 
-                  _goToEditMemberPage(context, rider);
+                  _goToEditRiderPage(context, rider);
                 },
               );
             },
@@ -73,7 +73,7 @@ class MemberDetailsPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return Column(
       children: <Widget>[
-        _buildMemberInfoSection(context),
+        _buildRiderInfoSection(context),
         const Expanded(child: RiderDevicesList()),
       ],
     );
@@ -102,7 +102,7 @@ class MemberDetailsPage extends StatelessWidget {
                       onPressed: () {
                         final rider = ref.read(selectedRiderProvider)!;
 
-                        _goToEditMemberPage(context, rider);
+                        _goToEditRiderPage(context, rider);
                       },
                     );
                   },
@@ -125,7 +125,7 @@ class MemberDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMemberInfoSection(BuildContext context) {
+  Widget _buildRiderInfoSection(BuildContext context) {
     return Column(
       children: [
         Row(

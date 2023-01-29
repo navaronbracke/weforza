@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
-import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
+import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
 
@@ -60,7 +60,7 @@ class MemberListItem extends ConsumerWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 4),
-              child: MemberListItemAttendingCount(member: member),
+              child: RiderListItemAttendingCount(rider: member),
             ),
           ],
         ),

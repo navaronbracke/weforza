@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
+import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';

@@ -1,11 +1,10 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-
 import 'package:weforza/extensions/date_extension.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride_attendee.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class defines an interface to work with members.
 abstract class MemberDao {

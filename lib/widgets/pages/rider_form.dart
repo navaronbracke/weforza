@@ -75,7 +75,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
 
       _delegate.editRider(model, whenComplete: (updatedRider) {
         // Update the selected rider.
-        notifier.setSelectedMember(updatedRider);
+        notifier.setSelectedRider(updatedRider);
 
         // An item in the list was updated.
         ref.invalidate(riderListProvider);

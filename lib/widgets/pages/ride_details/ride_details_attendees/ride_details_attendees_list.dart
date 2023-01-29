@@ -29,12 +29,12 @@ class RideDetailsAttendeesList extends ConsumerWidget {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index) {
-                  final member = attendees[index];
+                  final attendee = attendees[index];
 
                   return RideDetailsAttendeesListItem(
-                    firstName: member.firstName,
-                    lastName: member.lastName,
-                    alias: member.alias,
+                    firstName: attendee.firstName,
+                    lastName: attendee.lastName,
+                    alias: attendee.alias,
                   );
                 },
                 itemCount: attendees.length,

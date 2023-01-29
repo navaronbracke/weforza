@@ -46,8 +46,8 @@ class ImportRidersDaoImpl implements ImportRidersDao {
 
   /// Get the existing riders.
   /// Returns a map of [Rider]s mapped to their respective [SerializableRiderKey]s.
-  Future<Map<SerializableRiderKey, Member>> _getExistingRiders() async {
-    final collection = <SerializableRiderKey, Member>{};
+  Future<Map<SerializableRiderKey, Rider>> _getExistingRiders() async {
+    final collection = <SerializableRiderKey, Rider>{};
 
     final records = await _riderStore.find(_database);
 
@@ -59,7 +59,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
       );
 
       if (collection[key] == null) {
-        collection[key] = Member.of(record.key, record.value);
+        collection[key] = Rider.of(record.key, record.value);
       }
     }
 
@@ -82,7 +82,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
     final ridersToUpdate = <SerializableRiderUpdateTimestamp>{};
 
     // The new riders that should be added.
-    final newRiders = <Member>{};
+    final newRiders = <Rider>{};
 
     // The new devices that should be added.
     final newDevices = <Device>{};
@@ -98,7 +98,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
         final uuid = uuidGenerator.v4();
 
         newRiders.add(
-          Member(
+          Rider(
             active: rider.active,
             alias: rider.alias,
             firstName: rider.firstName,

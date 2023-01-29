@@ -63,8 +63,8 @@ class RideAttendeeScanningDelegate {
   /// The settings for the delegate.
   final Settings settings;
 
-  /// This map contains all the active members mapped to their [Member.uuid].
-  final _activeMembers = <String, Member>{};
+  /// This map contains all the active members mapped to their [Rider.uuid].
+  final _activeMembers = <String, Rider>{};
 
   /// This map contains the uuids of owners per device name.
   ///
@@ -102,10 +102,10 @@ class RideAttendeeScanningDelegate {
   /// An owner cannot be resolved automatically
   /// if a scanned device has two or more possible owners,
   /// because then there are multiple valid options.
-  final _unresolvedOwners = <Member>{};
+  final _unresolvedOwners = <Rider>{};
 
   /// Get the list of active members.
-  List<Member> get activeMembers => _activeMembers.values.toList();
+  List<Rider> get activeMembers => _activeMembers.values.toList();
 
   /// Get the amount of selected ride attendees.
   int get attendeeCount => _rideAttendeeController.value.length;
@@ -377,10 +377,10 @@ class RideAttendeeScanningDelegate {
 
   /// Get the list of unresolved device owners
   /// that have not yet been scanned automatically.
-  List<Member> getUnresolvedDeviceOwners() {
+  List<Rider> getUnresolvedDeviceOwners() {
     final rideAttendees = _rideAttendeeController.value;
 
-    return _unresolvedOwners.where((Member member) {
+    return _unresolvedOwners.where((Rider member) {
       return !rideAttendees.contains(
         ScannedRideAttendee(uuid: member.uuid, isScanned: false),
       );

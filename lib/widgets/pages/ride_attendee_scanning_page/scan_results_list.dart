@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
-import 'package:weforza/widgets/common/member_name_and_alias.dart';
+import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -145,7 +145,7 @@ class _ScanResultsListItem extends StatelessWidget {
           padding: const EdgeInsets.only(right: 4),
           child: Icon(icon, color: textStyle.color),
         ),
-        MemberNameAndAlias.singleLine(
+        RiderNameAndAlias.singleLine(
           alias: owner.alias,
           firstName: owner.firstName,
           lastName: owner.lastName,

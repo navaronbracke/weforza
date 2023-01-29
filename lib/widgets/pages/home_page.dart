@@ -7,7 +7,7 @@ import 'package:weforza/widgets/pages/settings/settings_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// The home page of the application.
-/// This page provides access to the ride list page, the member list page
+/// This page provides access to the ride list page, the riders list page
 /// and the settings page.
 ///
 /// By default the ride list page is shown.
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage>
       controller: _pageController,
       onPageChanged: (page) {
         // When switching pages in the page view, the old page gives up focus.
-        // The member list page has a search field,
+        // The riders list page has a search field,
         // and the settings page has several text fields.
         // Only the ride list page has nothing that can have keyboard focus.
         if (_selectedIndex != 0) {

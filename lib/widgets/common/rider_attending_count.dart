@@ -9,7 +9,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// The provider for the attending count of a single rider list item
 /// is an `autoDispose` provider as there might be many items in the list,
 /// that get built nd destroyed.
-final _memberAttendingCount =
+final _riderAttendingCount =
     FutureProvider.autoDispose.family<int, String>((ref, uuid) {
   final repository = ref.read(riderRepositoryProvider);
 
@@ -17,9 +17,9 @@ final _memberAttendingCount =
 });
 
 /// This widget represents the base attending count widget
-/// that is used by [MemberListItemAttendingCount] and [SelectedMemberAttendingCount].
-class _MemberAttendingCount extends StatelessWidget {
-  const _MemberAttendingCount(this.value);
+/// that is used by [RiderListItemAttendingCount] and [SelectedRiderAttendingCount].
+class _RiderAttendingCount extends StatelessWidget {
+  const _RiderAttendingCount(this.value);
 
   final AsyncValue<int?> value;
 
@@ -73,30 +73,30 @@ class _MemberAttendingCount extends StatelessWidget {
 }
 
 /// This widget represents the attending count for a rider list item.
-class MemberListItemAttendingCount extends ConsumerWidget {
-  const MemberListItemAttendingCount({
-    required this.member,
+class RiderListItemAttendingCount extends ConsumerWidget {
+  const RiderListItemAttendingCount({
+    required this.rider,
     super.key,
   });
 
-  final Rider member;
+  final Rider rider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(_memberAttendingCount(member.uuid));
+    final value = ref.watch(_riderAttendingCount(rider.uuid));
 
-    return _MemberAttendingCount(value);
+    return _RiderAttendingCount(value);
   }
 }
 
 /// This widget represents the attending count for the selected rider.
-class SelectedMemberAttendingCount extends ConsumerWidget {
-  const SelectedMemberAttendingCount({super.key});
+class SelectedRiderAttendingCount extends ConsumerWidget {
+  const SelectedRiderAttendingCount({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(selectedRiderAttendingCountProvider);
 
-    return _MemberAttendingCount(value);
+    return _RiderAttendingCount(value);
   }
 }

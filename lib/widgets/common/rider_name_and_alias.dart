@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// This widget displays the first name, alias and last name of a member.
-class MemberNameAndAlias extends StatelessWidget {
-  const MemberNameAndAlias.singleLine({
+/// This widget displays the first name, alias and last name of a rider.
+class RiderNameAndAlias extends StatelessWidget {
+  const RiderNameAndAlias.singleLine({
     required this.alias,
     required this.firstName,
     required this.lastName,
@@ -13,7 +13,7 @@ class MemberNameAndAlias extends StatelessWidget {
         firstLineStyle = style,
         secondLineStyle = null;
 
-  const MemberNameAndAlias.twoLines({
+  const RiderNameAndAlias.twoLines({
     required this.alias,
     required this.firstLineStyle,
     required this.firstName,
@@ -28,8 +28,12 @@ class MemberNameAndAlias extends StatelessWidget {
 
   /// The style for the text on the first line.
   ///
-  /// If [isTwoLine] is true, this is the style for the first name and the alias.
-  /// Otherwise this is the style for the first name, alias and last name.
+  /// If the name of the rider is displayed on a single line,
+  /// this is the style for the text.
+  ///
+  /// If the name of the rider is displayed on two lines,
+  /// this is the style for the first name and the alias,
+  /// which are displayed on the first line.
   final TextStyle firstLineStyle;
 
   /// The first name to display.

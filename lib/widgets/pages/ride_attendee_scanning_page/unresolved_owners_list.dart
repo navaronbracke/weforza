@@ -4,7 +4,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/widgets/common/member_name_and_alias.dart';
+import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -163,7 +163,7 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
 
     Widget child = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: MemberNameAndAlias.twoLines(
+      child: RiderNameAndAlias.twoLines(
         alias: widget.item.alias,
         firstLineStyle: firstNameStyle,
         firstName: widget.item.firstName,

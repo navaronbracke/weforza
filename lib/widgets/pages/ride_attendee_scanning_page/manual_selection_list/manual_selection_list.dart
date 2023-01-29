@@ -89,7 +89,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   /// Sort the active members on their name and alias.
   Future<List<Rider>> _sortActiveMembers() async {
-    final items = widget.delegate.activeMembers;
+    final items = widget.delegate.activeRiders;
 
     items.sort((Rider m1, Rider m2) => m1.compareTo(m2));
 
@@ -100,7 +100,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   void initState() {
     super.initState();
 
-    if (widget.delegate.hasActiveMembers) {
+    if (widget.delegate.hasActiveRiders) {
       _activeMembersFuture = _sortActiveMembers();
     }
   }
@@ -177,7 +177,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.delegate.hasActiveMembers) {
+    if (widget.delegate.hasActiveRiders) {
       return FutureBuilder<List<Rider>>(
         future: _activeMembersFuture,
         builder: (context, snapshot) {

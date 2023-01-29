@@ -77,7 +77,7 @@ class _ManualSelectionListItemState
         // If the search bar still has focus, unfocus it first.
         FocusScope.of(context).unfocus();
 
-        final accepted = await widget.delegate.toggleSelectionForActiveMember(
+        final accepted = await widget.delegate.toggleSelectionForActiveRider(
           ScannedRideAttendee(uuid: widget.item.uuid, isScanned: isScanned),
           () async {
             final result = await showWeforzaDialog<bool>(

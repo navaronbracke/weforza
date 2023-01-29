@@ -10,7 +10,7 @@ import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/member_name.dart';
-import 'package:weforza/widgets/pages/member_details/member_profile_image.dart';
+import 'package:weforza/widgets/pages/member_details/rider_profile_image.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -132,7 +132,7 @@ class MemberDetailsPage extends StatelessWidget {
           children: const [
             Padding(
               padding: EdgeInsets.all(8),
-              child: MemberProfileImage(),
+              child: RiderProfileImage(),
             ),
             Expanded(child: MemberName()),
           ],

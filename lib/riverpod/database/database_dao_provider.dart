@@ -28,8 +28,8 @@ final importRidersDaoProvider = Provider<ImportRidersDao>((ref) {
   return ImportRidersDaoImpl(database.getDatabase());
 });
 
-/// This provider provides the member dao.
-final memberDaoProvider = Provider<RiderDao>((ref) {
+/// This provider provides the rider dao.
+final riderDaoProvider = Provider<RiderDao>((ref) {
   final database = ref.read(databaseProvider);
 
   return RiderDaoImpl(database.getDatabase());

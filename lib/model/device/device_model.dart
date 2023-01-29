@@ -1,4 +1,4 @@
-import 'package:weforza/model/device_type.dart';
+import 'package:weforza/model/device/device_type.dart';
 
 /// This class represents the model to add or edit a device.
 class DeviceModel {

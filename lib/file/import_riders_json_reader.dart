@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:weforza/file/import_riders_file_reader.dart';
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 

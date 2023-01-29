@@ -11,7 +11,7 @@ final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(
 );
 
 /// This provider provides the list of attendees for the currently selected ride.
-final selectedRideAttendeesProvider = FutureProvider<List<Member>>((ref) async {
+final selectedRideAttendeesProvider = FutureProvider<List<Rider>>((ref) async {
   final repository = ref.watch(rideRepositoryProvider);
   final selectedRide = ref.watch(selectedRideProvider);
 

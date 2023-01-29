@@ -26,14 +26,14 @@ class UnresolvedOwnersList extends StatefulWidget {
 }
 
 class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
-  Future<List<Member>>? _future;
+  Future<List<Rider>>? _future;
 
   /// Filter out the owners that have already been scanned
   /// and sort the remaining unresolved owners.
-  Future<List<Member>> _filterAndSortItems() async {
+  Future<List<Rider>> _filterAndSortItems() async {
     final filtered = widget.delegate.getUnresolvedDeviceOwners();
 
-    filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
+    filtered.sort((Rider m1, Rider m2) => m1.compareTo(m2));
 
     return filtered;
   }
@@ -65,7 +65,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Member>>(
+    return FutureBuilder<List<Rider>>(
       future: _future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -122,7 +122,7 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 
   final RideAttendeeScanningDelegate delegate;
 
-  final Member item;
+  final Rider item;
 
   @override
   State<_UnresolvedOwnersListItem> createState() =>

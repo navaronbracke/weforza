@@ -21,7 +21,7 @@ class MemberList extends ConsumerWidget {
   });
 
   /// The function that handles filtering results.
-  final List<Member> Function(List<Member> data, String query) filter;
+  final List<Rider> Function(List<Rider> data, String query) filter;
 
   /// The function that is called after a member is selected.
   final void Function() onMemberSelected;

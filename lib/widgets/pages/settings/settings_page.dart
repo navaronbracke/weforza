@@ -52,7 +52,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.memberListFilter,
+      initialValue: currentSettings.riderListFilter,
     );
     scanDurationDelegate = ScanDurationDelegate(
       settingsDelegate: settingsDelegate,

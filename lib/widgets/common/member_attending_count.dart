@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_attending_count_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
@@ -11,7 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// that get built nd destroyed.
 final _memberAttendingCount =
     FutureProvider.autoDispose.family<int, String>((ref, uuid) {
-  final repository = ref.read(memberRepositoryProvider);
+  final repository = ref.read(riderRepositoryProvider);
 
   return repository.getAttendingCount(uuid);
 });

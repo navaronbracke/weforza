@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 
@@ -22,7 +22,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
       throw ArgumentError.notNull('rider');
     }
 
-    await ref.read(memberRepositoryProvider).deleteMember(rider.uuid);
+    await ref.read(riderRepositoryProvider).deleteRider(rider.uuid);
 
     // Refresh the rider list, the collection has one item less.
     ref.invalidate(riderListProvider);
@@ -39,9 +39,9 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
     }
 
     try {
-      final repository = ref.read(memberRepositoryProvider);
+      final repository = ref.read(riderRepositoryProvider);
 
-      await repository.setMemberActive(rider.uuid, value: value);
+      await repository.setRiderActive(rider.uuid, value: value);
 
       state = Rider(
         active: value,

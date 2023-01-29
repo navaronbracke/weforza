@@ -15,7 +15,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
 
   final Ref ref;
 
-  Future<void> deleteMember() async {
+  Future<void> deleteRider() async {
     final rider = state;
 
     if (rider == null) {
@@ -31,7 +31,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
     ref.read(selectedRideProvider.notifier).setSelectedRide(null);
   }
 
-  void setMemberActive({required bool value}) async {
+  void setRiderActive({required bool value}) async {
     final rider = state;
 
     if (rider == null || rider.active == value) {
@@ -59,7 +59,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
     }
   }
 
-  void setSelectedMember(Rider rider) {
+  void setSelectedRider(Rider rider) {
     if (state != rider) {
       state = rider;
     }

@@ -19,7 +19,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
   final Database _database;
 
   /// A reference to the [Rider] store.
-  final _memberStore = DatabaseTables.rider;
+  final _riderStore = DatabaseTables.rider;
 
   /// A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseTables.rideAttendee;
@@ -56,18 +56,18 @@ class ExportRidesDaoImpl implements ExportRidesDao {
     return attendees;
   }
 
-  /// Get all the members, mapped to their [Rider.uuid].
-  Future<Map<String, Rider>> _getMembers() async {
-    final members = <String, Rider>{};
+  /// Get all the riders, mapped to their [Rider.uuid].
+  Future<Map<String, Rider>> _getRiders() async {
+    final riders = <String, Rider>{};
 
-    final records = await _memberStore.find(_database);
+    final records = await _riderStore.find(_database);
 
     for (final record in records) {
-      final member = Rider.of(record.key, record.value);
-      members[member.uuid] = member;
+      final rider = Rider.of(record.key, record.value);
+      riders[rider.uuid] = rider;
     }
 
-    return members;
+    return riders;
   }
 
   /// Get all the rides, mapped to their date.
@@ -96,7 +96,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
 
   Iterable<ExportableRide> _joinRidesAndAttendees(
     Map<DateTime, Set<RideAttendee>> attendees,
-    Map<String, Rider> members,
+    Map<String, Rider> riders,
     Map<DateTime, Ride> rides,
   ) {
     final exports = <ExportableRide>[];
@@ -106,15 +106,15 @@ class ExportRidesDaoImpl implements ExportRidesDao {
       final rideAttendees = attendees[ride.key] ?? <RideAttendee>{};
 
       for (final rideAttendee in rideAttendees) {
-        final member = members[rideAttendee.uuid];
+        final rider = riders[rideAttendee.uuid];
 
-        // If a member no longer exists, don't add it.
-        if (member != null) {
+        // If a rider no longer exists, don't add it.
+        if (rider != null) {
           exportableRideAttendees.add(
             ExportableRideAttendee(
-              alias: member.alias,
-              firstName: member.firstName,
-              lastName: member.lastName,
+              alias: rider.alias,
+              firstName: rider.firstName,
+              lastName: rider.lastName,
             ),
           );
         }
@@ -131,13 +131,13 @@ class ExportRidesDaoImpl implements ExportRidesDao {
   @override
   Future<Iterable<ExportableRide>> getRides(DateTime? ride) async {
     final attendeesFuture = _getAttendees(ride);
-    final membersFuture = _getMembers();
+    final ridersFuture = _getRiders();
     final ridesFuture = _getRides(ride);
 
     final attendees = await attendeesFuture;
-    final members = await membersFuture;
+    final riders = await ridersFuture;
     final rides = await ridesFuture;
 
-    return _joinRidesAndAttendees(attendees, members, rides);
+    return _joinRidesAndAttendees(attendees, riders, rides);
   }
 }

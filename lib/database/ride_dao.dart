@@ -17,7 +17,7 @@ abstract class RideDao {
   Future<void> deleteRideCalendar();
 
   /// Get the attendees of the ride with the given [date].
-  Future<List<Member>> getRideAttendees(DateTime date);
+  Future<List<Rider>> getRideAttendees(DateTime date);
 
   /// Get the dates of the rides in the calendar.
   Future<List<DateTime>> getRideDates();
@@ -45,7 +45,7 @@ class RideDaoImpl implements RideDao {
   /// A reference to the database.
   final Database _database;
 
-  /// A reference to the [Member] store.
+  /// A reference to the [Rider] store.
   final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
@@ -86,7 +86,7 @@ class RideDaoImpl implements RideDao {
   }
 
   @override
-  Future<List<Member>> getRideAttendees(DateTime date) async {
+  Future<List<Rider>> getRideAttendees(DateTime date) async {
     final rideAttendees = await _rideAttendeeStore.find(
       _database,
       finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
@@ -106,7 +106,7 @@ class RideDaoImpl implements RideDao {
       ),
     );
 
-    return memberRecords.map((r) => Member.of(r.key, r.value)).toList();
+    return memberRecords.map((r) => Rider.of(r.key, r.value)).toList();
   }
 
   @override

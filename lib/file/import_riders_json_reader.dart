@@ -20,7 +20,7 @@ class ImportRidersJsonReader
       final firstName = chunk['firstName'] as String;
       final lastName = chunk['lastName'] as String;
 
-      final regex = Member.personNameAndAliasRegex;
+      final regex = Rider.personNameAndAliasRegex;
 
       // If the first name, last name or alias is invalid, skip this chunk.
       if (!regex.hasMatch(firstName) ||

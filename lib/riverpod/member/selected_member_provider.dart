@@ -6,11 +6,11 @@ import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 
 /// This provider manages the selected member.
 final selectedMemberProvider =
-    StateNotifierProvider<SelectedMemberNotifier, Member?>(
+    StateNotifierProvider<SelectedMemberNotifier, Rider?>(
   SelectedMemberNotifier.new,
 );
 
-class SelectedMemberNotifier extends StateNotifier<Member?> {
+class SelectedMemberNotifier extends StateNotifier<Rider?> {
   SelectedMemberNotifier(this.ref) : super(null);
 
   final Ref ref;
@@ -43,7 +43,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
 
       await repository.setMemberActive(member.uuid, value: value);
 
-      state = Member(
+      state = Rider(
         active: value,
         alias: member.alias,
         firstName: member.firstName,
@@ -59,7 +59,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
     }
   }
 
-  void setSelectedMember(Member member) {
+  void setSelectedMember(Rider member) {
     if (state != member) {
       state = member;
     }

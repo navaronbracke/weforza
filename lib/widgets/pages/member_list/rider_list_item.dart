@@ -9,14 +9,14 @@ import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
 
-class MemberListItem extends ConsumerWidget {
-  MemberListItem({
-    required this.member,
+class RiderListItem extends ConsumerWidget {
+  RiderListItem({
+    required this.rider,
     required this.onPressed,
-  }) : super(key: ValueKey(member.uuid));
+  }) : super(key: ValueKey(rider.uuid));
 
   /// The rider that is displayed in this item.
-  final Rider member;
+  final Rider rider;
 
   /// The onTap handler for this item.
   ///
@@ -31,7 +31,7 @@ class MemberListItem extends ConsumerWidget {
       onTap: () {
         final notifier = ref.read(selectedRiderProvider.notifier);
 
-        notifier.setSelectedRider(member);
+        notifier.setSelectedRider(rider);
 
         ref.invalidate(selectedRiderDevicesProvider);
 
@@ -45,22 +45,22 @@ class MemberListItem extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.only(right: 4),
               child: AdaptiveProfileImage.path(
-                imagePath: member.profileImageFilePath,
-                personInitials: member.initials,
+                imagePath: rider.profileImageFilePath,
+                personInitials: rider.initials,
               ),
             ),
             Expanded(
               child: RiderNameAndAlias.twoLines(
-                alias: member.alias,
+                alias: rider.alias,
                 firstLineStyle: textTheme.firstNameStyle,
-                firstName: member.firstName,
-                lastName: member.lastName,
+                firstName: rider.firstName,
+                lastName: rider.lastName,
                 secondLineStyle: textTheme.lastNameStyle,
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 4),
-              child: RiderListItemAttendingCount(rider: member),
+              child: RiderListItemAttendingCount(rider: rider),
             ),
           ],
         ),

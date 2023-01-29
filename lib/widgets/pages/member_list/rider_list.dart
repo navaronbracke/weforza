@@ -6,15 +6,15 @@ import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
-import 'package:weforza/widgets/pages/member_list/member_list_empty.dart';
-import 'package:weforza/widgets/pages/member_list/member_list_item.dart';
+import 'package:weforza/widgets/pages/member_list/rider_list_empty.dart';
+import 'package:weforza/widgets/pages/member_list/rider_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
-/// This widget represents the member list itself.
-class MemberList extends ConsumerWidget {
-  const MemberList({
+/// This widget represents the rider list itself.
+class RiderList extends ConsumerWidget {
+  const RiderList({
     required this.filter,
-    required this.onMemberSelected,
+    required this.onRiderSelected,
     required this.searchField,
     required this.searchQueryStream,
     super.key,
@@ -24,7 +24,7 @@ class MemberList extends ConsumerWidget {
   final List<Rider> Function(List<Rider> data, String query) filter;
 
   /// The function that is called after a rider is selected.
-  final void Function() onMemberSelected;
+  final void Function() onRiderSelected;
 
   /// The widget that provides the search field.
   final Widget searchField;
@@ -39,7 +39,7 @@ class MemberList extends ConsumerWidget {
     return riderList.when(
       data: (items) {
         if (items.isEmpty) {
-          return const Center(child: MemberListEmpty());
+          return const Center(child: RiderListEmpty());
         }
 
         return FocusAbsorber(
@@ -58,9 +58,9 @@ class MemberList extends ConsumerWidget {
 
                     return ListView.builder(
                       itemCount: results.length,
-                      itemBuilder: (_, index) => MemberListItem(
-                        member: results[index],
-                        onPressed: onMemberSelected,
+                      itemBuilder: (_, index) => RiderListItem(
+                        rider: results[index],
+                        onPressed: onRiderSelected,
                       ),
                     );
                   },

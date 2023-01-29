@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 
 /// This widget represents a dialog
@@ -46,9 +46,9 @@ class _ResetRideCalendarDialogState
           }
 
           // Refresh the rides since they have been deleted.
-          // Refresh the members since their attendances have been reset.
+          // Refresh the riders since their attendances have been reset.
           ref.invalidate(rideListProvider);
-          ref.invalidate(memberListProvider);
+          ref.invalidate(riderListProvider);
 
           // Close the dialog after refreshing the data.
           Navigator.of(context).pop();

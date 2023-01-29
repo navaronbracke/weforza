@@ -8,7 +8,7 @@ import 'package:weforza/model/device/device_form_delegate.dart';
 import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/model/device/device_validator.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
@@ -25,7 +25,7 @@ class DeviceForm extends ConsumerStatefulWidget {
   /// If this is null, a new device will be created instead.
   final Device? device;
 
-  /// The UUID of the member that owns this device.
+  /// The UUID of the rider that owns this device.
   final String ownerUuid;
 
   @override
@@ -47,7 +47,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     super.initState();
 
     _delegate = DeviceFormDelegate(
-      notifier: ref.read(selectedMemberDevicesProvider.notifier),
+      notifier: ref.read(selectedRiderDevicesProvider.notifier),
     );
 
     final deviceType = widget.device?.type ?? DeviceType.unknown;

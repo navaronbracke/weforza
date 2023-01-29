@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 
 /// This provider manages the selected ride.
 final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(
@@ -39,8 +39,8 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
     // Refresh the ride list, there is a ride less in the collection.
     ref.invalidate(rideListProvider);
 
-    // Refresh the member list, the members might have a reduced attending count.
-    ref.invalidate(memberListProvider);
+    // Refresh the rider list, the riders might have a reduced attending count.
+    ref.invalidate(riderListProvider);
   }
 
   /// Set the selected ride to [ride].

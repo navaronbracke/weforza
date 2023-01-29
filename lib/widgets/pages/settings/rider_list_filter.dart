@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -18,7 +18,7 @@ class RiderListFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<MemberFilterOption>(
+    return StreamBuilder<RiderFilterOption>(
       initialData: delegate.currentValue,
       stream: delegate.stream,
       builder: (context, snapshot) {
@@ -30,26 +30,26 @@ class RiderListFilter extends StatelessWidget {
 
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: SegmentedButton<MemberFilterOption>(
+              child: SegmentedButton<RiderFilterOption>(
                 showSelectedIcon: false,
-                segments: <ButtonSegment<MemberFilterOption>>[
+                segments: <ButtonSegment<RiderFilterOption>>[
                   ButtonSegment(
                     icon: const Icon(Icons.people),
                     label: Text(translator.All),
-                    value: MemberFilterOption.all,
+                    value: RiderFilterOption.all,
                   ),
                   ButtonSegment(
                     icon: const Icon(Icons.directions_bike),
                     label: Text(translator.Active),
-                    value: MemberFilterOption.active,
+                    value: RiderFilterOption.active,
                   ),
                   ButtonSegment(
                     icon: const Icon(Icons.block),
                     label: Text(translator.Inactive),
-                    value: MemberFilterOption.inactive,
+                    value: RiderFilterOption.inactive,
                   ),
                 ],
-                selected: <MemberFilterOption>{currentFilter},
+                selected: <RiderFilterOption>{currentFilter},
                 onSelectionChanged: (selectedSegments) {
                   if (selectedSegments.isEmpty) {
                     return;
@@ -62,7 +62,7 @@ class RiderListFilter extends StatelessWidget {
           },
           ios: (_) => _CupertinoRiderFilter(
             groupValue: currentFilter,
-            onValueChanged: (MemberFilterOption? value) {
+            onValueChanged: (RiderFilterOption? value) {
               if (value != null) {
                 delegate.onValueChanged(value);
               }
@@ -80,9 +80,9 @@ class _CupertinoRiderFilter extends StatefulWidget {
     required this.onValueChanged,
   });
 
-  final MemberFilterOption groupValue;
+  final RiderFilterOption groupValue;
 
-  final void Function(MemberFilterOption?) onValueChanged;
+  final void Function(RiderFilterOption?) onValueChanged;
 
   @override
   State<_CupertinoRiderFilter> createState() => _CupertinoRiderFilterState();
@@ -92,7 +92,7 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
   /// The map of options for the segmented control.
   /// This map preserves its insertion order,
   /// as that order is used to display the options.
-  LinkedHashMap<MemberFilterOption, String> _labels = LinkedHashMap();
+  LinkedHashMap<RiderFilterOption, String> _labels = LinkedHashMap();
 
   /// The text painter that will measure the width of the widest label.
   final TextPainter _textPainter = TextPainter(
@@ -131,10 +131,10 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
     super.didChangeDependencies();
     final translator = S.of(context);
 
-    _labels = LinkedHashMap.from(<MemberFilterOption, String>{
-      MemberFilterOption.all: translator.All,
-      MemberFilterOption.active: translator.Active,
-      MemberFilterOption.inactive: translator.Inactive,
+    _labels = LinkedHashMap.from(<RiderFilterOption, String>{
+      RiderFilterOption.all: translator.All,
+      RiderFilterOption.active: translator.Active,
+      RiderFilterOption.inactive: translator.Inactive,
     });
 
     _computeWidestLabelWidth(DefaultTextStyle.of(context).style);
@@ -142,10 +142,10 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoSlidingSegmentedControl<MemberFilterOption>(
+    return CupertinoSlidingSegmentedControl<RiderFilterOption>(
       groupValue: widget.groupValue,
       onValueChanged: widget.onValueChanged,
-      children: <MemberFilterOption, Widget>{
+      children: <RiderFilterOption, Widget>{
         for (final entry in _labels.entries)
           entry.key: SizedBox(
             width: _widestLabelWidth,

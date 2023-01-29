@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:weforza/database/rider_dao.dart';
-import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class provides an API to work with members.
 class MemberRepository {
@@ -16,7 +16,7 @@ class MemberRepository {
 
   Future<int> getAttendingCount(String uuid) => _dao.getAttendingCount(uuid);
 
-  Future<List<Rider>> getMembers(MemberFilterOption filter) {
+  Future<List<Rider>> getMembers(RiderFilterOption filter) {
     return _dao.getRiders(filter);
   }
 

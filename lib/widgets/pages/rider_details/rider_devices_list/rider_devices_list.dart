@@ -7,10 +7,10 @@ import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
-import 'package:weforza/widgets/pages/member_details/rider_devices_list/delete_device_button.dart';
-import 'package:weforza/widgets/pages/member_details/rider_devices_list/rider_devices_list_empty.dart';
-import 'package:weforza/widgets/pages/member_details/rider_devices_list/rider_devices_list_header.dart';
-import 'package:weforza/widgets/pages/member_details/rider_devices_list/rider_devices_list_item.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_devices_list/delete_device_button.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_devices_list/rider_devices_list_empty.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_devices_list/rider_devices_list_header.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_devices_list/rider_devices_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 

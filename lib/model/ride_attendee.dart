@@ -1,4 +1,4 @@
-/// This class represents a [Member] that attends a given [Ride].
+/// This class represents a [Rider] that attends a given [Ride].
 class RideAttendee {
   RideAttendee({
     required this.isScanned,

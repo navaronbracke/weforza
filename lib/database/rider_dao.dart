@@ -2,9 +2,9 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
-import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines an interface to work with riders.
 abstract class RiderDao {
@@ -18,7 +18,7 @@ abstract class RiderDao {
   Future<int> getAttendingCount(String uuid);
 
   /// Get the list of riders that satisfy the given [filter].
-  Future<List<Rider>> getRiders(MemberFilterOption filter);
+  Future<List<Rider>> getRiders(RiderFilterOption filter);
 
   /// Toggle the active state of the rider with the given [uuid].
   Future<void> setRiderActive(String uuid, {required bool value});
@@ -116,7 +116,7 @@ class RiderDaoImpl implements RiderDao {
   }
 
   @override
-  Future<List<Rider>> getRiders(MemberFilterOption filter) async {
+  Future<List<Rider>> getRiders(RiderFilterOption filter) async {
     final finder = Finder(
       sortOrders: [
         SortOrder('firstname'),
@@ -126,10 +126,10 @@ class RiderDaoImpl implements RiderDao {
     );
 
     switch (filter) {
-      case MemberFilterOption.active:
+      case RiderFilterOption.active:
         finder.filter = Filter.equals('active', true);
         break;
-      case MemberFilterOption.inactive:
+      case RiderFilterOption.inactive:
         finder.filter = Filter.equals('active', false);
         break;
       default:

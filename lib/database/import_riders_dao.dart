@@ -2,7 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/model/device/device.dart';
-import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 
 /// This class defines an interface for importing [SerializableRider]s.

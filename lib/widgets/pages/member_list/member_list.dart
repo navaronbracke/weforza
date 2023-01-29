@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';

@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
@@ -15,6 +14,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
+import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';

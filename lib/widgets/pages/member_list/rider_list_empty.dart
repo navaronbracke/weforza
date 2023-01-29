@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
-class MemberListEmpty extends StatelessWidget {
-  const MemberListEmpty({super.key});
+class RiderListEmpty extends StatelessWidget {
+  const RiderListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,8 @@ import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget resembles the toggle switch for the 'active' state of a rider.
-class MemberActiveToggle extends StatelessWidget {
-  const MemberActiveToggle({super.key});
+class RiderActiveToggle extends StatelessWidget {
+  const RiderActiveToggle({super.key});
 
   @override
   Widget build(BuildContext context) {

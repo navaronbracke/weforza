@@ -110,7 +110,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           padding: EdgeInsets.only(left: 12, right: 12, top: 12),
           child: ExcludedTermsListFooter(),
         ),
-        memberListFilter: Padding(
+        riderListFilter: Padding(
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -239,7 +239,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: ExcludedTermsListFooter(),
         ),
-        memberListFilter: CupertinoFormSection.insetGrouped(
+        riderListFilter: CupertinoFormSection.insetGrouped(
           header: Text(translator.Riders.toUpperCase()),
           footer: Text(translator.RidersListFilterDescription),
           children: [

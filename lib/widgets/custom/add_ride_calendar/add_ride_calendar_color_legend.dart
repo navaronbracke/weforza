@@ -46,7 +46,9 @@ class AddRideCalendarColorLegend extends StatelessWidget {
               label,
               softWrap: true,
               style: labelStyle,
-              textAlign: dotDirection == AxisDirection.right ? TextAlign.right : TextAlign.left,
+              textAlign: dotDirection == AxisDirection.right
+                  ? TextAlign.right
+                  : TextAlign.left,
               maxLines: labelMaxLines,
             ),
           ),

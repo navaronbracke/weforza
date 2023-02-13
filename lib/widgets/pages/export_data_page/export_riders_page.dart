@@ -14,7 +14,8 @@ class ExportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidersPage> createState() => _ExportRidersPageState();
 }
 
-class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with SingleTickerProviderStateMixin {
+class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
+    with SingleTickerProviderStateMixin {
   late final ExportRidersDelegate _delegate;
 
   late final AnimationController checkmarkController;
@@ -36,7 +37,8 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _delegate.fileNameController.text = S.of(context).exportRidersDefaultFileName;
+    _delegate.fileNameController.text =
+        S.of(context).exportRidersDefaultFileName;
   }
 
   @override

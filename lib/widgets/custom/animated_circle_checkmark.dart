@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 
 /// This widget represents a checkmark inside a circle.
 /// The circle animates growing to a maximum size.
-class AnimatedCircleCheckmark extends StatelessWidget {
+///
+/// This widget will start the animation of its [controller],
+/// if it has not already started.
+class AnimatedCircleCheckmark extends StatefulWidget {
   const AnimatedCircleCheckmark({
     required this.controller,
     super.key,
@@ -14,6 +17,12 @@ class AnimatedCircleCheckmark extends StatelessWidget {
   /// The animation controller that drives the checkmark animation.
   final AnimationController controller;
 
+  @override
+  State<AnimatedCircleCheckmark> createState() =>
+      _AnimatedCircleCheckmarkState();
+}
+
+class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
   Widget _buildAnimation(Color backgroundColor, IconData checkmarkIcon) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -23,7 +32,7 @@ class AnimatedCircleCheckmark extends StatelessWidget {
         );
 
         return ScaleTransition(
-          scale: controller,
+          scale: widget.controller,
           child: Container(
             width: checkmarkCircleSize,
             height: checkmarkCircleSize,
@@ -44,6 +53,15 @@ class AnimatedCircleCheckmark extends StatelessWidget {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.controller.status == AnimationStatus.dismissed) {
+      widget.controller.forward();
+    }
   }
 
   @override
@@ -70,7 +88,7 @@ class AnimatedCircleCheckmark extends StatelessWidget {
 
     return Center(
       child: AnimatedBuilder(
-        animation: controller,
+        animation: widget.controller,
         builder: (context, child) => _buildAnimation(
           backgroundColor,
           checkmarkIcon,

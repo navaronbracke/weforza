@@ -13,10 +13,12 @@ class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({super.key});
 
   @override
-  ConsumerState<ResetRideCalendarDialog> createState() => _ResetRideCalendarDialogState();
+  ConsumerState<ResetRideCalendarDialog> createState() =>
+      _ResetRideCalendarDialogState();
 }
 
-class _ResetRideCalendarDialogState extends ConsumerState<ResetRideCalendarDialog> {
+class _ResetRideCalendarDialogState
+    extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? future;
 
   @override

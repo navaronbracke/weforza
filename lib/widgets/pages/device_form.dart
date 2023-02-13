@@ -88,7 +88,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          widget.device == null ? translator.AddDevice : translator.EditDevice,
+          widget.device == null ? translator.addDevice : translator.editDevice,
         ),
       ),
       body: CustomScrollView(
@@ -132,7 +132,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         backgroundColor: backgroundColor,
         border: null,
         middle: Text(
-          widget.device == null ? translator.AddDevice : translator.EditDevice,
+          widget.device == null ? translator.addDevice : translator.editDevice,
         ),
         transitionBetweenRoutes: false,
       ),
@@ -181,18 +181,18 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
-          requiredMessage: translator.DeviceNameRequired,
-          maxLengthMessage: translator.DeviceNameMaxLength(
+          requiredMessage: translator.deviceNameRequired,
+          maxLengthMessage: translator.deviceNameMaxLength(
             Device.nameMaxLength,
           ),
-          illegalCharachterMessage: translator.DeviceNameCannotContainComma,
-          isBlankMessage: translator.DeviceNameBlank,
+          illegalCharachterMessage: translator.deviceNameCannotContainComma,
+          isBlankMessage: translator.deviceNameBlank,
         ),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 4,
           ),
-          labelText: translator.DeviceName,
+          labelText: translator.deviceName,
           helperText: ' ',
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -203,18 +203,18 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         controller: _deviceNameController,
         focusNode: _deviceNameFocusNode,
         keyboardType: TextInputType.text,
-        placeholder: translator.DeviceName,
+        placeholder: translator.deviceName,
         textInputAction: TextInputAction.done,
         maxLength: Device.nameMaxLength,
         onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,
-          requiredMessage: translator.DeviceNameRequired,
-          maxLengthMessage: translator.DeviceNameMaxLength(
+          requiredMessage: translator.deviceNameRequired,
+          maxLengthMessage: translator.deviceNameMaxLength(
             Device.nameMaxLength,
           ),
-          illegalCharachterMessage: translator.DeviceNameCannotContainComma,
-          isBlankMessage: translator.DeviceNameBlank,
+          illegalCharachterMessage: translator.deviceNameCannotContainComma,
+          isBlankMessage: translator.deviceNameBlank,
         ),
       ),
     );
@@ -231,13 +231,13 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     if (error is DeviceExistsException) {
       return GenericErrorLabel(
-        message: translator.DeviceExists,
+        message: translator.deviceExists,
         iosPadding: iOSPadding,
       );
     }
 
     return GenericErrorLabel(
-      message: translator.GenericError,
+      message: translator.genericError,
       iosPadding: iOSPadding,
     );
   }
@@ -245,8 +245,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
-    final label =
-        widget.device == null ? translator.AddDevice : translator.EditDevice;
+    final label = widget.device == null ? translator.addDevice : translator.editDevice;
 
     return FormSubmitButton<void>(
       delegate: _delegate,

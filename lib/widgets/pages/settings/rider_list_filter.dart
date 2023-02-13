@@ -35,17 +35,17 @@ class RiderListFilter extends StatelessWidget {
                 segments: <ButtonSegment<RiderFilterOption>>[
                   ButtonSegment(
                     icon: const Icon(Icons.people),
-                    label: Text(translator.All),
+                    label: Text(translator.all),
                     value: RiderFilterOption.all,
                   ),
                   ButtonSegment(
                     icon: const Icon(Icons.directions_bike),
-                    label: Text(translator.Active),
+                    label: Text(translator.active),
                     value: RiderFilterOption.active,
                   ),
                   ButtonSegment(
                     icon: const Icon(Icons.block),
-                    label: Text(translator.Inactive),
+                    label: Text(translator.inactive),
                     value: RiderFilterOption.inactive,
                   ),
                 ],
@@ -132,9 +132,9 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
     final translator = S.of(context);
 
     _labels = LinkedHashMap.from(<RiderFilterOption, String>{
-      RiderFilterOption.all: translator.All,
-      RiderFilterOption.active: translator.Active,
-      RiderFilterOption.inactive: translator.Inactive,
+      RiderFilterOption.all: translator.all,
+      RiderFilterOption.active: translator.active,
+      RiderFilterOption.inactive: translator.inactive,
     });
 
     _computeWidestLabelWidth(DefaultTextStyle.of(context).style);

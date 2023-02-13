@@ -65,14 +65,14 @@ class ProfileImagePicker extends StatelessWidget {
     showWeforzaDialog<void>(
       context,
       builder: (context) => WeforzaAlertDialog.defaultButtons(
-        confirmButtonLabel: translator.Delete,
-        description: Text(translator.RemovePhotoDescription, softWrap: true),
+        confirmButtonLabel: translator.delete,
+        description: Text(translator.removePhotoDescription, softWrap: true),
         isDestructive: true,
         onConfirmPressed: () {
           delegate.clear();
           Navigator.of(context).pop();
         },
-        title: translator.RemovePhoto,
+        title: translator.removePhoto,
       ),
     );
   }
@@ -87,17 +87,17 @@ class ProfileImagePicker extends StatelessWidget {
     );
 
     final openGalleryButton = _ProfileImagePickerButton(
-      label: translator.SelectPhoto,
+      label: translator.selectPhoto,
       onPressed: delegate.selectProfileImageFromGallery,
     );
 
     final openCameraButton = _ProfileImagePickerButton(
-      label: translator.TakePhoto,
+      label: translator.takePhoto,
       onPressed: delegate.takePhoto,
     );
 
     final deleteImageButton = _ProfileImagePickerButton(
-      label: translator.RemovePhoto,
+      label: translator.removePhoto,
       onPressed: () => _showDeleteProfileImageDialog(context),
       isDestructive: true,
     );
@@ -186,9 +186,7 @@ class _ProfileImagePickerButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: isDestructive
-              ? const TextStyle(color: CupertinoColors.destructiveRed)
-              : null,
+          style: isDestructive ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
         ),
       ),
     );

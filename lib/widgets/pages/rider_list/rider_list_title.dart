@@ -13,9 +13,9 @@ class RiderListTitle extends ConsumerWidget {
     final translator = S.of(context);
 
     return riderList.when(
-      data: (items) => Text(translator.RidersListTitle(items.length)),
-      error: (error, stackTrace) => Text(translator.Riders),
-      loading: () => Text(translator.Riders),
+      data: (items) => Text(translator.ridersListTitle(items.length)),
+      error: (error, stackTrace) => Text(translator.riders),
+      loading: () => Text(translator.riders),
     );
   }
 }

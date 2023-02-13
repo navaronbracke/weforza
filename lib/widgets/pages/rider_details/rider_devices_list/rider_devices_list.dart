@@ -74,7 +74,7 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
 
                   onAddDevicePressed(context, selectedRider!.uuid);
                 },
-                child: Text(S.of(context).AddDevice),
+                child: Text(S.of(context).addDevice),
               ),
               ios: (context) => CupertinoButton.filled(
                 onPressed: () {
@@ -82,7 +82,7 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
 
                   onAddDevicePressed(context, selectedRider!.uuid);
                 },
-                child: Text(S.of(context).AddDevice),
+                child: Text(S.of(context).addDevice),
               ),
             ),
           ),

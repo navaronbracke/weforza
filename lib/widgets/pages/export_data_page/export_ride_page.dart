@@ -27,12 +27,12 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
 
   late final AnimationController checkmarkController;
 
-  String _getInitialFileName(Ride? ride) {
-    final translator = S.current;
+  String _getFileNameForRide(BuildContext context, Ride? ride) {
+    final translator = S.of(context);
 
     return ride == null
-        ? translator.ExportRidesFileNamePlaceholder
-        : translator.ExportRideFileNamePlaceholder(ride.dateAsDayMonthYear);
+        ? translator.exportRidesFileNamePlaceholder
+        : translator.exportRideFileNamePlaceholder(ride.dateAsDayMonthYear);
   }
 
   @override
@@ -40,7 +40,6 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
     super.initState();
     _delegate = ExportRidesDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      initialFileName: _getInitialFileName(widget.selectedRide),
       repository: ref.read(exportRidesRepositoryProvider),
     );
 
@@ -48,6 +47,12 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
       vsync: this,
       duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _delegate.fileNameController.text = _getFileNameForRide(context, widget.selectedRide);
   }
 
   @override

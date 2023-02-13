@@ -46,9 +46,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     excludedTermsDelegate = ExcludedTermsDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter
-          .map((t) => ExcludedTerm(term: t))
-          .toList(),
+      initialValue: currentSettings.excludedTermsFilter.map((t) => ExcludedTerm(term: t)).toList(),
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,
@@ -86,7 +84,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: Text(translator.Settings)),
+      appBar: AppBar(title: Text(translator.settings)),
       body: SettingsPageScrollView(
         excludedTermsListHeader: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
@@ -117,7 +115,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                translator.RidersListFilter,
+                translator.ridersListFilter,
                 style: textTheme.titleMedium,
               ),
               Theme(
@@ -128,7 +126,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                 child: RiderListFilter(delegate: riderFilterDelegate),
               ),
               Text(
-                translator.RidersListFilterDescription,
+                translator.ridersListFilterDescription,
                 style: textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),
@@ -152,7 +150,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               alignment: Alignment.bottomCenter,
               child: AppVersion(
                 builder: (version) => Text(
-                  '${translator.Version} $version',
+                  '${translator.version} $version',
                   style: textTheme.bodySmall?.copyWith(
                     fontStyle: FontStyle.italic,
                   ),
@@ -240,8 +238,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           child: ExcludedTermsListFooter(),
         ),
         riderListFilter: CupertinoFormSection.insetGrouped(
-          header: Text(translator.Riders.toUpperCase()),
-          footer: Text(translator.RidersListFilterDescription),
+          header: Text(translator.riders.toUpperCase()),
+          footer: Text(translator.ridersListFilterDescription),
           children: [
             Padding(
               padding: const EdgeInsets.all(6),
@@ -254,13 +252,13 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         navigationBar: CupertinoSliverNavigationBar(
           backgroundColor: CupertinoColors.systemGroupedBackground,
           border: null,
-          largeTitle: Text(translator.Settings),
+          largeTitle: Text(translator.settings),
           transitionBetweenRoutes: false,
         ),
         resetRideCalendarButton: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
           child: CupertinoFormSection.insetGrouped(
-            header: Text(translator.RideCalendar.toUpperCase()),
+            header: Text(translator.rideCalendar.toUpperCase()),
             children: const [
               CupertinoFormRow(
                 padding: EdgeInsetsDirectional.only(
@@ -274,14 +272,14 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           ),
         ),
         scanDurationOption: CupertinoFormSection.insetGrouped(
-          header: Text(translator.ScanSettings.toUpperCase()),
+          header: Text(translator.scanSettings.toUpperCase()),
           children: [ScanDurationOption(delegate: scanDurationDelegate)],
         ),
         version: SliverToBoxAdapter(
           child: CupertinoFormSection.insetGrouped(
             children: [
               CupertinoFormRow(
-                prefix: Text(translator.Version),
+                prefix: Text(translator.version),
                 child: AppVersion(
                   builder: (version) => Text(
                     version,

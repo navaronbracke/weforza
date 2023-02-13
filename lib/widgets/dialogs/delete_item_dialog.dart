@@ -37,7 +37,7 @@ class DeleteItemDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WeforzaAsyncActionDialog(
-      confirmButtonLabel: S.of(context).Delete,
+      confirmButtonLabel: S.of(context).delete,
       description: Text(description, softWrap: true),
       errorDescription: Text(errorDescription, softWrap: true),
       future: future,

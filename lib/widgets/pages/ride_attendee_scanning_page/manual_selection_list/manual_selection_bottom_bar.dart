@@ -37,7 +37,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          S.of(context).ScannedRiders,
+          S.of(context).scannedRiders,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           softWrap: true,
@@ -125,7 +125,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          S.of(context).ScannedRiders,
+          S.of(context).scannedRiders,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           softWrap: true,

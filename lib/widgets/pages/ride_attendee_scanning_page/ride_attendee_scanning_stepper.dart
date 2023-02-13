@@ -28,8 +28,8 @@ class RideAttendeeScanningStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
-    final scanLabel = translator.Scan.toUpperCase();
-    final manualLabel = translator.Manual.toUpperCase();
+    final scanLabel = translator.scan.toUpperCase();
+    final manualLabel = translator.manual.toUpperCase();
 
     final separator = PlatformAwareWidget(
       android: (_) => const Icon(Icons.chevron_right_rounded, size: 48),
@@ -53,8 +53,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
           stream: stream,
           builder: (context, snapshot) {
             // Every step before the manual selection should highlight the `Scan` label.
-            final isScanStep =
-                snapshot.data != RideAttendeeScanningState.manualSelection;
+            final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
 
             return Row(
               mainAxisSize: MainAxisSize.min,

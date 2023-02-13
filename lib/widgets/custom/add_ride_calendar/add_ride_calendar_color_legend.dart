@@ -46,9 +46,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
               label,
               softWrap: true,
               style: labelStyle,
-              textAlign: dotDirection == AxisDirection.right
-                  ? TextAlign.right
-                  : TextAlign.left,
+              textAlign: dotDirection == AxisDirection.right ? TextAlign.right : TextAlign.left,
               maxLines: labelMaxLines,
             ),
           ),
@@ -76,7 +74,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 child: _buildLegendItem(
                   color: theme.selection,
                   dotDirection: AxisDirection.right,
-                  label: translator.CurrentSelection,
+                  label: translator.currentSelection,
                 ),
               ),
               const SizedBox(width: 16),
@@ -84,7 +82,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 child: _buildLegendItem(
                   color: theme.futureRide,
                   dotDirection: AxisDirection.left,
-                  label: translator.FutureRide,
+                  label: translator.futureRide,
                 ),
               ),
             ],
@@ -99,7 +97,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 child: _buildLegendItem(
                   color: theme.pastRide,
                   dotDirection: AxisDirection.right,
-                  label: translator.PastDayWithRide,
+                  label: translator.pastDayWithRide,
                 ),
               ),
               const SizedBox(width: 16),
@@ -107,7 +105,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 child: _buildLegendItem(
                   color: theme.pastDay,
                   dotDirection: AxisDirection.left,
-                  label: translator.PastDayNoRide,
+                  label: translator.pastDayNoRide,
                 ),
               ),
             ],

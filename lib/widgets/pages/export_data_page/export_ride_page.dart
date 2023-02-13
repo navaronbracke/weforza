@@ -22,18 +22,17 @@ class ExportRidePage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidePage> createState() => _ExportRidePageState();
 }
 
-class _ExportRidePageState extends ConsumerState<ExportRidePage>
-    with SingleTickerProviderStateMixin {
+class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTickerProviderStateMixin {
   late final ExportRidesDelegate _delegate;
 
   late final AnimationController checkmarkController;
 
-  String _getInitialFileName(Ride? ride) {
-    final translator = S.current;
+  String _getFileNameForRide(BuildContext context, Ride? ride) {
+    final translator = S.of(context);
 
     return ride == null
-        ? translator.ExportRidesFileNamePlaceholder
-        : translator.ExportRideFileNamePlaceholder(ride.dateAsDayMonthYear);
+        ? translator.exportRidesFileNamePlaceholder
+        : translator.exportRideFileNamePlaceholder(ride.dateAsDayMonthYear);
   }
 
   @override
@@ -41,7 +40,6 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage>
     super.initState();
     _delegate = ExportRidesDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      initialFileName: _getInitialFileName(widget.selectedRide),
       repository: ref.read(exportRidesRepositoryProvider),
     );
 
@@ -49,6 +47,12 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage>
       vsync: this,
       duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _delegate.fileNameController.text = _getFileNameForRide(context, widget.selectedRide);
   }
 
   @override
@@ -62,8 +66,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage>
       onPressed: () => _delegate.exportDataToFile(
         ExportRidesOptions(ride: selectedRide?.date),
       ),
-      title:
-          selectedRide == null ? translator.ExportRides : translator.ExportRide,
+      title: selectedRide == null ? translator.exportRides : translator.exportRide,
     );
   }
 

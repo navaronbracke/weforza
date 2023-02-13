@@ -63,21 +63,21 @@ enum DeviceType {
   String getLabel(S translator) {
     switch (this) {
       case DeviceType.cadenceMeter:
-        return translator.DeviceCadenceMeter;
+        return translator.deviceCadenceMeter;
       case DeviceType.gps:
-        return translator.DeviceGPS;
+        return translator.deviceGPS;
       case DeviceType.headset:
-        return translator.DeviceHeadset;
+        return translator.deviceHeadset;
       case DeviceType.phone:
-        return translator.DevicePhone;
+        return translator.devicePhone;
       case DeviceType.powerMeter:
-        return translator.DevicePowerMeter;
+        return translator.devicePowerMeter;
       case DeviceType.pulseMonitor:
-        return translator.DevicePulseMonitor;
+        return translator.devicePulseMonitor;
       case DeviceType.watch:
-        return translator.DeviceWatch;
+        return translator.deviceWatch;
       default:
-        return translator.DeviceUnknown;
+        return translator.deviceUnknown;
     }
   }
 }

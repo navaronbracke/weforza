@@ -133,15 +133,15 @@ class ExcludedTermsDelegate {
   /// Returns null otherwise.
   String? validateTerm(String? term, S translator, {String? originalValue}) {
     if (term == null || term.isEmpty) {
-      return translator.DisallowedWordRequired;
+      return translator.disallowedWordRequired;
     }
 
     if (whitespaceMatcher.hasMatch(term)) {
-      return translator.DisallowedWordNoWhitespace;
+      return translator.disallowedWordNoWhitespace;
     }
 
     if (term.length > maxLength) {
-      return translator.DisallowedWordMaxLength(maxLength);
+      return translator.disallowedWordMaxLength(maxLength);
     }
 
     // Create a temporary value to use when checking existence.
@@ -154,7 +154,7 @@ class ExcludedTermsDelegate {
     // If the term is equal to the original value,
     // then the term is equal to itself, which is allowed.
     if (term != originalValue && exists) {
-      return translator.DisallowedWordExists;
+      return translator.disallowedWordExists;
     }
 
     return null;

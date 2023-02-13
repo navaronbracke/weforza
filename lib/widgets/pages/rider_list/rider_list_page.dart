@@ -110,7 +110,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
           onChanged: _searchController.onQueryChanged,
           decoration: InputDecoration(
             suffixIcon: const Icon(Icons.search),
-            labelText: S.of(context).SearchRiders,
+            labelText: S.of(context).searchRiders,
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(horizontal: 4),
             floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -170,7 +170,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
               controller: _controller,
               suffixIcon: const Icon(CupertinoIcons.search),
               onChanged: _searchController.onQueryChanged,
-              placeholder: S.of(context).SearchRiders,
+              placeholder: S.of(context).searchRiders,
             ),
           ),
         ),

@@ -47,7 +47,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
 
     checkmarkController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
   }
 

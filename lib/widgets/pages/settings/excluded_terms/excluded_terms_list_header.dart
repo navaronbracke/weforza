@@ -9,7 +9,7 @@ class ExcludedTermsListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final title = S.of(context).DisallowedWords;
+    final title = S.of(context).disallowedWords;
 
     switch (theme.platform) {
       case TargetPlatform.android:

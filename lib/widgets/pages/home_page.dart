@@ -82,15 +82,15 @@ class _HomePageState extends State<HomePage> {
           destinations: <NavigationDestination>[
             NavigationDestination(
               icon: const Icon(Icons.directions_bike),
-              label: S.of(context).Rides,
+              label: S.of(context).rides,
             ),
             NavigationDestination(
               icon: const Icon(Icons.people),
-              label: S.of(context).Riders,
+              label: S.of(context).riders,
             ),
             NavigationDestination(
               icon: const Icon(Icons.settings),
-              label: S.of(context).Settings,
+              label: S.of(context).settings,
             ),
           ],
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -118,15 +118,15 @@ class _HomePageState extends State<HomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.directions_bike),
-                label: S.of(context).Rides,
+                label: S.of(context).rides,
               ),
               BottomNavigationBarItem(
                 icon: const Icon(CupertinoIcons.person_2_fill),
-                label: S.of(context).Riders,
+                label: S.of(context).riders,
               ),
               BottomNavigationBarItem(
                 icon: const Icon(CupertinoIcons.settings),
-                label: S.of(context).Settings,
+                label: S.of(context).settings,
               ),
             ],
             onTap: (index) {

@@ -22,8 +22,7 @@ class ExportRidePage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidePage> createState() => _ExportRidePageState();
 }
 
-class _ExportRidePageState extends ConsumerState<ExportRidePage>
-    with SingleTickerProviderStateMixin {
+class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTickerProviderStateMixin {
   late final ExportRidesDelegate _delegate;
 
   late final AnimationController checkmarkController;
@@ -62,8 +61,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage>
       onPressed: () => _delegate.exportDataToFile(
         ExportRidesOptions(ride: selectedRide?.date),
       ),
-      title:
-          selectedRide == null ? translator.ExportRides : translator.ExportRide,
+      title: selectedRide == null ? translator.exportRides : translator.exportRide,
     );
   }
 

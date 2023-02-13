@@ -103,7 +103,7 @@ class _ScanResultsListItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4),
           child: Text(
-            S.of(context).AmountOfRidersWithDeviceName(ownersLength),
+            S.of(context).amountOfRidersWithDeviceName(ownersLength),
             style: textStyle,
           ),
         ),

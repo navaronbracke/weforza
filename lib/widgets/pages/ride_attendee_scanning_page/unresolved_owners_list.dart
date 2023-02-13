@@ -125,7 +125,8 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
   final Rider item;
 
   @override
-  State<_UnresolvedOwnersListItem> createState() => _UnresolvedOwnersListItemState();
+  State<_UnresolvedOwnersListItem> createState() =>
+      _UnresolvedOwnersListItemState();
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {

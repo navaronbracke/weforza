@@ -186,7 +186,9 @@ class _ProfileImagePickerButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(
           label,
-          style: isDestructive ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
+          style: isDestructive
+              ? const TextStyle(color: CupertinoColors.destructiveRed)
+              : null,
         ),
       ),
     );

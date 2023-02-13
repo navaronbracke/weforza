@@ -10,7 +10,7 @@ import 'package:weforza/riverpod/repository/serialize_riders_repository_provider
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/progress_indicator_with_label.dart';
-import 'package:weforza/widgets/custom/animated_checkmark.dart';
+import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -21,8 +21,11 @@ class ImportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ImportRidersPage> createState() => _ImportRidersPageState();
 }
 
-class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
+class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
+    with SingleTickerProviderStateMixin {
   late final ImportRidersDelegate delegate;
+
+  late final AnimationController checkmarkController;
 
   void _onImportRidersPressed() {
     delegate.importRiders(
@@ -40,6 +43,11 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
     delegate = ImportRidersDelegate(
       ref.read(fileHandlerProvider),
       ref.read(serializeRidersRepositoryProvider),
+    );
+
+    checkmarkController = AnimationController(
+      vsync: this,
+      duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
   }
 
@@ -89,7 +97,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
 
           switch (data) {
             case ImportRidersState.done:
-              return const AdaptiveAnimatedCheckmark();
+              return AnimatedCircleCheckmark(controller: checkmarkController);
             case ImportRidersState.idle:
               return _ImportRidersButton(
                 label: buttonLabel,
@@ -127,6 +135,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> {
   @override
   void dispose() {
     delegate.dispose();
+    checkmarkController.dispose();
     super.dispose();
   }
 }

@@ -10,13 +10,14 @@ import 'package:weforza/widgets/common/export_file_format_selection.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/custom/animated_checkmark.dart';
+import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage<T> extends StatelessWidget {
   ExportDataPage({
+    required this.checkmarkAnimationController,
     required this.delegate,
     required this.onPressed,
     required this.title,
@@ -28,6 +29,9 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// The maximum length for the file name input field.
   static const int maxLength = 80;
+
+  /// The animation controller for the 'Done' checkmark widget.
+  final AnimationController checkmarkAnimationController;
 
   /// The delegate that handles the export.
   final ExportDelegate<T> delegate;
@@ -203,7 +207,9 @@ class ExportDataPage<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());
+    final doneIndicator = AnimatedCircleCheckmark(
+      controller: checkmarkAnimationController,
+    );
     final translator = S.of(context);
     final label = translator.Export;
     final genericErrorIndicator = Center(

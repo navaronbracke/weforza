@@ -21,7 +21,7 @@ class RideListPage extends StatelessWidget {
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).Rides),
+        title: Text(S.of(context).rides),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
@@ -50,7 +50,7 @@ class RideListPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text(S.of(context).Rides),
+                child: Text(S.of(context).rides),
               ),
             ),
             CupertinoIconButton(

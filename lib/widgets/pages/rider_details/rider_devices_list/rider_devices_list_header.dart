@@ -8,7 +8,7 @@ class RiderDevicesListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = S.of(context).Devices;
+    final title = S.of(context).devices;
 
     return PlatformAwareWidget(
       android: (context) {

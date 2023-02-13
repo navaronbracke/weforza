@@ -12,14 +12,14 @@ class UnselectScannedRiderDialog extends StatelessWidget {
     final translator = S.of(context);
 
     return WeforzaAlertDialog.defaultButtons(
-      confirmButtonLabel: translator.Uncheck,
+      confirmButtonLabel: translator.uncheck,
       description: Text(
-        translator.UncheckScannedRiderDescription,
+        translator.uncheckScannedRiderDescription,
         softWrap: true,
       ),
       isDestructive: true,
       onConfirmPressed: () => Navigator.of(context).pop(true),
-      title: translator.UncheckScannedRider,
+      title: translator.uncheckScannedRider,
     );
   }
 }

@@ -63,7 +63,7 @@ class StopScanButton extends StatelessWidget {
 
         return ScanButton(
           onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),
-          text: isScanning ? translator.SkipScan : translator.Continue,
+          text: isScanning ? translator.skipScan : translator.continueLabel,
         );
       },
     );

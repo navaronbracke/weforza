@@ -88,7 +88,9 @@ class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
 
     return Center(
       child: AnimatedBuilder(
-        animation: widget.controller,
+        animation: widget.controller.drive(
+          CurveTween(curve: Curves.easeOutQuart),
+        ),
         builder: (context, child) => _buildAnimation(
           backgroundColor,
           checkmarkIcon,

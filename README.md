@@ -31,8 +31,9 @@ Before runing the app on a real IOS device, this checklist should be performed.
 ### IOS Deployment target version
 
 To bump the minimum iOS version for a project do the following:
-
-- Open the project in XCode and set the target OS version
+- Open the project in XCode
+- Set the iOS version under `Runner > General > Minimum Deployments > iOS`
+- In `ios/Flutter/AppFrameworkInfo.plist` set `MinimumOSVersion`
 - Update the `platform :ios, <version number>` section in the Podfile.
 - Ensure that the `flutter_additional_ios_build_settings(target)` section in ios/Podfile has set `IPHONEOS_DEPLOYMENT_TARGET`
 ```
@@ -40,7 +41,7 @@ To bump the minimum iOS version for a project do the following:
       installer.pods_project.targets.each do |target|
         flutter_additional_ios_build_settings(target)
         target.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '(version number, e.g. 14.4 for iOS 14.4)'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '<version number>'
         end
       end
     end

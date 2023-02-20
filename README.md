@@ -48,9 +48,10 @@ Before runing the app on a real IOS device, this checklist should be performed.
 
 - Let XCode set up the device for development.
   * Check that the device is shown in XCode as the selected device.
-  * If it is shown as `untrusted`, trust the host machine from the device when connecting.
-    The device will ask this through a confirmation dialog.
-  * When prompted, register the device with XCode. Xcode will show a dialog for this.
+  * iOS 15 and lower: If the device is shown as `untrusted`, trust the host machine from the device when connecting.
+    The device will display a confirmation dialog. When prompted, register the device with XCode.
+  * iOS 16 and higher: On iOS 16 and higher Developer mode should be enabled on the device.
+  See https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device
 
 - If required, run `pods install` in the terminal. (preferably from the flutter project dir)
   Usually the Flutter tool does this automatically when building.

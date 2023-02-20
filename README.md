@@ -12,6 +12,33 @@ If a new locale is added, a [full restart is required](https://github.com/flutte
 
 See also: https://docs.flutter.dev/development/accessibility-and-localization/internationalization
 
+#### Translating the iOS Information Property List file (Info.plist)
+
+The `Info.plist` file contains `NSUsageDescription` tags that should be translated.
+These contain the descriptions for system defined permission dialogs.
+The title and button labels are provided by the system and do not have to be translated.
+
+To translate the Info.plist file do the following:
+
+A) If the InfoPlist.strings file does not yet exist:
+
+- Create a new Resource file under `ios > Runner > Runner`
+- Select the inner `Runner` target
+- Right click and select `New File`
+- Select `Strings File` under the `Resource` category
+- Create the new file with the name `InfoPlist.strings`
+- Add the baseline translations (usually in English) in this file using the format `Key="Translation";`
+- Back in XCode, select the `InfoPlist.strings` file
+- Press the `Localise` button on the right
+- Select the languages that the `InfoPlist.strings` file should be localised in
+- Add the translations to the newly created `InfoPlist.strings` variants (one per selected language)
+
+b) If the InfoPlist.strings file does exist:
+
+- Select the `InfoPlist.strings` file
+- Add the desired languages that should have their `InfoPlist.strings` variants added
+- Add the translations to the newly created `InfoPlist.strings` variants (one per selected language)
+
 ### IOS on device testing
 
 Before runing the app on a real IOS device, this checklist should be performed.

@@ -36,13 +36,13 @@
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>The app uses Bluetooth to scan for Bluetooth peripherals in your immediate area.</string>
+	<string>The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>The app uses Bluetooth to scan for Bluetooth peripherals in your immediate area.</string>
+	<string>The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allow access to your camera to take new profile pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to photos to select profile pictures from your photo library.</string>
+	<string>Allow access to Photos to select profile pictures from your photo library.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIFileSharingEnabled</key>

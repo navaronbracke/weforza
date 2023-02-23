@@ -39,8 +39,16 @@ class AddExcludedTermInputField extends StatelessWidget {
     }
 
     delegate.addTerm(formState.value!);
+
+    // After the new excluded term is added,
+    // clear the text so a new term can be entered,
+    // reset the form state so that the validation error for an empty field is removed
+    // (which is caused by clearing the text field).
+    // Finally unfocus the text field, as keeping it focused
+    // makes it less obvious that a new term can be added.
     controller.clear();
     formState.reset();
+    focusNode.unfocus();
   }
 
   @override

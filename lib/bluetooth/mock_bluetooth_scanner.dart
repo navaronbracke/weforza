@@ -7,7 +7,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   final PublishSubject _stopScanPill = PublishSubject();
 
-  /// Build a fale scan results stream.
+  /// Build a fake scan results stream.
   Stream<BluetoothPeripheral> _buildScanResultsStream() async* {
     final duplicateOwner = BluetoothPeripheral(id: '1', deviceName: 'rudy1');
     final duplicateDevice = BluetoothPeripheral(
@@ -69,9 +69,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
     ];
 
-    yield* _buildScanResultsStream()
-        .takeUntil(Rx.merge(killStreams))
-        .doOnDone(stopScan);
+    yield* _buildScanResultsStream().takeUntil(Rx.merge(killStreams)).doOnDone(stopScan);
   }
 
   @override

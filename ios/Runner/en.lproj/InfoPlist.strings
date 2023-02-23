@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Navaron Bracke on 20/02/2023.
+*/
+NSBluetoothAlwaysUsageDescription = "The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.";
+NSBluetoothPeripheralUsageDescription = "The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.";
+NSCameraUsageDescription = "Allow access to your camera to take new profile pictures.";
+NSPhotoLibraryUsageDescription = "Allow access to Photos to select profile pictures from your photo library.";

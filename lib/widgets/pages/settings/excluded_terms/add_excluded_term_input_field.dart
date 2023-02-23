@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
@@ -39,8 +40,20 @@ class AddExcludedTermInputField extends StatelessWidget {
     }
 
     delegate.addTerm(formState.value!);
+
+    // After the new excluded term is added,
+    // clear the text so a new term can be entered,
+    // reset the form state so that the validation error for an empty field is removed
+    // (which is caused by clearing the text field).
     controller.clear();
     formState.reset();
+
+    // Finally unfocus the text field, as keeping it focused
+    // makes it less obvious that a new term can be added.
+    // However, do this in the next frame, otherwise the text in the text field is not cleared.
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      focusNode.unfocus();
+    });
   }
 
   @override

@@ -25,12 +25,10 @@ class EditExcludedTermInputField extends StatefulWidget {
   final ExcludedTerm excludedTerm;
 
   @override
-  State<EditExcludedTermInputField> createState() =>
-      _EditExcludedTermInputFieldState();
+  State<EditExcludedTermInputField> createState() => _EditExcludedTermInputFieldState();
 }
 
-class _EditExcludedTermInputFieldState
-    extends State<EditExcludedTermInputField> {
+class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField> {
   // This flag is used to keep the edit menu open when the delete dialog is shown.
   bool deleteDialogVisible = false;
 

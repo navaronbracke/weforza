@@ -9,6 +9,7 @@ class SettingsPageScrollView extends StatelessWidget {
     required this.riderListFilter,
     required this.resetRideCalendarButton,
     required this.scanDurationOption,
+    required this.scrollController,
     required this.version,
     super.key,
     this.excludedTermsListHeader,
@@ -36,12 +37,16 @@ class SettingsPageScrollView extends StatelessWidget {
   /// The widget that displays the scan duration option.
   final Widget scanDurationOption;
 
+  /// The scroll controller for the scroll view.
+  final ScrollController scrollController;
+
   /// The widget that displays the app version information.
   final Widget version;
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      controller: scrollController,
       slivers: [
         if (navigationBar != null) navigationBar!,
         SliverList(

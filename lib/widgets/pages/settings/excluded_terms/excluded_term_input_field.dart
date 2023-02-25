@@ -71,6 +71,7 @@ class ExcludedTermInputField extends StatelessWidget {
         maxLength: maxLength,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         onEditingComplete: onEditingComplete,
+        scrollPadding: const EdgeInsets.only(bottom: 60),
         textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.done,
         validator: validator,
@@ -88,6 +89,7 @@ class ExcludedTermInputField extends StatelessWidget {
           // The excluded terms have a 15 margin on their border.
           padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
           placeholder: placeholder,
+          scrollPadding: const EdgeInsets.only(bottom: 60),
           textInputAction: TextInputAction.done,
           validator: validator,
         );

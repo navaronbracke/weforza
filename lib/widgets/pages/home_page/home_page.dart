@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/home_page_tab.dart';
+import 'package:weforza/widgets/pages/home_page/home_page_app_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-
-// TODO the child pages should not have a scaffold
-// TODO the app bar should be built in the home page
 
 /// The home page of the application.
 /// This page provides access to the ride list page, the riders list page
@@ -70,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     final translator = S.of(context);
 
     return Scaffold(
-      appBar: foo, // TODO: get value for current page
+      appBar: HomePageAppBar(selectedTab: _selectedTab),
       resizeToAvoidBottomInset: _selectedTab.resizeToAvoidBottomInset,
       body: _buildPageView(context),
       bottomNavigationBar: Theme(
@@ -105,10 +103,25 @@ class _HomePageState extends State<HomePage> {
   Widget _buildIosWidget(BuildContext context) {
     final translator = S.of(context);
 
+    ObstructingPreferredSizeWidget? navigationBar;
+    Color? backgroundColor;
+
+    switch (_selectedTab) {
+      case HomePageTab.riderList:
+      case HomePageTab.ridesList:
+        navigationBar = HomePageCupertinoNavigationBar(selectedTab: _selectedTab);
+        break;
+      case HomePageTab.settings:
+        // The settings page uses a CupertinoSliverNavigationBar,
+        // and a different background color.
+        backgroundColor = CupertinoColors.systemGroupedBackground;
+        break;
+    }
+
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: _selectedTab.resizeToAvoidBottomInset,
-      backgroundColor: foo, // get this from selected tab
-      navigationBar: foo, // get this from selected tab
+      backgroundColor: backgroundColor,
+      navigationBar: navigationBar,
       child: Column(
         children: <Widget>[
           Expanded(child: _buildPageView(context)),

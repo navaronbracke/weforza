@@ -42,13 +42,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPage(BuildContext context) {
-    // TODO
-    /*
     const List<Widget> pages = [
       RideList(),
       RiderList(),
       SettingsPage(),
-    ];*/
+    ];
 
     return pages[_selectedTab.tabIndex];
   }

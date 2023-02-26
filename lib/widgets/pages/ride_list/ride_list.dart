@@ -14,19 +14,22 @@ class RideList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ridesList = ref.watch(rideListProvider);
 
-    return ridesList.when(
-      data: (items) {
-        if (items.isEmpty) {
-          return const RideListEmpty();
-        }
+    return SafeArea(
+      bottom: false,
+      child: ridesList.when(
+        data: (items) {
+          if (items.isEmpty) {
+            return const RideListEmpty();
+          }
 
-        return ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) => RideListItem(ride: items[index]),
-        );
-      },
-      error: (error, stackTrace) => const Center(child: GenericError()),
-      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) => RideListItem(ride: items[index]),
+          );
+        },
+        error: (error, stackTrace) => const Center(child: GenericError()),
+        loading: () => const Center(child: PlatformAwareLoadingIndicator()),
+      ),
     );
   }
 }

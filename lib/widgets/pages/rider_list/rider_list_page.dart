@@ -92,6 +92,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
       bottom: false,
       child: RiderList(
         onRiderSelected: () => _onRiderSelected(context),
+        initialSearchQuery: _searchController.currentQuery,
         filter: _filterOnSearchQuery,
         searchQueryStream: _searchController.searchQuery,
         searchField: searchField,

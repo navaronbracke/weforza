@@ -14,6 +14,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 class RiderList extends ConsumerWidget {
   const RiderList({
     required this.filter,
+    required this.initialSearchQuery,
     required this.onRiderSelected,
     required this.searchField,
     required this.searchQueryStream,
@@ -22,6 +23,9 @@ class RiderList extends ConsumerWidget {
 
   /// The function that handles filtering results.
   final List<Rider> Function(List<Rider> data, String query) filter;
+
+  /// The initial value for the search query [StreamBuilder].
+  final String initialSearchQuery;
 
   /// The function that is called after a rider is selected.
   final void Function() onRiderSelected;
@@ -48,6 +52,7 @@ class RiderList extends ConsumerWidget {
               searchField,
               Expanded(
                 child: StreamBuilder<String>(
+                  initialData: initialSearchQuery,
                   stream: searchQueryStream,
                   builder: (context, snapshot) {
                     final results = filter(items, snapshot.data ?? '');

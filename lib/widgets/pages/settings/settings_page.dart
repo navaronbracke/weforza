@@ -85,79 +85,75 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(translator.settings)),
-      body: SettingsPageScrollView(
-        scrollController: scrollController,
-        excludedTermsListHeader: const Padding(
-          padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
-          child: ExcludedTermsListHeader(),
-        ),
-        excludedTermsList: SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          sliver: ExcludedTermsList(
-            addTermInputField: AddExcludedTermInputField(
-              controller: addTermController,
-              delegate: excludedTermsDelegate,
-              focusNode: addTermFocusNode,
-              formKey: addTermFormKey,
-            ),
-            builder: _buildExcludedTermItem,
-            initialData: excludedTermsDelegate.terms,
-            stream: excludedTermsDelegate.stream,
+    return SettingsPageScrollView(
+      scrollController: scrollController,
+      excludedTermsListHeader: const Padding(
+        padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
+        child: ExcludedTermsListHeader(),
+      ),
+      excludedTermsList: SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        sliver: ExcludedTermsList(
+          addTermInputField: AddExcludedTermInputField(
+            controller: addTermController,
+            delegate: excludedTermsDelegate,
+            focusNode: addTermFocusNode,
+            formKey: addTermFormKey,
           ),
+          builder: _buildExcludedTermItem,
+          initialData: excludedTermsDelegate.terms,
+          stream: excludedTermsDelegate.stream,
         ),
-        excludedTermsListFooter: const Padding(
-          padding: EdgeInsets.only(left: 12, right: 12, top: 12),
-          child: ExcludedTermsListFooter(),
+      ),
+      excludedTermsListFooter: const Padding(
+        padding: EdgeInsets.only(left: 12, right: 12, top: 12),
+        child: ExcludedTermsListFooter(),
+      ),
+      riderListFilter: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              translator.ridersListFilter,
+              style: textTheme.titleMedium,
+            ),
+            Theme(
+              data: ThemeData(
+                useMaterial3: true,
+                segmentedButtonTheme: theme.segmentedButtonTheme,
+              ),
+              child: RiderListFilter(delegate: riderFilterDelegate),
+            ),
+            Text(
+              translator.ridersListFilterDescription,
+              style: textTheme.bodySmall?.copyWith(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
         ),
-        riderListFilter: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                translator.ridersListFilter,
-                style: textTheme.titleMedium,
-              ),
-              Theme(
-                data: ThemeData(
-                  useMaterial3: true,
-                  segmentedButtonTheme: theme.segmentedButtonTheme,
-                ),
-                child: RiderListFilter(delegate: riderFilterDelegate),
-              ),
-              Text(
-                translator.ridersListFilterDescription,
+      ),
+      resetRideCalendarButton: const Padding(
+        padding: EdgeInsets.fromLTRB(24, 56, 24, 0),
+        child: Center(child: ResetRideCalendarButton()),
+      ),
+      scanDurationOption: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
+        child: ScanDurationOption(delegate: scanDurationDelegate),
+      ),
+      version: SliverFillRemaining(
+        hasScrollBody: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AppVersion(
+              builder: (version) => Text(
+                '${translator.version} $version',
                 style: textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-        ),
-        resetRideCalendarButton: const Padding(
-          padding: EdgeInsets.fromLTRB(24, 56, 24, 0),
-          child: Center(child: ResetRideCalendarButton()),
-        ),
-        scanDurationOption: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
-          child: ScanDurationOption(delegate: scanDurationDelegate),
-        ),
-        version: SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: AppVersion(
-                builder: (version) => Text(
-                  '${translator.version} $version',
-                  style: textTheme.bodySmall?.copyWith(
-                    fontStyle: FontStyle.italic,
-                  ),
                 ),
               ),
             ),
@@ -185,117 +181,113 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       width: 1.0 / MediaQuery.of(context).devicePixelRatio,
     );
 
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: CupertinoColors.systemGroupedBackground,
-      child: SettingsPageScrollView(
-        scrollController: scrollController,
-        excludedTermsList: SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          sliver: ExcludedTermsList(
-            addTermInputField: DecoratedBox(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
+    return SettingsPageScrollView(
+      scrollController: scrollController,
+      excludedTermsList: SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        sliver: ExcludedTermsList(
+          addTermInputField: DecoratedBox(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              color: CupertinoColors.secondarySystemGroupedBackground,
+            ),
+            child: AddExcludedTermInputField(
+              controller: addTermController,
+              delegate: excludedTermsDelegate,
+              focusNode: addTermFocusNode,
+              formKey: addTermFormKey,
+            ),
+          ),
+          initialData: excludedTermsDelegate.terms,
+          stream: excludedTermsDelegate.stream,
+          builder: (items, index) {
+            BorderRadius borderRadius = BorderRadius.zero;
+
+            if (index == items.length - 1) {
+              borderRadius = const BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              );
+            }
+
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
                 color: CupertinoColors.secondarySystemGroupedBackground,
               ),
-              child: AddExcludedTermInputField(
-                controller: addTermController,
-                delegate: excludedTermsDelegate,
-                focusNode: addTermFocusNode,
-                formKey: addTermFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    color: excludedTermDivider.color,
+                    height: excludedTermDivider.width,
+                    margin: const EdgeInsetsDirectional.only(start: 15.0),
+                  ),
+                  _buildExcludedTermItem(items, index),
+                ],
               ),
+            );
+          },
+        ),
+      ),
+      excludedTermsListFooter: const Padding(
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+        child: ExcludedTermsListFooter(),
+      ),
+      riderListFilter: CupertinoFormSection.insetGrouped(
+        header: Text(translator.riders.toUpperCase()),
+        footer: Text(translator.ridersListFilterDescription),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: Center(
+              child: RiderListFilter(delegate: riderFilterDelegate),
             ),
-            initialData: excludedTermsDelegate.terms,
-            stream: excludedTermsDelegate.stream,
-            builder: (items, index) {
-              BorderRadius borderRadius = BorderRadius.zero;
-
-              if (index == items.length - 1) {
-                borderRadius = const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                );
-              }
-
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: borderRadius,
-                  color: CupertinoColors.secondarySystemGroupedBackground,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      color: excludedTermDivider.color,
-                      height: excludedTermDivider.width,
-                      margin: const EdgeInsetsDirectional.only(start: 15.0),
-                    ),
-                    _buildExcludedTermItem(items, index),
-                  ],
-                ),
-              );
-            },
           ),
-        ),
-        excludedTermsListFooter: const Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: ExcludedTermsListFooter(),
-        ),
-        riderListFilter: CupertinoFormSection.insetGrouped(
-          header: Text(translator.riders.toUpperCase()),
-          footer: Text(translator.ridersListFilterDescription),
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(6),
-              child: Center(
-                child: RiderListFilter(delegate: riderFilterDelegate),
+        ],
+      ),
+      navigationBar: CupertinoSliverNavigationBar(
+        backgroundColor: CupertinoColors.systemGroupedBackground,
+        border: null,
+        largeTitle: Text(translator.settings),
+        transitionBetweenRoutes: false,
+      ),
+      resetRideCalendarButton: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        child: CupertinoFormSection.insetGrouped(
+          header: Text(translator.rideCalendar.toUpperCase()),
+          children: const [
+            CupertinoFormRow(
+              padding: EdgeInsetsDirectional.only(
+                start: 20,
+                end: 6,
               ),
+              prefix: ResetRideCalendarButton(),
+              child: SizedBox.shrink(),
             ),
           ],
         ),
-        navigationBar: CupertinoSliverNavigationBar(
-          backgroundColor: CupertinoColors.systemGroupedBackground,
-          border: null,
-          largeTitle: Text(translator.settings),
-          transitionBetweenRoutes: false,
-        ),
-        resetRideCalendarButton: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
-          child: CupertinoFormSection.insetGrouped(
-            header: Text(translator.rideCalendar.toUpperCase()),
-            children: const [
-              CupertinoFormRow(
-                padding: EdgeInsetsDirectional.only(
-                  start: 20,
-                  end: 6,
-                ),
-                prefix: ResetRideCalendarButton(),
-                child: SizedBox.shrink(),
-              ),
-            ],
-          ),
-        ),
-        scanDurationOption: CupertinoFormSection.insetGrouped(
-          header: Text(translator.scanSettings.toUpperCase()),
-          children: [ScanDurationOption(delegate: scanDurationDelegate)],
-        ),
-        version: SliverToBoxAdapter(
-          child: CupertinoFormSection.insetGrouped(
-            children: [
-              CupertinoFormRow(
-                prefix: Text(translator.version),
-                child: AppVersion(
-                  builder: (version) => Text(
-                    version,
-                    style: const TextStyle(color: CupertinoColors.systemGrey),
-                  ),
+      ),
+      scanDurationOption: CupertinoFormSection.insetGrouped(
+        header: Text(translator.scanSettings.toUpperCase()),
+        children: [ScanDurationOption(delegate: scanDurationDelegate)],
+      ),
+      version: SliverToBoxAdapter(
+        child: CupertinoFormSection.insetGrouped(
+          children: [
+            CupertinoFormRow(
+              prefix: Text(translator.version),
+              child: AppVersion(
+                builder: (version) => Text(
+                  version,
+                  style: const TextStyle(color: CupertinoColors.systemGrey),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

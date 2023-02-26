@@ -4,13 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
-import 'package:weforza/widgets/pages/import_riders_page.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_details_page.dart';
-import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/pages/rider_list/rider_list.dart';
-import 'package:weforza/widgets/pages/rider_list/rider_list_title.dart';
-import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the list of riders.
@@ -63,126 +58,44 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
     }).toList();
   }
 
-  Widget _buildAndroidWidget(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const RiderListTitle(),
-        actions: <Widget>[
-          Consumer(
-            builder: (context, ref, child) {
-              return IconButton(
-                icon: const Icon(Icons.person_add),
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const RiderForm()),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.file_download),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ImportRidersPage(),
-              ),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.file_upload),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const ExportRidersPage(),
-              ),
-            ),
-          ),
-        ],
+  @override
+  Widget build(BuildContext context) {
+    final placeholder = S.of(context).searchRiders;
+
+    final Widget searchField = PlatformAwareWidget(
+      android: (context) => TextField(
+        controller: _controller,
+        textInputAction: TextInputAction.search,
+        keyboardType: TextInputType.text,
+        autocorrect: false,
+        onChanged: _searchController.onQueryChanged,
+        decoration: InputDecoration(
+          suffixIcon: const Icon(Icons.search),
+          labelText: placeholder,
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+        ),
       ),
-      body: RiderList(
+      ios: (context) => Padding(
+        padding: const EdgeInsets.all(8),
+        child: CupertinoSearchTextField(
+          controller: _controller,
+          suffixIcon: const Icon(CupertinoIcons.search),
+          onChanged: _searchController.onQueryChanged,
+          placeholder: placeholder,
+        ),
+      ),
+    );
+
+    return SafeArea(
+      bottom: false,
+      child: RiderList(
         onRiderSelected: () => _onRiderSelected(context),
         filter: _filterOnSearchQuery,
         searchQueryStream: _searchController.searchQuery,
-        searchField: TextFormField(
-          controller: _controller,
-          textInputAction: TextInputAction.search,
-          keyboardType: TextInputType.text,
-          autocorrect: false,
-          autovalidateMode: AutovalidateMode.disabled,
-          onChanged: _searchController.onQueryChanged,
-          decoration: InputDecoration(
-            suffixIcon: const Icon(Icons.search),
-            labelText: S.of(context).searchRiders,
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-          ),
-        ),
+        searchField: searchField,
       ),
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context) {
-    return CupertinoPageScaffold(
-      resizeToAvoidBottomInset: false,
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Row(
-          children: <Widget>[
-            const Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: RiderListTitle(),
-              ),
-            ),
-            CupertinoIconButton(
-              icon: CupertinoIcons.person_badge_plus_fill,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const RiderForm()),
-              ),
-            ),
-            CupertinoIconButton(
-              icon: CupertinoIcons.arrow_down_doc_fill,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const ImportRidersPage(),
-                ),
-              ),
-            ),
-            CupertinoIconButton(
-              icon: CupertinoIcons.arrow_up_doc_fill,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const ExportRidersPage(),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: RiderList(
-          onRiderSelected: () => _onRiderSelected(context),
-          filter: _filterOnSearchQuery,
-          searchQueryStream: _searchController.searchQuery,
-          searchField: Padding(
-            padding: const EdgeInsets.all(8),
-            child: CupertinoSearchTextField(
-              controller: _controller,
-              suffixIcon: const Icon(CupertinoIcons.search),
-              onChanged: _searchController.onQueryChanged,
-              placeholder: S.of(context).searchRiders,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidWidget,
-      ios: _buildIosWidget,
     );
   }
 

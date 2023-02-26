@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/home_page_tab.dart';
 import 'package:weforza/widgets/pages/home_page/home_page_app_bar.dart';
+import 'package:weforza/widgets/pages/ride_list/ride_list.dart';
+import 'package:weforza/widgets/pages/rider_list/rider_list.dart';
+import 'package:weforza/widgets/pages/settings/settings_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// The home page of the application.
@@ -57,10 +60,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPageView(BuildContext context) {
+    const List<Widget> pages = [
+      RideList(),
+      RiderList(),
+      SettingsPage(),
+    ];
+
     return PageView(
       controller: _pageController,
       onPageChanged: (page) => _onPageChanged(context, page),
-      children: HomePageTab.pages,
+      children: pages,
     );
   }
 

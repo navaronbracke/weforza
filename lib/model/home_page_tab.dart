@@ -1,8 +1,3 @@
-import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/pages/ride_list/ride_list_page.dart';
-import 'package:weforza/widgets/pages/rider_list/rider_list_page.dart';
-import 'package:weforza/widgets/pages/settings/settings_page.dart';
-
 /// This enum defines the different tabs for the home page.
 enum HomePageTab {
   /// The list of riders. This is the second tab.
@@ -35,13 +30,4 @@ enum HomePageTab {
 
   /// Whether this tab should resize to avoid the bottom view inset.
   final bool resizeToAvoidBottomInset;
-
-  /// Get the list of tabs as a list of [Widget]s.
-  ///
-  /// This value is typically passed to the `children` of a [PageView].
-  static const List<Widget> pages = [
-    RideListPage(),
-    RiderListPage(),
-    SettingsPage(),
-  ];
 }

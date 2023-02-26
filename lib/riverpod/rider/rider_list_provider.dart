@@ -15,3 +15,10 @@ final riderListProvider = FutureProvider<List<Rider>>((ref) {
 
   return repository.getRiders(filter);
 });
+
+/// This provider provides the total amount of riders.
+final riderAmountProvider = FutureProvider<int>((ref) {
+  final future = ref.watch(riderListProvider.selectAsync((list) => list.length));
+
+  return future;
+});

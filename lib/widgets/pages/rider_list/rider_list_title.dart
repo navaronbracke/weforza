@@ -9,11 +9,11 @@ class RiderListTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final riderList = ref.watch(riderListProvider);
+    final amount = ref.watch(riderAmountProvider);
     final translator = S.of(context);
 
-    return riderList.when(
-      data: (items) => Text(translator.ridersListTitle(items.length)),
+    return amount.when(
+      data: (value) => Text(translator.ridersListTitle(value)),
       error: (error, stackTrace) => Text(translator.riders),
       loading: () => Text(translator.riders),
     );

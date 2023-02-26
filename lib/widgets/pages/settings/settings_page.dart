@@ -31,6 +31,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   final addTermFocusNode = FocusNode();
   final addTermFormKey = GlobalKey<FormFieldState<String>>();
 
+  final ScrollController scrollController = ScrollController();
+
   late final ExcludedTermsDelegate excludedTermsDelegate;
 
   late final RiderFilterDelegate riderFilterDelegate;
@@ -87,6 +89,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(translator.settings)),
       body: SettingsPageScrollView(
+        scrollController: scrollController,
         excludedTermsListHeader: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
           child: ExcludedTermsListHeader(),
@@ -171,6 +174,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       delegate: excludedTermsDelegate,
       index: index,
       excludedTerm: term,
+      scrollController: scrollController,
     );
   }
 
@@ -185,6 +189,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: CupertinoColors.systemGroupedBackground,
       child: SettingsPageScrollView(
+        scrollController: scrollController,
         excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: ExcludedTermsList(
@@ -304,6 +309,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     excludedTermsDelegate.dispose();
     riderFilterDelegate.dispose();
     scanDurationDelegate.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 }

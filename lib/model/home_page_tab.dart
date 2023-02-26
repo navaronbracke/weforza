@@ -12,8 +12,8 @@ enum HomePageTab {
   /// The default constructor.
   const HomePageTab({required this.pageIndex, required this.resizeToAvoidBottomInset});
 
-  factory HomePageTab.fromPageIndex(int pageIndex) {
-    switch (pageIndex) {
+  factory HomePageTab.fromIndex(int index) {
+    switch (index) {
       case 0:
         return ridesList;
       case 1:
@@ -21,7 +21,7 @@ enum HomePageTab {
       case 2:
         return settings;
       default:
-        throw ArgumentError.value(pageIndex);
+        throw ArgumentError.value(index);
     }
   }
 

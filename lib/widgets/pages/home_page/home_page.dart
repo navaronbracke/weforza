@@ -23,54 +23,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   HomePageTab _selectedTab = HomePageTab.ridesList;
 
-  final PageController _pageController = PageController(initialPage: HomePageTab.ridesList.pageIndex);
-
-  void _onNavigationDestinationSelected(int index) {
+  void _onNavigationDestinationSelected(BuildContext context, int index) {
     if (_selectedTab.pageIndex == index) {
       return;
     }
 
-    setState(() {
-      _selectedTab = HomePageTab.fromPageIndex(index);
-    });
-
-    _pageController.animateToPage(
-      _selectedTab.pageIndex,
-      duration: kTabScrollDuration,
-      curve: Curves.easeInOut,
-    );
-  }
-
-  void _onPageChanged(BuildContext context, int page) {
-    if (_selectedTab.pageIndex == page) {
-      return;
-    }
-
-    // When switching pages in the page view, the old page gives up focus.
+    // When switching pages, the old page gives up focus.
     // The riders list page has a search field,
     // and the settings page has several text fields.
     // Only the ride list page has nothing that can have keyboard focus.
-    if (_selectedTab.pageIndex != 0) {
+    if (_selectedTab.pageIndex != HomePageTab.ridesList.pageIndex) {
       FocusScope.of(context).unfocus();
     }
 
     setState(() {
-      _selectedTab = HomePageTab.fromPageIndex(page);
+      _selectedTab = HomePageTab.fromIndex(index);
     });
   }
 
-  Widget _buildPageView(BuildContext context) {
+  Widget _buildPage(BuildContext context) {
     const List<Widget> pages = [
       RideList(),
       RiderList(),
       SettingsPage(),
     ];
 
-    return PageView(
-      controller: _pageController,
-      onPageChanged: (page) => _onPageChanged(context, page),
-      children: pages,
-    );
+    return pages[_selectedTab.pageIndex];
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -79,7 +57,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: HomePageAppBar(selectedTab: _selectedTab),
       resizeToAvoidBottomInset: _selectedTab.resizeToAvoidBottomInset,
-      body: _buildPageView(context),
+      body: _buildPage(context),
       bottomNavigationBar: Theme(
         data: ThemeData(
           // The NavigationBar needs Material 3 to style its selected icon properly.
@@ -88,7 +66,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: NavigationBar(
           selectedIndex: _selectedTab.pageIndex,
-          onDestinationSelected: _onNavigationDestinationSelected,
+          onDestinationSelected: (index) => _onNavigationDestinationSelected(context, index),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: <NavigationDestination>[
             NavigationDestination(
@@ -133,10 +111,10 @@ class _HomePageState extends State<HomePage> {
       navigationBar: navigationBar,
       child: Column(
         children: <Widget>[
-          Expanded(child: _buildPageView(context)),
+          Expanded(child: _buildPage(context)),
           CupertinoTabBar(
             currentIndex: _selectedTab.pageIndex,
-            onTap: _onNavigationDestinationSelected,
+            onTap: (index) => _onNavigationDestinationSelected(context, index),
             items: [
               BottomNavigationBarItem(
                 icon: const Icon(Icons.directions_bike),
@@ -163,11 +141,5 @@ class _HomePageState extends State<HomePage> {
       android: _buildAndroidWidget,
       ios: _buildIosWidget,
     );
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 }

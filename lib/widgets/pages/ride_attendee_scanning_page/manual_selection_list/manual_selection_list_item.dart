@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
@@ -22,22 +23,18 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
   final Rider item;
 
   @override
-  ConsumerState<ManualSelectionListItem> createState() =>
-      _ManualSelectionListItemState();
+  ConsumerState<ManualSelectionListItem> createState() => _ManualSelectionListItemState();
 }
 
-class _ManualSelectionListItemState
-    extends ConsumerState<ManualSelectionListItem> {
+class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListItem> {
   BoxDecoration? _getDecoration(BuildContext context, bool isSelected) {
     if (isSelected) {
-      final theme = Theme.of(context);
-
-      switch (theme.platform) {
+      switch (defaultTargetPlatform) {
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          return BoxDecoration(color: theme.primaryColorDark);
+          return BoxDecoration(color: Theme.of(context).primaryColorDark);
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
           return BoxDecoration(color: CupertinoTheme.of(context).primaryColor);
@@ -120,9 +117,7 @@ class _ManualSelectionListItemState
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: Icon(
-                  isScanned
-                      ? Icons.bluetooth_searching
-                      : Icons.pan_tool_rounded,
+                  isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded,
                   color: Colors.white,
                 ),
               ),

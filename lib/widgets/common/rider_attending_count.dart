@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
@@ -9,8 +10,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// The provider for the attending count of a single rider list item
 /// is an `autoDispose` provider as there might be many items in the list,
 /// that get built nd destroyed.
-final _riderAttendingCount =
-    FutureProvider.autoDispose.family<int, String>((ref, uuid) {
+final _riderAttendingCount = FutureProvider.autoDispose.family<int, String>((ref, uuid) {
   final repository = ref.read(riderRepositoryProvider);
 
   return repository.getAttendingCount(uuid);
@@ -24,14 +24,12 @@ class _RiderAttendingCount extends StatelessWidget {
   final AsyncValue<int?> value;
 
   Widget _buildBikeIcon(BuildContext context) {
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Icon(Icons.directions_bike, color: theme.primaryColor);
+        return Icon(Icons.directions_bike, color: Theme.of(context).primaryColor);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Icon(

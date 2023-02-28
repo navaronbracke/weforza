@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 
@@ -8,19 +9,16 @@ class ExcludedTermsListFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final description = S.of(context).disallowedWordsDescription;
 
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         return Text(
           description,
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontStyle: FontStyle.italic,
-          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

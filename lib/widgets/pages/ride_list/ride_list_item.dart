@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride.dart';
@@ -18,14 +19,12 @@ class RideListItem extends ConsumerWidget {
 
   Color? _getMonthColor(BuildContext context) {
     if (ride.date.month.isEven) {
-      final theme = Theme.of(context);
-
-      switch (theme.platform) {
+      switch (defaultTargetPlatform) {
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          return theme.primaryColor;
+          return Theme.of(context).primaryColor;
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
           return CupertinoTheme.of(context).primaryColor;

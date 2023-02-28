@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/theme.dart';
@@ -18,7 +19,7 @@ Future<T?> showWeforzaDialog<T>(
   required WidgetBuilder builder,
   bool barrierDismissible = true,
 }) {
-  switch (Theme.of(context).platform) {
+  switch (defaultTargetPlatform) {
     case TargetPlatform.android:
     case TargetPlatform.fuchsia:
     case TargetPlatform.linux:
@@ -159,7 +160,7 @@ class WeforzaAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
+    final TargetPlatform platform = defaultTargetPlatform;
     final Widget confirmButton = confirmButtonBuilder(context, platform);
     final Widget? cancelButton = cancelButtonBuilder?.call(context, platform);
 

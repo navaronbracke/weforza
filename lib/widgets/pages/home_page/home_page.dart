@@ -58,30 +58,23 @@ class _HomePageState extends State<HomePage> {
       appBar: HomePageAppBar(selectedTab: _selectedTab),
       resizeToAvoidBottomInset: false,
       body: _buildPage(context),
-      bottomNavigationBar: Theme(
-        data: ThemeData(
-          // The NavigationBar needs Material 3 to style its selected icon properly.
-          useMaterial3: true,
-          navigationBarTheme: Theme.of(context).navigationBarTheme,
-        ),
-        child: NavigationBar(
-          selectedIndex: _selectedTab.tabIndex,
-          onDestinationSelected: (index) => _onNavigationDestinationSelected(context, index),
-          destinations: <NavigationDestination>[
-            NavigationDestination(
-              icon: const Icon(Icons.directions_bike),
-              label: translator.rides,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.people),
-              label: translator.riders,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.settings),
-              label: translator.settings,
-            ),
-          ],
-        ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedTab.tabIndex,
+        onDestinationSelected: (index) => _onNavigationDestinationSelected(context, index),
+        destinations: <NavigationDestination>[
+          NavigationDestination(
+            icon: const Icon(Icons.directions_bike),
+            label: translator.rides,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.people),
+            label: translator.riders,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.settings),
+            label: translator.settings,
+          ),
+        ],
       ),
     );
   }

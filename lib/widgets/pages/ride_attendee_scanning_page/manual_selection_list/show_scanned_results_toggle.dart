@@ -16,7 +16,7 @@ class ShowScannedResultsToggle extends StatelessWidget {
   final bool initialValue;
 
   /// The handler for changes to the toggle value.
-  final void Function(bool) onChanged;
+  final void Function({required bool value}) onChanged;
 
   /// The stream that provides updates for the state of the toggle switch.
   final Stream<bool> stream;
@@ -32,12 +32,12 @@ class ShowScannedResultsToggle extends StatelessWidget {
         return PlatformAwareWidget(
           android: (_) {
             return Switch(
-              onChanged: onChanged,
+              onChanged: (value) => onChanged(value: value),
               value: showScannedResults,
             );
           },
           ios: (_) => CupertinoSwitch(
-            onChanged: onChanged,
+            onChanged: (value) => onChanged(value: value),
             value: showScannedResults,
           ),
         );

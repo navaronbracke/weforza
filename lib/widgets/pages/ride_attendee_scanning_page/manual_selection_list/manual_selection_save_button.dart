@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the save button for the manual selection page.
 class ManualSelectionSaveButton extends StatefulWidget {
@@ -19,8 +18,7 @@ class ManualSelectionSaveButton extends StatefulWidget {
   final void Function() onPressed;
 
   @override
-  State<ManualSelectionSaveButton> createState() =>
-      _ManualSelectionSaveButtonState();
+  State<ManualSelectionSaveButton> createState() => _ManualSelectionSaveButtonState();
 }
 
 class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
@@ -82,18 +80,8 @@ class _SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (_) => ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.colorScheme.primary,
-          foregroundColor: Colors.white,
-        ),
-        child: Text(text),
-      ),
-      ios: (_) => CupertinoButton(
-        onPressed: onPressed,
-        child: Text(text),
-      ),
+      android: (_) => ElevatedButton(onPressed: onPressed, child: Text(text)),
+      ios: (_) => CupertinoButton(onPressed: onPressed, child: Text(text)),
     );
   }
 }

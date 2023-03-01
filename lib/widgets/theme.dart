@@ -16,7 +16,8 @@ abstract class AppTheme {
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: colorScheme.surface,
       surfaceTintColor: colorScheme.surfaceTint,
-      indicatorColor: colorScheme.primaryContainer,
+      indicatorColor: const Color(0xffc2e7ff),
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: ButtonStyle(

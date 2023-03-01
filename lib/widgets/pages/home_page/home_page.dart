@@ -67,7 +67,6 @@ class _HomePageState extends State<HomePage> {
         child: NavigationBar(
           selectedIndex: _selectedTab.tabIndex,
           onDestinationSelected: (index) => _onNavigationDestinationSelected(context, index),
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: <NavigationDestination>[
             NavigationDestination(
               icon: const Icon(Icons.directions_bike),

@@ -68,7 +68,7 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: PlatformAwareWidget(
-              android: (context) => TextButton(
+              android: (context) => FilledButton(
                 onPressed: () {
                   final selectedRider = ref.read(selectedRiderProvider);
 

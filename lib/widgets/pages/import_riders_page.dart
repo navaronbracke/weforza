@@ -21,8 +21,7 @@ class ImportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ImportRidersPage> createState() => _ImportRidersPageState();
 }
 
-class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
-    with SingleTickerProviderStateMixin {
+class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with SingleTickerProviderStateMixin {
   late final ImportRidersDelegate delegate;
 
   late final AnimationController checkmarkController;
@@ -168,7 +167,11 @@ class _ImportRidersButton extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: TextButton(onPressed: onPressed, child: Text(label)),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.insert_drive_file_outlined),
+                onPressed: onPressed,
+                label: Text(label),
+              ),
             ),
             Flexible(
               child: Text(
@@ -189,11 +192,20 @@ class _ImportRidersButton extends StatelessWidget {
             child: CupertinoFormRow(
               error: errorMessage == null
                   ? null
-                  : Center(child: Text(errorMessage!)),
+                  : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
               child: Center(
-                child: CupertinoButton(
+                child: CupertinoButton.filled(
                   onPressed: onPressed,
-                  child: Text(label),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Icon(CupertinoIcons.arrow_down_doc),
+                      ),
+                      Text(label),
+                    ],
+                  ),
                 ),
               ),
             ),

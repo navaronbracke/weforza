@@ -6,6 +6,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
+import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_bottom_bar.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_filter_delegate.dart';
@@ -146,12 +147,17 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
                   return const RiderSearchFilterEmpty();
                 }
 
-                return ListView.builder(
-                  itemBuilder: (context, index) => ManualSelectionListItem(
-                    delegate: widget.delegate,
-                    item: results[index],
+                return ScrollConfiguration(
+                  // Use a custom scroll behavior that does not build a stretching overscroll indicator.
+                  // Otherwise there are issues with gaps in the selected color of adjacent selected scan results.
+                  behavior: const NoOverscrollIndicatorScrollBehavior(),
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => ManualSelectionListItem(
+                      delegate: widget.delegate,
+                      item: results[index],
+                    ),
+                    itemCount: results.length,
                   ),
-                  itemCount: results.length,
                 );
               },
             ),

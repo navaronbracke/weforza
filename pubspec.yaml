@@ -59,7 +59,7 @@ dependencies:
   jiffy: ^5.0.0
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^3.0.2
+  package_info_plus: ^3.0.3
 
   # Path utilities for URI's and the like.
   path: ^1.8.1

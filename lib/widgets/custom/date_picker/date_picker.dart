@@ -15,9 +15,9 @@ import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 /// The `size` is the computed layout [Size] for the day item.
 typedef DatePickerDayBuilder = Widget Function(
   DateTime date,
+  Size size, {
   bool isCurrentMonth,
-  Size size,
-);
+});
 
 /// This typedef defines the signature
 /// for the [DatePicker]'s forward and back button builder.
@@ -314,11 +314,7 @@ class _DatePickerBody extends StatelessWidget {
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),
                   days: days.map((day) {
-                    return dayBuilder(
-                      day,
-                      day.month == currentMonth.month,
-                      dayItemSize,
-                    );
+                    return dayBuilder(day, dayItemSize, isCurrentMonth: day.month == currentMonth.month);
                   }).toList(),
                   weekSpacing: weekSpacing,
                 );

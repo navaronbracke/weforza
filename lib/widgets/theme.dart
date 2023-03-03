@@ -3,10 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// TODO: app bar theme
+// - use the same vibrant blue as the selected navigation destination
+// - always show bg color
+// - update the color of actions in the app bar
+
 /// This class defines the application theme.
 abstract class AppTheme {
   /// The [ThemeData] for the [MaterialApp].
   static final androidTheme = ThemeData(
+    useMaterial3: true,
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),

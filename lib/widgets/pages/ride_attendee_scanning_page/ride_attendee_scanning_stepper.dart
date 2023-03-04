@@ -92,15 +92,15 @@ class _RideAttendeeScanningStepperLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color selectedColor;
-    Color unselectedColor;
+    Color? unselectedColor;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        selectedColor = Colors.lime.shade300;
-        unselectedColor = Colors.white;
+        selectedColor = Theme.of(context).colorScheme.primary;
+        unselectedColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

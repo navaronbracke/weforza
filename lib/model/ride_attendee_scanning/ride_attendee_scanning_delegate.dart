@@ -500,7 +500,7 @@ class RideAttendeeScanningDelegate {
           // Otherwise the next scan results might be dropped.
         },
       );
-    } catch (error) {
+    } catch (_) {
       _stateMachine.setStartScanError();
     }
   }
@@ -594,7 +594,6 @@ class RideAttendeeScanningDelegate {
   void dispose() {
     _stateMachine.dispose();
     _rideAttendeeController.close();
-    scanner.dispose();
     _startScanningSubscription?.cancel();
     _startScanningSubscription = null;
     _scanProgressBarController.dispose();

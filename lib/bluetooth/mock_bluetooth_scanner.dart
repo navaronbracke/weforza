@@ -57,7 +57,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   Stream<bool> get isScanning => _scanningController;
 
   @override
-  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
     if (_scanningController.value) {
       throw Exception('Another scan is already in progress.');
     }
@@ -69,7 +69,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
     ];
 
-    yield* _buildScanResultsStream().takeUntil(Rx.merge(killStreams)).doOnDone(stopScan);
+    return _buildScanResultsStream().takeUntil(Rx.merge(killStreams)).doOnDone(stopScan);
   }
 
   @override

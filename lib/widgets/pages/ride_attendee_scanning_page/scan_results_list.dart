@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/ride_attendee_scanning/bluetooth_peripheral_with_owners.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
-import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -39,9 +39,7 @@ class ScanResultsList extends StatelessWidget {
             itemBuilder: (context, index, animation) {
               return SizeTransition(
                 sizeFactor: animation,
-                child: _ScanResultsListItem(
-                  device: delegate.getScannedDevice(index),
-                ),
+                child: _ScanResultsListItem(peripheral: delegate.getScannedPeripheral(index)),
               );
             },
           ),
@@ -54,11 +52,11 @@ class ScanResultsList extends StatelessWidget {
 
 /// This widget represents a single item for the [ScanResultsList].
 class _ScanResultsListItem extends StatelessWidget {
-  const _ScanResultsListItem({required this.device});
+  const _ScanResultsListItem({required this.peripheral});
 
-  final ScannedDevice device;
+  final BluetoothPeripheralWithOwners peripheral;
 
-  Widget _buildMultipleOwnersListItem(BuildContext context, int ownersLength) {
+  Widget _buildMultipleOwnersListItem(BuildContext context) {
     IconData icon;
     Color color;
 
@@ -77,38 +75,29 @@ class _ScanResultsListItem extends StatelessWidget {
         break;
     }
 
-    final textStyle = TextStyle(
-      fontStyle: FontStyle.italic,
-      fontSize: 12,
-      color: color,
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: Icon(icon, color: textStyle.color),
-              ),
-              SelectableText(
-                device.name,
-                scrollPhysics: const ClampingScrollPhysics(),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Row(
+              children: [
+                Padding(padding: const EdgeInsets.only(right: 4), child: Icon(icon, color: color)),
+                SelectableText(peripheral.device.deviceName, scrollPhysics: const ClampingScrollPhysics()),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: Text(
-            S.of(context).amountOfRidersWithDeviceName(ownersLength),
-            style: textStyle,
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              S.of(context).amountOfRidersWithDeviceName(peripheral.owners.length),
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: color),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -131,65 +120,52 @@ class _ScanResultsListItem extends StatelessWidget {
         break;
     }
 
-    final textStyle = TextStyle(
-      color: color,
-      fontWeight: FontWeight.bold,
+    final textStyle = TextStyle(color: color, fontWeight: FontWeight.bold);
+    final deviceOwner = peripheral.owners.first;
+
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          Padding(padding: const EdgeInsets.only(right: 4), child: Icon(icon, color: textStyle.color)),
+          RiderNameAndAlias.singleLine(
+            alias: deviceOwner.alias,
+            firstName: deviceOwner.firstName,
+            lastName: deviceOwner.lastName,
+            style: textStyle,
+          ),
+        ],
+      ),
     );
+  }
 
-    final owner = device.owners.first;
-
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: Icon(icon, color: textStyle.color),
-        ),
-        RiderNameAndAlias.singleLine(
-          alias: owner.alias,
-          firstName: owner.firstName,
-          lastName: owner.lastName,
-          style: textStyle,
-        ),
-      ],
+  Widget _buildUnknownDeviceListItem() {
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: PlatformAwareWidget(
+              android: (_) => const Icon(Icons.device_unknown, color: Colors.grey),
+              ios: (_) => const Icon(Icons.device_unknown, color: CupertinoColors.systemGrey),
+            ),
+          ),
+          SelectableText(peripheral.device.deviceName, scrollPhysics: const ClampingScrollPhysics()),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
-
-    switch (device.owners.length) {
+    switch (peripheral.owners.length) {
       case 0:
-        child = Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: PlatformAwareWidget(
-                android: (_) => const Icon(
-                  Icons.device_unknown,
-                  color: Colors.grey,
-                ),
-                ios: (_) => const Icon(
-                  Icons.device_unknown,
-                  color: CupertinoColors.systemGrey,
-                ),
-              ),
-            ),
-            SelectableText(
-              device.name,
-              scrollPhysics: const ClampingScrollPhysics(),
-            ),
-          ],
-        );
-        break;
+        return _buildUnknownDeviceListItem();
       case 1:
-        child = _buildSingleOwnerListItem(context);
-        break;
+        return _buildSingleOwnerListItem(context);
       default:
-        child = _buildMultipleOwnersListItem(context, device.owners.length);
-        break;
+        return _buildMultipleOwnersListItem(context);
     }
-
-    return Padding(padding: const EdgeInsets.all(4), child: child);
   }
 }

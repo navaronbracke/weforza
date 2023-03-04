@@ -155,12 +155,10 @@ class RideAttendeeScanningDelegate {
     final deviceName = device.deviceName;
 
     // Get the owners of the device.
-    final owners = _deviceOwners[deviceName]?.map(
-      (uuid) => _activeRiders[uuid]!,
-    );
+    final owners = _deviceOwners[deviceName]?.map((uuid) => _activeRiders[uuid]!) ?? [];
 
     // The device is a known device that has one or more possible owners.
-    if (owners != null && owners.isNotEmpty) {
+    if (owners.isNotEmpty) {
       if (owners.length > 1) {
         // If the device has multiple possible owners,
         // add the conflicting owners to the unresolved owners.
@@ -171,7 +169,7 @@ class RideAttendeeScanningDelegate {
       }
     }
 
-    _devicesWithOwners.insert(0, BluetoothPeripheralWithOwners(device, [...?owners]));
+    _devicesWithOwners.insert(0, BluetoothPeripheralWithOwners(device, owners.toList()));
 
     onDeviceFound(device);
   }

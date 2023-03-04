@@ -44,7 +44,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       settings: ref.read(settingsProvider),
       vsync: this,
       // The delegate will have added the device to the scan results,
-      // the only thing left to do is to inset it into the animated list.
+      // the only thing left to do is to insert it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
 

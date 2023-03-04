@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 abstract class AppTheme {
   /// The [ThemeData] for the [MaterialApp].
   static final androidTheme = ThemeData(
+    useMaterial3: true,
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),

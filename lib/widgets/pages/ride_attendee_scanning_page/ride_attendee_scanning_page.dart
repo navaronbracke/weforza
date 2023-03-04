@@ -22,12 +22,10 @@ class RideAttendeeScanningPage extends ConsumerStatefulWidget {
   const RideAttendeeScanningPage({super.key});
 
   @override
-  RideAttendeeScanningPageState createState() =>
-      RideAttendeeScanningPageState();
+  RideAttendeeScanningPageState createState() => RideAttendeeScanningPageState();
 }
 
-class RideAttendeeScanningPageState
-    extends ConsumerState<RideAttendeeScanningPage>
+class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPage>
     with SingleTickerProviderStateMixin {
   late final RideAttendeeScanningDelegate delegate;
 
@@ -46,7 +44,7 @@ class RideAttendeeScanningPageState
       settings: ref.read(settingsProvider),
       vsync: this,
       // The delegate will have added the device to the scan results,
-      // the only thing left to do is to inset it into the animated list.
+      // the only thing left to do is to insert it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
 

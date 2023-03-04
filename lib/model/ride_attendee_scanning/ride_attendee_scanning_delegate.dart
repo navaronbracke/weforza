@@ -477,10 +477,7 @@ class RideAttendeeScanningDelegate {
 
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
-      scanner
-          .scanForDevices(settings.scanDuration)
-          .where(_includeScanResult)
-          .listen(
+      scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
         _addScannedDevice,
         onError: (error) {
           // Ignore errors from individual events.
@@ -489,7 +486,7 @@ class RideAttendeeScanningDelegate {
         // Don't stop scanning even if an event was an error.
         cancelOnError: false,
       );
-    } catch (error) {
+    } catch (_) {
       _stateMachine.setStartScanError();
     }
   }
@@ -583,7 +580,6 @@ class RideAttendeeScanningDelegate {
   void dispose() {
     _stateMachine.dispose();
     _rideAttendeeController.close();
-    scanner.dispose();
     _startScanningSubscription?.cancel();
     _startScanningSubscription = null;
     _scanProgressBarController.dispose();

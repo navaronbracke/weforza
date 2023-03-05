@@ -8,14 +8,18 @@ class ScanProgressIndicator extends StatelessWidget {
   const ScanProgressIndicator({
     required this.animationController,
     required this.isScanning,
+    required this.isScanningStream,
     super.key,
   });
 
   /// The controller that drives the progress bar animation.
   final AnimationController animationController;
 
-  /// The stream that indicates if there is a running scan.
-  final Stream<bool> isScanning;
+  /// Whether a device scan is currently in progress.
+  final bool isScanning;
+
+  /// The stream of changes to the scanning state.
+  final Stream<bool> isScanningStream;
 
   Widget _buildProgressIndicator(double progress, Color color) {
     return LinearProgressIndicator(
@@ -28,7 +32,8 @@ class ScanProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: isScanning,
+      initialData: isScanning,
+      stream: isScanningStream,
       builder: (context, snapshot) {
         final value = snapshot.data;
 

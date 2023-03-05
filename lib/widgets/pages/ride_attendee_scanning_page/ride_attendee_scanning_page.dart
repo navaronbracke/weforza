@@ -95,6 +95,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
               progressBar: ScanProgressIndicator(
                 animationController: delegate.progressBarController,
                 isScanning: delegate.scanner.isScanning,
+                isScanningStream: delegate.scanner.isScanningStream,
               ),
               scanResultsListKey: _scanResultsKey,
             );

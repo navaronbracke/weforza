@@ -37,7 +37,7 @@ class RideAttendeeScanningDelegate {
           vsync: vsync,
           value: 1.0,
         ) {
-    _startScanningSubscription = scanner.isScanning.listen(_listenToScanStart);
+    _startScanningSubscription = scanner.isScanningStream.listen(_listenToScanStart);
   }
 
   /// The repository that loads all the devices.

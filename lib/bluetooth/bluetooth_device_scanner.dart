@@ -8,8 +8,11 @@ abstract class BluetoothDeviceScanner {
   /// Check whether bluetooth is enabled.
   Future<bool> isBluetoothEnabled();
 
+  /// Get the current scanning state.
+  bool get isScanning;
+
   /// Get the stream of changes to the scanning state.
-  Stream<bool> get isScanning;
+  Stream<bool> get isScanningStream;
 
   /// Scan for bluetooth devices.
   /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
@@ -31,7 +34,10 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   Future<bool> isBluetoothEnabled() => _fBlInstance.isOn;
 
   @override
-  Stream<bool> get isScanning => _fBlInstance.isScanning;
+  bool get isScanning => _fBlInstance.isScanning;
+
+  @override
+  Stream<bool> get isScanningStream => _fBlInstance.isScanningStream;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {

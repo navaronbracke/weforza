@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -8,11 +7,11 @@ import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
+import 'package:weforza/widgets/common/search_field_with_clear_button.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_details_page.dart';
 import 'package:weforza/widgets/pages/rider_list/rider_list_empty.dart';
 import 'package:weforza/widgets/pages/rider_list/rider_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the list of riders.
 class RiderList extends StatefulWidget {
@@ -26,6 +25,7 @@ class _RiderListState extends State<RiderList> {
   final _searchController = DebounceSearchDelegate();
 
   final _searchFieldController = TextEditingController();
+  final _searchFieldFocusNode = FocusNode();
 
   void _onRiderSelected(BuildContext context) {
     // Clear the search query.
@@ -67,30 +67,11 @@ class _RiderListState extends State<RiderList> {
   Widget _buildRiderList(BuildContext context) {
     final String placeholder = S.of(context).searchRiders;
 
-    final Widget searchField = PlatformAwareWidget(
-      android: (context) => TextField(
-        controller: _searchFieldController,
-        textInputAction: TextInputAction.search,
-        keyboardType: TextInputType.text,
-        autocorrect: false,
-        onChanged: _searchController.onQueryChanged,
-        decoration: InputDecoration(
-          suffixIcon: const Icon(Icons.search),
-          labelText: placeholder,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-        ),
-      ),
-      ios: (context) => Padding(
-        padding: const EdgeInsets.all(8),
-        child: CupertinoSearchTextField(
-          controller: _searchFieldController,
-          suffixIcon: const Icon(CupertinoIcons.search),
-          onChanged: _searchController.onQueryChanged,
-          placeholder: placeholder,
-        ),
-      ),
+    final Widget searchField = SearchFieldWithClearButton(
+      controller: _searchFieldController,
+      focusNode: _searchFieldFocusNode,
+      onChanged: _searchController.onQueryChanged,
+      placeholder: placeholder,
     );
 
     return Consumer(
@@ -150,6 +131,7 @@ class _RiderListState extends State<RiderList> {
   @override
   void dispose() {
     _searchController.dispose();
+    _searchFieldFocusNode.dispose();
     _searchFieldController.dispose();
     super.dispose();
   }

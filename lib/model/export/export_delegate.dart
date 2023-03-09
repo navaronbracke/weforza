@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
@@ -12,12 +13,17 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
   ExportDelegate({
     required this.fileHandler,
-  }) : fileNameController = TextEditingController();
+    Directory? initialDirectory,
+  })  : fileNameController = TextEditingController(),
+        _selectDirectoryController = BehaviorSubject.seeded(AsyncData(initialDirectory));
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
+
+  /// The controller that manages the selected directory.
+  final BehaviorSubject<AsyncValue<Directory?>> _selectDirectoryController;
 
   /// The name of the last file that is known to exist.
   ///
@@ -47,6 +53,12 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
+
+  /// Get the selected export directory.
+  AsyncValue<Directory?> get selectedDirectory => _selectDirectoryController.value;
+
+  /// Get the stream of selected directory changes.
+  Stream<AsyncValue<Directory?>> get selectedDirectoryStream => _selectDirectoryController;
 
   /// Export the currently available data to a file.
   ///
@@ -147,6 +159,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
+    _selectDirectoryController.close();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

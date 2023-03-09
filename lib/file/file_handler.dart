@@ -10,6 +10,11 @@ abstract class FileHandler {
   /// Get the directory where the application can store publicly accessible files.
   Future<Directory> getPublicDocumentsDirectory();
 
+  /// Choose a directory using a directory picker.
+  ///
+  /// Returns the chosen directory, or null if none was chosen.
+  Future<Directory?> pickDirectory();
+
   /// Choose the file to use as data source
   /// for importing riders and their devices.
   ///
@@ -41,6 +46,22 @@ class IoFileHandler implements FileHandler {
     }
 
     return directory;
+  }
+
+  @override
+  Future<Directory?> pickDirectory() async {
+    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+
+    if (directoryPath == null) {
+      return null;
+    }
+
+    // `getDirectoryPath()` returns `/` if the directory is protected.
+    if (Platform.isAndroid && directoryPath == Platform.pathSeparator) {
+      throw DirectoryProtectedException();
+    }
+
+    return Directory(directoryPath);
   }
 
   @override

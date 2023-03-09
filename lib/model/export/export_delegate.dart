@@ -72,6 +72,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
+    final directory = _selectDirectoryController.valueOrNull?.value;
 
     try {
       // Sanity-check that the file name ends with the correct extension.
@@ -82,6 +83,14 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
           'fileName',
           'The file name should end with the correct file extension',
         );
+      }
+
+      if (directory == null) {
+        throw DirectoryRequiredException();
+      }
+
+      if (!directory.existsSync()) {
+        throw DirectoryNotFoundException();
       }
 
       final file = await fileHandler.getFile(fileName);

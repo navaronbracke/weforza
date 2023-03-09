@@ -1,6 +1,9 @@
 /// An exception that is thrown when a directory does not exist.
 class DirectoryNotFoundException implements Exception {}
 
+/// An exception that is thrown when a protected directory was used.
+class DirectoryProtectedException implements Exception {}
+
 /// An exception that is thrown when a directory is required, but it was not provided.
 class DirectoryRequiredException implements Exception {}
 

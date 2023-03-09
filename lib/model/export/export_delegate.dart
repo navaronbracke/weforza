@@ -159,11 +159,11 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       );
     }
 
+    _fileFormatController.add(value);
+
     // If a new file format was selected,
     // the `File Exists` message may be outdated.
     fileNameKey.currentState?.validate();
-
-    _fileFormatController.add(value);
   }
 
   /// Write the export data to the given [file], using the given [fileFormat].

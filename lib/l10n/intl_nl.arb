@@ -49,6 +49,7 @@
 	"deviceWatch": "Horloge",
 	"devices": "Toestellen",
 	"directoryDoesNotExist": "Deze map bestaat niet",
+	"directoryIsProtected": "Deze folder is beveiligd. Gelieve een andere folder te kiezen.",
 	"directoryRequired": "Een map is verplicht",
 	"disallowedWordExists": "Dit verboden woord bestaat al",
 	"disallowedWordMaxLength": "Een verboden woord mag niet langer zijn dan {maxLength} karakters",

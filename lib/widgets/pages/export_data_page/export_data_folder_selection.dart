@@ -101,6 +101,13 @@ class ExportDataFolderSelection extends StatelessWidget {
             );
           }
 
+          if (error is DirectoryProtectedException) {
+            return _buildSelectDirectoryButton(
+              selectedDirectoryPathLabel,
+              errorMessage: translator.directoryIsProtected,
+            );
+          }
+
           if (error is DirectoryRequiredException) {
             return _buildSelectDirectoryButton(selectedDirectoryPathLabel, errorMessage: translator.directoryRequired);
           }

@@ -65,7 +65,7 @@ class ImportRidersDelegate {
       );
     }
 
-    throw UnsupportedFileFormatError();
+    throw UnsupportedFileFormatException();
   }
 
   /// Import riders from a chosen file.
@@ -75,7 +75,7 @@ class ImportRidersDelegate {
   ///
   /// If no file was chosen a [FileRequiredException] is emitted through [stream].
   /// If the chosen file is of an unsupported format,
-  /// an [UnsupportedFileFormatError] is emitted through the [stream].
+  /// an [UnsupportedFileFormatException] is emitted through the [stream].
   ///
   /// If the chosen file is malformed, a [FormatException] is emitted through the [stream].
   void importRiders({required void Function() whenComplete}) async {

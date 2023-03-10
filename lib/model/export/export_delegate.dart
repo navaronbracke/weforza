@@ -15,7 +15,9 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     required this.fileHandler,
     Directory? initialDirectory,
   })  : fileNameController = TextEditingController(),
-        _selectDirectoryController = BehaviorSubject.seeded(AsyncData(initialDirectory));
+        directoryController = DirectorySelectionController(fileHandler: fileHandler, initialValue: initialDirectory) {
+    directoryController.addListener(_onDirectoryChanged);
+  }
 
   /// The controller that keeps track of the selected file format.
   ///
@@ -39,6 +41,12 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
+
+  void _onDirectoryChanged() {
+    // If a new directory was selected,
+    // the `File Exists` message may be outdated.
+    fileNameKey.currentState?.validate();
+  }
 
   /// Export the currently available data to a file.
   ///

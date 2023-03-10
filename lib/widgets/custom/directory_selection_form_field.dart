@@ -118,3 +118,67 @@ class _DirectorySelectionFormFieldState extends FormFieldState<Directory> {
     }
   }
 }
+
+class _DirectorySelectionFormFieldWidget extends StatelessWidget {
+  const _DirectorySelectionFormFieldWidget({
+    required this.selectDirectory,
+    this.directoryPath,
+    this.errorMessage,
+  });
+
+  /// The path to the picked directory.
+  final String? directoryPath;
+
+  /// The validation error message that is displayed below the [directoryPath].
+  final String? errorMessage;
+
+  /// The function that opens a directory picker.
+  final void Function() selectDirectory;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: (context) {
+        final translator = S.of(context);
+
+        final Widget child = directoryPath == null
+            ? Center(child: TextButton(onPressed: selectDirectory, child: Text(translator.selectDirectory)))
+            : Text(directoryPath!, maxLines: 1, overflow: TextOverflow.ellipsis);
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
+                Flexible(child: child),
+              ],
+            ),
+            if (errorMessage != null)
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(errorMessage!, style: Theme.of(context).inputDecorationTheme.errorStyle),
+                ),
+              ),
+          ],
+        );
+      },
+      ios: (context) {
+        final translator = S.of(context);
+
+        final Widget child = directoryPath == null
+            ? CupertinoButton(onPressed: selectDirectory, child: Text(translator.selectDirectory))
+            : Text(directoryPath!, maxLines: 1, overflow: TextOverflow.ellipsis);
+
+        return CupertinoFormRow(
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
+          prefix: Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
+          error: errorMessage != null ? Text(errorMessage!) : null,
+          child: child,
+        );
+      },
+    );
+  }
+}

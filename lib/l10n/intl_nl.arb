@@ -48,6 +48,7 @@
 	"deviceUnknown": "Onbekend",
 	"deviceWatch": "Horloge",
 	"devices": "Toestellen",
+	"directory": "Map",
 	"directoryDoesNotExist": "Deze map bestaat niet",
 	"directoryIsProtected": "Deze map is beveiligd. Gelieve een andere map te kiezen.",
 	"directoryRequired": "Een map is verplicht",

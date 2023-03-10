@@ -22,6 +22,9 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
+  /// The directory that manages the selected directory.
+  final DirectorySelectionController directoryController;
+
   /// The file handler that will provide directories.
   final FileHandler fileHandler;
 
@@ -49,7 +52,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
-    final directory = _selectDirectoryController.valueOrNull?.value;
+    final directory = directoryController.directory;
 
     try {
       // Sanity-check that the file name ends with the correct extension.
@@ -72,7 +75,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
       final file = File(directory.path + Platform.pathSeparator + fileName);
 
-      // If the file exists, revalidate the form to trigger the validation message.
+      // If the file exists, revalidate the form to trigger the validation message for the file exists case.
       if (file.existsSync()) {
         fileNameKey.currentState?.validate();
 
@@ -132,6 +135,8 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
+    directoryController.removeListener(_onDirectoryChanged);
+    directoryController.dispose();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

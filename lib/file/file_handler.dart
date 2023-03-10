@@ -56,11 +56,6 @@ class IoFileHandler implements FileHandler {
       return null;
     }
 
-    // `getDirectoryPath()` returns `/` if the directory is protected.
-    if (Platform.isAndroid && directoryPath == Platform.pathSeparator) {
-      throw DirectoryProtectedException();
-    }
-
     return Directory(directoryPath);
   }
 

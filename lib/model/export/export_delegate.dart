@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
@@ -73,21 +72,24 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
+      // Sanity-check that the directory was provided.
+      // This should have been validated with the form state as well.
       if (directory == null) {
         throw ArgumentError.notNull('directory');
       }
 
+      // Sanity-check that the directory exists.
+      // This should have been validated with the form state as well.
       if (!directory.existsSync()) {
         throw StateError('The given directory $directory does not exist');
       }
 
       final file = File(directory.path + Platform.pathSeparator + fileName);
 
-      // If the file exists, revalidate the form to trigger the validation message for the file exists case.
+      // Sanity-check that the file does not exist.
+      // This should have been validated with the form state as well.
       if (file.existsSync()) {
-        fileNameKey.currentState?.validate();
-
-        throw FileExistsException();
+        throw StateError('The given file $file already exists');
       }
 
       await writeToFile(file, fileFormat, options);

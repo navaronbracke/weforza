@@ -194,7 +194,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
 
         final Widget child = directoryPath == null
             ? CupertinoButton(onPressed: selectDirectory, child: Text(translator.selectDirectory))
-            : Text(directoryPath!, maxLines: 1, overflow: TextOverflow.ellipsis);
+            : Text(directoryPath!, maxLines: 3, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 14));
 
         final padding = directoryPath == null
             ? const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16)
@@ -202,7 +202,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
 
         return CupertinoFormRow(
           padding: padding,
-          prefix: Padding(padding: const EdgeInsets.only(right: 8), child: Text(translator.directory)),
+          prefix: Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
           error: errorMessage != null ? Text(errorMessage!) : null,
           helper: directoryPath != null
               ? Center(

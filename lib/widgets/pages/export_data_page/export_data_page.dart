@@ -143,7 +143,7 @@ class ExportDataPage<T> extends StatelessWidget {
           validator: (directory) => _validateDirectory(directory, translator),
         ),
         CupertinoFormRow(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 6, 20),
           prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
           child: ExportFileFormatSelection(
             initialValue: delegate.currentFileFormat,

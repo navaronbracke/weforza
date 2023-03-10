@@ -64,6 +64,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
     return ExportDataPage(
       checkmarkAnimationController: checkmarkController,
       delegate: _delegate,
+      options: ExportRidesOptions(ride: selectedRide?.date),
       onPressed: () => _delegate.exportDataToFile(
         context,
         ExportRidesOptions(ride: selectedRide?.date),

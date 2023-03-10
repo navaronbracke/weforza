@@ -20,6 +20,7 @@ class ExportDataPage<T> extends StatelessWidget {
     required this.checkmarkAnimationController,
     required this.delegate,
     required this.onPressed,
+    required this.options,
     required this.title,
     super.key,
   });
@@ -32,6 +33,9 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// The onPressed handler for the export button.
   final void Function() onPressed;
+
+  /// The options for the export handler.
+  final T options;
 
   /// The title for the page.
   final String title;

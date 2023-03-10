@@ -186,6 +186,13 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
                   child: Text(errorMessage!, style: Theme.of(context).inputDecorationTheme.errorStyle),
                 ),
               ),
+            if (directoryPath != null)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: TextButton(onPressed: selectDirectory, child: Text(translator.selectDirectory)),
+                ),
+              ),
           ],
         );
       },

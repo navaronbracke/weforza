@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the controller for a [DirectorySelectionFormField].
 class DirectorySelectionController extends ChangeNotifier {
@@ -24,11 +27,10 @@ class DirectorySelectionController extends ChangeNotifier {
 /// This form field does not support state restoration.
 class DirectorySelectionFormField extends FormField<Directory> {
   DirectorySelectionFormField({
-    required Widget Function(ValueChanged<Directory> onChanged) builder,
     required this.controller,
     this.buttonFocusNode,
     this.labelFocusNode,
-    ValueChanged<Directory>? onChanged,
+    ValueChanged<Directory?>? onChanged,
     this.maxLines = 1,
     AutovalidateMode? autovalidateMode,
     super.onSaved,
@@ -39,12 +41,23 @@ class DirectorySelectionFormField extends FormField<Directory> {
           initialValue: controller.directory,
           autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
           enabled: true,
-          builder: (FormFieldState<Directory> field) => builder(
-            (Directory value) {
-              field.didChange(value);
-              onChanged?.call(value);
-            },
-          ),
+          builder: (FormFieldState<Directory> field) {
+            return _DirectorySelectionFormFieldWidget(
+              directoryPath: field.value?.path,
+              errorMessage: field.errorText,
+              selectDirectory: () async {
+                // If the directory picking operation failed, it returns null instead of an error.
+                final Directory? directory = await controller.selectDirectory();
+
+                if (!field.mounted) {
+                  return;
+                }
+
+                field.didChange(directory);
+                onChanged?.call(directory);
+              },
+            );
+          },
         );
 
   /// The focus node for the select directory button.

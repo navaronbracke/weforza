@@ -59,12 +59,9 @@ class ExportDataPage<T> extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
       child: Column(
         children: [
+          ExportDataFileNameTextField<T>(delegate: delegate),
           Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: ExportDataFileNameTextField<T>(delegate: delegate),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 32),
+            padding: const EdgeInsets.symmetric(vertical: 32),
             child: DirectorySelectionFormField(
               controller: delegate.directoryController,
               autovalidateMode: AutovalidateMode.onUserInteraction,

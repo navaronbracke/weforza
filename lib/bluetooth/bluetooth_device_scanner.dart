@@ -76,7 +76,10 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
               if (!completer.isCompleted) {
                 subscription?.cancel();
                 subscription = null;
-                completer.completeError(StateError('Access to Bluetooth was not authorized.'), StackTrace.current);
+                completer.completeError(
+                  StateError('Access to Bluetooth was not authorized.'),
+                  StackTrace.current,
+                );
               }
               break;
             case BluetoothState.unavailable:

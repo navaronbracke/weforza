@@ -57,7 +57,9 @@ void main() async {
           (ref) => SettingsNotifier(settings, settingsRepository),
         ),
         // Inject the default directory for file exports.
-        exportDataDefaultDirectoryProvider.overrideWithValue(defaultExportDirectory),
+        exportDataDefaultDirectoryProvider.overrideWithValue(
+          defaultExportDirectory,
+        ),
       ],
       child: const WeForzaApp(),
     ),

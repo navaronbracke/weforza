@@ -59,10 +59,6 @@ class AddRideCalendarItem extends StatelessWidget {
       initialData: delegate.currentSelection,
       stream: delegate.selectionStream,
       builder: (context, _) {
-        final style = delegate.isBeforeToday(date) || delegate.isScheduled(date)
-            ? const TextStyle(color: Colors.white)
-            : null;
-
         return GestureDetector(
           onTap: () => delegate.selectDay(date),
           child: SizedBox.fromSize(
@@ -77,7 +73,9 @@ class AddRideCalendarItem extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '${date.day}',
-                    style: style,
+                    style: delegate.isBeforeToday(date) || delegate.isScheduled(date)
+                        ? const TextStyle(color: Colors.white)
+                        : null,
                     textAlign: TextAlign.center,
                   ),
                 ),

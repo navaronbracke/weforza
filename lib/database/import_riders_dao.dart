@@ -157,9 +157,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
           .update(txn, ridersToUpdate.map((r) => r.toMap()).toList());
 
       // Add the new riders.
-      await _riderStore
-          .records(newRiders.map((r) => r.uuid))
-          .add(txn, newRiders.map((r) => r.toMap()).toList());
+      await _riderStore.records(newRiders.map((r) => r.uuid)).add(txn, newRiders.map((r) => r.toMap()).toList());
 
       // Add the new devices.
       await _deviceStore

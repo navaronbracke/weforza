@@ -148,10 +148,7 @@ class RiderDaoImpl implements RiderDao {
     if (await record.exists(_database)) {
       await record.update(
         _database,
-        {
-          'active': value,
-          'lastUpdated': DateTime.now().toStringWithoutMilliseconds()
-        },
+        {'active': value, 'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
       );
     }
   }

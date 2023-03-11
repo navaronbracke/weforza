@@ -8,8 +8,7 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 
 /// This class represents an [ImportRidersFileReader]
 /// that handles the JSON format.
-class ImportRidersJsonReader
-    implements ImportRidersFileReader<Map<String, dynamic>> {
+class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynamic>> {
   @override
   Future<void> processChunk(
     Map<String, dynamic> chunk,
@@ -23,9 +22,7 @@ class ImportRidersJsonReader
       final regex = Rider.personNameAndAliasRegex;
 
       // If the first name, last name or alias is invalid, skip this chunk.
-      if (!regex.hasMatch(firstName) ||
-          !regex.hasMatch(lastName) ||
-          alias.isNotEmpty && !regex.hasMatch(alias)) {
+      if (!regex.hasMatch(firstName) || !regex.hasMatch(lastName) || alias.isNotEmpty && !regex.hasMatch(alias)) {
         return;
       }
 

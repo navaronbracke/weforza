@@ -10,7 +10,8 @@ import 'package:weforza/widgets/theme.dart';
 class WeForzaApp extends StatelessWidget {
   const WeForzaApp({super.key});
 
-  static const _appName = 'WeForza';
+  /// The name of the application, 'WeForza'.
+  static const String applicationName = 'WeForza';
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +23,14 @@ class WeForzaApp extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: (_) => MaterialApp(
-        title: _appName,
+        title: applicationName,
         localizationsDelegates: S.localizationsDelegates,
         supportedLocales: S.supportedLocales,
         theme: AppTheme.androidTheme,
         home: const HomePage(),
       ),
       ios: (_) => const CupertinoApp(
-        title: _appName,
+        title: applicationName,
         localizationsDelegates: S.localizationsDelegates,
         supportedLocales: S.supportedLocales,
         theme: AppTheme.iosTheme,

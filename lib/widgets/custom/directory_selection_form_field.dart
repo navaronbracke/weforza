@@ -153,10 +153,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
         final translator = S.of(context);
 
         final Widget child = directoryPath == null
-            ? Align(
-                alignment: Alignment.centerRight,
-                child: FilledButton.tonal(onPressed: selectDirectory, child: Text(translator.selectDirectory)),
-              )
+            ? FilledButton.tonal(onPressed: selectDirectory, child: Text(translator.selectDirectory))
             : Text(directoryPath!);
 
         return Column(
@@ -166,7 +163,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
             Row(
               children: [
                 Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
-                Flexible(child: child),
+                Flexible(child: Align(alignment: Alignment.centerRight, child: child)),
               ],
             ),
             if (errorMessage != null)

@@ -30,15 +30,11 @@ class RideListItemAttendeeCounter extends ConsumerStatefulWidget {
   }
 }
 
-class RideListItemAttendeeCounterState
-    extends ConsumerState<RideListItemAttendeeCounter> {
+class RideListItemAttendeeCounterState extends ConsumerState<RideListItemAttendeeCounter> {
   Future<int>? future;
 
   void _getAttendeeCount() {
-    future = ref
-        .read(rideRepositoryProvider)
-        .getRideAttendees(widget.rideDate)
-        .then((value) => value.length);
+    future = ref.read(rideRepositoryProvider).getRideAttendees(widget.rideDate).then((value) => value.length);
   }
 
   @override

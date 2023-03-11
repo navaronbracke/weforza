@@ -1,5 +1,4 @@
-import 'package:flutter/widgets.dart'
-    show Curve, Curves, DragEndDetails, PageController;
+import 'package:flutter/widgets.dart' show Curve, Curves, DragEndDetails, PageController;
 
 import 'package:jiffy/jiffy.dart';
 import 'package:rxdart/rxdart.dart';

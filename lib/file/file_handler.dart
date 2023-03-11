@@ -7,17 +7,19 @@ import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Get a [File] with the given [fileName].
+  /// Get the directory where the application can store publicly accessible files.
+  Future<Directory> getPublicDocumentsDirectory();
+
+  /// Choose a directory using a directory picker.
   ///
-  /// Returns a reference to the [File].
-  /// This method does not create the underlying file.
-  Future<File> getFile(String fileName);
+  /// Returns the chosen directory, or null if none was chosen.
+  Future<Directory?> pickDirectory();
 
   /// Choose the file to use as data source
   /// for importing riders and their devices.
   ///
   /// Returns the chosen file or null if no file was chosen.
-  /// Throws an [UnsupportedFileFormatError] if a file with an unsupported file type was chosen.
+  /// Throws an [UnsupportedFileFormatException] if a file with an unsupported file type was chosen.
   Future<File?> pickImportRidersDataSource();
 
   /// Pick a profile image from the given [source].
@@ -28,7 +30,7 @@ abstract class FileHandler {
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
   @override
-  Future<File> getFile(String fileName) async {
+  Future<Directory> getPublicDocumentsDirectory() async {
     Directory? directory;
 
     if (Platform.isAndroid) {
@@ -43,7 +45,18 @@ class IoFileHandler implements FileHandler {
       throw ArgumentError.notNull('directory');
     }
 
-    return File(directory.path + Platform.pathSeparator + fileName);
+    return directory;
+  }
+
+  @override
+  Future<Directory?> pickDirectory() async {
+    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
+
+    if (directoryPath == null) {
+      return null;
+    }
+
+    return Directory(directoryPath);
   }
 
   @override
@@ -61,11 +74,11 @@ class IoFileHandler implements FileHandler {
     final ext = chosenFile.extension;
 
     if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
-      throw UnsupportedFileFormatError();
+      throw UnsupportedFileFormatException();
     }
 
     if (chosenFile.path == null) {
-      throw UnsupportedFileFormatError();
+      throw UnsupportedFileFormatException();
     }
 
     return File(chosenFile.path!);
@@ -88,7 +101,8 @@ class IoFileHandler implements FileHandler {
       case ImageSource.camera:
         // Get a new file handle
         // for a file with the same name in the documents directory.
-        final destinationFile = await getFile(file.name);
+        final Directory publicDocumentsDirectory = await getPublicDocumentsDirectory();
+        final File destinationFile = File(publicDocumentsDirectory.path + Platform.pathSeparator + file.name);
 
         await file.saveTo(destinationFile.path);
 

@@ -20,6 +20,7 @@ class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
   ExportRidesDelegate({
     required super.fileHandler,
     required this.repository,
+    super.initialDirectory,
   });
 
   final ExportRidesRepository repository;
@@ -43,9 +44,7 @@ class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
         await file.writeAsString(buffer.toString());
         break;
       case ExportFileFormat.json:
-        final Map<String, Object?> data = {
-          'rides': rides.map((r) => r.toJson()).toList()
-        };
+        final Map<String, Object?> data = {'rides': rides.map((r) => r.toJson()).toList()};
 
         await file.writeAsString(jsonEncode(data));
         break;

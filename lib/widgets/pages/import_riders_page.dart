@@ -60,7 +60,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
           final buttonLabel = translator.pickFile;
           final error = snapshot.error;
 
-          if (error is UnsupportedFileFormatError) {
+          if (error is UnsupportedFileFormatException) {
             return _ImportRidersButton(
               errorMessage: translator.onlyCsvOrJsonAllowed,
               label: buttonLabel,

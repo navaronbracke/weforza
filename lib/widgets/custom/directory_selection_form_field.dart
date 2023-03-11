@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -186,9 +187,12 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
       ios: (context) {
         final translator = S.of(context);
 
+        // On iOS the path on the filesystem will contain a whole bunch of intermediary folders
+        // that don't add any value to the end result.
+        // Therefor we only show the name of the folder itself.
         final Widget child = directoryPath == null
             ? CupertinoButton(onPressed: selectDirectory, child: Text(translator.selectDirectory))
-            : Text(directoryPath!, style: const TextStyle(fontSize: 14));
+            : Text(basename(directoryPath!));
 
         final padding = directoryPath == null
             ? const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16)

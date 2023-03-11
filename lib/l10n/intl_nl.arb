@@ -116,7 +116,7 @@
 	"resetRideCalendar": "Rittenkalender resetten",
 	"resetRideCalendarDescription": "Bent u zeker dat u de rittenkalender wil resetten?\n\nDit zal alle ritten verwijderen en de aanwezigheden van alle renners worden gereset.",
 	"resetRideCalendarErrorDescription": "Er liep iets fout bij het resetten van de rittenkalender",
-	"resetRideCalendarPendingDescription": "De rittenkalender wordt gereset",
+	"resetRideCalendarPendingDescription": "Rittenkalender resetten",
 	"retryScan": "Opnieuw scannen",
 	"rideCalendar": "Rittenkalender",
 	"rideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",

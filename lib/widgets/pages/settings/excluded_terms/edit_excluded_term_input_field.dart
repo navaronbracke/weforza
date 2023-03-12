@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -39,6 +41,9 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   final focusNode = FocusNode();
 
   final GlobalKey<FormFieldState<String>> textFieldKey = GlobalKey();
+
+  /// This completer is used to notify [_onDeletePressed] when the view insets
+  Completer<void>? _viewInsetsHiddenCompleter;
 
   /// Request that this widget is made fully visible in the scroll view.
   void _ensureVisible() {
@@ -87,6 +92,20 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
 
   void _onDeletePressed(BuildContext context) async {
     deleteDialogVisible = true;
+
+    // If the text field focus node has focus, then the keyboard is still visible.
+    // The delete dialog should delay opening until the keyboard is hidden,
+    // otherwise the dialog does not animate in from the center of the screen (since it has to avoid the view insets).
+    if (focusNode.hasFocus) {
+      _viewInsetsHiddenCompleter = Completer<void>();
+      focusNode.unfocus();
+
+      await _viewInsetsHiddenCompleter?.future;
+    }
+
+    if (!mounted) {
+      return;
+    }
 
     final result = await showWeforzaDialog<bool>(
       context,
@@ -158,6 +177,21 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   void initState() {
     super.initState();
     focusNode.addListener(_handleFocusChange);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final EdgeInsets viewInsets = MediaQuery.of(context).viewInsets;
+
+    // If the bottom view insets collapsed back to zero, notify the waiting view insets completer.
+    if (_viewInsetsHiddenCompleter == null || _viewInsetsHiddenCompleter!.isCompleted) {
+      return;
+    }
+
+    if (viewInsets.bottom == 0.0) {
+      _viewInsetsHiddenCompleter?.complete();
+    }
   }
 
   @override

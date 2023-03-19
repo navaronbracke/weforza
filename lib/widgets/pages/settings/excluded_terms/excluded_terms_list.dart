@@ -46,6 +46,23 @@ class ExcludedTermsList extends StatelessWidget {
     return result + 1;
   }
 
+  int? _computeSemanticIndex(Widget widget, int index) {
+    // The add term input field does not need a semantic index.
+    if (index == 0) {
+      return null;
+    }
+
+    // Remove the initial offset from the add term input field.
+    index--;
+
+    if (separatorBuilder == null) {
+      return index;
+    }
+
+    // Separators do not get semantic indexes.
+    return index.isEven ? index ~/ 2 : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ExcludedTerm>>(
@@ -93,6 +110,7 @@ class ExcludedTermsList extends StatelessWidget {
               return separatorBuilder!(context, itemIndex);
             },
             childCount: _computeActualChildCount(terms.length),
+            semanticIndexCallback: _computeSemanticIndex,
           ),
         );
       },

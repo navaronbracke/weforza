@@ -157,7 +157,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, BoxDecoration? decoration) {
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration}) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
@@ -214,7 +214,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             return _buildExcludedTermItem(
               items,
               index,
-              BoxDecoration(
+              decoration: BoxDecoration(
                 borderRadius: borderRadius,
                 color: CupertinoColors.secondarySystemGroupedBackground,
               ),

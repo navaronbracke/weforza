@@ -180,7 +180,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       excludedTermsList: SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         sliver: ExcludedTermsList(
-          addTermInputField: DecoratedBox(
+          addTermInputField: AddExcludedTermInputField(
+            controller: addTermController,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -188,12 +189,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               color: CupertinoColors.secondarySystemGroupedBackground,
             ),
-            child: AddExcludedTermInputField(
-              controller: addTermController,
-              delegate: excludedTermsDelegate,
-              focusNode: addTermFocusNode,
-              formKey: addTermFormKey,
-            ),
+            delegate: excludedTermsDelegate,
+            focusNode: addTermFocusNode,
+            formKey: addTermFormKey,
           ),
           initialData: excludedTermsDelegate.terms,
           stream: excludedTermsDelegate.stream,

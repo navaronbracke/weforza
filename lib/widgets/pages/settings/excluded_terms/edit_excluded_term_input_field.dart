@@ -16,7 +16,11 @@ class EditExcludedTermInputField extends StatefulWidget {
     required this.index,
     required this.excludedTerm,
     required this.scrollController,
+    this.decoration,
   }) : super(key: ValueKey(excludedTerm.term));
+
+  /// The decoration for the text field and the context menu.
+  final BoxDecoration? decoration;
 
   /// The delegate that manages the excluded terms.
   final ExcludedTermsDelegate delegate;
@@ -211,6 +215,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       // When pressing the delete button focus moves to the delete dialog.
       contextMenuButtonBar: deleteDialogVisible || focusNode.hasFocus ? contextMenuButtonBar : null,
       controller: widget.excludedTerm.controller,
+      decoration: widget.decoration,
       focusNode: focusNode,
       maxLength: widget.delegate.maxLength,
       onEditingComplete: () => _onEditingComplete(context),

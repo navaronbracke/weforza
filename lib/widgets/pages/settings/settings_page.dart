@@ -157,10 +157,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index) {
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, BoxDecoration? decoration) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
+      decoration: decoration,
       delegate: excludedTermsDelegate,
       index: index,
       excludedTerm: term,
@@ -195,6 +196,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           initialData: excludedTermsDelegate.terms,
           stream: excludedTermsDelegate.stream,
+          separatorBuilder: (context, index) => Container(
+            color: excludedTermDivider.color,
+            height: excludedTermDivider.width,
+            margin: const EdgeInsetsDirectional.only(start: 15.0),
+          ),
           builder: (items, index) {
             BorderRadius borderRadius = BorderRadius.zero;
 
@@ -205,21 +211,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               );
             }
 
-            return DecoratedBox(
-              decoration: BoxDecoration(
+            return _buildExcludedTermItem(
+              items,
+              index,
+              BoxDecoration(
                 borderRadius: borderRadius,
                 color: CupertinoColors.secondarySystemGroupedBackground,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    color: excludedTermDivider.color,
-                    height: excludedTermDivider.width,
-                    margin: const EdgeInsetsDirectional.only(start: 15.0),
-                  ),
-                  _buildExcludedTermItem(items, index),
-                ],
               ),
             );
           },

@@ -12,11 +12,15 @@ class ExcludedTermInputField extends StatelessWidget {
     required this.maxLength,
     required this.onEditingComplete,
     required this.validator,
+    this.contextMenuButtonBar,
     this.placeholder,
     this.suffix,
     this.textFieldKey,
     super.key,
   });
+
+  /// The widget that acts as the context menu button bar below the text field.
+  final Widget? contextMenuButtonBar;
 
   /// The controller for the text field.
   final TextEditingController controller;
@@ -43,7 +47,7 @@ class ExcludedTermInputField extends StatelessWidget {
   final String? Function(String? value) validator;
 
   /// Build the invisible counter. The max length is enforced by the text field.
-  Widget? _buildCounter(
+  Widget? _buildAndroidCounter(
     BuildContext context, {
     required int currentLength,
     required bool isFocused,
@@ -52,13 +56,12 @@ class ExcludedTermInputField extends StatelessWidget {
     return null;
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTextField() {
     return PlatformAwareWidget(
       android: (_) => TextFormField(
         key: textFieldKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-        buildCounter: _buildCounter,
+        buildCounter: _buildAndroidCounter,
         controller: controller,
         decoration: InputDecoration(
           border: const UnderlineInputBorder(),
@@ -98,6 +101,29 @@ class ExcludedTermInputField extends StatelessWidget {
 
         return Row(children: [Expanded(child: child), suffix!]);
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget textField = _buildTextField();
+    final Widget? contextMenu = contextMenuButtonBar;
+
+    if (contextMenu == null) {
+      return textField;
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        // Consume gestures so that they are not handled by the focus absorber.
+        // Otherwise the context menu would be closed when tapping on its blank areas.
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[textField, contextMenu],
+      ),
     );
   }
 }

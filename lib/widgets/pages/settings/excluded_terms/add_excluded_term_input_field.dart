@@ -17,9 +17,13 @@ class AddExcludedTermInputField extends StatelessWidget {
     required this.delegate,
     required this.focusNode,
     required this.formKey,
+    this.bottom,
     this.decoration,
     super.key,
   });
+
+  /// The widget below this text field.
+  final Widget? bottom;
 
   /// The controller for the text field.
   final TextEditingController controller;
@@ -64,7 +68,7 @@ class AddExcludedTermInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return ExcludedTermInputField(
+    final Widget child = ExcludedTermInputField(
       controller: controller,
       decoration: decoration,
       focusNode: focusNode,
@@ -81,6 +85,15 @@ class AddExcludedTermInputField extends StatelessWidget {
       textFieldKey: formKey,
       validator: (value) => delegate.validateTerm(value, translator),
       placeholder: translator.addDisallowedWord,
+    );
+
+    if (bottom == null) {
+      return child;
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[child, bottom!],
     );
   }
 }

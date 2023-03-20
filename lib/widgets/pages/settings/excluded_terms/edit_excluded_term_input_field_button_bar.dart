@@ -89,7 +89,6 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         );
 
         return Row(
-          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             undoButton,

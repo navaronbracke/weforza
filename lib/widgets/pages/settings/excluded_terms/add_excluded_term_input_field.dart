@@ -17,11 +17,15 @@ class AddExcludedTermInputField extends StatelessWidget {
     required this.delegate,
     required this.focusNode,
     required this.formKey,
+    this.decoration,
     super.key,
   });
 
   /// The controller for the text field.
   final TextEditingController controller;
+
+  /// The decoration for the text field.
+  final BoxDecoration? decoration;
 
   /// The delegate that manages the list of terms.
   final ExcludedTermsDelegate delegate;
@@ -62,6 +66,7 @@ class AddExcludedTermInputField extends StatelessWidget {
 
     return ExcludedTermInputField(
       controller: controller,
+      decoration: decoration,
       focusNode: focusNode,
       maxLength: delegate.maxLength,
       onEditingComplete: _onEditingComplete,

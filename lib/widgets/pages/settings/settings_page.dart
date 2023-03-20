@@ -157,11 +157,18 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index) {
+  Widget _buildExcludedTermItem(
+    List<ExcludedTerm> terms,
+    int index, {
+    BoxDecoration? decoration,
+    Widget? divider,
+  }) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
+      decoration: decoration,
       delegate: excludedTermsDelegate,
+      divider: divider,
       index: index,
       excludedTerm: term,
       scrollController: scrollController,
@@ -180,7 +187,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       excludedTermsList: SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         sliver: ExcludedTermsList(
-          addTermInputField: DecoratedBox(
+          addTermInputField: AddExcludedTermInputField(
+            controller: addTermController,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -188,12 +196,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               color: CupertinoColors.secondarySystemGroupedBackground,
             ),
-            child: AddExcludedTermInputField(
-              controller: addTermController,
-              delegate: excludedTermsDelegate,
-              focusNode: addTermFocusNode,
-              formKey: addTermFormKey,
-            ),
+            delegate: excludedTermsDelegate,
+            focusNode: addTermFocusNode,
+            formKey: addTermFormKey,
           ),
           initialData: excludedTermsDelegate.terms,
           stream: excludedTermsDelegate.stream,
@@ -207,21 +212,17 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               );
             }
 
-            return DecoratedBox(
+            return _buildExcludedTermItem(
+              items,
+              index,
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
                 color: CupertinoColors.secondarySystemGroupedBackground,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    color: excludedTermDivider.color,
-                    height: excludedTermDivider.width,
-                    margin: const EdgeInsetsDirectional.only(start: 15.0),
-                  ),
-                  _buildExcludedTermItem(items, index),
-                ],
+              divider: Container(
+                color: excludedTermDivider.color,
+                height: excludedTermDivider.width,
+                margin: const EdgeInsetsDirectional.only(start: 15.0),
               ),
             );
           },

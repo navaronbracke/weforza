@@ -71,10 +71,28 @@ class RiderDetailsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Column(
+    return const Column(
       children: <Widget>[
-        _buildRiderInfoSection(context),
-        const Expanded(child: RiderDevicesList()),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: RiderProfileImage(),
+            ),
+            Expanded(child: RiderName()),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 4, left: 8, right: 8),
+          child: Row(
+            children: [
+              SelectedRiderAttendingCount(),
+              Expanded(child: Center()),
+              RiderActiveToggle(),
+            ],
+          ),
+        ),
+        Expanded(child: RiderDevicesList()),
       ],
     );
   }
@@ -122,32 +140,6 @@ class RiderDetailsPage extends StatelessWidget {
         bottom: false,
         child: _buildBody(context),
       ),
-    );
-  }
-
-  Widget _buildRiderInfoSection(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: const [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: RiderProfileImage(),
-            ),
-            Expanded(child: RiderName()),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
-          child: Row(
-            children: const [
-              SelectedRiderAttendingCount(),
-              Expanded(child: Center()),
-              RiderActiveToggle(),
-            ],
-          ),
-        )
-      ],
     );
   }
 }

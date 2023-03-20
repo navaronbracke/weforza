@@ -69,13 +69,26 @@ class ExcludedTermInputField extends StatelessWidget {
 
   Widget _buildTextField() {
     return PlatformAwareWidget(
-      android: (_) => TextFormField(
+      android: (context) => TextFormField(
         key: textFieldKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         buildCounter: _buildAndroidCounter,
         controller: controller,
         decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
+          border: MaterialStateUnderlineInputBorder.resolveWith(
+            (states) {
+              final ColorScheme colorScheme = Theme.of(context).colorScheme;
+              Color color = const Color(0xFFD5D5D5);
+
+              if (states.contains(MaterialState.error)) {
+                color = colorScheme.error;
+              } else if (states.contains(MaterialState.focused)) {
+                color = colorScheme.primary;
+              }
+
+              return UnderlineInputBorder(borderSide: BorderSide(width: 2, color: color));
+            },
+          ),
           hintText: placeholder,
           isDense: true,
           suffixIcon: suffix,

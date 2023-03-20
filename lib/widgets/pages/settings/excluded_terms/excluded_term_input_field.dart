@@ -14,6 +14,7 @@ class ExcludedTermInputField extends StatelessWidget {
     required this.validator,
     this.contextMenuButtonBar,
     this.decoration,
+    this.divider,
     this.placeholder,
     this.suffix,
     this.textFieldKey,
@@ -28,6 +29,9 @@ class ExcludedTermInputField extends StatelessWidget {
 
   /// The decoration to apply to the text field and the context menu.
   final BoxDecoration? decoration;
+
+  /// The divider that is placed above the text field.
+  final Widget? divider;
 
   /// The focus node for the text field.
   final FocusNode focusNode;
@@ -108,12 +112,29 @@ class ExcludedTermInputField extends StatelessWidget {
     );
   }
 
-  Widget _wrapWithDecoration(Widget child, {BoxDecoration? decoration}) {
-    if (decoration == null) {
-      return child;
+  Widget _wrapWithDecoration(
+    Widget child, {
+    Widget? contextMenu,
+    BoxDecoration? decoration,
+    Widget? divider,
+  }) {
+    if (contextMenu != null || divider != null) {
+      child = Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          if (divider != null) divider,
+          child,
+          if (contextMenu != null) contextMenu,
+        ],
+      );
     }
 
-    return DecoratedBox(decoration: decoration, child: child);
+    if (decoration != null) {
+      child = DecoratedBox(decoration: decoration, child: child);
+    }
+
+    return child;
   }
 
   @override
@@ -122,7 +143,7 @@ class ExcludedTermInputField extends StatelessWidget {
     final Widget? contextMenu = contextMenuButtonBar;
 
     if (contextMenu == null) {
-      return _wrapWithDecoration(textField, decoration: decoration);
+      return _wrapWithDecoration(textField, decoration: decoration, divider: divider);
     }
 
     return GestureDetector(
@@ -132,12 +153,10 @@ class ExcludedTermInputField extends StatelessWidget {
         // Otherwise the context menu would be closed when tapping on its blank areas.
       },
       child: _wrapWithDecoration(
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[textField, contextMenu],
-        ),
+        textField,
+        contextMenu: contextMenu,
         decoration: decoration,
+        divider: divider,
       ),
     );
   }

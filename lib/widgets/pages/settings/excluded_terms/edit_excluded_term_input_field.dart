@@ -17,6 +17,7 @@ class EditExcludedTermInputField extends StatefulWidget {
     required this.excludedTerm,
     required this.scrollController,
     this.decoration,
+    this.divider,
   }) : super(key: ValueKey(excludedTerm.term));
 
   /// The decoration for the text field and the context menu.
@@ -24,6 +25,12 @@ class EditExcludedTermInputField extends StatefulWidget {
 
   /// The delegate that manages the excluded terms.
   final ExcludedTermsDelegate delegate;
+
+  /// The divider that is placed above the text field.
+  ///
+  /// This widget is typically used to add separators
+  /// between this widget and the previous one in a list of [ExcludedTermInputField]s.
+  final Widget? divider;
 
   /// The index of [excludedTerm] in the list of terms.
   final int index;
@@ -216,6 +223,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       contextMenuButtonBar: deleteDialogVisible || focusNode.hasFocus ? contextMenuButtonBar : null,
       controller: widget.excludedTerm.controller,
       decoration: widget.decoration,
+      divider: widget.divider,
       focusNode: focusNode,
       maxLength: widget.delegate.maxLength,
       onEditingComplete: () => _onEditingComplete(context),

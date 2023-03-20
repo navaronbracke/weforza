@@ -31,6 +31,9 @@ class ExcludedTermInputField extends StatelessWidget {
   final BoxDecoration? decoration;
 
   /// The divider that is placed above the text field.
+  ///
+  /// This widget is typically used to add separators
+  /// between this widget and the previous one in a list of [ExcludedTermInputField]s.
   final Widget? divider;
 
   /// The focus node for the text field.

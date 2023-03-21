@@ -18,7 +18,7 @@ class ManualSelectionListEmpty extends StatelessWidget {
         PlatformAwareIcon(
           androidIcon: Icons.people,
           iosIcon: CupertinoIcons.person_2_fill,
-          size: MediaQuery.of(context).size.shortestSide * .1,
+          size: MediaQuery.sizeOf(context).shortestSide * .1,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),

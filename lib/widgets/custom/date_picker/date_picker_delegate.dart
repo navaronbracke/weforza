@@ -31,7 +31,7 @@ class DatePickerDelegate {
       calendarPageCount: calendarPagesCount,
       curve: curve,
       duration: duration,
-      initialDate: Jiffy(DateTime(today.year, today.month)),
+      initialDate: Jiffy.parseFromDateTime(DateTime(today.year, today.month)),
       pageController: PageController(initialPage: currentPage),
     );
   }
@@ -82,7 +82,7 @@ class DatePickerDelegate {
 
     // The first day of this month is not a monday.
     if (firstDayWeekday != 1) {
-      final previousMonth = Jiffy(currentMonth).subtract(months: 1);
+      final previousMonth = currentMonth.subtract(months: 1);
 
       final daysInPreviousMonth = previousMonth.daysInMonth;
       final start = daysInPreviousMonth - firstDayWeekday + 2;
@@ -108,7 +108,7 @@ class DatePickerDelegate {
 
     // The last day of the current month is not a sunday.
     if (lastDayWeekDay != 7) {
-      final nextMonth = Jiffy(currentMonth).add(months: 1);
+      final nextMonth = currentMonth.add(months: 1);
 
       // Get the offset for the last day of this month.
       // If the last day of this month is a sunday,
@@ -139,7 +139,7 @@ class DatePickerDelegate {
 
   /// Go back one month in the calendar.
   void goBackOneMonth() {
-    final newDate = Jiffy(_monthController.value).subtract(months: 1);
+    final newDate = _monthController.value.subtract(months: 1);
 
     _monthController.add(newDate);
     pageController.previousPage(duration: duration, curve: curve);
@@ -147,7 +147,7 @@ class DatePickerDelegate {
 
   /// Go forward one month in the calendar.
   void goForwardOneMonth() {
-    final newDate = Jiffy(_monthController.value).add(months: 1);
+    final newDate = _monthController.value.add(months: 1);
 
     _monthController.add(newDate);
     pageController.nextPage(duration: duration, curve: curve);

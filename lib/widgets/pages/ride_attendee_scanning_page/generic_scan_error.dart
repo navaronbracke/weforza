@@ -34,7 +34,7 @@ class _GenericScanErrorBase extends StatelessWidget {
       children: [
         IconTheme(
           data: IconThemeData(
-            size: MediaQuery.of(context).size.shortestSide * .1,
+            size: MediaQuery.sizeOf(context).shortestSide * .1,
           ),
           child: icon,
         ),

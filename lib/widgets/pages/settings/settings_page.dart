@@ -179,7 +179,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final translator = S.of(context);
     final excludedTermDivider = BorderSide(
       color: CupertinoColors.separator.resolveFrom(context),
-      width: 1.0 / MediaQuery.of(context).devicePixelRatio,
+      width: 1.0 / MediaQuery.devicePixelRatioOf(context),
     );
 
     return SettingsPageScrollView(

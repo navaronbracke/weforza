@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # device info_plus provides access to device specific information.
-  device_info_plus: ^8.0.0  
+  device_info_plus: ^8.1.0  
 
   # Provides an injectable file system abstraction.
   # Used by tests.

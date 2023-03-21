@@ -53,7 +53,7 @@ dependencies:
     sdk: flutter
 
   # For shared state management.
-  flutter_riverpod: ^2.1.1
+  flutter_riverpod: ^2.3.2
 
   # For picking images from the camera / gallery.
   image_picker: ^0.8.6+1

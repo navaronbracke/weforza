@@ -169,28 +169,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  fixnum:
-    dependency: transitive
-    description:
-      name: fixnum
-      sha256: "04be3e934c52e082558cc9ee21f42f5c1cd7a1262f4c63cd0357c08d5bba81ec"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_blue_plus:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: patch_ios_bluetooth_state
-      resolved-ref: "7d40c2671c7911ef1e5709f20135867fa49b871d"
-      url: "git@github.com:navaronbracke/flutter_blue_plus.git"
-    source: git
-    version: "1.5.0"
   flutter_driver:
     dependency: "direct dev"
     description: flutter
@@ -565,14 +548,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.4"
-  protobuf:
-    dependency: transitive
-    description:
-      name: protobuf
-      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   pub_semver:
     dependency: transitive
     description:

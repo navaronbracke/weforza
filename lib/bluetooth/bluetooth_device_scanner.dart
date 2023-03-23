@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 /// This class defines an interface for a bluetooth scanner.
@@ -29,7 +30,15 @@ abstract class BluetoothDeviceScanner {
 }
 
 class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
-  final FlutterBluePlus _fBlInstance = FlutterBluePlus.instance;
+  final BehaviorSubject<bool> _isScanningController = BehaviorSubject.seeded(false);
+
+  @override
+  bool get isScanning => _isScanningController.value;
+
+  @override
+  Stream<bool> get isScanningStream => _isScanningController;
+
+  /*
 
   @override
   Future<bool> isBluetoothEnabled() async {
@@ -118,12 +127,6 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   }
 
   @override
-  bool get isScanning => _fBlInstance.isScanning;
-
-  @override
-  Stream<bool> get isScanningStream => _fBlInstance.isScanningStream;
-
-  @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
     return _fBlInstance
         .scan(scanMode: ScanMode.balanced, timeout: Duration(seconds: scanDurationInSeconds))
@@ -137,5 +140,7 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   void dispose() {
     // If the scan could not be stopped, there is nothing that can be done.
     unawaited(stopScan().catchError((_) {}));
+
+    _isScanningController.close();
   }
 }

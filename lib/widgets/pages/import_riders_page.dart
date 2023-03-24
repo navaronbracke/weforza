@@ -201,9 +201,9 @@ class _ImportRidersButton extends StatelessWidget {
                     children: [
                       const Padding(
                         padding: EdgeInsets.only(right: 8),
-                        child: Icon(CupertinoIcons.arrow_down_doc),
+                        child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
                       ),
-                      Text(label),
+                      Text(label, style: const TextStyle(color: CupertinoColors.white)),
                     ],
                   ),
                 ),

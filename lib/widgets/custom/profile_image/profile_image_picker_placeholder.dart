@@ -15,45 +15,48 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: size,
-      child: Stack(
-        children: [
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: CupertinoColors.systemGrey2,
-              borderRadius: BorderRadius.all(
-                Radius.circular(size / 2),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Transform.translate(
-              offset: Offset(0, size / 10),
-              child: Icon(
-                CupertinoIcons.person_solid,
-                color: CupertinoColors.white,
-                size: size,
-              ),
-            ),
-          ),
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              border: Border.all(
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+      child: SizedBox.square(
+        dimension: size,
+        child: Stack(
+          children: [
+            Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
                 color: CupertinoColors.systemGrey2,
-                width: 3.0,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(size / 2),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(size / 2),
+                ),
               ),
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Transform.translate(
+                offset: Offset(0, size / 10),
+                child: Icon(
+                  CupertinoIcons.person_solid,
+                  color: CupertinoColors.white,
+                  size: size,
+                ),
+              ),
+            ),
+            Container(
+              width: size,
+              height: size,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: CupertinoColors.systemGrey2,
+                  width: 3.0,
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(size / 2),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/widgets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
@@ -311,52 +307,6 @@ class RideAttendeeScanningDelegate {
     onDeviceFound(device);
   }
 
-  /// Request permission to check the Bluetooth adapter state and
-  /// start a Bluetooth peripheral scan.
-  ///
-  /// Returns wether or not the permissions were granted.
-  Future<bool> _requestScanPermission() async {
-    final permissions = <Permission>[];
-
-    final deviceInfo = DeviceInfoPlugin();
-
-    if (Platform.isAndroid) {
-      final androidInfo = await deviceInfo.androidInfo;
-      final androidVersion = androidInfo.version.sdkInt;
-
-      // Android <12 uses the legacy permissions.
-      if (androidVersion < 31) {
-        permissions.addAll([
-          // Without the location, the scan does not find devices.
-          Permission.locationWhenInUse,
-          Permission.bluetooth,
-        ]);
-      } else {
-        // Android 12+ uses the newer Bluetooth permissions.
-        permissions.add(Permission.bluetoothScan);
-      }
-    } else if (Platform.isIOS) {
-      // iOS 13+ needs Bluetooth permission.
-      // On lower versions this permission is always granted,
-      // since it does not exist.
-      // The permission plugin handles this internally,
-      // so there is no need to check the version.
-      permissions.add(Permission.bluetooth);
-    } else {
-      throw UnsupportedError('Only Android and iOS are supported');
-    }
-
-    final statuses = await permissions.request();
-
-    for (final status in statuses.values) {
-      if (status != PermissionStatus.granted) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   /// Scroll the manual selection label into view.
   void _scrollToManualSelectionLabel() {
     if (_stepperScrollController.hasClients) {
@@ -469,7 +419,7 @@ class RideAttendeeScanningDelegate {
   /// performs setup for the scanner and starts a scan.
   void startDeviceScan() async {
     try {
-      final hasPermission = await _requestScanPermission();
+      final hasPermission = await scanner.requestBluetoothScanPermission();
 
       if (!hasPermission) {
         _stateMachine.setState(RideAttendeeScanningState.permissionDenied);
@@ -477,9 +427,9 @@ class RideAttendeeScanningDelegate {
         return;
       }
 
-      final bluetoothEnabled = await scanner.isBluetoothEnabled();
+      final bluetoothIsOn = await scanner.bluetoothIsOn ?? false;
 
-      if (!bluetoothEnabled) {
+      if (!bluetoothIsOn) {
         _stateMachine.setState(RideAttendeeScanningState.bluetoothDisabled);
 
         return;

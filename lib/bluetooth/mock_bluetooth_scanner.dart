@@ -54,7 +54,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  Future<bool?> get isOn async => true;
+  Future<bool> get bluetoothIsOn async => true;
 
   @override
   bool get isScanning => _scanningController.value;
@@ -64,6 +64,9 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Stream<BluetoothState> get state => _stateController;
+
+  @override
+  Future<bool> requestBluetoothScanPermission() async => true;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {

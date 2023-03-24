@@ -22,6 +22,13 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
   Stream<bool> get isScanningStream => _isScanningController;
 
   @override
+  Future<bool> requestBluetoothScanPermission() async {
+    final bool? result = await methodChannel.invokeMethod<bool>('requestBluetoothScanPermission');
+
+    return result ?? false;
+  }
+
+  @override
   Future<void> stopScan() async {
     if (_isScanningController.isClosed || !isScanning) {
       return;

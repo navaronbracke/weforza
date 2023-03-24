@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
+import 'package:weforza/bluetooth/bluetooth_state.dart';
 import 'package:weforza/native_service/native_service.dart';
 
 /// This class represents a [NativeService] for the Bluetooth adapter on the device.
@@ -20,6 +21,23 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
 
   @override
   Stream<bool> get isScanningStream => _isScanningController;
+
+  /// Cached broadcast stream for Bluetooth adapter state events.
+  /// Caching this stream allows listeners to individually subscribe to events.
+  Stream<BluetoothState>? _stateStream;
+
+  @override
+  Stream<BluetoothState> get state async* {
+    yield BluetoothState.fromValue(await methodChannel.invokeMethod<String>('getBluetoothAdapterState'));
+
+    _stateStream ??= bluetoothStateChannel
+        .receiveBroadcastStream()
+        .cast<String?>()
+        .map(BluetoothState.fromValue)
+        .doOnCancel(() => _stateStream = null);
+
+    yield* _stateStream!;
+  }
 
   @override
   Future<bool> requestBluetoothScanPermission() async {

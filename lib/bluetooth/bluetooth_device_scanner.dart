@@ -21,6 +21,11 @@ abstract class BluetoothDeviceScanner {
   /// Get the stream of changes to the Bluetooth adapter's state.
   Stream<BluetoothState> get state;
 
+  /// Request permission to use the Bluetooth adapter.
+  ///
+  /// Returns whether permission was granted.
+  Future<bool> requestBluetoothScanPermission();
+
   /// Scan for Bluetooth devices.
   /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
   ///

@@ -181,7 +181,10 @@ class _AddRideSubmitButton extends StatelessWidget {
             ),
             ios: (_) => CupertinoButton.filled(
               onPressed: hasSelection ? onPressed : null,
-              child: Text(translator.addSelection),
+              child: Text(
+                translator.addSelection,
+                style: TextStyle(color: hasSelection ? CupertinoColors.white : CupertinoColors.inactiveGray),
+              ),
             ),
           );
         },

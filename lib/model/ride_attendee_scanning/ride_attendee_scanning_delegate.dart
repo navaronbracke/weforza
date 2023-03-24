@@ -57,7 +57,7 @@ class RideAttendeeScanningDelegate {
   /// and saves the ride attendees after a scan.
   final RideRepository rideRepository;
 
-  /// The scanner that manages the bluetooth state and running scan.
+  /// The scanner that manages the Bluetooth state and running scan.
   final BluetoothDeviceScanner scanner;
 
   /// The settings for the delegate.
@@ -311,8 +311,8 @@ class RideAttendeeScanningDelegate {
     onDeviceFound(device);
   }
 
-  /// Request permission to check the bluetooth adapter state and
-  /// start a bluetooth peripheral scan.
+  /// Request permission to check the Bluetooth adapter state and
+  /// start a Bluetooth peripheral scan.
   ///
   /// Returns wether or not the permissions were granted.
   Future<bool> _requestScanPermission() async {

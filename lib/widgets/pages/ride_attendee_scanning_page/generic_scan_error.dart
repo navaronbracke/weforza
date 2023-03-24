@@ -64,8 +64,8 @@ class _GenericScanErrorBase extends StatelessWidget {
   }
 }
 
-/// This widget represents a scan error that indicates that bluetooth is disabled.
-/// It provides a button to open the bluetooth settings and a button to retry the scan.
+/// This widget represents a scan error that indicates that Bluetooth is disabled.
+/// It provides a button to open the Bluetooth settings and a button to retry the scan.
 class BluetoothDisabledError extends StatelessWidget {
   const BluetoothDisabledError({
     required this.onRetry,

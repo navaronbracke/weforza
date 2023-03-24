@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
 
-/// This class defines an interface for a bluetooth scanner.
+/// This class defines an interface for a Bluetooth device scanner.
 abstract class BluetoothDeviceScanner {
-  /// Check whether bluetooth is enabled.
+  /// Check whether Bluetooth is enabled.
   Future<bool> isBluetoothEnabled();
 
   /// Get the current scanning state.
@@ -17,7 +17,7 @@ abstract class BluetoothDeviceScanner {
   /// Get the stream of changes to the Bluetooth adapter's state.
   Stream<BluetoothState> get state;
 
-  /// Scan for bluetooth devices.
+  /// Scan for Bluetooth devices.
   /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
   ///
   /// Returns a stream of scan results.

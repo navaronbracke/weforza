@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/bluetooth/bluetooth_device_scan_options.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
@@ -122,6 +123,41 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
     final bool? result = await methodChannel.invokeMethod<bool>('requestBluetoothScanPermission');
 
     return result ?? false;
+  }
+
+  @override
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
+    if (isScanning) {
+      throw StateError('Another scan is already in progress.');
+    }
+
+    _isScanningController.add(true);
+
+    final List<Stream> abortScanTriggers = [
+      _stopScanSingalEmitter,
+      Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
+    ];
+
+    const BluetoothDeviceScanOptions options = BluetoothDeviceScanOptions(scanMode: BluetoothScanMode.balanced);
+
+    try {
+      await methodChannel.invokeMethod<void>('startBluetoothScan', options.toMap());
+    } catch (error) {
+      // If the scan fails to start, rollback the stop trigger and abort.
+      if (!_isScanningController.isClosed) {
+        _stopScanSingalEmitter.add(null);
+        _isScanningController.add(false);
+      }
+
+      rethrow;
+    }
+
+    yield* bluetoothDeviceDiscoveryChannel
+        .receiveBroadcastStream()
+        .takeUntil(Rx.merge(abortScanTriggers))
+        .cast<Map<String, Object?>>()
+        .map(BluetoothPeripheral.fromMap)
+        .doOnDone(stopScan);
   }
 
   @override

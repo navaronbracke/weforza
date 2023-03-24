@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/services.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
+import 'package:weforza/bluetooth/bluetooth_state.dart';
 
 /// This class defines an interface for a bluetooth scanner.
 abstract class BluetoothDeviceScanner {
@@ -15,6 +13,9 @@ abstract class BluetoothDeviceScanner {
 
   /// Get the stream of changes to the scanning state.
   Stream<bool> get isScanningStream;
+
+  /// Get the stream of changes to the Bluetooth adapter's state.
+  Stream<BluetoothState> get state;
 
   /// Scan for bluetooth devices.
   /// The [scanDurationInSeconds] indicates the length of the scan in seconds.

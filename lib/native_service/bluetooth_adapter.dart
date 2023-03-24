@@ -17,6 +17,84 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
   final PublishSubject<void> _stopScanSingalEmitter = PublishSubject();
 
   @override
+  Future<bool> get bluetoothIsOn async {
+    final bool? result = await methodChannel.invokeMethod<bool>('isBluetoothOn');
+
+    if (result != null) {
+      return result;
+    }
+
+    // If the Bluetooth adapter returned null, it is neither on or off,
+    // but in an intermediate state (i.e. it is turning on or off).
+    // In that case, wait for it to turn on or off.
+    final Completer<bool> completer = Completer();
+
+    StreamSubscription<BluetoothState>? subscription;
+
+    subscription = state.listen(
+      (value) {
+        switch (value) {
+          case BluetoothState.off:
+          case BluetoothState.turningOff:
+            // Complete with the value and cancel the subscription.
+            if (!completer.isCompleted) {
+              subscription?.cancel();
+              subscription = null;
+              completer.complete(false);
+            }
+            break;
+          case BluetoothState.on:
+            // Complete with the value and cancel the subscription.
+            if (!completer.isCompleted) {
+              subscription?.cancel();
+              subscription = null;
+              completer.complete(true);
+            }
+            break;
+          case BluetoothState.unauthorized:
+            // Complete with the error and cancel the subscription.
+            if (!completer.isCompleted) {
+              subscription?.cancel();
+              subscription = null;
+              completer.completeError(
+                StateError('Access to Bluetooth was not authorized.'),
+                StackTrace.current,
+              );
+            }
+            break;
+          case BluetoothState.unavailable:
+            // Complete with the error and cancel the subscription.
+            if (!completer.isCompleted) {
+              subscription?.cancel();
+              subscription = null;
+              completer.completeError(
+                UnsupportedError('Bluetooth is not supported on this device.'),
+                StackTrace.current,
+              );
+            }
+            break;
+          case BluetoothState.unknown:
+          case BluetoothState.turningOn:
+            // If the state is unknown, wait for it to resolve.
+            // If the state is turning on, wait for it to switch to `BluetoothState.on`.
+            break;
+        }
+      },
+      cancelOnError: true,
+      onError: (error, stackTrace) {
+        // Complete with the error and cancel the subscription.
+        if (!completer.isCompleted) {
+          subscription?.cancel();
+          subscription = null;
+          completer.completeError(error, stackTrace);
+        }
+      },
+    );
+
+    return completer.future;
+  }
+
+  @override
   bool get isScanning => _isScanningController.value;
 
   @override

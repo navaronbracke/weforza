@@ -10,7 +10,7 @@ abstract class BluetoothDeviceScanner {
   /// Returns null if the Bluetooth adapter is not available.
   /// Returns true if the Bluetooth adapter is currently on.
   /// Returns false if the Bluetooth adapter is currently off.
-  Future<bool?> get isOn;
+  Future<bool?> get bluetoothIsOn;
 
   /// Get the current scanning state.
   bool get isScanning;

@@ -427,7 +427,8 @@ class RideAttendeeScanningDelegate {
         return;
       }
 
-      final bluetoothIsOn = await scanner.bluetoothIsOn ?? false;
+      // Bluetooth not being available is the same as it being off.
+      final bluetoothIsOn = await scanner.bluetoothIsOn.catchError((_) => false);
 
       if (!bluetoothIsOn) {
         _stateMachine.setState(RideAttendeeScanningState.bluetoothDisabled);

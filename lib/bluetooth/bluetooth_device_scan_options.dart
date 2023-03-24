@@ -1,7 +1,6 @@
 /// This class represents the scan options for a Bluetooth device scan.
 class BluetoothDeviceScanOptions {
   const BluetoothDeviceScanOptions({
-    required this.timeout,
     this.allowDuplicates = false,
     this.scanMode = BluetoothScanMode.lowLatency,
   });
@@ -12,13 +11,7 @@ class BluetoothDeviceScanOptions {
   /// The scan mode for the scan.
   final BluetoothScanMode scanMode;
 
-  /// The timeout for the scan.
-  /// Once this timeout is reached, the scan is aborted automatically.
-  final Duration timeout;
-
   /// Convert this object to a map.
-  ///
-  /// The [timeout] is not included in the map.
   Map<String, Object?> toMap() {
     return {
       'allowDuplicates': allowDuplicates,

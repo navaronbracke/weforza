@@ -6,11 +6,7 @@ import 'package:weforza/bluetooth/bluetooth_state.dart';
 /// This class defines an interface for a Bluetooth device scanner.
 abstract class BluetoothDeviceScanner {
   /// Returns whether the Bluetooth adapter is currently on.
-  ///
-  /// Returns null if the Bluetooth adapter is not available.
-  /// Returns true if the Bluetooth adapter is currently on.
-  /// Returns false if the Bluetooth adapter is currently off.
-  Future<bool?> get bluetoothIsOn;
+  Future<bool> get bluetoothIsOn;
 
   /// Get the current scanning state.
   bool get isScanning;

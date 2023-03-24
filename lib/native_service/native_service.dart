@@ -13,6 +13,9 @@ abstract class NativeService {
   /// The [EventChannel] that is used to receive events from the Bluetooth device discovery stream.
   final EventChannel bluetoothDeviceDiscoveryChannel = const EventChannel('be.weforza.app/bluetooth_device_discovery');
 
+  /// The [EventChannel] that is used to receive events from the Bluetooth adapter state.
+  final EventChannel bluetoothStateChannel = const EventChannel('be.weforza.app/bluetooth_state');
+
   /// Dispose of this service.
   @mustCallSuper
   void dispose() {

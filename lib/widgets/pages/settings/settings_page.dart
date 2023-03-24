@@ -275,12 +275,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             CupertinoFormRow(
               prefix: Text(translator.version),
-              child: AppVersion(
-                builder: (version) => Text(
-                  version,
-                  style: const TextStyle(color: CupertinoColors.systemGrey),
-                ),
-              ),
+              child: const AppVersion(builder: Text.new),
             ),
           ],
         ),

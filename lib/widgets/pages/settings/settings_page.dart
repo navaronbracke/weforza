@@ -182,6 +182,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       width: 1.0 / MediaQuery.devicePixelRatioOf(context),
     );
 
+    final decorationBackgroundColor = CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context);
+
     return SettingsPageScrollView(
       scrollController: scrollController,
       excludedTermsList: SliverPadding(
@@ -189,12 +191,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         sliver: ExcludedTermsList(
           addTermInputField: AddExcludedTermInputField(
             controller: addTermController,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              color: CupertinoColors.secondarySystemGroupedBackground,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              color: decorationBackgroundColor,
             ),
             delegate: excludedTermsDelegate,
             focusNode: addTermFocusNode,
@@ -215,10 +214,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             return _buildExcludedTermItem(
               items,
               index,
-              decoration: BoxDecoration(
-                borderRadius: borderRadius,
-                color: CupertinoColors.secondarySystemGroupedBackground,
-              ),
+              decoration: BoxDecoration(borderRadius: borderRadius, color: decorationBackgroundColor),
               divider: Container(
                 color: excludedTermDivider.color,
                 height: excludedTermDivider.width,
@@ -275,12 +271,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           children: [
             CupertinoFormRow(
               prefix: Text(translator.version),
-              child: AppVersion(
-                builder: (version) => Text(
-                  version,
-                  style: const TextStyle(color: CupertinoColors.systemGrey),
-                ),
-              ),
+              child: const AppVersion(builder: Text.new),
             ),
           ],
         ),

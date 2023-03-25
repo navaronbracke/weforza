@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
@@ -27,12 +27,14 @@ class AddRideCalendarColorLegend extends StatelessWidget {
     required AxisDirection dotDirection,
     required String label,
   }) {
-    final dot = Container(
-      height: dotSize,
-      width: dotSize,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: color,
+    final dot = Builder(
+      builder: (context) => Container(
+        height: dotSize,
+        width: dotSize,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          color: color is CupertinoDynamicColor ? color.resolveFrom(context) : color,
+        ),
       ),
     );
 

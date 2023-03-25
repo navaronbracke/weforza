@@ -21,14 +21,6 @@ class ScanProgressIndicator extends StatelessWidget {
   /// The stream of changes to the scanning state.
   final Stream<bool> isScanningStream;
 
-  Widget _buildProgressIndicator(double progress, Color color) {
-    return LinearProgressIndicator(
-      backgroundColor: color.withOpacity(0.4),
-      value: progress,
-      valueColor: AlwaysStoppedAnimation<Color>(color),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
@@ -51,20 +43,69 @@ class ScanProgressIndicator extends StatelessWidget {
                 final progress = animationController.value;
 
                 return PlatformAwareWidget(
-                  android: (_) => _buildProgressIndicator(
-                    progress,
-                    Colors.green,
+                  android: (_) => _BrightnessAwareProgressIndicator(
+                    progress: progress,
+                    color: Colors.green,
+                    backgroundColor: Colors.green.withOpacity(0.4),
                   ),
-                  ios: (_) => _buildProgressIndicator(
-                    progress,
-                    CupertinoColors.systemGreen,
-                  ),
+                  ios: (context) {
+                    final theme = CupertinoTheme.of(context);
+
+                    return _BrightnessAwareProgressIndicator(
+                      progress: progress,
+                      color: theme.primaryColor,
+                      backgroundColor: CupertinoColors.white,
+                      darkBackgroundColor: CupertinoColors.inactiveGray,
+                    );
+                  },
                 );
               },
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _BrightnessAwareProgressIndicator extends StatelessWidget {
+  const _BrightnessAwareProgressIndicator({
+    required this.backgroundColor,
+    required this.color,
+    required this.progress,
+    this.darkBackgroundColor,
+  });
+
+  /// The background color when the brightness is [Brightness.light].
+  final Color backgroundColor;
+
+  /// The background color when the brightness is [Brightness.dark].
+  /// If this is null, defaults to [backgroundColor].
+  final Color? darkBackgroundColor;
+
+  /// The color for the progress.
+  final Color color;
+
+  /// The progress value.
+  final double progress;
+
+  @override
+  Widget build(BuildContext context) {
+    Color effectiveBackgroundColor;
+
+    switch (MediaQuery.platformBrightnessOf(context)) {
+      case Brightness.dark:
+        effectiveBackgroundColor = darkBackgroundColor ?? backgroundColor;
+        break;
+      case Brightness.light:
+        effectiveBackgroundColor = backgroundColor;
+        break;
+    }
+
+    return LinearProgressIndicator(
+      backgroundColor: effectiveBackgroundColor,
+      value: progress,
+      valueColor: AlwaysStoppedAnimation<Color>(color),
     );
   }
 }

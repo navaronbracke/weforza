@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/add_ride_page_delegate.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
@@ -59,6 +60,12 @@ class AddRideCalendarItem extends StatelessWidget {
       initialData: delegate.currentSelection,
       stream: delegate.selectionStream,
       builder: (context, _) {
+        Color? backgroundColor = _computeBackgroundColor();
+
+        if (backgroundColor is CupertinoDynamicColor) {
+          backgroundColor = backgroundColor.resolveFrom(context);
+        }
+
         return GestureDetector(
           onTap: () => delegate.selectDay(date),
           child: SizedBox.fromSize(
@@ -67,7 +74,7 @@ class AddRideCalendarItem extends StatelessWidget {
               padding: theme.padding,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: _computeBackgroundColor(),
+                  color: backgroundColor,
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                 ),
                 child: Center(

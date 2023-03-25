@@ -24,20 +24,17 @@ class ExcludedTermsListEmpty extends StatelessWidget {
         final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
 
         return Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(10),
             ),
-            color: CupertinoColors.secondarySystemGroupedBackground,
+            color: CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context),
           ),
           padding: const EdgeInsets.all(4),
           child: Text(
             text,
-            style: textStyle.copyWith(
-              fontSize: 13,
-              color: CupertinoColors.systemGrey,
-            ),
+            style: textStyle.copyWith(fontSize: 13),
             textAlign: TextAlign.center,
           ),
         );

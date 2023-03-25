@@ -294,12 +294,10 @@ class RideAttendeeScanningDelegate {
         // If the device has multiple possible owners,
         // add the conflicting owners to the unresolved owners.
         _unresolvedOwners.addAll(owners);
-
-        return;
+      } else {
+        // Otherwise the single owner can be resolved automatically.
+        _addRideAttendee(owners.first.uuid, isScanned: true);
       }
-
-      // Otherwise the single owner can be resolved automatically.
-      _addRideAttendee(owners.first.uuid, isScanned: true);
     }
 
     // Finally, add the device to the list of found devices and emit the device found signal.
@@ -323,6 +321,9 @@ class RideAttendeeScanningDelegate {
     _stateMachine.setState(RideAttendeeScanningState.manualSelection);
     _scrollToManualSelectionLabel();
   }
+
+  /// Get the amount of scanned peripherals.
+  int get scannedPeripheralsLength => _devicesWithOwners.length;
 
   /// Get the scanned Bluetooth peripheral at the given [index].
   BluetoothPeripheralWithOwners getScannedPeripheral(int index) => _devicesWithOwners[index];

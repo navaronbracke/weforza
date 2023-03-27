@@ -140,10 +140,6 @@ internal class PermissionResultListener(
     private val expectedRequestCode: Int,
     private val resultHandler: PermissionResultCallback,
 ) {
-    // This flag will keep track of whether the result callback was invoked.
-    // This prevents an edge case with duplicate calls to the listener.
-    private var alreadyCalled: Boolean = false
-
     /**
      * Handle a permission request result for the expected request code.
     */
@@ -151,11 +147,9 @@ internal class PermissionResultListener(
         requestCode: Int,
         grantResults: IntArray
     ) {
-        if (alreadyCalled || requestCode != expectedRequestCode) {
+        if (requestCode != expectedRequestCode) {
             return
         }
-
-        alreadyCalled = true
 
         // grantResults could be empty if the permissions request with the user is interrupted
         // https://developer.android.com/reference/android/app/Activity#onRequestPermissionsResult(int,%20java.lang.String[],%20int[])

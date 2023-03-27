@@ -48,11 +48,10 @@ class MainActivity: FlutterActivity() {
                 )
                 "startBluetoothScan" -> {
                     val options = BluetoothScanOptions(
-                        call.argument<Boolean>("allowDuplicates")?: false,
                         call.argument<Int>("androidScanMode") ?: ScanSettings.SCAN_MODE_BALANCED
                     )
 
-                    bluetoothAdapterDelegate.startBluetoothScan(options, result)
+                    bluetoothAdapterDelegate.startBluetoothScan(options, result, this)
                 }
                 "stopBluetoothScan" -> bluetoothAdapterDelegate.stopBluetoothScan(result, this)
                 else -> result.notImplemented()

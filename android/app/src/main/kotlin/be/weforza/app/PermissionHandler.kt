@@ -28,9 +28,6 @@ class PermissionHandler {
         const val REQUEST_CODE_BLUETOOTH_PERMISSION = 2000
     }
 
-    // This flag prevents multiple permission requests from interfering with each other.
-    private var ongoing: Boolean = false
-
     // The permission listener that will listen for the permission result.
     private var permissionListener: PermissionResultListener? = null
 
@@ -73,7 +70,7 @@ class PermissionHandler {
         permissions: Array<String>,
         requestCode: Int,
         callback: PermissionResultCallback) {
-        if (ongoing) {
+        if (permissionListener != null) {
             callback.onPermissionResult(
                 PERMISSION_REQUEST_ONGOING, PERMISSION_REQUEST_ONGOING_MESSAGE)
             return
@@ -90,13 +87,11 @@ class PermissionHandler {
             object: PermissionResultCallback {
                 override fun onPermissionResult(errorCode: String?, errorDescription: String?) {
                     // Unregister the result listener once the response has been received.
-                    ongoing = false
                     permissionListener = null
                     callback.onPermissionResult(errorCode, errorDescription)
                 }
             })
 
-        ongoing = true
         ActivityCompat.requestPermissions(
             activity,
             permissions,

@@ -21,7 +21,7 @@ import io.flutter.plugin.common.MethodChannel
 /**
  * This class represents the Bluetooth adapter implementation.
  */
-class BluetoothAdapter(
+class BluetoothAdapterDelegate(
     private val bluetoothAdapter: BluetoothAdapter?,
     val stateStreamHandler: BluetoothAdapterStateStreamHandler) {
 
@@ -30,6 +30,9 @@ class BluetoothAdapter(
     private var bluetoothScanCallback: ScanCallback? = null
 
     companion object {
+        const val BLUETOOTH_SCAN_RESULT_ERROR_CODE = "BLUETOOTH_SCAN_RESULT_ERROR"
+        const val BLUETOOTH_SCAN_RESULT_ERROR_MESSAGE = "A scan result returned an error."
+
         const val BLUETOOTH_UNAUTHORIZED_ERROR_CODE = "BLUETOOTH_UNAUTHORIZED"
         const val BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE = "Access to Bluetooth was denied."
 
@@ -236,6 +239,10 @@ class BluetoothDeviceDiscoveryStreamHandler : StreamHandler {
             ))
         } catch (exception: SecurityException) {
             // If Bluetooth permission is not granted, skip the scan results.
+            sink?.error(
+                BluetoothAdapterDelegate.BLUETOOTH_SCAN_RESULT_ERROR_CODE,
+                exception.message?: BluetoothAdapterDelegate.BLUETOOTH_SCAN_RESULT_ERROR_MESSAGE,
+                null)
         }
     }
 

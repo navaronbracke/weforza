@@ -1,12 +1,8 @@
 /// This class represents the scan options for a Bluetooth device scan.
 class BluetoothDeviceScanOptions {
   const BluetoothDeviceScanOptions({
-    this.allowDuplicates = false,
     this.scanMode = BluetoothScanMode.lowLatency,
   });
-
-  /// Whether to allow duplicates in the scan results.
-  final bool allowDuplicates;
 
   /// The scan mode for the scan.
   final BluetoothScanMode scanMode;
@@ -14,7 +10,6 @@ class BluetoothDeviceScanOptions {
   /// Convert this object to a map.
   Map<String, Object?> toMap() {
     return {
-      'allowDuplicates': allowDuplicates,
       'androidScanMode': scanMode.androidScanMode,
     };
   }

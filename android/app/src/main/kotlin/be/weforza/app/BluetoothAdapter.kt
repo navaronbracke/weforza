@@ -1,0 +1,271 @@
+package be.weforza.app
+
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanFilter
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.EventChannel.StreamHandler
+import io.flutter.plugin.common.MethodChannel
+
+/**
+ * This class represents the Bluetooth adapter implementation.
+ */
+class BluetoothAdapter(
+    private val bluetoothAdapter: BluetoothAdapter?,
+    val stateStreamHandler: BluetoothAdapterStateStreamHandler) {
+
+    val deviceDiscoveryStreamHandler = BluetoothDeviceDiscoveryStreamHandler()
+
+    private var bluetoothScanCallback: ScanCallback? = null
+
+    companion object {
+        const val BLUETOOTH_UNAUTHORIZED_ERROR_CODE = "BLUETOOTH_UNAUTHORIZED"
+        const val BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE = "Access to Bluetooth was denied."
+
+        const val BLUETOOTH_UNAVAILABLE_ERROR_CODE = "BLUETOOTH_UNAVAILABLE"
+        const val BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE = "Bluetooth is not supported on this device."
+    }
+
+    private fun buildBluetoothScanSettings(options: BluetoothScanOptions) : ScanSettings {
+        val scanModes = mutableSetOf(
+            ScanSettings.SCAN_MODE_BALANCED,
+            ScanSettings.SCAN_MODE_LOW_LATENCY,
+            ScanSettings.SCAN_MODE_LOW_POWER,
+        )
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            scanModes.add(ScanSettings.SCAN_MODE_OPPORTUNISTIC)
+        }
+
+        val scanMode = if(scanModes.contains(options.scanMode)) {
+            options.scanMode
+        } else {
+            ScanSettings.SCAN_MODE_BALANCED
+        }
+
+        var scanSettingsBuilder = ScanSettings.Builder().setScanMode(scanMode)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            scanSettingsBuilder = scanSettingsBuilder.setPhy(ScanSettings.PHY_LE_ALL_SUPPORTED)
+                .setLegacy(false)
+        }
+
+        return scanSettingsBuilder.build()
+    }
+
+    /**
+     * Get the current state of the Bluetooth adapter.
+     */
+    fun getState(result: MethodChannel.Result) {
+        if(bluetoothAdapter == null) {
+            result.success("unavailable")
+            return
+        }
+
+        try {
+            when(bluetoothAdapter.state) {
+                BluetoothAdapter.STATE_OFF -> result.success("off")
+                BluetoothAdapter.STATE_ON -> result.success("on")
+                BluetoothAdapter.STATE_TURNING_OFF -> result.success("turningOff")
+                BluetoothAdapter.STATE_TURNING_ON -> result.success("turningOn")
+                else -> result.success("unknown")
+            }
+        } catch (exception: SecurityException) {
+            result.success("unauthorized")
+        }
+    }
+
+    /**
+     * Check if Bluetooth is currently on.
+     *
+     * Returns true if Bluetooth is currently on.
+     * Returns false if Bluetooth is currently off.
+     * Returns null otherwise.
+     */
+    fun isBluetoothOn(result: MethodChannel.Result) {
+        if(bluetoothAdapter == null) {
+            result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
+            return
+        }
+
+        try {
+            when(bluetoothAdapter.state) {
+                BluetoothAdapter.STATE_OFF -> result.success(false)
+                BluetoothAdapter.STATE_ON -> result.success(true)
+                BluetoothAdapter.STATE_TURNING_OFF -> result.success(null)
+                BluetoothAdapter.STATE_TURNING_ON -> result.success(null)
+                else -> result.success(null)
+            }
+        } catch (exception: SecurityException) {
+            result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
+        }
+    }
+
+    /**
+     * Start a new Bluetooth scan.
+     */
+    fun startBluetoothScan(options: BluetoothScanOptions, result: MethodChannel.Result, context: Context) {
+        if(bluetoothAdapter == null) {
+            result.success(null)
+
+            return
+        }
+
+        val hasScanPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.BLUETOOTH_SCAN
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+
+        if(hasScanPermission) {
+            bluetoothScanCallback = BluetoothScanCallback(deviceDiscoveryStreamHandler::onDeviceFound)
+
+            val filters = listOf<ScanFilter>()
+
+            bluetoothAdapter.bluetoothLeScanner.startScan(filters, buildBluetoothScanSettings(options), bluetoothScanCallback)
+            result.success(null)
+        } else {
+            result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
+        }
+    }
+
+    /**
+     * Stop a running Bluetooth device scan.
+     */
+    fun stopBluetoothScan(result: MethodChannel.Result, context: Context) {
+        val bluetoothScanner = bluetoothAdapter?.bluetoothLeScanner
+
+        if(bluetoothScanner == null || bluetoothScanCallback == null) {
+            result.success(null)
+
+            return
+        }
+
+        // Permission should be granted at this point, since the scan already started.
+        // This is just a sanity check to silence the hint for bluetoothScanner.stopScan().
+        val hasScanPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.BLUETOOTH_SCAN
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+
+        if(hasScanPermission) {
+            bluetoothScanner.stopScan(bluetoothScanCallback)
+            bluetoothScanCallback = null // Clean up the old scan callback along with its settings.
+            result.success(null)
+        } else {
+            result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
+        }
+    }
+}
+
+/**
+ * This class represents the Bluetooth adapter state change stream handler.
+ */
+class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamHandler {
+    private val receiver = BluetoothAdapterStateBroadcastReceiver(::onStateChanged)
+
+    private var sink: EventChannel.EventSink? = null
+
+    private fun onStateChanged(state: Int) {
+        when(state) {
+            BluetoothAdapter.STATE_OFF -> sink?.success("off")
+            BluetoothAdapter.STATE_ON -> sink?.success("on")
+            BluetoothAdapter.STATE_TURNING_OFF -> sink?.success("turningOff")
+            BluetoothAdapter.STATE_TURNING_ON -> sink?.success("turningOn")
+            else -> sink?.success("unknown")
+        }
+    }
+
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        sink = events
+        val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        context.registerReceiver(receiver, filter)
+    }
+
+    override fun onCancel(arguments: Any?) {
+        sink = null
+        context.unregisterReceiver(receiver)
+    }
+}
+
+/**
+ * This class represents the BroadcastReceiver for Bluetooth state changes.
+ */
+private class BluetoothAdapterStateBroadcastReceiver(private val onStateChanged: (state: Int) -> Unit) : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if(intent == null || !intent.action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+            return
+        }
+
+        val bluetoothAdapterState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+            BluetoothAdapter.ERROR)
+
+        onStateChanged(bluetoothAdapterState)
+    }
+}
+
+/**
+ * This class represents the Bluetooth device discovery stream handler.
+ */
+class BluetoothDeviceDiscoveryStreamHandler : StreamHandler {
+    private var sink: EventChannel.EventSink? = null
+
+    fun onDeviceFound(bluetoothDevice: BluetoothDevice) {
+        try {
+            sink?.success(mapOf(
+                "deviceName" to bluetoothDevice.name,
+                "deviceId" to bluetoothDevice.address
+            ))
+        } catch (exception: SecurityException) {
+            // If Bluetooth permission is not granted, skip the scan results.
+        }
+    }
+
+    override fun onCancel(arguments: Any?) {
+        sink = null
+    }
+
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+        sink = events
+    }
+}
+
+/**
+ * This class represents the Bluetooth scan callback for a Bluetooth scan.
+ */
+private class BluetoothScanCallback(
+    private val onDeviceFound: (device: BluetoothDevice) -> Unit) : ScanCallback() {
+
+    override fun onScanResult(callbackType: Int, result: ScanResult?) {
+        super.onScanResult(callbackType, result)
+
+        val device = result?.device
+
+        device?.let {
+            onDeviceFound(it)
+        }
+    }
+}
+
+/**
+ * This class represents the options for a Bluetooth scan.
+ */
+data class BluetoothScanOptions(val scanMode: Int)

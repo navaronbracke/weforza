@@ -9,8 +9,8 @@ class BluetoothPeripheral {
   /// Create a [BluetoothPeripheral] from the given [map].
   factory BluetoothPeripheral.fromMap(Map<String, Object?> map) {
     return BluetoothPeripheral(
-      deviceName: map['deviceName'] as String,
-      id: map['deviceId'] as String,
+      deviceName: map['deviceName'] as String? ?? '',
+      id: map['deviceId'] as String? ?? '',
     );
   }
 

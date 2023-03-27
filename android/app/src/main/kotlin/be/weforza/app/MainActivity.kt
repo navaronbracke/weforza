@@ -13,18 +13,16 @@ class MainActivity: FlutterActivity() {
     private val bluetoothDeviceDiscoveryChannel = "be.weforza.app/bluetooth_device_discovery"
     private val bluetoothStateChannel = "be.weforza.app/bluetooth_state"
 
-    private val bluetoothAdapterDelegate: BluetoothAdapter
+    private lateinit var bluetoothAdapterDelegate: BluetoothAdapter
     private val permissionDelegate = PermissionHandler()
 
-    init {
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapterDelegate = BluetoothAdapter(bluetoothManager.adapter,
             BluetoothAdapterStateStreamHandler(this)
         )
-    }
-
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        super.configureFlutterEngine(flutterEngine)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannel).setMethodCallHandler {
                 call, result ->

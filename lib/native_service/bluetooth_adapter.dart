@@ -152,12 +152,16 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
       rethrow;
     }
 
-    yield* bluetoothDeviceDiscoveryChannel
-        .receiveBroadcastStream()
-        .takeUntil(Rx.merge(abortScanTriggers))
-        .cast<Map<String, Object?>>()
-        .map(BluetoothPeripheral.fromMap)
-        .doOnDone(stopScan);
+    yield* bluetoothDeviceDiscoveryChannel.receiveBroadcastStream().takeUntil(Rx.merge(abortScanTriggers)).map((event) {
+      // The binary messenger sends things back as `dynamic`.
+      // If the event is a `Map`,
+      // it does not have type information and comes back as `Map<Object?, Object?>`.
+      // Cast it using `Map.cast()` to at least recover the type of the key.
+      // The values are still `Object?`, though.
+      final Map<String, Object?> eventMap = (event as Map<Object?, Object?>).cast<String, Object?>();
+
+      return BluetoothPeripheral.fromMap(eventMap);
+    }).doOnDone(stopScan);
   }
 
   @override

@@ -4,6 +4,7 @@
 
     <!-- Location permission is required for scanning devices. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- Android S Bluetooth permissions -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />

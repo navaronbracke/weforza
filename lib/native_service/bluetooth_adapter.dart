@@ -76,6 +76,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
             break;
           case BluetoothState.unknown:
           case BluetoothState.turningOn:
+          case BluetoothState.resetting:
             // If the state is unknown, wait for it to resolve.
             // If the state is turning on, wait for it to switch to `BluetoothState.on`.
             break;

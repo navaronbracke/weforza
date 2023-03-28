@@ -6,6 +6,9 @@ enum BluetoothState {
   /// The Bluetooth adapter is currently enabled.
   on,
 
+  /// The Bluetooth adapter is currently resetting.
+  resetting,
+
   /// The Bluetooth adapter is currently turning off.
   turningOff,
 
@@ -28,6 +31,8 @@ enum BluetoothState {
         return off;
       case 'on':
         return on;
+      case 'resetting':
+        return resetting;
       case 'turningOff':
         return turningOff;
       case 'turningOn':

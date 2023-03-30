@@ -27,6 +27,10 @@ class BluetoothAdapterDelegate(
 
     val deviceDiscoveryStreamHandler = BluetoothDeviceDiscoveryStreamHandler()
 
+    /**
+     * The Bluetooth scan callback for the running scan.
+     * If this is not null, a scan is in progress.
+     */
     private var bluetoothScanCallback: ScanCallback? = null
 
     companion object {
@@ -119,7 +123,7 @@ class BluetoothAdapterDelegate(
      * Start a new Bluetooth scan.
      */
     fun startBluetoothScan(options: BluetoothScanOptions, result: MethodChannel.Result, context: Context) {
-        if(bluetoothAdapter == null) {
+        if(bluetoothAdapter == null || bluetoothScanCallback != null) {
             result.success(null)
 
             return

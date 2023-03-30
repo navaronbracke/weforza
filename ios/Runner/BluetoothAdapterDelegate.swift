@@ -29,9 +29,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// The pending Bluetooth state result.
     ///
-    /// This result is cached when the Bluetooth state is queried on-demand
+    /// This result is cached when the Bluetooth on/off state is queried on-demand
     /// and the state is either ``CBManagerState.unknown`` or ``CBManagerState.resetting``.
-    private var _pendingBluetoothStateResult: FlutterResult?
+    private var _pendingBluetoothIsOnOrOffResult: FlutterResult?
     
     public let bluetoothStateStreamHandler = BluetoothStateStreamHandler()
     
@@ -81,30 +81,30 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
 
         self.bluetoothStateStreamHandler.onBluetoothStateChanged(state: bluetoothAdapterState)
         
-        if(self._pendingBluetoothStateResult != nil) {
+        if(self._pendingBluetoothIsOnOrOffResult != nil) {
             switch(bluetoothAdapterState) {
             case .unknown:
                 break
             case .resetting:
                 break
             case .unsupported:
-                self._pendingBluetoothStateResult?(FlutterError(
+                self._pendingBluetoothIsOnOrOffResult?(FlutterError(
                     code: BLUETOOTH_UNAVAILABLE_ERROR_CODE,
                     message: BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE,
                     details: nil))
-                self._pendingBluetoothStateResult = nil
+                self._pendingBluetoothIsOnOrOffResult = nil
             case .unauthorized:
-                self._pendingBluetoothStateResult?(FlutterError(
+                self._pendingBluetoothIsOnOrOffResult?(FlutterError(
                     code: BLUETOOTH_UNAUTHORIZED_ERROR_CODE,
                     message: BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE,
                     details: nil))
-                self._pendingBluetoothStateResult = nil
+                self._pendingBluetoothIsOnOrOffResult = nil
             case .poweredOff:
-                self._pendingBluetoothStateResult?(false)
-                self._pendingBluetoothStateResult = nil
+                self._pendingBluetoothIsOnOrOffResult?(false)
+                self._pendingBluetoothIsOnOrOffResult = nil
             case .poweredOn:
-                self._pendingBluetoothStateResult?(true)
-                self._pendingBluetoothStateResult = nil
+                self._pendingBluetoothIsOnOrOffResult?(true)
+                self._pendingBluetoothIsOnOrOffResult = nil
             }
         }
     }
@@ -149,9 +149,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
         // cache the pending result and wait for a state change.
         switch(bluetoothManager.state) {
         case .unknown:
-            _pendingBluetoothStateResult = result
+            _pendingBluetoothIsOnOrOffResult = result
         case .resetting:
-            _pendingBluetoothStateResult = result
+            _pendingBluetoothIsOnOrOffResult = result
         case .unsupported:
             result(FlutterError(
                 code: BLUETOOTH_UNAVAILABLE_ERROR_CODE,

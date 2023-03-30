@@ -116,15 +116,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Get the current state of the Bluetooth adapter.
     func getBluetoothAdapterState(result: @escaping FlutterResult) {
-        guard let bluetoothManager = _bluetoothManager else {
-            result(FlutterError(
-                code: BLUETOOTH_UNAVAILABLE_ERROR_CODE,
-                message: BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE,
-                details: nil))
-            return
-        }
+        let state = _bluetoothManager?.state ?? CBManagerState.unsupported
         
-        result(bluetoothManager.state.toSerializedString())
+        result(state.toSerializedString())
     }
     
     /// Initialize the ``CBCentralManager`` without showing a permission dialog.

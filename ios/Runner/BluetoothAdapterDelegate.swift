@@ -214,12 +214,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
             return
         }
         
-        if(bluetoothManager.isScanning) {
-            result(nil)
-            return
+        if(!bluetoothManager.isScanning) {
+            bluetoothManager.scanForPeripherals(withServices: [], options: [:])
         }
-                
-        bluetoothManager.scanForPeripherals(withServices: [], options: [:])
         
         result(nil)
     }

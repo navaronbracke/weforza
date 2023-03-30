@@ -103,15 +103,22 @@ class PermissionHandler {
     * Request the permissions to start a Bluetooth Peripheral scan.
     */
     fun requestBluetoothScanPermission(activity: Activity, callback: PermissionResultCallback) {
-        // From Android S onwards, there is a specific permission for Bluetooth device scanning.
-        val permissions: Array<String> = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            arrayOf(Manifest.permission.BLUETOOTH_SCAN)
-        } else {
+        // Without the location permission, the scan does not find devices.
+        // Request both types of permission,
+        // so that the user can choose between precise and approximate location.
+        val locationPermissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+
+        val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
-                Manifest.permission.BLUETOOTH,
-                // Without the location permission, the scan does not find devices.
-                Manifest.permission.ACCESS_FINE_LOCATION,
+                *locationPermissions,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT, // To access `BluetoothDevice.name`.
             )
+        } else {
+            arrayOf(*locationPermissions, Manifest.permission.BLUETOOTH)
         }
 
         requestPermissions(activity, permissions, REQUEST_CODE_BLUETOOTH_PERMISSION, callback)

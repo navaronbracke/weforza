@@ -1,8 +1,10 @@
 package be.weforza.app
 
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import android.content.IntentFilter
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -14,14 +16,21 @@ class MainActivity: FlutterActivity() {
     private val bluetoothStateChannel = "be.weforza.app/bluetooth_state"
 
     private lateinit var bluetoothAdapterDelegate: BluetoothAdapterDelegate
+    private val bluetoothStateStreamHandler = BluetoothAdapterStateStreamHandler()
     private val permissionDelegate = PermissionHandler()
+
+    /**
+     * The broadcast receiver that is notified of the Bluetooth adapter's state changes.
+     */
+    private var bluetoothStateBroadcastReceiver: BluetoothAdapterStateBroadcastReceiver? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothAdapterDelegate = BluetoothAdapterDelegate(bluetoothManager.adapter,
-            BluetoothAdapterStateStreamHandler(this)
+        bluetoothAdapterDelegate = BluetoothAdapterDelegate(
+            bluetoothManager.adapter,
+            bluetoothStateStreamHandler
         )
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannel).setMethodCallHandler {
@@ -76,5 +85,23 @@ class MainActivity: FlutterActivity() {
             true -> permissionDelegate.onRequestPermissionsResult(requestCode, grantResults)
             false -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        bluetoothStateBroadcastReceiver = BluetoothAdapterStateBroadcastReceiver(
+            bluetoothStateStreamHandler::onStateChanged
+        )
+        registerReceiver(bluetoothStateBroadcastReceiver, filter)
+    }
+
+    override fun onPause() {
+        if(bluetoothStateBroadcastReceiver != null) {
+            unregisterReceiver(bluetoothStateBroadcastReceiver)
+        }
+
+        super.onPause()
     }
 }

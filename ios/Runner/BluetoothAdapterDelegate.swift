@@ -23,14 +23,17 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     /// The pending Bluetooth permission result.
     ///
     /// This result is cached when the Bluetooth permission is requested.
-    /// It will be resolved with a value once the permission request completed.
+    /// It will be resolved with a boolean once the permission request completed.
     /// Only one pending permission result can be active at once.
     private var _pendingPermissionResult: FlutterResult?
     
-    /// The pending Bluetooth state result.
+    /// The pending Bluetooth on/off state result.
     ///
     /// This result is cached when the Bluetooth on/off state is queried on-demand
     /// and the state is either ``CBManagerState.unknown`` or ``CBManagerState.resetting``.
+    /// It will be resolved with a boolean once ``CBManagerState.poweredOn`` or ``CBManagerState.poweredOff``
+    /// is the current state.
+    /// Only one pending Bluetooth state result result can be active at once.
     private var _pendingBluetoothIsOnOrOffResult: FlutterResult?
     
     public let bluetoothStateStreamHandler = BluetoothStateStreamHandler()

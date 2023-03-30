@@ -317,9 +317,7 @@ private class BluetoothScanCallback(
     override fun onScanResult(callbackType: Int, result: ScanResult?) {
         super.onScanResult(callbackType, result)
 
-        val device = result?.device
-
-        device?.let {
+        result?.device?.let {
             onDeviceFound(it)
         }
     }

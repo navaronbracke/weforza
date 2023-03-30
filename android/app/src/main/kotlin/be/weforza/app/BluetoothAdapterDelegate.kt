@@ -123,9 +123,13 @@ class BluetoothAdapterDelegate(
      * Start a new Bluetooth scan.
      */
     fun startBluetoothScan(options: BluetoothScanOptions, result: MethodChannel.Result, context: Context) {
-        if(bluetoothAdapter == null || bluetoothScanCallback != null) {
-            result.success(null)
+        if(bluetoothAdapter == null) {
+            result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
+            return
+        }
 
+        if(bluetoothScanCallback != null) {
+            result.success(null)
             return
         }
 
@@ -154,11 +158,15 @@ class BluetoothAdapterDelegate(
      * Stop a running Bluetooth device scan.
      */
     fun stopBluetoothScan(result: MethodChannel.Result, context: Context) {
-        val bluetoothScanner = bluetoothAdapter?.bluetoothLeScanner
+        if(bluetoothAdapter == null) {
+            result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
+            return
+        }
 
-        if(bluetoothScanner == null || bluetoothScanCallback == null) {
+        val bluetoothScanner = bluetoothAdapter.bluetoothLeScanner
+
+        if(bluetoothScanCallback == null) {
             result.success(null)
-
             return
         }
 

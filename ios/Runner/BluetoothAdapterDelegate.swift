@@ -205,6 +205,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     }
     
     /// Start a new Bluetooth scan.
+    ///
+    /// This method assumes that permission was granted before,
+    /// since checking the authorization status might show a permission dialog.
     func startBluetoothScan(result: @escaping FlutterResult) {
         guard let bluetoothManager = _bluetoothManager else {
             result(FlutterError(
@@ -222,6 +225,9 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     }
     
     /// Stop a running Bluetooth scan.
+    ///
+    /// This method assumes that permission was granted before,
+    /// since checking the authorization status might show a permission dialog.
     func stopBluetoothScan(result: @escaping FlutterResult) {
         guard let bluetoothManager = _bluetoothManager else {
             result(FlutterError(

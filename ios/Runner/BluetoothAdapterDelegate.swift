@@ -69,6 +69,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Handle changes in the state of the ``CBCentralManager``.
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        // Check if the permission result was pending and resolve it now.
         if(self._pendingPermissionResult != nil) {
             let permissionStatus = checkBluetoothPermissionStatus(bluetoothManager: central)
             
@@ -81,6 +82,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
 
         self.bluetoothStateStreamHandler.onBluetoothStateChanged(state: bluetoothAdapterState)
         
+        // Check if the Bluetooth on/off result was pending and resolve it now.
         if(self._pendingBluetoothIsOnOrOffResult != nil) {
             switch(bluetoothAdapterState) {
             case .unknown:

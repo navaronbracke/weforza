@@ -110,9 +110,9 @@ class BluetoothAdapterDelegate(
             when(bluetoothAdapter.state) {
                 BluetoothAdapter.STATE_OFF -> result.success(false)
                 BluetoothAdapter.STATE_ON -> result.success(true)
-                BluetoothAdapter.STATE_TURNING_OFF -> result.success(null)
-                BluetoothAdapter.STATE_TURNING_ON -> result.success(null)
-                else -> result.success(null)
+                // Set the pending result if the state is indeterminate.
+                BluetoothAdapter.STATE_TURNING_OFF -> stateStreamHandler.setPendingBluetoothStateResult(result)
+                BluetoothAdapter.STATE_TURNING_ON -> stateStreamHandler.setPendingBluetoothStateResult(result)
             }
         } catch (exception: SecurityException) {
             result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
@@ -220,8 +220,21 @@ class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamH
 
     private fun onStateChanged(state: Int) {
         when(state) {
-            BluetoothAdapter.STATE_OFF -> sink?.success("off")
-            BluetoothAdapter.STATE_ON -> sink?.success("on")
+            // Resolve the pending state result if needed.
+            BluetoothAdapter.STATE_OFF -> {
+                sink?.success("off")
+                if(pendingBluetoothIsOnOrOffResult != null) {
+                    pendingBluetoothIsOnOrOffResult?.success(false)
+                    pendingBluetoothIsOnOrOffResult = null
+                }
+            }
+            BluetoothAdapter.STATE_ON -> {
+                sink?.success("on")
+                if(pendingBluetoothIsOnOrOffResult != null) {
+                    pendingBluetoothIsOnOrOffResult?.success(true)
+                    pendingBluetoothIsOnOrOffResult = null
+                }
+            }
             BluetoothAdapter.STATE_TURNING_OFF -> sink?.success("turningOff")
             BluetoothAdapter.STATE_TURNING_ON -> sink?.success("turningOn")
             else -> sink?.success("unknown")

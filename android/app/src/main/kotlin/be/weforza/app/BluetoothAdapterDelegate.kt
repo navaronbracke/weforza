@@ -195,8 +195,27 @@ class BluetoothAdapterDelegate(
  * This class represents the Bluetooth adapter state change stream handler.
  */
 class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamHandler {
+    /**
+     * The pending Bluetooth on/off state result.
+     *
+     * This result is cached when the Bluetooth on/off state is queried on-demand
+     * and the state is either [BluetoothAdapter.STATE_TURNING_OFF]
+     * or [BluetoothAdapter.STATE_TURNING_ON].
+     *
+     * It will be resolved with a boolean once [BluetoothAdapter.STATE_ON]
+     * or [BluetoothAdapter.STATE_OFF] is the current state.
+     * Only one pending Bluetooth state result result can be active at once.
+     */
+    private var pendingBluetoothIsOnOrOffResult : MethodChannel.Result? = null
+
+    /**
+     * The broadcast receiver that is notified of the Bluetooth adapter's state changes.
+     */
     private val receiver = BluetoothAdapterStateBroadcastReceiver(::onStateChanged)
 
+    /**
+     * The event sink that collects the Bluetooth adapter's state changes.
+     */
     private var sink: EventChannel.EventSink? = null
 
     private fun onStateChanged(state: Int) {
@@ -218,6 +237,15 @@ class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamH
     override fun onCancel(arguments: Any?) {
         sink = null
         context.unregisterReceiver(receiver)
+    }
+
+    /**
+     * Set the pending Bluetooth state result.
+     */
+    fun setPendingBluetoothStateResult(result: MethodChannel.Result) {
+        if(pendingBluetoothIsOnOrOffResult == null) {
+            pendingBluetoothIsOnOrOffResult = result
+        }
     }
 }
 

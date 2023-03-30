@@ -130,6 +130,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     /// Initialize the ``CBCentralManager`` without showing a permission dialog.
     private func initializeBluetoothManager() {
         if(_bluetoothManager == nil) {
+            // Allocating the `CBCentralManager` requests Bluetooth permissions.
+            // Specifically disable the alert for turning on Bluetooth, as this is handled separately.
             _bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: false])
             self.bluetoothStateStreamHandler.setCachedState(state: _bluetoothManager?.state)
         }

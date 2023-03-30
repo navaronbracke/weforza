@@ -10,7 +10,6 @@ import android.bluetooth.le.ScanSettings
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
@@ -194,7 +193,7 @@ class BluetoothAdapterDelegate(
 /**
  * This class represents the Bluetooth adapter state change stream handler.
  */
-class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamHandler {
+class BluetoothAdapterStateStreamHandler : StreamHandler {
     /**
      * The pending Bluetooth on/off state result.
      *
@@ -209,16 +208,11 @@ class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamH
     private var pendingBluetoothIsOnOrOffResult : MethodChannel.Result? = null
 
     /**
-     * The broadcast receiver that is notified of the Bluetooth adapter's state changes.
-     */
-    private val receiver = BluetoothAdapterStateBroadcastReceiver(::onStateChanged)
-
-    /**
      * The event sink that collects the Bluetooth adapter's state changes.
      */
     private var sink: EventChannel.EventSink? = null
 
-    private fun onStateChanged(state: Int) {
+    fun onStateChanged(state: Int) {
         when(state) {
             // Resolve the pending state result if needed.
             BluetoothAdapter.STATE_OFF -> {
@@ -243,13 +237,10 @@ class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamH
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         sink = events
-        val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
-        context.registerReceiver(receiver, filter)
     }
 
     override fun onCancel(arguments: Any?) {
         sink = null
-        context.unregisterReceiver(receiver)
     }
 
     /**
@@ -265,7 +256,7 @@ class BluetoothAdapterStateStreamHandler(private val context: Context) : StreamH
 /**
  * This class represents the BroadcastReceiver for Bluetooth state changes.
  */
-private class BluetoothAdapterStateBroadcastReceiver(private val onStateChanged: (state: Int) -> Unit) : BroadcastReceiver() {
+class BluetoothAdapterStateBroadcastReceiver(private val onStateChanged: (state: Int) -> Unit) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if(intent == null || !intent.action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
             return

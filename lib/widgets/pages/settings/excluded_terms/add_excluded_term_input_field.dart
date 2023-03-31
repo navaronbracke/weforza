@@ -36,7 +36,7 @@ class AddExcludedTermInputField extends StatefulWidget {
 
 class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
   void _handleFocusChange() {
-    if (widget.focusNode.hasFocus) {
+    if (widget.focusNode.hasPrimaryFocus) {
       return;
     }
 

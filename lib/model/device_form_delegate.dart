@@ -4,13 +4,10 @@ import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.
 class DeviceFormDelegate {
-  DeviceFormDelegate({required this.notifier, required this.onDeviceAdded});
+  DeviceFormDelegate({required this.notifier});
 
   /// The notifier that handles adding and editing devices.
   final SelectedMemberDevicesNotifier notifier;
-
-  /// A signal function that is called when a new device is added.
-  final void Function() onDeviceAdded;
 
   /// This controller manages a submit flag.
   /// If the current value is true, the delegate is submitting the form.
@@ -32,8 +29,6 @@ class DeviceFormDelegate {
 
     try {
       await notifier.addDevice(model);
-
-      onDeviceAdded();
     } catch (error) {
       _submitController.addError(error);
 

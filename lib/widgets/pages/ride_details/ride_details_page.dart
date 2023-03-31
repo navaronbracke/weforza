@@ -42,10 +42,10 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
       // Refresh the ride list so that the attendee counter for this ride
       // updates in the list of rides.
-      ref.refresh(rideListProvider);
+      ref.invalidate(rideListProvider);
 
       // Refresh the attending count of the selected member.
-      ref.refresh(selectedMemberAttendingCountProvider);
+      ref.invalidate(selectedMemberAttendingCountProvider);
     }
   }
 

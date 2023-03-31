@@ -44,8 +44,7 @@ class ExportRidesDao implements IExportRidesDao {
   Future<Iterable<ExportableRide>> getRides() async {
     HashMap<DateTime, Ride> rides = HashMap();
     HashMap<String, Member> members = HashMap();
-    //We set this collection later, thus we don't need to initialize it here.
-    Iterable<RideAttendee> attendees;
+    List<RideAttendee> attendees = [];
 
     //Fetch the rides/members and attendees in parallel.
     //This populates the given collections with data.
@@ -85,10 +84,10 @@ class ExportRidesDao implements IExportRidesDao {
   ///Fetch the ride attendees and store them in [collection].
   ///An Iterable is used, since all we do with the attendees is do a data match per item, by using the ride/member HashMaps.
   ///We return a Future<void> for use with Future.wait().
-  Future<void> _fetchAttendees(Iterable<RideAttendee> collection) async {
+  Future<void> _fetchAttendees(List<RideAttendee> collection) async {
     final records = await _rideAttendeeStore.find(_database);
 
-    collection = records.map((record) => RideAttendee.of(record.value));
+    records.map((record) => collection.add(RideAttendee.of(record.value)));
   }
 
   Iterable<ExportableRide> _joinRidesAndAttendees(HashMap<DateTime, Ride> rides, HashMap<String, Member> members, Iterable<RideAttendee> attendees) {

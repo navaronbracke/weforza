@@ -15,8 +15,6 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderWidth = size / 16;
-
     return SizedBox.square(
       dimension: size,
       child: Stack(
@@ -34,7 +32,7 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Transform.translate(
-              offset: Offset(0, borderWidth),
+              offset: Offset(0, size / 10),
               child: Icon(
                 CupertinoIcons.person_solid,
                 color: CupertinoColors.white,
@@ -48,7 +46,7 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 color: CupertinoColors.systemGrey2,
-                width: borderWidth,
+                width: 3.0,
               ),
               borderRadius: BorderRadius.all(
                 Radius.circular(size / 2),

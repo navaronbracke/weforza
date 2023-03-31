@@ -102,7 +102,7 @@
 
   "ExportMembersTitle": "Renners Exporteren",
   "ExportingMembersDescription": "Renners en toestellen exporteren",
-  "ExportMembersCsvHeader": "voornaam,familienaam,alias,actief,toestellen",
+  "ExportMembersCsvHeader": "voornaam,achternaam,alias,actief,laatste_update,toestellen",
 
   "DeviceUnknown": "Onbekend",
   "DeviceGPS": "GPS",

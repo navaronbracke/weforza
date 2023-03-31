@@ -198,7 +198,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                     ),
                   ),
                   Text(
-                    S.of(context).ImportMembersCsvHeaderExample,
+                    S.of(context).ExportMembersCsvHeader,
                     style: ApplicationTheme.importMembersHeaderExampleTextStyle,
                     softWrap: true,
                   )

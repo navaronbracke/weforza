@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/rideExportState.dart';
+import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/fileExtensionSelection.dart';
 import 'package:weforza/widgets/common/genericError.dart';
@@ -13,7 +13,9 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ExportRidePage extends StatefulWidget {
-  ExportRidePage({ @required this.bloc }): assert(bloc != null);
+  ExportRidePage({
+    @required this.bloc
+  }): assert(bloc != null);
 
   final ExportRideBloc bloc;
 
@@ -24,12 +26,6 @@ class ExportRidePage extends StatefulWidget {
 class _ExportRidePageState extends State<ExportRidePage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    widget.bloc.loadRideAttendees();
-  }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
@@ -59,16 +55,15 @@ class _ExportRidePageState extends State<ExportRidePage> {
   }
 
   Widget _buildBody(BuildContext context){
-    return StreamBuilder<RideExportState>(
-      initialData: RideExportState.INIT,
+    return StreamBuilder<ExportDataOrError>(
+      initialData: ExportDataOrError.idle(),
       stream: widget.bloc.stream,
       builder: (context, snapshot){
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
         }else{
-          switch(snapshot.data){
-            case RideExportState.INIT: return PlatformAwareLoadingIndicator();
-            case RideExportState.EXPORTING: return Column(
+          if(snapshot.data.exporting){
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PlatformAwareLoadingIndicator(),
@@ -78,7 +73,26 @@ class _ExportRidePageState extends State<ExportRidePage> {
                 ),
               ],
             );
-            case RideExportState.IDLE: return Form(
+          }else if(snapshot.data.success){
+            return LayoutBuilder(
+              builder: (context,constraints){
+                final paintSize = constraints.biggest.shortestSide * .3;
+                return Center(
+                    child: SizedBox(
+                      width: paintSize,
+                      height: paintSize,
+                      child: Center(
+                        child: AnimatedCheckmark(
+                          color: ApplicationTheme.accentColor,
+                          size: Size.square(paintSize),
+                        ),
+                      ),
+                    )
+                );
+              },
+            );
+          }else{
+            return Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,11 +110,11 @@ class _ExportRidePageState extends State<ExportRidePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
-                    child: StreamBuilder<String>(
-                      initialData: "",
-                      stream: widget.bloc.fileNameErrorStream,
+                    child: StreamBuilder<bool>(
+                      initialData: false,
+                      stream: widget.bloc.fileNameExistsStream,
                       builder: (context, snapshot){
-                        return Text(snapshot.data);
+                        return Text(snapshot.data ? S.of(context).FileExists : "");
                       },
                     ),
                   ),
@@ -111,7 +125,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       child: Text(S.of(context).Export),
                       onPressed: (){
                         if(_formKey.currentState.validate()){
-                          widget.bloc.exportRide(S.of(context).FileExists);
+                          widget.bloc.exportRide();
                         }
                       },
                     ),
@@ -119,7 +133,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       child: Text(S.of(context).Export),
                       onPressed: (){
                         if (_iosValidateFilename(context)) {
-                          widget.bloc.exportRide(S.of(context).FileExists);
+                          widget.bloc.exportRide();
                         }else {
                           setState(() {});
                         }
@@ -129,25 +143,6 @@ class _ExportRidePageState extends State<ExportRidePage> {
                 ],
               ),
             );
-            case RideExportState.DONE: return LayoutBuilder(
-              builder: (context,constraints){
-                final paintSize = constraints.biggest.shortestSide * .3;
-                return Center(
-                    child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.accentColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
-              },
-            );
-
-            default: return GenericError(text: S.of(context).GenericError);
           }
         }
       },

@@ -2,12 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the controller for a [DirectorySelectionFormField].
 class DirectorySelectionController extends ChangeNotifier {
-  DirectorySelectionController({Directory? initialValue}) : _directory = initialValue;
+  DirectorySelectionController({
+    required FileHandler fileHandler,
+    Directory? initialValue,
+  })  : _directory = initialValue,
+        _fileHandler = fileHandler;
+
+  final FileHandler _fileHandler;
 
   Directory? _directory;
 
@@ -20,6 +27,9 @@ class DirectorySelectionController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Open a directory picker.
+  Future<Directory?> openDirectoryPicker() => _fileHandler.pickDirectory();
 }
 
 /// This class represents a [FormField] for selecting a directory.
@@ -47,9 +57,10 @@ class DirectorySelectionFormField extends FormField<Directory> {
               errorMessage: field.errorText,
               selectDirectory: () async {
                 // If the directory picking operation failed, it returns null instead of an error.
-                final Directory? directory = await controller.selectDirectory();
+                final Directory? directory = await controller.openDirectoryPicker();
 
-                if (!field.mounted) {
+                // If no directory was selected, do not overwrite the old directory.
+                if (!field.mounted || directory == null) {
                   return;
                 }
 

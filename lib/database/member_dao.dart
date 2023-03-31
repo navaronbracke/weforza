@@ -93,10 +93,10 @@ class MemberDao implements IMemberDao {
     ]);
 
     switch (filterOption) {
-      case MemberFilterOption.ACTIVE:
+      case MemberFilterOption.active:
         finder.filter = Filter.equals('active', true);
         break;
-      case MemberFilterOption.INACTIVE:
+      case MemberFilterOption.inactive:
         finder.filter = Filter.equals('active', false);
         break;
       default:

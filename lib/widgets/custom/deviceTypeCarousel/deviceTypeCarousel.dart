@@ -94,19 +94,19 @@ class DeviceTypeCarousel extends StatelessWidget {
 
   String _getLabel(BuildContext context, int index) {
     switch (DeviceType.values[index]) {
-      case DeviceType.HEADSET:
+      case DeviceType.headset:
         return S.of(context).DeviceHeadset;
-      case DeviceType.WATCH:
+      case DeviceType.watch:
         return S.of(context).DeviceWatch;
-      case DeviceType.POWER_METER:
+      case DeviceType.powerMeter:
         return S.of(context).DevicePowerMeter;
-      case DeviceType.CADENCE_METER:
+      case DeviceType.cadenceMeter:
         return S.of(context).DeviceCadenceMeter;
-      case DeviceType.PHONE:
+      case DeviceType.phone:
         return S.of(context).DevicePhone;
-      case DeviceType.GPS:
+      case DeviceType.gps:
         return S.of(context).DeviceGPS;
-      case DeviceType.PULSE_MONITOR:
+      case DeviceType.pulseMonitor:
         return S.of(context).DevicePulseMonitor;
       default:
         return S.of(context).DeviceUnknown;

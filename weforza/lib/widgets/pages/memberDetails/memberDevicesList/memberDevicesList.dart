@@ -71,18 +71,21 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
           ),
         ),
         Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: PlatformAwareWidget(
-              android: () => FlatButton(
+          child: PlatformAwareWidget(
+            android: () => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: FlatButton(
                 onPressed: widget.onAddDeviceButtonPressed,
                 child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
               ),
-              ios: () => CupertinoButton(
+            ),
+            ios: () => Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 15),
+              child: CupertinoButton(
                 onPressed: widget.onAddDeviceButtonPressed,
                 child: Text(
-                    S.of(context).AddDeviceTitle,
-                    style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+                  S.of(context).AddDeviceTitle,
+                  style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
                 ),
               ),
             ),

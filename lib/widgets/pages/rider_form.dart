@@ -284,10 +284,17 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                     children: [
                       Center(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
                           child: ProfileImagePicker(
                             delegate: _profileImageDelegate,
-                            size: 64,
+                            imagePreviewSize: 64,
+                            pickingIndicator: const SizedBox.square(
+                              dimension: 88,
+                              child: Center(
+                                child: CupertinoActivityIndicator(),
+                              ),
+                            ),
                           ),
                         ),
                       ),

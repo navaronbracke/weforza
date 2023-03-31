@@ -1542,6 +1542,16 @@ class S {
       args: [],
     );
   }
+
+  /// `This file already exists`
+  String get FileExists {
+    return Intl.message(
+      'This file already exists',
+      name: 'FileExists',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

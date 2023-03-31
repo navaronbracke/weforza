@@ -175,5 +175,6 @@
   "DistanceKm": "Km",
   "Filename": "Filename",
   "InvalidFilename": "Invalid filename",
-  "FilenameWhitespace": "A filename can't be blank"
+  "FilenameWhitespace": "A filename can't be blank",
+  "FileExists": "This file already exists"
 }

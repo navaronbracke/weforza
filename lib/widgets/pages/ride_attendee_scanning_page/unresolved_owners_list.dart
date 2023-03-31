@@ -160,17 +160,15 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
 
         setState(() => _setColors());
       },
-      child: DecoratedBox(
+      child: Container(
         decoration: BoxDecoration(color: backgroundColor),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: MemberNameAndAlias(
-            firstLineStyle: firstNameStyle,
-            secondLineStyle: lastNameStyle,
-            firstName: widget.item.firstname,
-            lastName: widget.item.lastname,
-            alias: widget.item.alias,
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: MemberNameAndAlias(
+          firstLineStyle: firstNameStyle,
+          secondLineStyle: lastNameStyle,
+          firstName: widget.item.firstname,
+          lastName: widget.item.lastname,
+          alias: widget.item.alias,
         ),
       ),
     );

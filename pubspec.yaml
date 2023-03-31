@@ -41,7 +41,7 @@ dependencies:
   intl: ^0.17.0
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^4.0.0
+  jiffy: ^5.0.0
 
   # RxDart provides extensions to Dart Streams.
   rxdart: ^0.27.3

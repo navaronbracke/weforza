@@ -107,11 +107,8 @@
   "EditRideSubmit": "Wijzigingen Opslaan",
   "EditRideSubmitError": "Kon de wijzigingen niet opslaan",
 
-  "ImportExportPageTitle": "Importeren & Exporteren",
-  "ImportMembersFromFile": "Importeer leden van bestand",
-  "ImportDataFromNetwork": "Importeer gegevens",
-  "ExportAttendeesToFile": "Exporteer aanwezigen naar bestand",
-  "ExportDataToNetwork": "Exporteer gegevens",
+  "ImportMembersPageTitle": "Importeer Leden",
+  "ImportMembersPickFile": "Kies Bestand",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",

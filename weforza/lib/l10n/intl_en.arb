@@ -107,11 +107,8 @@
   "EditRideSubmit": "Save Changes",
   "EditRideSubmitError": "Failed to save the changes",
 
-  "ImportExportPageTitle": "Import & Export",
-  "ImportMembersFromFile": "Import members from file",
-  "ImportDataFromNetwork": "Import data",
-  "ExportAttendeesToFile": "Export attendees to file",
-  "ExportDataToNetwork": "Export data",
+  "ImportMembersPageTitle": "Import Members",
+  "ImportMembersPickFile": "Choose File",
 
   "RideStart": "Start",
   "RideDestination": "Destination",

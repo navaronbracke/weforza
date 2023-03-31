@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
+import 'package:weforza/widgets/pages/add_device/add_device_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_disabled_item.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
@@ -10,43 +13,56 @@ import 'package:weforza/widgets/pages/member_details/member_devices_list/member_
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class MemberDevicesList extends StatefulWidget {
+class MemberDevicesList extends ConsumerStatefulWidget {
   const MemberDevicesList({
     Key? key,
-    required this.future,
-    required this.onDeleteDevice,
-    required this.onAddDeviceButtonPressed,
   }) : super(key: key);
-
-  final Future<List<Device>>? future;
-  final Future<void> Function(Device device) onDeleteDevice;
-  final void Function() onAddDeviceButtonPressed;
 
   @override
   _MemberDevicesListState createState() => _MemberDevicesListState();
 }
 
-class _MemberDevicesListState extends State<MemberDevicesList> {
+class _MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+
+  late final SelectedMemberNotifier selectedMemberNotifier;
+
+  void onAddDevicePressed(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const AddDevicePage()),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedMemberNotifier = ref.read(selectedMemberProvider.notifier);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final future = ref.watch(
+      selectedMemberProvider.select((value) => value?.devices),
+    );
+
     return FutureBuilder<List<Device>>(
-      future: widget.future,
+      future: future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return GenericError(text: S.of(context).GenericError);
-          } else {
-            return snapshot.data == null || snapshot.data!.isEmpty
-                ? MemberDevicesListEmpty(
-                    onAddDevicePageButtonPressed:
-                        widget.onAddDeviceButtonPressed,
-                  )
-                : _buildDevicesList(context, snapshot.data!);
-          }
-        } else {
-          return const Center(child: PlatformAwareLoadingIndicator());
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return GenericError(text: S.of(context).GenericError);
+            }
+
+            final data = snapshot.data ?? [];
+
+            if (data.isEmpty) {
+              return const MemberDevicesListEmpty();
+            }
+
+            return _buildDevicesList(context, data);
+          default:
+            return const Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );
@@ -62,9 +78,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             initialItemCount: devices.length,
             itemBuilder: (context, index, animation) => MemberDevicesListItem(
               device: devices[index],
-              index: index,
-              onDelete: (device, index) =>
-                  onDeleteDevice(context, device, index, devices),
+              onDelete: () => onDeleteDevice(context, index),
             ),
           ),
         ),
@@ -72,14 +86,14 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
           android: () => Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: TextButton(
-              onPressed: widget.onAddDeviceButtonPressed,
+              onPressed: () => onAddDevicePressed(context),
               child: Text(S.of(context).AddDeviceTitle),
             ),
           ),
           ios: () => Padding(
             padding: const EdgeInsets.only(top: 5, bottom: 15),
             child: CupertinoButton.filled(
-              onPressed: widget.onAddDeviceButtonPressed,
+              onPressed: () => onAddDevicePressed(context),
               child: Text(
                 S.of(context).AddDeviceTitle,
                 style: const TextStyle(color: Colors.white),
@@ -91,27 +105,34 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
     );
   }
 
-  Future<void> onDeleteDevice(
-      BuildContext context, Device device, int index, List<Device> devices) {
-    //delete it from the database
-    return widget.onDeleteDevice(device).then((_) {
-      Navigator.of(context).pop(); //get rid of the dialog
+  Future<void> onDeleteDevice(BuildContext context, int index) async {
+    final device = await selectedMemberNotifier.deleteDevice(index);
 
-      final listState = _listKey.currentState;
+    if (!mounted) {
+      return;
+    }
 
-      if (listState != null) {
-        final device = devices.removeAt(index); //remove it from memory
-        //and remove it from the animated list
-        listState.removeItem(
-            index,
-            (context, animation) => SizeTransition(
-                  sizeFactor: animation,
-                  child: MemberDevicesListDisabledItem(device: device),
-                ));
-        if (devices.isEmpty) {
-          setState(() {}); //switch to the is empty list widget
-        }
-      }
-    });
+    // Get rid of the delete dialog.
+    Navigator.of(context).pop();
+
+    final listState = _listKey.currentState;
+
+    if (listState == null) {
+      return;
+    }
+
+    // Remove the device from the animated list.
+    listState.removeItem(
+      index,
+      (context, animation) => SizeTransition(
+        sizeFactor: animation,
+        child: MemberDevicesListDisabledItem(device: device),
+      ),
+    );
+
+    // Switch to the empty list widget.
+    if (selectedMemberNotifier.hasNoDevices) {
+      setState(() {});
+    }
   }
 }

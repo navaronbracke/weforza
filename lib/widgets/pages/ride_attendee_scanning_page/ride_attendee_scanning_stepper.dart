@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This Widget represents the stepper at the top of the scanning page.
-/// It shows if the user is in the scanning step or the manual assignment step.
+/// This widget represents the stepper at the top of the scanning page.
+/// It displays the two labels of the scanning process,
+/// `Scan` and `Manual`, separated by an arrow.
+/// The currently applicable label is highlighted.
 class RideAttendeeScanningStepper extends StatelessWidget {
-  const RideAttendeeScanningStepper({
-    Key? key,
-    required this.stream,
-  }) : super(key: key);
+  const RideAttendeeScanningStepper({super.key, required this.stream});
 
-  final Stream<bool> stream;
+  /// The stream that indicates the current step in the scanning process.
+  final Stream<RideAttendeeScanningState> stream;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: true,
+    return StreamBuilder<RideAttendeeScanningState>(
       stream: stream,
-      builder: (context, snapshot) => PlatformAwareWidget(
-        android: () => _buildAndroidWidget(context, snapshot.data!),
-        ios: () => _buildIosWidget(context, snapshot.data!),
-      ),
+      builder: (context, snapshot) {
+        // Every step before the manual selection is regarded as part of the
+        // `Scan` label.
+        final isScanningStep =
+            snapshot.data != RideAttendeeScanningState.manualSelection;
+
+        return PlatformAwareWidget(
+          android: () => _buildAndroidWidget(context, isScanningStep),
+          ios: () => _buildIosWidget(context, isScanningStep),
+        );
+      },
     );
   }
 

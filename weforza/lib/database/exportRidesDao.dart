@@ -2,7 +2,7 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/exportableRide.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
@@ -14,17 +14,31 @@ abstract class IExportRidesDao {
 }
 
 class ExportRidesDao implements IExportRidesDao {
-  ExportRidesDao(this._database): assert(_database != null);
+  ExportRidesDao(
+      this._database,
+      this._memberStore,
+      this._rideStore,
+      this._rideAttendeeStore): assert(_database != null
+      && _memberStore != null && _rideStore != null
+      && _rideAttendeeStore != null
+  );
+
+  ExportRidesDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.memberStore,
+    provider.rideStore,
+    provider.rideAttendeeStore
+  );
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
 
   ///A reference to the [Ride] store.
-  final _rideStore = DatabaseProvider.rideStore;
+  final StoreRef<String, Map<String, dynamic>> _rideStore;
   ///A reference to the [Member] store.
-  final _memberStore = DatabaseProvider.memberStore;
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
   ///A reference to the [RideAttendee] store.
-  final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
   @override
   Future<Iterable<ExportableRide>> getRides() async {

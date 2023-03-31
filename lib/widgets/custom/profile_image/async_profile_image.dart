@@ -16,7 +16,7 @@ class AsyncProfileImage extends StatelessWidget {
     this.size = 40,
   }) : super(key: key);
 
-  final Future<File>? future;
+  final Future<File?> future;
   final String? personInitials;
   final double size;
   final IconData icon;
@@ -26,19 +26,10 @@ class AsyncProfileImage extends StatelessWidget {
     const iconColor = ApplicationTheme.profileImagePlaceholderIconColor;
     final bgColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor;
 
-    return FutureBuilder<File>(
+    return FutureBuilder<File?>(
       future: future,
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return ProfileImage(
-              icon: icon,
-              image: null,
-              size: size,
-              personInitials: personInitials,
-              iconColor: iconColor,
-              backgroundColor: bgColor,
-            );
           case ConnectionState.done:
             if (snapshot.hasError) {
               return ProfileImage(

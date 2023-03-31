@@ -63,7 +63,7 @@ class DatePickerDelegate {
   final BehaviorSubject<Jiffy> _monthController;
 
   /// Get the current calendar month.
-  DateTime get currentCalendarMonth => _monthController.value.dateTime;
+  Jiffy get currentCalendarMonth => _monthController.value;
 
   /// Get the stream for the currently selected month.
   Stream<Jiffy> get monthStream => _monthController;

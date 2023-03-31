@@ -45,21 +45,27 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               },
               child: Text(translator.SettingsResetRideCalendarButtonLabel),
             ),
-            ios: () => CupertinoButton(
-              color: ApplicationTheme.deleteItemButtonTextColor,
-              child: Text(translator.SettingsResetRideCalendarButtonLabel),
-              onPressed: () async {
-                final result = await showCupertinoDialog(
-                  context: context,
-                  builder: (context) => ResetRideCalendarDialog(),
-                );
+            ios: () => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: CupertinoButton(
+                color: ApplicationTheme.deleteItemButtonTextColor,
+                child: Text(
+                  translator.SettingsResetRideCalendarButtonLabel,
+                  style: ApplicationTheme.iosSettingsResetRideCalendarTextStyle,
+                ),
+                onPressed: () async {
+                  final result = await showCupertinoDialog(
+                    context: context,
+                    builder: (context) => ResetRideCalendarDialog(),
+                  );
 
-                if(result != null && result){
-                  setState(() {
-                    _deleted = true;
-                  });
-                }
-              },
+                  if(result != null && result){
+                    setState(() {
+                      _deleted = true;
+                    });
+                  }
+                },
+              )
             ),
           ),
           Padding(

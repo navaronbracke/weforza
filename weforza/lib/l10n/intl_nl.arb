@@ -94,6 +94,7 @@
   "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
   "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Kies een eigenaar",
+  "RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip": "Nog aan het scannen",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

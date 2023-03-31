@@ -94,6 +94,7 @@
   "RideAttendeeScanningSaveManualResults": "Save Selection",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
   "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Choose an owner",
+  "RideAttendeeScanningScanResultMultipleOwnersDisabledTooltip": "Still busy scanning",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

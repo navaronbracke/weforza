@@ -125,7 +125,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
             }
 
             if (error != null) {
-              return GenericError(text: translator.GenericError);
+              return const Center(child: GenericError());
             }
 
             return const AdaptiveAnimatedCheckmark();

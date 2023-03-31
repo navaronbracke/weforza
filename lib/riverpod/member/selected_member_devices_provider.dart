@@ -14,7 +14,7 @@ final selectedMemberDevicesProvider = StateNotifierProvider<
 
   return SelectedMemberDevicesNotifier(
     repository: repository,
-    uuid: selectedMember?.value.uuid,
+    uuid: selectedMember?.uuid,
   );
 });
 

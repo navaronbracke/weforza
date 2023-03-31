@@ -79,7 +79,7 @@ class _EditDeviceButton extends ConsumerWidget {
       MaterialPageRoute(
         builder: (context) => DeviceForm(
           device: device,
-          ownerUuid: selectedMember!.value.uuid,
+          ownerUuid: selectedMember!.uuid,
         ),
       ),
     );

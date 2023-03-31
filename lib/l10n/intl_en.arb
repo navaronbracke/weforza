@@ -95,6 +95,7 @@
 	"MemberAlreadyExists": "This rider already exists",
 	"MemberDeleteDialogDescription": "Are you sure that you want to delete this rider?",
 	"MemberDetailsNoDevices": "This rider has no devices yet",
+	"NoKeywords": "There are no keywords yet",
 	"Ok": "Ok",
 	"PastDayNoRide": "Past Day Without Ride",
 	"PastDayWithRide": "Past Day With Ride",

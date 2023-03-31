@@ -6,7 +6,7 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/device_repository.dart';
-import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/member_repository.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {

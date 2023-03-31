@@ -14,9 +14,9 @@ import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scan_result.dart';
 import 'package:weforza/model/scan_process_step.dart';
 import 'package:weforza/repository/device_repository.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/repository/member_repository.dart';
+import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/repository/settings_repository.dart';
 
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({

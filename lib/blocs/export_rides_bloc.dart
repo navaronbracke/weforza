@@ -9,7 +9,7 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/export_data_or_error.dart';
 import 'package:weforza/model/exportable_ride.dart';
-import 'package:weforza/repository/exportRidesRepository.dart';
+import 'package:weforza/repository/export_rides_repository.dart';
 
 class ExportRidesBloc extends Bloc {
   ExportRidesBloc({

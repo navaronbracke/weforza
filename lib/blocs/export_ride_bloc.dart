@@ -11,7 +11,7 @@ import 'package:weforza/model/export_data_or_error.dart';
 import 'package:weforza/model/exportable_ride.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/ride_repository.dart';
 
 class ExportRideBloc extends Bloc {
   ExportRideBloc({

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/repository/settings_repository.dart';
 
 class SettingsBloc extends Bloc {
   SettingsBloc(this._repository);

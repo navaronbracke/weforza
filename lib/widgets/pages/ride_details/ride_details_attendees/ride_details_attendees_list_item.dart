@@ -4,10 +4,10 @@ import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
   RideDetailsAttendeesListItem({
-    super.key,
     required this.firstName,
     required this.lastName,
     required this.alias,
+    super.key,
   }) : assert(
           firstName.isNotEmpty && lastName.isNotEmpty,
           'The first name and last name of a ride attendee should not be empty',

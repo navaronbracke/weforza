@@ -7,9 +7,9 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class _GenericScanErrorBase extends StatelessWidget {
   const _GenericScanErrorBase({
-    this.errorMessage,
     required this.icon,
     required this.primaryButton,
+    this.errorMessage,
     this.secondaryButton,
   });
 
@@ -67,7 +67,10 @@ class _GenericScanErrorBase extends StatelessWidget {
 /// This widget represents a scan error that indicates that bluetooth is disabled.
 /// It provides a button to open the bluetooth settings and a button to retry the scan.
 class BluetoothDisabledError extends StatelessWidget {
-  const BluetoothDisabledError({super.key, required this.onRetry});
+  const BluetoothDisabledError({
+    required this.onRetry,
+    super.key,
+  });
 
   final void Function() onRetry;
 

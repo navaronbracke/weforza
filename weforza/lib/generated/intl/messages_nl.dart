@@ -162,8 +162,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "SettingsLoading" : MessageLookupByLibrary.simpleMessage("Instellingen Laden"),
     "SettingsLoadingError" : MessageLookupByLibrary.simpleMessage("Kon de instellingen niet laden"),
     "SettingsScanSliderHeader" : MessageLookupByLibrary.simpleMessage("Duur van een scan (in seconden)"),
-    "SettingsShowAllDevicesOptionDescription" : MessageLookupByLibrary.simpleMessage("Toon alle gescande toestellen, ongeacht of ze van bekende personen zijn of niet."),
-    "SettingsShowAllDevicesOptionLabel" : MessageLookupByLibrary.simpleMessage("Toon Alle Gescande Toestellen"),
     "SettingsSubmitError" : MessageLookupByLibrary.simpleMessage("Kon de instellingen niet opslaan"),
     "SettingsTitle" : MessageLookupByLibrary.simpleMessage("Instellingen"),
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Zo"),

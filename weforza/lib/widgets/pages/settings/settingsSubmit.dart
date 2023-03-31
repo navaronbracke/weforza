@@ -5,36 +5,46 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-abstract class SettingsSubmitHandler {
-  Stream<bool> get submitStream;
-
-  VoidCallback onSubmit;
-}
-
 class SettingsSubmit extends StatelessWidget {
-  SettingsSubmit({@required this.handler}): assert(handler != null);
+  SettingsSubmit({
+    @required this.onSubmit,
+    @required this.submitStream,
+  }): assert(onSubmit != null && submitStream != null);
 
-  final SettingsSubmitHandler handler;
+  final Stream<bool> submitStream;
+  final VoidCallback onSubmit;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       initialData: false,
-      stream: handler.submitStream,
+      stream: submitStream,
       builder: (context,snapshot){
         if(snapshot.hasError){
           return SizedBox(width: 0,height: 0);
         }else{
-          return PlatformAwareWidget(
+          return snapshot.data ? Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Center(
+                child: PlatformAwareWidget(
+                  android: () => CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                  ios: () => CupertinoActivityIndicator(),
+                ),
+            ),
+          ): PlatformAwareWidget(
             android: () => IconButton(
               icon: Icon(Icons.done,color: Colors.white),
-              onPressed: snapshot.data ? (){} : handler.onSubmit,
+              onPressed: onSubmit,
             ),
-            ios: () => CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
-              icon: Icons.done,
-              onPressed: snapshot.data ? (){} : handler.onSubmit,
+            ios: () => Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: CupertinoIconButton(
+                onPressedColor: ApplicationTheme.primaryColor,
+                idleColor: ApplicationTheme.accentColor,
+                icon: Icons.done,
+                onPressed: onSubmit,
+              ),
             ),
           );
         }

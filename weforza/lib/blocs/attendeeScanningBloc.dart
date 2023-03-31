@@ -11,7 +11,6 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/scanResultItem.dart';
-import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -75,6 +74,7 @@ class AttendeeScanningBloc extends Bloc {
   HashSet<String> rideAttendees;
 
   final List<ScanResultItem> _scanResults = [];
+  int scanDuration;
 
   ///The page number for the members that should get loaded.
   ///This number starts at 0 but changes over time
@@ -135,7 +135,7 @@ class AttendeeScanningBloc extends Bloc {
     if(!isScanning.value){
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
-      scanner.scanForDevices(Settings.instance.scanDuration).listen((deviceName) {
+      scanner.scanForDevices(scanDuration).listen((deviceName) {
         //Start the lookup for the member, giving the device name as placeholder.
         onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
       }, onError: (error){
@@ -150,7 +150,10 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   ///Load the application settings.
-  Future<void> _loadSettings() => settingsRepo.loadApplicationSettings();
+  Future<void> _loadSettings() async {
+    final settings = await settingsRepo.loadApplicationSettings();
+    scanDuration = settings.scanDuration;
+  }
 
   ///Load the members subset (is better for memory usage).
   ///Has a page parameter (ignored for now).

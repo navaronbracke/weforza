@@ -38,16 +38,12 @@ class DirectorySelectionController extends ChangeNotifier {
 class DirectorySelectionFormField extends FormField<Directory> {
   DirectorySelectionFormField({
     required this.controller,
-    this.buttonFocusNode,
-    this.labelFocusNode,
     ValueChanged<Directory?>? onChanged,
-    this.maxLines = 1,
     AutovalidateMode? autovalidateMode,
     super.onSaved,
     super.validator,
     super.key,
-  })  : assert(maxLines == null || maxLines > 0, 'Max lines should be null or greater than zero'),
-        super(
+  }) : super(
           initialValue: controller.directory,
           autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
           enabled: true,
@@ -71,17 +67,8 @@ class DirectorySelectionFormField extends FormField<Directory> {
           },
         );
 
-  /// The focus node for the select directory button.
-  final FocusNode? buttonFocusNode;
-
   /// The controller for the directory selection field.
   final DirectorySelectionController controller;
-
-  /// The focus node for the selected directory label.
-  final FocusNode? labelFocusNode;
-
-  /// The maximum lines for the directory path label.
-  final int? maxLines;
 
   @override
   FormFieldState<Directory> createState() => _DirectorySelectionFormFieldState();

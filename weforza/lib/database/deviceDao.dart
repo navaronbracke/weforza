@@ -13,8 +13,6 @@ abstract class IDeviceDao {
   Future<List<Device>> getOwnerDevices(String ownerId);
 
   Future<List<Device>> getAllDevices();
-
-  Future<Set<String>> getOwnersOfDevicesWithName(String deviceName);
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -56,16 +54,5 @@ class DeviceDao implements IDeviceDao {
   Future<List<Device>> getAllDevices() async {
     final records = await _deviceStore.find(_database);
     return records.map((record) => Device.of(record.key,record.value)).toList();
-  }
-
-  @override
-  Future<Set<String>> getOwnersOfDevicesWithName(String deviceName) async {
-    final records = await _deviceStore.find(
-        _database,
-        finder: Finder(filter: Filter.equals("deviceName", deviceName))
-    );
-
-    //Get the owner directly from the snapshot
-    return records.map((RecordSnapshot record) => record["owner"] as String).toSet();
   }
 }

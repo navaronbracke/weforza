@@ -7,8 +7,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
-import 'package:weforza/model/exportDataOrError.dart';
-import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/model/export_data_or_error.dart';
+import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';
 
 class ExportMembersBloc extends Bloc {

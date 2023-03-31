@@ -2,8 +2,8 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rideAttendee.dart';
-import 'package:weforza/model/rideAttendeeScanResult.dart';
+import 'package:weforza/model/ride_attendee.dart';
+import 'package:weforza/model/ride_attendee_scan_result.dart';
 
 ///This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {

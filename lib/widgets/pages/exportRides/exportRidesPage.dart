@@ -4,7 +4,7 @@ import 'package:weforza/blocs/export_rides_bloc.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/model/exportDataOrError.dart';
+import 'package:weforza/model/export_data_or_error.dart';
 import 'package:weforza/repository/exportRidesRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/fileExtensionSelection.dart';

@@ -14,6 +14,8 @@ class ExcludedTermsDelegate {
   /// The max length for an excluded term.
   final int maxLength = 16;
 
+  final whitespaceMatcher = RegExp(r'\s');
+
   /// Get the stream of excluded terms.
   Stream<List<String>> get stream => _termsController;
 
@@ -66,6 +68,10 @@ class ExcludedTermsDelegate {
   String? validateTerm(String? term, S translator, {String? originalValue}) {
     if (term == null || term.trim().isEmpty) {
       return translator.DisallowedWordRequired;
+    }
+
+    if (whitespaceMatcher.hasMatch(term)) {
+      return translator.DisallowedWordNoWhitespace;
     }
 
     if (term.length > maxLength) {

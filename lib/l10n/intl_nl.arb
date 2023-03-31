@@ -44,6 +44,7 @@
 	"DevicesListNoDevices": "Geen toestellen om te tonen",
 	"DisallowedWordExists": "Dit verboden woord bestaat al",
 	"DisallowedWordMaxLength": "Een verboden woord mag niet langer zijn dan {maxLength} karakters",
+	"DisallowedWordNoWhitespace": "Een verboden woord mag geen spaties bevatten",
 	"DisallowedWordRequired": "Een verboden woord mag niet leeg zijn",
 	"EditDevice": "Toestel Bewerken",
 	"EditDisallowedWord": "Verboden woord bewerken",

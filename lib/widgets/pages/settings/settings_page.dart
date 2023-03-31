@@ -99,7 +99,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
 
   Widget _buildAndroidWidget(BuildContext context) {
     final translator = S.of(context);
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -139,10 +140,14 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 translator.RiderListFilter,
                 style: textTheme.titleMedium,
               ),
-              MemberListFilter(
-                initialFilter: memberFilterController.value,
-                onChanged: memberFilterController.add,
-                stream: memberFilterController,
+              Theme(
+                // TODO: remove when useMaterial3 is true in MaterialApp
+                data: ThemeData(useMaterial3: true, chipTheme: theme.chipTheme),
+                child: MemberListFilter(
+                  initialFilter: memberFilterController.value,
+                  onChanged: memberFilterController.add,
+                  stream: memberFilterController,
+                ),
               ),
               Text(
                 translator.RiderListFilterDescription,

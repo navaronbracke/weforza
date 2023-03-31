@@ -19,7 +19,9 @@ class CupertinoIconButton extends StatelessWidget {
   final IconData icon;
 
   /// The onTap handler for the button.
-  final void Function() onPressed;
+  ///
+  /// If this is null, the button is disabled.
+  final void Function()? onPressed;
 
   /// The size for the button.
   final double size;
@@ -31,7 +33,10 @@ class CupertinoIconButton extends StatelessWidget {
       minSize: size,
       onPressed: onPressed,
       padding: EdgeInsets.zero,
-      child: Icon(icon, color: color),
+      child: Icon(
+        icon,
+        color: onPressed == null ? CupertinoColors.quaternarySystemFill : color,
+      ),
     );
   }
 }

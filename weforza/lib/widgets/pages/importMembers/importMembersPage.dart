@@ -146,6 +146,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
       ios: () => CupertinoButton.filled(
         child: Text(
           S.of(context).ImportMembersPickFile,
+          style: TextStyle(color: Colors.white),
         ),
         onPressed: () => onImportMembers(context),
       ),

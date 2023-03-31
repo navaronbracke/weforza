@@ -52,7 +52,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       scanner: InjectionContainer.get<BluetoothDeviceScanner>(),
       ridesRepo: InjectionContainer.get<RideRepository>(),
     );
-    bloc.scanFuture = bloc.doInitialDeviceScan(_onDeviceFound);
+    bloc.scanFuture = bloc.startDeviceScan(_onDeviceFound);
   }
 
   @override
@@ -108,7 +108,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   case ScanProcessStep.BLUETOOTH_DISABLED: return Center(
                     child: BluetoothDisabledWidget(
                       onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
-                      onRetryScan: () => bloc.scanFuture = bloc.retryDeviceScan(_onDeviceFound),
+                      onRetryScan: () => bloc.scanFuture = bloc.startDeviceScan(_onDeviceFound),
                     ),
                   );
                   case ScanProcessStep.SCAN:

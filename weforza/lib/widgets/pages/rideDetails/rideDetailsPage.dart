@@ -22,7 +22,6 @@ import 'package:weforza/widgets/pages/rideAttendeeAssignmentPage/rideAttendeeAss
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -49,70 +48,11 @@ class _RideDetailsPageState extends State<RideDetailsPage>
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => OrientationAwareWidget(
-          portrait: () => _buildAndroidPortraitLayout(context),
-          landscape: () => _buildAndroidLandscapeLayout(context),
-        ),
-        ios: () => OrientationAwareWidget(
-          portrait: () => _buildIOSPortraitLayout(context),
-          landscape: () => _buildIOSLandscapeLayout(context),
-        ),
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIOSLayout(context),
       );
 
-  Widget _buildAndroidLandscapeLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(ride.getFormattedDate(context, false),
-            style: TextStyle(fontSize: 16)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.person_pin),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(
-                      builder: (context) => RideAttendeeScanStartTrigger(
-                            child: RideAttendeeAssignmentPage(
-                                RideAttendeeAssignmentBloc(
-                                    RideProvider.selectedRide,
-                                    InjectionContainer.get<RideRepository>(),
-                                    InjectionContainer.get<MemberRepository>(),
-                                    InjectionContainer.get<DeviceRepository>(),
-                                    InjectionContainer.get<SettingsRepository>(),
-                                    InjectionContainer.get<IBluetoothScanner>())),
-                          )))
-                  .then((value) {
-                if (value != null && value) {
-                  setState(() {
-                    attendeesFuture =
-                        _bloc.loadRideAttendees(RideProvider.selectedRide.date);
-                  });
-                }
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditRidePage()));
-            },
-          ),
-          IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => DeleteRideDialog(this));
-              }),
-        ],
-      ),
-      body: _buildLandscapeBody(ride),
-    );
-  }
-
-  Widget _buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return Scaffold(
       appBar: AppBar(
@@ -161,78 +101,11 @@ class _RideDetailsPageState extends State<RideDetailsPage>
               }),
         ],
       ),
-      body: _buildPortraitBody(ride),
+      body: _buildBody(ride),
     );
   }
 
-  Widget _buildIOSLandscapeLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Center(
-                  child: Text(ride.getFormattedDate(context, false),
-                      style: TextStyle(fontSize: 16))),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CupertinoIconButton(
-                    icon: Icons.person_pin,
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(
-                              builder: (context) =>
-                                  RideAttendeeScanStartTrigger(
-                                    child: RideAttendeeAssignmentPage(
-                                        RideAttendeeAssignmentBloc(
-                                            RideProvider.selectedRide,
-                                            InjectionContainer.get<RideRepository>(),
-                                            InjectionContainer.get<MemberRepository>(),
-                                            InjectionContainer.get<DeviceRepository>(),
-                                            InjectionContainer.get<SettingsRepository>(),
-                                            InjectionContainer.get<IBluetoothScanner>()
-                                        )
-                                    ),
-                                  )))
-                          .then((value) {
-                        if (value != null && value) {
-                          setState(() {
-                            attendeesFuture = _bloc.loadRideAttendees(
-                                RideProvider.selectedRide.date);
-                          });
-                        }
-                      });
-                    }),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    icon: Icons.edit,
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditRidePage()))),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    icon: Icons.delete,
-                    onPressed: () => showCupertinoDialog(
-                        context: context,
-                        builder: (context) => DeleteRideDialog(this))),
-              ],
-            ),
-          ],
-        ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: _buildLandscapeBody(ride),
-      ),
-    );
-  }
-
-  Widget _buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -294,7 +167,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildPortraitBody(ride),
+        child: _buildBody(ride),
       ),
     );
   }
@@ -372,61 +245,8 @@ class _RideDetailsPageState extends State<RideDetailsPage>
 
   ///Build the page main body.
   ///Encompasses an optional title at the top,
-  ///the ride properties on the left and the attendees on the right.
-  Widget _buildLandscapeBody(Ride ride) {
-    return (ride.title == null || ride.title.isEmpty)
-        ? Row(
-            children: <Widget>[
-              Flexible(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8, left: 8),
-                  child: _buildPropertiesPanel(ride),
-                ),
-              ),
-              Flexible(
-                flex: 4,
-                child: _buildAttendeesList(),
-              ),
-            ],
-          )
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(ride.title,
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-              ),
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      flex: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: _buildPropertiesPanel(ride),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 4,
-                      child: _buildAttendeesList(),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          );
-  }
-
-  ///Build the page main body.
-  ///Encompasses an optional title at the top,
   ///the ride properties below the title and the attendees at the bottom.
-  Widget _buildPortraitBody(Ride ride) {
+  Widget _buildBody(Ride ride) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: (ride.title == null || ride.title.isEmpty)

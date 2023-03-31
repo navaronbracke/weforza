@@ -9,7 +9,6 @@ import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -34,63 +33,11 @@ class _AddRidePageState extends State<AddRidePage> {
 
   @override
   Widget build(BuildContext context)=> PlatformAwareWidget(
-    android: () => OrientationAwareWidget(
-      portrait: () => _buildAndroidPortraitLayout(context),
-      landscape: () => _buildAndroidLandscapeLayout(context),
-    ),
-    ios: () => OrientationAwareWidget(
-      portrait: () => _buildIOSPortraitLayout(context),
-      landscape: () => _buildIOSLandscapeLayout(context),
-    ),
+    android: () => _buildAndroidLayout(context),
+    ios: () => _buildIOSLayout(context),
   );
 
-  Widget _buildAndroidLandscapeLayout(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).AddRideTitle),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete_sweep),
-            onPressed: () => _bloc.onRequestClear(),
-          ),
-        ],
-      ),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-              flex: 3,
-              child: _buildCalendar(),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: AddRideColorLegend(),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: AddRideSubmit(_bloc.submitStream,() async {
-                        await _bloc.addRides((){
-                          RideProvider.reloadRides = true;
-                          Navigator.pop(context);
-                        });
-                      }),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
@@ -132,60 +79,7 @@ class _AddRidePageState extends State<AddRidePage> {
     );
   }
 
-  Widget _buildIOSLandscapeLayout(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Center(child: Text(S.of(context).AddRideTitle)),
-            ),
-            CupertinoIconButton(
-              icon: Icons.delete_sweep,
-              onPressed: () => _bloc.onRequestClear(),
-            ),
-          ],
-        ),
-      ),
-      child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                flex: 3,
-                child: _buildCalendar(),
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: AddRideColorLegend(),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: AddRideSubmit(_bloc.submitStream,() async {
-                            await _bloc.addRides((){
-                              RideProvider.reloadRides = true;
-                              Navigator.pop(context);
-                            });
-                          }),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSLayout(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

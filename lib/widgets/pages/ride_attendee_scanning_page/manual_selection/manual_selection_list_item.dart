@@ -175,7 +175,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   void handleTap(BuildContext context) async {
     // Don't allow selecting the member when locked by saving.
     // Focus changes are allowed but those have been handled already.
-    if (!widget.canTap()) {
+    if (!mounted || !widget.canTap()) {
       return;
     }
 
@@ -205,9 +205,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     }
 
     // Rebuild with the new colors.
-    if (mounted) {
-      setState(() => _setColors());
-    }
+    setState(() => _setColors());
   }
 
   Future<bool?> showConfirmationDialog(BuildContext context) {

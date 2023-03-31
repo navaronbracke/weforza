@@ -67,9 +67,7 @@ class RideListItemState extends ConsumerState<RideListItem> {
         ),
       ),
       onTap: () {
-        final notifier = ref.read(selectedRideProvider.notifier);
-
-        notifier.setSelectedRide(attendees: rideAttendees, ride: widget.ride);
+        ref.read(selectedRideProvider.notifier).setSelectedRide(widget.ride);
 
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const RideDetailsPage()),

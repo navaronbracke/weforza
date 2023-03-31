@@ -7,10 +7,10 @@ class RideDetailsTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ride = ref.watch(selectedRideProvider.select((r) => r!.value));
+    final ride = ref.watch(selectedRideProvider);
 
     return Text(
-      ride.getFormattedDate(context),
+      ride!.getFormattedDate(context),
       style: const TextStyle(fontSize: 16),
     );
   }

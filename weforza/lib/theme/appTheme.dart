@@ -65,10 +65,10 @@ abstract class ApplicationTheme {
   );
 
   //MemberList Item First Name Text Style
-  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w500);
+  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 18,fontWeight: FontWeight.w500);
 
   //MemberList Item Last Name Text Style
-  static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
+  static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 14);
 
   //Cupertino Form Input Error Text Style
   static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);

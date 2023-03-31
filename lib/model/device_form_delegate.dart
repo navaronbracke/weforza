@@ -1,10 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/model/device.dart';
 import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
-import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.
 class DeviceFormDelegate {
@@ -31,24 +28,7 @@ class DeviceFormDelegate {
     _submitController.add(true);
 
     try {
-      final repository = ref.read(deviceRepositoryProvider);
-
-      final exists = await repository.deviceExists(model.name, model.ownerId);
-
-      if (exists) {
-        throw DeviceExistsException();
-      }
-
-      final device = Device(
-        creationDate: DateTime.now(),
-        name: model.name,
-        ownerId: model.ownerId,
-        type: model.type,
-      );
-
-      await repository.addDevice(device);
-
-      ref.refresh(selectedMemberDevicesProvider);
+      await ref.read(selectedMemberDevicesProvider.notifier).addDevice(model);
     } catch (error) {
       _submitController.addError(error);
 
@@ -56,38 +36,11 @@ class DeviceFormDelegate {
     }
   }
 
-  Future<Device> editDevice(DevicePayload model) async {
+  Future<void> editDevice(DevicePayload model) async {
     _submitController.add(true);
 
     try {
-      final creationDate = model.creationDate;
-
-      if (creationDate == null) {
-        throw ArgumentError.notNull('creationDate');
-      }
-
-      final repository = ref.read(deviceRepositoryProvider);
-
-      final exists = await repository.deviceExists(
-        model.name,
-        model.ownerId,
-        creationDate,
-      );
-
-      if (exists) {
-        throw DeviceExistsException();
-      }
-
-      final newDevice = Device(
-        creationDate: creationDate,
-        name: model.name,
-        ownerId: model.ownerId,
-        type: model.type,
-      );
-
-      await repository.updateDevice(newDevice);
-
-      return newDevice;
+      await ref.read(selectedMemberDevicesProvider.notifier).editDevice(model);
     } catch (error) {
       _submitController.addError(error);
 

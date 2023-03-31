@@ -9,6 +9,10 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),
+    chipTheme: const ChipThemeData(
+      selectedColor: Colors.blue,
+      secondaryLabelStyle: TextStyle(color: Colors.white),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue,

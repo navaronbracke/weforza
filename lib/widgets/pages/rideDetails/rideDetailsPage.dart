@@ -20,6 +20,8 @@ import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideDetailsPage extends StatefulWidget {
+  const RideDetailsPage({Key? key}) : super(key: key);
+
   @override
   _RideDetailsPageState createState() => _RideDetailsPageState();
 }

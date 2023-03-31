@@ -5,6 +5,8 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class LoadingSettings extends StatelessWidget {
+  const LoadingSettings({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
         android: () => Scaffold(
@@ -27,7 +29,7 @@ class LoadingSettings extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          PlatformAwareLoadingIndicator(),
+          const PlatformAwareLoadingIndicator(),
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Text(S.of(context).SettingsLoading),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -7,10 +6,11 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberListFilter extends StatefulWidget {
-  MemberListFilter({
+  const MemberListFilter({
+    Key? key,
     required this.getValue,
     required this.onChanged,
-  });
+  }) : super(key: key);
 
   final void Function(MemberFilterOption value) onChanged;
   final MemberFilterOption Function() getValue;
@@ -20,7 +20,6 @@ class MemberListFilter extends StatefulWidget {
 }
 
 class _MemberListFilterState extends State<MemberListFilter> {
-
   @override
   Widget build(BuildContext context) {
     final currentValue = widget.getValue();
@@ -34,7 +33,10 @@ class _MemberListFilterState extends State<MemberListFilter> {
         ),
         Padding(
           padding: const EdgeInsets.only(
-            left: 15, right: 15, top: 15, bottom: 10,
+            left: 15,
+            right: 15,
+            top: 15,
+            bottom: 10,
           ),
           child: PlatformAwareWidget(
             android: () => Row(
@@ -42,8 +44,8 @@ class _MemberListFilterState extends State<MemberListFilter> {
                 ChoiceChip(
                   label: Text(S.of(context).All),
                   selected: currentValue == MemberFilterOption.ALL,
-                  onSelected: (selected){
-                    if(selected){
+                  onSelected: (selected) {
+                    if (selected) {
                       setState(() {
                         widget.onChanged(MemberFilterOption.ALL);
                       });
@@ -55,8 +57,8 @@ class _MemberListFilterState extends State<MemberListFilter> {
                   child: ChoiceChip(
                     label: Text(S.of(context).Active),
                     selected: currentValue == MemberFilterOption.ACTIVE,
-                    onSelected: (selected){
-                      if(selected){
+                    onSelected: (selected) {
+                      if (selected) {
                         setState(() {
                           widget.onChanged(MemberFilterOption.ACTIVE);
                         });
@@ -67,8 +69,8 @@ class _MemberListFilterState extends State<MemberListFilter> {
                 ChoiceChip(
                   label: Text(S.of(context).Inactive),
                   selected: currentValue == MemberFilterOption.INACTIVE,
-                  onSelected: (selected){
-                    if(selected){
+                  onSelected: (selected) {
+                    if (selected) {
                       setState(() {
                         widget.onChanged(MemberFilterOption.INACTIVE);
                       });
@@ -79,18 +81,20 @@ class _MemberListFilterState extends State<MemberListFilter> {
             ),
             ios: () => CupertinoSlidingSegmentedControl<MemberFilterOption>(
               groupValue: currentValue,
-              onValueChanged: (MemberFilterOption? value){
+              onValueChanged: (MemberFilterOption? value) {
                 // Should not happen as we have an initial value.
-                if(value == null) return;
+                if (value == null) return;
 
-                setState((){
+                setState(() {
                   widget.onChanged(value);
                 });
               },
               children: {
                 MemberFilterOption.ALL: Text(S.of(context).All.toUpperCase()),
-                MemberFilterOption.ACTIVE: Text(S.of(context).Active.toUpperCase()),
-                MemberFilterOption.INACTIVE: Text(S.of(context).Inactive.toUpperCase()),
+                MemberFilterOption.ACTIVE:
+                    Text(S.of(context).Active.toUpperCase()),
+                MemberFilterOption.INACTIVE:
+                    Text(S.of(context).Inactive.toUpperCase()),
               },
             ),
           ),
@@ -98,11 +102,14 @@ class _MemberListFilterState extends State<MemberListFilter> {
         PlatformAwareWidget(
           android: () => Text(
             S.of(context).SettingsRiderFilterDescription,
-            style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+            style:
+                ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
           ),
           ios: () => Text(
             S.of(context).SettingsRiderFilterDescription,
-            style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle.copyWith(fontSize: 14),
+            style: ApplicationTheme
+                .settingsResetRideCalendarDescriptionTextStyle
+                .copyWith(fontSize: 14),
           ),
         ),
       ],

@@ -1,22 +1,21 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/model/saveMemberOrError.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SaveMemberSubmit extends StatelessWidget {
   SaveMemberSubmit({
+    Key? key,
     required this.stream,
     required this.onPressed,
     required this.submitButtonLabel,
     required this.memberExistsMessage,
     required this.genericErrorMessage,
-  }): assert(submitButtonLabel.isNotEmpty
-      && memberExistsMessage.isNotEmpty
-      && genericErrorMessage.isNotEmpty
-  );
+  })  : assert(submitButtonLabel.isNotEmpty &&
+            memberExistsMessage.isNotEmpty &&
+            genericErrorMessage.isNotEmpty),
+        super(key: key);
 
   final Stream<SaveMemberOrError> stream;
   final VoidCallback onPressed;
@@ -25,7 +24,7 @@ class SaveMemberSubmit extends StatelessWidget {
   final String genericErrorMessage;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     // Create the submit button in advance, for reuse later.
     final Widget button = PlatformAwareWidget(
       android: () => ElevatedButton(
@@ -35,7 +34,7 @@ class SaveMemberSubmit extends StatelessWidget {
       ios: () => CupertinoButton.filled(
         child: Text(
           submitButtonLabel,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         onPressed: onPressed,
       ),
@@ -44,14 +43,14 @@ class SaveMemberSubmit extends StatelessWidget {
     return StreamBuilder<SaveMemberOrError>(
       initialData: SaveMemberOrError.idle(),
       stream: stream,
-      builder: (context,snapshot){
-        if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
           return Text(genericErrorMessage);
-        }else{
-          if(snapshot.data!.saving){
-            return PlatformAwareLoadingIndicator();
-          }else {
-            if(snapshot.data!.memberExists){
+        } else {
+          if (snapshot.data!.saving) {
+            return const PlatformAwareLoadingIndicator();
+          } else {
+            if (snapshot.data!.memberExists) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -68,9 +67,9 @@ class SaveMemberSubmit extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 //Show an empty text widget, to prevent popping when an already existing member is entered.
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(""),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Text(''),
                 ),
                 button
               ],

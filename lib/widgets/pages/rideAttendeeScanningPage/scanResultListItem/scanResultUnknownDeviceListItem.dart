@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ScanResultUnknownDeviceListItem extends StatelessWidget {
-  ScanResultUnknownDeviceListItem({
-    required this.deviceName
-  });
+  const ScanResultUnknownDeviceListItem({
+    Key? key,
+    required this.deviceName,
+  }) : super(key: key);
 
   final String deviceName;
 
@@ -13,8 +14,8 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
       padding: const EdgeInsets.all(5),
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 5),
+          const Padding(
+            padding: EdgeInsets.only(right: 5),
             child: Icon(
               Icons.device_unknown,
               color: Colors.black,
@@ -22,7 +23,7 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
           ),
           SelectableText(
             deviceName,
-            scrollPhysics: ClampingScrollPhysics(),
+            scrollPhysics: const ClampingScrollPhysics(),
           ),
         ],
       ),

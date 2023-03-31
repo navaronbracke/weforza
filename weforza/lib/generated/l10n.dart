@@ -12,22 +12,21 @@ import 'intl/messages_all.dart';
 
 class S {
   S();
-  
+
   static S current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
     final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       S.current = S();
-      
+
       return S.current;
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -1008,6 +1007,26 @@ class S {
     return Intl.message(
       '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)(\,?)(.*)',
       name: 'ImportMembersCsvHeaderRegex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A csv header might look like:`
+  String get ImportMembersCsvHeaderExampleDescription {
+    return Intl.message(
+      'A csv header might look like:',
+      name: 'ImportMembersCsvHeaderExampleDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,surname,cellphone,devices`
+  String get ImportMembersCsvHeaderExample {
+    return Intl.message(
+      'firstname,surname,cellphone,devices',
+      name: 'ImportMembersCsvHeaderExample',
       desc: '',
       args: [],
     );

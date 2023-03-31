@@ -23,6 +23,8 @@ import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListIte
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultSingleOwnerListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultUnknownDeviceListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/skipScanButton.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/unresolvedOwnersList/unresolvedOwnersList.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/unresolvedOwnersList/unresolvedOwnersListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
@@ -152,7 +154,17 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                     );
                   case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
                   case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
-                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return null;//TODO new list selection widget, listview builder w/ button
+                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return UnresolvedOwnersList(
+                    items: bloc.ownersOfScannedDevicesWithMultiplePossibleOwners.toList(),
+                    itemBuilder: (Member member) => UnresolvedOwnersListItem(
+                      firstName: member.firstname,
+                      lastName: member.lastname,
+                      alias: member.alias,
+                      isSelected: () => bloc.isItemSelected(member.uuid),
+                      onTap: () => bloc.onMemberSelected(member.uuid),
+                    ),
+                    onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
+                  );
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }
@@ -193,10 +205,10 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       firstName: item.firstname,
       lastName: item.lastname,
       alias: item.alias,
-      isSelected: () => bloc.isItemSelected(item),
+      isSelected: () => bloc.isItemSelected(item.uuid),
       onTap: (){
         if(!bloc.isSaving.value){
-          bloc.onMemberSelected(item);
+          bloc.onMemberSelected(item.uuid);
         }
       },
     );

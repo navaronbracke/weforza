@@ -19,7 +19,7 @@ class AddRideCalendarMonth extends StatelessWidget {
     //If the first day of the month is monday, this is 0. If this day is a sunday, its 6.
     int offset = pageDate.weekday - 1;
     //A list of filler widgets for the offset + the actual day widgets
-    List<Widget> items = List();
+    List<Widget> items = [];
     //Add start offset widgets first
     for(int i = 0; i<offset; i++){
       items.add(SizedBox.fromSize(size: Size.square(40)));
@@ -39,11 +39,11 @@ class AddRideCalendarMonth extends StatelessWidget {
     }
 
     //The aforementioned items, but grouped in rows
-    List<Widget> output = List();
+    List<Widget> output = [];
 
     //While we still have items to put in rows, generate a row
     while(items.isNotEmpty){
-      List<Widget> children = List();
+      List<Widget> children = [];
       if(items.length < 7){
         //Add remaining items
         while(items.isNotEmpty){

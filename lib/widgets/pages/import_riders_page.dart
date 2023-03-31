@@ -171,7 +171,7 @@ class _ImportRidersButton extends StatelessWidget {
               child: Text(
                 errorMessage ?? '',
                 style: theme.textTheme.labelMedium!.copyWith(
-                  color: theme.errorColor,
+                  color: theme.colorScheme.error,
                 ),
               ),
             ),

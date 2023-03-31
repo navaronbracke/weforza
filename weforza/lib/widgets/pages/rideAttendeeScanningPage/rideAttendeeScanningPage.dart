@@ -106,10 +106,12 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 return Center(child: GenericScanErrorWidget());
               }else{
                 switch(snapshot.data){
-                  case ScanProcessStep.INIT: return PreparingScanWidget();
-                  case ScanProcessStep.BLUETOOTH_DISABLED: return BluetoothDisabledWidget(
-                    onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
-                    onRetryScan: () => bloc.scanFuture = bloc.retryDeviceScan(_onDeviceFound),
+                  case ScanProcessStep.INIT: return Center(child: PreparingScanWidget());
+                  case ScanProcessStep.BLUETOOTH_DISABLED: return Center(
+                    child: BluetoothDisabledWidget(
+                      onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
+                      onRetryScan: () => bloc.scanFuture = bloc.retryDeviceScan(_onDeviceFound),
+                    ),
                   );
                   case ScanProcessStep.SCAN:
                     return WillPopScope(
@@ -151,7 +153,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         bloc: bloc,
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
-                  case ScanProcessStep.NO_MEMBERS: return NoMembersForScanWidget();
+                  case ScanProcessStep.NO_MEMBERS: return Center(child: NoMembersForScanWidget());
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }

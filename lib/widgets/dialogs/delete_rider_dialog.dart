@@ -27,7 +27,7 @@ class _DeleteRiderDialogState extends ConsumerState<DeleteRiderDialog> {
         final notifier = ref.read(selectedRiderProvider.notifier);
         final navigator = Navigator.of(context);
 
-        future = notifier.deleteMember().then((_) {
+        future = notifier.deleteRider().then((_) {
           if (!mounted) {
             return;
           }

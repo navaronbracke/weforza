@@ -1,5 +1,6 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AttendeeListCounter extends StatelessWidget {
   AttendeeListCounter({
@@ -16,15 +17,27 @@ class AttendeeListCounter extends StatelessWidget {
     }
 
     if(count == 1){
-      return Text(
-        S.of(context).AttendeeCounterOne,
-        style: TextStyle(fontSize: 12),
+      return PlatformAwareWidget(
+        android: () => Text(
+          S.of(context).AttendeeCounterOne,
+          style: TextStyle(fontSize: 12, color: Colors.white),
+        ),
+        ios: () => Text(
+          S.of(context).AttendeeCounterOne,
+          style: TextStyle(fontSize: 12),
+        ),
       );
     }
 
-    return Text(
-      S.of(context).AttendeeCounterMany(count),
-      style: TextStyle(fontSize: 12),
+    return PlatformAwareWidget(
+      android: () => Text(
+        S.of(context).AttendeeCounterMany(count),
+        style: TextStyle(fontSize: 12, color: Colors.white),
+      ),
+      ios: () => Text(
+        S.of(context).AttendeeCounterMany(count),
+        style: TextStyle(fontSize: 12),
+      ),
     );
   }
 }

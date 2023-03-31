@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
@@ -14,12 +14,11 @@ class ProfileImagePicker extends StatelessWidget {
     @required this.isSelecting,
     @required this.selectImage,
     @required this.clear,
-    @required this.personInitials,
-    @required this.future,
+    @required this.image,
+    this.personInitials
   }): assert(
     size != null && size > 0 && errorMessage != null && isSelecting != null
-        && personInitials != null && personInitials.isNotEmpty
-        && selectImage != null && clear != null && future != null
+        && selectImage != null && clear != null && personInitials == null || personInitials.isNotEmpty
   );
 
   ///The size for a selected image.
@@ -33,10 +32,9 @@ class ProfileImagePicker extends StatelessWidget {
 
   final Stream<bool> isSelecting;
 
-  final String personInitials;
+  final File image;
 
-  /// This future stores the file retrieval.
-  final Future<File> future;
+  final String personInitials;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +52,9 @@ class ProfileImagePicker extends StatelessWidget {
               child: PlatformAwareLoadingIndicator(),
             ),
           ): GestureDetector(
-              child: AsyncProfileImage(
+              child: ProfileImage(
                 size: size,
-                future: future,
+                image: image,
                 personInitials: personInitials,
               ),
               onTap: selectImage,

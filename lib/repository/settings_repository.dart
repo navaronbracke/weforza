@@ -1,5 +1,5 @@
 import 'package:weforza/database/settings_dao.dart';
-import 'package:weforza/model/settings.dart';
+import 'package:weforza/model/settings/settings.dart';
 
 class SettingsRepository {
   SettingsRepository(this._settingsDao);

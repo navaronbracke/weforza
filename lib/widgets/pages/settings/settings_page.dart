@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/excluded_terms_delegate.dart';
-import 'package:weforza/model/member_filter_option.dart';
-import 'package:weforza/model/settings.dart';
-import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
+import 'package:weforza/model/settings/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/rider_filter_delegate.dart';
+import 'package:weforza/model/settings/scan_duration_delegate.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
@@ -15,11 +13,10 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
-import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
+import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
-import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -36,44 +33,30 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   late final ExcludedTermsDelegate excludedTermsDelegate;
 
-  late final BehaviorSubject<MemberFilterOption> memberFilterController;
+  late final RiderFilterDelegate riderFilterDelegate;
 
-  late final BehaviorSubject<double> scanDurationController;
-
-  Future<void>? _saveSettingsFuture;
-
-  Future<void> saveSettings() async {
-    // TODO: remove the delay once the changes are saved automatically
-
-    // Use an artificial delay to give the loading indicator some time to appear.
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    final newSettings = Settings(
-      excludedTermsFilter: excludedTermsDelegate.terms.toSet(),
-      scanDuration: scanDurationController.value.floor(),
-      memberListFilter: memberFilterController.value,
-    );
-
-    final repository = ref.read(settingsRepositoryProvider);
-
-    await repository.write(newSettings);
-
-    if (mounted) {
-      ref.read(settingsProvider.notifier).state = newSettings;
-    }
-  }
+  late final ScanDurationDelegate scanDurationDelegate;
 
   @override
   void initState() {
     super.initState();
-    final settings = ref.read(settingsProvider);
+
+    final settingsDelegate = ref.read(settingsProvider.notifier);
+    final currentSettings = ref.read(settingsProvider);
 
     excludedTermsDelegate = ExcludedTermsDelegate(
-      initialValue: settings.excludedTermsFilter.toList(),
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.excludedTermsFilter
+          .map((t) => ExcludedTerm(term: t))
+          .toList(),
     );
-    memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
-    scanDurationController = BehaviorSubject.seeded(
-      settings.scanDuration.toDouble(),
+    riderFilterDelegate = RiderFilterDelegate(
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.memberListFilter,
+    );
+    scanDurationDelegate = ScanDurationDelegate(
+      settingsDelegate: settingsDelegate,
+      initialValue: currentSettings.scanDuration.toDouble(),
     );
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);
@@ -103,10 +86,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(translator.Settings),
-        actions: [_buildSubmitButton()],
-      ),
+      appBar: AppBar(title: Text(translator.Settings)),
       body: SettingsPageScrollView(
         excludedTermsListHeader: const Padding(
           padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
@@ -145,11 +125,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                   useMaterial3: true,
                   segmentedButtonTheme: theme.segmentedButtonTheme,
                 ),
-                child: MemberListFilter(
-                  initialFilter: memberFilterController.value,
-                  onChanged: memberFilterController.add,
-                  stream: memberFilterController,
-                ),
+                child: RiderListFilter(delegate: riderFilterDelegate),
               ),
               Text(
                 translator.RidersListFilterDescription,
@@ -166,11 +142,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         scanDurationOption: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
-          child: ScanDurationOption(
-            initialValue: scanDurationController.value,
-            onChanged: scanDurationController.add,
-            stream: scanDurationController,
-          ),
+          child: ScanDurationOption(delegate: scanDurationDelegate),
         ),
         version: SliverFillRemaining(
           hasScrollBody: false,
@@ -193,13 +165,13 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<String> terms, int index) {
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
       delegate: excludedTermsDelegate,
       index: index,
-      term: term,
+      excludedTerm: term,
     );
   }
 
@@ -274,11 +246,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             Padding(
               padding: const EdgeInsets.all(6),
               child: Center(
-                child: MemberListFilter(
-                  initialFilter: memberFilterController.value,
-                  onChanged: memberFilterController.add,
-                  stream: memberFilterController,
-                ),
+                child: RiderListFilter(delegate: riderFilterDelegate),
               ),
             ),
           ],
@@ -288,10 +256,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           border: null,
           largeTitle: Text(translator.Settings),
           transitionBetweenRoutes: false,
-          trailing: SizedBox(
-            width: 40,
-            child: Center(child: _buildSubmitButton()),
-          ),
         ),
         resetRideCalendarButton: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
@@ -311,13 +275,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         scanDurationOption: CupertinoFormSection.insetGrouped(
           header: Text(translator.ScanSettings.toUpperCase()),
-          children: [
-            ScanDurationOption(
-              initialValue: scanDurationController.value,
-              onChanged: scanDurationController.add,
-              stream: scanDurationController,
-            ),
-          ],
+          children: [ScanDurationOption(delegate: scanDurationDelegate)],
         ),
         version: SliverToBoxAdapter(
           child: CupertinoFormSection.insetGrouped(
@@ -338,28 +296,14 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildSubmitButton() {
-    // Use a stateful builder to avoid having to rebuild the entire page.
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return SettingsSubmit(
-          future: _saveSettingsFuture,
-          onSaveSettings: () => setState(() {
-            _saveSettingsFuture = saveSettings();
-          }),
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     addTermController.dispose();
     addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
-    memberFilterController.close();
-    scanDurationController.close();
+    riderFilterDelegate.dispose();
+    scanDurationDelegate.dispose();
     super.dispose();
   }
 }

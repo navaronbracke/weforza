@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field_button_bar.dart';
@@ -12,17 +12,17 @@ class EditExcludedTermInputField extends StatefulWidget {
   EditExcludedTermInputField({
     required this.delegate,
     required this.index,
-    required this.term,
-  }) : super(key: ValueKey(term));
+    required this.excludedTerm,
+  }) : super(key: ValueKey(excludedTerm.term));
 
   /// The delegate that manages the excluded terms.
   final ExcludedTermsDelegate delegate;
 
-  /// The index of [term] in the list of terms.
+  /// The index of [excludedTerm] in the list of terms.
   final int index;
 
   /// The term that this widget represents.
-  final String term;
+  final ExcludedTerm excludedTerm;
 
   @override
   State<EditExcludedTermInputField> createState() =>
@@ -31,8 +31,6 @@ class EditExcludedTermInputField extends StatefulWidget {
 
 class _EditExcludedTermInputFieldState
     extends State<EditExcludedTermInputField> {
-  late final TextEditingController controller;
-
   // This flag is used to keep the edit menu open when the delete dialog is shown.
   bool deleteDialogVisible = false;
 
@@ -56,7 +54,7 @@ class _EditExcludedTermInputFieldState
   }
 
   void _onCommitValidTerm(String value, BuildContext context) {
-    if (value != widget.term) {
+    if (value != widget.excludedTerm.term) {
       widget.delegate.editTerm(value, widget.index);
     }
 
@@ -68,7 +66,7 @@ class _EditExcludedTermInputFieldState
 
     final result = await showWeforzaDialog<bool>(
       context,
-      builder: (_) => DeleteExcludedTermDialog(term: widget.term),
+      builder: (_) => DeleteExcludedTermDialog(term: widget.excludedTerm.term),
     );
 
     if (!mounted) {
@@ -78,7 +76,7 @@ class _EditExcludedTermInputFieldState
     deleteDialogVisible = false;
 
     if (result ?? false) {
-      widget.delegate.deleteTerm(widget.term);
+      widget.delegate.deleteTerm(widget.excludedTerm);
 
       // When the delete dialog's modal route closes, the wrong widget gets focus.
       // Usually its the add term focus node which greedily grabs focus.
@@ -99,7 +97,7 @@ class _EditExcludedTermInputFieldState
 
     final currentValue = formState.value;
 
-    if (currentValue == null || currentValue == widget.term) {
+    if (currentValue == null || currentValue == widget.excludedTerm.term) {
       FocusScope.of(context).unfocus();
       return;
     }
@@ -116,9 +114,11 @@ class _EditExcludedTermInputFieldState
   void _onUndoPressed() {
     // Reset the text editing value back to the original,
     // and keep the cursor at the end of the text.
-    controller.value = TextEditingValue(
-      text: widget.term,
-      selection: TextSelection.collapsed(offset: widget.term.length),
+    widget.excludedTerm.controller.value = TextEditingValue(
+      text: widget.excludedTerm.term,
+      selection: TextSelection.collapsed(
+        offset: widget.excludedTerm.term.length,
+      ),
     );
   }
 
@@ -126,21 +126,20 @@ class _EditExcludedTermInputFieldState
     return widget.delegate.validateTerm(
       value,
       S.of(context),
-      originalValue: widget.term,
+      originalValue: widget.excludedTerm.term,
     );
   }
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController(text: widget.term);
     focusNode.addListener(_handleFocusChange);
   }
 
   @override
   Widget build(BuildContext context) {
     final textFieldWidget = ExcludedTermInputField(
-      controller: controller,
+      controller: widget.excludedTerm.controller,
       focusNode: focusNode,
       maxLength: widget.delegate.maxLength,
       onEditingComplete: () => _onEditingComplete(context),
@@ -161,11 +160,11 @@ class _EditExcludedTermInputFieldState
           children: [
             textFieldWidget,
             EditExcludedTermInputFieldButtonBar(
-              controller: controller,
+              controller: widget.excludedTerm.controller,
               onCommitValidTerm: (value) => _onCommitValidTerm(value, context),
               onDeletePressed: _onDeletePressed,
               onUndoPressed: _onUndoPressed,
-              term: widget.term,
+              term: widget.excludedTerm.term,
               validator: _validateTerm,
             ),
           ],
@@ -180,7 +179,6 @@ class _EditExcludedTermInputFieldState
   void dispose() {
     focusNode.removeListener(_handleFocusChange);
     focusNode.dispose();
-    controller.dispose();
     super.dispose();
   }
 }

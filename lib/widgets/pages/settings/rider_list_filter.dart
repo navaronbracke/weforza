@@ -4,27 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class MemberListFilter extends StatelessWidget {
-  const MemberListFilter({
-    required this.initialFilter,
-    required this.onChanged,
-    required this.stream,
+class RiderListFilter extends StatelessWidget {
+  const RiderListFilter({
+    required this.delegate,
     super.key,
   });
 
-  final MemberFilterOption initialFilter;
-
-  final void Function(MemberFilterOption value) onChanged;
-
-  final Stream<MemberFilterOption> stream;
+  /// The delegate that manages the value.
+  final RiderFilterDelegate delegate;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<MemberFilterOption>(
-      initialData: initialFilter,
-      stream: stream,
+      initialData: delegate.currentValue,
+      stream: delegate.stream,
       builder: (context, snapshot) {
         final currentFilter = snapshot.data!;
 
@@ -59,16 +55,16 @@ class MemberListFilter extends StatelessWidget {
                     return;
                   }
 
-                  onChanged(selectedSegments.first);
+                  delegate.onValueChanged(selectedSegments.first);
                 },
               ),
             );
           },
-          ios: (_) => _CupertinoMemberFilter(
+          ios: (_) => _CupertinoRiderFilter(
             groupValue: currentFilter,
             onValueChanged: (MemberFilterOption? value) {
               if (value != null) {
-                onChanged(value);
+                delegate.onValueChanged(value);
               }
             },
           ),
@@ -78,8 +74,8 @@ class MemberListFilter extends StatelessWidget {
   }
 }
 
-class _CupertinoMemberFilter extends StatefulWidget {
-  const _CupertinoMemberFilter({
+class _CupertinoRiderFilter extends StatefulWidget {
+  const _CupertinoRiderFilter({
     required this.groupValue,
     required this.onValueChanged,
   });
@@ -89,10 +85,10 @@ class _CupertinoMemberFilter extends StatefulWidget {
   final void Function(MemberFilterOption?) onValueChanged;
 
   @override
-  State<_CupertinoMemberFilter> createState() => _CupertinoMemberFilterState();
+  State<_CupertinoRiderFilter> createState() => _CupertinoRiderFilterState();
 }
 
-class _CupertinoMemberFilterState extends State<_CupertinoMemberFilter> {
+class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
   /// The map of options for the segmented control.
   /// This map preserves its insertion order,
   /// as that order is used to display the options.

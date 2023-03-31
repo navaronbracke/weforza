@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelectionItemCounter.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ManualSelectionSubmit extends StatelessWidget {
@@ -76,7 +75,7 @@ class ManualSelectionSubmit extends StatelessWidget {
           builder: (context, snapshot){
             return Padding(
               padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: snapshot.data! ? PlatformAwareLoadingIndicator() : CupertinoButton(
+              child: snapshot.data! ? CupertinoActivityIndicator() : CupertinoButton(
                 child: Text(
                   S.of(context).Save,
                   style: TextStyle(color: ApplicationTheme.primaryColor),

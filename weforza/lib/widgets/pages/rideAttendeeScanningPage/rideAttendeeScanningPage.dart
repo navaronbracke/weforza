@@ -96,7 +96,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       ),
       child: SafeArea(
         child: _buildBody(),
-        bottom: false
       ),
     );
   }

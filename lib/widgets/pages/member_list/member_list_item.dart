@@ -47,7 +47,7 @@ class MemberListItem extends ConsumerWidget {
               ),
             ),
             Expanded(
-              child: MemberNameAndAlias(
+              child: MemberNameAndAlias.twoLines(
                 alias: member.alias,
                 firstLineStyle: theme.firstNameStyle,
                 firstName: member.firstName,

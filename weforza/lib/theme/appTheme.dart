@@ -61,9 +61,6 @@ abstract class ApplicationTheme {
   static final TextStyle rideAttendeeLastNameTextStyle = TextStyle(
     fontSize: 14.0
   );
-  static final TextStyle rideAttendeePhoneTextStyle = TextStyle(
-      fontSize: 12.0, fontStyle: FontStyle.italic
-  );
 
 
   //MemberList Item First Name Text Style

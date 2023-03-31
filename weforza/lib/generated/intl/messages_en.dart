@@ -19,33 +19,31 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(buildNumber) => "Build Number: ${buildNumber}";
+  static m0(maxLength) => "An alias can\'t be longer than ${maxLength} characters";
 
-  static m1(version) => "Version: ${version}";
+  static m1(buildNumber) => "Build Number: ${buildNumber}";
 
-  static m2(maxLength) => "Device name is max. ${maxLength} characters";
+  static m2(version) => "Version: ${version}";
 
-  static m3(maxLength) => "An address can\'t be longer than ${maxLength} characters";
+  static m3(maxLength) => "Device name is max. ${maxLength} characters";
 
-  static m4(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
+  static m4(maxLength) => "An address can\'t be longer than ${maxLength} characters";
 
-  static m5(maxLength) => "A title can\'t be longer than ${maxLength} characters";
+  static m5(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
 
-  static m6(path) => "Ride saved at ${path}";
+  static m6(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m7(date) => "ride_${date}";
+  static m7(path) => "Ride saved at ${path}";
 
-  static m8(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
+  static m8(date) => "ride_${date}";
 
-  static m9(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m9(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m10(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m10(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m11(maxLength) => "A phone number is maximum ${maxLength} digits long";
+  static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m12(minLength) => "A phone number is minimum ${minLength} digits long";
-
-  static m13(value) => "${value} is required";
+  static m12(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

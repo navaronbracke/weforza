@@ -16,11 +16,11 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     @required this.profileImage,
     @required this.firstName,
     @required this.lastName,
-    @required this.phone,
+    @required this.alias,
     @required this.id,
   }): assert(
     repository != null && firstName != null && lastName != null
-        && phone != null && id != null
+        && alias != null && id != null
   );
 
   ///The [IMemberRepository] that handles the submit.
@@ -37,7 +37,7 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
   ///The actual inputs.
   String firstName;
   String lastName;
-  String phone;
+  String alias;
   final String id;
   File profileImage;
 
@@ -47,20 +47,15 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
   ///The actual errors.
   String firstNameError;
   String lastNameError;
-  String phoneError;
+  String aliasError;
 
-  ///Length ranges for input.
-  final int firstNameMaxLength = 50;
-  final int lastNameMaxLength = 50;
-  final int phoneMaxLength = 15;
-  final int phoneMinLength = 8;
+  final int nameAndAliasMaxLength = 50;
 
   ///Auto validation flags per input.
   ///Validation should start once an input came into focus at least once.
   bool autoValidateFirstName = false;
   bool autoValidateLastName = false;
-  bool autoValidatePhone = false;
-
+  bool autoValidateAlias = false;
 
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
@@ -76,10 +71,10 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     }else if(value.trim().isEmpty){
       firstNameError = isBlankMessage;
     }
-    else if(firstNameMaxLength < value.length){
+    else if(nameAndAliasMaxLength < value.length){
       firstNameError = maxLengthMessage;
     }
-    else if(Member.personNameRegex.hasMatch(value)){
+    else if(Member.personNameAndAliasRegex.hasMatch(value)){
       firstName = value;
       firstNameError = null;
     }
@@ -103,10 +98,10 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     }else if(value.trim().isEmpty){
       lastNameError = isBlankMessage;
     }
-    else if(lastNameMaxLength < value.length){
+    else if(nameAndAliasMaxLength < value.length){
       lastNameError = maxLengthMessage;
     }
-    else if(Member.personNameRegex.hasMatch(value)){
+    else if(Member.personNameAndAliasRegex.hasMatch(value)){
       lastName = value;
       lastNameError = null;
     }
@@ -116,31 +111,25 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     return lastNameError;
   }
 
-  ///Validate [value] according to the phone rule.
-  ///Returns null if valid or an error message otherwise.
-  ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validatePhone(String value, String isRequiredMessage, String illegalCharacterMessage,String minLengthMessage,String maxLengthMessage){
-    if(value != phone){
+  String validateAlias(String value,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+    if(value != alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(EditMemberSubmitState.IDLE);
     }
-    if(value == null || value.isEmpty)
-    {
-      phoneError = isRequiredMessage;
+    if(value.isNotEmpty && value.trim().isEmpty){
+      aliasError = isBlankMessage;
     }
-    else if(value.length < phoneMinLength){
-      phoneError = minLengthMessage;
-    }else if(phoneMaxLength < value.length){
-      phoneError = maxLengthMessage;
+    else if(nameAndAliasMaxLength < value.length){
+      aliasError = maxLengthMessage;
     }
-    else if(Member.phoneNumberRegex.hasMatch(value)){
-      phone = value;
-      phoneError = null;
+    else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
+      alias = value;
+      aliasError = null;
     }
     else{
-      phoneError = illegalCharacterMessage;
+      aliasError = illegalCharacterMessage;
     }
-    return phoneError;
+    return aliasError;
   }
 
   Future<MemberItem> editMember() async {
@@ -149,11 +138,11 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
       id,
       firstName,
       lastName,
-      phone,
+      alias,
       profileImage?.path,
     );
 
-    bool exists = await repository.memberExists(firstName, lastName, phone,id).catchError((error){
+    bool exists = await repository.memberExists(firstName, lastName, alias,id).catchError((error){
       _submitStateController.add(EditMemberSubmitState.ERROR);
       return Future.error(EditMemberSubmitState.ERROR);
     });

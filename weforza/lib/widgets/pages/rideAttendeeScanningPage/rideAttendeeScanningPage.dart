@@ -19,6 +19,7 @@ import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/preparingScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningProgressIndicator.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningStepper.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
@@ -152,6 +153,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         bloc: bloc,
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
+                  case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }

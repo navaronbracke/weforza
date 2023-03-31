@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -41,11 +42,17 @@ class SaveScanOrSkipButton extends StatelessWidget {
   Widget _buildSkipScanButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => FlatButton(
-        child: Text(S.of(context).RideAttendeeScanningSkipScan),
+        child: Text(
+            S.of(context).RideAttendeeScanningSkipScan,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
+        ),
         onPressed: onSkip,
       ),
       ios: () => CupertinoButton(
-        child: Text(S.of(context).RideAttendeeScanningSkipScan),
+        child: Text(
+          S.of(context).RideAttendeeScanningSkipScan,
+          style: TextStyle(color: ApplicationTheme.primaryColor),
+        ),
         onPressed: onSkip,
       ),
     );
@@ -54,11 +61,17 @@ class SaveScanOrSkipButton extends StatelessWidget {
   Widget _buildSaveButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => FlatButton(
-        child: Text(S.of(context).RideAttendeeScanningSaveScanResults),
+        child: Text(
+          S.of(context).RideAttendeeScanningSaveScanResults,
+          style: TextStyle(color: ApplicationTheme.primaryColor),
+        ),
         onPressed: onSave,
       ),
       ios: () => CupertinoButton(
-        child: Text(S.of(context).RideAttendeeScanningSaveScanResults),
+        child: Text(
+          S.of(context).RideAttendeeScanningSaveScanResults,
+          style: TextStyle(color: ApplicationTheme.primaryColor),
+        ),
         onPressed: onSave,
       ),
     );

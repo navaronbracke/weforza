@@ -45,7 +45,9 @@ class AddExcludedTermInputField extends StatelessWidget {
         builder: (context) {
           return PlatformAwareWidget(
             android: () => TextFormField(
-              decoration: InputDecoration(hintText: translator.AddKeyword),
+              decoration: InputDecoration(
+                hintText: translator.AddDisallowedWord,
+              ),
               keyboardType: TextInputType.text,
               onEditingComplete: () => _onEditingComplete(context),
               onSaved: _onSaved,
@@ -65,7 +67,7 @@ class AddExcludedTermInputField extends StatelessWidget {
               onSaved: _onSaved,
               // The excluded terms have a 15 margin on their border.
               padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
-              placeholder: translator.AddKeyword,
+              placeholder: translator.AddDisallowedWord,
               textInputAction: TextInputAction.done,
               validator: (value) => excludedTermsDelegate.validateTerm(
                 value,

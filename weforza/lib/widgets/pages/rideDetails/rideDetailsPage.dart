@@ -122,32 +122,34 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                     icon: Icons.bluetooth_searching,
                     onPressed: () => goToScanningPage(context),
                 ),
-                SizedBox(width: 15),
-                CupertinoIconButton.fromAppTheme(
-                    icon: Icons.more_vert,
-                    onPressed: () async {
-                      final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
-                        return CupertinoActionSheet(
-                          actions: [
-                            CupertinoActionSheetAction(
-                              child: Text(S.of(context).RideDetailsExportOption),
-                              onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: CupertinoIconButton.fromAppTheme(
+                      icon: Icons.more_vert,
+                      onPressed: () async {
+                        final RideDetailsPageOptions option = await showCupertinoModalPopup(context: context, builder: (context){
+                          return CupertinoActionSheet(
+                            actions: [
+                              CupertinoActionSheetAction(
+                                child: Text(S.of(context).RideDetailsExportOption),
+                                onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
+                              ),
+                              CupertinoActionSheetAction(
+                                child: Text(S.of(context).RideDetailsDeleteOption),
+                                isDestructiveAction: true,
+                                onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
+                              child: Text(S.of(context).DialogCancel),
+                              onPressed: () => Navigator.of(context).pop(),
                             ),
-                            CupertinoActionSheetAction(
-                              child: Text(S.of(context).RideDetailsDeleteOption),
-                              isDestructiveAction: true,
-                              onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
-                            ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            child: Text(S.of(context).DialogCancel),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        );
-                      });
+                          );
+                        });
 
-                      onSelectMenuOption(context, option);
-                    }
+                        onSelectMenuOption(context, option);
+                      }
+                  ),
                 ),
               ],
             ),

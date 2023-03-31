@@ -29,8 +29,10 @@ class LoadingSettings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           PlatformAwareLoadingIndicator(),
-          SizedBox(height: 10),
-          Text(S.of(context).SettingsLoading),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(S.of(context).SettingsLoading),
+          ),
         ],
       ),
     );

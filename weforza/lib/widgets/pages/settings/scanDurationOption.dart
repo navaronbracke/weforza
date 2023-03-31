@@ -39,9 +39,8 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(S.of(context).SettingsScanSliderHeader,style: ApplicationTheme.settingsOptionHeaderStyle),
-        SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 5,
@@ -70,9 +69,8 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
           S.of(context).SettingsScanSliderHeader,
           style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 16)
         ),
-        SizedBox(height: 5),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
           child: Row(
             children: <Widget>[
               Expanded(

@@ -14,9 +14,10 @@ class RideListEmpty extends StatelessWidget {
             color: ApplicationTheme.listInformationalIconColor,
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
-          SizedBox(height: 5),
-          Text(S.of(context).RideListNoRides),
-          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(S.of(context).RideListNoRides),
+          ),
           Text(S.of(context).RideListAddRideInstruction)
         ],
       ),

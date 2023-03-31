@@ -153,80 +153,86 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       size: 100,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  CupertinoTextField(
-                    textCapitalization: TextCapitalization.words,
-                    focusNode: _firstNameFocusNode,
-                    textInputAction: TextInputAction.next,
-                    controller: _firstNameController,
-                    placeholder: _firstNameLabel,
-                    autocorrect: false,
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      setState(() {
-                        _bloc.validateFirstName(
-                            value,
-                            _firstNameRequiredMessage,
-                            _firstNameMaxLengthMessage,
-                            _firstNameIllegalCharactersMessage,
-                            _firstNameBlankMessage);
-                      });
-                    },
-                    onSubmitted: (value){
-                      _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: CupertinoTextField(
+                      textCapitalization: TextCapitalization.words,
+                      focusNode: _firstNameFocusNode,
+                      textInputAction: TextInputAction.next,
+                      controller: _firstNameController,
+                      placeholder: _firstNameLabel,
+                      autocorrect: false,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        setState(() {
+                          _bloc.validateFirstName(
+                              value,
+                              _firstNameRequiredMessage,
+                              _firstNameMaxLengthMessage,
+                              _firstNameIllegalCharactersMessage,
+                              _firstNameBlankMessage);
+                        });
+                      },
+                      onSubmitted: (value){
+                        _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                      },
+                    ),
                   ),
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(
-                          _bloc.firstNameError),
-                      style: ApplicationTheme.iosFormErrorStyle),
-                  SizedBox(height: 5),
-                  CupertinoTextField(
-                    textCapitalization: TextCapitalization.words,
-                    focusNode: _lastNameFocusNode,
-                    textInputAction: TextInputAction.next,
-                    controller: _lastNameController,
-                    placeholder: _lastNameLabel,
-                    autocorrect: false,
-                    keyboardType: TextInputType.text,
-                    onChanged: (value) {
-                      setState(() {
-                        _bloc.validateLastName(
-                            value,
-                            _lastNameRequiredMessage,
-                            _lastNameMaxLengthMessage,
-                            _lastNameIllegalCharactersMessage,
-                            _lastNameBlankMessage);
-                      });
-                    },
-                    onSubmitted: (value){
-                      _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
-                    },
+                      CupertinoFormErrorFormatter.formatErrorMessage(_bloc.firstNameError),
+                      style: ApplicationTheme.iosFormErrorStyle
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: CupertinoTextField(
+                      textCapitalization: TextCapitalization.words,
+                      focusNode: _lastNameFocusNode,
+                      textInputAction: TextInputAction.next,
+                      controller: _lastNameController,
+                      placeholder: _lastNameLabel,
+                      autocorrect: false,
+                      keyboardType: TextInputType.text,
+                      onChanged: (value) {
+                        setState(() {
+                          _bloc.validateLastName(
+                              value,
+                              _lastNameRequiredMessage,
+                              _lastNameMaxLengthMessage,
+                              _lastNameIllegalCharactersMessage,
+                              _lastNameBlankMessage);
+                        });
+                      },
+                      onSubmitted: (value){
+                        _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
+                      },
+                    ),
                   ),
                   Text(
-                      CupertinoFormErrorFormatter.formatErrorMessage(
-                          _bloc.lastNameError),
-                      style: ApplicationTheme.iosFormErrorStyle),
-                  SizedBox(height: 5),
-                  CupertinoTextField(
-                    focusNode: _aliasFocusNode,
-                    textInputAction: TextInputAction.done,
-                    controller: _aliasController,
-                    autocorrect: false,
-                    keyboardType: TextInputType.text,
-                    placeholder: _aliasLabel,
-                    onChanged: (value) {
-                      setState(() {
-                        _bloc.validateAlias(
-                            value,
-                            _aliasMaxLengthMessage,
-                            _aliasIllegalCharactersMessage,
-                            _aliasBlankMessage);
-                      });
-                    },
-                    onSubmitted: (value){
-                      _aliasFocusNode.unfocus();
-                    },
+                      CupertinoFormErrorFormatter.formatErrorMessage(_bloc.lastNameError),
+                      style: ApplicationTheme.iosFormErrorStyle
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: CupertinoTextField(
+                      focusNode: _aliasFocusNode,
+                      textInputAction: TextInputAction.done,
+                      controller: _aliasController,
+                      autocorrect: false,
+                      keyboardType: TextInputType.text,
+                      placeholder: _aliasLabel,
+                      onChanged: (value) {
+                        setState(() {
+                          _bloc.validateAlias(
+                              value,
+                              _aliasMaxLengthMessage,
+                              _aliasIllegalCharactersMessage,
+                              _aliasBlankMessage);
+                        });
+                      },
+                      onSubmitted: (value){
+                        _aliasFocusNode.unfocus();
+                      },
+                    ),
                   ),
                   Text(
                       CupertinoFormErrorFormatter.formatErrorMessage(
@@ -276,55 +282,58 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     size: 100,
                   ),
                 ),
-                SizedBox(height: 10),
-                TextFormField(
-                  textCapitalization: TextCapitalization.words,
-                  focusNode: _firstNameFocusNode,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    labelText: _firstNameLabel,
-                    helperText: " ",//Prevent popping up and down after validation
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    focusNode: _firstNameFocusNode,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      labelText: _firstNameLabel,
+                      helperText: " ",//Prevent popping up and down after validation
+                    ),
+                    controller: _firstNameController,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    validator: (value) => _bloc.validateFirstName(
+                        value,
+                        _firstNameRequiredMessage,
+                        _firstNameMaxLengthMessage,
+                        _firstNameIllegalCharactersMessage,
+                        _firstNameBlankMessage),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onFieldSubmitted: (value){
+                      _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
+                    },
                   ),
-                  controller: _firstNameController,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateFirstName(
-                      value,
-                      _firstNameRequiredMessage,
-                      _firstNameMaxLengthMessage,
-                      _firstNameIllegalCharactersMessage,
-                      _firstNameBlankMessage),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onFieldSubmitted: (value){
-                    _focusChange(context, _firstNameFocusNode, _lastNameFocusNode);
-                  },
                 ),
-                SizedBox(height: 5),
-                TextFormField(
-                  textCapitalization: TextCapitalization.words,
-                  focusNode: _lastNameFocusNode,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    labelText: _lastNameLabel,
-                    helperText: " ",//Prevent popping up and down after validation
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.words,
+                    focusNode: _lastNameFocusNode,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      labelText: _lastNameLabel,
+                      helperText: " ",//Prevent popping up and down after validation
+                    ),
+                    controller: _lastNameController,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    validator: (value) => _bloc.validateLastName(
+                        value,
+                        _lastNameRequiredMessage,
+                        _lastNameMaxLengthMessage,
+                        _lastNameIllegalCharactersMessage,
+                        _lastNameBlankMessage),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    onFieldSubmitted: (value){
+                      _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
+                    },
                   ),
-                  controller: _lastNameController,
-                  autocorrect: false,
-                  keyboardType: TextInputType.text,
-                  validator: (value) => _bloc.validateLastName(
-                      value,
-                      _lastNameRequiredMessage,
-                      _lastNameMaxLengthMessage,
-                      _lastNameIllegalCharactersMessage,
-                      _lastNameBlankMessage),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  onFieldSubmitted: (value){
-                    _focusChange(context, _lastNameFocusNode, _aliasFocusNode);
-                  },
                 ),
-                SizedBox(height: 5),
                 TextFormField(
                   focusNode: _aliasFocusNode,
                   textInputAction: TextInputAction.done,

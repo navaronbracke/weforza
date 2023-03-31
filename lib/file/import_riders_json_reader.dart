@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
@@ -76,10 +74,7 @@ class ImportRidersJsonReader
 
       throw const FormatException('Unexpected JSON format');
     } catch (e) {
-      throw const DataSourceMalformedException(
-        FileExtension.json,
-        'The format of the input file is invalid',
-      );
+      throw const FormatException('The format of the input file is invalid');
     }
   }
 }

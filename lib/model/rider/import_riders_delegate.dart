@@ -48,7 +48,7 @@ class ImportRidersDelegate {
   ///
   /// Returns the collection of [SerializableRider]s.
   ///
-  /// Throws a [DataSourceMalformedException] if the file is malformed.
+  /// Throws a [FormatException] if the file is malformed.
   Future<Iterable<SerializableRider>> _readRidersFromFile(File file) {
     if (file.path.endsWith(FileExtension.csv.value)) {
       return _readFileWithReader<String>(
@@ -76,7 +76,7 @@ class ImportRidersDelegate {
   /// If the chosen file is of an unsupported format,
   /// an [UnsupportedFileFormatError] is emitted through the [stream].
   ///
-  /// If the chosen file is malformed, a [DataSourceMalformedException] is emitted through the [stream].
+  /// If the chosen file is malformed, a [FormatException] is emitted through the [stream].
   void importRiders({required void Function() whenComplete}) async {
     try {
       _controller.add(ImportRidersState.pickingFile);

@@ -88,6 +88,8 @@
   "RideAttendeeScanningSaveScanResults": "Save Scan Results",
   "RideAttendeeScanningSaveManualResults": "Save Selection",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no members to choose from",
+  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Owned By:",
+  "RideAttendeeScanningScanResultOwnerTelephoneLabel": "tel: ",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

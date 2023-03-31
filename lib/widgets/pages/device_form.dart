@@ -174,12 +174,14 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
-      ios: (_) => CupertinoFormField(
+      ios: (_) => CupertinoTextFormFieldRow(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: _deviceNameController,
         focusNode: _deviceNameFocusNode,
         keyboardType: TextInputType.text,
         placeholder: translator.DeviceName,
         textInputAction: TextInputAction.done,
+        maxLength: Device.nameMaxLength,
         onChanged: _resetSubmit,
         validator: (value) => validateDeviceName(
           value: value,

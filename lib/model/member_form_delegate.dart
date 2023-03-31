@@ -1,20 +1,19 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
-import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
 /// This class represents the delegate for a Member form.
 class MemberFormDelegate {
-  MemberFormDelegate(this.repository, this.memberList);
+  MemberFormDelegate(this.ref);
 
-  final MemberListNotifier memberList;
-
-  final MemberRepository repository;
+  final WidgetRef ref;
 
   /// This controller manages a submit flag.
   /// If the current value is true, the delegate is submitting the form.
@@ -37,6 +36,8 @@ class MemberFormDelegate {
     _submitController.add(true);
 
     try {
+      final repository = ref.read(memberRepositoryProvider);
+
       final exists = await repository.memberExists(
         model.firstName,
         model.lastName,
@@ -63,7 +64,7 @@ class MemberFormDelegate {
 
       await repository.addMember(member);
 
-      memberList.getMembers();
+      ref.refresh(memberListProvider);
     } catch (error) {
       _submitController.addError(error);
 
@@ -80,6 +81,8 @@ class MemberFormDelegate {
       if (uuid == null) {
         throw ArgumentError.notNull('uuid');
       }
+
+      final repository = ref.read(memberRepositoryProvider);
 
       final exists = await repository.memberExists(
         model.firstName,

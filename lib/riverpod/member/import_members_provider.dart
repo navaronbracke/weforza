@@ -9,27 +9,16 @@ import 'package:weforza/file/import_members_file_reader.dart';
 import 'package:weforza/file/json_file_reader.dart';
 import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/import_members_state.dart';
-import 'package:weforza/repository/import_members_repository.dart';
-import 'package:weforza/riverpod/database/database_dao_provider.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/import_members_repository_provider.dart';
 
-final importMembersProvider = Provider((ref) {
-  return ImportMembersNotifier(
-    ref.read(fileHandlerProvider),
-    ref.read(memberListProvider.notifier),
-    ImportMembersRepository(ref.read(importMembersDaoProvider)),
-  );
-});
+final importMembersProvider = Provider(ImportMembersNotifier.new);
 
 class ImportMembersNotifier {
-  ImportMembersNotifier(this.fileHandler, this.membersList, this.repository);
+  ImportMembersNotifier(this.ref);
 
-  final IFileHandler fileHandler;
-
-  final MemberListNotifier membersList;
-
-  final ImportMembersRepository repository;
+  final Ref ref;
 
   Future<List<ExportableMember>> _readFile<T>(
     File file,
@@ -77,6 +66,8 @@ class ImportMembersNotifier {
     try {
       onProgress(ImportMembersState.pickingFile);
 
+      final fileHandler = ref.read(fileHandlerProvider);
+
       final file = await fileHandler.chooseImportMemberDatasourceFile();
 
       onProgress(ImportMembersState.importing);
@@ -91,9 +82,11 @@ class ImportMembersNotifier {
 
       const uuidGenerator = Uuid();
 
+      final repository = ref.read(importMembersRepositoryProvider);
+
       await repository.saveMembersWithDevices(members, uuidGenerator.v4);
 
-      membersList.getMembers(); // Trigger a reload of the members list.
+      ref.refresh(memberListProvider);
       onProgress(ImportMembersState.done);
     } catch (error) {
       onError(error);

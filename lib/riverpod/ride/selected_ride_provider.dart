@@ -8,7 +8,7 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 /// This provider manages the selected ride.
 final selectedRideProvider =
     StateNotifierProvider<SelectedRideNotifier, SelectedRide?>(
-  (ref) => SelectedRideNotifier(ref),
+  SelectedRideNotifier.new,
 );
 
 class SelectedRideNotifier extends StateNotifier<SelectedRide?> {

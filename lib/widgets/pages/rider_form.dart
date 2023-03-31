@@ -151,7 +151,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
               children: <Widget>[
                 Center(

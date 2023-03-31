@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
@@ -53,8 +55,7 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
 
   @override
   void dispose() {
-    stopScan().catchError((_) {
-      // If the scan could not be stopped, there is nothing that can be done.
-    });
+    // If the scan could not be stopped, there is nothing that can be done.
+    unawaited(stopScan().catchError((_) {}));
   }
 }

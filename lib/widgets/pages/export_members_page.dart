@@ -41,7 +41,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   Future<void> _submitForm(S translator) {
     try {
       return exportProvider.exportMembers(
-        csvHeader: translator.ExportMembersCsvHeader,
+        csvHeader: translator.ExportRidersCsvHeader,
         fileExtension: _fileExtensionController.value.ext,
         fileName: _filenameController.text,
       );
@@ -65,7 +65,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(S.of(context).ExportMembersTitle),
+        title: Text(S.of(context).ExportRiders),
       ),
       body: Center(child: _buildBody(context)),
     );
@@ -75,7 +75,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).ExportMembersTitle),
+        middle: Text(S.of(context).ExportRiders),
         transitionBetweenRoutes: false,
       ),
       child: Center(child: _buildBody(context)),
@@ -100,7 +100,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
                   padding: EdgeInsets.only(bottom: 4),
                   child: PlatformAwareLoadingIndicator(),
                 ),
-                Text(translator.ExportingMembersDescription),
+                Text(translator.ExportingRiders),
               ],
             );
           case ConnectionState.done:

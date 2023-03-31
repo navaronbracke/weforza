@@ -137,7 +137,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                translator.RiderListFilter,
+                translator.RidersListFilter,
                 style: textTheme.titleMedium,
               ),
               Theme(
@@ -149,7 +149,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 ),
               ),
               Text(
-                translator.RiderListFilterDescription,
+                translator.RidersListFilterDescription,
                 style: textTheme.bodySmall?.copyWith(
                   fontStyle: FontStyle.italic,
                 ),
@@ -266,7 +266,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         ),
         memberListFilter: CupertinoFormSection.insetGrouped(
           header: Text(translator.Riders.toUpperCase()),
-          footer: Text(translator.RiderListFilterDescription),
+          footer: Text(translator.RidersListFilterDescription),
           children: [
             Padding(
               padding: const EdgeInsets.all(6),

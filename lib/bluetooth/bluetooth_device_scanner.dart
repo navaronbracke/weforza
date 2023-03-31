@@ -35,19 +35,11 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
+    // Trim the whitespace off.
+    // This could otherwise cause matching issues later on.
     return _fBlInstance
-        .scan(
-          scanMode: ScanMode.balanced,
-          timeout: Duration(seconds: scanDurationInSeconds),
-        )
-        .map(
-          (result) => BluetoothPeripheral(
-            id: result.device.id.id,
-            // Trim the whitespace off.
-            // This could otherwise cause matching issues later on.
-            deviceName: result.device.name.trim(),
-          ),
-        );
+        .scan(scanMode: ScanMode.balanced, timeout: Duration(seconds: scanDurationInSeconds))
+        .map((result) => BluetoothPeripheral(id: result.device.id.id, deviceName: result.device.name.trim()));
   }
 
   @override

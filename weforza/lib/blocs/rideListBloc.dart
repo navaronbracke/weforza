@@ -9,7 +9,17 @@ class RideListBloc extends Bloc {
 
   final RideRepository _repository;
 
+  Future<List<Ride>> ridesFuture;
+
+  void loadRidesIfNotLoaded(){
+    if(ridesFuture == null){
+      ridesFuture = loadRides();
+    }
+  }
+
   Future<List<Ride>> loadRides() => _repository.getRides();
+
+  Future<int> getAmountOfRideAttendees(DateTime rideDate) => _repository.getAmountOfRideAttendees(rideDate);
 
   @override
   void dispose() {}

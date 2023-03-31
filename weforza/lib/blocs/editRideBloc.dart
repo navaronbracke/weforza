@@ -1,13 +1,16 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 class EditRideBloc extends Bloc {
-  EditRideBloc(this._repository,this.ride): assert(_repository != null && ride != null){
+  EditRideBloc({@required this.repository, @required this.ride}):
+        assert(repository != null && ride != null)
+  {
     titleInput = ride.title ?? "";
     distanceInput = ride.distance;
     departureInput = ride.startAddress ?? "";
@@ -18,7 +21,7 @@ class EditRideBloc extends Bloc {
   Stream<EditRideSubmitState> get stream => _submitController.stream;
 
   final Ride ride;
-  final RideRepository _repository;
+  final RideRepository repository;
 
   ///Max values for input
   final int titleMaxLength = 80;
@@ -130,21 +133,24 @@ class EditRideBloc extends Bloc {
     return destinationError;
   }
 
-  Future<void> editRide(void Function(Ride updatedRide) onSuccess) async {
+  ///Edit the ride and return the updated ride.
+  Future<Ride> editRide() async {
     _submitController.add(EditRideSubmitState.SUBMIT);
     //Grab a copy first
     final newRide = Ride(
       date: ride.date,
       title: titleInput == "" ? null : titleInput,
-      numberOfAttendees: ride.numberOfAttendees,
       destinationAddress: destinationInput == "" ? null : destinationInput,
       startAddress: departureInput == "" ? null : departureInput,
       distance: distanceInput
     );
     //Save the copy, if it fails, nothing gets overwritten.
-    await _repository.editRide(newRide).then((_){
-      onSuccess(newRide);
-    },onError: (e)=> _submitController.add(EditRideSubmitState.ERROR));
+    return await repository.editRide(newRide).then((_){
+      return newRide;
+    },onError: (e){
+      _submitController.add(EditRideSubmitState.ERROR);
+      return Future.error(EditRideSubmitState.ERROR);
+    });
   }
 
   @override

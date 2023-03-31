@@ -1,6 +1,9 @@
 
 import 'dart:async';
+import 'dart:collection';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jiffy/jiffy.dart';
@@ -8,65 +11,104 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
+//TODO test item selection -> check future rides/past day w/ ride
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
-  AddRideBloc(this._repository){
-    assert(_repository != null);
-    onDayPressed = (date){
-      DateTime today = DateTime.now();
-      //This date is in the past OR there is a ride with this date.
-      if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)) return false;
-
-      //This is a selected ride, unselect it.
-      if(_ridesToAdd.contains(date)){
-        _ridesToAdd.remove(date);
-        _submitController.add(AddRideSubmitState.IDLE);
-        return true;
-      }else{
-        _ridesToAdd.add(date);
-        _submitController.add(AddRideSubmitState.IDLE);
-        return true;
-      }
-    };
-  }
+  AddRideBloc({@required this.repository}): assert(repository != null);
 
   ///The repository that will handle the submit.
-  final RideRepository _repository;
+  final RideRepository repository;
+
+  PageController pageController;
+  //12 months in a year 3000 years range either way.
+  final int calendarItemCount = 72000;
+
+  //We start in the middle
+  int _currentPage = 36000;
 
   final StreamController<AddRideSubmitState> _submitController = BehaviorSubject();
   Stream<AddRideSubmitState> get submitStream => _submitController.stream;
 
+  final StreamController<DateTime> _calendarHeaderController = BehaviorSubject();
+  Stream<DateTime> get headerStream => _calendarHeaderController.stream;
+
   ///The date for the currently visible month in the calendar.
   DateTime pageDate;
+
+  final Duration _pageDuration = Duration(milliseconds: 300);
+  final Curve _pageCurve = Curves.easeInOut;
+
+  //The current submit state is cached, so we can check if we can allow events to alter the selected dates.
+  AddRideSubmitState _currentSubmitState;
 
   ///The days in the month of [pageDate].
   int daysInMonth = 0;
 
   ///The already persistent rides.
-  List<DateTime> _existingRides;
+  HashSet<DateTime> _existingRides;
+
+  ///This future holds the loading process for initializing [_existingRides].
+  Future<void> loadExistingRidesFuture;
 
   ///The rides to add on a submit.
-  List<DateTime> _ridesToAdd = List();
+  HashSet<DateTime> _ridesToAdd = HashSet();
 
-  ///A callback function for when a date is pressed.
-  bool Function(DateTime date) onDayPressed;
+  final List<VoidCallback> _resetFunctions = [];
 
-  ///A callback function that is fired when a selection clear is requested.
-  VoidCallback _onSelectionCleared;
+  //Intercept a day pressed event.
+  //Returns true if the item state should be refreshed.
+  bool onDayPressed(DateTime date){
+    if(_currentSubmitState == AddRideSubmitState.IDLE || _currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
+      //if we had a no selection error, clear it.
+      if(_currentSubmitState == AddRideSubmitState.ERR_NO_SELECTION){
+        _currentSubmitState = AddRideSubmitState.IDLE;
+        _submitController.add(_currentSubmitState);
+      }
 
-  set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
+      //This date is in the past OR there is a ride with this date.
+      if(isBeforeToday(date) || _existingRides.contains(date)){
+        return false;
+      }
 
+      //This is a selected ride, unselect it.
+      if(_ridesToAdd.contains(date)){
+        _ridesToAdd.remove(date);
+      }else{
+        _ridesToAdd.add(date);
+      }
+      return true;
+    }
+    return false;
+  }
+  
   ///This function clears the current ride dates selection.
   void onRequestClear(){
-    if(_ridesToAdd.isNotEmpty && _onSelectionCleared != null){
-      _onSelectionCleared();
+    if(_currentSubmitState == AddRideSubmitState.IDLE){
       _ridesToAdd.clear();
-      _submitController.add(AddRideSubmitState.IDLE);
+      _resetFunctions.forEach((method) => method());
+
+      //unset the error -> the submit widget will show an empty string with IDLE
+      _currentSubmitState = AddRideSubmitState.IDLE;
+      _submitController.add(_currentSubmitState);
+    }
+  }
+
+  void registerResetFunction(VoidCallback function) => _resetFunctions.add(function);
+
+  void unregisterResetFunction(VoidCallback function)=> _resetFunctions.remove(function);
+
+  ///Load [_existingRides] if not initialized.
+  ///This also populates loadExistingRidesFuture, which is used for the calendar.
+  void loadRideDatesIfNotLoaded(){
+    if(_existingRides == null){
+      loadExistingRidesFuture = loadRideDates();
     }
   }
 
   ///Load the existing ride dates.
-  Future loadRideDates() async => _existingRides = await _repository.getRideDates();
+  Future<void> loadRideDates() async {
+    _existingRides = HashSet.of(await repository.getRideDates());
+  }
 
   ///Whether a day, has or had a ride planned beforehand.
   bool dayHasRidePlanned(DateTime date){
@@ -75,6 +117,7 @@ class AddRideBloc extends Bloc {
   }
 
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
+  ///Rides that were planned previously, but still have to happen aren't 'new' scheduled rides.
   bool dayIsNewlyScheduledRide(DateTime date){
     assert(date != null);
     return !_existingRides.contains(date) && _ridesToAdd.contains(date);
@@ -86,47 +129,99 @@ class AddRideBloc extends Bloc {
     final jiffyDate = Jiffy([today.year,today.month,1]);
     pageDate = jiffyDate.dateTime;
     daysInMonth = jiffyDate.daysInMonth;
+    pageController = PageController(initialPage: _currentPage);
+    _calendarHeaderController.add(pageDate);
+    _currentSubmitState = AddRideSubmitState.IDLE;
   }
 
   ///Add a month to [pageDate].
-  ///This does not trigger a page switch.
-  void addMonth(){
+  void _addMonth(){
     //Always take first day of month as reference
     final newDate = Jiffy([pageDate.year,pageDate.month,1])
       ..add(months: 1);
     pageDate = newDate.dateTime;
     daysInMonth = newDate.daysInMonth;
+    _currentPage++;
+    _calendarHeaderController.add(pageDate);
   }
 
   ///Subtract a month from [pageDate].
-  ///This does not trigger a page switch.
-  void subtractMonth(){
+  void _subtractMonth(){
     //Always take first day of month as reference
     final newDate = Jiffy([pageDate.year,pageDate.month,1])
       ..subtract(months: 1);
     pageDate = newDate.dateTime;
     daysInMonth = newDate.daysInMonth;
+    _currentPage--;
+    _calendarHeaderController.add(pageDate);
   }
 
-  ///Add the selected rides.
-  Future<void> addRides(VoidCallback onSuccess) async {
-    if(_ridesToAdd.isNotEmpty){
-      _submitController.add(AddRideSubmitState.SUBMIT);
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).then((_)
-      {
-        onSuccess();
-      },onError: (error){
-        _submitController.add(AddRideSubmitState.ERR_SUBMIT);
-      });
-    }else{
-      _submitController.add(AddRideSubmitState.ERR_NO_SELECTION);
+  ///This method handles pressing forward in the header.
+  void onPageForward(){
+    _addMonth();
+    pageController.nextPage(duration: _pageDuration, curve: _pageCurve);
+  }
+
+  ///This method handles pressing backward in the header.
+  void onPageBackward(){
+    _subtractMonth();
+    pageController.previousPage(duration: _pageDuration, curve: _pageCurve);
+  }
+
+  ///This method handles swiping the calendar.
+  void onDragCalendar(DragEndDetails details){
+    if(details.velocity.pixelsPerSecond.dx < 0){
+      onPageForward();
+    }else if(details.velocity.pixelsPerSecond.dx > 0){
+      onPageBackward();
     }
   }
 
-  ///Dispose of this object.
+  ///Add the selected rides.
+  Future<void> addRides() async {
+    _currentSubmitState = AddRideSubmitState.SUBMIT;
+    _submitController.add(_currentSubmitState);
+    if(_ridesToAdd.isNotEmpty){
+      await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).catchError((error){
+        _currentSubmitState = AddRideSubmitState.ERR_SUBMIT;
+        _submitController.add(_currentSubmitState);
+        return Future.error(_currentSubmitState);
+      });
+    }else{
+      //empty selection
+      _currentSubmitState = AddRideSubmitState.ERR_NO_SELECTION;
+      _submitController.add(_currentSubmitState);
+      return Future.error(_currentSubmitState);
+    }
+  }
+
+  ///Whether [date] is before today.
+  bool isBeforeToday(DateTime date){
+    DateTime today = DateTime.now();
+    return date.isBefore(DateTime(today.year,today.month,today.day));
+  }
+
+  @override
+  int get hashCode {
+    final setEquality = SetEquality();
+    return hashValues(pageDate, _currentSubmitState, setEquality.hash(_existingRides), setEquality.hash(_ridesToAdd));
+  }
+
+  @override
+  bool operator ==(Object other){
+    final setEquality = SetEquality();
+    return other is AddRideBloc && pageDate == other.pageDate
+        && _currentSubmitState == other._currentSubmitState
+        && setEquality.equals(_ridesToAdd, other._ridesToAdd)
+        && setEquality.equals(_existingRides, other._existingRides);
+  }
+  
   @override
   void dispose() {
+    _resetFunctions.clear();
     _submitController.close();
+    _calendarHeaderController.close();
+    pageController.dispose();
   }
 }
 

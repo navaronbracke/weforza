@@ -6,8 +6,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/provider/deviceProvider.dart';
-import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -21,29 +19,32 @@ import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatefulWidget {
 
   @override
-  _MemberDetailsPageState createState() => _MemberDetailsPageState(
-      MemberDetailsBloc(InjectionContainer.get<MemberRepository>(),InjectionContainer.get<DeviceRepository>())
-  );
+  _MemberDetailsPageState createState() => _MemberDetailsPageState();
 }
 
 ///This is the [State] class for [MemberDetailsPage].
 class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
-  _MemberDetailsPageState(this._bloc): assert(_bloc != null);
+
 
   ///The BLoC in charge of the content.
-  final MemberDetailsBloc _bloc;
-
-  Future<List<Device>> devicesFuture;
+  MemberDetailsBloc bloc;
 
   @override
-  void initState() {
-    super.initState();
-    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc = MemberDetailsBloc(
+      memberRepository: InjectionContainer.get<MemberRepository>(),
+      deviceRepository: InjectionContainer.get<DeviceRepository>(),
+      memberUuid: SelectedItemProvider.of(context).selectedMember.value.uuid
+    );
+    bloc.loadDevicesAndAttendingCount();
   }
 
   @override
@@ -53,7 +54,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
-    final member = MemberProvider.selectedMember;
+    final member = SelectedItemProvider.of(context).selectedMember.value;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).MemberDetailsTitle),
@@ -105,7 +106,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                   ),
                   Expanded(
                     child: Center(
-                      child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                      child: _buildAttendingCountWidget(),
                     ),
                   ),
                   //tel/count
@@ -122,7 +123,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   Widget _buildIOSLayout(BuildContext context) {
-    final member = MemberProvider.selectedMember;
+    final member = SelectedItemProvider.of(context).selectedMember.value;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
@@ -190,7 +191,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     ),
                     Expanded(
                       child: Center(
-                        child: _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
+                        child: _buildAttendingCountWidget(),
                       ),
                     ),
                     //tel/count
@@ -210,7 +211,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   ///Build the list of devices.
   Widget _buildDevicesList(){
     return FutureBuilder<List<Device>>(
-      future: devicesFuture,
+      future: bloc.devicesFuture,
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
@@ -221,11 +222,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
               Navigator.push(context, MaterialPageRoute(builder: (context)=>
                   DeviceManagementPage(devices: snapshot.data),
               )).then((_)=> (){
-                if(DeviceProvider.reloadDevices){
-                  DeviceProvider.reloadDevices = false;
-                  setState(() {
-                    devicesFuture = _bloc.getMemberDevices(MemberProvider.selectedMember.uuid);
-                  });
+                final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
+                if(reloadDevicesNotifier.value){
+                  reloadDevicesNotifier.value = false;
+                  setState(() => bloc.devicesFuture = bloc.getMemberDevices());
                 }
               });
             };
@@ -240,14 +240,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   ///Build the attending count widget.
-  Widget _buildAttendingCountWidget(Future<int> future){
+  Widget _buildAttendingCountWidget(){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(Icons.location_on),
         SizedBox(width: 5),
         FutureBuilder<int>(
-          future: future,
+          future: bloc.attendingCountFuture,
           builder: (context,snapshot){
             if(snapshot.connectionState == ConnectionState.done){
               if(snapshot.hasError){
@@ -264,5 +264,5 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
   }
 
   @override
-  Future<void> deleteMember() => _bloc.deleteMember(MemberProvider.selectedMember.uuid);
+  Future<void> deleteMember() => bloc.deleteMember();
 }

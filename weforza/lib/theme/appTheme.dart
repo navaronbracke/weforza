@@ -44,21 +44,28 @@ abstract class ApplicationTheme {
   ///The profile image placeholder icon's background color.
   static const Color profileImagePlaceholderIconBackgroundColor = Color(0xFF1976D2);
 
-  ///The font color for an unselected ride attendee.
-  static final Color rideAttendeeUnSelectedFontColor = Colors.black;
-  ///The font color for a selected ride attendee.
-  static final Color rideAttendeeSelectedFontColor = Colors.white;
   ///The background color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
   ///The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Colors.lightGreen;
-  ///The profile image placeholder background color when the ride attendee is unselected.
-  static final Color rideAttendeeUnselectedPlaceholderBackgroundColor = Colors.blue;
-  ///The profile image placeholder background color when the ride attendee is selected.
-  static final Color rideAttendeeSelectedPlaceholderBackgroundColor = Colors.green;
+  static final Color rideAttendeeSelectedBackgroundColor = Colors.lightBlue.withAlpha(150);
+
+  static final TextStyle rideAttendeeSelectedFirstNameTextStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 16.0
+  );
+  static final TextStyle rideAttendeeUnselectedFirstNameTextStyle = TextStyle(
+      fontWeight: FontWeight.bold, fontSize: 16.0
+  );
+  static final TextStyle rideAttendeeSelectedLastNameTextStyle = TextStyle(
+    color: Colors.white, fontSize: 12.0
+  );
+  static final TextStyle rideAttendeeUnselectedLastNameTextStyle = TextStyle(
+      fontSize: 12.0
+  );
 
   //MemberList Item First Name Text Style
-  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
+  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w500);
 
   //MemberList Item Last Name Text Style
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
@@ -73,8 +80,6 @@ abstract class ApplicationTheme {
   ///This color is used for Icons in lists that show some information when there is nothing to show.
   static final Color listInformationalIconColor = primaryColor;
 
-  static final Color scanProgressBarStrokeColor = primaryColor;
-
   static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
 
@@ -82,6 +87,16 @@ abstract class ApplicationTheme {
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
   static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
+  static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
+  static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
+  static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  static final Color rideAttendeeScanGoToSettingsButtonColor = Colors.blue.shade300;
+  static final Color rideAttendeeScanRetryScanButtonColor = Colors.blue;
+  static final Color rideAttendeeScanResultWarningColor = Colors.orange;
+  static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
+  static final Color rideAttendeeScanResultLoadingColor = primaryColor;
+
+  static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

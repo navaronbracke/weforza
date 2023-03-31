@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
@@ -5,27 +6,45 @@ import 'package:weforza/repository/memberRepository.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {
-  MemberDetailsBloc(this._memberRepository,this._deviceRepository): assert(_memberRepository != null && _deviceRepository != null);
+  MemberDetailsBloc({
+    @required this.memberRepository,
+    @required this.deviceRepository,
+    @required this.memberUuid,
+  }): assert(
+    memberRepository != null && deviceRepository != null && memberUuid != null
+        && memberUuid.isNotEmpty
+  );
 
-  final MemberRepository _memberRepository;
-  final DeviceRepository _deviceRepository;
+  final MemberRepository memberRepository;
+  final DeviceRepository deviceRepository;
+  final String memberUuid;
+
+  Future<List<Device>> devicesFuture;
+
+  Future<int> attendingCountFuture;
+
+  void loadDevicesAndAttendingCount(){
+    if(devicesFuture == null){
+      devicesFuture = getMemberDevices();
+    }
+    if(attendingCountFuture == null){
+      attendingCountFuture = getAttendingCount();
+    }
+  }
 
   ///Dispose of this object.
   @override
   void dispose() {}
 
-  Future<void> deleteMember(String uuid) async {
-    assert(uuid != null && uuid.isNotEmpty);
-    await _memberRepository.deleteMember(uuid);
+  Future<void> deleteMember() async {
+    await memberRepository.deleteMember(memberUuid);
   }
 
-  Future<int> getAttendingCount(String uuid){
-    assert(uuid != null && uuid.isNotEmpty);
-    return _memberRepository.getAttendingCountForAttendee(uuid);
+  Future<int> getAttendingCount(){
+    return memberRepository.getAttendingCountForAttendee(memberUuid);
   }
 
-  Future<List<Device>> getMemberDevices(String uuid){
-    assert(uuid != null && uuid.isNotEmpty);
-    return _deviceRepository.getOwnerDevices(uuid);
+  Future<List<Device>> getMemberDevices(){
+    return deviceRepository.getOwnerDevices(memberUuid);
   }
 }

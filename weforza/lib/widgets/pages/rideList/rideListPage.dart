@@ -5,7 +5,6 @@ import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
@@ -16,38 +15,28 @@ import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
 
   @override
-  State<RideListPage> createState() => _RideListPageState(RideListBloc(InjectionContainer.get<RideRepository>()));
+  State<RideListPage> createState() => _RideListPageState(
+      bloc: RideListBloc(InjectionContainer.get<RideRepository>())
+  );
 }
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage> {
-  _RideListPageState(this._bloc): assert(_bloc != null){
-    _onReload = (){
-      if(RideProvider.reloadRides){
-        RideProvider.reloadRides = false;
-        setState(() {
-          ridesFuture = _bloc.loadRides();
-        });
-      }
-    };
-  }
+  _RideListPageState({@required this.bloc}): assert(bloc != null);
 
-  final RideListBloc _bloc;
-
-  Future<List<Ride>> ridesFuture;
-
-  ///This callback triggers a reload.
-  VoidCallback _onReload;
+  final RideListBloc bloc;
 
   @override
   void initState() {
     super.initState();
-    ridesFuture = _bloc.loadRides();
+    bloc.loadRidesIfNotLoaded();
   }
 
   @override
@@ -64,12 +53,13 @@ class _RideListPageState extends State<RideListPage> {
             IconButton(
               icon: Icon(Icons.add),
               color: Colors.white,
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))
-                  .then((_) => _onReload()),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=> AddRidePage())
+              ),
             ),
           ],
         ),
-        body: _buildList(ridesFuture)
+        body: _buildList(context)
     );
   }
 
@@ -86,20 +76,36 @@ class _RideListPageState extends State<RideListPage> {
               onPressedColor: ApplicationTheme.primaryColor,
               idleColor: ApplicationTheme.accentColor,
               icon: Icons.add,
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddRidePage()))
-                  .then((_) => _onReload()),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=> AddRidePage())
+              ),
             ),
           ],
         ),
       ),
       child: SafeArea(
           bottom: false,
-          child: _buildList(ridesFuture)
+          child: _buildList(context)
       )
     );
   }
 
-  Widget _buildList(Future<List<Ride>> future){
+  Widget _buildList(BuildContext context){
+    final listenable = ReloadDataProvider.of(context).reloadRides;
+    return ValueListenableBuilder<bool>(
+      valueListenable: listenable,
+      child: _listFutureBuilder(bloc.ridesFuture),
+      builder: (context, reload, child){
+        if(reload){
+          listenable.value = false;
+          bloc.ridesFuture = bloc.loadRides();
+        }
+        return child;
+      },
+    );
+  }
+
+  Widget _listFutureBuilder(Future<List<Ride>> future){
     return FutureBuilder<List<Ride>>(
       future: future,
       builder: (context,snapshot){
@@ -113,11 +119,18 @@ class _RideListPageState extends State<RideListPage> {
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context,index){
-                    return RideListItem(snapshot.data[index],(){
-                      RideProvider.selectedRide = snapshot.data[index];
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> RideDetailsPage()))
-                          .then((_) => _onReload());
-                    });
+                    final Ride ride = snapshot.data[index];
+                    return RideListItem(
+                      ride: ride,
+                      rideAttendeeFuture: bloc.getAmountOfRideAttendees(ride.date),
+                      onPressed: (future,ride){
+                        SelectedItemProvider.of(context).selectedRide.value = ride;
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => RideDetailsPage(),
+                          ),
+                        );
+                      },
+                    );
                   });
             }
           }

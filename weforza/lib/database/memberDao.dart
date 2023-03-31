@@ -28,9 +28,9 @@ abstract class IMemberDao {
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
 
-  ///Get the [Member]s of a given ride.
-  ///This method is intended for use with a [Ride] detail page.
-  Future<List<Member>> getRideAttendees(DateTime date);
+  ///Get the member with the given UUID.
+  ///Returns null if it doesn't exist.
+  Future<Member> getMemberByUuid(String uuid);
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -118,17 +118,14 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<List<Member>> getRideAttendees(DateTime date) async {
-    assert(date != null);
-    //fetch the attendees of the ride and map to their uuid's
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals("date", date.toIso8601String())));
-    final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]).toList();
-    //fetch the members that belong to the attendee uuid's
-    final memberRecords = await _memberStore.find(_database,
-        finder: Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)),
-            sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
-    //map the record snapshots
-    return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
+  Future<Member> getMemberByUuid(String uuid) async {
+    final record = await _memberStore.record(uuid).getSnapshot(_database);
+
+    if(record == null){
+      return null;
+    }else{
+      //need record snapshot
+      return Member.of(uuid, record.value);
+    }
   }
 }

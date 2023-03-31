@@ -623,121 +623,101 @@ class S {
     );
   }
 
-  /// `Attendees`
-  String get RideAttendeeAssignmentTitle {
+  /// `Preparing Scan`
+  String get RideAttendeeScanningPreparingScan {
     return Intl.message(
-      'Attendees',
-      name: 'RideAttendeeAssignmentTitle',
+      'Preparing Scan',
+      name: 'RideAttendeeScanningPreparingScan',
       desc: '',
       args: [],
     );
   }
 
-  /// `Loading members for assignment`
-  String get RideAttendeeAssignmentLoadingMembers {
+  /// `Cannot start a scan, there are no members.`
+  String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Loading members for assignment',
-      name: 'RideAttendeeAssignmentLoadingMembers',
+      'Cannot start a scan, there are no members.',
+      name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
     );
   }
 
-  /// `The scan failed`
-  String get RideAttendeeAssignmentScanningFailed {
+  /// `Return to detail page`
+  String get RideAttendeeScanningGoBack {
     return Intl.message(
-      'The scan failed',
-      name: 'RideAttendeeAssignmentScanningFailed',
+      'Return to detail page',
+      name: 'RideAttendeeScanningGoBack',
       desc: '',
       args: [],
     );
   }
 
-  /// `Return to the list`
-  String get RideAttendeeAssignmentReturnToList {
+  /// `Something went wrong.`
+  String get RideAttendeeScanningGenericError {
     return Intl.message(
-      'Return to the list',
-      name: 'RideAttendeeAssignmentReturnToList',
+      'Something went wrong.',
+      name: 'RideAttendeeScanningGenericError',
       desc: '',
       args: [],
     );
   }
 
-  /// `Scanning for attendees`
-  String get RideAttendeeAssignmentScanningTitle {
+  /// `Cannot start scanning, Bluetooth is disabled.`
+  String get RideAttendeeScanningBluetoothDisabled {
     return Intl.message(
-      'Scanning for attendees',
-      name: 'RideAttendeeAssignmentScanningTitle',
+      'Cannot start scanning, Bluetooth is disabled.',
+      name: 'RideAttendeeScanningBluetoothDisabled',
       desc: '',
       args: [],
     );
   }
 
-  /// `Stop Scan`
-  String get RideAttendeeAssignmentStopScan {
+  /// `Go to settings`
+  String get RideAttendeeScanningGoToBluetoothSettings {
     return Intl.message(
-      'Stop Scan',
-      name: 'RideAttendeeAssignmentStopScan',
+      'Go to settings',
+      name: 'RideAttendeeScanningGoToBluetoothSettings',
       desc: '',
       args: [],
     );
   }
 
-  /// `Saving Attendees`
-  String get RideAttendeeAssignmentSubmitting {
+  /// `Retry Scan`
+  String get RideAttendeeScanningRetryScan {
     return Intl.message(
-      'Saving Attendees',
-      name: 'RideAttendeeAssignmentSubmitting',
+      'Retry Scan',
+      name: 'RideAttendeeScanningRetryScan',
       desc: '',
       args: [],
     );
   }
 
-  /// `Could not save attendees`
-  String get RideAttendeeAssignmentSubmitError {
+  /// `Skip Scan`
+  String get RideAttendeeScanningSkipScan {
     return Intl.message(
-      'Could not save attendees',
-      name: 'RideAttendeeAssignmentSubmitError',
+      'Skip Scan',
+      name: 'RideAttendeeScanningSkipScan',
       desc: '',
       args: [],
     );
   }
 
-  /// `Something went wrong`
-  String get RideAttendeeAssignmentError {
+  /// `Save Scan Results`
+  String get RideAttendeeScanningSaveScanResults {
     return Intl.message(
-      'Something went wrong',
-      name: 'RideAttendeeAssignmentError',
+      'Save Scan Results',
+      name: 'RideAttendeeScanningSaveScanResults',
       desc: '',
       args: [],
     );
   }
 
-  /// `Loading all known devices`
-  String get RideAttendeeAssignmentLoadingDevices {
+  /// `Save Selection`
+  String get RideAttendeeScanningSaveManualResults {
     return Intl.message(
-      'Loading all known devices',
-      name: 'RideAttendeeAssignmentLoadingDevices',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Processing Scan Results`
-  String get RideAttendeeAssignmentProcessingScanResult {
-    return Intl.message(
-      'Processing Scan Results',
-      name: 'RideAttendeeAssignmentProcessingScanResult',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `The previous scan wasn't finished`
-  String get RideAttendeeAssignmentAlreadyScanning {
-    return Intl.message(
-      'The previous scan wasn\'t finished',
-      name: 'RideAttendeeAssignmentAlreadyScanning',
+      'Save Selection',
+      name: 'RideAttendeeScanningSaveManualResults',
       desc: '',
       args: [],
     );
@@ -1250,36 +1230,6 @@ class S {
       name: 'PhoneMaxLength',
       desc: '',
       args: [maxLength],
-    );
-  }
-
-  /// `Enable Bluetooth`
-  String get EnableBluetoothDialogTitle {
-    return Intl.message(
-      'Enable Bluetooth',
-      name: 'EnableBluetoothDialogTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bluetooth is required to start a scan. Do you want to go to Settings?`
-  String get EnableBluetoothDialogDescription {
-    return Intl.message(
-      'Bluetooth is required to start a scan. Do you want to go to Settings?',
-      name: 'EnableBluetoothDialogDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Go To Settings`
-  String get EnableBluetoothGoToSettings {
-    return Intl.message(
-      'Go To Settings',
-      name: 'EnableBluetoothGoToSettings',
-      desc: '',
-      args: [],
     );
   }
 

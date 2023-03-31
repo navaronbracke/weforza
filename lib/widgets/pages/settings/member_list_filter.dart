@@ -18,6 +18,22 @@ class MemberListFilter extends StatelessWidget {
 
   final Stream<MemberFilterOption> stream;
 
+  Widget _buildChip({
+    required MemberFilterOption groupValue,
+    required Widget label,
+    required MemberFilterOption value,
+  }) {
+    return ChoiceChip(
+      label: label,
+      selected: groupValue == value,
+      onSelected: (selected) {
+        if (selected) {
+          onChanged(value);
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
@@ -31,35 +47,23 @@ class MemberListFilter extends StatelessWidget {
         return PlatformAwareWidget(
           android: (_) => Row(
             children: [
-              ChoiceChip(
+              _buildChip(
+                groupValue: currentFilter,
                 label: Text(translator.All),
-                selected: currentFilter == MemberFilterOption.all,
-                onSelected: (selected) {
-                  if (selected) {
-                    onChanged(MemberFilterOption.all);
-                  }
-                },
+                value: MemberFilterOption.all,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ChoiceChip(
+                child: _buildChip(
+                  groupValue: currentFilter,
                   label: Text(translator.Active),
-                  selected: currentFilter == MemberFilterOption.active,
-                  onSelected: (selected) {
-                    if (selected) {
-                      onChanged(MemberFilterOption.active);
-                    }
-                  },
+                  value: MemberFilterOption.active,
                 ),
               ),
-              ChoiceChip(
+              _buildChip(
+                groupValue: currentFilter,
                 label: Text(translator.Inactive),
-                selected: currentFilter == MemberFilterOption.inactive,
-                onSelected: (selected) {
-                  if (selected) {
-                    onChanged(MemberFilterOption.inactive);
-                  }
-                },
+                value: MemberFilterOption.inactive,
               ),
             ],
           ),

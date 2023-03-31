@@ -44,7 +44,7 @@ class AddDeviceBloc extends Bloc {
   final StreamController<String> _submitErrorController = BehaviorSubject();
   Stream<String> get submitErrorStream => _submitErrorController.stream;
 
-  ///This controller manages the current page for the type carousel.
+  ///This controller manages the current page dot for the type carousel.
   final StreamController<int> _typeController = BehaviorSubject.seeded(DeviceType.UNKNOWN.index);
   Stream<int> get currentTypeStream => _typeController.stream;
 

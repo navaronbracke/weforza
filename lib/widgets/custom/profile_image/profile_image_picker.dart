@@ -141,7 +141,11 @@ class ProfileImagePickerActionButton extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: Icon(icon, color: Colors.white, size: decorationSize / 2),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: decorationSize * 0.6,
+              ),
             ),
           ),
         ),

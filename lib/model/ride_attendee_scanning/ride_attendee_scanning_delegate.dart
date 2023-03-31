@@ -362,8 +362,7 @@ class RideAttendeeScanningDelegate {
     final currentSelection = _rideAttendeeController.value;
 
     if (currentSelection.contains(item)) {
-      currentSelection.remove(item);
-      _rideAttendeeController.add(currentSelection);
+      _removeRideAttendee(item);
     } else {
       _addRideAttendee(item.uuid, isScanned: false);
     }

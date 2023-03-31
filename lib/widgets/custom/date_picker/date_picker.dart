@@ -103,8 +103,8 @@ class _DatePickerBody extends StatelessWidget {
     required this.dayBuilder,
     required this.delegate,
     required this.showWeekdays,
-    required this.weekDayWidth,
-    required this.weekPadding,
+    required this.weekDayStyle,
+    required this.weekSpacing,
   });
 
   final Widget Function(DateTime date, bool isCurrentMonth) dayBuilder;
@@ -113,9 +113,9 @@ class _DatePickerBody extends StatelessWidget {
 
   final bool showWeekdays;
 
-  final double weekDayWidth;
+  final TextStyle weekDayStyle;
 
-  final EdgeInsets weekPadding;
+  final double weekSpacing;
 
   Widget _buildWeekdaysHeader(DateFormat dateFormat) {
     // This list contains the first monday - sunday of the year 1970.
@@ -160,16 +160,15 @@ class _DatePickerBody extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: delegate.calendarPageCount,
               itemBuilder: (context, index) {
-                final days = delegate.computeDaysForMonth();
-
                 final currentMonth = delegate.currentCalendarMonth;
+                final days = delegate.computeDaysForMonth();
 
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),
                   days: days.map((date) {
                     return dayBuilder(date, date.month == currentMonth.month);
                   }).toList(),
-                  weekPadding: weekPadding,
+                  weekSpacing: weekSpacing,
                 );
               },
             ),

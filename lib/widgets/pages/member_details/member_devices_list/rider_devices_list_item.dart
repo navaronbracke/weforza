@@ -8,8 +8,8 @@ import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class MemberDevicesListItem extends StatelessWidget {
-  const MemberDevicesListItem({
+class RiderDevicesListItem extends StatelessWidget {
+  const RiderDevicesListItem({
     required this.deleteDeviceButton,
     required this.device,
     super.key,

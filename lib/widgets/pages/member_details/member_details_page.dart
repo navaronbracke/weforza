@@ -7,8 +7,8 @@ import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/rider_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/rider_active_toggle.dart';
-import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/rider_name.dart';
 import 'package:weforza/widgets/pages/member_details/rider_profile_image.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
@@ -74,7 +74,7 @@ class MemberDetailsPage extends StatelessWidget {
     return Column(
       children: <Widget>[
         _buildMemberInfoSection(context),
-        const Expanded(child: MemberDevicesList()),
+        const Expanded(child: RiderDevicesList()),
       ],
     );
   }

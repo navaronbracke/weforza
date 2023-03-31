@@ -137,8 +137,11 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                           }
                         },
                       ),
-                      ios: () => CupertinoButton(
-                        child: Text(S.of(context).Export),
+                      ios: () => CupertinoButton.filled(
+                        child: Text(
+                          S.of(context).Export,
+                          style: TextStyle(color: Colors.white),
+                        ),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
                             await bloc.exportRidesWithAttendees();

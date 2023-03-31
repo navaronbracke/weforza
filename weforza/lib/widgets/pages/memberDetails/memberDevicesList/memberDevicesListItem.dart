@@ -135,8 +135,8 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
         padding: const EdgeInsets.only(left: 5),
         child: CupertinoIconButton(
           icon: CupertinoIcons.delete,
-          idleColor: ApplicationTheme.deleteItemButtonTextColor,
-          onPressedColor: ApplicationTheme.deleteItemButtonTextColor.withAlpha(150),
+          idleColor: CupertinoColors.destructiveRed,
+          onPressedColor: CupertinoColors.destructiveRed.withAlpha(150),
           onPressed: () => showCupertinoDialog(
             context: context,
             builder: (_) => DeleteItemDialog(

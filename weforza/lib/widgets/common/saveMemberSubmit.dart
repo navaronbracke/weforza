@@ -34,10 +34,9 @@ class SaveMemberSubmit extends StatelessWidget {
       ),
       ios: () => CupertinoButton.filled(
         child: Text(
-            submitButtonLabel,
-            style: TextStyle(color: Colors.white)
+          submitButtonLabel,
+          style: TextStyle(color: Colors.white),
         ),
-        pressedOpacity: 0.5,
         onPressed: onPressed,
       ),
     );

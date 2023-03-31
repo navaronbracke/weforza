@@ -227,9 +227,9 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
                     child: Text(
                       S.of(context).Delete,
                       style: TextStyle(
-                        color: ApplicationTheme.deleteItemButtonTextColor
-                        ),
+                        color: CupertinoColors.destructiveRed,
                       ),
+                    ),
                     onPressed: () => _onConfirmDeletion(),
                   ),
                 ),
@@ -270,7 +270,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
                   child: Icon(
                       CupertinoIcons.exclamationmark_circle,
                       size: 25,
-                      color: ApplicationTheme.deleteItemButtonTextColor
+                      color: CupertinoColors.destructiveRed,
                   ),
                 ),
                 Text(

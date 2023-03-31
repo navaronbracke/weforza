@@ -97,7 +97,7 @@ class ExportRidesDao implements IExportRidesDao {
         return ExportableRideAttendee(
           firstName: member.firstname,
           lastName: member.lastname,
-          alias: "",//TODO add alias here once its a property of Member
+          alias: member.alias,
         );
       }) : [];
 

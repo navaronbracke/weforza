@@ -37,9 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m8(amount) => "Renners (${amount})";
 
-  static String m9(amount) => "Renners (${amount})";
+  static String m8(amount) => "Renners (${amount})";
 
-  static String m10(value) => "${value} is verplicht";
+  static String m9(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

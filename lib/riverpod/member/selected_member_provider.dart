@@ -69,7 +69,7 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
   void setSelectedMember({
     required Future<int> attendingCount,
     required Member member,
-    required Future<File?> profileImage,
+    Future<File?>? profileImage,
   }) {
     state = SelectedMember(
       attendingCount: attendingCount,

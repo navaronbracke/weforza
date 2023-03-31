@@ -11,14 +11,14 @@ import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 class AsyncProfileImage extends StatelessWidget {
   const AsyncProfileImage({
     super.key,
-    required this.future,
+    this.future,
     required this.icon,
     this.personInitials,
     this.size = 40,
   });
 
   /// The future that represents the loading of the image.
-  final Future<File?> future;
+  final Future<File?>? future;
 
   /// The icon that is used as fallback if [personInitials] is null or empty.
   final IconData icon;

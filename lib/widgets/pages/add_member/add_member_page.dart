@@ -7,7 +7,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
-import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
+import 'package:weforza/widgets/pages/add_member/add_member_submit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';

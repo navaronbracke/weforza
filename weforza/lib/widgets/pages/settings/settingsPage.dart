@@ -62,10 +62,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(S.of(context).Settings),
         actions: <Widget>[
-          SettingsSubmit(
-            submitStream: bloc.submitStream,
-            onSubmit: bloc.saveSettings,
-          ),
+          SettingsSubmit(bloc: bloc),
         ],
       ),
       body: _buildBody(context, settings),
@@ -86,10 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
             SizedBox(
               width: 40,
               child: Center(
-                child: SettingsSubmit(
-                  submitStream: bloc.submitStream,
-                  onSubmit: bloc.saveSettings,
-                ),
+                child: SettingsSubmit(bloc: bloc),
               ),
             ),
           ],

@@ -2,14 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 
-/// This provider provides the attending count for the selected member.
-final selectedMemberAttendingCountProvider = FutureProvider<int?>((ref) {
-  final member = ref.watch(selectedMemberProvider);
+// TODO: use select on the uuid to fix bug with active toggle
+
+/// This provider provides the attending count for the selected rider.
+final selectedMemberAttendingCountProvider = FutureProvider<int?>((ref) async {
+  final rider = ref.watch(selectedMemberProvider);
   final repository = ref.read(memberRepositoryProvider);
 
-  if (member == null) {
-    return Future.value();
+  if (rider == null) {
+    return null;
   }
 
-  return repository.getAttendingCount(member.uuid);
+  return repository.getAttendingCount(rider.uuid);
 });

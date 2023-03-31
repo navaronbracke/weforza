@@ -13,9 +13,9 @@ class MemberProfileImage extends ConsumerWidget {
       selectedMemberProvider.select((selectedMember) => selectedMember!),
     );
 
-    return AdaptiveProfileImage(
-      image: selectedMember.profileImage,
-      personInitials: selectedMember.value.initials,
+    return AdaptiveProfileImage.path(
+      imagePath: selectedMember.profileImageFilePath,
+      personInitials: selectedMember.initials,
       size: 72,
     );
   }

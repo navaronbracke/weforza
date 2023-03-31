@@ -13,7 +13,7 @@ class CupertinoIconButton extends StatelessWidget {
   /// The color for the icon.
   ///
   /// Defaults to [CupertinoColors.activeBlue].
-  final CupertinoDynamicColor color;
+  final Color color;
 
   /// The icon for the button.
   final IconData icon;

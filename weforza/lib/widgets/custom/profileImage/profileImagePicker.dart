@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/selectProfileImageState.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
@@ -11,13 +10,12 @@ class ProfileImagePicker extends StatelessWidget {
   ProfileImagePicker({
     @required this.errorMessage,
     @required this.size,
-    @required this.isSelecting,
     @required this.selectImage,
     @required this.clear,
-    @required this.image
+    @required this.stream
   }): assert(
-    size != null && size > 0 && errorMessage != null && isSelecting != null
-        && selectImage != null && clear != null && image != null
+    size != null && size > 0 && errorMessage != null && stream != null
+        && selectImage != null && clear != null
   );
 
   ///The size for a selected image.
@@ -29,33 +27,33 @@ class ProfileImagePicker extends StatelessWidget {
   ///This function is called when an image selection is requested.
   final void Function() selectImage;
 
-  final Stream<bool> isSelecting;
-
-  final Future<File> image;
+  final Stream<SelectProfileImageState> stream;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: false,
-      stream: isSelecting,
+    return StreamBuilder<SelectProfileImageState>(
+      initialData: SelectProfileImageState(
+          image: Future.value(null),
+          isSelecting: false
+      ),
       builder: (context,snapshot){
         if(snapshot.hasError){
           return Center(child: Text(errorMessage,softWrap: true));
         }else{
-          return snapshot.data ? SizedBox(
+          return snapshot.data.isSelecting ? SizedBox(
             width: size,
             height: size,
             child: Center(
               child: PlatformAwareLoadingIndicator(),
             ),
           ): GestureDetector(
-              child: AsyncProfileImage(
-                future: image,
-                icon: Icons.camera_alt,
-                size: size,
-              ),
-              onTap: selectImage,
-              onLongPress: clear,
+            child: AsyncProfileImage(
+              future: snapshot.data.image,
+              icon: Icons.camera_alt,
+              size: size,
+            ),
+            onTap: selectImage,
+            onLongPress: clear,
           );
         }
       },

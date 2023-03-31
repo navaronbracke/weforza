@@ -14,6 +14,7 @@ import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
@@ -97,7 +98,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
           ),
         ),
         excludedTermsListHeader: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
           child: ExcludedTermsListHeader(),
         ),
         excludedTermsList: SliverPadding(

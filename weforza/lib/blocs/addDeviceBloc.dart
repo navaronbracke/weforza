@@ -1,16 +1,20 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 
-class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
-  AddDeviceBloc(this._repository): assert(_repository != null);
+class AddDeviceBloc extends Bloc {
+  AddDeviceBloc({
+    @required this.repository,
+    @required this.ownerId,
+  }): assert(repository != null && ownerId != null && ownerId.isNotEmpty);
 
-  final DeviceRepository _repository;
+  final DeviceRepository repository;
+  final String ownerId;
 
   ///Auto validate flag for device name.
   bool autoValidateNewDeviceName = false;
@@ -20,7 +24,7 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
   ///Device Name input backing field
   String _newDeviceName = "";
   ///Device type backing field.
-  DeviceType _type = DeviceType.UNKNOWN;
+  DeviceType type = DeviceType.UNKNOWN;
 
   ///Form Error message
   String addDeviceError;
@@ -39,13 +43,13 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
-  Future<Device> addDevice(String ownerId,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<Device> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
-    final device = Device(ownerId: ownerId, name: _newDeviceName,type: _type,creationDate: DateTime.now());
-    await _repository.deviceExists(device).then((exists) async {
+    final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
+    await repository.deviceExists(device).then((exists) async {
       if(!exists){
-        await _repository.addDevice(device).then((_){
+        await repository.addDevice(device).then((_){
           _submitButtonController.add(false);
           return device;
         },onError: (error){
@@ -80,22 +84,5 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
       addDeviceError = null;
     }
     return addDeviceError;
-  }
-
-  @override
-  DeviceType get currentValue => _type;
-
-  @override
-  void onTypeBackPressed(){
-    if(_type.index == 0) return;
-
-    _type = DeviceType.values[_type.index - 1];
-  }
-
-  @override
-  void onTypeForwardPressed(){
-    if(_type.index == DeviceType.values.length-1) return;
-
-    _type = DeviceType.values[_type.index + 1];
   }
 }

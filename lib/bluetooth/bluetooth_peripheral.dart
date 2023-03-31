@@ -3,10 +3,7 @@ class BluetoothPeripheral {
   BluetoothPeripheral({
     required this.deviceName,
     required this.id,
-  }) : assert(
-          id.isNotEmpty,
-          'The id of a Bluetooth peripheral cannot be empty',
-        );
+  });
 
   /// The name of the device.
   final String deviceName;
@@ -16,9 +13,7 @@ class BluetoothPeripheral {
 
   @override
   bool operator ==(Object other) {
-    return other is BluetoothPeripheral &&
-        id == other.id &&
-        deviceName == other.deviceName;
+    return other is BluetoothPeripheral && id == other.id && deviceName == other.deviceName;
   }
 
   @override

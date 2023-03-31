@@ -7,7 +7,7 @@ class ManualSelectionItemCounter extends StatelessWidget {
   ManualSelectionItemCounter({
     required this.backgroundColor,
     required this.countStream,
-    required this.initialData
+    required this.initialData,
   });
 
   final Color backgroundColor;
@@ -16,67 +16,17 @@ class ManualSelectionItemCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = Colors.white;
-
     final child = Stack(
       children: [
         _buildBackground(),
-        Positioned(
-          top: 5,
-          left: 10,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildIcon(),
-              Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: StreamBuilder<int>(
-                  initialData: initialData,
-                  stream: countStream,
-                  builder: (context, snapshot){
-                    final count = snapshot.data;
-                    if(snapshot.hasError || count == null){
-                      return Text(
-                        "-",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: textColor,
-                        ),
-                      );
-                    }
-
-                    // Limit the maximum shown number.
-                    // This is an edge case for overflow.
-                    if(count > 999){
-                      return Text(
-                        "999+",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: textColor,
-                        ),
-                      );
-                    }
-
-                    return Text(
-                      "${snapshot.data}",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: textColor,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        _buildPositioned(_buildRow()),
       ],
     );
 
     return _buildSizedBox(child);
   }
 
-  Widget _buildBackground(){
+  Widget _buildBackground() {
     return PlatformAwareWidget(
       android: () => RectangleAndCircleQuarter(
         color: backgroundColor,
@@ -84,14 +34,14 @@ class ManualSelectionItemCounter extends StatelessWidget {
       ),
       ios: () => RectangleAndCircleQuarter(
         color: backgroundColor,
-        size: Size(110, 40),
+        size: Size(110, 48),
         drawHalfCircle: true,
       ),
     );
   }
 
-  Widget _buildIcon(){
-    return  PlatformAwareWidget(
+  Widget _buildIcon() {
+    return PlatformAwareWidget(
       android: () => Icon(
         Icons.people,
         color: Colors.white,
@@ -99,13 +49,13 @@ class ManualSelectionItemCounter extends StatelessWidget {
       ),
       ios: () => Icon(
         CupertinoIcons.person_2_fill,
-          color: Colors.white,
-          size: 30,
-        ),
-      );
+        color: Colors.white,
+        size: 28,
+      ),
+    );
   }
 
-  Widget _buildSizedBox(Widget child){
+  Widget _buildSizedBox(Widget child) {
     return PlatformAwareWidget(
       android: () => SizedBox(
         width: 95,
@@ -114,9 +64,64 @@ class ManualSelectionItemCounter extends StatelessWidget {
       ),
       ios: () => SizedBox(
         width: 110,
-        height: 40,
+        height: 48,
         child: child,
       ),
+    );
+  }
+
+  Widget _buildPositioned(Widget child) {
+    return PlatformAwareWidget(
+      android: () => Positioned(
+        top: 5,
+        left: 10,
+        child: child,
+      ),
+      ios: () => Positioned(
+        top: 8,
+        left: 10,
+        child: child,
+      ),
+    );
+  }
+
+  Widget _buildValue(String value) {
+    return Text(
+      value,
+      style: TextStyle(
+        fontSize: 16,
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _buildRow() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _buildIcon(),
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: StreamBuilder<int>(
+            initialData: initialData,
+            stream: countStream,
+            builder: (context, snapshot) {
+              final count = snapshot.data;
+              if (snapshot.hasError || count == null) {
+                return _buildValue("-");
+              }
+
+              // Limit the maximum shown number.
+              // This is an edge case for overflow.
+              if (count > 999) {
+                return _buildValue("999+");
+              }
+
+              return _buildValue("${snapshot.data}");
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -35,7 +35,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     final String lastUpdateString = values[4];
 
     // Invalid data lines are skipped.
-    // Check firstname, lastname & alias by regex.
+    // Check first name, last name & alias by regex.
     if (!Member.personNameAndAliasRegex.hasMatch(firstName) ||
         !Member.personNameAndAliasRegex.hasMatch(lastName) ||
         (alias.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(alias))) {

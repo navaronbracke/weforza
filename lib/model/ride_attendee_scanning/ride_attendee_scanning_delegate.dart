@@ -94,6 +94,14 @@ class RideAttendeeScanningDelegate {
   /// Get the list of active members.
   List<Member> get activeMembers => _activeMembers.values.toList();
 
+  /// Get the amount of selected ride attendees.
+  int get attendeeCount => _rideAttendeeController.value.length;
+
+  /// Get a stream of changes to the amount of selected ride attendees.
+  Stream<int> get attendeeCountStream {
+    return _rideAttendeeController.map((value) => value.length);
+  }
+
   /// Returns whether there are active members.
   bool get hasActiveMembers => _activeMembers.isNotEmpty;
 

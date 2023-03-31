@@ -28,7 +28,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
             return GenericError(text: S.of(context).GenericError);
           }else {
             if(snapshot.data.isEmpty){
-              return ManualSelectionListEmpty();
+              return Center(child: ManualSelectionListEmpty());
             }
 
             return Column(

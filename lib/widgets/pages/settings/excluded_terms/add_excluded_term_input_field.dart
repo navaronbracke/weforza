@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 
 /// This widget represents the input field for adding an excluded term.
 ///
@@ -36,16 +35,6 @@ class AddExcludedTermInputField extends StatefulWidget {
 }
 
 class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
-  /// Build the invisible counter. The max length is enforced by the text field.
-  Widget? _buildCounter(
-    BuildContext context, {
-    required int currentLength,
-    required bool isFocused,
-    required int? maxLength,
-  }) {
-    return null;
-  }
-
   void _handleFocusChange() {
     if (widget.focusNode.hasFocus) {
       return;
@@ -74,44 +63,15 @@ class _AddExcludedTermInputFieldState extends State<AddExcludedTermInputField> {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
-    final placeholder = translator.AddDisallowedWord;
 
-    return PlatformAwareWidget(
-      android: () => TextFormField(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        buildCounter: _buildCounter,
-        controller: widget.controller,
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          hintText: placeholder,
-          isDense: true,
-        ),
-        focusNode: widget.focusNode,
-        keyboardType: TextInputType.text,
-        onEditingComplete: _onEditingComplete,
-        maxLength: widget.delegate.maxLength,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        maxLines: 1,
-        textAlignVertical: TextAlignVertical.center,
-        textInputAction: TextInputAction.done,
-        validator: (value) => widget.delegate.validateTerm(value, translator),
-      ),
-      ios: () => CupertinoTextFormFieldRow(
-        key: widget.formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        controller: widget.controller,
-        focusNode: widget.focusNode,
-        keyboardType: TextInputType.text,
-        maxLength: widget.delegate.maxLength,
-        maxLines: 1,
-        onEditingComplete: _onEditingComplete,
-        // The excluded terms have a 15 margin on their border.
-        padding: const EdgeInsetsDirectional.fromSTEB(15, 6, 6, 6),
-        placeholder: placeholder,
-        textInputAction: TextInputAction.done,
-        validator: (value) => widget.delegate.validateTerm(value, translator),
-      ),
+    return ExcludedTermInputField.editable(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      maxLength: widget.delegate.maxLength,
+      onEditingComplete: _onEditingComplete,
+      textFieldKey: widget.formKey,
+      validator: (value) => widget.delegate.validateTerm(value, translator),
+      placeholder: translator.AddDisallowedWord,
     );
   }
 

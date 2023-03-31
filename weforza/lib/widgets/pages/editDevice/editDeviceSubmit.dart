@@ -30,7 +30,7 @@ class EditDeviceSubmit extends StatelessWidget {
               stream: submitErrorStream,
               builder: (context, snapshot){
                 return snapshot.hasError ?
-                Text(S.of(context).EditDeviceGenericError):
+                Text(S.of(context).GenericError):
                 Text(snapshot.data);
               },
             ),

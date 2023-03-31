@@ -43,12 +43,10 @@
 
   "AddDeviceTitle": "Add Device",
   "AddDeviceError": "Could not add device",
-  "AddDeviceGenericError": "Something went wrong",
   "AddDeviceSubmit": "Create Device",
 
   "EditDeviceTitle": "Edit Device",
   "EditDeviceError": "Could not edit device",
-  "EditDeviceGenericError": "Something went wrong",
   "EditDeviceSubmit": "Save Changes",
 
   "EditMemberTitle": "Edit Member",
@@ -78,10 +76,9 @@
   "RideAttendeeScanningProcessScanLabel": "Scan",
   "RideAttendeeScanningProcessAddMembersLabel": "By Hand",
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
-  "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members.",
+  "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members",
   "RideAttendeeScanningGoBackToDetailPage": "Return to detail page",
   "RideAttendeeScanningGoBack": "Go Back",
-  "RideAttendeeScanningGenericError": "Something went wrong.",
   "RideAttendeeScanningPermissionDenied": "Scan aborted, permission was denied",
   "RideAttendeeScanningPermissionDescription": "Scanning requires permission to use your location",
   "RideAttendeeScanningBluetoothDisabled": "Scan aborted, Bluetooth is disabled",
@@ -131,7 +128,6 @@
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",
   "SettingsLoading": "Loading Settings",
   "SettingsLoadingError": "Could not load the settings",
-  "SettingsGenericError": "Something went wrong",
   "SettingsSubmitError": "Could not save the settings",
 
   "PersonFirstNameLabel": "First Name",
@@ -152,6 +148,7 @@
   "DialogCancel": "Cancel",
   "DialogDelete": "Delete",
   "DialogDismiss": "Ok",
+  "GenericError": "Something went wrong",
 
   "DistanceKm": "Km"
 }

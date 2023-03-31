@@ -43,12 +43,10 @@
 
   "AddDeviceTitle": "Toestel Toevoegen",
   "AddDeviceError": "Kon toestel niet toevoegen",
-  "AddDeviceGenericError": "Er liep iets fout",
   "AddDeviceSubmit": "Toestel Aanmaken",
 
   "EditDeviceTitle": "Toestel Bewerken",
   "EditDeviceError": "Kon toestel niet bewerken",
-  "EditDeviceGenericError": "Er liep iets fout",
   "EditDeviceSubmit": "Wijzigingen Opslaan",
 
   "EditMemberTitle": "Lid Bewerken",
@@ -78,10 +76,9 @@
   "RideAttendeeScanningProcessScanLabel": "Scannen",
   "RideAttendeeScanningProcessAddMembersLabel": "Manueel",
   "RideAttendeeScanningPreparingScan": "Scan Voorbereiden",
-  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
+  "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden",
   "RideAttendeeScanningGoBackToDetailPage": "Terug naar detailpagina",
   "RideAttendeeScanningGoBack": "Keer Terug",
-  "RideAttendeeScanningGenericError": "Er liep iets fout.",
   "RideAttendeeScanningPermissionDenied": "Scan geannuleerd, toestemming werd geweigerd",
   "RideAttendeeScanningPermissionDescription": "Scannen vereist toegang tot je locatie",
   "RideAttendeeScanningBluetoothDisabled": "Scan geannuleerd, Bluetooth staat uit",
@@ -131,7 +128,6 @@
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
   "SettingsLoadingError": "Kon de instellingen niet laden",
-  "SettingsGenericError": "Er liep iets fout",
   "SettingsSubmitError": "Kon de instellingen niet opslaan",
 
   "PersonFirstNameLabel": "Voornaam",
@@ -152,6 +148,7 @@
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
   "DialogDismiss": "Ok",
+  "GenericError": "Er liep iets fout",
 
   "DistanceKm": "Km"
 }

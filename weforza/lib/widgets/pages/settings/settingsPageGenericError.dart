@@ -35,7 +35,7 @@ class SettingsPageGenericError extends StatelessWidget {
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           SizedBox(height: 5),
-          Text(S.of(context).SettingsGenericError)
+          Text(S.of(context).GenericError)
         ],
       ),
     );

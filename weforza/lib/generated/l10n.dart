@@ -383,16 +383,6 @@ class S {
     );
   }
 
-  /// `Something went wrong`
-  String get AddDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'AddDeviceGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Create Device`
   String get AddDeviceSubmit {
     return Intl.message(
@@ -418,16 +408,6 @@ class S {
     return Intl.message(
       'Could not edit device',
       name: 'EditDeviceError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong`
-  String get EditDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'EditDeviceGenericError',
       desc: '',
       args: [],
     );
@@ -673,10 +653,10 @@ class S {
     );
   }
 
-  /// `Cannot start a scan, there are no members.`
+  /// `Cannot start a scan, there are no members`
   String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Cannot start a scan, there are no members.',
+      'Cannot start a scan, there are no members',
       name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
@@ -698,16 +678,6 @@ class S {
     return Intl.message(
       'Go Back',
       name: 'RideAttendeeScanningGoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong.`
-  String get RideAttendeeScanningGenericError {
-    return Intl.message(
-      'Something went wrong.',
-      name: 'RideAttendeeScanningGenericError',
       desc: '',
       args: [],
     );
@@ -1153,16 +1123,6 @@ class S {
     );
   }
 
-  /// `Something went wrong`
-  String get SettingsGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'SettingsGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Could not save the settings`
   String get SettingsSubmitError {
     return Intl.message(
@@ -1328,6 +1288,16 @@ class S {
     return Intl.message(
       'Ok',
       name: 'DialogDismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong`
+  String get GenericError {
+    return Intl.message(
+      'Something went wrong',
+      name: 'GenericError',
       desc: '',
       args: [],
     );

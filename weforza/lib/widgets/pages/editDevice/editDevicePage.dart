@@ -161,7 +161,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
               Navigator.of(context).pop(editedDevice);
             }).catchError((e){
@@ -175,7 +175,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
               Navigator.of(context).pop(editedDevice);
             }).catchError((e){

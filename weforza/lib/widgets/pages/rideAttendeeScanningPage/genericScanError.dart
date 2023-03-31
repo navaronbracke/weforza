@@ -16,7 +16,7 @@ class GenericScanErrorWidget extends StatelessWidget {
         size: MediaQuery.of(context).size.shortestSide * .1,
       ),
       SizedBox(height: 5),
-      Text(S.of(context).RideAttendeeScanningGenericError),
+      Text(S.of(context).GenericError),
       SizedBox(height: 20),
       _buildGoBackButton(context)
     ],

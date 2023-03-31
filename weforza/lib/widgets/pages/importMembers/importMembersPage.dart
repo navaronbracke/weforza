@@ -4,6 +4,7 @@ import 'package:weforza/blocs/importMembersBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
+import 'package:weforza/repository/importMembersRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersComplete.dart';
@@ -19,7 +20,10 @@ class ImportMembersPage extends StatefulWidget {
 
 class _ImportMembersPageState extends State<ImportMembersPage> {
 
-  final ImportMembersBloc bloc = ImportMembersBloc(fileHandler: InjectionContainer.get<IFileHandler>());
+  final ImportMembersBloc bloc = ImportMembersBloc(
+    fileHandler: InjectionContainer.get<IFileHandler>(),
+    repository: InjectionContainer.get<ImportMembersRepository>(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(S.of(context).ImportMembersPickFileWarning),
+                Text(
+                    S.of(context).ImportMembersPickFileWarning,
+                    style: ApplicationTheme.importWarningTextStyle,
+                    softWrap: true
+                ),
                 SizedBox(height: 10),
                 _buildButton(context),
               ],
@@ -65,9 +73,25 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(S.of(context).ImportMembersInvalidFileFormat),
+                Text(
+                    S.of(context).ImportMembersInvalidFileFormat,
+                    style: ApplicationTheme.importWarningTextStyle,
+                    softWrap: true
+                ),
                 SizedBox(height: 10),
                 _buildButton(context),
+                SizedBox(height: 10),
+                LayoutBuilder(
+                  builder: (context, constraints){
+                    return SizedBox(
+                      width: constraints.biggest.shortestSide * .8,
+                      child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
+                          style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                          softWrap: true, maxLines: 2
+                      ),
+                    );
+                  },
+                ),
               ],
             );
           }else{
@@ -81,21 +105,41 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                 Text(""),
                 SizedBox(height: 10),
                 _buildButton(context),
+                SizedBox(height: 10),
+                LayoutBuilder(
+                  builder: (context, constraints){
+                    return SizedBox(
+                      width: constraints.biggest.shortestSide * .8,
+                      child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
+                          style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                          softWrap: true, maxLines: 2
+                      ),
+                    );
+                  },
+                ),
               ],
+            );
+            case ImportMembersState.PICKING_FILE: return Center(
+                child: PlatformAwareLoadingIndicator()
             );
             case ImportMembersState.IMPORTING: return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 PlatformAwareLoadingIndicator(),
                 SizedBox(height: 10),
-                Text(S.of(context).ImportMembersImporting),
+                Text(S.of(context).ImportMembersImporting, softWrap: true),
               ],
             );
             case ImportMembersState.DONE: return Center(
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: ImportMembersComplete(),
+              child: LayoutBuilder(
+                builder: (context,constraints){
+                  final size = constraints.biggest.shortestSide * .8;
+                  return SizedBox(
+                    width: size,
+                    height: size,
+                    child: ImportMembersComplete(),
+                  );
+                },
               ),
             );
 
@@ -115,16 +159,18 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
 
   Widget _buildButton(BuildContext context){
     return PlatformAwareWidget(
-      android: () => RaisedButton(
+      android: () => FlatButton(
         onPressed: () => onImportMembers(context),
-        color: ApplicationTheme.primaryColor,
         child: Text(
           S.of(context).ImportMembersPickFile,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: ApplicationTheme.primaryColor),
         ),
       ),
-      ios: () => CupertinoButton.filled(
-        child: Text(S.of(context).ImportMembersPickFile),
+      ios: () => CupertinoButton(
+        child: Text(
+          S.of(context).ImportMembersPickFile,
+          style: TextStyle(color: ApplicationTheme.primaryColor),
+        ),
         onPressed: () => onImportMembers(context),
       ),
     );

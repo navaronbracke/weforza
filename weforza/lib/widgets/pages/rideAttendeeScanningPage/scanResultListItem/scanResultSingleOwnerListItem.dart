@@ -36,6 +36,7 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+          fontWeight: FontWeight.bold,
         ),
       );
     }
@@ -50,12 +51,14 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+                fontWeight: FontWeight.bold,
               ),
             ),
             TextSpan(
               text: owner.lastname,
               style: TextStyle(
                 color: ApplicationTheme.rideAttendeeScanResultSingleOwnerColor,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ]

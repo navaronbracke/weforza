@@ -71,7 +71,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
     return Container(
       decoration: BoxDecoration(),
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(10),
         child: Row(
           children: <Widget>[
             Padding(

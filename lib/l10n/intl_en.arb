@@ -50,6 +50,8 @@
 	"ExportRide": "Export Ride",
 	"ExportRideFileNamePlaceholder": "ride_{date}",
 	"ExportRides": "Export Rides",
+	"ExportingAllRides": "Exporting all rides",
+	"ExportingRide" : "Exporting ride",
 	"ExportingMembersDescription": "Exporting riders and devices",
 	"FileCsvExtension": "csv",
 	"FileExists": "This file already exists",

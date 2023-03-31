@@ -18,7 +18,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+      padding: const EdgeInsets.all(4),
       child: MemberNameAndAlias(
         firstNameStyle: ApplicationTheme.memberListItemFirstNameTextStyle,
         lastNameStyle: ApplicationTheme.memberListItemLastNameTextStyle,

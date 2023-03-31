@@ -26,7 +26,7 @@ class RideDetailsAttendeesListEmpty extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 4),
             child: Text(S.of(context).RideDetailsNoAttendees),
           ),
         ],

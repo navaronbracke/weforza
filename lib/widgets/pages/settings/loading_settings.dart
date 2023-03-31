@@ -31,7 +31,7 @@ class LoadingSettings extends StatelessWidget {
         children: <Widget>[
           const PlatformAwareLoadingIndicator(),
           Padding(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 8),
             child: Text(S.of(context).SettingsLoading),
           ),
         ],

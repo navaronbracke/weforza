@@ -15,7 +15,7 @@ class MemberActiveToggle extends StatelessWidget {
       children: [
         Text(S.of(context).Active),
         Padding(
-          padding: const EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 4),
           child: Consumer(
             builder: (_, ref, child) {
               final isActive = ref.watch(

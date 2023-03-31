@@ -130,7 +130,7 @@ class ResetRideCalendarDialogState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                  padding: EdgeInsets.symmetric(vertical: 4),
                   child: Icon(
                     Icons.error_outline,
                     size: 30,

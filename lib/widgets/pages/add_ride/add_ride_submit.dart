@@ -27,7 +27,7 @@ class AddRideSubmit extends StatelessWidget {
             return Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 8),
                   child: Text(S.of(context).AddRideEmptySelection),
                 ),
                 _buildButton(context),
@@ -44,7 +44,7 @@ class AddRideSubmit extends StatelessWidget {
               children: <Widget>[
                 //Show empty text widget to prevent popping
                 const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: EdgeInsets.only(bottom: 8),
                   child: Text(''),
                 ),
                 _buildButton(context),

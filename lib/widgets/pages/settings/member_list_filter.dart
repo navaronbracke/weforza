@@ -32,12 +32,7 @@ class MemberListFilterState extends State<MemberListFilter> {
           style: ApplicationTheme.settingsOptionHeaderStyle,
         ),
         Padding(
-          padding: const EdgeInsets.only(
-            left: 15,
-            right: 15,
-            top: 15,
-            bottom: 10,
-          ),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
           child: PlatformAwareWidget(
             android: () => Row(
               children: [
@@ -55,7 +50,7 @@ class MemberListFilterState extends State<MemberListFilter> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: ChoiceChip(
                     label: Text(translator.Active),
                     selected: currentValue == MemberFilterOption.active,

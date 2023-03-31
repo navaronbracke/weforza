@@ -1,26 +1,29 @@
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/model/settings.dart';
 
 class SettingsRepository {
-  SettingsRepository(this._dao);
+  SettingsRepository(this._rideDao, this._settingsDao);
 
-  final ISettingsDao _dao;
+  final IRideDao _rideDao;
+
+  final ISettingsDao _settingsDao;
 
   Future<Settings> loadApplicationSettings() async {
-    final settings = await _dao.readApplicationSettings();
-
-    // Append the app version to the settings.
+    final ridesCount = await _rideDao.getRidesCount();
+    final settings = await _settingsDao.readApplicationSettings();
     final packageInfo = await PackageInfo.fromPlatform();
 
     return Settings(
       appVersion: packageInfo.version,
+      hasRideCalendar: ridesCount > 0,
       memberListFilter: settings.memberListFilter,
       scanDuration: settings.scanDuration,
     );
   }
 
   Future<void> writeApplicationSettings(Settings settings) async {
-    await _dao.writeApplicationSettings(settings);
+    await _settingsDao.writeApplicationSettings(settings);
   }
 }

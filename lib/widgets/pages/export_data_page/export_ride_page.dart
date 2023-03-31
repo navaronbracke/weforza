@@ -5,6 +5,7 @@ import 'package:weforza/model/export/export_rides_delegate.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/repository/export_rides_repository_provider.dart';
+import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
 
 /// This widget represents a page for exporting rides.
@@ -21,8 +22,11 @@ class ExportRidePage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidePage> createState() => _ExportRidePageState();
 }
 
-class _ExportRidePageState extends ConsumerState<ExportRidePage> {
+class _ExportRidePageState extends ConsumerState<ExportRidePage>
+    with SingleTickerProviderStateMixin {
   late final ExportRidesDelegate _delegate;
+
+  late final AnimationController checkmarkController;
 
   String _getInitialFileName(Ride? ride) {
     final translator = S.current;
@@ -40,6 +44,11 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
       initialFileName: _getInitialFileName(widget.selectedRide),
       repository: ref.read(exportRidesRepositoryProvider),
     );
+
+    checkmarkController = AnimationController(
+      vsync: this,
+      duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
+    );
   }
 
   @override
@@ -48,6 +57,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
     final translator = S.of(context);
 
     return ExportDataPage(
+      checkmarkAnimationController: checkmarkController,
       delegate: _delegate,
       onPressed: () => _delegate.exportDataToFile(
         ExportRidesOptions(ride: selectedRide?.date),
@@ -60,6 +70,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> {
   @override
   void dispose() {
     _delegate.dispose();
+    checkmarkController.dispose();
     super.dispose();
   }
 }

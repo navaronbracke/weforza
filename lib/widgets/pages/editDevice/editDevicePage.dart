@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/editDeviceBloc.dart';
+import 'package:weforza/blocs/edit_device_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/deviceRepository.dart';

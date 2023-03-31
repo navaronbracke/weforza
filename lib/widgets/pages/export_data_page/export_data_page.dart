@@ -55,48 +55,46 @@ class ExportDataPage<T> extends StatelessWidget {
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
-    return Form(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: ExportDataFileNameTextField<T>(delegate: delegate),
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: ExportDataFileNameTextField<T>(delegate: delegate),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: DirectorySelectionFormField(
+              controller: delegate.directoryController,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (directory) => _validateDirectory(directory, translator),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: DirectorySelectionFormField(
-                controller: delegate.directoryController,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (directory) => _validateDirectory(directory, translator),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 6, right: 8),
-                      child: Text(
-                        translator.fileFormat,
-                        style: Theme.of(context).textTheme.labelMedium,
-                        maxLines: 2,
-                      ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 8),
+                    child: Text(
+                      translator.fileFormat,
+                      style: Theme.of(context).textTheme.labelMedium,
+                      maxLines: 2,
                     ),
                   ),
-                  ExportFileFormatSelection(
-                    initialValue: delegate.currentFileFormat,
-                    onFormatSelected: delegate.setFileFormat,
-                    stream: delegate.fileFormatStream,
-                  ),
-                ],
-              ),
+                ),
+                ExportFileFormatSelection(
+                  initialValue: delegate.currentFileFormat,
+                  onFormatSelected: delegate.setFileFormat,
+                  stream: delegate.fileFormatStream,
+                ),
+              ],
             ),
-            child,
-          ],
-        ),
+          ),
+          child,
+        ],
       ),
     );
   }
@@ -104,8 +102,7 @@ class ExportDataPage<T> extends StatelessWidget {
   /// Build the body of the export page.
   ///
   /// The [builder] function is used to build the form when the export has not started yet.
-  /// If the export failed because of a different error,
-  /// the [genericErrorIndicator] is displayed.
+  /// If the export failed because of an error, the [genericErrorIndicator] is displayed.
   ///
   /// The [doneIndicator] is shown when the export has finished successfully.
   Widget _buildBody({
@@ -113,49 +110,49 @@ class ExportDataPage<T> extends StatelessWidget {
     required Widget doneIndicator,
     required Widget genericErrorIndicator,
   }) {
-    return StreamBuilder<AsyncValue<void>?>(
-      initialData: delegate.currentState,
-      stream: delegate.stream,
-      builder: (context, snapshot) {
-        final value = snapshot.data;
+    return Form(
+      child: StreamBuilder<AsyncValue<void>?>(
+        initialData: delegate.currentState,
+        stream: delegate.stream,
+        builder: (context, snapshot) {
+          final value = snapshot.data;
 
-        if (value == null) {
-          return FocusAbsorber(child: builder(context, isExporting: false));
-        }
+          if (value == null) {
+            return FocusAbsorber(child: builder(context, isExporting: false));
+          }
 
-        return value.when(
-          data: (_) => doneIndicator,
-          error: (error, stackTrace) => genericErrorIndicator,
-          loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
-        );
-      },
+          return value.when(
+            data: (_) => doneIndicator,
+            error: (error, stackTrace) => genericErrorIndicator,
+            loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
+          );
+        },
+      ),
     );
   }
 
   Widget _buildIosForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
-    return Form(
-      child: CupertinoFormSection.insetGrouped(
-        children: [
-          ExportDataFileNameTextField<T>(delegate: delegate),
-          DirectorySelectionFormField(
-            controller: delegate.directoryController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (directory) => _validateDirectory(directory, translator),
+    return CupertinoFormSection.insetGrouped(
+      children: [
+        ExportDataFileNameTextField<T>(delegate: delegate),
+        DirectorySelectionFormField(
+          controller: delegate.directoryController,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (directory) => _validateDirectory(directory, translator),
+        ),
+        CupertinoFormRow(
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
+          prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
+          child: ExportFileFormatSelection(
+            initialValue: delegate.currentFileFormat,
+            onFormatSelected: delegate.setFileFormat,
+            stream: delegate.fileFormatStream,
           ),
-          CupertinoFormRow(
-            padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
-            prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
-            child: ExportFileFormatSelection(
-              initialValue: delegate.currentFileFormat,
-              onFormatSelected: delegate.setFileFormat,
-              stream: delegate.fileFormatStream,
-            ),
-          ),
-          child,
-        ],
-      ),
+        ),
+        child,
+      ],
     );
   }
 

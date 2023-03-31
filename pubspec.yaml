@@ -14,8 +14,7 @@ description: The WeForza App
 version: 1.0.0+1
 
 environment:
-  # TODO: bump dart to a stable release once the next Flutter stable release is available
-  sdk: ">=2.19.0-444.1.beta <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   # This package provides easy access to app settings.
@@ -36,7 +35,7 @@ dependencies:
   file: ^6.1.4
 
   # This package provides platform independent file picking.
-  file_picker: ^5.2.4
+  file_picker: ^5.2.5
 
   flutter:
     sdk: flutter

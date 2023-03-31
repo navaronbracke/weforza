@@ -97,7 +97,11 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
   _UnresolvedOwnersListItem({
     required this.delegate,
     required this.item,
-  }) : scanResultEntry = ScannedRideAttendee(uuid: item.uuid, isScanned: false);
+  })  : scanResultEntry = ScannedRideAttendee(
+          uuid: item.uuid,
+          isScanned: false,
+        ),
+        super(key: ValueKey(item.uuid));
 
   final RideAttendeeScanningDelegate delegate;
 

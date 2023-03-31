@@ -73,7 +73,7 @@ class Member implements Comparable<Member> {
       alias: values["alias"],
       isActiveMember: values["active"],
       profileImageFilePath: values["profile"],
-      lastUpdated: values["lastUpdated"],
+      lastUpdated: DateTime.parse(values["lastUpdated"]),
     );
   }
 

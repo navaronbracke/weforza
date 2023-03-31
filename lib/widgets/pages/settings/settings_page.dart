@@ -9,7 +9,10 @@ import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
 import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
@@ -76,7 +79,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     );
   }
 
-  Widget _buildAndroidWidget(S translator) {
+  Widget _buildAndroidWidget(BuildContext context) {
+    final translator = S.of(context);
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -159,7 +163,13 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     );
   }
 
-  Widget _buildIosWidget(S translator) {
+  Widget _buildIosWidget(BuildContext context) {
+    final translator = S.of(context);
+    final excludedTermDivider = BorderSide(
+      color: CupertinoColors.separator.resolveFrom(context),
+      width: 1.0 / MediaQuery.of(context).devicePixelRatio,
+    );
+
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       child: _SettingsPageScrollView(
@@ -183,7 +193,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         excludedTermsList: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: ExcludedTermsList(
-            decorator: (index, terms) {
+            decorator: (child, index, terms) {
               BorderRadius borderRadius = BorderRadius.zero;
 
               if (index == terms.length - 1) {
@@ -193,9 +203,22 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 );
               }
 
-              return BoxDecoration(
-                borderRadius: borderRadius,
-                color: CupertinoColors.secondarySystemGroupedBackground,
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  color: CupertinoColors.secondarySystemGroupedBackground,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      color: excludedTermDivider.color,
+                      height: excludedTermDivider.width,
+                      margin: const EdgeInsetsDirectional.only(start: 15.0),
+                    ),
+                    child,
+                  ],
+                ),
               );
             },
             delegate: excludedTermsDelegate,

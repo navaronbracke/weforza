@@ -56,10 +56,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
 
                         onAddDevicePressed(context, selectedMember!.uuid);
                       },
-                      child: Text(
-                        translator.AddDevice,
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                      child: Text(translator.AddDevice),
                     ),
                   );
                 },

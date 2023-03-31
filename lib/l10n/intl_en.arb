@@ -3,6 +3,7 @@
 	"Active": "Active",
 	"AddDevice": "Add device",
 	"AddDisallowedWord": "Add disallowed word",
+	"AddRideCalendarGenericErrorMessage": "Something went wrong while trying to load the ride calendar",
 	"AddRideEmptySelection": "Please select at least one date",
 	"AddRider": "Add rider",
 	"AddSelection": "Add selection",

@@ -3,6 +3,7 @@
 	"Active": "Actief",
 	"AddDevice": "Toestel toevoegen",
 	"AddDisallowedWord": "Verboden woord toevoegen",
+	"AddRideCalendarGenericErrorMessage": "Er liep iets fout bij het laden van de rittenkalender",
 	"AddRideEmptySelection": "Gelieve minimum één datum te kiezen",
 	"AddRider": "Renner toevoegen",
 	"AddSelection": "Selectie toevoegen",

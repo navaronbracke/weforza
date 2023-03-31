@@ -58,6 +58,34 @@ class GenericError extends StatelessWidget {
   }
 }
 
+/// This class represents an error label
+/// that uses the default error style for the current platform.
+class GenericErrorLabel extends StatelessWidget {
+  const GenericErrorLabel({required this.message, super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: (context) => DefaultTextStyle(
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.error,
+          fontSize: 14,
+        ),
+        child: Text(message),
+      ),
+      ios: (_) => DefaultTextStyle(
+        style: const TextStyle(
+          color: CupertinoColors.destructiveRed,
+          fontWeight: FontWeight.w500,
+        ),
+        child: Text(message),
+      ),
+    );
+  }
+}
+
 /// This class represents a [GenericError] with a default back button
 /// as the [GenericError.actionButton].
 class GenericErrorWithBackButton extends StatelessWidget {

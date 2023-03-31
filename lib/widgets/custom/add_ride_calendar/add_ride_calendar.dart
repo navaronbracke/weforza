@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/add_ride_form_delegate.dart';
+import 'package:weforza/model/add_ride_page_delegate.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
@@ -12,7 +12,7 @@ class AddRideCalendar extends StatelessWidget {
     super.key,
   });
 
-  final AddRideFormDelegate delegate;
+  final AddRidePageDelegate delegate;
 
   @override
   Widget build(BuildContext context) {

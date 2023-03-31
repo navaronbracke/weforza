@@ -1,25 +1,27 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
-import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
 /// This class represents the delegate for the add ride page.
-class AddRideFormDelegate {
-  AddRideFormDelegate(this.ref) {
-    final repository = ref.read(rideRepositoryProvider);
-
+class AddRidePageDelegate extends AsyncComputationDelegate<void> {
+  AddRidePageDelegate({
+    required this.repository,
+  }) {
     _initializeFuture = repository.getRideDates().then(_existingRides.addAll);
   }
 
-  final WidgetRef ref;
+  /// The delegate that manages the calendar.
+  final calendarDelegate = DatePickerDelegate();
+
+  /// The repository that manages the rides.
+  final RideRepository repository;
 
   /// The rides that already exist.
   final _existingRides = <DateTime>{};
 
-  /// The computation that loads the existing rides.
-  /// The calendar needs to be able to display these rides.
+  /// The computation that loads the existing rides for the ride calendar.
   Future<void>? _initializeFuture;
 
   /// A mutex flag that locks the selection while saving.
@@ -28,23 +30,18 @@ class AddRideFormDelegate {
   /// The controller that manages the current selection of rides.
   final _selectionController = BehaviorSubject.seeded(<DateTime>{});
 
-  /// The computation that represents saving the selection.
-  Future<void>? _submitFuture;
-
-  /// The current date.
+  /// The date of today.
   /// This date is used to determine if a ride is before today.
-  final DateTime _today = DateTime.now();
+  final _today = DateTime.now();
 
-  /// The delegate that manages the calendar.
-  final calendarDelegate = DatePickerDelegate();
-
+  /// Get the current selection.
   Set<DateTime> get currentSelection => _selectionController.value;
 
+  /// Get the initialization computation.
   Future<void>? get initializeFuture => _initializeFuture;
 
-  Stream<Set<DateTime>> get selection => _selectionController;
-
-  Future<void>? get submitFuture => _submitFuture;
+  /// Get the [Stream] of selection changes.
+  Stream<Set<DateTime>> get selectionStream => _selectionController;
 
   /// Clear the current selection.
   void clearSelection() {
@@ -57,7 +54,8 @@ class AddRideFormDelegate {
       return;
     }
 
-    _submitFuture = null;
+    // Clear any submit errors from the last attempt.
+    reset();
     _selectionController.add(const {});
   }
 
@@ -77,8 +75,34 @@ class AddRideFormDelegate {
     return _existingRides.contains(date) || currentSelection.contains(date);
   }
 
+  /// Save the selected rides.
+  ///
+  /// The [whenComplete] handler is invoked after the rides have been added.
+  void saveRides({
+    required void Function() whenComplete,
+  }) async {
+    final rides = _selectionController.value;
+
+    if (!canStartComputation() || _savingSelection || rides.isEmpty) {
+      return;
+    }
+
+    _savingSelection = true;
+
+    try {
+      await repository.addRides(rides.map((date) => Ride(date: date)).toList());
+
+      setDone(null);
+      whenComplete();
+    } catch (error, stackTrace) {
+      setError(error, stackTrace);
+    } finally {
+      _savingSelection = false;
+    }
+  }
+
   /// Handle (de)selecting of a day in the calendar.
-  void onDaySelected(DateTime date) {
+  void selectDay(DateTime date) {
     // The selection is locked while saving.
     // Abort if the ride was scheduled in another session.
     if (_savingSelection || _existingRides.contains(date)) {
@@ -94,37 +118,14 @@ class AddRideFormDelegate {
     }
 
     // Clear any submit errors from the last attempt.
-    _submitFuture = null;
+    reset();
     _selectionController.add(newSelection);
   }
 
-  /// Save the selected rides.
-  void saveSelectedRides() {
-    final rides = _selectionController.value;
-
-    if (_savingSelection || rides.isEmpty) {
-      return;
-    }
-
-    _savingSelection = true;
-
-    final items = rides.map((date) => Ride(date: date)).toList();
-
-    _submitFuture = ref.read(rideRepositoryProvider).addRides(items).then<void>(
-      (_) {
-        ref.invalidate(rideListProvider);
-        _savingSelection = false;
-      },
-    ).catchError((error) {
-      _savingSelection = false;
-
-      return Future.error(error);
-    });
-  }
-
-  /// Dispose of this delegate.
+  @override
   void dispose() {
     calendarDelegate.dispose();
     _selectionController.close();
+    super.dispose();
   }
 }

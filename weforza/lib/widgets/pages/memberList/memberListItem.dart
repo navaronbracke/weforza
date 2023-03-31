@@ -50,12 +50,9 @@ class MemberListItem extends StatelessWidget {
                   alias: member.alias,
                 ),
               ),
-              SizedBox(
-                width: 15,
-                child: Center(
-                  child: MemberAttendingCount(
-                    future: memberAttendingCount,
-                  ),
+              Center(
+                child: MemberAttendingCount(
+                  future: memberAttendingCount,
                 ),
               ),
             ],

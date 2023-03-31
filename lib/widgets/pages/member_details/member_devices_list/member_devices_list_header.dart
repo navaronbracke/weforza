@@ -4,7 +4,7 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListHeader extends StatelessWidget {
-  const MemberDevicesListHeader({Key? key}) : super(key: key);
+  const MemberDevicesListHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

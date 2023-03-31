@@ -7,10 +7,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class FileExtensionSelection extends StatefulWidget {
   const FileExtensionSelection({
-    Key? key,
+    super.key,
     required this.initialValue,
     required this.onExtensionSelected,
-  }) : super(key: key);
+  });
 
   final FileExtension initialValue;
   final void Function(FileExtension value) onExtensionSelected;

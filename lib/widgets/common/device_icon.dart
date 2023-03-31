@@ -3,7 +3,7 @@ import 'package:weforza/model/device_type.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 class DeviceIcon extends StatelessWidget {
-  const DeviceIcon({Key? key, required this.type}) : super(key: key);
+  const DeviceIcon({super.key, required this.type});
 
   final DeviceType type;
 

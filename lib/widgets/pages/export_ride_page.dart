@@ -18,7 +18,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a page for exporting rides.
 /// It supports both exporting a single ride and exporting all rides.
 class ExportRidePage extends ConsumerStatefulWidget {
-  const ExportRidePage({Key? key, this.rideToExport}) : super(key: key);
+  const ExportRidePage({super.key, this.rideToExport});
 
   final Ride? rideToExport;
 

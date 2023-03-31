@@ -6,11 +6,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ScanDurationOption extends StatelessWidget {
   const ScanDurationOption({
-    Key? key,
+    super.key,
     required this.initialScanDuration,
     required this.onChanged,
     required this.stream,
-  }) : super(key: key);
+  });
 
   final double initialScanDuration;
 

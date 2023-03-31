@@ -5,7 +5,7 @@ import 'package:weforza/theme/app_theme.dart';
 /// This widget represents a [CupertinoTextField] that has a validation message.
 class CupertinoFormField extends StatelessWidget {
   const CupertinoFormField({
-    Key? key,
+    super.key,
     this.autocorrect = false,
     required this.controller,
     required this.errorController,
@@ -17,7 +17,7 @@ class CupertinoFormField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
     this.validator,
-  }) : super(key: key);
+  });
 
   final bool autocorrect;
 

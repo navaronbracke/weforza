@@ -4,7 +4,7 @@ import 'package:weforza/theme/app_theme.dart';
 
 /// This widget represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {
-  const AddRideCalendarColorLegend({Key? key}) : super(key: key);
+  const AddRideCalendarColorLegend({super.key});
 
   @override
   Widget build(BuildContext context) {

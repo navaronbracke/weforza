@@ -8,11 +8,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget centers itself within its parent.
 class GenericError extends StatelessWidget {
   GenericError({
-    Key? key,
+    super.key,
     required this.text,
     this.iconBuilder,
-  })  : assert(text.isNotEmpty),
-        super(key: key);
+  })  : assert(text.isNotEmpty);
 
   final String text;
   final Widget Function(BuildContext context)? iconBuilder;

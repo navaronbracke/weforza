@@ -4,7 +4,7 @@ import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 class MemberName extends ConsumerWidget {
-  const MemberName({Key? key}) : super(key: key);
+  const MemberName({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

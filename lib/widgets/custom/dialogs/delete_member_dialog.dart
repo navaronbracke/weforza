@@ -5,7 +5,7 @@ import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 
 class DeleteMemberDialog extends ConsumerStatefulWidget {
-  const DeleteMemberDialog({Key? key}) : super(key: key);
+  const DeleteMemberDialog({super.key});
 
   @override
   DeleteMemberDialogState createState() => DeleteMemberDialogState();

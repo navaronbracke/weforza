@@ -13,12 +13,12 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// This widget represents the member list itself.
 class MemberList extends ConsumerWidget {
   const MemberList({
-    Key? key,
+    super.key,
     required this.filter,
     required this.onMemberSelected,
     required this.searchField,
     required this.searchQueryStream,
-  }) : super(key: key);
+  });
 
   /// The function that handles filtering results.
   final List<Member> Function(List<Member> data, String query) filter;

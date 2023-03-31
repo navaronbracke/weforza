@@ -6,12 +6,12 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class FormSubmitButton extends StatelessWidget {
   const FormSubmitButton({
-    Key? key,
+    super.key,
     required this.initialData,
     required this.onPressed,
     required this.stream,
     required this.submitButtonLabel,
-  }) : super(key: key);
+  });
 
   final bool initialData;
 

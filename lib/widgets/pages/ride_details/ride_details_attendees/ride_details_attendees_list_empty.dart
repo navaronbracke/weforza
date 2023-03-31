@@ -5,7 +5,7 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideDetailsAttendeesListEmpty extends StatelessWidget {
-  const RideDetailsAttendeesListEmpty({Key? key}) : super(key: key);
+  const RideDetailsAttendeesListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {

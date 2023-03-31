@@ -15,7 +15,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ExportMembersPage extends ConsumerStatefulWidget {
-  const ExportMembersPage({Key? key}) : super(key: key);
+  const ExportMembersPage({super.key});
 
   @override
   ExportMembersPageState createState() => ExportMembersPageState();

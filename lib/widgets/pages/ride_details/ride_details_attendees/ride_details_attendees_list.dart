@@ -12,7 +12,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideDetailsAttendeesList extends ConsumerWidget {
-  const RideDetailsAttendeesList({Key? key}) : super(key: key);
+  const RideDetailsAttendeesList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

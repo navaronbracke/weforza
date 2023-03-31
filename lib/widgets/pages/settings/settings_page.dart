@@ -15,7 +15,7 @@ import 'package:weforza/widgets/pages/settings/settings_submit.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   SettingsPageState createState() => SettingsPageState();

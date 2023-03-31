@@ -4,9 +4,9 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 class MemberAttendingCount extends StatelessWidget {
   const MemberAttendingCount({
-    Key? key,
+    super.key,
     required this.future,
-  }) : super(key: key);
+  });
 
   final Future<int> future;
 
@@ -44,9 +44,9 @@ class MemberAttendingCount extends StatelessWidget {
               ),
             ],
           );
-        } else {
-          return const PlatformAwareLoadingIndicator();
         }
+
+        return const PlatformAwareLoadingIndicator();
       },
     );
   }

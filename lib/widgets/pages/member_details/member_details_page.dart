@@ -16,7 +16,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the detail page for a [Member].
 class MemberDetailsPage extends StatelessWidget {
-  const MemberDetailsPage({Key? key}) : super(key: key);
+  const MemberDetailsPage({super.key});
 
   void _goToEditMemberPage(BuildContext context, Member member) {
     Navigator.push(

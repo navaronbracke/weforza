@@ -8,10 +8,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   const ProfileImagePicker({
-    Key? key,
+    super.key,
     required this.delegate,
     required this.size,
-  }) : super(key: key);
+  });
 
   final ProfileImagePickerDelegate delegate;
 

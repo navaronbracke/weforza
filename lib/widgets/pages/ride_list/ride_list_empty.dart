@@ -3,7 +3,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 class RideListEmpty extends StatelessWidget {
-  const RideListEmpty({Key? key}) : super(key: key);
+  const RideListEmpty({super.key});
 
   @override
   Widget build(BuildContext context) {

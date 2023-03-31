@@ -9,15 +9,13 @@ class CupertinoBottomBar extends StatelessWidget {
   });
 
   /// Constructor for [CupertinoBottomBar]'s that act like a [CupertinoTabBar].
-  const CupertinoBottomBar.tabBar({
-    required Widget child
-  }): this._(child: child, useMaximumTabBarHeight: true);
+  const CupertinoBottomBar.tabBar({required Widget child})
+      : this._(child: child, useMaximumTabBarHeight: true);
 
   /// Constructor for [CupertinoBottomBar]'s
   /// that let their child decide the height.
-  const CupertinoBottomBar({
-    required Widget child
-  }) : this._(child: child, useMaximumTabBarHeight: false);
+  const CupertinoBottomBar({required Widget child})
+      : this._(child: child, useMaximumTabBarHeight: false);
 
   final Widget child;
 
@@ -30,8 +28,9 @@ class CupertinoBottomBar extends StatelessWidget {
   final double _kTabBarHeight = 50.0;
 
   /// BorderSide resolution, as defined in [CupertinoTabBar].
-  BorderSide resolveBorderSide(BuildContext context,  BorderSide side){
-    return side.copyWith(color: CupertinoDynamicColor.resolve(side.color, context));
+  BorderSide resolveBorderSide(BuildContext context, BorderSide side) {
+    return side.copyWith(
+        color: CupertinoDynamicColor.resolve(side.color, context));
   }
 
   @override
@@ -39,7 +38,7 @@ class CupertinoBottomBar extends StatelessWidget {
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
 
-    final Border border = Border(
+    const border = Border(
       top: BorderSide(
         // Color resolution is the same as in CupertinoTabBar.
         color: CupertinoDynamicColor.withBrightness(
@@ -61,7 +60,7 @@ class CupertinoBottomBar extends StatelessWidget {
       ),
     );
 
-    if(useMaximumTabBarHeight){
+    if (useMaximumTabBarHeight) {
       content = SizedBox(
         // We create a SizedBox that takes up
         // the maximum tab bar height + notch height.

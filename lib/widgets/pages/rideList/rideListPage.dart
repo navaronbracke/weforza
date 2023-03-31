@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
@@ -20,18 +19,14 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
-
   @override
   State<RideListPage> createState() => _RideListPageState(
-      bloc: RideListBloc(InjectionContainer.get<RideRepository>())
-  );
+      bloc: RideListBloc(InjectionContainer.get<RideRepository>()));
 }
 
 ///This class is the [State] for [RideListPage].
 class _RideListPageState extends State<RideListPage> {
-  _RideListPageState({
-    required this.bloc
-  });
+  _RideListPageState({required this.bloc});
 
   final RideListBloc bloc;
 
@@ -42,10 +37,10 @@ class _RideListPageState extends State<RideListPage> {
   }
 
   @override
-  Widget build(BuildContext context)=> PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
+  Widget build(BuildContext context) => PlatformAwareWidget(
+        android: () => _buildAndroidWidget(context),
+        ios: () => _buildIosWidget(context),
+      );
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
@@ -53,103 +48,101 @@ class _RideListPageState extends State<RideListPage> {
           title: Text(S.of(context).Rides),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               color: Colors.white,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_)=> onReturnToRideListPage(context)),
+              onPressed: () => Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AddRidePage()))
+                  .then((_) => onReturnToRideListPage(context)),
             ),
             IconButton(
-              icon: Icon(Icons.file_upload),
+              icon: const Icon(Icons.file_upload),
               color: Colors.white,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ExportRidesPage())
-              ),
+                  MaterialPageRoute(builder: (context) => ExportRidesPage())),
             ),
           ],
         ),
-        body: _buildList(context)
-    );
+        body: _buildList(context));
   }
 
   Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        transitionBetweenRoutes: false,
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).Rides),
-              ),
-            ),
-            CupertinoIconButton.fromAppTheme(
-              icon: CupertinoIcons.add,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_) => onReturnToRideListPage(context)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: CupertinoIconButton.fromAppTheme(
-                onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ExportRidesPage())
+        navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: false,
+          middle: Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(S.of(context).Rides),
                 ),
-                icon: CupertinoIcons.arrow_up_doc_fill,
               ),
-            ),
-          ],
+              CupertinoIconButton.fromAppTheme(
+                icon: CupertinoIcons.add,
+                onPressed: () => Navigator.of(context)
+                    .push(
+                        MaterialPageRoute(builder: (context) => AddRidePage()))
+                    .then((_) => onReturnToRideListPage(context)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: CupertinoIconButton.fromAppTheme(
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ExportRidesPage())),
+                  icon: CupertinoIcons.arrow_up_doc_fill,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      child: SafeArea(
-          bottom: false,
-          child: _buildList(context)
-      )
-    );
+        child: SafeArea(bottom: false, child: _buildList(context)));
   }
 
-  Widget _buildList(BuildContext context){
+  Widget _buildList(BuildContext context) {
     return FutureBuilder<List<Ride>>(
       future: bloc.ridesFuture,
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
-          }else{
-            if(snapshot.data == null || snapshot.data!.isEmpty){
+          } else {
+            if (snapshot.data == null || snapshot.data!.isEmpty) {
               return RideListEmpty();
-            }else{
+            } else {
               return ListView.builder(
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (context,index){
+                  itemBuilder: (context, index) {
                     final Ride ride = snapshot.data![index];
 
                     return RideListItem(
                       ride: ride,
-                      rideAttendeeFuture: bloc.getAmountOfRideAttendees(ride.date),
-                      onPressed: (future,ride){
-                        SelectedItemProvider.of(context).selectedRide.value = ride;
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => RideDetailsPage(),
-                          ),
-                        ).then((_) => onReturnToRideListPage(context));
+                      rideAttendeeFuture:
+                          bloc.getAmountOfRideAttendees(ride.date),
+                      onPressed: (future, ride) {
+                        SelectedItemProvider.of(context).selectedRide.value =
+                            ride;
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => RideDetailsPage(),
+                              ),
+                            )
+                            .then((_) => onReturnToRideListPage(context));
                       },
                     );
                   });
             }
           }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
+        } else {
+          return const Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );
   }
 
-  void onReturnToRideListPage(BuildContext context){
+  void onReturnToRideListPage(BuildContext context) {
     final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-    if(reloadNotifier.value){
+    if (reloadNotifier.value) {
       reloadNotifier.value = false;
       setState(() {
         bloc.reloadRides();

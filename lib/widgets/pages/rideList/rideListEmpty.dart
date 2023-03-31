@@ -1,8 +1,10 @@
-import 'package:weforza/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 
 class RideListEmpty extends StatelessWidget {
+  const RideListEmpty({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(

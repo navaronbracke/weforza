@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SettingsPageGenericError extends StatelessWidget {
+  const SettingsPageGenericError({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: () => Scaffold(
         appBar: AppBar(

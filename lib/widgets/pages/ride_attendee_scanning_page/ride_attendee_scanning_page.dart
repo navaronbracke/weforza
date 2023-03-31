@@ -22,12 +22,10 @@ class RideAttendeeScanningPage extends ConsumerStatefulWidget {
   const RideAttendeeScanningPage({super.key});
 
   @override
-  RideAttendeeScanningPageState createState() =>
-      RideAttendeeScanningPageState();
+  RideAttendeeScanningPageState createState() => RideAttendeeScanningPageState();
 }
 
-class RideAttendeeScanningPageState
-    extends ConsumerState<RideAttendeeScanningPage>
+class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPage>
     with SingleTickerProviderStateMixin {
   late final RideAttendeeScanningDelegate delegate;
 

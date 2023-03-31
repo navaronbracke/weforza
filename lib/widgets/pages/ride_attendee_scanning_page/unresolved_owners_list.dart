@@ -51,11 +51,18 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        color = CupertinoColors.systemGrey;
+        color = const CupertinoDynamicColor.withBrightness(
+          color: CupertinoColors.systemGrey,
+          darkColor: CupertinoColors.white,
+        );
         break;
     }
 
-    return TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: color);
+    return TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 14,
+      color: color is CupertinoDynamicColor ? color.resolveFrom(context) : color,
+    );
   }
 
   @override

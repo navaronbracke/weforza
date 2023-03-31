@@ -29,13 +29,13 @@ class SerializeRidersRepository {
     final riders = await ridersFuture;
 
     return riders.map(
-      (member) => SerializableRider(
-        active: member.active,
-        alias: member.alias,
-        devices: devices[member.uuid] ?? <String>{},
-        firstName: member.firstName,
-        lastName: member.lastName,
-        lastUpdated: member.lastUpdated,
+      (rider) => SerializableRider(
+        active: rider.active,
+        alias: rider.alias,
+        devices: devices[rider.uuid] ?? <String>{},
+        firstName: rider.firstName,
+        lastName: rider.lastName,
+        lastUpdated: rider.lastUpdated,
       ),
     );
   }

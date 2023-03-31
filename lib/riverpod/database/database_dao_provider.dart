@@ -13,68 +13,45 @@ final deviceDaoProvider = Provider<DeviceDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return DeviceDaoImpl(
-    database.getDatabase(),
-    databaseTables.device,
-    databaseTables.member,
-  );
+  return DeviceDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the export rides dao.
-final exportRidesDaoProvider = Provider<IExportRidesDao>((ref) {
+final exportRidesDaoProvider = Provider<ExportRidesDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return ExportRidesDao(
-    database.getDatabase(),
-    databaseTables.member,
-    databaseTables.ride,
-    databaseTables.rideAttendee,
-  );
+  return ExportRidesDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the import members dao.
-final importMembersDaoProvider = Provider<IImportMembersDao>((ref) {
+final importMembersDaoProvider = Provider<ImportMembersDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return ImportMembersDao(
-    database.getDatabase(),
-    databaseTables.member,
-    databaseTables.device,
-  );
+  return ImportMembersDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the member dao.
-final memberDaoProvider = Provider<IMemberDao>((ref) {
+final memberDaoProvider = Provider<MemberDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return MemberDao(
-    database.getDatabase(),
-    databaseTables.member,
-    databaseTables.rideAttendee,
-    databaseTables.device,
-  );
+  return MemberDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the ride dao.
-final rideDaoProvider = Provider<IRideDao>((ref) {
+final rideDaoProvider = Provider<RideDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return RideDao(
-    database.getDatabase(),
-    databaseTables.member,
-    databaseTables.ride,
-    databaseTables.rideAttendee,
-  );
+  return RideDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the application settings dao.
-final settingsDaoProvider = Provider<ISettingsDao>((ref) {
+final settingsDaoProvider = Provider<SettingsDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return SettingsDao(database.getDatabase(), databaseTables.settings);
+  return SettingsDaoImpl(database.getDatabase(), databaseTables);
 });

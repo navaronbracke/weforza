@@ -1,26 +1,25 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
-///This class defines behaviour to scan for bluetooth devices.
+/// This class defines an interface for a bluetooth scanner.
 abstract class BluetoothDeviceScanner {
-  ///Check if bluetooth is enabled.
-  ///
-  ///Returns true if bluetooth is currently enabled.
-  ///Returns false if bluetooth is currently disabled.
-  ///Throws an exception if bluetooth is not available on the host device.
+  /// Check whether bluetooth is enabled.
   Future<bool> isBluetoothEnabled();
 
-  ///Scan for bluetooth devices.
-  ///Has a required scan duration (in seconds).
+  /// Get the stream of changes to the scanning state.
+  Stream<bool> get isScanning;
+
+  /// Scan for bluetooth devices.
+  /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
   ///
-  ///Returns a Stream of results.
-  ///Each result represents a device that was found with an id + name.
-  ///Any devices that don't expose their device name are not sent through the stream.
+  /// Returns a stream of scan results.
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds);
 
-  ///Stop a running scan.
-  ///Throws an error if the scan couldn't be stopped.
+  /// Stop a running scan.
   Future<void> stopScan();
+
+  /// Dispose of this scanner.
+  void dispose();
 }
 
 class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
@@ -28,6 +27,9 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
 
   @override
   Future<bool> isBluetoothEnabled() => _fBlInstance.isOn;
+
+  @override
+  Stream<bool> get isScanning => _fBlInstance.isScanning;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) =>
@@ -48,4 +50,11 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();
+
+  @override
+  void dispose() {
+    stopScan().catchError((_) {
+      // If the scan could not be stopped, there is nothing that can be done.
+    });
+  }
 }

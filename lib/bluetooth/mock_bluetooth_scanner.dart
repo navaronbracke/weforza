@@ -1,7 +1,10 @@
+import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 class MockBluetoothScanner implements BluetoothDeviceScanner {
+  final _scanningController = BehaviorSubject.seeded(false);
+
   @override
   Future<bool> isBluetoothEnabled() {
     return Future.value(true);
@@ -9,6 +12,8 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
+    _scanningController.add(true);
+
     final BluetoothPeripheral duplicateOwner =
         BluetoothPeripheral(id: '1', deviceName: 'rudy1');
     final BluetoothPeripheral duplicateDevice =
@@ -53,5 +58,17 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  Future<void> stopScan() => Future<void>.value(null);
+  Future<void> stopScan() {
+    _scanningController.add(false);
+
+    return Future<void>.value();
+  }
+
+  @override
+  Stream<bool> get isScanning => _scanningController;
+
+  @override
+  void dispose() {
+    _scanningController.close();
+  }
 }

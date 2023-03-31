@@ -16,6 +16,20 @@ class DeleteExcludedTermDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
+    const splitDelimiter = '|term|';
+
+    // The translated value has one delimiter,
+    // which is used to split off the value for the term.
+    // That value is put in bold text, while the rest is not.
+    final description = translator.DeleteDisallowedWordDescription.split(
+      splitDelimiter,
+    );
+
+    assert(
+      description.length == 2,
+      'The description requires at most one delimiter.',
+    );
+
     return WeforzaAlertDialog(
       confirmButtonBuilder: (context, platform) {
         switch (platform) {
@@ -38,7 +52,18 @@ class DeleteExcludedTermDialog extends StatelessWidget {
         }
       },
       cancelButtonBuilder: WeforzaAlertDialog.defaultCancelButton,
-      description: translator.DeleteDisallowedWordDescription(term),
+      description: Text.rich(
+        TextSpan(
+          text: description.first,
+          children: [
+            TextSpan(
+              text: term,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(text: description.last),
+          ],
+        ),
+      ),
       title: translator.DeleteDisallowedWord,
     );
   }

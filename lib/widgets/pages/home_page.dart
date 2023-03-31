@@ -73,29 +73,37 @@ class _HomePageState extends State<HomePage>
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       body: _buildPageView(context),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.directions_bike),
-            label: S.of(context).Rides,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.people),
-            label: S.of(context).Riders,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: S.of(context).Settings,
-          ),
-        ],
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          // The NavigationBar needs Material 3 to style its selected icon properly.
+          useMaterial3: true,
+          navigationBarTheme: Theme.of(context).navigationBarTheme,
+        ),
+        child: NavigationBar(
+          destinations: <NavigationDestination>[
+            NavigationDestination(
+              icon: const Icon(Icons.directions_bike),
+              label: S.of(context).Rides,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.people),
+              label: S.of(context).Riders,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.settings),
+              label: S.of(context).Settings,
+            ),
+          ],
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          onDestinationSelected: (index) {
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          },
+          selectedIndex: _selectedIndex,
+        ),
       ),
     );
   }

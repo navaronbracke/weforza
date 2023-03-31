@@ -39,7 +39,7 @@ class ScanProgressIndicator extends StatelessWidget {
                 final progress = animationController.value;
 
                 return PlatformAwareWidget(
-                  android: () {
+                  android: (_) {
                     final theme = AppTheme.scanProgressIndicator.android;
 
                     return LinearProgressIndicator(
@@ -50,7 +50,7 @@ class ScanProgressIndicator extends StatelessWidget {
                       ),
                     );
                   },
-                  ios: () {
+                  ios: (_) {
                     final theme = AppTheme.scanProgressIndicator.ios;
 
                     return LinearProgressIndicator(

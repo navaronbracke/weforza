@@ -34,48 +34,44 @@ class BluetoothDisabledWidget extends StatelessWidget {
   );
 
   Widget _buildAndroidButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      direction: Axis.horizontal,
+      children: [
         ElevatedButton(
           child: Text(S.of(context).RideAttendeeScanningGoToSettings),
           onPressed: onGoToSettings,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: TextButton(
-            child: Text(S.of(context).RideAttendeeScanningRetryScan),
-            onPressed: onRetryScan,
-          ),
+        TextButton(
+          child: Text(S.of(context).RideAttendeeScanningRetryScan),
+          onPressed: onRetryScan,
         ),
       ],
     );
   }
 
   Widget _buildIosButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      direction: Axis.horizontal,
+      children: [
         CupertinoButton.filled(
-          padding: const EdgeInsets.symmetric(
-            vertical: 14.0,
-            horizontal: 24.0,
-          ),
           child: Text(
             S.of(context).RideAttendeeScanningGoToSettings,
             style: TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: CupertinoButton(
-            child: Text(
-              S.of(context).RideAttendeeScanningRetryScan,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
-            ),
-            onPressed: onRetryScan,
+        CupertinoButton(
+          child: Text(
+            S.of(context).RideAttendeeScanningRetryScan,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
+          onPressed: onRetryScan,
         ),
       ],
     );

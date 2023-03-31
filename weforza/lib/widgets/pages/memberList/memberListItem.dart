@@ -36,6 +36,7 @@ class MemberListItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: AsyncProfileImage(
+                  icon: Icons.person,
                   personInitials: member.initials,
                   future: memberProfileImage,
                 ),

@@ -10,11 +10,14 @@ class ProfileImage extends StatelessWidget {
   ProfileImage({
     this.image,
     this.size = 75,
-    this.icon = Icons.camera_alt,
+    @required this.icon,
     this.iconColor = ApplicationTheme.profileImagePlaceholderIconColor,
     this.backgroundColor = ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
     this.personInitials,
-  }): assert(iconColor != null && backgroundColor != null && size != null);
+  }): assert(
+    icon != null && iconColor != null && backgroundColor
+        != null && size != null && size > 0
+  );
 
   ///The image to show.
   final File image;

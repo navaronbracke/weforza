@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/settings_repository.dart';
 
@@ -44,7 +44,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
   }
 
   /// Save the [riderListFilter] value.
-  Future<void> saveRiderListFilter(MemberFilterOption riderListFilter) {
+  Future<void> saveRiderListFilter(RiderFilterOption riderListFilter) {
     final Settings newSettings = state.copyWith(
       memberListFilter: riderListFilter,
     );

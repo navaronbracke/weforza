@@ -1,7 +1,7 @@
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/import_riders_dao.dart';
 import 'package:weforza/database/rider_dao.dart';
-import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 
 /// This class represents the repository that handles (de)serializing riders.
@@ -23,7 +23,7 @@ class SerializeRidersRepository {
     // Since Future.wait() expects the same datatypes from all Futures,
     // it cannot be used here. Instead, start (but not await) each computation.
     final devicesFuture = deviceDao.getAllDevicesGroupedByOwnerId();
-    final ridersFuture = riderDao.getRiders(MemberFilterOption.all);
+    final ridersFuture = riderDao.getRiders(RiderFilterOption.all);
 
     final devices = await devicesFuture;
     final riders = await ridersFuture;

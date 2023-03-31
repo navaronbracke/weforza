@@ -4,27 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListFilter extends StatelessWidget {
   const MemberListFilter({
-    required this.initialFilter,
-    required this.onChanged,
-    required this.stream,
+    required this.delegate,
     super.key,
   });
 
-  final MemberFilterOption initialFilter;
-
-  final void Function(MemberFilterOption value) onChanged;
-
-  final Stream<MemberFilterOption> stream;
+  /// The delegate that manages the value.
+  final RiderFilterDelegate delegate;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<MemberFilterOption>(
-      initialData: initialFilter,
-      stream: stream,
+      initialData: delegate.currentValue,
+      stream: delegate.stream,
       builder: (context, snapshot) {
         final currentFilter = snapshot.data!;
 
@@ -59,7 +55,7 @@ class MemberListFilter extends StatelessWidget {
                     return;
                   }
 
-                  onChanged(selectedSegments.first);
+                  delegate.onValueChanged(selectedSegments.first);
                 },
               ),
             );
@@ -68,7 +64,7 @@ class MemberListFilter extends StatelessWidget {
             groupValue: currentFilter,
             onValueChanged: (MemberFilterOption? value) {
               if (value != null) {
-                onChanged(value);
+                delegate.onValueChanged(value);
               }
             },
           ),

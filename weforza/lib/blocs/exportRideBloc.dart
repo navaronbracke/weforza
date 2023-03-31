@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
@@ -115,7 +116,7 @@ class ExportRideBloc extends Bloc {
       };
       await file.writeAsString(jsonEncode(data));
     }else{
-      return Future.error(InvalidFileFormatError());
+      return Future.error(InvalidFileExtensionError());
     }
   }
 

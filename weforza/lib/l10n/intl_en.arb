@@ -80,6 +80,7 @@
   "RideAttendeeScanningRetryScan": "Retry Scan",
   "RideAttendeeScanningSkipScan": "Skip Scan",
   "RideAttendeeScanningSaveScanResults": "Save Scan Results",
+  "RideAttendeeScanningSaveManualResults": "Save Selection",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

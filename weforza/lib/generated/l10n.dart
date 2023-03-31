@@ -713,6 +713,16 @@ class S {
     );
   }
 
+  /// `Save Selection`
+  String get RideAttendeeScanningSaveManualResults {
+    return Intl.message(
+      'Save Selection',
+      name: 'RideAttendeeScanningSaveManualResults',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

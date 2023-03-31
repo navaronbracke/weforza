@@ -1,0 +1,49 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+
+class ManualSelectionSubmit extends StatelessWidget {
+  ManualSelectionSubmit({
+    @required this.onSave,
+    @required this.isSaving
+  }): assert(onSave != null && isSaving != null);
+
+  final void Function() onSave;
+  final ValueNotifier<bool> isSaving;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Center(
+        child: ValueListenableBuilder<bool>(
+          valueListenable: isSaving,
+          builder: (context, isSaving, child){
+            if(isSaving){
+              return PlatformAwareLoadingIndicator();
+            }else{
+              return PlatformAwareWidget(
+                android: () => RaisedButton(
+                  child: Text(
+                      S.of(context).RideAttendeeScanningSaveManualResults,
+                      style: TextStyle(color: Colors.white)
+                  ),
+                  onPressed: onSave,
+                ),
+                ios: () => CupertinoButton.filled(
+                    child: Text(
+                        S.of(context).RideAttendeeScanningSaveManualResults,
+                        style: TextStyle(color: Colors.white)
+                    ),
+                    onPressed: onSave,
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}

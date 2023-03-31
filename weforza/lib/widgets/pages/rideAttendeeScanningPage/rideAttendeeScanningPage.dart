@@ -135,7 +135,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                                 isSaving: bloc.isSaving,
                                 isScanning: bloc.isScanning,
                                 onSkip: () => bloc.skipScan(),
-                                //TODO put this call in manual selection but w/ false as argument in the optional arg
                                 onSave: () async => await bloc.saveScanResults().then((_){
                                   widget.onRefreshAttendees();
                                 }, onError: (error){
@@ -148,7 +147,10 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                       ),
                     );
                   case ScanProcessStep.MANUAL:
-                    return RideAttendeeManualSelection();
+                    return RideAttendeeManualSelection(
+                        bloc: bloc,
+                        onRefreshAttendees: widget.onRefreshAttendees
+                    );
                   case ScanProcessStep.NO_MEMBERS: return NoMembersForScanWidget();
                   default: return GenericScanErrorWidget();
                 }

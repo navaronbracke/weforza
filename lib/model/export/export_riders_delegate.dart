@@ -19,6 +19,7 @@ class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
   ExportRidersDelegate({
     required super.fileHandler,
     required this.serializeRidersRepository,
+    super.initialDirectory,
   });
 
   /// The repository that handles exporting the riders.

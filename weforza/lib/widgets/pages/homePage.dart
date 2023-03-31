@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
 import 'package:weforza/widgets/pages/settings/settingsPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/generated/l10n.dart';
 
 ///This [Widget] represents the app landing page.
 ///It allows navigating between [RideListPage] and [MemberListPage].
@@ -61,16 +61,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         },
         items: [
           BottomNavigationBarItem(
-            label: S.of(context).Rides,
             icon: Icon(Icons.directions_bike),
+            label: S.of(context).Rides,
           ),
           BottomNavigationBarItem(
-            label: S.of(context).Members,
             icon: Icon(Icons.people),
+            label: S.of(context).Riders,
           ),
           BottomNavigationBarItem(
-            label: S.of(context).Settings,
             icon: Icon(Icons.settings),
+            label: S.of(context).Settings,
           ),
         ],
       ),
@@ -88,16 +88,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(
-                label: S.of(context).Rides,
                 icon: Icon(Icons.directions_bike),
+                label: S.of(context).Rides,
               ),
               BottomNavigationBarItem(
-                label: S.of(context).Members,
                 icon: Icon(Icons.people),
+                label: S.of(context).Riders,
               ),
               BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
                 label: S.of(context).Settings,
-                icon: Icon(CupertinoIcons.settings),
               ),
             ],
             onTap: (index){

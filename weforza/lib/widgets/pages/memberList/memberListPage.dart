@@ -11,6 +11,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
+import 'package:weforza/widgets/common/riderSearchFilterEmpty.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
@@ -123,20 +124,6 @@ class _MemberListPageState extends State<MemberListPage> {
       ),
       body: Column(
         children: [
-          TextFormField(
-            textInputAction: TextInputAction.search,
-            keyboardType: TextInputType.text,
-            autocorrect: false,
-            autovalidateMode: AutovalidateMode.disabled,
-            onChanged: _queryController.add,
-            decoration: InputDecoration(
-                suffixIcon: Icon(Icons.search),
-                labelText: S.of(context).RiderSearchFilterInputLabel,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                floatingLabelBehavior: FloatingLabelBehavior.never
-            ),
-          ),
           Expanded(
             child: _buildList(context),
           ),
@@ -189,16 +176,6 @@ class _MemberListPageState extends State<MemberListPage> {
         bottom: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: CupertinoTextField(
-                textInputAction: TextInputAction.search,
-                placeholder: S.of(context).RiderSearchFilterInputLabel,
-                autocorrect: false,
-                keyboardType: TextInputType.text,
-                onChanged: _queryController.add,
-              ),
-            ),
             Expanded(
               child: _buildList(context),
             ),
@@ -211,19 +188,69 @@ class _MemberListPageState extends State<MemberListPage> {
   Widget _buildList(BuildContext context){
     return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
+      builder: (context, futureSnapshot) {
+        if (futureSnapshot.connectionState == ConnectionState.done) {
+          if (futureSnapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
-          } else {
-            return (snapshot.data == null || snapshot.data!.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data!)
-            );
           }
-        } else {
-          return Center(child: PlatformAwareLoadingIndicator());
+
+          if(futureSnapshot.data == null || futureSnapshot.data!.isEmpty){
+            return Center(child: MemberListEmpty());
+          }
+
+          return Column(
+            children: [
+              PlatformAwareWidget(
+                android: () => TextFormField(
+                  textInputAction: TextInputAction.search,
+                  keyboardType: TextInputType.text,
+                  autocorrect: false,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  onChanged: _queryController.add,
+                  decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.search),
+                      labelText: S.of(context).RiderSearchFilterInputLabel,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                      floatingLabelBehavior: FloatingLabelBehavior.never
+                  ),
+                ),
+                ios: () => Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CupertinoTextField(
+                    textInputAction: TextInputAction.search,
+                    placeholder: S.of(context).RiderSearchFilterInputLabel,
+                    autocorrect: false,
+                    keyboardType: TextInputType.text,
+                    onChanged: _queryController.add,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<String>(
+                  stream: _queryController.stream,
+                    builder: (context, streamSnapshot){
+                      final data = filterData(
+                        futureSnapshot.data ?? [],
+                        streamSnapshot.data ?? "",
+                      );
+
+                      if(data.isEmpty){
+                        return RiderSearchFilterEmpty();
+                      }
+
+                      return ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) => _buildListItem(context, data[index]),
+                      );
+                    },
+                ),
+              ),
+            ],
+          );
         }
+
+        return Center(child: PlatformAwareLoadingIndicator());
       },
     );
   }
@@ -238,15 +265,14 @@ class _MemberListPageState extends State<MemberListPage> {
     ).then((_)=> onReturnToMemberListPage(context));
   }
 
-  Widget _buildListItem(BuildContext context, int index, List<Member> members) {
-    final Member member = members[index];
-    final Future<int> attendingCount = bloc.getMemberAttendingCount(member.uuid);
-    final Future<File?> profileImage = bloc.getMemberProfileImage(member.profileImageFilePath);
+  Widget _buildListItem(BuildContext context, Member item) {
+    final Future<int> attendingCount = bloc.getMemberAttendingCount(item.uuid);
+    final Future<File?> profileImage = bloc.getMemberProfileImage(item.profileImageFilePath);
     return MemberListItem(
-        member: member,
+        member: item,
         memberProfileImage: profileImage,
         memberAttendingCount: attendingCount,
-        onTap: ()=> onTapListItem(context, member, attendingCount, profileImage)
+        onTap: ()=> onTapListItem(context, item, attendingCount, profileImage)
     );
   }
 

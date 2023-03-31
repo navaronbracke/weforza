@@ -9,10 +9,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents the attendee counter for a ride list item.
 class RideListItemAttendeeCounter extends ConsumerStatefulWidget {
   const RideListItemAttendeeCounter({
+    required this.rideDate,
     super.key,
     this.counterStyle,
     this.iconSize = 24,
-    required this.rideDate,
   });
 
   /// The style for the counter.

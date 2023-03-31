@@ -201,11 +201,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "RideListRidesHeader": MessageLookupByLibrary.simpleMessage("Ritten"),
         "RideStart": MessageLookupByLibrary.simpleMessage("Vertrek"),
         "SaturdayPrefix": MessageLookupByLibrary.simpleMessage("Za"),
-        "SettingsLoading": MessageLookupByLibrary.simpleMessage("Instellingen Laden"),
-        "SettingsLoadingError": MessageLookupByLibrary.simpleMessage("Kon de instellingen niet laden"),
+        "Save": MessageLookupByLibrary.simpleMessage("Opslaan"),
+        "SaveChanges": MessageLookupByLibrary.simpleMessage("Opslaan"),
+        "Settings": MessageLookupByLibrary.simpleMessage("Instellingen"),
+        "SettingsResetRideCalendarButtonLabel": MessageLookupByLibrary.simpleMessage("Kalender Resetten"),
+        "SettingsResetRideCalendarDescription": MessageLookupByLibrary.simpleMessage(
+            "Dit zal alle ritten verwijderen.\nDe aanwezigheden worden terug op nul gezet."),
+        "SettingsResetRideCalendarDialogConfirm": MessageLookupByLibrary.simpleMessage("Resetten"),
+        "SettingsResetRideCalendarDialogDescription":
+            MessageLookupByLibrary.simpleMessage("Bent u zeker dat u alle ritten wil verwijderen?"),
+        "SettingsResetRideCalendarDialogTitle": MessageLookupByLibrary.simpleMessage("Kalender Resetten"),
+        "SettingsResetRideCalendarErrorMessage":
+            MessageLookupByLibrary.simpleMessage("Kon de rittenkalender niet verwijderen."),
+        "SettingsRiderFilterDescription":
+            MessageLookupByLibrary.simpleMessage("Filter renners in de rennerslijst, op basis van hun status"),
+        "SettingsRiderFilterHeader": MessageLookupByLibrary.simpleMessage("Rennerslijst Filter"),
         "SettingsScanSliderHeader": MessageLookupByLibrary.simpleMessage("Duur van een scan (in seconden)"),
-        "SettingsSubmitError": MessageLookupByLibrary.simpleMessage("Kon de instellingen niet opslaan"),
-        "SettingsTitle": MessageLookupByLibrary.simpleMessage("Instellingen"),
         "SundayPrefix": MessageLookupByLibrary.simpleMessage("Zo"),
         "ThursdayPrefix": MessageLookupByLibrary.simpleMessage("Do"),
         "TuesdayPrefix": MessageLookupByLibrary.simpleMessage("Di"),

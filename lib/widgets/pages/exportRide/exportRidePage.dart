@@ -102,7 +102,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     child: FileExtensionSelection(
                       onExtensionSelected: (ext) =>
                           widget.bloc.onSelectFileExtension(ext),
-                      initialValue: FileExtension.CSV,
+                      initialValue: FileExtension.csv,
                     ),
                   ),
                   Padding(

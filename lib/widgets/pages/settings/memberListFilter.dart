@@ -43,11 +43,11 @@ class _MemberListFilterState extends State<MemberListFilter> {
               children: [
                 ChoiceChip(
                   label: Text(S.of(context).All),
-                  selected: currentValue == MemberFilterOption.ALL,
+                  selected: currentValue == MemberFilterOption.all,
                   onSelected: (selected) {
                     if (selected) {
                       setState(() {
-                        widget.onChanged(MemberFilterOption.ALL);
+                        widget.onChanged(MemberFilterOption.all);
                       });
                     }
                   },
@@ -56,11 +56,11 @@ class _MemberListFilterState extends State<MemberListFilter> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: ChoiceChip(
                     label: Text(S.of(context).Active),
-                    selected: currentValue == MemberFilterOption.ACTIVE,
+                    selected: currentValue == MemberFilterOption.active,
                     onSelected: (selected) {
                       if (selected) {
                         setState(() {
-                          widget.onChanged(MemberFilterOption.ACTIVE);
+                          widget.onChanged(MemberFilterOption.active);
                         });
                       }
                     },
@@ -68,11 +68,11 @@ class _MemberListFilterState extends State<MemberListFilter> {
                 ),
                 ChoiceChip(
                   label: Text(S.of(context).Inactive),
-                  selected: currentValue == MemberFilterOption.INACTIVE,
+                  selected: currentValue == MemberFilterOption.inactive,
                   onSelected: (selected) {
                     if (selected) {
                       setState(() {
-                        widget.onChanged(MemberFilterOption.INACTIVE);
+                        widget.onChanged(MemberFilterOption.inactive);
                       });
                     }
                   },
@@ -90,10 +90,10 @@ class _MemberListFilterState extends State<MemberListFilter> {
                 });
               },
               children: {
-                MemberFilterOption.ALL: Text(S.of(context).All.toUpperCase()),
-                MemberFilterOption.ACTIVE:
+                MemberFilterOption.all: Text(S.of(context).All.toUpperCase()),
+                MemberFilterOption.active:
                     Text(S.of(context).Active.toUpperCase()),
-                MemberFilterOption.INACTIVE:
+                MemberFilterOption.inactive:
                     Text(S.of(context).Inactive.toUpperCase()),
               },
             ),

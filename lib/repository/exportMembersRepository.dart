@@ -15,7 +15,7 @@ class ExportMembersRepository {
   Future<void> _getDevices(HashMap<String, Set<String>> collection) async =>
       collection.addAll(await deviceDao.getAllDevicesGroupedByOwnerId());
   Future<void> _getMembers(List<Member> collection) async =>
-      collection.addAll(await memberDao.getMembers(MemberFilterOption.ALL));
+      collection.addAll(await memberDao.getMembers(MemberFilterOption.all));
 
   Future<Iterable<ExportableMember>> getMembers() async {
     final HashMap<String, Set<String>> _devicesGroupedByOwner = HashMap();

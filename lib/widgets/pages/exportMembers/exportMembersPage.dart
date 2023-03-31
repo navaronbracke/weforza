@@ -111,7 +111,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                       child: FileExtensionSelection(
                         onExtensionSelected: (ext) =>
                             bloc.onSelectFileExtension(ext),
-                        initialValue: FileExtension.CSV,
+                        initialValue: FileExtension.csv,
                       ),
                     ),
                     Padding(

@@ -39,7 +39,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Radio<FileExtension>(
-          value: FileExtension.CSV,
+          value: FileExtension.csv,
           groupValue: currentValue,
           onChanged: onValueChanged,
         ),
@@ -47,13 +47,13 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           padding: const EdgeInsets.only(left: 2, right: 20),
           child: Text(
             S.of(context).FileCsvExtension.toUpperCase(),
-            style: FileExtension.CSV == currentValue
+            style: FileExtension.csv == currentValue
                 ? const TextStyle(color: ApplicationTheme.primaryColor)
                 : null,
           ),
         ),
         Radio<FileExtension>(
-          value: FileExtension.JSON,
+          value: FileExtension.json,
           groupValue: currentValue,
           onChanged: onValueChanged,
         ),
@@ -61,7 +61,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
           padding: const EdgeInsets.only(left: 2),
           child: Text(
             S.of(context).FileJsonExtension.toUpperCase(),
-            style: FileExtension.JSON == currentValue
+            style: FileExtension.json == currentValue
                 ? const TextStyle(color: ApplicationTheme.primaryColor)
                 : null,
           ),
@@ -75,8 +75,8 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
       groupValue: currentValue,
       onValueChanged: onValueChanged,
       children: {
-        FileExtension.CSV: Text(S.of(context).FileCsvExtension.toUpperCase()),
-        FileExtension.JSON: Text(S.of(context).FileJsonExtension.toUpperCase()),
+        FileExtension.csv: Text(S.of(context).FileCsvExtension.toUpperCase()),
+        FileExtension.json: Text(S.of(context).FileJsonExtension.toUpperCase()),
       },
     );
   }

@@ -65,7 +65,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   leading: const Icon(Icons.publish),
                   title: Text(S.of(context).Export),
                 ),
-                value: RideDetailsPageOptions.EXPORT,
+                value: RideDetailsPageOptions.export,
               ),
               const PopupMenuDivider(),
               PopupMenuItem<RideDetailsPageOptions>(
@@ -74,7 +74,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   title: Text(S.of(context).Delete,
                       style: const TextStyle(color: Colors.red)),
                 ),
-                value: RideDetailsPageOptions.DELETE,
+                value: RideDetailsPageOptions.delete,
               ),
             ],
             onSelected: (RideDetailsPageOptions option) =>
@@ -126,13 +126,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                       CupertinoActionSheetAction(
                                         child: Text(S.of(context).Export),
                                         onPressed: () => Navigator.of(context)
-                                            .pop(RideDetailsPageOptions.EXPORT),
+                                            .pop(RideDetailsPageOptions.export),
                                       ),
                                       CupertinoActionSheetAction(
                                         child: Text(S.of(context).Delete),
                                         isDestructiveAction: true,
                                         onPressed: () => Navigator.of(context)
-                                            .pop(RideDetailsPageOptions.DELETE),
+                                            .pop(RideDetailsPageOptions.delete),
                                       ),
                                     ],
                                     cancelButton: CupertinoActionSheetAction(
@@ -177,14 +177,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       final attendeeProvider =
           RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
 
-      final void Function() callback = () {
+      callback() {
         // The attendee counters need an update too.
         if (attendeeProvider.value != null) {
           ReloadDataProvider.of(context).reloadRides.value = true;
           bloc.attendeesFuture = attendeeProvider.value!;
           attendeeProvider.value = null;
         }
-      };
+      }
 
       // Update the UI with the new bloc.ride value.
       // Also trigger an optional refresh of the attendees.
@@ -221,17 +221,20 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {
     switch (option) {
-      case RideDetailsPageOptions.EXPORT:
+      case RideDetailsPageOptions.export:
         goToExportPage(context);
         break;
-      case RideDetailsPageOptions.DELETE:
-        final Widget Function(BuildContext) builder =
-            (context) => DeleteItemDialog(
-                  title: S.of(context).RideDeleteDialogTitle,
-                  description: S.of(context).RideDeleteDialogDescription,
-                  errorDescription: S.of(context).GenericError,
-                  onDelete: () => deleteRide(context),
-                );
+      case RideDetailsPageOptions.delete:
+        builder(BuildContext context) {
+          final translator = S.of(context);
+
+          return DeleteItemDialog(
+            title: translator.RideDeleteDialogTitle,
+            description: translator.RideDeleteDialogDescription,
+            errorDescription: translator.GenericError,
+            onDelete: () => deleteRide(context),
+          );
+        }
         if (Platform.isAndroid) {
           showDialog(context: context, builder: builder);
         } else if (Platform.isIOS) {

@@ -4,30 +4,49 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   @override
   Future<bool> isBluetoothEnabled() {
-    //fake impl that throws an error or returns true or false
+    //fake impl
     // TODO: implement isBluetoothEnabled
-    return Future.error("fakeBluetoothError");
-
-    //return Future.value(true);
+    //return Future.value(false);
+    return Future.error("some error");
   }
 
   @override
   Stream<String> scanForDevices(int scanDurationInSeconds) async* {
     //fake impl that returns some elements
-    await Future.delayed(Duration(seconds: 2), (){
-      //wait 2 seconds
-    });
     for(int i = 0; i<5; i++){
       switch(i){
-        case 0: yield "Device one";
+        case 0: {
+          await Future.delayed(Duration(seconds: 2), (){
+            //wait 2 seconds
+          });
+        }
+        yield "Device one";
         break;
-        case 1: yield "Device two";
+        case 1: {
+          await Future.delayed(Duration(seconds: 2), (){
+            //wait 2 seconds
+          });
+        }
+        yield "Device two";
         break;
-        case 2: throw Exception("some error");
+        case 2: {
+          await Future.delayed(Duration(seconds: 2), (){
+            //wait 2 seconds
+          });
+        }
+        throw Exception("some error");
         break;
-        case 3: yield "Device three";
+        case 3: {
+          await Future.delayed(Duration(seconds: 2), (){
+            //wait 2 seconds
+          });
+        } yield "Device three";
         break;
-        case 4: yield "Device four";
+        case 4: {
+          await Future.delayed(Duration(seconds: 2), (){
+            //wait 2 seconds
+          });
+        } yield "Device four";
         break;
       }
 

@@ -9,46 +9,41 @@ class ScanPermissionDenied extends StatelessWidget {
   const ScanPermissionDenied({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          PlatformAwareWidget(
-            android: () => Icon(
-              Icons.warning,
-              color: ApplicationTheme.listInformationalIconColor,
-              size: MediaQuery.of(context).size.shortestSide * .1,
-            ),
-            ios: () => Icon(
-              CupertinoIcons.exclamationmark_triangle_fill,
-              color: ApplicationTheme.listInformationalIconColor,
-              size: MediaQuery.of(context).size.shortestSide * .1,
-            ),
+  Widget build(BuildContext context) {
+    final translator = S.of(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        PlatformAwareWidget(
+          android: () => Icon(
+            Icons.warning,
+            color: ApplicationTheme.listInformationalIconColor,
+            size: MediaQuery.of(context).size.shortestSide * .1,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(S.of(context).RideAttendeeScanningPermissionDenied,
-                      softWrap: true),
-                  Text(
-                      S
-                          .of(context)
-                          .RideAttendeeScanningPermissionDeniedDescription,
-                      softWrap: true),
-                ],
-              ),
-            ),
+          ios: () => Icon(
+            CupertinoIcons.exclamationmark_triangle_fill,
+            color: ApplicationTheme.listInformationalIconColor,
+            size: MediaQuery.of(context).size.shortestSide * .1,
           ),
-          PlatformAwareWidget(
-            android: () => _buildAndroidButtons(context),
-            ios: () => _buildIosButtons(context),
-          )
-        ],
-      );
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+          child: Center(
+            child: Text(translator.ScanAbortedPermissionDenied, softWrap: true),
+          ),
+        ),
+        PlatformAwareWidget(
+          android: () => _buildAndroidButtons(context),
+          ios: () => _buildIosButtons(context),
+        )
+      ],
+    );
+  }
 
   Widget _buildAndroidButtons(BuildContext context) {
+    final translator = S.of(context);
+
     return Wrap(
       spacing: 16,
       runSpacing: 8,
@@ -56,11 +51,11 @@ class ScanPermissionDenied extends StatelessWidget {
       direction: Axis.horizontal,
       children: [
         ElevatedButton(
-          child: Text(S.of(context).RideAttendeeScanningGoToSettings),
-          onPressed: () async => await openAppSettings(),
+          child: Text(translator.GoToSettings),
+          onPressed: () => openAppSettings(),
         ),
         TextButton(
-          child: Text(S.of(context).GoBack),
+          child: Text(translator.GoBack),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],
@@ -68,6 +63,8 @@ class ScanPermissionDenied extends StatelessWidget {
   }
 
   Widget _buildIosButtons(BuildContext context) {
+    final translator = S.of(context);
+
     return Wrap(
       spacing: 16,
       runSpacing: 8,
@@ -75,19 +72,16 @@ class ScanPermissionDenied extends StatelessWidget {
       direction: Axis.horizontal,
       children: <Widget>[
         CupertinoButton.filled(
-          padding: const EdgeInsets.symmetric(
-            vertical: 14.0,
-            horizontal: 24.0,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
           child: Text(
-            S.of(context).RideAttendeeScanningGoToSettings,
+            translator.GoToSettings,
             style: const TextStyle(color: Colors.white),
           ),
-          onPressed: () async => await openAppSettings(),
+          onPressed: () => openAppSettings(),
         ),
         CupertinoButton(
           child: Text(
-            S.of(context).GoBack,
+            translator.GoBack,
             style: const TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: () => Navigator.of(context).pop(),

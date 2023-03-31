@@ -27,6 +27,8 @@
 	"DeleteRide": "Verwijder Rit",
 	"DeleteRider": "Verwijder Renner",
 	"DeleteRiderDescription": "Bent u zeker dat u deze renner wil verwijderen?",
+	"DeleteRiderErrorDescription": "Er liep iets fout bij het verwijderen van de renner",
+	"DeleteRiderPendingDescription": "De renner wordt verwijderd",
 	"DeselectRider": "Renner Afvinken",
 	"Details": "Details",
 	"DeviceCadenceMeter": "Cadansmeter",

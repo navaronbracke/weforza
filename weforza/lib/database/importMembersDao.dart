@@ -17,8 +17,8 @@ class ImportMembersDao implements IImportMembersDao {
   final _deviceStore = DatabaseProvider.deviceStore;
 
   @override
-  Future<void> saveMembersWithDevices(List<Map<String, dynamic>> membersWithDevicesData) {
-    throw UnimplementedError();
+  Future<void> saveMembersWithDevices(List<Map<String, dynamic>> membersWithDevicesData) async {
+    print(membersWithDevicesData.first);//test for ios file reading
 
     //TODO save the list of maps to the database
     //TODO for each member

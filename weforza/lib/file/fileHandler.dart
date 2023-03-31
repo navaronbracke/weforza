@@ -40,10 +40,14 @@ abstract class IFileHandler {
   ///Returns the [File] if it exists, or null otherwise.
   Future<File> loadProfileImageFromDisk(String path);
 
+  ///Choose the file to use as datasource,
+  ///from which to import members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
 
+  ///Save the given ride and attendees to a file with the given filename.
   Future<void> saveRideAndAttendeesToFile(String fileName, FileExtension extension, Ride ride, List<Member> attendees);
 
+  //Read the given CSV file and return the lines that were read.
   Future<List<String>> readCsvFile(File file);
 }
 
@@ -114,10 +118,6 @@ class FileHandler implements IFileHandler {
       }
       break;
       case FileExtension.CSV: {
-        //Ride details on single line
-        //Attendee 1
-        //Attendee 2
-        //.....
         final buffer = StringBuffer();
         buffer.writeln(ride.exportToCsv());
         for(Member m in attendees){

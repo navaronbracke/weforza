@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
@@ -400,7 +401,7 @@ class RideAttendeeScanningDelegate {
     } catch (error) {
       // Pipe the error to the state machine.
       if (!_stateMachine.isClosed) {
-        _stateMachine.addError(error);
+        _stateMachine.addError(SaveScanResultsException());
       }
 
       rethrow;
@@ -452,7 +453,7 @@ class RideAttendeeScanningDelegate {
       );
     } catch (error) {
       if (!_stateMachine.isClosed) {
-        _stateMachine.addError(error);
+        _stateMachine.addError(StartScanException());
       }
     }
   }
@@ -461,6 +462,29 @@ class RideAttendeeScanningDelegate {
   ///
   /// Returns whether the scan was stopped successfully.
   Future<bool> stopScan() async {
+    // These states happen before the scan is running.
+    final beforeScanStates = <RideAttendeeScanningState>{
+      RideAttendeeScanningState.bluetoothDisabled,
+      RideAttendeeScanningState.permissionDenied,
+      RideAttendeeScanningState.requestPermissions,
+      RideAttendeeScanningState.startingScan,
+    };
+
+    final stateError = _stateMachine.errorOrNull;
+    final scannerState = _stateMachine.valueOrNull;
+
+    // If the scan never started, return early.
+    if (stateError == null && beforeScanStates.contains(scannerState)) {
+      return true;
+    }
+
+    // If the state machine encountered one of the following errors,
+    // the scan has either never started, or has already stopped.
+    if (stateError is StartScanException ||
+        stateError is SaveScanResultsException) {
+      return true;
+    }
+
     _changeState(RideAttendeeScanningState.stoppingScan);
 
     try {
@@ -470,7 +494,7 @@ class RideAttendeeScanningDelegate {
     } catch (error) {
       if (!_stateMachine.isClosed) {
         // If stopping the scan failed, pipe the error through the state machine.
-        _stateMachine.addError(error);
+        _stateMachine.addError(StopScanException());
       }
 
       return false;

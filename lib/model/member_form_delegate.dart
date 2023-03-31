@@ -60,7 +60,7 @@ class MemberFormDelegate {
         alias: model.alias,
         profileImageFilePath: image?.path,
         isActiveMember: true,
-        lastUpdated: DateTime.now().toUtc(),
+        lastUpdated: DateTime.now(),
       );
 
       await repository.addMember(member);
@@ -107,7 +107,7 @@ class MemberFormDelegate {
         alias: model.alias,
         profileImageFilePath: profileImage?.path,
         isActiveMember: model.activeMember,
-        lastUpdated: DateTime.now().toUtc(),
+        lastUpdated: DateTime.now(),
       );
 
       await repository.updateMember(newMember);

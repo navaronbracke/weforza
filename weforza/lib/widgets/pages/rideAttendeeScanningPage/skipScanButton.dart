@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 /// This widget provides a button that advances the scan process step.
@@ -33,17 +32,17 @@ class SkipScanButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: TextButton(
+        child: ElevatedButton(
           child: Text(S.of(context).RideAttendeeScanningSkipScan),
           onPressed: onSkip,
         ),
       ),
       ios: () => Padding(
         padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: CupertinoButton(
+        child: CupertinoButton.filled(
           child: Text(
             S.of(context).RideAttendeeScanningSkipScan,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+            style: TextStyle(color: Colors.white),
           ),
           onPressed: onSkip,
         ),
@@ -55,17 +54,17 @@ class SkipScanButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: TextButton(
+        child: ElevatedButton(
           child: Text(S.of(context).RideAttendeeScanningContinue),
           onPressed: onPressed,
         ),
       ),
       ios: () => Padding(
         padding: const EdgeInsets.only(bottom: 20, top: 10),
-        child: CupertinoButton(
+        child: CupertinoButton.filled(
           child: Text(
             S.of(context).RideAttendeeScanningContinue,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+            style: TextStyle(color: Colors.white),
           ),
           onPressed: onPressed,
         ),

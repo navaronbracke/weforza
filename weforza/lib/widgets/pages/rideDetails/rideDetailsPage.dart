@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
@@ -10,7 +9,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/attendeeListCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/exportRide/exportRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
@@ -58,9 +57,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 4),
             child: _buildAttendeesListAttendingCount(
-                context,
-                bloc.attendeesFuture?.then((list)=> list.length),
-                ApplicationTheme.androidRideAttendeeListCounterTextStyle
+              context,
+              bloc.attendeesFuture?.then((list)=> list.length),
             ),
           ),
           preferredSize: Size.fromHeight(10.0),
@@ -166,9 +164,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Center(
                 child: _buildAttendeesListAttendingCount(
-                    context,
-                    bloc.attendeesFuture?.then((list)=> list.length),
-                    ApplicationTheme.iosRideAttendeeListCounterTextStyle),
+                  context,
+                  bloc.attendeesFuture?.then((list)=> list.length),
+                ),
               ),
             ),
             Expanded(
@@ -180,7 +178,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     );
   }
 
-  Widget _buildAttendeesListAttendingCount(BuildContext context, Future<int>? future, TextStyle textStyle){
+  Widget _buildAttendeesListAttendingCount(BuildContext context, Future<int>? future){
     return FutureBuilder<int>(
       future: future,
       builder: (context, snapshot){
@@ -189,15 +187,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             // When there is an error, the generic error widget is shown.
             return SizedBox.shrink();
           }else{
+            final count = snapshot.data;
+
             // There are no attendees.
-            if(snapshot.data == 0){
+            // We show an empty list widget instead.
+            if(count == null || count == 0){
               return SizedBox.shrink();
             }
 
-            return Text(
-              "${S.of(context).Attendees} (${snapshot.data})",
-              style: textStyle,
-            );
+            return AttendeeListCounter(count: count);
           }
         }else{
           // When the list is still loading, the loading indicator is shown.
@@ -274,7 +272,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         }
         break;
 
-      default: break;//null is ignored
+      default: break;
     }
   }
 

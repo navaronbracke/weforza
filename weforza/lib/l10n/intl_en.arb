@@ -18,7 +18,6 @@
   "Delete": "Delete",
   "Cancel": "Cancel",
   "Ok": "Ok",
-  "Attendees": "Attendants",
   "Details": "Details",
   "Devices": "Devices",
   "SaveChanges": "Save changes",
@@ -28,6 +27,9 @@
   "Inactive": "Inactive",
   "All": "All",
   "Filter": "Filter",
+
+  "AttendeeCounterOne": "One attendant",
+  "AttendeeCounterMany": "{count} attendants",
 
   "ListEmpty": "There is nothing to show",
   "RidersListTitle": "Riders ({amount})",

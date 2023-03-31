@@ -37,7 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m8(amount) => "Riders (${amount})";
 
-  static m9(value) => "${value} is required";
+  static m9(amount) => "${amount} riders have a device with this name";
+
+  static m10(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

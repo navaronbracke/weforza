@@ -17,5 +17,5 @@ class DeviceRepository {
 
   Future<List<Device>> getAllDevices() => _dao.getAllDevices();
 
-  Future<Device> getDeviceWithName(String deviceName) => _dao.getDeviceWithName(deviceName);
+  Future<Set<String>> getOwnersOfDevicesWithName(String deviceName) => _dao.getOwnersOfDevicesWithName(deviceName);
 }

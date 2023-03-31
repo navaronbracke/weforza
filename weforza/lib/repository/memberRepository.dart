@@ -16,7 +16,7 @@ class MemberRepository {
 
   Future<void> addMember(Member member) => _dao.addMember(member);
 
-  Future<List<Member>> getMembers() => _dao.getMembers();
+  Future<List<Member>> getMembers({Set<String> uuids}) => _dao.getMembers(uuids: uuids);
 
   Future<Member> getMemberByUuid(String uuid) => _dao.getMemberByUuid(uuid);
 

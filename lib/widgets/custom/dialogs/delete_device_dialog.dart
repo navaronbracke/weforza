@@ -29,11 +29,11 @@ class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
       onDeletePressed: () {
         final notifier = ref.read(selectedMemberDevicesProvider.notifier);
 
-        future = notifier.deleteDevice(widget.index).then<void>((_) {
+        future = notifier.deleteDevice(widget.index).then((_) {
           if (mounted) {
             Navigator.of(context).pop(true);
           }
-        }).catchError((error) => Future.error(error));
+        });
 
         setState(() {});
       },

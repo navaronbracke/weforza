@@ -75,14 +75,9 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     if (model.creationDate == null) {
       // Notify the animated list that a device was inserted.
-      _future = _delegate
-          .addDevice(model)
-          .then((_) => navigator.pop(true))
-          .catchError((error) => Future.error(error));
+      _future = _delegate.addDevice(model).then((_) => navigator.pop(true));
     } else {
-      _future = _delegate
-          .editDevice(model)
-          .catchError((error) => Future.error(error));
+      _future = _delegate.editDevice(model);
     }
 
     setState(() {});

@@ -26,7 +26,7 @@ class DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
       onDeletePressed: () {
         final notifier = ref.read(selectedRideProvider.notifier);
 
-        future = notifier.deleteRide().then<void>((_) {
+        future = notifier.deleteRide().then((_) {
           if (!mounted) {
             return;
           }
@@ -35,7 +35,7 @@ class DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
           // Pop both the dialog and the detail screen.
           navigator.pop();
           navigator.pop();
-        }).catchError((error) => Future.error(error));
+        });
 
         setState(() {});
       },

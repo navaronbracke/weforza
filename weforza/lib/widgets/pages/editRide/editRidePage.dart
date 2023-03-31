@@ -308,6 +308,7 @@ class _EditRidePageState extends State<EditRidePage> {
         middle: Text(S.of(context).EditRidePageTitle),
       ),
       child: SafeArea(
+        bottom: false,
         child: Column(
           children: <Widget>[
             Flexible(

@@ -15,6 +15,7 @@ class DatePicker extends StatelessWidget {
     required this.dayBuilder,
     required this.delegate,
     required this.forwardButton,
+    this.headerHeight = 50,
     this.headerPadding = EdgeInsets.zero,
     this.monthStyle,
     this.showWeekdays = false,
@@ -40,6 +41,11 @@ class DatePicker extends StatelessWidget {
   /// The widget that represents the button to go forward one month.
   /// This widget is placed in the right corner of the calendar header.
   final Widget forwardButton;
+
+  /// The height for the calendar header.
+  ///
+  /// Defaults to 50.
+  final double headerHeight;
 
   /// The padding for the calendar header.
   final EdgeInsets headerPadding;
@@ -70,6 +76,7 @@ class DatePicker extends StatelessWidget {
             child: _DatePickerHeader(
               backButton: backButton,
               forwardButton: forwardButton,
+              height: headerHeight,
               monthStream: delegate.monthStream,
               style: monthStyle,
             ),
@@ -178,7 +185,7 @@ class _DatePickerHeader extends StatelessWidget {
   const _DatePickerHeader({
     required this.backButton,
     required this.forwardButton,
-    this.height = 50,
+    required this.height,
     required this.monthStream,
     this.style,
   });
@@ -190,8 +197,6 @@ class _DatePickerHeader extends StatelessWidget {
   final Widget forwardButton;
 
   /// The height for the month header.
-  ///
-  /// Defaults to 50.
   final double height;
 
   /// The stream that provides updates about the current month.

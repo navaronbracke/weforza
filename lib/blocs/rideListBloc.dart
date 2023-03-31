@@ -1,4 +1,3 @@
-
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
@@ -11,19 +10,18 @@ class RideListBloc extends Bloc {
 
   Future<List<Ride>>? ridesFuture;
 
-  void loadRidesIfNotLoaded(){
-    if(ridesFuture == null){
-      ridesFuture = _loadRides();
-    }
+  void loadRidesIfNotLoaded() {
+    ridesFuture ??= _loadRides();
   }
 
-  void reloadRides(){
+  void reloadRides() {
     ridesFuture = _loadRides();
   }
 
   Future<List<Ride>> _loadRides() => _repository.getRides();
 
-  Future<int> getAmountOfRideAttendees(DateTime rideDate) => _repository.getAmountOfRideAttendees(rideDate);
+  Future<int> getAmountOfRideAttendees(DateTime rideDate) =>
+      _repository.getAmountOfRideAttendees(rideDate);
 
   @override
   void dispose() {}

@@ -20,9 +20,10 @@ class ExportRidesBloc extends Bloc {
   final ExportRidesRepository repository;
   final IFileHandler fileHandler;
   final TextEditingController fileNameController = TextEditingController();
-  final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
+  final RegExp filenamePattern = RegExp(r'^[\w\s-]{1,80}$');
 
-  final StreamController<ExportDataOrError> _streamController = BehaviorSubject();
+  final StreamController<ExportDataOrError> _streamController =
+      BehaviorSubject();
   Stream<ExportDataOrError> get stream => _streamController.stream;
 
   final StreamController<bool> _filenameExistsController = BehaviorSubject();
@@ -30,12 +31,12 @@ class ExportRidesBloc extends Bloc {
 
   final int filenameMaxLength = 80;
 
-  String _filename = "";
+  String _filename = '';
 
   FileExtension _fileExtension = FileExtension.CSV;
 
-  void onSelectFileExtension(FileExtension extension){
-    if(_fileExtension != extension){
+  void onSelectFileExtension(FileExtension extension) {
+    if (_fileExtension != extension) {
       _filenameExistsController.add(false);
       _fileExtension = extension;
     }
@@ -49,22 +50,21 @@ class ExportRidesBloc extends Bloc {
       String fileNameIsRequired,
       String isWhitespaceMessage,
       String filenameNameMaxLengthMessage,
-      String invalidFilenameMessage)
-  {
-    if(_filename != filename){
+      String invalidFilenameMessage) {
+    if (_filename != filename) {
       _filenameExistsController.add(false);
     }
 
-    if(filename == null || filename.isEmpty){
+    if (filename == null || filename.isEmpty) {
       filenameError = fileNameIsRequired;
-    }else if(filename.trim().isEmpty){
+    } else if (filename.trim().isEmpty) {
       filenameError = isWhitespaceMessage;
-    }else if(filenameMaxLength < filename.length){
+    } else if (filenameMaxLength < filename.length) {
       //The full title is the biggest thing we allow
       filenameError = filenameNameMaxLengthMessage;
-    }else if(!filenamePattern.hasMatch(filename)){
+    } else if (!filenamePattern.hasMatch(filename)) {
       filenameError = invalidFilenameMessage;
-    }else{
+    } else {
       _filename = filename;
       filenameError = null;
     }
@@ -75,44 +75,51 @@ class ExportRidesBloc extends Bloc {
   Future<void> exportRidesWithAttendees() async {
     final Iterable<ExportableRide> rides = await repository.getRides();
 
-    await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
-      if(await file.exists()){
+    await fileHandler
+        .createFile(_filename, _fileExtension.extension())
+        .then((file) async {
+      if (await file.exists()) {
         _filenameExistsController.add(true);
-      }else{
+      } else {
         _filenameExistsController.add(false);
         _streamController.add(ExportDataOrError.exporting());
         await _saveRidesToFile(file, _fileExtension.extension(), rides);
         _streamController.add(ExportDataOrError.success());
       }
-    }).catchError((e){
+    }).catchError((e) {
       _streamController.addError(e);
     });
   }
 
   ///Save the given [ExportableRide]s to the given file.
   ///The extension determines how the data is structured inside the file.
-  Future<void> _saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides) async {
-    if(extension == FileExtension.CSV.extension()){
+  Future<void> _saveRidesToFile(
+      File file, String extension, Iterable<ExportableRide> rides) async {
+    if (extension == FileExtension.CSV.extension()) {
       final buffer = StringBuffer();
 
-      rides.forEach((exportedRide) {
+      for (final exportedRide in rides) {
         buffer.writeln(exportedRide.ride.toCsv());
-        for(ExportableRideAttendee attendee in exportedRide.attendees){
+        for (ExportableRideAttendee attendee in exportedRide.attendees) {
           buffer.writeln(attendee.toCsv());
         }
-      });
+      }
 
       await file.writeAsString(buffer.toString());
-    }else if(extension == FileExtension.JSON.extension()){
+    } else if (extension == FileExtension.JSON.extension()) {
       final Map<String, dynamic> data = {
-        "rides": rides.map((ExportableRide exportableRide) => {
-          "ride": exportableRide.ride.toJson(),
-          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson()).toList()
-        }).toList()
+        'rides': rides
+            .map((ExportableRide exportableRide) => {
+                  'ride': exportableRide.ride.toJson(),
+                  'attendees': exportableRide.attendees
+                      .map((attendee) => attendee.toJson())
+                      .toList()
+                })
+            .toList()
       };
 
       await file.writeAsString(jsonEncode(data));
-    }else{
+    } else {
       return Future.error(InvalidFileExtensionError());
     }
   }
@@ -123,5 +130,4 @@ class ExportRidesBloc extends Bloc {
     _filenameExistsController.close();
     fileNameController.dispose();
   }
-
 }

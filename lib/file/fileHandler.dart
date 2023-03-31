@@ -1,26 +1,24 @@
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
-enum FileExtension {
-  JSON, CSV
-}
+enum FileExtension { JSON, CSV }
 
 extension ToFileTypeExtension on FileExtension {
-  String extension(){
-    switch(this){
-      case FileExtension.JSON: return ".json";
-      case FileExtension.CSV: return ".csv";
+  String extension() {
+    switch (this) {
+      case FileExtension.JSON:
+        return '.json';
+      case FileExtension.CSV:
+        return '.csv';
     }
   }
 }
 
 ///This class provides a contract to work with [File].
 abstract class IFileHandler {
-
   ///Pick an image from the device gallery.
   ///Returns the [File] that was picked or null otherwise.
   Future<File?> chooseProfileImageFromGallery();
@@ -39,12 +37,12 @@ abstract class IFileHandler {
 
 ///This class is an implementation of [IFileHandler].
 class FileHandler implements IFileHandler {
-
   @override
   Future<File?> chooseProfileImageFromGallery() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+    final FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if(result == null || result.files.isEmpty) return null;
+    if (result == null || result.files.isEmpty) return null;
 
     final path = result.files.first.path;
 
@@ -53,10 +51,9 @@ class FileHandler implements IFileHandler {
 
   @override
   Future<File?> loadProfileImageFromDisk(String? path) async {
-    if(path == null || path.isEmpty){
+    if (path == null || path.isEmpty) {
       return null;
-    }
-    else {
+    } else {
       File image = File(path);
 
       return await image.exists() ? image : null;
@@ -65,17 +62,22 @@ class FileHandler implements IFileHandler {
 
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv','json']);
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: <String>['csv', 'json']);
 
-    if(result == null || result.files.isEmpty) return Future.error(NoFileChosenError());
+    if (result == null || result.files.isEmpty) {
+      return Future.error(NoFileChosenError());
+    }
 
     final chosenFile = result.files.first;
 
-    if(chosenFile.extension == null || (!chosenFile.extension!.endsWith('csv') && !chosenFile.extension!.endsWith('json'))){
+    if (chosenFile.extension == null ||
+        (!chosenFile.extension!.endsWith('csv') &&
+            !chosenFile.extension!.endsWith('json'))) {
       return Future.error(InvalidFileExtensionError());
     }
 
-    if(chosenFile.path == null){
+    if (chosenFile.path == null) {
       return Future.error(InvalidFileExtensionError());
     }
 
@@ -86,19 +88,20 @@ class FileHandler implements IFileHandler {
   Future<File> createFile(String fileName, String extension) async {
     Directory? directory;
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       directory = await getExternalStorageDirectory();
-    }else if(Platform.isIOS){
+    } else if (Platform.isIOS) {
       directory = await getApplicationDocumentsDirectory();
-    }else{
-      throw Exception("Only Android and IOS are supported");
+    } else {
+      throw Exception('Only Android and IOS are supported');
     }
 
-    if(directory == null){
-      throw Exception("Could not create file path");
+    if (directory == null) {
+      throw Exception('Could not create file path');
     }
 
-    final String path = directory.path + Platform.pathSeparator + fileName + extension;
+    final String path =
+        directory.path + Platform.pathSeparator + fileName + extension;
 
     return File(path);
   }

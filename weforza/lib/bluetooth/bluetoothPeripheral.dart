@@ -7,9 +7,7 @@ class BluetoothPeripheral {
   BluetoothPeripheral({
     @required this.id,
     @required this.deviceName,
-  }): assert(
-    id != null && id.isNotEmpty && deviceName != null && deviceName.isNotEmpty
-  );
+  }): assert(id != null && id.isNotEmpty);
 
   final String id;
   final String deviceName;

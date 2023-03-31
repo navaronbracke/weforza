@@ -108,15 +108,16 @@ class ExportDataPage<T> extends StatelessWidget {
         return value.when(
           data: (_) => doneIndicator,
           error: (error, stackTrace) {
-            if (error is FileExistsException) {
+            // Defer to the form for specific file system errors.
+            if (error is FileExistsException ||
+                error is DirectoryNotFoundException ||
+                error is DirectoryRequiredException) {
               return FocusAbsorber(child: builder(context, isExporting: false));
             }
 
             return genericErrorIndicator;
           },
-          loading: () => FocusAbsorber(
-            child: builder(context, isExporting: true),
-          ),
+          loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
         );
       },
     );

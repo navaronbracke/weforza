@@ -9,9 +9,11 @@ class FileRequiredException extends ArgumentError {
   FileRequiredException() : super('file');
 }
 
-class InvalidFileExtensionError extends ArgumentError {
-  InvalidFileExtensionError() : super('Invalid file extension.');
-}
-
 /// An exception that is thrown when a rider already exists.
 class RiderExistsException implements Exception {}
+
+/// An exception that is thrown when a [File] was provided,
+/// but the given file format is not supported.
+class UnsupportedFileFormatError extends ArgumentError {
+  UnsupportedFileFormatError() : super('File format not supported');
+}

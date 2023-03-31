@@ -23,7 +23,6 @@ class DatePicker extends StatelessWidget {
   const DatePicker({
     super.key,
     required this.backButton,
-    required this.constraints,
     required this.dayBuilder,
     required this.delegate,
     required this.forwardButton,
@@ -43,10 +42,8 @@ class DatePicker extends StatelessWidget {
   /// The constraints for the entire calendar.
   final BoxConstraints constraints;
 
-  /// The builder that creates a widget for a given `date`.
-  /// The `isCurrentMonth` argument indicates if the `date`
-  /// is within the currently selected month.
-  final Widget Function(DateTime date, bool isCurrentMonth) dayBuilder;
+  /// The builder that creates a [Widget] for a given day.
+  final DatePickerDayBuilder dayBuilder;
 
   /// The delegate that manages the date picker.
   final DatePickerDelegate delegate;

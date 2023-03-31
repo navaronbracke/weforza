@@ -19,6 +19,8 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This [Widget] shows the list of Rides.
 class RideListPage extends StatefulWidget {
+  const RideListPage({Key? key}) : super(key: key);
+
   @override
   State<RideListPage> createState() => _RideListPageState(
       bloc: RideListBloc(InjectionContainer.get<RideRepository>()));
@@ -107,7 +109,7 @@ class _RideListPageState extends State<RideListPage> {
             return GenericError(text: S.of(context).GenericError);
           } else {
             if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return RideListEmpty();
+              return const RideListEmpty();
             } else {
               return ListView.builder(
                   itemCount: snapshot.data!.length,

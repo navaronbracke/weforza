@@ -48,12 +48,6 @@ class EditMemberBloc extends Bloc {
 
   final int nameAndAliasMaxLength = 50;
 
-  ///Auto validation flags per input.
-  ///Validation should start once an input came into focus at least once.
-  bool autoValidateFirstName = false;
-  bool autoValidateLastName = false;
-  bool autoValidateAlias = false;
-
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.

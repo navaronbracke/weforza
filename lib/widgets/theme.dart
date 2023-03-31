@@ -14,8 +14,8 @@ abstract class AppTheme {
       DestructiveButtons(errorColor: colorScheme.error),
     ],
     navigationBarTheme: NavigationBarThemeData(
-      // The default is secondaryContainer,
-      // which is a little harder to see.
+      backgroundColor: colorScheme.surface,
+      surfaceTintColor: colorScheme.surfaceTint,
       indicatorColor: colorScheme.primaryContainer,
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(

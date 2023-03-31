@@ -76,6 +76,8 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeCounterIconColor = Colors.black87;
 
   static final Color deviceIconColor = Colors.blue.shade200;
+  static final Color deviceTypePickerDotColor = Colors.blueGrey.shade100;
+  static final Color deviceTypePickerCurrentDotColor = Colors.blueGrey;
 
   ///This color is used for Icons in lists that show some information when there is nothing to show.
   static final Color listInformationalIconColor = primaryColor;

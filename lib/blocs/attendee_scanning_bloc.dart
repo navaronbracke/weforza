@@ -221,8 +221,7 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Load the active members.
   Future<void> _loadMembers() async {
-    final List<Member> list =
-        await memberRepo.getMembers(MemberFilterOption.active);
+    final list = await memberRepo.getMembers(MemberFilterOption.active);
 
     for (final member in list) {
       _members[member.uuid] = member;

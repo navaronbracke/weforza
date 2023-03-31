@@ -10,13 +10,15 @@ final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(
   SelectedRideNotifier.new,
 );
 
+// TODO: use select on ride date
+
 /// This provider provides the list of attendees for the currently selected ride.
-final selectedRideAttendeesProvider = FutureProvider<List<Member>>((ref) {
+final selectedRideAttendeesProvider = FutureProvider<List<Member>>((ref) async {
   final repository = ref.watch(rideRepositoryProvider);
   final selectedRide = ref.watch(selectedRideProvider);
 
   if (selectedRide == null) {
-    return Future.error(ArgumentError.notNull('selectedRide'));
+    throw ArgumentError.notNull('selectedRide');
   }
 
   return repository.getRideAttendees(selectedRide.date);
@@ -31,7 +33,7 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
     final ride = state;
 
     if (ride == null) {
-      return Future.error(ArgumentError.notNull('ride'));
+      throw ArgumentError.notNull('ride');
     }
 
     await ref.read(rideRepositoryProvider).deleteRide(ride.date);

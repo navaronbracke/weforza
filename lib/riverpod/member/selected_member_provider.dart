@@ -19,7 +19,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
     final member = state;
 
     if (member == null) {
-      return Future.error(ArgumentError.notNull('selected member'));
+      throw ArgumentError.notNull('member');
     }
 
     await ref.read(memberRepositoryProvider).deleteMember(member.uuid);

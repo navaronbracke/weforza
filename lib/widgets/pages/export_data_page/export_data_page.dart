@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
@@ -104,8 +103,7 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// Build the body of the export page.
   ///
-  /// The [builder] function is used to build the form when the export has not started yet,
-  /// or when the export failed with a [FileExistsException].
+  /// The [builder] function is used to build the form when the export has not started yet.
   /// If the export failed because of a different error,
   /// the [genericErrorIndicator] is displayed.
   ///
@@ -127,14 +125,7 @@ class ExportDataPage<T> extends StatelessWidget {
 
         return value.when(
           data: (_) => doneIndicator,
-          error: (error, stackTrace) {
-            // Defer to the form for specific file system errors.
-            if (error is FileExistsException) {
-              return FocusAbsorber(child: builder(context, isExporting: false));
-            }
-
-            return genericErrorIndicator;
-          },
+          error: (error, stackTrace) => genericErrorIndicator,
           loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
         );
       },

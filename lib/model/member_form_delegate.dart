@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/model/add_member_model.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 
@@ -33,7 +33,7 @@ class MemberFormDelegate {
 
   Stream<bool> get isSubmittingStream => _submitController;
 
-  Future<void> addMember(AddMemberModel model) async {
+  Future<void> addMember(MemberPayload model) async {
     _submitController.add(true);
 
     try {
@@ -64,6 +64,51 @@ class MemberFormDelegate {
       await repository.addMember(member);
 
       memberList.getMembers();
+    } catch (error) {
+      _submitController.addError(error);
+
+      rethrow;
+    }
+  }
+
+  Future<Member> editMember(MemberPayload model) async {
+    _submitController.add(true);
+
+    try {
+      final uuid = model.uuid;
+
+      if (uuid == null) {
+        throw ArgumentError.notNull('uuid');
+      }
+
+      final exists = await repository.memberExists(
+        model.firstName,
+        model.lastName,
+        model.alias,
+        uuid,
+      );
+
+      if (exists) {
+        throw MemberExistsException();
+      }
+
+      final profileImage = await model.profileImage.catchError((error) {
+        return Future<File?>.value(null);
+      });
+
+      final newMember = Member(
+        uuid: uuid,
+        firstname: model.firstName,
+        lastname: model.lastName,
+        alias: model.alias,
+        profileImageFilePath: profileImage?.path,
+        isActiveMember: model.activeMember,
+        lastUpdated: DateTime.now().toUtc(),
+      );
+
+      await repository.updateMember(newMember);
+
+      return newMember;
     } catch (error) {
       _submitController.addError(error);
 

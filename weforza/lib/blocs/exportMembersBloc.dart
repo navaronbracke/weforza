@@ -29,8 +29,6 @@ class ExportMembersBloc extends Bloc {
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final TextEditingController filenameController = TextEditingController();
 
-  bool autoValidateFileName = false;
-
   final int filenameMaxLength = 80;
   String _filename;
 

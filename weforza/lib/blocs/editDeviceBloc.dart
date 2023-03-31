@@ -30,8 +30,6 @@ class EditDeviceBloc extends Bloc {
   String deviceName;
   DeviceType deviceType;
 
-  ///Auto validate flag for device name.
-  bool autoValidateDeviceName = false;
   ///Device Name max length
   int deviceNameMaxLength = 40;
 

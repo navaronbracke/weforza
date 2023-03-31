@@ -74,13 +74,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
       );
     }
 
-    return Theme(
-      data: ThemeData(
-        useMaterial3: true,
-        colorScheme: AppTheme.colorScheme,
-      ),
-      child: child,
-    );
+    return child;
   }
 
   Widget _buildAttendeeCounter(Widget icon, {TextStyle? textStyle}) {

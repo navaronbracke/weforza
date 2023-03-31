@@ -9,11 +9,11 @@ class MemberName extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firstName = ref.watch(
-      selectedMemberProvider.select((value) => value!.firstname),
+      selectedMemberProvider.select((value) => value!.firstName),
     );
 
     final lastName = ref.watch(
-      selectedMemberProvider.select((value) => value!.lastname),
+      selectedMemberProvider.select((value) => value!.lastName),
     );
 
     final alias = ref.watch(

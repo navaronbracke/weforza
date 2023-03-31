@@ -2,18 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/member_list_filter_delegate.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberListFilter extends StatefulWidget {
   const MemberListFilter({
     Key? key,
-    required this.getValue,
-    required this.onChanged,
+    required this.delegate,
   }) : super(key: key);
 
-  final void Function(MemberFilterOption value) onChanged;
-  final MemberFilterOption Function() getValue;
+  final MemberListFilterDelegate delegate;
 
   @override
   _MemberListFilterState createState() => _MemberListFilterState();
@@ -22,13 +21,14 @@ class MemberListFilter extends StatefulWidget {
 class _MemberListFilterState extends State<MemberListFilter> {
   @override
   Widget build(BuildContext context) {
-    final currentValue = widget.getValue();
+    final translator = S.of(context);
+    final currentValue = widget.delegate.memberListFilter;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          S.of(context).SettingsRiderFilterHeader,
+          translator.SettingsRiderFilterHeader,
           style: ApplicationTheme.settingsOptionHeaderStyle,
         ),
         Padding(
@@ -42,12 +42,14 @@ class _MemberListFilterState extends State<MemberListFilter> {
             android: () => Row(
               children: [
                 ChoiceChip(
-                  label: Text(S.of(context).All),
+                  label: Text(translator.All),
                   selected: currentValue == MemberFilterOption.all,
                   onSelected: (selected) {
                     if (selected) {
                       setState(() {
-                        widget.onChanged(MemberFilterOption.all);
+                        widget.delegate.onMemberListFilterChanged(
+                          MemberFilterOption.all,
+                        );
                       });
                     }
                   },
@@ -55,24 +57,28 @@ class _MemberListFilterState extends State<MemberListFilter> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: ChoiceChip(
-                    label: Text(S.of(context).Active),
+                    label: Text(translator.Active),
                     selected: currentValue == MemberFilterOption.active,
                     onSelected: (selected) {
                       if (selected) {
                         setState(() {
-                          widget.onChanged(MemberFilterOption.active);
+                          widget.delegate.onMemberListFilterChanged(
+                            MemberFilterOption.active,
+                          );
                         });
                       }
                     },
                   ),
                 ),
                 ChoiceChip(
-                  label: Text(S.of(context).Inactive),
+                  label: Text(translator.Inactive),
                   selected: currentValue == MemberFilterOption.inactive,
                   onSelected: (selected) {
                     if (selected) {
                       setState(() {
-                        widget.onChanged(MemberFilterOption.inactive);
+                        widget.delegate.onMemberListFilterChanged(
+                          MemberFilterOption.inactive,
+                        );
                       });
                     }
                   },
@@ -82,31 +88,32 @@ class _MemberListFilterState extends State<MemberListFilter> {
             ios: () => CupertinoSlidingSegmentedControl<MemberFilterOption>(
               groupValue: currentValue,
               onValueChanged: (MemberFilterOption? value) {
-                // Should not happen as we have an initial value.
                 if (value == null) return;
 
                 setState(() {
-                  widget.onChanged(value);
+                  widget.delegate.onMemberListFilterChanged(value);
                 });
               },
               children: {
-                MemberFilterOption.all: Text(S.of(context).All.toUpperCase()),
-                MemberFilterOption.active:
-                    Text(S.of(context).Active.toUpperCase()),
-                MemberFilterOption.inactive:
-                    Text(S.of(context).Inactive.toUpperCase()),
+                MemberFilterOption.all: Text(translator.All.toUpperCase()),
+                MemberFilterOption.active: Text(
+                  translator.Active.toUpperCase(),
+                ),
+                MemberFilterOption.inactive: Text(
+                  translator.Inactive.toUpperCase(),
+                ),
               },
             ),
           ),
         ),
         PlatformAwareWidget(
           android: () => Text(
-            S.of(context).SettingsRiderFilterDescription,
+            translator.SettingsRiderFilterDescription,
             style:
                 ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
           ),
           ios: () => Text(
-            S.of(context).SettingsRiderFilterDescription,
+            translator.SettingsRiderFilterDescription,
             style: ApplicationTheme
                 .settingsResetRideCalendarDescriptionTextStyle
                 .copyWith(fontSize: 14),

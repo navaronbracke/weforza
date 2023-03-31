@@ -10,24 +10,15 @@ abstract class ApplicationTheme {
   static final Color secondaryColor = Colors.blue.shade300;
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
-  static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
   static final Color rideCalendarFutureDayNoRideFontColor = Colors.black;
 
-  //Ride Calendar Item Styling for an item that is in the future and already has a ride planned.
+  // Ride Calendar Item font color, except for future days without rides.
+  static final Color rideCalendarDayFontColor = Colors.white;
+
   static final Color rideCalendarFutureDayWithRideBackgroundColor = Colors.blue.shade700;
-  static final Color rideCalendarFutureDayWithRideFontColor = Colors.white;
-
-  //Ride Calendar Item Styling for an item that is part of the user's selection for new rides.
   static final Color rideCalendarSelectedDayBackgroundColor = Colors.blue.shade200;
-  static final Color rideCalendarSelectedDayFontColor = Colors.white;
-  
-  //Ride Calendar Item Styling for an item that is in the past and doesn't have a ride.
   static final Color rideCalendarPastDayWithoutRideBackgroundColor = Colors.grey.shade400;
-  static final Color rideCalendarPastDayWithoutRideFontColor = Colors.white;
-
-  //Ride Calendar Item Styling for an item that is in the past and does have a ride.
   static final Color rideCalendarPastDayWithRideBackgroundColor = Colors.grey.shade700;
-  static final Color rideCalendarPastDayWithRideFontColor = Colors.white;
 
   //Ride Calendar Header Font Color
   static final Color rideCalendarHeaderColor = Colors.black;

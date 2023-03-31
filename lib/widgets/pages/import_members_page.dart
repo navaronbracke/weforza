@@ -35,12 +35,12 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
 
   Widget _buildErrorMessage(String errorMessage) {
     return PlatformAwareWidget(
-      android: () => Text(
+      android: (_) => Text(
         errorMessage,
         softWrap: true,
         style: AppTheme.desctructiveAction.androidMediumErrorStyle,
       ),
-      ios: () => Text(
+      ios: (_) => Text(
         errorMessage,
         softWrap: true,
         style: const TextStyle(
@@ -181,8 +181,8 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
+      android: _buildAndroidWidget,
+      ios: _buildIosWidget,
     );
   }
 
@@ -205,8 +205,8 @@ class _ImportMembersButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => TextButton(onPressed: onTap, child: Text(text)),
-      ios: () => CupertinoButton.filled(
+      android: (_) => TextButton(onPressed: onTap, child: Text(text)),
+      ios: (_) => CupertinoButton.filled(
         onPressed: onTap,
         child: Text(text, style: const TextStyle(color: Colors.white)),
       ),

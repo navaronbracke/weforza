@@ -43,9 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m12(firstName, alias, lastName) => "Eigendom van:  ${firstName} \'${alias}\' ${lastName}";
-
-  static m13(value) => "${value} is verplicht";
+  static m12(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

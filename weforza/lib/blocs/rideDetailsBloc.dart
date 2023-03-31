@@ -1,29 +1,43 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 
 ///This class is the BLoC for the ride details page.
 class RideDetailsBloc extends Bloc {
-  RideDetailsBloc(this._memberRepository,this._rideRepository):
-        assert(_memberRepository != null && _rideRepository != null);
+  RideDetailsBloc({
+    @required this.ride,
+    @required this.rideRepo,
+    @required this.memberRepo
+  }): assert(ride != null && memberRepo != null && rideRepo != null);
 
-  final MemberRepository _memberRepository;
-  final RideRepository _rideRepository;
+  final MemberRepository memberRepo;
+  final RideRepository rideRepo;
+  final Ride ride;
 
-  Future<List<MemberItem>> loadRideAttendees(DateTime date) async {
-    List<Member> attendees = await _rideRepository.getRideAttendees(date);
+  Future<List<MemberItem>> attendeesFuture;
+
+  void loadAttendeesIfNotLoaded(){
+    if(attendeesFuture == null){
+      attendeesFuture = loadRideAttendees();
+    }
+  }
+
+  Future<List<MemberItem>> loadRideAttendees() async {
+    List<Member> attendees = await rideRepo.getRideAttendees(ride.date);
     List<Future<MemberItem>> items = attendees.map((attendee) async =>
-        MemberItem(attendee,await _memberRepository.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
+        MemberItem(attendee,await memberRepo.loadProfileImageFromDisk(attendee.profileImageFilePath))).toList();
     final list = await Future.wait(items);
     return list;
   }
 
-  Future<void> deleteRide(DateTime date) => _rideRepository.deleteRide(date);
+  Future<void> deleteRide() => rideRepo.deleteRide(ride.date);
 
   @override
   void dispose() {}

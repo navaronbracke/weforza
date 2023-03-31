@@ -46,6 +46,7 @@
 	"DisallowedWordMaxLength": "Een verboden woord mag niet langer zijn dan {maxLength} karakters",
 	"DisallowedWordNoWhitespace": "Een verboden woord mag geen spaties bevatten",
 	"DisallowedWordRequired": "Een verboden woord mag niet leeg zijn",
+	"DisallowedWordsDescription": "Toestellen die een verboden woord bevatten worden niet getoond in de scanresultaten.",
 	"EditDevice": "Toestel Bewerken",
 	"EditDisallowedWord": "Verboden woord bewerken",
 	"EditMember": "Renner Bewerken",

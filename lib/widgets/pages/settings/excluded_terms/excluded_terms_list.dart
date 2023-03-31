@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/model/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.

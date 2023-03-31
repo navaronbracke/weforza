@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';

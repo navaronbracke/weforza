@@ -34,14 +34,13 @@ class ProfileImagePicker extends StatelessWidget {
 
         final value = snapshot.data!;
 
+        final loading = SizedBox.square(
+          dimension: size,
+          child: const Center(child: PlatformAwareLoadingIndicator()),
+        );
+
         if (value.selecting) {
-          return SizedBox(
-            width: size,
-            height: size,
-            child: const Center(
-              child: PlatformAwareLoadingIndicator(),
-            ),
-          );
+          return loading;
         }
 
         return GestureDetector(
@@ -51,11 +50,13 @@ class ProfileImagePicker extends StatelessWidget {
             android: () => _AsyncProfileImage(
               future: value.image,
               icon: Icons.camera_alt,
+              loading: loading,
               size: size,
             ),
             ios: () => _AsyncProfileImage(
               future: value.image,
               icon: CupertinoIcons.camera_fill,
+              loading: loading,
               size: size,
             ),
           ),
@@ -69,6 +70,7 @@ class _AsyncProfileImage extends StatelessWidget {
   const _AsyncProfileImage({
     this.future,
     required this.icon,
+    required this.loading,
     required this.size,
   });
 
@@ -77,6 +79,9 @@ class _AsyncProfileImage extends StatelessWidget {
 
   /// The icon that is used as fallback if the image is not available.
   final IconData icon;
+
+  /// The widget that is displayed when the image is loading.
+  final Widget loading;
 
   /// The size of this widget.
   final double size;
@@ -92,6 +97,7 @@ class _AsyncProfileImage extends StatelessWidget {
         icon: icon,
         iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
         image: snapshot.data,
+        loading: loading,
         size: size,
       ),
     );

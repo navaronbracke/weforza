@@ -176,13 +176,10 @@ class _MemberListPageState extends State<MemberListPage> {
         bottom: false,
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: MemberListFilter(
-                stream: bloc.stream,
-                onFilterChanged: onFilterChanged,
-                items: filterItems,
-              ),
+            MemberListFilter(
+              stream: bloc.stream,
+              onFilterChanged: onFilterChanged,
+              items: filterItems,
             ),
             Expanded(
               child: _buildList(context),

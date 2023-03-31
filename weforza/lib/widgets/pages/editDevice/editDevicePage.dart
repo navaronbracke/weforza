@@ -9,7 +9,6 @@ import 'package:weforza/widgets/custom/deviceTypeCarousel/deviceTypeCarousel.dar
 import 'package:weforza/widgets/pages/editDevice/editDeviceSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditDevicePage extends StatefulWidget {
@@ -159,10 +158,9 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((_){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
-              ReloadDataProvider.of(context).reloadDevices.value = true;
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(editedDevice);
             }).catchError((e){
               //the stream catches the error
             });
@@ -174,10 +172,9 @@ class _EditDevicePageState extends State<EditDevicePage> {
         isSubmittingStream: bloc.submitStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
-            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((_){
+            await bloc.editDevice(S.of(context).DeviceAlreadyExists, S.of(context).EditDeviceGenericError).then((editedDevice){
               SelectedItemProvider.of(context).selectedDevice.value = null;
-              ReloadDataProvider.of(context).reloadDevices.value = true;
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(editedDevice);
             }).catchError((e){
               //the stream catches the error
             });

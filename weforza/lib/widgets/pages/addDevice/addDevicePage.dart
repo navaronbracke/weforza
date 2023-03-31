@@ -75,7 +75,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     );
   }
 
-  Widget _buildDeviceNameInput(){
+  Widget _buildDeviceNameInput(BuildContext context){
     return Form(
       key: _formKey,
       child: Padding(
@@ -141,6 +141,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
+            FocusScope.of(context).unfocus();
             await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
               setState(() {
@@ -158,6 +159,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
+            FocusScope.of(context).unfocus();
             await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
               setState(() {
@@ -185,7 +187,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
           flex: 8,
           child: Column(
             children: <Widget>[
-              _buildDeviceNameInput(),
+              _buildDeviceNameInput(context),
               _buildSubmitButton(context),
             ],
           ),

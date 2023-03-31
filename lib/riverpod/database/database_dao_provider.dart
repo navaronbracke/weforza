@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/export_rides_dao.dart';
-import 'package:weforza/database/import_members_dao.dart';
+import 'package:weforza/database/import_riders_dao.dart';
 import 'package:weforza/database/member_dao.dart';
 import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
@@ -24,12 +24,12 @@ final exportRidesDaoProvider = Provider<ExportRidesDao>((ref) {
   return ExportRidesDaoImpl(database.getDatabase(), databaseTables);
 });
 
-/// This provider provides the import members dao.
-final importMembersDaoProvider = Provider<ImportMembersDao>((ref) {
+/// This provider provides the import riders dao.
+final importRidersDaoProvider = Provider<ImportRidersDao>((ref) {
   final database = ref.read(databaseProvider);
   final databaseTables = ref.read(databaseTableProvider);
 
-  return ImportMembersDaoImpl(database.getDatabase(), databaseTables);
+  return ImportRidersDaoImpl(database.getDatabase(), databaseTables);
 });
 
 /// This provider provides the member dao.

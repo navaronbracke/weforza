@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class RideDetailsAttendeesEmpty extends StatelessWidget {
+class RideDetailsAttendeesListEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(

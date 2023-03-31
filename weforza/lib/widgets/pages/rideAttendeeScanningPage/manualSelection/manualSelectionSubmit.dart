@@ -20,32 +20,28 @@ class ManualSelectionSubmit extends StatelessWidget {
       child: ValueListenableBuilder<bool>(
         valueListenable: isSaving,
         builder: (context, isSaving, child){
-          if(isSaving){
-            return PlatformAwareLoadingIndicator();
-          }else{
-            return PlatformAwareWidget(
-              android: () => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: FlatButton(
-                  child: Text(
-                      S.of(context).RideAttendeeScanningSaveManualResults,
-                      style: TextStyle(color: ApplicationTheme.primaryColor)
-                  ),
-                  onPressed: onSave,
+          return PlatformAwareWidget(
+            android: () => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: isSaving ? PlatformAwareLoadingIndicator() : FlatButton(
+                child: Text(
+                    S.of(context).RideAttendeeScanningSaveResults,
+                    style: TextStyle(color: ApplicationTheme.primaryColor)
                 ),
+                onPressed: onSave,
               ),
-              ios: () => Padding(
-                padding: const EdgeInsets.only(bottom: 20, top: 10),
-                child: CupertinoButton(
-                    child: Text(
-                        S.of(context).RideAttendeeScanningSaveManualResults,
-                        style: TextStyle(color: ApplicationTheme.primaryColor)
-                    ),
-                    onPressed: onSave,
+            ),
+            ios: () => Padding(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              child: isSaving ? PlatformAwareLoadingIndicator() : CupertinoButton(
+                child: Text(
+                    S.of(context).RideAttendeeScanningSaveResults,
+                    style: TextStyle(color: ApplicationTheme.primaryColor)
                 ),
+                onPressed: onSave,
               ),
-            );
-          }
+            ),
+          );
         },
       ),
     );

@@ -17,6 +17,8 @@ class Ride {
   static final String longDatePattern = "EEEE d MMMM yyyy";
   static final String shortDatePattern = "EEE d MMM yyyy";
 
+  static final int titleMaxLength = 80;
+
   ///Address regex for departure/destination addresses.
   ///Between 1 and 80 letters, digits, spaces or characters that are included in the regex.
   ///The first group in the regex OR are the regex pattern classes for digits, whitespace and letters.
@@ -93,4 +95,31 @@ class Ride {
 
   @override
   int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
+
+  String dateToDDMMYYY() => "${date.day}-${date.month}-${date.year}";
+  
+  Map<String, String> toJson() {
+    return {
+      "date": dateToDDMMYYY(),
+      "title": title,
+      "destination": destinationAddress,
+      "start": startAddress,
+      "distance": distance == null || distance == 0.0 ? "0 Km" : "$distance Km"
+    };
+  }
+
+  String toCsv() {
+    String value = dateToDDMMYYY();
+    value = "$value,${title ?? ""},";
+    value = "$value${startAddress ?? ""},";
+    value = "$value${destinationAddress ?? ""},";
+
+    if(distance == null || distance == 0.0){
+      value = value + "0 Km";
+    }else{
+      value = value + "$distance Km";
+    }
+
+    return value;
+  }
 }

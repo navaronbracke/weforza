@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 
@@ -23,7 +23,7 @@ abstract class IMemberDao {
   ///If [uuid] isn't null or empty it checks if there is a member with the values and a uuid that is different from [uuid].
   ///A member with the same values and uuid means it's the owner of said values.
   ///This would merely overwrite the old one with a copy of itself and is thus harmless.
-  Future<bool> memberExists(String firstname, String lastname, String phone,[String uuid]);
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
@@ -35,16 +35,30 @@ abstract class IMemberDao {
 
 ///This class is an implementation of [IMemberDao].
 class MemberDao implements IMemberDao {
-  MemberDao(this._database): assert(_database != null);
+  MemberDao(
+      this._database,
+      this._memberStore,
+      this._rideAttendeeStore,
+      this._deviceStore): assert(
+        _database != null && _memberStore != null && _rideAttendeeStore != null
+            && _deviceStore != null
+  );
 
-  ///A reference to the database, which is needed by the Store.
+  MemberDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.memberStore,
+    provider.rideAttendeeStore,
+    provider.deviceStore
+  );
+
+  ///A reference to the application database.
   final Database _database;
   ///A reference to the [Member] store.
-  final _memberStore = DatabaseProvider.memberStore;
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
   ///A reference to the [RideAttendee] store.
-  final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
   ///A reference to the [Device] store.
-  final _deviceStore = DatabaseProvider.deviceStore;
+  final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
   @override
   Future<void> addMember(Member member) async  {
@@ -73,13 +87,15 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<List<Member>> getMembers() async {
-    final finder = Finder(
-        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("phone")]
+    final Finder finder = Finder(
+        sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("alias")]
     );
 
-    final records = await _memberStore.find(_database,finder: finder);
+    final Iterable<Member> members = await _memberStore.find(_database,finder: finder).then((records){
+      return records.map((record)=> Member.of(record.key, record.value));
+    });
 
-    return records.map((record)=> Member.of(record.key, record.value)).toList();
+    return members.toList();
   }
 
   @override
@@ -93,11 +109,11 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<bool> memberExists(String firstname, String lastname, String phone, [String uuid]) async {
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]) async {
     final List<Filter> filters = [
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
-      Filter.equals("phone", phone),
+      Filter.equals("alias", alias),
     ];
     if(uuid != null && uuid.isNotEmpty){
       filters.add(Filter.notEquals(Field.key, uuid));
@@ -121,11 +137,6 @@ class MemberDao implements IMemberDao {
   Future<Member> getMemberByUuid(String uuid) async {
     final record = await _memberStore.record(uuid).getSnapshot(_database);
 
-    if(record == null){
-      return null;
-    }else{
-      //need record snapshot
-      return Member.of(uuid, record.value);
-    }
+    return record == null ? null : Member.of(uuid, record.value);
   }
 }

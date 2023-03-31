@@ -50,7 +50,7 @@ abstract class ApplicationTheme {
   );
 
   ///The background color for an unselected ride attendee.
-  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
+  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
   ///The background color for a selected ride attendee.
   static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
 
@@ -60,9 +60,6 @@ abstract class ApplicationTheme {
   );
   static final TextStyle rideAttendeeLastNameTextStyle = TextStyle(
     fontSize: 14.0
-  );
-  static final TextStyle rideAttendeePhoneTextStyle = TextStyle(
-      fontSize: 12.0, fontStyle: FontStyle.italic
   );
 
 
@@ -105,14 +102,24 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
-  static final Color rideAttendeeScanResultWarningColor = Colors.orange;
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
-
-  static final TextStyle rideAttendeeScanResultOwnerLabelTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
-
+  static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
+  static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
+  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
+  static final TextStyle rideAttendeeMultipleOwnersListTooltipStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
 
   static final Color deleteItemButtonTextColor = Colors.red;
+
+  static final TextStyle importMembersHeaderRemovalMessageTextStyle = TextStyle(
+      fontSize: 12,fontStyle: FontStyle.italic, color: Colors.grey.shade600
+  );
+
+  static final TextStyle importWarningTextStyle = TextStyle(color: Colors.red);
+
+  static final Color importMembersDoneIconColor = Colors.green;
+
+  static final TextStyle appVersionTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

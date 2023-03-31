@@ -5,6 +5,7 @@ import 'package:weforza/blocs/settingsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/settings/loadingSettings.dart';
 import 'package:weforza/widgets/pages/settings/scanDurationOption.dart';
 import 'package:weforza/widgets/pages/settings/settingsPageGenericError.dart';
@@ -73,40 +74,72 @@ class _SettingsPageState extends State<SettingsPage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Row(
-          children: <Widget>[
+          children: [
             Expanded(
               child: Center(child: Text(S.of(context).SettingsTitle)),
             ),
-            SettingsSubmit(
-              submitStream: bloc.submitStream,
-              onSubmit: () async {
-                await bloc.saveSettings();
-                setState(() {});
-              },
+            SizedBox(
+              width: 40,
+              child: Center(
+                child: SettingsSubmit(
+                  submitStream: bloc.submitStream,
+                  onSubmit: () async {
+                    await bloc.saveSettings();
+                    setState(() {});
+                  },
+                ),
+              ),
             ),
           ],
         ),
         transitionBetweenRoutes: false,
       ),
-      child: SafeArea(child: _buildBody(context)),
+      child: SafeArea(
+        child: _buildBody(context),
+      ),
     );
   }
 
   Widget _buildBody(BuildContext context){
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ScanDurationOption(
-              getValue: () => bloc.scanDuration,
-              maxScanValue: bloc.maxScanValue,
-              minScanValue: bloc.minScanValue,
-              onChanged: bloc.onScanDurationChanged,
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ScanDurationOption(
+                      getValue: () => bloc.scanDuration,
+                      maxScanValue: bloc.maxScanValue,
+                      minScanValue: bloc.minScanValue,
+                      onChanged: bloc.onScanDurationChanged,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+          _buildApplicationPackageInfo()
+        ],
       ),
+    );
+  }
+
+  Widget _buildApplicationPackageInfo(){
+    return Column(
+      children: [
+        Text(
+          S.of(context).AppVersionNumber(bloc.appVersion),
+          style:  ApplicationTheme.appVersionTextStyle,
+        ),
+        Text(
+          S.of(context).AppVersionBuildNumber(bloc.appBuildNumber),
+          style:  ApplicationTheme.appVersionTextStyle,
+        ),
+      ],
     );
   }
 

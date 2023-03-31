@@ -21,7 +21,7 @@ class MemberDevicesListItem extends StatefulWidget {
   //Initial value from the list builder
   final Device device;
   final int index;
-  final Future<void> Function(String deviceName, int index) onDelete;
+  final Future<void> Function(Device device, int index) onDelete;
 
   @override
   _MemberDevicesListItemState createState() => _MemberDevicesListItemState();
@@ -48,7 +48,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             title: S.of(context).DeleteDeviceTitle,
             description: S.of(context).DeleteDeviceDescription,
             errorDescription: S.of(context).DeleteDeviceErrorDescription,
-            onDelete: () => widget.onDelete(device.name, widget.index),
+            onDelete: () => widget.onDelete(device, widget.index),
           ),
       ),
       child: Container(
@@ -66,7 +66,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           title: S.of(context).DeleteDeviceTitle,
           description: S.of(context).DeleteDeviceDescription,
           errorDescription: S.of(context).DeleteDeviceErrorDescription,
-          onDelete: () => widget.onDelete(device.name, widget.index),
+          onDelete: () => widget.onDelete(device, widget.index),
         ),
       ),
       child: Container(
@@ -105,7 +105,8 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
     switch(device.type){
       case DeviceType.HEADSET: return Icon(Icons.headset,color: ApplicationTheme.deviceIconColor);
       case DeviceType.WATCH: return Icon(Icons.watch,color: ApplicationTheme.deviceIconColor);
-      case DeviceType.TABLET: return Icon(Icons.tablet,color: ApplicationTheme.deviceIconColor);
+      case DeviceType.POWER_METER: return Icon(Icons.flash_on,color: ApplicationTheme.deviceIconColor);
+      case DeviceType.CADENCE_METER: return Icon(Icons.fitness_center,color: ApplicationTheme.deviceIconColor);
       case DeviceType.PHONE: return Icon(Icons.smartphone,color: ApplicationTheme.deviceIconColor);
       case DeviceType.GPS: return Icon(Icons.gps_fixed,color: ApplicationTheme.deviceIconColor);
       case DeviceType.PULSE_MONITOR: return Icon(Icons.favorite_border,color: ApplicationTheme.deviceIconColor);
@@ -131,9 +132,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           });
         },
       ),
-      ios: () => CupertinoIconButton(
-        idleColor: ApplicationTheme.memberDevicesListEditDeviceIdleColor,
-        onPressedColor: ApplicationTheme.memberDevicesListEditDevicePressedColor,
+      ios: () => CupertinoIconButton.fromAppTheme(
         onPressed: (){
           SelectedItemProvider.of(context).selectedDevice.value = device;
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDevicePage())).then((editedDevice){

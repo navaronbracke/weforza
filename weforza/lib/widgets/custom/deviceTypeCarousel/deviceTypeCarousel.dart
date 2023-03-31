@@ -99,7 +99,8 @@ class DeviceTypeCarousel extends StatelessWidget {
     switch(DeviceType.values[index]){
       case DeviceType.HEADSET: return S.of(context).DeviceHeadset;
       case DeviceType.WATCH: return S.of(context).DeviceWatch;
-      case DeviceType.TABLET: return S.of(context).DeviceTablet;
+      case DeviceType.POWER_METER: return S.of(context).DevicePowerMeter;
+      case DeviceType.CADENCE_METER: return S.of(context).DeviceCadenceMeter;
       case DeviceType.PHONE: return S.of(context).DevicePhone;
       case DeviceType.GPS: return S.of(context).DeviceGPS;
       case DeviceType.PULSE_MONITOR: return S.of(context).DevicePulseMonitor;
@@ -111,7 +112,8 @@ class DeviceTypeCarousel extends StatelessWidget {
     switch(DeviceType.values[index]){
       case DeviceType.HEADSET: return Icons.headset;
       case DeviceType.WATCH: return Icons.watch;
-      case DeviceType.TABLET: return Icons.tablet;
+      case DeviceType.POWER_METER: return Icons.flash_on;
+      case DeviceType.CADENCE_METER: return Icons.fitness_center;
       case DeviceType.PHONE: return Icons.smartphone;
       case DeviceType.GPS: return Icons.gps_fixed;
       case DeviceType.PULSE_MONITOR: return Icons.favorite_border;

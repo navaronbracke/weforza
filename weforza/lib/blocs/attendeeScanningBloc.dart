@@ -163,6 +163,7 @@ class AttendeeScanningBloc extends Bloc {
         //so the value listenable builder for the button updates.
         //At this point the user can also switch pages.
         isScanning.value = false;
+        _menuEnabledStreamController.add(true);
       }, cancelOnError: false);
     }
   }

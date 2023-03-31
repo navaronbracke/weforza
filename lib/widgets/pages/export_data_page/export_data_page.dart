@@ -190,8 +190,13 @@ class ExportDataPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());
-    const genericErrorIndicator = Center(child: GenericError());
-    final exportLabel = S.of(context).Export;
+    final translator = S.of(context);
+    final exportLabel = translator.Export;
+    final genericErrorIndicator = Center(
+      child: GenericErrorWithBackButton(
+        message: translator.ExportGenericErrorMessage,
+      ),
+    );
 
     return PlatformAwareWidget(
       android: (context) => Scaffold(

@@ -54,7 +54,10 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   Future<bool> isBluetoothEnabled() async => true;
 
   @override
-  Stream<bool> get isScanning => _scanningController;
+  bool get isScanning => _scanningController.value;
+
+  @override
+  Stream<bool> get isScanningStream => _scanningController;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
@@ -74,7 +77,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Future<void> stopScan() async {
-    if (!_scanningController.isClosed) {
+    if (!_scanningController.isClosed && isScanning) {
       _stopScanPill.add(null);
       _scanningController.add(false);
     }

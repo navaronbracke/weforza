@@ -5,7 +5,7 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
-import 'package:weforza/repository/importMembersRepository.dart';
+import 'package:weforza/repository/import_members_repository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';

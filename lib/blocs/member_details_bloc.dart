@@ -5,18 +5,17 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/device_repository.dart';
+import 'package:weforza/repository/member_repository.dart';
 
 ///This class is the BLoC for MemberDetailsPage.
 class MemberDetailsBloc extends Bloc {
-  MemberDetailsBloc({
-    required this.memberRepository,
-    required this.deviceRepository,
-    required this.member,
-    required this.profileImage,
-    required this.attendingCountFuture
-  }) {
+  MemberDetailsBloc(
+      {required this.memberRepository,
+      required this.deviceRepository,
+      required this.member,
+      required this.profileImage,
+      required this.attendingCountFuture}) {
     _isActiveController = BehaviorSubject.seeded(member.isActiveMember);
   }
 
@@ -31,7 +30,7 @@ class MemberDetailsBloc extends Bloc {
   Future<File?> profileImage;
   Future<List<Device>>? devicesFuture;
 
-  void loadDevices(){
+  void loadDevices() {
     devicesFuture = getMemberDevices();
   }
 
@@ -40,19 +39,21 @@ class MemberDetailsBloc extends Bloc {
     _isActiveController.close();
   }
 
-  Future<void> deleteDevice(Device device) => deviceRepository.removeDevice(device);
+  Future<void> deleteDevice(Device device) =>
+      deviceRepository.removeDevice(device);
 
   Future<void> deleteMember() => memberRepository.deleteMember(member.uuid);
 
-  Future<List<Device>> getMemberDevices() => deviceRepository.getOwnerDevices(member.uuid);
+  Future<List<Device>> getMemberDevices() =>
+      deviceRepository.getOwnerDevices(member.uuid);
 
   void setMemberActive(bool value, void Function() onSuccess) async {
-    if(member.isActiveMember != value){
-      await memberRepository.setMemberActive(member.uuid, value).then((_){
+    if (member.isActiveMember != value) {
+      await memberRepository.setMemberActive(member.uuid, value).then((_) {
         member.isActiveMember = value;
         _isActiveController.add(value);
         onSuccess();
-      }).catchError((e){
+      }).catchError((e) {
         _isActiveController.addError(e);
       });
     }

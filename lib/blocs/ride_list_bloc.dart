@@ -1,6 +1,6 @@
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/ride_repository.dart';
 
 ///This Bloc will load the rides.
 class RideListBloc extends Bloc {

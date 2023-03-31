@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/repository/member_repository.dart';
+import 'package:weforza/repository/ride_repository.dart';
 
 ///This class is the BLoC for the ride details page.
 class RideDetailsBloc extends Bloc {

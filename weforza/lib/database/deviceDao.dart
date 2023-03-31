@@ -24,19 +24,43 @@ abstract class IDeviceDao {
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
-  DeviceDao(this._database, this._deviceStore);
+  DeviceDao(this._database, this._deviceStore, this._memberStore);
 
-  DeviceDao.withProvider(ApplicationDatabase provider):
-        this(provider.getDatabase(), provider.deviceStore);
+  DeviceDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.deviceStore,
+    provider.memberStore,
+  );
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
   ///A reference to the device store.
   final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
+  ///A reference to the member store.
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
+
+  /// Convert the given date to a 'YYYY-MM-DD HH-MM-SSZ' string.
+  /// E.g. 1969-07-20 20:18:04Z
+  String _lastUpdatedToString(DateTime date){
+    final String s = date.toString();
+
+    // Strip the milliseconds and append a Z.
+    return s.substring(0, s.length - 4) + "Z";
+  }
+
   @override
   Future<void> addDevice(Device device) async {
-    await _deviceStore.record(device.creationDate.toIso8601String()).add(_database, device.toMap());
+    await _database.transaction((txn) async {
+      await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.toMap());
+      await _memberStore.update(
+        txn,
+        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        finder: Finder(
+          filter: Filter.byKey(device.ownerId),
+        ),
+      );
+    });
   }
 
   @override
@@ -47,22 +71,41 @@ class DeviceDao implements IDeviceDao {
 
   @override
   Future<void> removeDevice(Device device) async {
-    await _deviceStore.delete(
-        _database,
+    await _database.transaction((txn) async {
+      await _deviceStore.delete(
+        txn,
         finder: Finder(
           filter: Filter.and(<Filter>[
             Filter.equals("deviceName",device.name),
             Filter.equals("owner",device.ownerId),
           ]),
         ),
-    );
+      );
+
+      await _memberStore.update(
+        txn,
+        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        finder: Finder(
+          filter: Filter.byKey(device.ownerId),
+        ),
+      );
+    });
   }
 
   @override
   Future<void> updateDevice(Device newDevice) async {
-    await _deviceStore.update(_database, newDevice.toMap(),finder: Finder(
-      filter: Filter.byKey(newDevice.creationDate.toIso8601String())
-    ));
+    await _database.transaction((txn) async {
+      await _deviceStore.update(txn, newDevice.toMap(),finder: Finder(
+          filter: Filter.byKey(newDevice.creationDate.toIso8601String())
+      ));
+      await _memberStore.update(
+        txn,
+        { "lastUpdated": _lastUpdatedToString(DateTime.now().toUtc()) },
+        finder: Finder(
+          filter: Filter.byKey(newDevice.ownerId),
+        ),
+      );
+    });
   }
 
   @override

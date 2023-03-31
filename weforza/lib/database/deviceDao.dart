@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
 
 ///This interface defines a contract to work with member devices.
@@ -21,12 +21,16 @@ abstract class IDeviceDao {
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
-  DeviceDao(this._database): assert(_database != null);
+  DeviceDao(this._database, this._deviceStore):
+        assert(_database != null && _deviceStore != null);
+
+  DeviceDao.withProvider(ApplicationDatabase provider):
+        this(provider.getDatabase(), provider.deviceStore);
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
   ///A reference to the device store.
-  final _deviceStore = DatabaseProvider.deviceStore;
+  final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
   @override
   Future<void> addDevice(Device device) async {

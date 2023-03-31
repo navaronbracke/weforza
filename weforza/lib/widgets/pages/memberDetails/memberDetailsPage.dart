@@ -260,4 +260,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 }

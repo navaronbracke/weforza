@@ -1,6 +1,6 @@
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 
@@ -9,14 +9,23 @@ abstract class IImportMembersDao {
 }
 
 class ImportMembersDao implements IImportMembersDao {
-  ImportMembersDao(this._database): assert(_database != null);
+  ImportMembersDao(this._database, this._memberStore, this._deviceStore):
+        assert(_database != null && _memberStore != null
+            && _deviceStore != null
+        );
+
+  ImportMembersDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.memberStore,
+    provider.deviceStore
+  );
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;
   ///A reference to the [Member] store.
-  final _memberStore = DatabaseProvider.memberStore;
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
   ///A reference to the [Device] store.
-  final _deviceStore = DatabaseProvider.deviceStore;
+  final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
   @override
   Future<void> saveMembersWithDevices(Set<Member> members, Set<Device> devices) async {

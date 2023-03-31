@@ -1,6 +1,6 @@
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
@@ -38,16 +38,30 @@ abstract class IRideDao {
 }
 
 class RideDao implements IRideDao {
-  RideDao(this._database): assert(_database != null);
+  RideDao(
+      this._database,
+      this._memberStore,
+      this._rideStore,
+      this._rideAttendeeStore
+      ): assert(_database != null  && _memberStore != null
+        && _rideStore != null && _rideAttendeeStore != null
+  );
+
+  RideDao.withProvider(ApplicationDatabase provider): this(
+    provider.getDatabase(),
+    provider.memberStore,
+    provider.rideStore,
+    provider.rideAttendeeStore
+  );
 
   ///A reference to the database.
   final Database _database;
   ///A reference to the [RideAttendee] store.
-  final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
+  final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
   ///A reference to the [Ride] store.
-  final _rideStore = DatabaseProvider.rideStore;
+  final StoreRef<String, Map<String, dynamic>> _rideStore;
   ///A reference to the [Member] store.
-  final _memberStore = DatabaseProvider.memberStore;
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
 
 
   @override

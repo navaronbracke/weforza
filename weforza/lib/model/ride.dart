@@ -98,7 +98,7 @@ class Ride {
 
   String dateToDDMMYYY() => "${date.day}-${date.month}-${date.year}";
   
-  Map<String, String> exportToJson() {
+  Map<String, String> toJson() {
     return {
       "date": dateToDDMMYYY(),
       "title": title,
@@ -108,7 +108,7 @@ class Ride {
     };
   }
 
-  String exportToCsv() {
+  String toCsv() {
     String value = dateToDDMMYYY();
     value = "$value,${title ?? ""},";
     value = "$value${startAddress ?? ""},";

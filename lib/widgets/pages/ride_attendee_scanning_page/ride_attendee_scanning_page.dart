@@ -74,7 +74,10 @@ class RideAttendeeScanningPageState
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: RideAttendeeScanningStepper(stream: delegate.stateStream),
+        title: RideAttendeeScanningStepper(
+          alignment: MainAxisAlignment.start,
+          stream: delegate.stateStream,
+        ),
       ),
       body: _buildBody(),
     );
@@ -125,7 +128,10 @@ class RideAttendeeScanningPageState
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
-        middle: RideAttendeeScanningStepper(stream: delegate.stateStream),
+        middle: RideAttendeeScanningStepper(
+          alignment: MainAxisAlignment.center,
+          stream: delegate.stateStream,
+        ),
       ),
       child: SafeArea(
         // The bottom view padding should be preserved

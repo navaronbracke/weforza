@@ -114,11 +114,8 @@ class MemberFormDelegate {
 
       final notifier = ref.read(selectedMemberProvider.notifier);
 
-      // Update the selected member and its profile image.
-      notifier.updateSelectedMember(
-        member: newMember,
-        profileImage: profileImage,
-      );
+      // Update the selected member.
+      notifier.setSelectedMember(newMember);
 
       // An item in the list was updated.
       ref.refresh(memberListProvider);

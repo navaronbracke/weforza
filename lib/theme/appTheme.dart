@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ///This class provides the application [ThemeData].
 abstract class ApplicationTheme {
@@ -126,41 +127,39 @@ abstract class ApplicationTheme {
 
   static final Color rideListItemEvenMonthColor = Colors.blue;
 
-  ///Provide the Android theme.
+  /// Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(
-       primarySwatch: primaryColor,
-       accentColor: secondaryColor,
-       splashColor: secondaryColor.withAlpha(150),
-       // We need dark here, so the status bar gets a white text color.
-       appBarTheme: AppBarTheme(brightness: Brightness.dark),
-       // We set button styles explicitly here.
-       // This makes our buttons work with the new themes for buttons.
-       textButtonTheme: TextButtonThemeData(
-         style: TextButton.styleFrom(
-           primary: primaryColor,
-           minimumSize: Size(88, 36),
-           padding: EdgeInsets.symmetric(horizontal: 16.0),
-           shape: const RoundedRectangleBorder(
-             borderRadius: BorderRadius.all(Radius.circular(2.0)),
-           ),
-         )
-       ),
-       elevatedButtonTheme: ElevatedButtonThemeData(
-         style: ElevatedButton.styleFrom(
-           onPrimary: Colors.white,
-           primary: primaryColor,
-           minimumSize: Size(88, 36),
-           padding: EdgeInsets.symmetric(horizontal: 16),
-           shape: const RoundedRectangleBorder(
-             borderRadius: BorderRadius.all(Radius.circular(2)),
-           ),
-         )
-       )
-     );
+      splashColor: secondaryColor.withAlpha(150),
+      appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          primary: primaryColor,
+          minimumSize: Size(88, 36),
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          ),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          onPrimary: Colors.white,
+          primary: primaryColor,
+          minimumSize: Size(88, 36),
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(2)),
+          ),
+        ),
+      ), 
+      colorScheme: ColorScheme.fromSwatch(
+        primarySwatch: primaryColor,
+      ).copyWith(secondary: secondaryColor),
+    );
   }
 
-  ///Provide the IOS theme.
+  /// Provide the IOS theme.
   static CupertinoThemeData iosTheme(){
     return CupertinoThemeData(
       primaryColor: primaryColor,

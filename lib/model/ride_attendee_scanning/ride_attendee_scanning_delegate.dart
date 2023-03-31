@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
@@ -30,7 +31,14 @@ class RideAttendeeScanningDelegate {
     required this.rideRepository,
     required this.scanner,
     required this.settings,
-  });
+    required TickerProvider vsync,
+  }) : _scanProgressBarController = AnimationController(
+          duration: Duration(seconds: settings.scanDuration),
+          vsync: vsync,
+          value: 1.0,
+        ) {
+    _startScanningSubscription = scanner.isScanning.listen(_listenToScanStart);
+  }
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -71,10 +79,16 @@ class RideAttendeeScanningDelegate {
   /// This list contains the devices that were scanned.
   final _scannedDevices = <ScannedDevice>[];
 
+  /// The controller for the scanning progress bar.
+  final AnimationController _scanProgressBarController;
+
   /// This flag is a mutex that locks the ride attendee selection
   /// when the selection is being saved.
   /// When this flag is true, the selection should not be modified.
   bool _selectionLocked = false;
+
+  /// The subscription that listens to the start of the Bluetooth scan.
+  StreamSubscription<bool>? _startScanningSubscription;
 
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
@@ -202,6 +216,19 @@ class RideAttendeeScanningDelegate {
     return !_rideAttendeeController.value.contains(
       ScannedRideAttendee(uuid: owners.first, isScanned: false),
     );
+  }
+
+  /// Listen to the start signal of the Bluetooth scan
+  /// and start decreasing the progress in the progress bar.
+  void _listenToScanStart(bool isScanning) {
+    if (_stateMachine.isClosed || !isScanning) {
+      return;
+    }
+
+    // Start decreasing the progress when the scan starts.
+    if (_scanProgressBarController.status == AnimationStatus.completed) {
+      _scanProgressBarController.reverse();
+    }
   }
 
   /// Load the active members and their devices.
@@ -532,5 +559,8 @@ class RideAttendeeScanningDelegate {
     _stateMachine.dispose();
     _rideAttendeeController.close();
     scanner.dispose();
+    _startScanningSubscription?.cancel();
+    _startScanningSubscription = null;
+    _scanProgressBarController.dispose();
   }
 }

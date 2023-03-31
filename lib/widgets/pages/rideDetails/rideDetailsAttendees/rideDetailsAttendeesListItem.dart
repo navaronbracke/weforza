@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {

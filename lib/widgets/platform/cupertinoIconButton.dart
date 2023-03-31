@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 
 ///This [Widget] represents a custom ios icon button.
 class CupertinoIconButton extends StatefulWidget {

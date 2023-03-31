@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 
 ///This [Widget] represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {

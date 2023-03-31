@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 
 class AddRideCalendarItem extends StatefulWidget {
   const AddRideCalendarItem({

@@ -4,7 +4,7 @@ import 'package:weforza/blocs/reset_ride_calendar_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/ride_repository.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertinoLoadingDialog.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

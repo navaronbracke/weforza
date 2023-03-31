@@ -6,7 +6,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/memberAttendingCount.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';

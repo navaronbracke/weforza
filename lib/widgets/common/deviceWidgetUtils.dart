@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' show Icon, IconData, Icons, Widget;
 import 'package:weforza/model/device.dart' show DeviceType;
-import 'package:weforza/theme/appTheme.dart' show ApplicationTheme;
+import 'package:weforza/theme/app_theme.dart' show ApplicationTheme;
 
 /// This utility function takes a given [DeviceType]
 /// and outputs an [Icon] widget for that type.

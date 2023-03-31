@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scan_result.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

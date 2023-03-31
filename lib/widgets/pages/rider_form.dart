@@ -155,12 +155,15 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
             child: Column(
               children: <Widget>[
                 Center(
-                  child: ProfileImagePicker(
-                    delegate: _profileImageDelegate,
-                    imagePreviewSize: 64,
-                    pickingIndicator: const SizedBox.square(
-                      dimension: 64,
-                      child: Center(child: CircularProgressIndicator()),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: ProfileImagePicker(
+                      delegate: _profileImageDelegate,
+                      imagePreviewSize: 100,
+                      pickingIndicator: const SizedBox.square(
+                        dimension: 64,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                     ),
                   ),
                 ),

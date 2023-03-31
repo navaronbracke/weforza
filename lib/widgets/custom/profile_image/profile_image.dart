@@ -153,13 +153,13 @@ class AdaptiveProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => ProfileImage(
+      android: (_) => ProfileImage(
         icon: Icons.person,
         image: image,
         personInitials: personInitials,
         size: size,
       ),
-      ios: () => ProfileImage(
+      ios: (_) => ProfileImage(
         icon: CupertinoIcons.person_fill,
         image: image,
         personInitials: personInitials,

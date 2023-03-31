@@ -30,9 +30,7 @@ class _DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
 
         future = notifier.deleteDevice(widget.index).then((_) {
           if (mounted) {
-            // Emit a result that indicates that the device was deleted,
-            // so that it can be removed from the list of devices.
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop();
           }
         });
 

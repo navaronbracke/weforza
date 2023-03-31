@@ -1,7 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/attendeeScanningBloc.dart';
+import 'package:weforza/blocs/attendee_scanning_bloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/injection/injectionContainer.dart';

@@ -8,7 +8,7 @@ class CupertinoIconButton extends StatefulWidget {
   @required this.onPressed,
   @required this.onPressedColor,
   @required this.idleColor,
-  this.size = 24,
+  this.size = 28,
   }): assert(
     icon != null
     && onPressed != null 
@@ -26,7 +26,7 @@ class CupertinoIconButton extends StatefulWidget {
     onPressedColor: ApplicationTheme.accentColor,
     icon: icon,
     onPressed: onPressed,
-    size: size ?? 24
+    size: size ?? 28
   );
 
   ///A [VoidCallback] that is invoked when this [Widget] is pressed.

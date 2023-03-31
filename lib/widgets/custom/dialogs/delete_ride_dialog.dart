@@ -19,7 +19,7 @@ class _DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      title: translator.RideDeleteDialogTitle,
+      title: translator.DeleteRide,
       description: translator.RideDeleteDialogDescription,
       errorDescription: translator.GenericError,
       future: future,

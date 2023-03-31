@@ -63,15 +63,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           ),
           IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => EditRidePage())).then((_){
-                    setState(() {
-                      bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
-                    });
-              });
-            },
+            onPressed: () => goToEditPage(context),
           ),
           IconButton(
               icon: Icon(Icons.delete),
@@ -82,14 +74,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   title: S.of(context).RideDeleteDialogTitle,
                   description: S.of(context).RideDeleteDialogDescription,
                   errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                  onDelete: () => bloc.deleteRide().then((_){
-                    //trigger the reload of rides
-                    ReloadDataProvider.of(context).reloadRides.value = true;
-                    final navigator = Navigator.of(context);
-                    //Pop both the dialog and the detail screen
-                    navigator.pop();
-                    navigator.pop();
-                  }),
+                  onDelete: () => showDeleteRideDialog(context),
               ),
             ),
           ),
@@ -126,16 +111,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.edit,
-                    onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EditRidePage()
-                        )
-                    ).then((_){
-                      setState(() {
-                        bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
-                      });
-                    })
+                    onPressed: () => goToEditPage(context)
                 ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
@@ -148,14 +124,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           title: S.of(context).RideDeleteDialogTitle,
                           description: S.of(context).RideDeleteDialogDescription,
                           errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                          onDelete: () => bloc.deleteRide().then((_){
-                            //trigger the reload of rides
-                            ReloadDataProvider.of(context).reloadRides.value = true;
-                            final navigator = Navigator.of(context);
-                            //Pop both the dialog and the detail screen
-                            navigator.pop();
-                            navigator.pop();
-                          }),
+                          onDelete: () => showDeleteRideDialog(context),
                         ),
                     ),
                 ),
@@ -292,6 +261,27 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         setState((){});
         attendeeProvider.value = null;
       }
+    });
+  }
+
+  void goToEditPage(BuildContext context){
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => EditRidePage())).then((_){
+      setState(() {
+        bloc.ride = SelectedItemProvider.of(context).selectedRide.value;
+      });
+    });
+  }
+
+  Future<void> showDeleteRideDialog(BuildContext context){
+    return bloc.deleteRide().then((_){
+      //trigger the reload of rides
+      ReloadDataProvider.of(context).reloadRides.value = true;
+      final navigator = Navigator.of(context);
+      //Pop both the dialog and the detail screen
+      navigator.pop();
+      navigator.pop();
     });
   }
 }

@@ -11,8 +11,10 @@ class SettingsRepository {
   Future<Settings> loadApplicationSettings() async {
     final settings = await _dao.readApplicationSettings();
 
-    // Append the package info to the settings.
-    settings.packageInfo = await PackageInfo.fromPlatform();
+    // Append the app version to the settings.
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    settings.appVersion = packageInfo.version;
 
     return settings;
   }

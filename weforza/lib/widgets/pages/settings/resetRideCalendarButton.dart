@@ -70,9 +70,15 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              translator.SettingsResetRideCalendarDescription,
-              style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+            child: PlatformAwareWidget(
+              android: () => Text(
+                translator.SettingsResetRideCalendarDescription,
+                style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+              ),
+              ios: () => Text(
+                translator.SettingsResetRideCalendarDescription,
+                style: ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle.copyWith(fontSize: 14),
+              ),
             ),
           ),
         ],

@@ -21,23 +21,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(maxLength) => "Een alias is maximum ${maxLength} letters";
 
-  static m1(buildNumber) => "Build Nummer: ${buildNumber}";
+  static m1(version) => "Versie: ${version}";
 
-  static m2(version) => "Versie: ${version}";
+  static m2(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
 
-  static m3(count) => "${count} aanwezigen";
+  static m3(date) => "rit_${date}";
 
-  static m4(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
+  static m4(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m5(date) => "rit_${date}";
+  static m5(maxLength) => "Een voornaam is maximum ${maxLength} letters";
 
-  static m6(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m6(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m7(maxLength) => "Een voornaam is maximum ${maxLength} letters";
+  static m7(amount) => "${amount} renners hebben een toestel met deze naam";
 
-  static m8(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m8(amount) => "Renners (${amount})";
 
-  static m9(amount) => "${amount} renners hebben een toestel met deze naam";
+  static m9(amount) => "Renners (${amount})";
 
   static m10(value) => "${value} is verplicht";
 

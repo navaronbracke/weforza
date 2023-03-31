@@ -173,7 +173,11 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
         final hasSelection = selectionSnapshot.data?.isNotEmpty ?? false;
 
         return FutureBuilder<void>(
-          future: widget.delegate.submitFuture,
+          future: widget.delegate.submitFuture?.then((_) {
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
+          }),
           builder: (context, submitSnapshot) {
             final translator = S.of(context);
 

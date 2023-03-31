@@ -56,7 +56,8 @@ class ImportMembersBloc extends Bloc {
     final memberData = <Map<String,dynamic>>[];
 
     for (String data in lines){
-      final List<String> values = data.split(',');
+      //Get the individual cell values from the CSV line and remove the leading/trailing spaces but keep the spaces inside the cell.
+      final List<String> values = data.split(',').map((cellValue) => cellValue.trim()).toList();
       if(values.length < 3){//First Name, Last Name, Phone
         continue;
       }

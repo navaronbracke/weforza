@@ -135,7 +135,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
                     icon: Icons.edit,
-                    onPressed: ()=> () => goToEditMemberPage(context),
+                    onPressed: ()=> goToEditMemberPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 15),

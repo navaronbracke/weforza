@@ -114,7 +114,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   );
                   case ScanProcessStep.SCAN:
                     return WillPopScope(
-                      onWillPop: () async => bloc.isScanning.value ? await bloc.stopScan() : true,
+                      onWillPop: () => bloc.stopScan(),
                       child: Column(
                         children: <Widget>[
                           Expanded(

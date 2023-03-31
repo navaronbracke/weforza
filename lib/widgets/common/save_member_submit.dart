@@ -1,80 +1,79 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/save_member_or_error.dart';
+import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SaveMemberSubmit extends StatelessWidget {
-  SaveMemberSubmit({
+  const SaveMemberSubmit({
     Key? key,
-    required this.stream,
+    required this.buttonLabel,
+    required this.future,
     required this.onPressed,
-    required this.submitButtonLabel,
-    required this.memberExistsMessage,
-    required this.genericErrorMessage,
-  })  : assert(submitButtonLabel.isNotEmpty &&
-            memberExistsMessage.isNotEmpty &&
-            genericErrorMessage.isNotEmpty),
-        super(key: key);
+  }) : super(key: key);
 
-  final Stream<SaveMemberOrError> stream;
-  final VoidCallback onPressed;
-  final String submitButtonLabel;
-  final String memberExistsMessage;
-  final String genericErrorMessage;
+  /// The label for the submit button.
+  final String buttonLabel;
+
+  /// The future that handles the submit.
+  final Future<void>? future;
+
+  /// The onTap handler for the button.
+  final void Function() onPressed;
+
+  Widget _buildButton(Widget button, [String errorMessage = '']) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Text(errorMessage),
+        ),
+        button,
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Create the submit button in advance, for reuse later.
-    final Widget button = PlatformAwareWidget(
-      android: () => ElevatedButton(
-        child: Text(submitButtonLabel),
-        onPressed: onPressed,
-      ),
-      ios: () => CupertinoButton.filled(
-        child: Text(
-          submitButtonLabel,
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: onPressed,
-      ),
-    );
-
-    return StreamBuilder<SaveMemberOrError>(
-      initialData: SaveMemberOrError.idle(),
-      stream: stream,
+    return FutureBuilder<void>(
+      future: future,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text(genericErrorMessage);
-        } else {
-          if (snapshot.data!.saving) {
+        final translator = S.of(context);
+
+        final button = PlatformAwareWidget(
+          android: () => ElevatedButton(
+            child: Text(translator.AddMemberSubmit),
+            onPressed: onPressed,
+          ),
+          ios: () => CupertinoButton.filled(
+            child: Text(
+              translator.AddMemberSubmit,
+              style: const TextStyle(color: Colors.white),
+            ),
+            onPressed: onPressed,
+          ),
+        );
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return _buildButton(button);
+          case ConnectionState.waiting:
+          case ConnectionState.active:
             return const PlatformAwareLoadingIndicator();
-          } else {
-            if (snapshot.data!.memberExists) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(memberExistsMessage),
-                  ),
-                  button
-                ],
-              );
+          case ConnectionState.done:
+            final error = snapshot.error;
+
+            if (error is MemberExistsException) {
+              return _buildButton(button, translator.MemberAlreadyExists);
             }
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                //Show an empty text widget, to prevent popping when an already existing member is entered.
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 5),
-                  child: Text(''),
-                ),
-                button
-              ],
-            );
-          }
+            if (error != null) {
+              return _buildButton(button, translator.GenericError);
+            }
+
+            return const PlatformAwareLoadingIndicator();
         }
       },
     );

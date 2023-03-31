@@ -67,7 +67,9 @@ class MemberDaoImpl implements MemberDao {
     final recordRef = _memberStore.record(member.uuid);
 
     if (await recordRef.exists(_database)) {
-      throw ArgumentError('The uuid ${member.uuid} is already in use');
+      return Future.error(
+        ArgumentError('The uuid ${member.uuid} is already in use'),
+      );
     }
 
     await recordRef.add(_database, member.toMap());

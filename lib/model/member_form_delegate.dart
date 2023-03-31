@@ -31,7 +31,7 @@ class MemberFormDelegate {
     );
 
     if (exists) {
-      throw MemberExistsException();
+      return Future.error(MemberExistsException());
     }
 
     final image = await model.profileImage.catchError(
@@ -58,7 +58,7 @@ class MemberFormDelegate {
     final uuid = model.uuid;
 
     if (uuid == null) {
-      throw ArgumentError.notNull('uuid');
+      return Future.error(ArgumentError.notNull('uuid'));
     }
 
     final exists = await repository.memberExists(
@@ -69,7 +69,7 @@ class MemberFormDelegate {
     );
 
     if (exists) {
-      throw MemberExistsException();
+      return Future.error(MemberExistsException());
     }
 
     final profileImage = await model.profileImage.catchError((error) {

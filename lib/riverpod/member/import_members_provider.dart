@@ -31,7 +31,7 @@ class ImportMembersNotifier {
       return exports;
     }
 
-    // Process each item, skipping invalid items, instead of throwing an error.
+    // Process each item, skipping invalid items.
     await Future.wait(
       objects.map((element) => fileReader.processData(element, exports)),
     );

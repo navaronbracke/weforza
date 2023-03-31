@@ -10,11 +10,11 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
-import 'package:weforza/widgets/pages/deviceManagement/deviceManagementPage.dart';
+import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesList.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberDevicesListEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -236,20 +236,22 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
           if(snapshot.hasError){
             return MemberDevicesError();
           }else{
-            //init the callback, either with an empty list or with devices.
-            final onPressed = (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                  DeviceManagementPage(devices: snapshot.data),
-              )).then((_)=> (){
-                final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
-                if(reloadDevicesNotifier.value){
-                  reloadDevicesNotifier.value = false;
-                  setState(() => bloc.devicesFuture = bloc.getMemberDevices());
-                }
+            final goToAddDevicePage = (){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=> AddDevicePage()))
+                  .then((_){
+                    final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
+                    if(reloadDevicesNotifier.value){
+                      reloadDevicesNotifier.value = false;
+                      setState(() => bloc.reloadDevices());
+                    }
               });
             };
-            return snapshot.data.isEmpty ? MemberDevicesEmpty(onPressed: onPressed) :
-            MemberDevices(devices: snapshot.data,onEditPressed: onPressed);
+            return snapshot.data.isEmpty ?
+            MemberDevicesListEmpty(onPressed: goToAddDevicePage) :
+            MemberDevicesList(onAddButtonPressed: goToAddDevicePage, devices: snapshot.data);
+            //TODO onDevice long pressed (delete)
+            //TODO onEditDevice (edit -> press button in item)
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());

@@ -16,10 +16,11 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
+  flutter: ">=3.7.0"
 
 dependencies:
   # This package provides easy access to app settings.
-  app_settings: ^4.1.8
+  app_settings: ^4.2.0
 
   # Collection utilities.
   collection: ^1.17.0
@@ -29,14 +30,14 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # device info_plus provides access to device specific information.
-  device_info_plus: ^8.0.0  
+  device_info_plus: ^8.1.0  
 
   # Provides an injectable file system abstraction.
   # Used by tests.
   file: ^6.1.4
 
   # This package provides platform independent file picking.
-  file_picker: ^5.2.5
+  file_picker: ^5.2.6
 
   flutter:
     sdk: flutter
@@ -52,16 +53,16 @@ dependencies:
     sdk: flutter
 
   # For shared state management.
-  flutter_riverpod: ^2.1.1
+  flutter_riverpod: ^2.3.2
 
   # For picking images from the camera / gallery.
-  image_picker: ^0.8.6+1
+  image_picker: ^0.8.7
 
   # The intl package provides translation utilities.
   intl: any
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^5.0.0
+  jiffy: ^6.1.0
 
   # package_info_plus provides access to app specific information such as build number & version.
   package_info_plus: ^3.0.3
@@ -70,7 +71,7 @@ dependencies:
   path: ^1.8.1
 
   # For OS-specific directory paths.
-  path_provider: ^2.0.11
+  path_provider: ^2.0.13
 
   # The permission_handler packages provides utilities for requesting permissions.
   permission_handler: ^10.2.0
@@ -79,7 +80,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # The following dependency provides local persistence.
-  sembast: ^3.3.1
+  sembast: ^3.4.3
 
   # UUID generator for globally unique ids.
   uuid: ^3.0.7

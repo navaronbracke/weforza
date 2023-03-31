@@ -59,8 +59,7 @@ class DeviceDaoImpl implements DeviceDao {
       filter: Filter.and([
         Filter.equals('deviceName', deviceName),
         Filter.equals('owner', ownerUuid),
-        if (creationDate != null)
-          Filter.notEquals(Field.key, creationDate.toIso8601String())
+        if (creationDate != null) Filter.notEquals(Field.key, creationDate.toIso8601String())
       ]),
     );
 
@@ -82,9 +81,7 @@ class DeviceDaoImpl implements DeviceDao {
     }
 
     return _database.transaction((txn) async {
-      await _deviceStore
-          .record(device.creationDate.toIso8601String())
-          .add(txn, device.toMap());
+      await _deviceStore.record(device.creationDate.toIso8601String()).add(txn, device.toMap());
 
       await _updateOwnerLastUpdated(device.ownerId, txn);
     });

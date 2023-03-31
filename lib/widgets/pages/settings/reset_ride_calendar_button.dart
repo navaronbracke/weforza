@@ -35,9 +35,7 @@ class ResetRideCalendarButton extends ConsumerWidget {
         onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
         child: Text(
           S.of(context).resetRideCalendar,
-          style: enabled
-              ? const TextStyle(color: CupertinoColors.destructiveRed)
-              : null,
+          style: enabled ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
         ),
       ),
     );

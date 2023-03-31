@@ -44,9 +44,6 @@ class RideAttendee {
 
   @override
   bool operator ==(Object other) {
-    return other is RideAttendee &&
-        rideDate == other.rideDate &&
-        uuid == other.uuid &&
-        isScanned == other.isScanned;
+    return other is RideAttendee && rideDate == other.rideDate && uuid == other.uuid && isScanned == other.isScanned;
   }
 }

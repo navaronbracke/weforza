@@ -14,8 +14,7 @@ abstract class SettingsDao {
 
 /// The default implementation of [SettingsDao].
 class SettingsDaoImpl implements SettingsDao {
-  SettingsDaoImpl(this._database)
-      : _settingsRecordRef = DatabaseTables.settings.record(_settingsKey);
+  SettingsDaoImpl(this._database) : _settingsRecordRef = DatabaseTables.settings.record(_settingsKey);
 
   /// A reference to the database.
   final Database _database;

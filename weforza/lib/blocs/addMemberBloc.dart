@@ -21,6 +21,8 @@ class AddMemberBloc extends Bloc {
   StreamController<AddMemberSubmitState> _submitStateController = BehaviorSubject();
   Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
 
+  void onError(Object error) => _submitStateController.addError(error);
+
   Stream<bool> get stream => _imagePickingController.stream;
 
   StreamController<bool> _imagePickingController = BehaviorSubject();
@@ -124,26 +126,23 @@ class AddMemberBloc extends Bloc {
 
   Future<void> addMember() async {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
-    await _repository.memberExists(_firstName, _lastName, _alias).then((exists) async {
-      if(exists){
-        _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
-        return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
-      }else{
-        final File image = await selectedImage.catchError((err) => null);
-        final Member member = Member(
-            _uuidGenerator.v4(),
-            _firstName,
-            _lastName,
-            _alias,
-            image?.path
-        );
 
-        await _repository.addMember(member);
-      }
-    }).catchError((error){
-      _submitStateController.add(AddMemberSubmitState.ERROR);
-      return Future.error(AddMemberSubmitState.ERROR);
-    });
+    bool exists = await _repository.memberExists(_firstName, _lastName, _alias);
+
+    if(exists){
+      return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
+    }else{
+      final File image = await selectedImage.catchError((err) => null);
+      final Member member = Member(
+          _uuidGenerator.v4(),
+          _firstName,
+          _lastName,
+          _alias,
+          image?.path
+      );
+
+      await _repository.addMember(member);
+    }
   }
 
   void pickProfileImage() async {
@@ -173,8 +172,7 @@ class AddMemberBloc extends Bloc {
 ///This enum declares the different states for submitting a new [Member].
 ///[AddMemberSubmitState.IDLE] There is no submit in progress.
 ///[AddMemberSubmitState.SUBMIT] A submit is in progress.
-///[AddMemberSubmitState.ERROR] A submit failed because the member could not be saved.
 ///[AddMemberSubmitState.MEMBER_EXISTS] A submit failed because a member that matches the given one already exists.
 enum AddMemberSubmitState {
-  IDLE, SUBMIT, MEMBER_EXISTS, ERROR
+  IDLE, SUBMIT, MEMBER_EXISTS
 }

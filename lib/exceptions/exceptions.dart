@@ -22,6 +22,4 @@ class StopScanException implements Exception {}
 
 /// An exception that is thrown when a [File] was provided,
 /// but the given file format is not supported.
-class UnsupportedFileFormatError extends ArgumentError {
-  UnsupportedFileFormatError() : super('File format not supported');
-}
+class UnsupportedFileFormatException implements Exception {}

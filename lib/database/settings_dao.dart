@@ -3,8 +3,7 @@ import 'package:weforza/model/settings.dart';
 
 ///This class defines a contract for managing application settings.
 abstract class ISettingsDao {
-  ///Read the [Settings] from the database.
-  ///If this application never had its settings changed, this returns a
+  /// Read the [Settings] from the database.
   Future<Settings> readApplicationSettings();
 
   Future<void> writeApplicationSettings(Settings newSettings);

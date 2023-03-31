@@ -193,7 +193,7 @@ class RideAttendeeScanningDelegate {
   /// The [isScanned] parameter indicates if this ride attendee
   /// was found automatically, or if it was manually added.
   void addRideAttendee(String uuid, {required bool isScanned}) {
-    final items = _rideAttendeeController.valueOrNull ?? {};
+    final items = _rideAttendeeController.value;
 
     items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
 
@@ -206,7 +206,24 @@ class RideAttendeeScanningDelegate {
   }
 
   /// Get the scanned device at the given [index].
-  ScannedDevice getScanResult(int index) => _scannedDevices[index];
+  ScannedDevice getScannedDevice(int index) => _scannedDevices[index];
+
+  /// Get the list of unresolved device owners
+  /// that have not yet been scanned automatically.
+  List<Member> getUnresolvedDeviceOwners() {
+    final rideAttendees = _rideAttendeeController.value;
+
+    return _unresolvedOwners.where((Member member) {
+      return !rideAttendees.contains(
+        ScannedRideAttendee(uuid: member.uuid, isScanned: false),
+      );
+    }).toList();
+  }
+
+  /// Returns whether the given [item] is selected.
+  bool isSelectedRideAttendee(ScannedRideAttendee item) {
+    return _rideAttendeeController.value.contains(item);
+  }
 
   /// Stop a running scan and switch to the next state in the scanning process.
   ///
@@ -303,6 +320,23 @@ class RideAttendeeScanningDelegate {
       }
 
       return false;
+    }
+  }
+
+  /// Toggle the selection state for the given [item].
+  ///
+  /// If the item was selected, it is removed from the selection.
+  ///
+  /// If the item was not selected,
+  /// it is added to the selection as a manually selected item.
+  void toggleSelectionForItem(ScannedRideAttendee item) {
+    final currentSelection = _rideAttendeeController.value;
+
+    if (currentSelection.contains(item)) {
+      currentSelection.remove(item);
+      _rideAttendeeController.add(currentSelection);
+    } else {
+      addRideAttendee(item.uuid, isScanned: false);
     }
   }
 

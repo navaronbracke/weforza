@@ -18,6 +18,13 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class MemberDetailsPage extends StatelessWidget {
   const MemberDetailsPage({Key? key}) : super(key: key);
 
+  void _goToEditMemberPage(BuildContext context, Member member) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MemberForm(member: member)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
@@ -40,12 +47,7 @@ class MemberDetailsPage extends StatelessWidget {
                 onPressed: () {
                   final member = ref.read(selectedMemberProvider)!.value;
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MemberForm(member: member),
-                    ),
-                  );
+                  _goToEditMemberPage(context, member);
                 },
               );
             },
@@ -95,12 +97,7 @@ class MemberDetailsPage extends StatelessWidget {
                       onPressed: () {
                         final member = ref.read(selectedMemberProvider)!.value;
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MemberForm(member: member),
-                          ),
-                        );
+                        _goToEditMemberPage(context, member);
                       },
                     );
                   },

@@ -11,7 +11,6 @@ import 'package:weforza/widgets/common/progress_indicator_with_label.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class ImportRidersPage extends ConsumerStatefulWidget {
   const ImportRidersPage({super.key});
@@ -157,22 +156,28 @@ class _ImportRidersButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (_) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: TextButton(onPressed: onPressed, child: Text(label)),
-          ),
-          Flexible(
-            child: Text(
-              errorMessage ?? '',
-              style: AppTheme.desctructiveAction.androidMediumErrorStyle,
+      android: (context) {
+        final theme = Theme.of(context);
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: TextButton(onPressed: onPressed, child: Text(label)),
             ),
-          ),
-        ],
-      ),
+            Flexible(
+              child: Text(
+                errorMessage ?? '',
+                style: theme.textTheme.labelMedium!.copyWith(
+                  color: theme.errorColor,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
       ios: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

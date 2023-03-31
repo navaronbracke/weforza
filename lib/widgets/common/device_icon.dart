@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/device_type.dart';
+import 'package:weforza/model/device/device_type.dart';
 
 class DeviceIcon extends StatelessWidget {
   const DeviceIcon({

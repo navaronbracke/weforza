@@ -1,5 +1,5 @@
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/model/device_model.dart';
+import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.

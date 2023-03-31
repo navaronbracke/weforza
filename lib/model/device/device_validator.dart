@@ -1,4 +1,4 @@
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device/device.dart';
 
 mixin DeviceValidator {
   String? validateDeviceName({

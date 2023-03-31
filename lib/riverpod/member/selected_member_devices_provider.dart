@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/device.dart';
-import 'package:weforza/model/device_model.dart';
+import 'package:weforza/model/device/device.dart';
+import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';

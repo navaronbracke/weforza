@@ -1,4 +1,4 @@
-import 'package:weforza/model/device_type.dart';
+import 'package:weforza/model/device/device_type.dart';
 
 /// A device is a piece of hardware that is owned by a person.
 /// Each device has a [creationDate], a [name], an [ownerId] and a [type].

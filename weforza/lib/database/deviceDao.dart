@@ -73,9 +73,6 @@ class DeviceDao implements IDeviceDao {
   Future<Device> getDeviceWithName(String deviceName) async {
     final finder = Finder(filter: Filter.equals("deviceName", deviceName));
     final record = await _deviceStore.findFirst(_database, finder: finder);
-    if(record == null){
-      return null;
-    }
-    return Device.of(record.key,record.value);
+    return record == null ? null : Device.of(record.key,record.value);
   }
 }

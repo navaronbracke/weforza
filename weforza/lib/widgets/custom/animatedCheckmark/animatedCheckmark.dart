@@ -3,7 +3,7 @@ import 'package:weforza/widgets/custom/animatedPathPainter/animatedPathPainter.d
 
 class AnimatedCheckmark extends StatefulWidget {
   AnimatedCheckmark({
-    this.duration = const Duration(milliseconds: 400),
+    this.duration = const Duration(milliseconds: 300),
     @required this.color,
     this.strokeWidth = 4.0,
     this.strokeCap = StrokeCap.round,

@@ -116,7 +116,10 @@ class FileNameInputField extends StatelessWidget {
             ),
             ios: () => ValidationLabel(
               stream: errorController,
-              style: ApplicationTheme.iosFormErrorStyle,
+              style: const TextStyle(
+                color: CupertinoColors.destructiveRed,
+                fontSize: 14,
+              ),
             ),
           ),
         ],

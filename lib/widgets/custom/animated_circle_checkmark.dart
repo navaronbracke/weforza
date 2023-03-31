@@ -17,6 +17,11 @@ class AnimatedCircleCheckmark extends StatefulWidget {
   /// The animation controller that drives the checkmark animation.
   final AnimationController controller;
 
+  /// The default duration for the checkmark animation duration.
+  static const Duration kCheckmarkAnimationDuration = Duration(
+    milliseconds: 300,
+  );
+
   @override
   State<AnimatedCircleCheckmark> createState() =>
       _AnimatedCircleCheckmarkState();

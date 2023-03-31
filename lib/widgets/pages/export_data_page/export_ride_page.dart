@@ -5,6 +5,7 @@ import 'package:weforza/model/export/export_rides_delegate.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/repository/export_rides_repository_provider.dart';
+import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
 
 /// This widget represents a page for exporting rides.
@@ -46,7 +47,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage>
 
     checkmarkController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
   }
 

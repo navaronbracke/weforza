@@ -23,7 +23,7 @@ class ExportDataPage extends StatelessWidget {
     required this.title,
     super.key,
   }) : inputFormatters = [
-          FilteringTextInputFormatter.allow(RegExp(r'[\w-]')),
+          FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
           LengthLimitingTextInputFormatter(maxLength),
         ];
 

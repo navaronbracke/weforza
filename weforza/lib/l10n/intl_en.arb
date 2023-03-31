@@ -78,7 +78,6 @@
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
   "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members",
   "RideAttendeeScanningGoBackToDetailPage": "Return to detail page",
-  "RideAttendeeScanningGoBack": "Go Back",
   "RideAttendeeScanningPermissionDenied": "Scan aborted, permission was denied",
   "RideAttendeeScanningPermissionDescription": "Scanning requires permission to use your location",
   "RideAttendeeScanningBluetoothDisabled": "Scan aborted, Bluetooth is disabled",
@@ -109,6 +108,8 @@
 
   "ImportMembersPageTitle": "Import Members",
   "ImportMembersPickFile": "Choose File",
+  "ImportMembersPickFileWarning": "Please choose a file to import members",
+  "ImportMembersImporting": "Importing Members",
 
   "RideStart": "Start",
   "RideDestination": "Destination",
@@ -152,6 +153,7 @@
   "DialogDelete": "Delete",
   "DialogDismiss": "Ok",
   "GenericError": "Something went wrong",
+  "GoBack": "Go Back",
 
   "DistanceKm": "Km"
 }

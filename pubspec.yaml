@@ -20,7 +20,7 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  app_settings: ^4.1.8
+  app_settings: ^4.2.0
 
   # Collection utilities.
   collection: ^1.17.0

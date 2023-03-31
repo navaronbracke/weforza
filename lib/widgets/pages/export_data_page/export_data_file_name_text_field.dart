@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
@@ -50,7 +49,7 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
       );
     }
 
-    final Directory? directory = delegate.selectedDirectory.valueOrNull;
+    final Directory? directory = delegate.directoryController.directory;
 
     // Since the file needs a directory and a name to be valid, we can only check for its existence if we have both.
     if (directory != null && File(directory.path + Platform.pathSeparator + fileName).existsSync()) {

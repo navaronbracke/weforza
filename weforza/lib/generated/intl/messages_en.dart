@@ -27,15 +27,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m3(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m4(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m4(path) => "Ride saved at ${path}";
 
-  static m5(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m5(date) => "ride_${date}";
 
-  static m6(maxLength) => "A phone number is maximum ${maxLength} digits long";
+  static m6(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m7(minLength) => "A phone number is minimum ${minLength} digits long";
+  static m7(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m8(value) => "${value} is required";
+  static m8(maxLength) => "A phone number is maximum ${maxLength} digits long";
+
+  static m9(minLength) => "A phone number is minimum ${minLength} digits long";
+
+  static m10(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -97,9 +101,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Title"),
     "EditRideTitleMaxLength" : m3,
     "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("A title can\'t be only whitespace"),
+    "ExportRideCsvExtension" : MessageLookupByLibrary.simpleMessage("csv"),
+    "ExportRideExportedToPathMessage" : m4,
+    "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Exporting ride to file"),
+    "ExportRideFileNameLabel" : MessageLookupByLibrary.simpleMessage("Filename"),
+    "ExportRideFileNamePlaceholder" : m5,
+    "ExportRideJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
+    "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Export Ride"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be just whitespace"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("First Name can only contain letters, spaces or \' -"),
-    "FirstNameMaxLength" : m4,
+    "FirstNameMaxLength" : m6,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Fri"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Go Back"),
@@ -115,7 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ImportMembersPickFileWarning" : MessageLookupByLibrary.simpleMessage("Please choose a file to import members"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be just whitespace"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Last Name can only contain letters, spaces or \' -"),
-    "LastNameMaxLength" : m5,
+    "LastNameMaxLength" : m7,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("This member already exists"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this member?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete member"),
@@ -135,8 +146,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telephone"),
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("A phone number can only contain digits"),
-    "PhoneMaxLength" : m6,
-    "PhoneMinLength" : m7,
+    "PhoneMaxLength" : m8,
+    "PhoneMinLength" : m9,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan aborted, Bluetooth is disabled"),
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Go to Settings"),
@@ -177,7 +188,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m8,
+    "ValueIsRequired" : m10,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

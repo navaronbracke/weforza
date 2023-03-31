@@ -117,6 +117,14 @@
   "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
   "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 
+  "ExportRideTitle": "Rit Exporteren",
+  "ExportRideFileNameLabel": "Bestandsnaam",
+  "ExportRideFileNamePlaceholder": "rit_{date}",
+  "ExportRideCsvExtension": "csv",
+  "ExportRideJsonExtension": "json",
+  "ExportRideExportedToPathMessage": "Rit opgeslagen op {path}",
+  "ExportRideExportingToFile": "Rit exporteren naar bestand",
+
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
 

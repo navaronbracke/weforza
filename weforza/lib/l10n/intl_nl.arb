@@ -110,6 +110,7 @@
   "ImportMembersPickFile": "Kies Bestand",
   "ImportMembersPickFileWarning": "Een bestand is vereist om leden te importeren",
   "ImportMembersImporting": "Leden Importeren",
+  "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",
@@ -122,6 +123,7 @@
   "DeviceHeadset": "Koptelefoon",
   "DevicePulseMonitor": "Hartslagmeter",
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
+  "DeviceNameCannotContainComma": "De naam van een toestel mag geen , bevatten",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
 
   "DeleteDeviceTitle": "Verwijder Toestel",

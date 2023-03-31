@@ -110,6 +110,7 @@
   "ImportMembersPickFile": "Choose File",
   "ImportMembersPickFileWarning": "Please choose a file to import members",
   "ImportMembersImporting": "Importing Members",
+  "ImportMembersCsvHeaderRegex": "(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)",
 
   "RideStart": "Start",
   "RideDestination": "Destination",
@@ -122,6 +123,7 @@
   "DeviceHeadset": "Headset",
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
+  "DeviceNameCannotContainComma": "A device name cannot contain a ,",
   "DeviceAlreadyExists": "This device already exists",
 
   "DeleteDeviceTitle": "Delete Device",

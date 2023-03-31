@@ -10,22 +10,7 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== Scan Theme + Stepper sub theme
-
-  static final androidScanStepperCurrentColor = Colors.lightGreen.shade200;
-  static const androidScanStepperOtherColor = Colors.white;
-  static final androidScanStepperArrowColor = Colors.lightBlue.shade200;
-
-  static const iosScanStepperCurrentColor = CupertinoColors.activeGreen;
-  static const iosScanStepperOtherColor = CupertinoColors.inactiveGray;
-  static const iosScanStepperArrowColor = CupertinoColors.activeBlue;
-
-  static const androidScanProgressColor = Color.fromARGB(255, 98, 204, 98);
-  static const androidScanProgressBackground = Color.fromARGB(120, 98, 204, 98);
-
-  static const iosScanProgressColor = CupertinoColors.activeGreen;
-  static final iosScanProgressBackground =
-      CupertinoColors.activeGreen.withOpacity(0.4);
+  // ==== Scan Theme
 
   static const Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
   static const Color multipleOwnerColor = Colors.orange;

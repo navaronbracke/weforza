@@ -25,8 +25,10 @@ class DeleteDeviceBloc extends Bloc {
 
   Future<void> deleteDevice(String deleteDeviceError) async {
     _deviceDeletingStream.add(true);
-    await _repository.removeDevice(device.name)
-        .catchError((e) => _deviceDeletingStream.addError(deleteDeviceError));
+    await _repository.removeDevice(device.name).catchError((e){
+      _deviceDeletingStream.addError(deleteDeviceError);
+      return Future.error(deleteDeviceError);
+    });
   }
 
   @override

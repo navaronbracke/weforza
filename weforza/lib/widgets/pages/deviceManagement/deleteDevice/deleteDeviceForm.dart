@@ -7,6 +7,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 class DeleteDeviceForm extends StatelessWidget {
   DeleteDeviceForm({@required this.deviceManager, @required this.bloc}):
@@ -47,7 +48,7 @@ class DeleteDeviceForm extends StatelessWidget {
               children: <Widget>[
                 Text(S.of(context).DeleteDeviceDescription(bloc.device.name)),
                 SizedBox(height: 10),
-                _buildButtons(S.of(context).DialogCancel, S.of(context).DialogDelete, S.of(context).DeleteDeviceError(bloc.device.name)),
+                _buildButtons(context),
               ],
             );
           }
@@ -57,22 +58,26 @@ class DeleteDeviceForm extends StatelessWidget {
   }
 
   //DialogDelete,Cancel and new error text
-  Widget _buildButtons(String cancel, String delete, String deleteError){
+  Widget _buildButtons(BuildContext context){
     return PlatformAwareWidget(
       android: () => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           FlatButton(
-            child: Text(cancel),
+            child: Text(S.of(context).DialogCancel),
             onPressed: ()=> deviceManager.requestAddForm(),
           ),
           SizedBox(width: 20),
           FlatButton(
-            child: Text(delete,style: TextStyle(color: Colors.red)),
+            child: Text(
+                S.of(context).DialogDelete,
+                style: TextStyle(color: Colors.red)
+            ),
             onPressed: () async {
-              await bloc.deleteDevice(deleteError)
-                  .then((_) => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex))
-                  .catchError((error){
+              await bloc.deleteDevice(S.of(context).DeleteDeviceError(bloc.device.name)).then((_){
+                deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex);
+                ReloadDataProvider.of(context).reloadDevices.value = true;
+              }).catchError((error){
                 //the error is caught by the stream.
               });
             },
@@ -83,16 +88,20 @@ class DeleteDeviceForm extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           CupertinoButton(
-            child: Text(cancel),
+            child: Text(S.of(context).DialogCancel),
             onPressed: ()=> deviceManager.requestAddForm(),
           ),
           SizedBox(width: 20),
           CupertinoButton(
-            child: Text(delete,style: TextStyle(color: Colors.red)),
+            child: Text(
+                S.of(context).DialogDelete,
+                style: TextStyle(color: Colors.red)
+            ),
             onPressed: () async {
-              await bloc.deleteDevice(deleteError)
-                  .then((_) => deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex))
-                  .catchError((error){
+              await bloc.deleteDevice(S.of(context).DeleteDeviceError(bloc.device.name)).then((_){
+                deviceManager.onDeviceRemoved(bloc.device,bloc.itemIndex);
+                ReloadDataProvider.of(context).reloadDevices.value = true;
+              }).catchError((error){
                 //the error is caught by the stream.
               });
             },

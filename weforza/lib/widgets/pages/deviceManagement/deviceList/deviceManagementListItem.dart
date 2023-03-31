@@ -6,6 +6,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 class DeviceManagementListItem extends StatefulWidget {
   DeviceManagementListItem({
@@ -54,33 +55,34 @@ class _DeviceManagementListItemState extends State<DeviceManagementListItem> {
             Expanded(
               child: Text(widget.device.name),
             ),
-            _buildButton()
+            _buildButton(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildButton(){
+  Widget _buildButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => IconButton(
         icon: Icon(Icons.edit),
-        onPressed: (){
-          widget.deviceManager.requestEditForm(
-              widget.device, (editedDevice) => updateItem(editedDevice)
-          );
-        },
-
+        onPressed: () => widget.deviceManager.requestEditForm(
+          widget.device, (editedDevice){
+              updateItem(editedDevice);
+              ReloadDataProvider.of(context).reloadDevices.value = true;
+            },
+        ),
       ),
       ios: () => CupertinoIconButton(
         onPressedColor: ApplicationTheme.primaryColor,
         idleColor: ApplicationTheme.accentColor,
         icon: Icons.edit,
-        onPressed: (){
-          widget.deviceManager.requestEditForm(
-              widget.device, (editedDevice) => updateItem(editedDevice)
-          );
-        },
+        onPressed: () => widget.deviceManager.requestEditForm(
+          widget.device, (editedDevice){
+            updateItem(editedDevice);
+            ReloadDataProvider.of(context).reloadDevices.value = true;
+          },
+        ),
       ),
     );
   }

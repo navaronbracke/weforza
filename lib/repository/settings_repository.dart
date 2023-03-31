@@ -12,14 +12,11 @@ class SettingsRepository {
 
   Future<Settings> loadApplicationSettings() async {
     final ridesCount = await _rideDao.getRidesCount();
-    final settings = await _settingsDao.readApplicationSettings();
     final packageInfo = await PackageInfo.fromPlatform();
 
-    return Settings(
-      appVersion: packageInfo.version,
-      hasRideCalendar: ridesCount > 0,
-      memberListFilter: settings.memberListFilter,
-      scanDuration: settings.scanDuration,
+    return _settingsDao.readApplicationSettings(
+      packageInfo.version,
+      ridesCount > 0,
     );
   }
 

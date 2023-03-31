@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/model/add_ride_form_delegate.dart';
+import 'package:weforza/model/add_ride_page_delegate.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendarItem extends StatelessWidget {
@@ -15,7 +15,7 @@ class AddRideCalendarItem extends StatelessWidget {
   final DateTime date;
 
   /// The delegate that manages the selection.
-  final AddRideFormDelegate delegate;
+  final AddRidePageDelegate delegate;
 
   /// The size of this calendar item.
   final Size size;
@@ -57,14 +57,14 @@ class AddRideCalendarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<Set<DateTime>>(
       initialData: delegate.currentSelection,
-      stream: delegate.selection,
+      stream: delegate.selectionStream,
       builder: (context, _) {
         final style = delegate.isBeforeToday(date) || delegate.isScheduled(date)
             ? const TextStyle(color: Colors.white)
             : null;
 
         return GestureDetector(
-          onTap: () => delegate.onDaySelected(date),
+          onTap: () => delegate.selectDay(date),
           child: SizedBox.fromSize(
             size: size,
             child: Padding(

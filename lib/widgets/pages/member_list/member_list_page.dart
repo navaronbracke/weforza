@@ -143,7 +143,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
                 child: MemberListTitle(),
               ),
             ),
-            CupertinoIconButton.fromAppTheme(
+            CupertinoIconButton(
               icon: CupertinoIcons.person_badge_plus_fill,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const MemberForm()),
@@ -151,7 +151,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12),
-              child: CupertinoIconButton.fromAppTheme(
+              child: CupertinoIconButton(
                 icon: CupertinoIcons.arrow_down_doc_fill,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
@@ -162,7 +162,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12),
-              child: CupertinoIconButton.fromAppTheme(
+              child: CupertinoIconButton(
                 icon: CupertinoIcons.arrow_up_doc_fill,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(

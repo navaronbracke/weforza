@@ -31,7 +31,7 @@ class AddRideCalendar extends StatelessWidget {
         ios: () => Padding(
           // The left chevron is more to the left.
           padding: const EdgeInsets.only(left: 8),
-          child: CupertinoIconButton.fromAppTheme(
+          child: CupertinoIconButton(
             icon: Icons.arrow_back_ios,
             onPressed: calendarDelegate.goBackOneMonth,
           ),
@@ -60,7 +60,7 @@ class AddRideCalendar extends StatelessWidget {
         ),
         ios: () => Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: CupertinoIconButton.fromAppTheme(
+          child: CupertinoIconButton(
             icon: Icons.arrow_forward_ios,
             onPressed: calendarDelegate.goForwardOneMonth,
           ),

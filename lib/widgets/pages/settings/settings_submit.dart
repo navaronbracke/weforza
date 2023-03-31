@@ -34,7 +34,7 @@ class SettingsSubmit extends StatelessWidget {
       ),
       ios: () => Padding(
         padding: const EdgeInsets.only(right: 8),
-        child: CupertinoIconButton.fromAppTheme(
+        child: CupertinoIconButton(
           icon: CupertinoIcons.checkmark_alt,
           onPressed: onSaveSettings,
         ),

@@ -92,7 +92,7 @@ class MemberDetailsPage extends StatelessWidget {
               children: <Widget>[
                 Consumer(
                   builder: (context, ref, child) {
-                    return CupertinoIconButton.fromAppTheme(
+                    return CupertinoIconButton(
                       icon: CupertinoIcons.pencil,
                       onPressed: () {
                         final member = ref.read(selectedMemberProvider)!.value;
@@ -104,7 +104,7 @@ class MemberDetailsPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16),
-                  child: CupertinoIconButton.fromAppTheme(
+                  child: CupertinoIconButton(
                     icon: CupertinoIcons.delete,
                     onPressed: () => showCupertinoDialog(
                       context: context,

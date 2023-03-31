@@ -18,6 +18,12 @@ class ProfileImagePlaceholderTheme {
 
   /// The icon color for the profile image placeholder.
   final Color iconColor = Colors.white;
+
+  /// The text style for the displayed initials.
+  final TextStyle initialsStyle = const TextStyle(
+    fontFamily: 'Roboto',
+    color: Colors.white,
+  );
 }
 
 /// This class represents the theme for the ride calendar date picker.

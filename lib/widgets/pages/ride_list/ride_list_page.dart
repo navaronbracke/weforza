@@ -25,14 +25,12 @@ class RideListPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
-            color: Colors.white,
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const AddRideForm()),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.file_upload),
-            color: Colors.white,
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const ExportRidePage()),
             ),

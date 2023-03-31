@@ -107,12 +107,20 @@ class ManualSelectionBottomBar extends StatelessWidget {
   }
 
   Widget _buildIosLayout(BuildContext context, BoxConstraints constraints) {
+    final labelTextStyle = TextStyle(
+      color: const CupertinoDynamicColor.withBrightness(
+        color: CupertinoColors.label,
+        darkColor: CupertinoColors.white,
+      ).resolveFrom(context),
+      fontSize: 15,
+    );
+
     final attendeeCounter = _buildAttendeeCounter(
       const Icon(
         CupertinoIcons.person_2_fill,
         color: CupertinoColors.activeBlue,
       ),
-      textStyle: const TextStyle(color: CupertinoColors.label, fontSize: 15),
+      textStyle: labelTextStyle,
     );
 
     final scannedResultsToggle = Row(
@@ -123,7 +131,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           softWrap: true,
-          style: const TextStyle(color: CupertinoColors.label, fontSize: 15),
+          style: labelTextStyle,
           textAlign: TextAlign.right,
         ),
         showScannedResultsToggle,

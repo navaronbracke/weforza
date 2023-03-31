@@ -138,29 +138,30 @@ class _ScanResultsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget child;
 
-    // Build a list item for an unknown device.
-    if (device.owners.isEmpty) {
-      child = Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 4),
-            child: Icon(Icons.device_unknown, color: Colors.black),
-          ),
-          SelectableText(
-            device.name,
-            scrollPhysics: const ClampingScrollPhysics(),
-          ),
-        ],
-      );
+    switch (device.owners.length) {
+      case 0:
+        child = Row(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(right: 4),
+              child: Icon(Icons.device_unknown, color: Colors.black),
+            ),
+            SelectableText(
+              device.name,
+              scrollPhysics: const ClampingScrollPhysics(),
+            ),
+          ],
+        );
+        break;
+      case 1:
+        child = _buildSingleOwnerListItem();
+        break;
+      default:
+        child = _buildMultipleOwnersListItem(
+          S.of(context).AmountOfRidersWithDeviceName(device.owners.length),
+        );
+        break;
     }
-
-    if (device.owners.length == 1) {
-      child = _buildSingleOwnerListItem();
-    }
-
-    child = _buildMultipleOwnersListItem(
-      S.of(context).AmountOfRidersWithDeviceName(device.owners.length),
-    );
 
     return Padding(padding: const EdgeInsets.all(4), child: child);
   }

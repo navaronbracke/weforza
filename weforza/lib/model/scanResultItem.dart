@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:weforza/model/member.dart';
 
@@ -14,4 +16,12 @@ class ScanResultItem {
 
   final Future<Member> memberLookup;
   final String deviceName;
+
+  @override
+  operator ==(other) => other is ScanResultItem && 
+    deviceName == other.deviceName && memberLookup == other.memberLookup;
+
+  @override
+  int get hashCode => hashValues(deviceName, memberLookup);
+
 }

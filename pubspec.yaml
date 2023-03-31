@@ -35,7 +35,7 @@ dependencies:
   path: ^1.8.0
 
   # UUID generator for globally unique ids.
-  uuid: ^3.0.1
+  uuid: ^3.0.6
 
   # The intl package provides translation utilities.
   intl: ^0.17.0

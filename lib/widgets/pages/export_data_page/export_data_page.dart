@@ -171,6 +171,31 @@ class ExportDataPage extends StatelessWidget {
     );
   }
 
+  /// Validate the given [fileName].
+  ///
+  /// Returns an error message or null if the file name is valid.
+  String? _validateFileName(String? fileName, S translator) {
+    if (fileName == null || fileName.isEmpty) {
+      return translator.FileNameRequired;
+    }
+
+    if (fileName.startsWith('.')) {
+      return translator.FileNameCantStartWithDot;
+    }
+
+    final ExportFileFormat fileFormat = delegate.currentFileFormat;
+    final String fileExtension = fileFormat.formatExtension;
+
+    if (!fileName.endsWith(fileExtension)) {
+      return translator.FileNameInvalidExtension(
+        fileFormat.asUpperCase,
+        fileExtension,
+      );
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     const doneIndicator = Center(child: AdaptiveAnimatedCheckmark());

@@ -22,14 +22,18 @@ class AddRideCalendarBody extends StatelessWidget {
           ],
         ),
         Expanded(
-          child: PageView.builder(
-            controller: bloc.pageController,
-            itemBuilder: (context, index) => AddRideCalendarMonth(
-              pageDate: bloc.pageDate,
-              daysInMonth: bloc.daysInMonth,
-              key: ValueKey<DateTime>(bloc.pageDate),
+          child: GestureDetector(
+            onHorizontalDragEnd: bloc.onDragCalendar,
+            child: PageView.builder(
+              controller: bloc.pageController,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => AddRideCalendarMonth(
+                pageDate: bloc.pageDate,
+                daysInMonth: bloc.daysInMonth,
+                key: ValueKey<DateTime>(bloc.pageDate),
+              ),
+              itemCount: bloc.calendarItemCount,
             ),
-            itemCount: bloc.calendarItemCount,
           ),
         ),
       ],

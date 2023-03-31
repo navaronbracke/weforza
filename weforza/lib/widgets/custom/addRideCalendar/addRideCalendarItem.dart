@@ -18,13 +18,22 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
 
   Color _backgroundColor;
   Color _fontColor;
+  ///The on reset callback
+  VoidCallback _onReset;
+
+  AddRideBloc _bloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final bloc = AddRideBlocProvider.of(context).bloc;
-    _setColors(bloc);
-    bloc.registerResetCallback(() => _onReset(bloc));
+    _bloc = AddRideBlocProvider.of(context).bloc;
+    _onReset = () {
+      if(mounted) {
+        setState(() { _setColors(_bloc); });
+      }
+    };
+    _bloc.registerResetFunction(_onReset);
+    _setColors(_bloc);
   }
 
   @override
@@ -79,13 +88,10 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
     }
   }
 
-  ///Reset the colors for the items of the current selection.
-  void _onReset(AddRideBloc bloc){
-    if(mounted && bloc.dayIsNewlyScheduledRide(widget.date)){
-      setState(() {
-        _backgroundColor = ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
-        _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
-      });
-    }
+  @override
+  void dispose() {
+    _bloc.unregisterResetFunction(_onReset);
+    _onReset = null;
+    super.dispose();
   }
 }

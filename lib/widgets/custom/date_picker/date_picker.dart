@@ -131,31 +131,87 @@ class DatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: constraints,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: headerPadding,
-            child: _DatePickerHeader(
-              backButton: backButton,
-              forwardButton: forwardButton,
-              height: headerHeight,
-              monthStream: delegate.monthStream,
-              style: monthStyle,
-            ),
+    double minInteractiveDimension;
+
+    // Get the minimum recommended size per platform.
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        minInteractiveDimension = kMinInteractiveDimension;
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        minInteractiveDimension = kMinInteractiveDimensionCupertino;
+        break;
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final constraintWidth = constraints.biggest.width;
+        // The max size for day items is equal to filling the constraint width.
+        final maxSize = constraintWidth / 7;
+
+        // Compute the minimum size for a day item.
+        // If the constraint with is smaller than the recommended min size,
+        // scale the minimum to fit the screen.
+        final minSize = constraintWidth < minInteractiveDimension * 7
+            ? maxSize
+            : minInteractiveDimension;
+
+        final Size dayItemSize = computeDaySize(
+          BoxConstraints(
+            maxHeight: maxSize,
+            maxWidth: maxSize,
+            minHeight: minSize,
+            minWidth: minSize,
           ),
-          Expanded(
-            child: _DatePickerBody(
-              dayBuilder: dayBuilder,
-              delegate: delegate,
-              showWeekdays: showWeekdays,
-              weekDayWidth: weekDayWidth,
-              weekPadding: weekPadding,
+        );
+
+        Widget header = _DatePickerHeader(
+          backButton: backButton,
+          forwardButton: forwardButton,
+          height: headerHeight,
+          monthStream: delegate.monthStream,
+          style: monthStyle,
+        );
+
+        if (headerBottomPadding > 0) {
+          header = Padding(
+            padding: EdgeInsets.only(bottom: headerBottomPadding),
+            child: header,
+          );
+        }
+
+        Widget calendar = Column(
+          children: <Widget>[
+            header,
+            Expanded(
+              child: _DatePickerBody(
+                dayBuilder: dayBuilder,
+                dayItemSize: dayItemSize,
+                delegate: delegate,
+                showWeekdays: showWeekdays,
+                weekDayStyle: weekDayStyle,
+                weekSpacing: weekSpacing,
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+
+        if (padding != EdgeInsets.zero) {
+          calendar = Padding(
+            padding: padding,
+            child: calendar,
+          );
+        }
+
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: _computeHeight(dayItemSize)),
+          child: calendar,
+        );
+      },
     );
   }
 }

@@ -30,6 +30,10 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 class SettingsPageState extends ConsumerState<SettingsPage>
     with ArtificialDelay {
+  final addTermController = TextEditingController();
+  final addTermFocusNode = FocusNode();
+  final addTermFormKey = GlobalKey<FormFieldState<String>>();
+
   late final ExcludedTermsDelegate excludedTermsDelegate;
 
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
@@ -94,7 +98,12 @@ class SettingsPageState extends ConsumerState<SettingsPage>
         addExcludedTermInputField: SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: SliverToBoxAdapter(
-            child: ExcludedTermInputField(delegate: excludedTermsDelegate),
+            child: AddExcludedTermInputField(
+              controller: addTermController,
+              delegate: excludedTermsDelegate,
+              focusNode: addTermFocusNode,
+              formKey: addTermFormKey,
+            ),
           ),
         ),
         excludedTermsListHeader: const Padding(
@@ -199,7 +208,12 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 ),
                 color: CupertinoColors.secondarySystemGroupedBackground,
               ),
-              child: ExcludedTermInputField(delegate: excludedTermsDelegate),
+              child: AddExcludedTermInputField(
+                controller: addTermController,
+                delegate: excludedTermsDelegate,
+                focusNode: addTermFocusNode,
+                formKey: addTermFormKey,
+              ),
             ),
           ),
         ),
@@ -329,6 +343,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
 
   @override
   void dispose() {
+    addTermController.dispose();
+    addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
     memberFilterController.close();
     scanDurationController.close();

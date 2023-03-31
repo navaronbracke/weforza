@@ -1,73 +1,78 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/scan_duration_delegate.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class ScanDurationOption extends StatefulWidget {
+class ScanDurationOption extends StatelessWidget {
   const ScanDurationOption({
     Key? key,
-    required this.delegate,
+    required this.initialScanDuration,
+    required this.onChanged,
+    required this.stream,
   }) : super(key: key);
 
-  final ScanDurationDelegate delegate;
+  final double initialScanDuration;
 
-  @override
-  ScanDurationOptionState createState() => ScanDurationOptionState();
-}
+  final double maxScanDuration = 60;
 
-class ScanDurationOptionState extends State<ScanDurationOption> {
+  final double minScanDuration = 10;
+
+  final void Function(double value) onChanged;
+
+  final Stream<double> stream;
+
   @override
   Widget build(BuildContext context) {
-    final currentValue = widget.delegate.currentScanDuration;
+    return StreamBuilder<double>(
+      initialData: initialScanDuration,
+      stream: stream,
+      builder: (context, snapshot) {
+        final currentScanDuration = snapshot.data!;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          S.of(context).SettingsScanSliderHeader,
-          style: ApplicationTheme.settingsOptionHeaderStyle,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
-          child: PlatformAwareWidget(
-            android: () => SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                trackHeight: 5,
-                thumbColor: ApplicationTheme.settingsScanSliderThumbColor,
-              ),
-              child: Slider(
-                value: currentValue,
-                onChanged: (value) {
-                  setState(() => widget.delegate.onScanDurationChanged(value));
-                },
-                min: widget.delegate.minScanDuration,
-                max: widget.delegate.maxScanDuration,
-                divisions: 5,
-              ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).SettingsScanSliderHeader,
+              style: ApplicationTheme.settingsOptionHeaderStyle,
             ),
-            ios: () => Row(
-              children: <Widget>[
-                Expanded(
-                  child: CupertinoSlider(
-                    value: currentValue,
-                    onChanged: (value) {
-                      setState(() {
-                        widget.delegate.onScanDurationChanged(value);
-                      });
-                    },
-                    min: widget.delegate.minScanDuration,
-                    max: widget.delegate.maxScanDuration,
+            Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
+              child: PlatformAwareWidget(
+                android: () => SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    trackHeight: 5,
+                    thumbColor: ApplicationTheme.settingsScanSliderThumbColor,
+                  ),
+                  child: Slider(
+                    value: currentScanDuration,
+                    onChanged: onChanged,
+                    min: minScanDuration,
+                    max: maxScanDuration,
                     divisions: 5,
                   ),
                 ),
-              ],
+                ios: () => Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: CupertinoSlider(
+                        value: currentScanDuration,
+                        onChanged: onChanged,
+                        min: minScanDuration,
+                        max: maxScanDuration,
+                        divisions: 5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        Center(child: Text('${currentValue.floor()}s')),
-      ],
+            Center(child: Text('${currentScanDuration.floor()}s')),
+          ],
+        );
+      },
     );
   }
 }

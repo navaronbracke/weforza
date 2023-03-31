@@ -9,13 +9,13 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
-import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -50,6 +50,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
+    //TODO ride actions responsive menu
+    //TODO export ride button
     return Scaffold(
       appBar: AppBar(
         title: Text(bloc.ride.getFormattedDate(context),
@@ -98,6 +100,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   }
 
   Widget _buildIOSLayout(BuildContext context) {
+    //TODO ride actions responsive menu
+    //TODO export ride button
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -174,7 +178,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
-            return RideDetailsAttendeesError();
+            return GenericError(
+                text: S.of(context).RideDetailsLoadAttendeesError
+            );
           } else {
             if (snapshot.data == null || snapshot.data.isEmpty) {
               return RideDetailsAttendeesEmpty();
@@ -224,7 +230,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             RideAttendeeCounter(
               //We need the attendee names + images for displaying in the list.
               //But we need the total of people for the counter, thus we map to the length when its done loading.
-              future: bloc.attendeesFuture.then((attendees) => attendees.length)
+              future: bloc.attendeesFuture.then((attendees) => attendees.length),
+              invisibleWhenLoadingOrError: true,
             ),
           ],
         ),

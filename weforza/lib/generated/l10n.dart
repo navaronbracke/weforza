@@ -383,16 +383,6 @@ class S {
     );
   }
 
-  /// `Something went wrong`
-  String get AddDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'AddDeviceGenericError',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Create Device`
   String get AddDeviceSubmit {
     return Intl.message(
@@ -418,16 +408,6 @@ class S {
     return Intl.message(
       'Could not edit device',
       name: 'EditDeviceError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong`
-  String get EditDeviceGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'EditDeviceGenericError',
       desc: '',
       args: [],
     );
@@ -673,10 +653,10 @@ class S {
     );
   }
 
-  /// `Cannot start a scan, there are no members.`
+  /// `Cannot start a scan, there are no members`
   String get RideAttendeeScanningNoMembers {
     return Intl.message(
-      'Cannot start a scan, there are no members.',
+      'Cannot start a scan, there are no members',
       name: 'RideAttendeeScanningNoMembers',
       desc: '',
       args: [],
@@ -688,26 +668,6 @@ class S {
     return Intl.message(
       'Return to detail page',
       name: 'RideAttendeeScanningGoBackToDetailPage',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Go Back`
-  String get RideAttendeeScanningGoBack {
-    return Intl.message(
-      'Go Back',
-      name: 'RideAttendeeScanningGoBack',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong.`
-  String get RideAttendeeScanningGenericError {
-    return Intl.message(
-      'Something went wrong.',
-      name: 'RideAttendeeScanningGenericError',
       desc: '',
       args: [],
     );
@@ -973,6 +933,76 @@ class S {
     );
   }
 
+  /// `Import Members`
+  String get ImportMembersPageTitle {
+    return Intl.message(
+      'Import Members',
+      name: 'ImportMembersPageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose File`
+  String get ImportMembersPickFile {
+    return Intl.message(
+      'Choose File',
+      name: 'ImportMembersPickFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please choose a file to import members`
+  String get ImportMembersPickFileWarning {
+    return Intl.message(
+      'Please choose a file to import members',
+      name: 'ImportMembersPickFileWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Importing Members`
+  String get ImportMembersImporting {
+    return Intl.message(
+      'Importing Members',
+      name: 'ImportMembersImporting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)`
+  String get ImportMembersCsvHeaderRegex {
+    return Intl.message(
+      '(firstname)\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\,(devices)',
+      name: 'ImportMembersCsvHeaderRegex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only CSV files are allowed`
+  String get ImportMembersInvalidFileFormat {
+    return Intl.message(
+      'Only CSV files are allowed',
+      name: 'ImportMembersInvalidFileFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If a header exists, it will be removed`
+  String get ImportMembersHeaderStrippedMessage {
+    return Intl.message(
+      'If a header exists, it will be removed',
+      name: 'ImportMembersHeaderStrippedMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(
@@ -1073,6 +1103,16 @@ class S {
     );
   }
 
+  /// `A device name cannot contain a ,`
+  String get DeviceNameCannotContainComma {
+    return Intl.message(
+      'A device name cannot contain a ,',
+      name: 'DeviceNameCannotContainComma',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `This device already exists`
   String get DeviceAlreadyExists {
     return Intl.message(
@@ -1148,16 +1188,6 @@ class S {
     return Intl.message(
       'Could not load the settings',
       name: 'SettingsLoadingError',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Something went wrong`
-  String get SettingsGenericError {
-    return Intl.message(
-      'Something went wrong',
-      name: 'SettingsGenericError',
       desc: '',
       args: [],
     );
@@ -1293,6 +1323,16 @@ class S {
     );
   }
 
+  /// `A device name can't be empty`
+  String get DeviceNameBlank {
+    return Intl.message(
+      'A device name can\'t be empty',
+      name: 'DeviceNameBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{value} is required`
   String ValueIsRequired(Object value) {
     return Intl.message(
@@ -1328,6 +1368,26 @@ class S {
     return Intl.message(
       'Ok',
       name: 'DialogDismiss',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong`
+  String get GenericError {
+    return Intl.message(
+      'Something went wrong',
+      name: 'GenericError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back`
+  String get GoBack {
+    return Intl.message(
+      'Go Back',
+      name: 'GoBack',
       desc: '',
       args: [],
     );

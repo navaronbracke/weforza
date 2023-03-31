@@ -92,7 +92,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
             validator: (value) => bloc.validateNewDeviceInput(
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                S.of(context).DeviceNameCannotContainComma,
+                S.of(context).DeviceNameBlank
             ),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 5),
@@ -115,9 +117,11 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 onChanged: (value) {
                   setState(() {
                     bloc.validateNewDeviceInput(
-                        value,
-                        S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                      value,
+                      S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
+                      S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                      S.of(context).DeviceNameCannotContainComma,
+                      S.of(context).DeviceNameBlank,
                     );
                   });
                 },
@@ -144,7 +148,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
-            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
+            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
               Navigator.of(context).pop();
             }).catchError((e){
@@ -158,7 +162,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
-            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
+            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).GenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
               Navigator.of(context).pop();
             }).catchError((e){
@@ -195,6 +199,8 @@ class _AddDevicePageState extends State<AddDevicePage> {
   bool iosValidateAddDevice(BuildContext context) {
     return bloc.validateNewDeviceInput(bloc.deviceNameController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")) == null;
+        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+        S.of(context).DeviceNameCannotContainComma,
+        S.of(context).DeviceNameBlank) == null;
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:weforza/file/exportable.dart';
+
 ///This class represents a 'Member.'
-class Member {
+class Member implements Exportable {
   Member(this.uuid,this.firstname,this.lastname,this.phone,[this.profileImageFilePath]):
         assert(uuid != null && uuid.isNotEmpty && firstname != null && lastname != null && phone != null);
 
@@ -48,12 +50,28 @@ class Member {
     return Member(uuid,values["firstname"],values["lastname"],values["phone"],values["profile"]);
   }
 
+  //If the uuid is the same, it is the same member.
+  //Otherwise it is the same member if all the properties match.
   @override
-  bool operator ==(Object other) => other is Member
-      && uuid == other.uuid && firstname == other.firstname
-      && lastname == other.lastname && phone == other.phone
-      && profileImageFilePath == other.profileImageFilePath;
+  bool operator ==(Object other){
+    return other is Member
+        && firstname == other.firstname
+        && lastname == other.lastname
+        && phone == other.phone;
+  }
 
   @override
-  int get hashCode => hashValues(firstname, lastname,uuid,phone,profileImageFilePath);
+  int get hashCode => hashValues(firstname, lastname, phone);
+
+  @override
+  Map<String, String> exportToJson() {
+    return {
+      "firstname": firstname,
+      "lastname": lastname,
+      "phone": phone
+    };
+  }
+
+  @override
+  String exportToCsv() => "$firstname,$lastname,$phone";
 }

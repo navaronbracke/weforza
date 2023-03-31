@@ -96,8 +96,18 @@ class SettingsPageState extends ConsumerState<SettingsPage>
             child: ExcludedTermInputField(delegate: excludedTermsDelegate),
           ),
         ),
-        excludedTermsList: ExcludedTermsList(delegate: excludedTermsDelegate),
-        excludedTermsListFooter: const ExcludedTermsListFooter(),
+        excludedTermsListHeader: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: ExcludedTermsListHeader(),
+        ),
+        excludedTermsList: SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: ExcludedTermsList(delegate: excludedTermsDelegate),
+        ),
+        excludedTermsListFooter: const Padding(
+          padding: EdgeInsets.only(left: 12, right: 12, top: 12),
+          child: ExcludedTermsListFooter(),
+        ),
         memberListFilter: Padding(
           padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
           child: Column(
@@ -330,6 +340,7 @@ class _SettingsPageScrollView extends StatelessWidget {
     required this.addExcludedTermInputField,
     required this.excludedTermsList,
     required this.excludedTermsListFooter,
+    this.excludedTermsListHeader,
     required this.memberListFilter,
     this.navigationBar,
     required this.resetRideCalendarButton,
@@ -345,6 +356,9 @@ class _SettingsPageScrollView extends StatelessWidget {
 
   /// The widget that represents the footer for the excluded terms list.
   final Widget excludedTermsListFooter;
+
+  /// The widget that represents the header for the excluded terms list.
+  final Widget? excludedTermsListHeader;
 
   /// The widget that represents the member list filter.
   final Widget memberListFilter;
@@ -370,6 +384,7 @@ class _SettingsPageScrollView extends StatelessWidget {
           delegate: SliverChildListDelegate.fixed([
             memberListFilter,
             scanDurationOption,
+            if (excludedTermsListHeader != null) excludedTermsListHeader!,
           ]),
         ),
         addExcludedTermInputField,

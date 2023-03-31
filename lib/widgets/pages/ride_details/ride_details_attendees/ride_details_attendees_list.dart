@@ -9,6 +9,7 @@ import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_d
 import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesList extends ConsumerWidget {
   const RideDetailsAttendeesList({super.key});
@@ -64,42 +65,41 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
   }) {
     final translator = S.of(context);
 
-    return BottomAppBar(
-      color: Theme.of(context).primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
+    return Theme(
+      data: ThemeData(
+        useMaterial3: true,
+        colorScheme: AppTheme.colorScheme,
+      ),
+      child: BottomAppBar(
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Tooltip(
+              margin: const EdgeInsets.only(bottom: 12),
               message: translator.Total,
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.people, color: Colors.white),
+                  Icon(Icons.people, color: AppTheme.colorScheme.primary),
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      '$total',
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    child: Text('$total'),
                   ),
                 ],
               ),
             ),
-            const Expanded(child: Center()),
             Tooltip(
+              margin: const EdgeInsets.only(bottom: 12),
               message: translator.Scanned,
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: Text(
-                      '${scannedAttendees ?? '-'}',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const Icon(
+                  Text('${scannedAttendees ?? '-'}'),
+                  Icon(
                     Icons.bluetooth_searching,
-                    color: Colors.white,
+                    color: AppTheme.colorScheme.primary,
                   ),
                 ],
               ),

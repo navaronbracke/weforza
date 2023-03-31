@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/model/add_ride_form_delegate.dart';
-import 'package:weforza/widgets/theme.dart';
+import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendarItem extends StatelessWidget {
   const AddRideCalendarItem({
@@ -8,6 +8,7 @@ class AddRideCalendarItem extends StatelessWidget {
     required this.date,
     required this.delegate,
     required this.size,
+    required this.theme,
   });
 
   /// The date for the calendar item.
@@ -19,15 +20,16 @@ class AddRideCalendarItem extends StatelessWidget {
   /// The size of this calendar item.
   final double size;
 
-  Color? _computeBackgroundColor() {
-    const theme = AppTheme.rideCalendar;
+  /// The theme for this ride calendar item.
+  final RideCalendarTheme theme;
 
+  Color? _computeBackgroundColor() {
     if (delegate.isBeforeToday(date)) {
       // A day in the past that has a ride.
       if (delegate.isScheduled(date)) {
         // The ride was scheduled in the current session.
         if (delegate.isScheduled(date, inCurrentSession: true)) {
-          return theme.selectedDay;
+          return theme.selection;
         }
 
         return theme.pastRide;
@@ -41,7 +43,7 @@ class AddRideCalendarItem extends StatelessWidget {
     if (delegate.isScheduled(date)) {
       // The ride was scheduled in the current session.
       if (delegate.isScheduled(date, inCurrentSession: true)) {
-        return theme.selectedDay;
+        return theme.selection;
       }
 
       return theme.futureRide;
@@ -57,7 +59,6 @@ class AddRideCalendarItem extends StatelessWidget {
       initialData: delegate.currentSelection,
       stream: delegate.selection,
       builder: (context, _) {
-        final backgroundColor = _computeBackgroundColor();
         final style = delegate.isBeforeToday(date) || delegate.isScheduled(date)
             ? const TextStyle(color: Colors.white)
             : null;
@@ -66,7 +67,7 @@ class AddRideCalendarItem extends StatelessWidget {
           onTap: () => delegate.onDaySelected(date),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: backgroundColor,
+              color: _computeBackgroundColor(),
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             child: SizedBox.square(

@@ -45,7 +45,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
         Padding(
           padding: const EdgeInsets.only(left: 2, right: 20),
           child: Text(
-            S.of(context).ExportRideCsvExtension.toUpperCase(),
+            S.of(context).FileCsvExtension.toUpperCase(),
             style: FileExtension.CSV == currentValue ? TextStyle(color: ApplicationTheme.primaryColor): null,
           ),
         ),
@@ -57,7 +57,7 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
         Padding(
           padding: const EdgeInsets.only(left: 2),
           child: Text(
-            S.of(context).ExportRideJsonExtension.toUpperCase(),
+            S.of(context).FileJsonExtension.toUpperCase(),
             style: FileExtension.JSON == currentValue ? TextStyle(color: ApplicationTheme.primaryColor): null,
           ),
         ),
@@ -66,27 +66,14 @@ class _FileExtensionSelectionState extends State<FileExtensionSelection> {
   }
 
   Widget _buildIosWidget(BuildContext context){
-
-    //TODO adaptive version
-    return CupertinoSegmentedControl<FileExtension>(
+    return CupertinoSlidingSegmentedControl<FileExtension>(
       groupValue: currentValue,
       onValueChanged: onValueChanged,
       children: {
-        FileExtension.CSV: Text(S.of(context).ExportRideCsvExtension.toUpperCase()),
-        FileExtension.JSON: Text(S.of(context).ExportRideJsonExtension.toUpperCase()),
+        FileExtension.CSV: Text(S.of(context).FileCsvExtension.toUpperCase()),
+        FileExtension.JSON: Text(S.of(context).FileJsonExtension.toUpperCase()),
       },
     );
-
-    /*
-    *     return CupertinoSlidingSegmentedControl<FileExtension>(
-      groupValue: currentValue,
-      onValueChanged: onValueChanged,
-      children: {
-        FileExtension.CSV: Text(S.of(context).ExportRideCsvExtension.toUpperCase()),
-        FileExtension.JSON: Text(S.of(context).ExportRideJsonExtension.toUpperCase()),
-      },
-    );
-    * */
   }
 
   void onValueChanged(FileExtension value){

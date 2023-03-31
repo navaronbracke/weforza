@@ -15,30 +15,29 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ExportMembersPage extends StatefulWidget {
+  const ExportMembersPage({Key? key}) : super(key: key);
+
   @override
   _ExportMembersPageState createState() => _ExportMembersPageState(
-    bloc: ExportMembersBloc(
-        exportMembersRepository: InjectionContainer.get<ExportMembersRepository>(),
-        fileHandler: InjectionContainer.get<IFileHandler>()
-    )
-  );
+      bloc: ExportMembersBloc(
+          exportMembersRepository:
+              InjectionContainer.get<ExportMembersRepository>(),
+          fileHandler: InjectionContainer.get<IFileHandler>()));
 }
 
 class _ExportMembersPageState extends State<ExportMembersPage> {
-  _ExportMembersPageState({
-    required this.bloc
-  });
+  _ExportMembersPageState({required this.bloc});
 
   final ExportMembersBloc bloc;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIosLayout(context),
-  );
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIosLayout(context),
+      );
 
-  Widget _buildAndroidLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -48,7 +47,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
     );
   }
 
-  Widget _buildIosLayout(BuildContext context){
+  Widget _buildIosLayout(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -59,44 +58,43 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return StreamBuilder<ExportDataOrError>(
       stream: bloc.stream,
       initialData: ExportDataOrError.idle(),
-      builder: (context, snapshot){
-        if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
           return GenericError(text: S.of(context).GenericError);
-        }else {
-          if(snapshot.data!.exporting){
+        } else {
+          if (snapshot.data!.exporting) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 5),
                   child: PlatformAwareLoadingIndicator(),
                 ),
                 Text(S.of(context).ExportingMembersDescription),
               ],
             );
-          }else if(snapshot.data!.success){
+          } else if (snapshot.data!.success) {
             return LayoutBuilder(
-              builder: (context,constraints){
+              builder: (context, constraints) {
                 final paintSize = constraints.biggest.shortestSide * .3;
                 return Center(
                     child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.secondaryColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
+                  width: paintSize,
+                  height: paintSize,
+                  child: Center(
+                    child: AnimatedCheckmark(
+                      color: ApplicationTheme.secondaryColor,
+                      size: Size.square(paintSize),
+                    ),
+                  ),
+                ));
               },
             );
-          }else{
+          } else {
             return Form(
               key: _formKey,
               child: Padding(
@@ -111,7 +109,8 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: FileExtensionSelection(
-                        onExtensionSelected: (ext) => bloc.onSelectFileExtension(ext),
+                        onExtensionSelected: (ext) =>
+                            bloc.onSelectFileExtension(ext),
                         initialValue: FileExtension.CSV,
                       ),
                     ),
@@ -120,7 +119,8 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                       child: StreamBuilder<bool>(
                         initialData: false,
                         stream: bloc.filenameExistsStream,
-                        builder: (context, snapshot) => Text(snapshot.data! ? S.of(context).FileExists : ""),
+                        builder: (context, snapshot) => Text(
+                            snapshot.data! ? S.of(context).FileExists : ''),
                       ),
                     ),
                     PlatformAwareWidget(
@@ -129,20 +129,22 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                         onPressed: () async {
                           final formState = _formKey.currentState;
 
-                          if(formState != null && formState.validate()){
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
+                          if (formState != null && formState.validate()) {
+                            await bloc.exportMembers(
+                                S.of(context).ExportMembersCsvHeader);
                           }
                         },
                       ),
                       ios: () => CupertinoButton.filled(
                         child: Text(
                           S.of(context).Export,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
-                          }else {
+                            await bloc.exportMembers(
+                                S.of(context).ExportMembersCsvHeader);
+                          } else {
                             setState(() {});
                           }
                         },
@@ -158,7 +160,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
     );
   }
 
-  Widget _buildFilenameInputField(BuildContext context){
+  Widget _buildFilenameInputField(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: PlatformAwareWidget(
@@ -171,13 +173,12 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
               value,
               S.of(context).ValueIsRequired(S.of(context).Filename),
               S.of(context).FilenameWhitespace,
-              S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-              S.of(context).InvalidFilename
-          ),
+              S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
+              S.of(context).InvalidFilename),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 5),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
             labelText: S.of(context).Filename,
-            helperText: " ",
+            helperText: ' ',
           ),
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
@@ -189,24 +190,25 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
               placeholder: S.of(context).Filename,
               autocorrect: false,
               controller: bloc.filenameController,
-              onChanged: (value){
+              onChanged: (value) {
                 setState(() {
                   bloc.validateFileName(
                       value,
                       S.of(context).ValueIsRequired(S.of(context).Filename),
                       S.of(context).FilenameWhitespace,
-                      S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-                      S.of(context).InvalidFilename
-                  );
+                      S
+                          .of(context)
+                          .FilenameMaxLength('${bloc.filenameMaxLength}'),
+                      S.of(context).InvalidFilename);
                 });
               },
             ),
             Row(
               children: [
                 Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(bloc.filenameError),
-                    style: ApplicationTheme.iosFormErrorStyle
-                ),
+                    CupertinoFormErrorFormatter.formatErrorMessage(
+                        bloc.filenameError),
+                    style: ApplicationTheme.iosFormErrorStyle),
               ],
             ),
           ],
@@ -217,12 +219,12 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
 
   bool _iosValidateFilename(BuildContext context) {
     return bloc.validateFileName(
-        bloc.filenameController.text,
-        S.of(context).ValueIsRequired(S.of(context).Filename),
-        S.of(context).FilenameWhitespace,
-        S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-        S.of(context).InvalidFilename
-    ) == null;
+            bloc.filenameController.text,
+            S.of(context).ValueIsRequired(S.of(context).Filename),
+            S.of(context).FilenameWhitespace,
+            S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
+            S.of(context).InvalidFilename) ==
+        null;
   }
 
   @override

@@ -69,7 +69,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
           final list = futureSnapshot.data;
 
           if (list == null || list.isEmpty) {
-            return Center(child: ManualSelectionListEmpty());
+            return const Center(child: ManualSelectionListEmpty());
           }
 
           return Column(

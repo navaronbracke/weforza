@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/editDeviceBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
@@ -12,6 +12,8 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditDevicePage extends StatefulWidget {
+  const EditDevicePage({Key? key}) : super(key: key);
+
   @override
   _EditDevicePageState createState() => _EditDevicePageState();
 }
@@ -19,7 +21,7 @@ class EditDevicePage extends StatefulWidget {
 class _EditDevicePageState extends State<EditDevicePage> {
   late EditDeviceBloc bloc;
 
-  GlobalKey<FormState> _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void didChangeDependencies() {
@@ -114,7 +116,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
                 S.of(context).DeviceNameCannotContainComma,
                 S.of(context).DeviceNameBlank),
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 5),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 5),
               labelText: S.of(context).DeviceNameLabel,
               helperText: ' ',
             ),

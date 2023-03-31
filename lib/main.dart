@@ -73,7 +73,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 
@@ -87,7 +87,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
       ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.iosTheme(),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 

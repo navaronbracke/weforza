@@ -76,7 +76,7 @@
   "AddRideColorLegendFutureRide": "Future Ride",
 
   "RideAttendeeScanningProcessScanLabel": "Scan",
-  "RideAttendeeScanningProcessAddMembersLabel": "Add Members",
+  "RideAttendeeScanningProcessAddMembersLabel": "By Hand",
   "RideAttendeeScanningPreparingScan": "Preparing Scan",
   "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members.",
   "RideAttendeeScanningGoBack": "Return to detail page",

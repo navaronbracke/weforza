@@ -653,10 +653,10 @@ class S {
     );
   }
 
-  /// `Add Members`
+  /// `By Hand`
   String get RideAttendeeScanningProcessAddMembersLabel {
     return Intl.message(
-      'Add Members',
+      'By Hand',
       name: 'RideAttendeeScanningProcessAddMembersLabel',
       desc: '',
       args: [],

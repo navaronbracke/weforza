@@ -94,7 +94,7 @@ class AttendeeScanningBloc extends Bloc {
   /// This list effectively collects the owners
   /// that are passed to the multiple possible owners resolution screen.
   /// On this screen the user can select the members from this list that weren't automatically resolved.
-  Set<Member> ownersOfScannedDevicesWithMultiplePossibleOwners = HashSet();//TODO add items
+  Set<Member> ownersOfScannedDevicesWithMultiplePossibleOwners = HashSet();
 
   ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   ///For each step it will trigger a rebuild of the UI accordingly.
@@ -201,7 +201,17 @@ class AttendeeScanningBloc extends Bloc {
 
   String getScanResultAt(int index) => _scanResults[index];
 
-  void addScanResult(String item) => _scanResults.insert(0, item);
+  /// Add the given [deviceName] into the scan results list.
+  /// If the given device has multiple possible owners,
+  /// these [Member]s are added to [ownersOfScannedDevicesWithMultiplePossibleOwners].
+  void addScanResult(String deviceName){
+    _scanResults.insert(0, deviceName);
+    final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => members[uuid]);
+    
+    if(owners.length > 1){
+      ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
+    }
+  }
 
   List<Member> getDeviceOwners(String deviceName) {
     if(deviceOwners.containsKey(deviceName)){

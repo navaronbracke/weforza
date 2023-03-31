@@ -5,9 +5,7 @@ class DeviceExistsException implements Exception {}
 class FileExistsException implements Exception {}
 
 /// An exception that is thrown when a file is required, but it was not provided.
-class FileRequiredException extends ArgumentError {
-  FileRequiredException() : super('file');
-}
+class FileRequiredException implements Exception {}
 
 /// An exception that is thrown when a rider already exists.
 class RiderExistsException implements Exception {}

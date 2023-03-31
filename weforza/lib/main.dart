@@ -22,8 +22,6 @@ void main() async {
   runApp(WeForzaApp());
 }
 
-//TODO check the usage of setState((){}) and fix typing issues with setting futures
-
 ///This class represents the application.
 class WeForzaApp extends StatefulWidget {
 

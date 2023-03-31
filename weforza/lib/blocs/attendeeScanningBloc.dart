@@ -32,6 +32,10 @@ class AttendeeScanningBloc extends Bloc {
   ///The bluetooth scanner that will do bluetooth stuff for us.
   final BluetoothDeviceScanner scanner;
 
+  ///The already scanned devices are stored here.
+  ///This prevents duplicates during the scan.
+  final Set<BluetoothPeripheral> _scannedDevices = HashSet();
+
   ///A value notifier for the scanning boolean.
   ///We use it to check if we can pop the widget scope
   ///and what button to show (skip or save scan).
@@ -101,13 +105,6 @@ class AttendeeScanningBloc extends Bloc {
   StreamController<ScanProcessStep> _scanStepController = BehaviorSubject();
   Stream<ScanProcessStep> get scanStepStream => _scanStepController.stream;
 
-  /// Returns true if the given [deviceName] has a single owner, that is not present in [rideAttendees].
-  /// In other words, this filters out devices, of which the single owner was already scanned.
-  bool _filterDeviceWhenSingleOwnerAndOwnerIsAlreadyAttending(String deviceName){
-    //Single owner & not attending already
-    return deviceOwners[deviceName].length == 1 && !rideAttendees.contains(deviceOwners[deviceName].first);
-  }
-
   ///Start the initial device scan.
   ///It starts with checking the bluetooth state.
   ///Then it loads the settings and the members / ride attendees.
@@ -148,19 +145,20 @@ class AttendeeScanningBloc extends Bloc {
   void _startDeviceScan(void Function(String deviceName) onDeviceFound){
     //Start scan if not scanning
     if(!isScanning.value){
-      final Set<BluetoothPeripheral> scannedDevices = HashSet();
+
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
 
-      scanner.scanForDevices(scanDuration).where(
-              (BluetoothPeripheral device) => _filterDeviceWhenSingleOwnerAndOwnerIsAlreadyAttending(device.deviceName)
-      ).listen((BluetoothPeripheral device) {
-        if(!scannedDevices.contains(device)){
-          scannedDevices.add(device);
-          onDeviceFound(device.deviceName);
-        }
-      }, onError: (error){
-        //skip the error
+      //Start the scan.
+      //Filters the already scanned devices.
+      //Then maps the result to the device name.
+      //And finishes by filtering the devices of which there is only one owner, that was already scanned.
+      scanner.scanForDevices(scanDuration)
+          .where((device) => _scannedDevices.add(device))
+          .map((device) => device.deviceName)
+          .where(_deviceOwnerNotScanned)
+          .listen(onDeviceFound, onError: (error){
+            //skip the error
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
@@ -191,6 +189,19 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
+  /// Returns whether the single owner of the given [deviceName] wasn't scanned yet.
+  bool _deviceOwnerNotScanned(String deviceName){
+    final owners = deviceOwners[deviceName];
+
+    // Unknown devices or devices with multiple possible owners.
+    if(owners == null || owners.isEmpty || owners.length > 1){
+      return true;
+    }else {
+      // An owner that wasn't scanned yet.
+      return !rideAttendees.contains(owners.first);
+    }
+  }
+
   ///Load the ride attendees and put them in a set.
   ///We need them in a set for easy lookup
   ///during the building of the member list item widgets in the manual step.
@@ -199,17 +210,29 @@ class AttendeeScanningBloc extends Bloc {
     rideAttendees = HashSet.from(members.map((member) => member.uuid).toList());
   }
 
+  /// Retrieve the scan result at a given index.
+  /// Used by the list builder to fetch data.
   String getScanResultAt(int index) => _scanResults[index];
 
-  /// Add the given [deviceName] into the scan results list.
+  /// Add the given [deviceName] to the scan results list.
   /// If the given device has multiple possible owners,
   /// these [Member]s are added to [ownersOfScannedDevicesWithMultiplePossibleOwners].
   void addScanResult(String deviceName){
+    //Notify the backing list.
     _scanResults.insert(0, deviceName);
+
+    //It's an unknown device, we can't add an owner to the attendees or the multiplePossibleOwners list.
+    if(deviceOwners[deviceName] == null || deviceOwners[deviceName].isEmpty){
+      return;
+    }
+
     final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => members[uuid]);
 
     if(owners.length > 1){
       ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
+    }else{
+      //Add the single owner to the attendees instead.
+      rideAttendees.add(owners.first.uuid);
     }
   }
 
@@ -299,4 +322,12 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
+
+  Future<List<Member>> filterAndSortMultipleOwnersList() {
+    final filtered = ownersOfScannedDevicesWithMultiplePossibleOwners.where((Member member) => !rideAttendees.contains(member.uuid)).toList();
+
+    filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
+
+    return Future.value(filtered);
+  }
 }

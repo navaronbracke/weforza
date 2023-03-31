@@ -19,7 +19,7 @@ final exportMembersProvider = Provider((ref) {
 class ExportMembersProvider {
   ExportMembersProvider(this.fileHandler, this.memberRepository);
 
-  final IFileHandler fileHandler;
+  final FileHandler fileHandler;
 
   final ExportMembersRepository memberRepository;
 

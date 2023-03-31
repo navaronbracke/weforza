@@ -4,9 +4,9 @@ import 'package:weforza/model/exportable_member.dart';
 class ImportMembersRepository {
   ImportMembersRepository(this.dao);
 
-  final IImportMembersDao dao;
+  final ImportMembersDao dao;
 
-  Future<void> saveMembersWithDevices(
-          Iterable<ExportableMember> members, String Function() generateId) =>
-      dao.saveMembersWithDevices(members, generateId);
+  Future<void> saveMembersWithDevices(Iterable<ExportableMember> members) {
+    return dao.saveMembersWithDevices(members);
+  }
 }

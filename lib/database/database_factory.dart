@@ -2,11 +2,9 @@ import 'package:file/file.dart';
 import 'package:sembast/sembast.dart';
 
 class ApplicationDatabaseFactory {
-  ApplicationDatabaseFactory({
-    required this.fileSystem,
-    required this.factory,
-  });
+  ApplicationDatabaseFactory({required this.factory, required this.fileSystem});
+
+  final DatabaseFactory factory;
 
   final FileSystem fileSystem;
-  final DatabaseFactory factory;
 }

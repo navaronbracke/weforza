@@ -4,13 +4,9 @@ import 'package:weforza/model/settings.dart';
 class SettingsRepository {
   SettingsRepository(this._settingsDao);
 
-  final ISettingsDao _settingsDao;
+  final SettingsDao _settingsDao;
 
-  Future<Settings> loadApplicationSettings() {
-    return _settingsDao.readApplicationSettings();
-  }
+  Future<Settings> read() => _settingsDao.read();
 
-  Future<void> writeApplicationSettings(Settings settings) async {
-    await _settingsDao.writeApplicationSettings(settings);
-  }
+  Future<void> write(Settings settings) => _settingsDao.write(settings);
 }

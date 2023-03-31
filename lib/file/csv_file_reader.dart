@@ -80,7 +80,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
       firstName: firstName,
       lastName: lastName,
       alias: alias,
-      isActiveMember: isActive,
+      active: isActive,
       devices: devices,
       lastUpdated: lastUpdated,
     ));

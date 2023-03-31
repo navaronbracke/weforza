@@ -27,9 +27,9 @@ void main() async {
 
   // Preload the settings.
   final settingsRepository = SettingsRepository(
-    SettingsDao(database.getDatabase(), DatabaseTables().settings),
+    SettingsDaoImpl(database.getDatabase(), DatabaseTables()),
   );
-  final settings = await settingsRepository.loadApplicationSettings();
+  final settings = await settingsRepository.read();
 
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();

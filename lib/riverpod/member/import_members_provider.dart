@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/csv_file_reader.dart';
 import 'package:weforza/file/file_handler.dart';
@@ -80,11 +79,9 @@ class ImportMembersNotifier {
         return;
       }
 
-      const uuidGenerator = Uuid();
-
       final repository = ref.read(importMembersRepositoryProvider);
 
-      await repository.saveMembersWithDevices(members, uuidGenerator.v4);
+      await repository.saveMembersWithDevices(members);
 
       ref.refresh(memberListProvider);
       onProgress(ImportMembersState.done);

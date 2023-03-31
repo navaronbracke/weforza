@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:weforza/database/memberDao.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 
 ///This class provides an API to work with members.
 class MemberRepository {
@@ -12,7 +13,7 @@ class MemberRepository {
 
   Future<void> addMember(Member member) => _dao.addMember(member);
 
-  Future<List<Member>> getMembers() => _dao.getMembers();
+  Future<List<Member>> getMembers(MemberFilterOption filter) => _dao.getMembers(filter);
 
   Future<Member> getMemberByUuid(String uuid) => _dao.getMemberByUuid(uuid);
 

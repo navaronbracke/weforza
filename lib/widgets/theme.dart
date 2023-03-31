@@ -45,9 +45,6 @@ abstract class AppTheme {
   /// The color scheme for the MaterialApp.
   static final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
 
-  /// The device type picker theme.
-  static final deviceTypePicker = DeviceTypePickerThemes();
-
   /// The [CupertinoThemeData] for the [CupertinoApp].
   static const iosTheme = CupertinoThemeData(
     primaryColor: CupertinoColors.activeBlue,
@@ -67,37 +64,6 @@ abstract class AppTheme {
 
   /// The theme for the scan stepper.
   static const scanStepper = ScanStepperThemes();
-}
-
-/// This class represents the data for [DeviceTypePickerThemes].
-class DeviceTypePickerTheme {
-  const DeviceTypePickerTheme({
-    required this.selectedColor,
-    required this.unselectedColor,
-  });
-
-  /// The color for a selected device type.
-  final Color selectedColor;
-
-  /// The color for an unselected device type.
-  final Color unselectedColor;
-}
-
-/// This class represents the theme for the device type picker.
-class DeviceTypePickerThemes {
-  DeviceTypePickerThemes();
-
-  /// The device type picker theme for Android.
-  final android = DeviceTypePickerTheme(
-    selectedColor: Colors.blue,
-    unselectedColor: Colors.blue.shade100,
-  );
-
-  /// The device type picker theme for iOS.
-  final ios = const DeviceTypePickerTheme(
-    selectedColor: CupertinoColors.activeBlue,
-    unselectedColor: CupertinoColors.systemGrey4,
-  );
 }
 
 /// This class represents the theme for the bottom bar

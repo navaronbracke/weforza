@@ -11,50 +11,40 @@ class ResetRideCalendarButton extends ConsumerWidget {
   const ResetRideCalendarButton({super.key});
 
   Widget _buildButton(BuildContext context, {bool enabled = true}) {
-    final translator = S.of(context);
-    const theme = AppTheme.settings;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PlatformAwareWidget(
-          android: () => ElevatedButton(
-            style: AppTheme.desctructiveAction.elevatedButtonTheme,
-            onPressed: enabled
-                ? () => showDialog(
-                      context: context,
-                      builder: (_) => const ResetRideCalendarDialog(),
-                    )
-                : null,
-            child: Text(translator.ResetRideCalendar),
-          ),
-          ios: () => CupertinoButton(
-            color: CupertinoColors.destructiveRed,
-            onPressed: enabled
-                ? () => showCupertinoDialog(
-                      context: context,
-                      builder: (context) => const ResetRideCalendarDialog(),
-                    )
-                : null,
-            child: Text(
-              translator.ResetRideCalendar,
-              style: const TextStyle(color: Colors.white),
+    return PlatformAwareWidget(
+      android: () => ElevatedButton(
+        style: AppTheme.desctructiveAction.elevatedButtonTheme,
+        onPressed: enabled
+            ? () => showDialog(
+                  context: context,
+                  builder: (_) => const ResetRideCalendarDialog(),
+                )
+            : null,
+        child: Text(S.of(context).ResetRideCalendar),
+      ),
+      ios: () {
+        if (enabled) {
+          return CupertinoButton(
+            borderRadius: BorderRadius.zero,
+            onPressed: () => showCupertinoDialog(
+              context: context,
+              builder: (context) => const ResetRideCalendarDialog(),
             ),
-          ),
-        ),
-        PlatformAwareWidget(
-          android: () => Text(
-            translator.ResetRideCalendarDescription,
-            style: theme.optionDescriptionStyle,
-            textAlign: TextAlign.center,
-          ),
-          ios: () => Text(
-            translator.ResetRideCalendarDescription,
-            style: theme.optionDescriptionStyle.copyWith(fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ],
+            padding: EdgeInsets.zero,
+            child: Text(
+              S.of(context).ResetRideCalendar,
+              style: const TextStyle(color: CupertinoColors.destructiveRed),
+            ),
+          );
+        }
+
+        return CupertinoButton(
+          borderRadius: BorderRadius.zero,
+          onPressed: null,
+          padding: EdgeInsets.zero,
+          child: Text(S.of(context).ResetRideCalendar),
+        );
+      },
     );
   }
 
@@ -62,13 +52,10 @@ class ResetRideCalendarButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ridesCount = ref.watch(rideListCountProvider);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 24, left: 20, right: 20),
-      child: ridesCount.when(
-        data: (count) => _buildButton(context, enabled: count > 0),
-        error: (error, stackTrace) => _buildButton(context, enabled: false),
-        loading: () => _buildButton(context, enabled: false),
-      ),
+    return ridesCount.when(
+      data: (count) => _buildButton(context, enabled: count > 0),
+      error: (error, stackTrace) => _buildButton(context, enabled: false),
+      loading: () => _buildButton(context, enabled: false),
     );
   }
 }

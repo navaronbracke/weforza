@@ -49,20 +49,17 @@ abstract class ApplicationTheme {
   ///The background color for a selected ride attendee.
   static final Color rideAttendeeSelectedBackgroundColor = Colors.lightBlue.withAlpha(150);
 
-  static final TextStyle rideAttendeeSelectedFirstNameTextStyle = TextStyle(
-    color: Colors.white,
+  static final TextStyle rideAttendeeFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 16.0
   );
-  static final TextStyle rideAttendeeUnselectedFirstNameTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 16.0
+  static final TextStyle rideAttendeeLastNameTextStyle = TextStyle(
+    fontSize: 14.0
   );
-  static final TextStyle rideAttendeeSelectedLastNameTextStyle = TextStyle(
-    color: Colors.white, fontSize: 12.0
+  static final TextStyle rideAttendeePhoneTextStyle = TextStyle(
+      fontSize: 12.0, fontStyle: FontStyle.italic
   );
-  static final TextStyle rideAttendeeUnselectedLastNameTextStyle = TextStyle(
-      fontSize: 12.0
-  );
+
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 18,fontWeight: FontWeight.w500);

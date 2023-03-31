@@ -65,10 +65,10 @@ class UnresolvedOwnersList extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 10),
-          child: CupertinoButton(
+          child: CupertinoButton.filled(
             child: Text(
               S.of(context).RideAttendeeScanningContinue,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
+              style: TextStyle(color: Colors.white),
             ),
             onPressed: onButtonPressed,
           ),

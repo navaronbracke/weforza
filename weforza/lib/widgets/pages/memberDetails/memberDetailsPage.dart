@@ -42,6 +42,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     });
   }
 
+  void onMemberActiveChanged(bool value, BuildContext context){
+    bloc.setMemberActive(value, () => ReloadDataProvider.of(context).reloadMembers.value = true);
+  }
+
   Future<void> onDeleteMember(BuildContext context) async {
     await bloc.deleteMember();
 
@@ -220,7 +224,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                 initialValue: bloc.member.isActiveMember,
                 label: S.of(context).Active,
                 stream: bloc.isActiveStream,
-                onChanged: bloc.setMemberActive,
+                onChanged: (bool value) => onMemberActiveChanged(value, context),
                 onErrorBuilder: () => PlatformAwareWidget(
                   android: () => Switch(
                     value: bloc.member.isActiveMember,

@@ -43,3 +43,9 @@ class RideDetailsBloc extends Bloc {
   void dispose() {}
 
 }
+
+enum RideDetailsPageOptions {
+  EDIT,
+  DELETE,
+  EXPORT
+}

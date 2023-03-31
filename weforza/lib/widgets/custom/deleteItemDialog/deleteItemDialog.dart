@@ -24,6 +24,9 @@ class DeleteItemDialog extends StatefulWidget {
   final String description;
   final String errorDescription;
 
+  //TODO ios: text is white -> should be black
+  //TODO ios: adjust the padding
+
   @override
   _DeleteItemDialogState createState() => _DeleteItemDialogState();
 }
@@ -31,7 +34,6 @@ class DeleteItemDialog extends StatefulWidget {
 class _DeleteItemDialogState extends State<DeleteItemDialog> {
 
   Future<void> deleteItemFuture;
-  //TODO IOS version
 
   @override
   Widget build(BuildContext context){
@@ -94,7 +96,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
         ),
       ],
     );
-    return _buildAndroidDialog(context, content);
+    return _buildAndroidDialog(content);
   }
 
   Widget _buildAndroidErrorDialog(BuildContext context){
@@ -140,7 +142,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
         ),
       ],
     );
-    return _buildAndroidDialog(context, content);
+    return _buildAndroidDialog(content);
   }
 
   Widget _buildAndroidLoadingDialog(BuildContext context){
@@ -156,17 +158,17 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
         ),
       ],
     );
-    return _buildAndroidDialog(context, content);
+    return _buildAndroidDialog(content);
   }
 
-  Widget _buildAndroidDialog(BuildContext context, Widget content){
+  Widget _buildAndroidDialog(Widget content){
     return Dialog(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        //TODO cross axis stretch?
         children: <Widget>[
           SizedBox(
-            width: 280,
+            width: 280,//280 is the minimum for a material Dialog
             height: 200,
             child: content,
           ),
@@ -176,23 +178,185 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
   }
 
   Widget _buildIosConfirmDialog(BuildContext context){
-    //TODO title + description + padding + confirm + cancel
+    final content = Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              fontFamily: '.SF UI Display',
+              inherit: false,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.48,
+              textBaseline: TextBaseline.alphabetic,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              widget.description,
+              style: TextStyle(
+                fontFamily: '.SF UI Text',
+                inherit: false,
+                fontSize: 13.4,
+                fontWeight: FontWeight.w400,
+                height: 1.036,
+                letterSpacing: -0.25,
+                textBaseline: TextBaseline.alphabetic,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Flexible(
+                child: Center(
+                  child: CupertinoDialogAction(
+                    child: Text(S.of(context).DialogCancel),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Center(
+                  child: CupertinoDialogAction(
+                    child: Text(
+                      S.of(context).DialogDelete,
+                      style: TextStyle(
+                        color: ApplicationTheme.deleteItemButtonTextColor
+                        ),
+                      ),
+                    onPressed: () => _onConfirmDeletion(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+    return _buildIosDialog(content);
   }
 
   Widget _buildIosErrorDialog(BuildContext context){
-    //TODO title + padding + dismiss button + error description
+    final content = Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 10),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              fontFamily: '.SF UI Display',
+              inherit: false,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.48,
+              textBaseline: TextBaseline.alphabetic,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Icon(
+                      Icons.error_outline,
+                      size: 25,
+                      color: ApplicationTheme.deleteItemButtonTextColor
+                  ),
+                ),
+                Text(
+                  widget.errorDescription,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontFamily: '.SF UI Text',
+                    inherit: false,
+                    fontSize: 13.4,
+                    fontWeight: FontWeight.w400,
+                    height: 1.036,
+                    letterSpacing: -0.25,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Center(
+                  child: CupertinoDialogAction(
+                    child: Text(S.of(context).DialogDismiss),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+    return _buildIosDialog(content);
   }
 
   Widget _buildIosLoadingDialog(BuildContext context){
-    //TODO title + loading indicator in the center + padding
+    final content = Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 10),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              fontFamily: '.SF UI Display',
+              inherit: false,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.48,
+              textBaseline: TextBaseline.alphabetic,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Center(child: PlatformAwareLoadingIndicator())
+        ),
+      ],
+    );
+    return _buildIosDialog(content);
   }
 
   ///Build the general dialog scaffolding and inject the content.
   ///This way, the general look is the same for each dialog,
   ///but the content can differ.
-  Widget _buildIosDialog(){
-    //popupsurface + title in middle + content
-    //figure out how to do the view insets
+  Widget _buildIosDialog(Widget content){
+    return Center(
+      child: CupertinoPopupSurface(
+      isSurfacePainted: true,
+      child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+            SizedBox(
+              width: 270.0,
+              height: 200,
+              child: content,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _onConfirmDeletion() {

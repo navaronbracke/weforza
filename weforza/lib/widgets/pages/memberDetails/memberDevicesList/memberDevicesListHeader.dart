@@ -47,28 +47,31 @@ class MemberDevicesListHeader extends StatelessWidget {
   }
 
   Widget _buildIosWidget(BuildContext context){
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: 4),
-            child: Text(
-              S.of(context).DevicesListHeader,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,15,15,10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: 4),
+              child: Text(
+                S.of(context).DevicesListHeader,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20
+                ),
               ),
             ),
           ),
-        ),
-        CupertinoIconButton(
-          onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
-          idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
-          icon: Icons.add,
-          onPressed: onPressed,
-          size: 26
-        )
-      ],
+          CupertinoIconButton(
+            onPressedColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonPressedColor,
+            idleColor: ApplicationTheme.memberDevicesListHeaderAddDeviceButtonIdleColor,
+            icon: Icons.add,
+            onPressed: onPressed,
+            size: 30
+          )
+        ],
+      ),
     );
   }
 }

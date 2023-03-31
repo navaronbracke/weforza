@@ -1,6 +1,6 @@
 import 'package:weforza/extensions/date_extension.dart';
 
-/// This class represents a member.
+/// This class represents a rider.
 class Member implements Comparable<Member> {
   /// The default constuctor.
   Member({
@@ -13,12 +13,12 @@ class Member implements Comparable<Member> {
     required this.uuid,
   }) : assert(
           uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty,
-          'The uuid, first name and last name of a member should not be empty',
+          'The uuid, first name and last name of a rider should not be empty',
         );
 
-  /// Create a member from the given [uuid] and [values].
+  /// Create a rider from the given [uuid] and [values].
   factory Member.of(String uuid, Map<String, Object?> values) {
-    assert(uuid.isNotEmpty, 'The uuid of a member should not be empty');
+    assert(uuid.isNotEmpty, 'The uuid of a rider should not be empty');
 
     return Member(
       active: values['active'] as bool? ?? true,
@@ -31,7 +31,7 @@ class Member implements Comparable<Member> {
     );
   }
 
-  /// Regex for a member's first name, last name or alias.
+  /// Regex for a rider's first name, last name or alias.
   ///
   /// The regex is language independent,
   /// allows hyphens, apostrophes and spaces,
@@ -44,28 +44,28 @@ class Member implements Comparable<Member> {
   /// The maximum length for the first name, last name and alias.
   static const int nameAndAliasMaxLength = 50;
 
-  /// Whether this member is currently an active ride participant.
+  /// Whether this rider is currently an active ride participant.
   final bool active;
 
-  /// The member's alias.
+  /// The rider's alias.
   final String alias;
 
-  /// The member's first name.
+  /// The rider's first name.
   final String firstName;
 
-  /// The member's last name.
+  /// The rider's last name.
   final String lastName;
 
-  /// The last time that this member was updated.
+  /// The last time that this rider was updated.
   final DateTime lastUpdated;
 
-  /// The path to the member's profile image on disk.
+  /// The path to the rider's profile image on disk.
   final String? profileImageFilePath;
 
-  /// The member's UUID.
+  /// The rider's UUID.
   final String uuid;
 
-  /// Get the member's initials.
+  /// Get the rider's initials.
   String get initials => firstName[0] + lastName[0];
 
   @override
@@ -85,7 +85,7 @@ class Member implements Comparable<Member> {
     return alias.compareTo(other.alias);
   }
 
-  /// Convert this member into a map.
+  /// Convert this rider into a map.
   Map<String, Object?> toMap() {
     return {
       'active': active,

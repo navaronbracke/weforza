@@ -2,6 +2,7 @@ import 'package:weforza/extensions/date_extension.dart';
 
 /// This class represents a member.
 class Member implements Comparable<Member> {
+  /// The default constuctor.
   Member({
     required this.uuid,
     required this.firstname,
@@ -11,6 +12,21 @@ class Member implements Comparable<Member> {
     required this.profileImageFilePath,
     required this.lastUpdated,
   }) : assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
+
+  /// Create a member from the given [uuid] and [values].
+  factory Member.of(String uuid, Map<String, Object?> values) {
+    assert(uuid.isNotEmpty);
+
+    return Member(
+      uuid: uuid,
+      firstname: values['firstname'] as String,
+      lastname: values['lastname'] as String,
+      alias: values['alias'] as String? ?? '',
+      isActiveMember: values['active'] as bool? ?? true,
+      profileImageFilePath: values['profile'] as String?,
+      lastUpdated: DateTime.parse(values['lastUpdated'] as String),
+    );
+  }
 
   /// Regex for a member's first or last name or alias.
   ///
@@ -58,20 +74,6 @@ class Member implements Comparable<Member> {
       'profile': profileImageFilePath,
       'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
     };
-  }
-
-  /// Create a member from a Map and a given uuid.
-  static Member of(String uuid, Map<String, Object?> values) {
-    assert(uuid.isNotEmpty);
-    return Member(
-      uuid: uuid,
-      firstname: values['firstname'] as String,
-      lastname: values['lastname'] as String,
-      alias: values['alias'] as String? ?? '',
-      isActiveMember: values['active'] as bool? ?? true,
-      profileImageFilePath: values['profile'] as String?,
-      lastUpdated: DateTime.parse(values['lastUpdated'] as String),
-    );
   }
 
   @override

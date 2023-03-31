@@ -86,10 +86,8 @@ class FakeDatabaseFactory implements DatabaseFactory {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  /*
-  Run this test:
-  flutter drive --driver=test_driver/integration_test.dart --target=integration_test/database_location_test.dart
-  */
+  // Run this test with
+  // flutter drive --driver=test_driver/integration_test.dart --target=integration_test/database_location_test.dart`
   group('Database creation tests', () {
     /// Integration / regression test for new database creation.
     /// New databases should be created in

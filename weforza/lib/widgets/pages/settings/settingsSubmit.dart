@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SettingsSubmit extends StatelessWidget {
@@ -24,18 +23,28 @@ class SettingsSubmit extends StatelessWidget {
         if(snapshot.hasError){
           return SizedBox(width: 0,height: 0);
         }else{
-          return snapshot.data ? Center(
-              child: PlatformAwareLoadingIndicator()
+          return snapshot.data ? Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Center(
+                child: PlatformAwareWidget(
+                  android: () => CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                  ios: () => CupertinoActivityIndicator(),
+                ),
+            ),
           ): PlatformAwareWidget(
             android: () => IconButton(
               icon: Icon(Icons.done,color: Colors.white),
               onPressed: onSubmit,
             ),
-            ios: () => CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
-              icon: Icons.done,
-              onPressed: onSubmit,
+            ios: () => Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: CupertinoIconButton(
+                onPressedColor: ApplicationTheme.primaryColor,
+                idleColor: ApplicationTheme.accentColor,
+                icon: Icons.done,
+                onPressed: onSubmit,
+              ),
             ),
           );
         }

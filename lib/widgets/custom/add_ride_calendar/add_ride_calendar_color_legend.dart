@@ -2,12 +2,14 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 
-///This [Widget] represents a color legend for AddRidePage.
+/// This widget represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {
   const AddRideCalendarColorLegend({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return IntrinsicWidth(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -25,8 +27,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).AddRideColorLegendPastDay,
-                    softWrap: true),
+                child: Text(translator.PastDayNoRide, softWrap: true),
               ),
             ],
           ),
@@ -45,8 +46,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(S.of(context).AddRideColorLegendPastRide,
-                      softWrap: true),
+                  child: Text(translator.PastDayWithRide, softWrap: true),
                 ),
               ],
             ),
@@ -66,8 +66,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: Text(S.of(context).AddRideColorLegendCurrentSelection,
-                      softWrap: true),
+                  child: Text(translator.CurrentSelection, softWrap: true),
                 ),
               ],
             ),
@@ -85,8 +84,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).AddRideColorLegendFutureRide,
-                    softWrap: true),
+                child: Text(translator.FutureRide, softWrap: true),
               ),
             ],
           ),

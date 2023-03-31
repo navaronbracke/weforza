@@ -4,11 +4,11 @@ import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 
-/// This provider provides the list of members.
-final memberListProvider = FutureProvider<List<Rider>>((ref) {
+/// This provider provides the list of riders.
+final riderListProvider = FutureProvider<List<Rider>>((ref) {
   final repository = ref.read(memberRepositoryProvider);
 
-  // Watch the member list filter for changes.
+  // Watch the rider list filter for changes.
   final filter = ref.watch(
     settingsProvider.select((settings) => settings.memberListFilter),
   );

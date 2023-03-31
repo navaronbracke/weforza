@@ -3,13 +3,13 @@ import 'package:weforza/generated/l10n.dart';
 
 /// This enum declares the different device types.
 enum DeviceType {
+  unknown(0), // This value should always be the first in the list.
   cadenceMeter(3),
   gps(5),
   headset(6),
   phone(7),
   powerMeter(2),
   pulseMonitor(1),
-  unknown(0),
   watch(4);
 
   const DeviceType(this.typeIndex);

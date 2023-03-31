@@ -42,13 +42,13 @@ class AddRideCalendar extends StatelessWidget {
 class _AddRideCalendarHeaderButton extends StatelessWidget {
   const _AddRideCalendarHeaderButton(
     this.onPressed,
-    this.iconSize,
+    this.buttonSize,
     this.axis,
   ) : assert(axis == AxisDirection.left || axis == AxisDirection.right);
 
   final AxisDirection axis;
 
-  final double iconSize;
+  final double buttonSize;
 
   final void Function() onPressed;
 
@@ -82,10 +82,10 @@ class _AddRideCalendarHeaderButton extends StatelessWidget {
             ),
           ),
           onPressed: onPressed,
-          // Enforce the icon constraints to match the icon size.
+          // Enforce the icon constraints to match the button size.
           constraints: BoxConstraints(
-            minHeight: iconSize,
-            minWidth: iconSize,
+            minHeight: buttonSize,
+            minWidth: buttonSize,
           ),
         );
       case TargetPlatform.iOS:
@@ -95,7 +95,7 @@ class _AddRideCalendarHeaderButton extends StatelessWidget {
             backIcon: CupertinoIcons.chevron_left,
             forwardIcon: CupertinoIcons.chevron_right,
           ),
-          size: iconSize,
+          size: buttonSize,
           onPressed: onPressed,
         );
     }

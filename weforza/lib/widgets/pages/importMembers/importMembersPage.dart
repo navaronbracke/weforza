@@ -114,9 +114,11 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
   }
 
   void onImportMembers(BuildContext context){
+    final provider = ReloadDataProvider.of(context);
     bloc.pickFileAndImportMembers(
-        S.of(context).ImportMembersCsvHeaderRegex,
-        ReloadDataProvider.of(context).reloadMembers
+      S.of(context).ImportMembersCsvHeaderRegex,
+      provider.reloadMembers,
+      provider.reloadDevices
     );
   }
 

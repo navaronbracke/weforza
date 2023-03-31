@@ -24,9 +24,6 @@ abstract class IRideDao {
   ///The old attendees of the ride will be removed and the new ones will be created.
   Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees);
 
-  ///Update a [ride]'s properties, excluding its attendees.
-  Future<void> updateRide(Ride ride);
-
   ///Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
 
@@ -115,11 +112,6 @@ class RideDao implements IRideDao {
   Future<List<DateTime>> getRideDates() async {
     final rides = await _rideStore.findKeys(_database);
     return rides.map((ride) => DateTime.parse(ride)).toList();
-  }
-
-  @override
-  Future<void> updateRide(Ride ride) async {
-    return await _rideStore.update(_database, ride.toMap(),finder: Finder(filter: Filter.byKey(ride.date.toIso8601String())));
   }
 
   @override

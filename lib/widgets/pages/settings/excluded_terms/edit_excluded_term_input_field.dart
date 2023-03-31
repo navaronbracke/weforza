@@ -79,6 +79,16 @@ class _EditExcludedTermInputFieldState
 
     if (result ?? false) {
       widget.delegate.deleteTerm(widget.term);
+
+      // TODO: walk up the focus tree to find primary focus
+
+      // When the delete dialog's modal route closes, the wrong widget gets focus.
+      // Usually its the add term focus node which greedily grabs focus.
+      // Instead of giving focus to a text field, return it back to the navigator,
+      // like when the settings page is first opened.
+      //
+      // Be aware that using the focus manager directly is very rare.
+      WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
     }
   }
 

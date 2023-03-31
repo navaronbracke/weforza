@@ -9,6 +9,7 @@ import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/rideExportState.dart';
 
 class ExportRideBloc extends Bloc {
   ExportRideBloc({
@@ -100,11 +101,4 @@ class ExportRideBloc extends Bloc {
     _streamController.close();
     _fileExistsController.close();
   }
-}
-
-enum RideExportState {
-  INIT,
-  IDLE,
-  EXPORTING,
-  DONE
 }

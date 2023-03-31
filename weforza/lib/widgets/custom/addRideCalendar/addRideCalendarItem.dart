@@ -92,35 +92,41 @@ class _AddRideCalendarItemState extends State<AddRideCalendarItem> {
 
   ///Update the colors for the widget.
   void _setColors() {
+    // In the past.
     if (widget.isBeforeToday(widget.date)) {
-      if (widget.rideScheduledDuringCurrentSession(widget.date)) {
-        //Past day with ride
-        _backgroundColor =
-            ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
-        _fontColor = ApplicationTheme.rideCalendarPastDayWithRideFontColor;
-      } else {
-        //Past day without ride
-        _backgroundColor =
-            ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
-        _fontColor = ApplicationTheme.rideCalendarPastDayWithoutRideFontColor;
+      // A day in the past that had a ride.
+      if(widget.rideScheduledOn(widget.date)){
+        // A day in the past that just got a ride scheduled in the current session.
+        if(widget.rideScheduledDuringCurrentSession(widget.date)){
+          _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+          _fontColor = ApplicationTheme.rideCalendarDayFontColor;
+        }else {
+          // A day in the past that had a ride.
+          // The ride was scheduled in a different session.
+          _backgroundColor = ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor;
+          _fontColor = ApplicationTheme.rideCalendarDayFontColor;
+        }
+      }else {
+        // A day in the past that didn't have a ride.
+        _backgroundColor = ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor;
+        _fontColor = ApplicationTheme.rideCalendarDayFontColor;
       }
     } else {
+      // A day with a ride.
       if (widget.rideScheduledOn(widget.date)) {
+        // A day in the future (or today) that just got a ride scheduled in the current session.
         if (widget.rideScheduledDuringCurrentSession(widget.date)) {
-          //new selected date
-          _backgroundColor =
-              ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
-          _fontColor = ApplicationTheme.rideCalendarSelectedDayFontColor;
+          _backgroundColor = ApplicationTheme.rideCalendarSelectedDayBackgroundColor;
+          _fontColor = ApplicationTheme.rideCalendarDayFontColor;
         } else {
-          //existing date
-          _backgroundColor =
-              ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
-          _fontColor = ApplicationTheme.rideCalendarFutureDayWithRideFontColor;
+          // A day in the future (or today) that
+          // already had a ride scheduled in a different session.
+          _backgroundColor = ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor;
+          _fontColor = ApplicationTheme.rideCalendarDayFontColor;
         }
       } else {
-        //day without ride
-        _backgroundColor =
-            ApplicationTheme.rideCalendarFutureDayNoRideBackgroundColor;
+        // A day in the future (or today) that does not have a ride scheduled.
+        _backgroundColor = Colors.transparent; // Use the background color of the page.
         _fontColor = ApplicationTheme.rideCalendarFutureDayNoRideFontColor;
       }
     }

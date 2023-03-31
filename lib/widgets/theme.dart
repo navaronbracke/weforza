@@ -200,9 +200,6 @@ class RideCalendarTheme {
   /// or in the current selection of days.
   final TextStyle scheduledDayStyle = const TextStyle(color: Colors.white);
 
-  /// The text style for a day that can be scheduled.
-  final TextStyle selectableDayStyle = const TextStyle(color: Colors.black);
-
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);
 }

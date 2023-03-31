@@ -62,7 +62,7 @@ class FileNameInputField extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           PlatformAwareWidget(
-            android: () => TextFormField(
+            android: (_) => TextFormField(
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
               autocorrect: false,
@@ -88,7 +88,7 @@ class FileNameInputField extends StatelessWidget {
               ),
               autovalidateMode: AutovalidateMode.onUserInteraction,
             ),
-            ios: () => CupertinoTextField(
+            ios: (_) => CupertinoTextField(
               textInputAction: TextInputAction.done,
               keyboardType: TextInputType.text,
               placeholder: translator.Filename,
@@ -110,11 +110,11 @@ class FileNameInputField extends StatelessWidget {
             ),
           ),
           PlatformAwareWidget(
-            android: () => ValidationLabel(
+            android: (_) => ValidationLabel(
               stream: errorController,
               style: AppTheme.desctructiveAction.androidMediumErrorStyle,
             ),
-            ios: () => ValidationLabel(
+            ios: (_) => ValidationLabel(
               stream: errorController,
               style: const TextStyle(
                 color: CupertinoColors.destructiveRed,

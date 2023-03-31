@@ -77,8 +77,8 @@ class AddRideFormState extends ConsumerState<AddRideForm> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIosLayout(context),
+      android: _buildAndroidLayout,
+      ios: _buildIosLayout,
     );
   }
 
@@ -107,11 +107,11 @@ class _ClearRideSelectionButton extends StatelessWidget {
         }
 
         return PlatformAwareWidget(
-          android: () => IconButton(
+          android: (_) => IconButton(
             icon: const Icon(Icons.delete_sweep),
             onPressed: delegate.clearSelection,
           ),
-          ios: () => CupertinoIconButton(
+          ios: (_) => CupertinoIconButton(
             color: CupertinoColors.systemRed,
             icon: CupertinoIcons.xmark_rectangle_fill,
             onPressed: delegate.clearSelection,
@@ -146,8 +146,8 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
           child: Text(errorMessage),
         ),
         PlatformAwareWidget(
-          android: () => ElevatedButton(onPressed: onTap, child: Text(label)),
-          ios: () => CupertinoButton.filled(
+          android: (_) => ElevatedButton(onPressed: onTap, child: Text(label)),
+          ios: (_) => CupertinoButton.filled(
             onPressed: onTap,
             child: Text(label, style: const TextStyle(color: Colors.white)),
           ),

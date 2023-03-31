@@ -82,7 +82,7 @@ class ExcludedTermInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => TextFormField(
+      android: (_) => TextFormField(
         key: textFieldKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         buildCounter: _buildCounter,
@@ -106,7 +106,7 @@ class ExcludedTermInputField extends StatelessWidget {
         textInputAction: TextInputAction.done,
         validator: validator,
       ),
-      ios: () {
+      ios: (_) {
         final child = CupertinoTextFormFieldRow(
           key: textFieldKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,

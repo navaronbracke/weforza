@@ -141,7 +141,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
               ),
             ),
             PlatformAwareWidget(
-              android: () => ElevatedButton(
+              android: (_) => ElevatedButton(
                 child: Text(translator.Export),
                 onPressed: () {
                   final formState = _formKey.currentState;
@@ -153,7 +153,7 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
                   }
                 },
               ),
-              ios: () => CupertinoButton.filled(
+              ios: (_) => CupertinoButton.filled(
                 child: Text(
                   translator.Export,
                   style: const TextStyle(color: Colors.white),
@@ -176,8 +176,8 @@ class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context),
-      ios: () => _buildIosLayout(context),
+      android: _buildAndroidLayout,
+      ios: _buildIosLayout,
     );
   }
 

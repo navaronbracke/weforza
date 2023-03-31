@@ -42,7 +42,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
               Consumer(
                 builder: (context, ref, child) {
                   return PlatformAwareWidget(
-                    android: () => ElevatedButton(
+                    android: (context) => ElevatedButton(
                       onPressed: () {
                         final selectedMember = ref.read(selectedMemberProvider);
 
@@ -50,7 +50,7 @@ class MemberDevicesListEmpty extends StatelessWidget {
                       },
                       child: Text(translator.AddDevice),
                     ),
-                    ios: () => CupertinoButton.filled(
+                    ios: (context) => CupertinoButton.filled(
                       onPressed: () {
                         final selectedMember = ref.read(selectedMemberProvider);
 

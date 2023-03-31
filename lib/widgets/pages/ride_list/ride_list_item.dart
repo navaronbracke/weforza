@@ -11,7 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a single item for the ride list page.
 class RideListItem extends ConsumerStatefulWidget {
-  const RideListItem({Key? key, required this.ride}) : super(key: key);
+  RideListItem({required this.ride}) : super(key: ValueKey(ride.date));
 
   final Ride ride;
 

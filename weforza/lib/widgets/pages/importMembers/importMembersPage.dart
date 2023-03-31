@@ -7,7 +7,7 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/custom/checkmarkPainter/checkmarkPainter.dart';
+import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
@@ -137,20 +137,30 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             case ImportMembersState.DONE: return Center(
               child: LayoutBuilder(
                 builder: (context,constraints){
-                  final size = constraints.biggest.shortestSide * .3;
+                  final paintSize = constraints.biggest.shortestSide * .3;
                   return Center(
-                    child: SizedBox(
-                      width: size,
-                      height: size,
-                      child: CheckmarkPainter(
-                        color: ApplicationTheme.accentColor,
-                        size: Size.square(size),
-                        strokeWidth: 4.0,
-                        duration: Duration(milliseconds: 1000),
-                        strokeCap: StrokeCap.round,
-                        strokeJoin: StrokeJoin.round,
-                      ),
-                    ),
+                      child: SizedBox(
+                        width: paintSize,
+                        height: paintSize,
+                        child: Center(
+                          child: AnimatedCheckmark(
+                            color: ApplicationTheme.accentColor,
+                            duration: Duration(milliseconds: 400),
+                            size: Size.square(paintSize),
+                            strokeCap: StrokeCap.round,
+                            strokeJoin: StrokeJoin.round,
+                            strokeWidth: 4.0,
+                            createPath: (Size size){
+                              final xOffset = size.width *.1;
+                              final yOffset = -(size.height *.1);
+                              return Path()
+                                ..moveTo((size.width *.8) + xOffset, (size.height *.2) + yOffset)
+                                ..lineTo((size.width *.3) + xOffset, size.height + yOffset)
+                                ..lineTo(xOffset, (size.height *.8) + yOffset);
+                            },
+                          ),
+                        ),
+                      )
                   );
                 },
               ),

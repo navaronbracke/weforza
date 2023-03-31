@@ -61,15 +61,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         },
         items: [
           BottomNavigationBarItem(
-            title: Text(S.of(context).HomePageRidesTab),
+            label: S.of(context).HomePageRidesTab,
             icon: Icon(Icons.directions_bike),
           ),
           BottomNavigationBarItem(
-            title: Text(S.of(context).HomePageMembersTab),
+            label: S.of(context).HomePageMembersTab,
             icon: Icon(Icons.people),
           ),
           BottomNavigationBarItem(
-            title: Text(S.of(context).HomePageSettingsTab),
+            label: S.of(context).HomePageSettingsTab,
             icon: Icon(Icons.settings),
           ),
         ],
@@ -88,15 +88,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             currentIndex: _selectedIndex,
             items: [
               BottomNavigationBarItem(
-                title: Text(S.of(context).HomePageRidesTab),
+                label: S.of(context).HomePageRidesTab,
                 icon: Icon(Icons.directions_bike),
               ),
               BottomNavigationBarItem(
-                title: Text(S.of(context).HomePageMembersTab),
+                label: S.of(context).HomePageMembersTab,
                 icon: Icon(Icons.people),
               ),
               BottomNavigationBarItem(
-                title: Text(S.of(context).HomePageSettingsTab),
+                label: S.of(context).HomePageSettingsTab,
                 icon: Icon(CupertinoIcons.settings),
               ),
             ],

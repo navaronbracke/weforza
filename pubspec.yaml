@@ -53,7 +53,7 @@ dependencies:
   image_picker: ^0.8.6+1
 
   # The intl package provides translation utilities.
-  intl: ^0.17.0
+  intl: any
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
   jiffy: ^5.0.0
@@ -100,8 +100,3 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
-flutter_intl:
-  enabled: true
-  class_name: S
-  main_locale: nl

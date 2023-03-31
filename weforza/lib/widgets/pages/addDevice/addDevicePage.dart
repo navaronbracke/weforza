@@ -64,6 +64,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
+        bottom: false,
         child: _buildBody(context),
       ),
     );

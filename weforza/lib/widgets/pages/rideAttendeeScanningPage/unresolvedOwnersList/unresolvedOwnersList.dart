@@ -25,12 +25,15 @@ class UnresolvedOwnersList extends StatelessWidget {
         if(snapshot.connectionState == ConnectionState.done){
           return Column(
             children: [
-              Center(
-                child: Text(
-                  S.of(context).RideAttendeeScanningUnresolvedOwnersListTooltip,
-                  style: ApplicationTheme.rideAttendeeMultipleOwnersListTooltipStyle,
-                  softWrap: true, textAlign: TextAlign.center,
-                )
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Center(
+                  child: Text(
+                    S.of(context).RideAttendeeScanningUnresolvedOwnersListTooltip,
+                    style: ApplicationTheme.rideAttendeeMultipleOwnersListTooltipStyle,
+                    softWrap: true, textAlign: TextAlign.center,
+                  )
+                ),
               ),
               Expanded(
                 child: ListView.builder(

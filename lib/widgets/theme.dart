@@ -63,6 +63,45 @@ abstract class AppTheme {
   static const scanStepper = ScanStepperThemes();
 }
 
+/// This class defines a theme extension for destructive Material buttons.
+@immutable
+class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
+  DestructiveButtons({
+    this.errorColor,
+  })  : elevatedButtonStyle = ElevatedButton.styleFrom(
+          backgroundColor: errorColor,
+        ),
+        textButtonStyle = TextButton.styleFrom(foregroundColor: errorColor);
+
+  /// The style for destructive [ElevatedButton]s.
+  final ButtonStyle elevatedButtonStyle;
+
+  /// The color that is used to create the [ButtonStyle]s.
+  final Color? errorColor;
+
+  /// The style for destructive [TextButton]s.
+  final ButtonStyle textButtonStyle;
+
+  @override
+  DestructiveButtons copyWith({Color? errorColor}) {
+    return DestructiveButtons(errorColor: errorColor);
+  }
+
+  @override
+  ThemeExtension<DestructiveButtons> lerp(
+    ThemeExtension<DestructiveButtons>? other,
+    double t,
+  ) {
+    if (other is! DestructiveButtons) {
+      return this;
+    }
+
+    return DestructiveButtons(
+      errorColor: Color.lerp(errorColor, other.errorColor, t),
+    );
+  }
+}
+
 /// This class represents the theme for the bottom bar
 /// on the manual ride attendee selection page.
 ///
@@ -168,43 +207,4 @@ class ScanStepperThemes {
     ),
     inactive: CupertinoColors.inactiveGray,
   );
-}
-
-/// This class defines a theme extension for destructive Material buttons.
-@immutable
-class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
-  DestructiveButtons({
-    this.errorColor,
-  })  : elevatedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: errorColor,
-        ),
-        textButtonStyle = TextButton.styleFrom(foregroundColor: errorColor);
-
-  /// The style for destructive [ElevatedButton]s.
-  final ButtonStyle elevatedButtonStyle;
-
-  /// The color that is used to create the [ButtonStyle]s.
-  final Color? errorColor;
-
-  /// The style for destructive [TextButton]s.
-  final ButtonStyle textButtonStyle;
-
-  @override
-  DestructiveButtons copyWith({Color? errorColor}) {
-    return DestructiveButtons(errorColor: errorColor);
-  }
-
-  @override
-  ThemeExtension<DestructiveButtons> lerp(
-    ThemeExtension<DestructiveButtons>? other,
-    double t,
-  ) {
-    if (other is! DestructiveButtons) {
-      return this;
-    }
-
-    return DestructiveButtons(
-      errorColor: Color.lerp(errorColor, other.errorColor, t),
-    );
-  }
 }

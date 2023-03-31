@@ -65,6 +65,9 @@ abstract class ApplicationTheme {
 
   static final Color rideAttendeeCounterIconColor = Colors.black87;
 
+  static final TextStyle androidRideAttendeeListCounterTextStyle = TextStyle(fontSize: 14.0, color: Colors.white);
+  static final TextStyle iosRideAttendeeListCounterTextStyle = TextStyle(fontSize: 12.0);
+
   static final Color deviceIconColor = Colors.blueGrey;
   static final Color deviceTypePickerDotColor = Colors.blueGrey.shade100;
   static final Color deviceTypePickerCurrentDotColor = Colors.blueGrey;
@@ -73,6 +76,7 @@ abstract class ApplicationTheme {
   ///The member devices list header + button colors for IOS.
   static final Color memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blueGrey;
   static final Color memberDevicesListHeaderAddDeviceButtonPressedColor = Colors.blueGrey.shade100;
+  static final TextStyle memberDevicesListHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
 
   ///The member device item edit button color for android.
   static final Color memberDevicesListEditDeviceColor = Colors.blue.shade300;

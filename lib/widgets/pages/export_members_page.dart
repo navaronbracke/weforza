@@ -75,6 +75,7 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
 
   void onSelectFileExtension(FileExtension extension) {
     if (_fileExtension != extension) {
+      _filenameErrorController.add('');
       _fileExtension = extension;
     }
   }

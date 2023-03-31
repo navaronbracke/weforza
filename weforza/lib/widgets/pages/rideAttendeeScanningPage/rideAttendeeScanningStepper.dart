@@ -15,6 +15,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StreamBuilder<bool>(
+    initialData: true,
     stream: stream,
     builder: (context, snapshot) => PlatformAwareWidget(
       android: () => _buildAndroidWidget(context, snapshot.data!),

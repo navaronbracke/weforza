@@ -19,6 +19,7 @@ class ManualSelectionSubmit extends StatelessWidget {
     return Center(
       child: StreamBuilder<bool>(
         stream: isSaving,
+        initialData: false,
         builder: (context, snapshot){
           return PlatformAwareWidget(
             android: () => Padding(

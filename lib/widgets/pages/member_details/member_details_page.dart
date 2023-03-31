@@ -6,11 +6,11 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_member_dialog.dart';
-import 'package:weforza/widgets/pages/edit_member_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/member_name.dart';
 import 'package:weforza/widgets/pages/member_details/member_profile_image.dart';
+import 'package:weforza/widgets/pages/member_form/member_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -33,12 +33,20 @@ class MemberDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(translator.Details),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const EditMemberPage()),
+          Consumer(
+            builder: (context, ref, child) {
+              return IconButton(
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  final member = ref.read(selectedMemberProvider)!.value;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MemberForm(member: member),
+                    ),
+                  );
+                },
               );
             },
           ),
@@ -80,14 +88,20 @@ class MemberDetailsPage extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton.fromAppTheme(
-                  icon: CupertinoIcons.pencil,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditMemberPage(),
-                      ),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return CupertinoIconButton.fromAppTheme(
+                      icon: CupertinoIcons.pencil,
+                      onPressed: () {
+                        final member = ref.read(selectedMemberProvider)!.value;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MemberForm(member: member),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),

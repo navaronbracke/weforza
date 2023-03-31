@@ -83,7 +83,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       height: paintSize,
                       child: Center(
                         child: AnimatedCheckmark(
-                          color: ApplicationTheme.accentColor,
+                          color: ApplicationTheme.secondaryColor,
                           size: Size.square(paintSize),
                         ),
                       ),

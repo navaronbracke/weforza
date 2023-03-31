@@ -90,7 +90,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: Text(scannedNumber == null ? "?" : "$scannedNumber", style: TextStyle(color: Colors.white)),
+                    child: Text(scannedNumber == null ? "-" : "$scannedNumber", style: TextStyle(color: Colors.white)),
                   ),
                   const Icon(Icons.bluetooth_searching, color: Colors.white),
                 ],
@@ -103,7 +103,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
   }
 
   Widget _buildIosLayout(BuildContext context, int total, int? scannedNumber){
-    return CupertinoBottomBar(
+    return CupertinoBottomBar.tabBar(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(

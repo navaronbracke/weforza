@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This Widget will show a progress indicator
 ///that shows how much time is left until the scan stops.
@@ -70,15 +71,24 @@ class _RideAttendeeScanningProgressIndicatorAnimatableState extends State<_RideA
       builder: (context, child){
         return PreferredSize(
           preferredSize: Size(double.infinity, 1.0),
-          child: Material(
-            child: LinearProgressIndicator(
-              value: _animation.value,
-              valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.rideAttendeeScanProgressbarColor),
-              backgroundColor: ApplicationTheme.rideAttendeeScanProgressbarBackgroundColor,
-            ),
-          ),
+          child: Material(child: _buildIndicator(_animation.value)),
         );
       },
+    );
+  }
+
+  Widget _buildIndicator(double progress){
+    return PlatformAwareWidget(
+      android: () => LinearProgressIndicator(
+        value: progress,
+        valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.androidRideAttendeeScanProgressbarColor),
+        backgroundColor: ApplicationTheme.androidRideAttendeeScanProgressbarBackgroundColor,
+      ),
+      ios: () => LinearProgressIndicator(
+        value: progress,
+        valueColor: AlwaysStoppedAnimation<Color>(ApplicationTheme.iosRideAttendeeScanProgressbarColor),
+        backgroundColor: ApplicationTheme.iosRideAttendeeScanProgressbarBackgroundColor,
+      ),
     );
   }
 

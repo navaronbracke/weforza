@@ -37,10 +37,10 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
     await ref.read(rideRepositoryProvider).deleteRide(ride.date);
 
     // Refresh the ride list, there is a ride less in the collection.
-    ref.refresh(rideListProvider);
+    ref.invalidate(rideListProvider);
 
     // Refresh the member list, the members might have a reduced attending count.
-    ref.refresh(memberListProvider);
+    ref.invalidate(memberListProvider);
   }
 
   /// Set the selected ride to [ride].

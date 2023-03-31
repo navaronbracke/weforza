@@ -276,7 +276,6 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return const CupertinoDialogAction(
-          onPressed: null,
           child: CupertinoActivityIndicator(),
         );
     }

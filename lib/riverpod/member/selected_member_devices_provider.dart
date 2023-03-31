@@ -24,7 +24,7 @@ class SelectedMemberDevicesNotifier
     String? uuid,
   }) : super(const AsyncLoading()) {
     if (uuid == null) {
-      state = AsyncError(ArgumentError.notNull('uuid'));
+      state = AsyncError(ArgumentError.notNull('uuid'), StackTrace.current);
 
       return;
     }
@@ -35,7 +35,7 @@ class SelectedMemberDevicesNotifier
       }
     }).catchError((error) {
       if (mounted) {
-        state = AsyncError(error);
+        state = AsyncError(error, StackTrace.current);
       }
     });
   }

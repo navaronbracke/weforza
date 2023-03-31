@@ -11,11 +11,14 @@ class Member implements Comparable<Member> {
     required this.lastUpdated,
     required this.profileImageFilePath,
     required this.uuid,
-  }) : assert(uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(
+          uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty,
+          'The uuid, first name and last name of a member should not be empty',
+        );
 
   /// Create a member from the given [uuid] and [values].
   factory Member.of(String uuid, Map<String, Object?> values) {
-    assert(uuid.isNotEmpty);
+    assert(uuid.isNotEmpty, 'The uuid of a member should not be empty');
 
     return Member(
       active: values['active'] as bool? ?? true,

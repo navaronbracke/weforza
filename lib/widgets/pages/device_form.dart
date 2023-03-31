@@ -110,7 +110,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         middle: Text(
           widget.device == null ? translator.AddDevice : translator.EditDevice,
         ),
-        automaticallyImplyLeading: true,
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(

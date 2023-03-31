@@ -10,7 +10,10 @@ class AnimatedPathPainter extends CustomPainter {
     required this.strokeJoin,
     required this.strokeCap,
     required this.createPath,
-  })  : assert(strokeWidth > 0.0),
+  })  : assert(
+          strokeWidth > 0.0,
+          'The stroke width should be greater than zero',
+        ),
         super(repaint: animation);
 
   final Path Function(Size size) createPath;

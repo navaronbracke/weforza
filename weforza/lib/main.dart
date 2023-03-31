@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/injection/injector.dart';
@@ -28,18 +29,25 @@ class _WeForzaAppState extends State<WeForzaApp> {
   final String _appName = "WeForza";
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    child: PlatformAwareWidget(
-      android: () => _buildAndroidWidget(),
-      ios: () => _buildIosWidget(),
-    ),
-    onTap: (){
-      final FocusScopeNode currentFocus = FocusScope.of(context);
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
-    },
-  );
+  Widget build(BuildContext context){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    return GestureDetector(
+      child: PlatformAwareWidget(
+        android: () => _buildAndroidWidget(),
+        ios: () => _buildIosWidget(),
+      ),
+      onTap: (){
+        //enable tap to dismiss keyboard
+        final FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+    );
+  }
 
   Widget _buildAndroidWidget() {
     return MaterialApp(

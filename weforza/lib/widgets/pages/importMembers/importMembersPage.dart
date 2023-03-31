@@ -112,11 +112,33 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                   builder: (context, constraints){
                     return SizedBox(
                       width: constraints.biggest.shortestSide * .8,
-                      child: Center(
-                        child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
-                            style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                            softWrap: true, maxLines: 2
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
+                                style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                                softWrap: true, maxLines: 2
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4, top: 15),
+                            child: Text(
+                              S.of(context).ImportMembersCsvHeaderExampleDescription,
+                              style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                              softWrap: true,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              S.of(context).ImportMembersCsvHeaderExample,
+                              style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },

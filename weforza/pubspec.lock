@@ -70,7 +70,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.1"
   clock:
     dependency: transitive
     description:
@@ -128,7 +128,7 @@ packages:
     source: hosted
     version: "1.0.0"
   file:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file
       url: "https://pub.dartlang.org"
@@ -138,6 +138,13 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  file_testing:
+    dependency: "direct dev"
+    description:
+      name: file_testing
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
@@ -213,6 +220,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
+  integration_test:
+    dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   intl:
     dependency: "direct main"
     description:

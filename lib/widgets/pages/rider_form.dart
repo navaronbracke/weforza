@@ -295,7 +295,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                               const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
                           child: ProfileImagePicker(
                             delegate: _profileImageDelegate,
-                            imagePreviewSize: 64,
+                            imagePreviewSize: 80,
                             pickingIndicator: const SizedBox.square(
                               dimension: 88,
                               child: Center(

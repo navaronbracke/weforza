@@ -4,6 +4,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
+//TODO create a ride attendee futurebuilder for the count property
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget {
   RideListItem(this.ride, this._onTap): assert(ride != null && _onTap != null);

@@ -45,9 +45,6 @@ class Ride {
   ///The Date of the Ride. This is the key for the stored record.
   final DateTime date;
 
-  ///The number of attendees.
-  int numberOfAttendees;
-
   ///The ride's title.
   String title;
 
@@ -90,10 +87,10 @@ class Ride {
 
   @override
   bool operator ==(Object other) => other is Ride && date == other.date
-      && numberOfAttendees == other.numberOfAttendees && title == other.title
-      && startAddress == other.startAddress && destinationAddress == other.destinationAddress
+      && title == other.title && startAddress == other.startAddress
+      && destinationAddress == other.destinationAddress
       && distance == other.distance;
 
   @override
-  int get hashCode => hashValues(date,numberOfAttendees,title,startAddress,destinationAddress,distance);
+  int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
 }

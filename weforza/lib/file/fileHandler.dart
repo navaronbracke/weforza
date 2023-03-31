@@ -6,8 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/model/exportableRide.dart';
-import 'package:weforza/model/member.dart';
-import 'package:weforza/model/ride.dart';
 
 enum FileExtension {
   JSON, CSV
@@ -45,10 +43,6 @@ abstract class IFileHandler {
   ///Choose the file to use as datasource,
   ///from which to import members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
-
-  ///Save the given ride and attendees to the given file.
-  ///The extension determines how the data is structured inside the file.
-  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees);
 
   ///Save the given [ExportableRide]s to the given file.
   ///The extension determines how the data is structured inside the file.
@@ -96,30 +90,6 @@ class FileHandler implements IFileHandler {
     }
 
     return File(result.files.first.path);
-  }
-
-  @override
-  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees) async {
-    await _writeRideToFile(ride, attendees, file, extension);
-  }
-
-  Future<void> _writeRideToFile(Ride ride, List<Member> attendees, File file, String fileExtension) async {
-    if(fileExtension == FileExtension.CSV.extension()){
-      final buffer = StringBuffer();
-      buffer.writeln(ride.toCsv());
-      for(Member m in attendees){
-        buffer.writeln(m.toCsv());
-      }
-      await file.writeAsString(buffer.toString());
-    }else if(fileExtension == FileExtension.JSON.extension()){
-      final data = {
-        "details": ride.toJson(),
-        "attendees": attendees.map((a) => a.toJson()).toList()
-      };
-      await file.writeAsString(jsonEncode(data));
-    }else{
-      return Future.error(InvalidFileFormatError());
-    }
   }
 
   @override

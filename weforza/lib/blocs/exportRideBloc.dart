@@ -1,5 +1,7 @@
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -90,10 +92,31 @@ class ExportRideBloc extends Bloc {
       }else{
         _fileExistsController.add(false);
         _streamController.add(RideExportState.EXPORTING);
-        await fileHandler.saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
+        await saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
         _streamController.add(RideExportState.DONE);
       }
     }).catchError((e) => _streamController.addError(e));
+  }
+
+  ///Save the given ride and attendees to the given file.
+  ///The extension determines how the data is structured inside the file.
+  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees) async {
+    if(extension == FileExtension.CSV.extension()){
+      final buffer = StringBuffer();
+      buffer.writeln(ride.toCsv());
+      for(Member m in attendees){
+        buffer.writeln(m.toCsv());
+      }
+      await file.writeAsString(buffer.toString());
+    }else if(extension == FileExtension.JSON.extension()){
+      final data = {
+        "details": ride.toJson(),
+        "attendees": attendees.map((a) => a.toJson()).toList()
+      };
+      await file.writeAsString(jsonEncode(data));
+    }else{
+      return Future.error(InvalidFileFormatError());
+    }
   }
 
   @override

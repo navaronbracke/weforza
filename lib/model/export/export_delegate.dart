@@ -25,7 +25,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The controller that manages the selected directory.
   final BehaviorSubject<AsyncValue<Directory?>> _selectDirectoryController;
 
-  /// The file handler that will manage the underlying file.
+  /// The file handler that will provide directories.
   final FileHandler fileHandler;
 
   /// The controller that manages the selected file name.
@@ -79,7 +79,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         throw DirectoryNotFoundException();
       }
 
-      final file = await fileHandler.getFile(fileName);
+      final file = File(directory.path + Platform.pathSeparator + fileName);
 
       // If the file exists, revalidate the form to trigger the validation message.
       if (file.existsSync()) {
@@ -101,9 +101,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     final Directory? oldDirectory = _selectDirectoryController.valueOrNull?.value;
 
     try {
-      // TODO: implement directory selection API using `file_picker` getDirectory() API
-      // TODO: the handler interface should implement this
-      final Directory? directory = await foo();
+      final Directory? directory = await fileHandler.pickDirectory();
 
       if (!mounted) {
         return;

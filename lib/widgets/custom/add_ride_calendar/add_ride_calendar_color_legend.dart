@@ -6,85 +6,63 @@ import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 class AddRideCalendarColorLegend extends StatelessWidget {
   const AddRideCalendarColorLegend({super.key});
 
+  /// Build a row in the color legend.
+  Widget _buildLegendRow({
+    required Color color,
+    required String label,
+    EdgeInsets? padding,
+  }) {
+    final child = Row(
+      children: [
+        Container(
+          height: 20,
+          width: 20,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            color: color,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(label, softWrap: true),
+        ),
+      ],
+    );
+
+    if (padding != null) {
+      return Padding(padding: padding, child: child);
+    }
+
+    return child;
+  }
+
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
-
     final theme = RideCalendarTheme.fromPlatform(context);
 
     return IntrinsicWidth(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: theme.pastDay,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(translator.PastDayNoRide, softWrap: true),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: theme.pastRide,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(translator.PastDayWithRide, softWrap: true),
-                ),
-              ],
-            ),
-          ),
-          Padding(
+          _buildLegendRow(
+            color: theme.selection,
+            label: translator.CurrentSelection,
             padding: const EdgeInsets.only(bottom: 4),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 20,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: theme.selection,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(translator.CurrentSelection, softWrap: true),
-                ),
-              ],
-            ),
           ),
-          Row(
-            children: <Widget>[
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  color: theme.futureRide,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(translator.FutureRide, softWrap: true),
-              ),
-            ],
+          _buildLegendRow(
+            color: theme.futureRide,
+            label: translator.FutureRide,
+            padding: const EdgeInsets.only(bottom: 4),
+          ),
+          _buildLegendRow(
+            color: theme.pastRide,
+            label: translator.PastDayWithRide,
+            padding: const EdgeInsets.only(bottom: 4),
+          ),
+          _buildLegendRow(
+            color: theme.pastDay,
+            label: translator.PastDayNoRide,
           ),
         ],
       ),

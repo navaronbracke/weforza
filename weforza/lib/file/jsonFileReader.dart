@@ -57,7 +57,7 @@ class JsonFileReader implements ImportMembersFileReader<Map<String, dynamic>> {
     try {
       final Map<String, dynamic> json = jsonDecode(await file.readAsString());
 
-      return (json["members"] as List).map((item)=> item as Map<String, dynamic>).toList();
+      return (json["riders"] as List).map((item)=> item as Map<String, dynamic>).toList();
     }catch(e){
       return Future.error(JsonFormatIncompatibleException());
     }

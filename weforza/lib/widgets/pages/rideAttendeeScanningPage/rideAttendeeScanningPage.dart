@@ -6,6 +6,7 @@ import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rideAttendeeScanResult.dart';
 import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
@@ -65,17 +66,13 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the MediaQuery before creating the scaffold widget.
-    // The scaffold exposes a MediaQuery without the viewPadding.
-    final mediaQuery = MediaQuery.of(context);
-
     return PlatformAwareWidget(
-      android: () => _buildAndroidLayout(context, mediaQuery.viewPadding.bottom),
-      ios: () => _buildIOSLayout(context, mediaQuery.viewPadding.bottom),
+      android: () => _buildAndroidLayout(context),
+      ios: () => _buildIOSLayout(context),
     );
   }
 
-  Widget _buildAndroidLayout(BuildContext context, double bottomInset){
+  Widget _buildAndroidLayout(BuildContext context){
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -84,11 +81,11 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
           stream: bloc.isScanStep,
         ),
       ),
-      body: _buildBody(bottomInset)
+      body: _buildBody()
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context, double bottomInset){
+  Widget _buildIOSLayout(BuildContext context){
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -99,12 +96,14 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
         ),
       ),
       child: SafeArea(
-        child: _buildBody(bottomInset),
+        child: _buildBody(),
+        // We need the bottom view padding for the manual selection save widget.
+        bottom: false,
       ),
     );
   }
 
-  Widget _buildBody(double bottomInset) {
+  Widget _buildBody() {
     return StreamBuilder<ScanProcessStep>(
       initialData: ScanProcessStep.INIT,
       stream: bloc.scanStepStream,
@@ -153,22 +152,34 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
               );
             case ScanProcessStep.MANUAL:
               return RideAttendeeManualSelection(
+                isMemberScanned: bloc.isMemberScanned,
                 activeMembersFuture: bloc.loadActiveMembers(),
                 itemBuilder: _buildManualSelectionListItem,
-                saveButtonBuilder: (BuildContext buildContext) => _buildSaveButton(buildContext, bottomInset),
+                saveButtonBuilder: _buildSaveButton,
+                query: bloc.searchQuery,
+                showScanned: bloc.showScanned,
+                onShowScannedChanged: bloc.onShowScannedChanged,
+                onQueryChanged: bloc.onQueryChanged,
               );
             case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
             case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
             case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return Center(
               child: UnresolvedOwnersList(
                 future: bloc.filterAndSortMultipleOwnersList(),
-                itemBuilder: (Member member) => UnresolvedOwnersListItem(
-                  firstName: member.firstname,
-                  lastName: member.lastname,
-                  alias: member.alias,
-                  isSelected: () => bloc.isItemSelected(member.uuid),
-                  onTap: () => bloc.onMemberSelected(member.uuid),
-                ),
+                itemBuilder: (Member member){
+                  // For UnresolvedOwnersListItem's isScanned is false anyway.
+                  final attendeeScanResult = RideAttendeeScanResult(uuid: member.uuid, isScanned: false);
+
+                  return UnresolvedOwnersListItem(
+                    firstName: member.firstname,
+                    lastName: member.lastname,
+                    alias: member.alias,
+                    isSelected: () => bloc.isItemSelected(attendeeScanResult),
+                    // We should not show dialogs on this screen.
+                    // We have to select manually anyway.
+                    onTap: () => bloc.onMemberSelectedWithoutConfirmationDialog(attendeeScanResult),
+                  );
+                },
                 onButtonPressed: () => bloc.continueToManualSelection(),
               ),
             );
@@ -182,43 +193,49 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   ///Trigger an insertion for a new item in the AnimatedList.
   void _onDeviceFound(String deviceName){
     if(_listKey.currentState != null){
-      bloc.addScanResult(deviceName);
+      bloc.addAutomaticScanResult(deviceName);
       _listKey.currentState!.insertItem(0);
     }
   }
 
-  void _onSaveScanResults(BuildContext context) async {
-    await bloc.saveRideAttendees().then((_){
+  Future<void> _onSaveScanResults(BuildContext context) async {
+    // Errors from this future are caught
+    // by the FutureBuilder that consumes this method.
+    return await bloc.saveRideAttendees().then((_){
       widget.onRefreshAttendees();
       Navigator.of(context).pop();
-    }).catchError((error){
-      //do nothing
     });
   }
 
-  Widget _buildSaveButton(BuildContext context, double bottomInset){
+  Widget _buildSaveButton(BuildContext context){
     return ManualSelectionSubmit(
-      isSaving: bloc.saving,
-      onSave: () => _onSaveScanResults(context),
-      getAttendeeCount: bloc.getRideAttendeeCount,
-      attendeeCountStream: bloc.attendeeCount,
-      bottomInset: bottomInset,
+      attendeeCount: bloc.attendeeCount,
+      initialAttendeeCount: bloc.rideAttendeeCount,
+      showScanned: bloc.showScanned,
+      onShowScannedChanged: bloc.onShowScannedChanged,
+      save: () => _onSaveScanResults(context),
     );
   }
 
-  Widget _buildManualSelectionListItem(Member item){
+  Widget _buildManualSelectionListItem(Member item, bool isScanned){
     return ManualSelectionListItem(
       profileImageFuture: widget.fileHandler.loadProfileImageFromDisk(item.profileImageFilePath),
       firstName: item.firstname,
       lastName: item.lastname,
       alias: item.alias,
       personInitials: item.initials,
-      isSelected: () => bloc.isItemSelected(item.uuid),
-      onTap: (){
-        if(bloc.canSelectMember()){
-          bloc.onMemberSelected(item.uuid);
-        }
-      },
+      isScanned: () => bloc.isMemberScanned(item.uuid),
+      isSelected: () => bloc.isItemSelected(
+        RideAttendeeScanResult(
+          uuid: item.uuid,
+          isScanned: isScanned,
+        ),
+      ),
+      uuid: item.uuid,
+      canTap: () => bloc.canSelectMember,
+      addScanResult: bloc.addManualScanResult,
+      removeScanResult: bloc.removeScanResult,
+      scanResultExists: bloc.scanResultExists,
     );
   }
 

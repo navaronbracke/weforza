@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/file_handler.dart';
 
@@ -28,21 +29,29 @@ class ProfileImagePickerDelegate {
     _controller.add(const AsyncValue.data(null));
   }
 
-  /// Select a new image from the photo gallery.
-  void selectImageFromGallery() async {
+  /// Select a new profile image from the device gallery.
+  void selectProfileImageFromGallery() {
+    _selectProfileImage(ImageSource.gallery);
+  }
+
+  /// Take a new photo to use as profile image.
+  void takePhoto() => _selectProfileImage(ImageSource.camera);
+
+  /// Select a new profile image from the given [source].
+  void _selectProfileImage(ImageSource source) async {
     try {
       final previousFile = _controller.value.valueOrNull;
 
       _controller.add(const AsyncLoading());
 
-      final file = await fileHandler.pickProfileImage(ImageSource.gallery);
+      final file = await fileHandler.pickProfileImage(source);
 
       if (_controller.isClosed) {
         return;
       }
 
       // If the result is null, but there was a previous file,
-      // use hte previous file as result.
+      // use the previous file as result.
       if (previousFile != null && file == null) {
         _controller.add(AsyncValue.data(previousFile));
 

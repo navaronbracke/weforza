@@ -162,7 +162,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
+                Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.location)),
                 Flexible(child: Align(alignment: Alignment.centerRight, child: child)),
               ],
             ),
@@ -196,7 +196,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
 
         return CupertinoFormRow(
           padding: padding,
-          prefix: Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.directory)),
+          prefix: Padding(padding: const EdgeInsets.only(right: 16), child: Text(translator.location)),
           error: errorMessage != null ? Text(errorMessage!) : null,
           helper: directoryPath != null
               ? Center(

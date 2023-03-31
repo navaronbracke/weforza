@@ -94,7 +94,6 @@
 	"Ok": "Ok",
 	"PastDayNoRide": "Past Day Without Ride",
 	"PastDayWithRide": "Past Day With Ride",
-	"PreparingScan": "Preparing Scan",
 	"ResetCalendar": "Reset Calendar",
 	"ResetCalendarDescription": "This will remove all rides.\nThe attendances will be reset to zero.",
 	"ResetCalendarDialogDescription": "Are you sure that you want to remove all the rides?",

@@ -41,6 +41,7 @@
   "MemberDetailsNoDevicesAddDevice": "Add a device",
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
+  "MemberDetailsAlias": "Alias:",
 
   "DevicesListHeader": "Devices",
   "DevicesListNoDevices": "No devices to show",

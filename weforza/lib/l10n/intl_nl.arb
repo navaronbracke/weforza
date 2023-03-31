@@ -41,6 +41,7 @@
   "MemberDetailsNoDevicesAddDevice": "Voeg een toestel toe",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsAlias": "Alias:",
 
   "DevicesListHeader": "Toestellen",
   "DevicesListNoDevices": "Geen toestellen om te tonen",

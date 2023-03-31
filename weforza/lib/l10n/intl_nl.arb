@@ -30,8 +30,7 @@
   "Filter": "Filter",
 
   "ListEmpty": "Er is niets om te tonen",
-  "RidersListActiveRiders": "Actieve Renners ({amount})",
-  "RidersListInactiveRiders": "Inactieve Renners ({amount})",
+  "RidersListTitle": "Renners ({amount})",
 
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
 

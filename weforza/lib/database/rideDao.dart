@@ -138,19 +138,4 @@ class RideDao implements IRideDao {
 
     return attendees.length;
   }
-
-  //TODO call this migration and remove it afterwards
-  Future<void> stripDataFromAllRides() async {
-    final records = await _rideStore.find(_database);
-
-    //Strip all unused values from the rides
-    await _database.transaction((transaction) async {
-      await _rideStore.records(records.map((r)=> r.key)).update(transaction, records.map(((record) => {
-        "title": FieldValue.delete,
-        "destination": FieldValue.delete,
-        "start": FieldValue.delete,
-        "distance": FieldValue.delete
-      })).toList());
-    });
-  }
 }

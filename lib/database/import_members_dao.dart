@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:sembast/sembast.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportable_member.dart';
@@ -68,10 +66,10 @@ class ImportMembersDao implements IImportMembersDao {
     // With this collection we can check
     // if a given member is an existing one or not.
     // We can also retrieve properties of the existing member easily.
-    final Map<ImportableMemberKey, Member> existingMembers = HashMap();
+    final existingMembers = <ImportableMemberKey, Member>{};
     // This Map holds the existing devices per member uuid.
     // We can only filter on the name of the device.
-    final Map<String, Set<String>> existingDevices = HashMap();
+    final existingDevices = <String, Set<String>>{};
     // This set holds the members that are scheduled for an update.
     final Set<ImportableMember> membersToUpdate = {};
     // This set holds the members that are scheduled for insertion.

@@ -44,7 +44,7 @@ dependencies:
   jiffy: ^5.0.0
 
   # RxDart provides extensions to Dart Streams.
-  rxdart: ^0.27.3
+  rxdart: ^0.27.4
 
   # This package provides platform independent file picking.
   file_picker: ^4.6.1

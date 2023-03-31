@@ -278,6 +278,19 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                 delegate: SliverChildListDelegate.fixed([
                   CupertinoFormSection.insetGrouped(
                     children: [
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: ProfileImagePicker(
+                            delegate: _profileImageDelegate,
+                            size: 64,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  CupertinoFormSection.insetGrouped(
+                    children: [
                       CupertinoTextFormFieldRow(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         textCapitalization: TextCapitalization.words,

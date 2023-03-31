@@ -1,11 +1,9 @@
-
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 
 ///This class defines behaviour to scan for bluetooth devices.
 abstract class BluetoothDeviceScanner {
-
   ///Check if bluetooth is enabled.
   ///
   ///Returns true if bluetooth is currently enabled.
@@ -30,37 +28,46 @@ abstract class BluetoothDeviceScanner {
   ///After requesting the permission, the proper callback is called.
   ///When the permission was granted before [onGranted] gets called.
   ///When the permission is denied, [onDenied] gets called.
-  void requestScanPermission({required void Function() onGranted, required void Function() onDenied});
+  void requestScanPermission({
+    required void Function() onGranted,
+    required void Function() onDenied,
+  });
 }
 
 class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
-
-  final FlutterBlue _fBlInstance = FlutterBlue.instance;
+  final FlutterBluePlus _fBlInstance = FlutterBluePlus.instance;
 
   @override
   Future<bool> isBluetoothEnabled() => _fBlInstance.isOn;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) =>
-      _fBlInstance.scan(
-          allowDuplicates: false,
-          scanMode: ScanMode.balanced,
-          timeout: Duration(seconds: scanDurationInSeconds)
-      ).map((result) => BluetoothPeripheral(
-        id: result.device.id.id,
-        // Trim the whitespace off.
-        // This could otherwise cause matching issues later on.
-        deviceName: result.device.name.trim(),
-      ));
+      _fBlInstance
+          .scan(
+            allowDuplicates: false,
+            scanMode: ScanMode.balanced,
+            timeout: Duration(seconds: scanDurationInSeconds),
+          )
+          .map(
+            (result) => BluetoothPeripheral(
+              id: result.device.id.id,
+              // Trim the whitespace off.
+              // This could otherwise cause matching issues later on.
+              deviceName: result.device.name.trim(),
+            ),
+          );
 
   @override
   Future<void> stopScan() => _fBlInstance.stopScan();
 
   @override
-  void requestScanPermission({required void Function() onGranted, required void Function() onDenied}) async {
-    if(await Permission.locationWhenInUse.request().isGranted){
+  void requestScanPermission({
+    required void Function() onGranted,
+    required void Function() onDenied,
+  }) async {
+    if (await Permission.locationWhenInUse.request().isGranted) {
       onGranted();
-    }else{
+    } else {
       onDenied();
     }
   }

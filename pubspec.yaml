@@ -1,5 +1,5 @@
 name: weforza
-description: The WeForza Flutter App
+description: The WeForza App
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -14,7 +14,7 @@ description: The WeForza Flutter App
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -25,46 +25,48 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
 
   # The following dependency provides local persistence.
-  sembast: ^3.0.0+4
+  sembast: ^3.2.0
 
   # For OS-specific directory paths.
-  path_provider: ^2.0.1
+  path_provider: ^2.0.9
   path: ^1.8.0
 
   # UUID generator for globally unique ids.
-  uuid: ^3.0.1
+  uuid: ^3.0.6
 
   # The intl package provides translation utilities.
   intl: ^0.17.0
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^4.0.0
+  jiffy: ^5.0.0
 
   # RxDart provides extensions to Dart Streams.
-  rxdart: ^0.26.0
+  rxdart: ^0.27.3
 
   # This package provides platform independent file picking.
-  file_picker: ^3.0.0
+  file_picker: ^4.5.0
 
   # This package provides Bluetooth Low Energy functionality.
-  flutter_blue: ^0.8.0
+  flutter_blue_plus: ^1.1.2
 
   # This package provides easy access to app settings.
-  app_settings: ^4.1.0
+  app_settings: ^4.1.1
 
   # The permission_handler packages provides utilities for requesting permissions.
-  permission_handler: ^8.3.0
+  permission_handler: ^9.2.0
 
-  # package_info provides access to app specific information such as build number & version.
-  package_info: ^2.0.0
+  # package_info_plus provides access to app specific information such as build number & version.
+  package_info_plus: ^1.4.0
 
   file: ^6.1.2
 
 dev_dependencies:
   file_testing: 3.0.0
+
+  flutter_lints: ^1.0.4
 
   test: any
 

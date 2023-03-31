@@ -20,7 +20,7 @@ abstract class IDeviceDao {
   ///Note that device names can occur in multiple lists, as multiple people can have a device with the same name.
   ///This method is essentially the exact opposite of [getAllOwnersGroupedByDeviceName].
   ///We group on owner ID and not on device name.
-  Future<HashMap<String, List<String>>> getAllDevicesGroupedByOwnerId();
+  Future<HashMap<String, Set<String>>> getAllDevicesGroupedByOwnerId();
 
   ///Get the owners of all devices, grouped by device name.
   ///This groups owners that have devices with the same name in the same list.
@@ -110,10 +110,10 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<HashMap<String, List<String>>> getAllDevicesGroupedByOwnerId() async {
+  Future<HashMap<String, Set<String>>> getAllDevicesGroupedByOwnerId() async {
     final List<RecordSnapshot<String, Map<String, dynamic>>> devices = await _deviceStore.find(_database);
 
-    final HashMap<String,List<String>> collection = HashMap();
+    final HashMap<String,Set<String>> collection = HashMap();
 
     devices.forEach((record) {
       final String device = record["deviceName"] as String;
@@ -122,7 +122,7 @@ class DeviceDao implements IDeviceDao {
       if(collection.containsKey(ownerUuid)){
         collection[ownerUuid].add(device);
       }else{
-        collection[ownerUuid] = <String>[device];
+        collection[ownerUuid] = Set.of(<String>[device]);
       }
     });
 

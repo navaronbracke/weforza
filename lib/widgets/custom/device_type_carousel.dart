@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/common/device_widget_utils.dart';
 
 class DeviceTypeCarousel extends StatelessWidget {
   const DeviceTypeCarousel({
@@ -67,15 +66,19 @@ class DeviceTypeCarousel extends StatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context, int index) {
+    final deviceType = DeviceType.values[index];
+
     return Column(
       children: <Widget>[
         Expanded(
           child: Center(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return Icon(getDeviceTypeIconData(index),
-                    color: ApplicationTheme.deviceTypePickerCurrentDotColor,
-                    size: constraints.biggest.shortestSide * .9);
+                return Icon(
+                  deviceType.icon,
+                  color: ApplicationTheme.deviceTypePickerCurrentDotColor,
+                  size: constraints.biggest.shortestSide * .9,
+                );
               },
             ),
           ),
@@ -83,33 +86,13 @@ class DeviceTypeCarousel extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Center(
-              child: Text(
-            _getLabel(context, index),
-            style: const TextStyle(fontSize: 14.0),
-          )),
+            child: Text(
+              deviceType.getLabel(S.of(context)),
+              style: const TextStyle(fontSize: 14.0),
+            ),
+          ),
         ),
       ],
     );
-  }
-
-  String _getLabel(BuildContext context, int index) {
-    switch (DeviceType.values[index]) {
-      case DeviceType.headset:
-        return S.of(context).DeviceHeadset;
-      case DeviceType.watch:
-        return S.of(context).DeviceWatch;
-      case DeviceType.powerMeter:
-        return S.of(context).DevicePowerMeter;
-      case DeviceType.cadenceMeter:
-        return S.of(context).DeviceCadenceMeter;
-      case DeviceType.phone:
-        return S.of(context).DevicePhone;
-      case DeviceType.gps:
-        return S.of(context).DeviceGPS;
-      case DeviceType.pulseMonitor:
-        return S.of(context).DevicePulseMonitor;
-      default:
-        return S.of(context).DeviceUnknown;
-    }
   }
 }

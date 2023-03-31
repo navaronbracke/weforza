@@ -27,6 +27,7 @@ class MemberListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         decoration: const BoxDecoration(),
         child: Padding(

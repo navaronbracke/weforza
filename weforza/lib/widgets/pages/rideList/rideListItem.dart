@@ -26,70 +26,30 @@ class RideListItem extends StatelessWidget {
   );
 
   Widget _buildAndroidLayout(BuildContext context) {
-    return (ride.title == null || ride.title.isEmpty)
-        ? ListTile(
-            title: Row(
-              children: <Widget>[
-                Text(ride.getFormattedDate(context, false)),
-                Expanded(child: Center()),
-                RideAttendeeCounter(future: rideAttendeeFuture),
-              ],
-            ),
-          )
-        : ListTile(
-            title: Text(
-              ride.title,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
-            subtitle: Row(
-              children: <Widget>[
-                Text(ride.getFormattedDate(context, false)),
-                Expanded(child: Center()),
-                RideAttendeeCounter(future: rideAttendeeFuture),
-              ],
-            ));
+    return ListTile(
+      title: Row(
+        children: <Widget>[
+          Text(ride.getFormattedDate(context, false)),
+          Expanded(child: Center()),
+          RideAttendeeCounter(future: rideAttendeeFuture),
+        ],
+      ),
+    );
   }
 
   Widget _buildIOSLayout(BuildContext context) {
-    return (ride.title == null || ride.title.isEmpty)
-        ? Container(
-            decoration: BoxDecoration(),
-            child: Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Row(
-                children: <Widget>[
-                  Text(ride.getFormattedDate(context, false)),
-                  Expanded(child: Center()),
-                  RideAttendeeCounter(future: rideAttendeeFuture),
-                ],
-              ),
-            ),
-          )
-        : Container(
-            decoration: BoxDecoration(),
-            child: Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    ride.title,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16,color: Colors.blue),
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: <Widget>[
-                      Text(ride.getFormattedDate(context, false)),
-                      Expanded(child: Center()),
-                      RideAttendeeCounter(future: rideAttendeeFuture)
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
+    return Container(
+      decoration: BoxDecoration(),
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Row(
+          children: <Widget>[
+            Text(ride.getFormattedDate(context, false)),
+            Expanded(child: Center()),
+            RideAttendeeCounter(future: rideAttendeeFuture),
+          ],
+        ),
+      ),
+    );
   }
 }

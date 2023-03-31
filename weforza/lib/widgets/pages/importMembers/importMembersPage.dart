@@ -137,11 +137,13 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
             case ImportMembersState.DONE: return Center(
               child: LayoutBuilder(
                 builder: (context,constraints){
-                  final size = constraints.biggest.shortestSide * .8;
-                  return SizedBox(
-                    width: size,
-                    height: size,
-                    child: ImportMembersComplete(),
+                  final size = constraints.biggest.shortestSide * .3;
+                  return Center(
+                    child: SizedBox(
+                      width: size,
+                      height: size,
+                      child: ImportMembersComplete(),
+                    ),
                   );
                 },
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/importMembersBloc.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -57,94 +58,22 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
       builder: (context, snapshot){
         if(snapshot.hasError){
           if(snapshot.error is NoFileChosenError){
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                    S.of(context).ImportMembersPickFileWarning,
-                    style: ApplicationTheme.importWarningTextStyle,
-                    softWrap: true
-                ),
-                SizedBox(height: 10),
-                _buildButton(context),
-              ],
-            );
-          }else if(snapshot.error is InvalidFileFormatError){
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                    S.of(context).ImportMembersInvalidFileFormat,
-                    style: ApplicationTheme.importWarningTextStyle,
-                    softWrap: true
-                ),
-                SizedBox(height: 10),
-                _buildButton(context),
-                SizedBox(height: 10),
-                LayoutBuilder(
-                  builder: (context, constraints){
-                    return SizedBox(
-                      width: constraints.biggest.shortestSide * .8,
-                      child: Center(
-                        child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
-                            style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                            softWrap: true, maxLines: 2
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+            return _buildNoFileChosen(context);
+          }else if(snapshot.error is InvalidFileExtensionError){
+            return _buildInvalidFileExtension(context);
+          }else if(snapshot.error is CsvHeaderMissingError){
+            return _buildCsvHeaderMissing(context);
+          }else if(snapshot.error is JsonFormatIncompatibleException){
+            return GenericError(
+                text: S.of(context).ImportMembersIncompatibleFileJsonContents,
+                icon: Icons.insert_drive_file
             );
           }else{
             return GenericError(text: S.of(context).GenericError);
           }
         }else{
           switch(snapshot.data){
-            case ImportMembersState.IDLE: return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(""),
-                SizedBox(height: 10),
-                _buildButton(context),
-                SizedBox(height: 10),
-                LayoutBuilder(
-                  builder: (context, constraints){
-                    return SizedBox(
-                      width: constraints.biggest.shortestSide * .8,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(S.of(context).ImportMembersHeaderStrippedMessage,
-                                style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                                softWrap: true, maxLines: 2
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4, top: 15),
-                            child: Text(
-                              S.of(context).ImportMembersCsvHeaderExampleDescription,
-                              style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                              softWrap: true,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              S.of(context).ImportMembersCsvHeaderExample,
-                              style: ApplicationTheme.importMembersHeaderRemovalMessageTextStyle,
-                              softWrap: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            );
+            case ImportMembersState.IDLE: return _buildPickFileForm(context);
             case ImportMembersState.PICKING_FILE: return Center(
                 child: PlatformAwareLoadingIndicator()
             );
@@ -175,7 +104,6 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                 },
               ),
             );
-
             default: return GenericError(text: S.of(context).GenericError);
           }
         }
@@ -206,6 +134,87 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
         ),
         onPressed: () => onImportMembers(context),
       ),
+    );
+  }
+
+  Widget _buildNoFileChosen(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+            S.of(context).ImportMembersPickFileWarning,
+            style: ApplicationTheme.importWarningTextStyle,
+            softWrap: true
+        ),
+        SizedBox(height: 10),
+        _buildButton(context),
+      ],
+    );
+  }
+
+  Widget _buildInvalidFileExtension(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+            S.of(context).ImportMembersInvalidFileExtension,
+            style: ApplicationTheme.importWarningTextStyle,
+            softWrap: true
+        ),
+        SizedBox(height: 10),
+        _buildButton(context),
+      ],
+    );
+  }
+
+  Widget _buildCsvHeaderMissing(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+            S.of(context).ImportMembersCsvHeaderRequired,
+            style: ApplicationTheme.importWarningTextStyle,
+            softWrap: true
+        ),
+        SizedBox(height: 10),
+        _buildButton(context),
+        SizedBox(height: 10),
+        LayoutBuilder(
+          builder: (context, constraints){
+            return SizedBox(
+              width: constraints.biggest.shortestSide * .8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(S.of(context).ImportMembersCsvHeaderExampleDescription,
+                        style: ApplicationTheme.importMembersHeaderExampleTextStyle,
+                        softWrap: true
+                    ),
+                  ),
+                  Text(
+                    S.of(context).ImportMembersCsvHeaderExample,
+                    style: ApplicationTheme.importMembersHeaderExampleTextStyle,
+                    softWrap: true,
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPickFileForm(BuildContext context){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(""),
+        SizedBox(height: 10),
+        _buildButton(context),
+      ],
     );
   }
 

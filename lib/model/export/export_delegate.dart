@@ -122,6 +122,39 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     return _lastExistingFileName == fileName;
   }
 
+  /// Select a new directory as the parent folder of the export file.
+  void selectDirectory() async {
+    final Directory? oldDirectory = _selectDirectoryController.valueOrNull?.value;
+
+    try {
+      // TODO: implement directory selection API using `file_picker` getDirectory() API
+      // TODO: the handler interface should implement this
+      final Directory? directory = await foo();
+
+      if (!mounted) {
+        return;
+      }
+
+      // Revert to the previous directory if none was selected.
+      if (directory == null) {
+        _selectDirectoryController.add(AsyncData(oldDirectory));
+
+        return;
+      }
+
+      _selectDirectoryController.add(AsyncData(directory));
+    } catch (error, stackTrace) {
+      if (!mounted) {
+        return;
+      }
+
+      // Amend the `AsyncValue.value` so that the old directory path is preserved.
+      _selectDirectoryController.add(
+        AsyncError<Directory?>(error, stackTrace).copyWithPrevious(AsyncData(oldDirectory)),
+      );
+    }
+  }
+
   /// Set the selected file format to [value].
   ///
   /// Does nothing if [value] is null.

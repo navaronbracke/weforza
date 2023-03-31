@@ -50,7 +50,7 @@ class ExportDataPage<T> extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 32),
             child: ExportDataFolderSelection(
               initialData: delegate.selectedDirectory,
-              selectDirectory: selectDirectory,
+              selectDirectory: delegate.selectDirectory,
               stream: delegate.selectedDirectoryStream,
             ),
           ),
@@ -130,7 +130,7 @@ class ExportDataPage<T> extends StatelessWidget {
         ExportDataFileNameTextField<T>(delegate: delegate),
         ExportDataFolderSelection(
           initialData: delegate.selectedDirectory,
-          selectDirectory: selectDirectory,
+          selectDirectory: delegate.selectDirectory,
           stream: delegate.selectedDirectoryStream,
         ),
         CupertinoFormRow(

@@ -91,7 +91,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: ProfileImage(image: bloc.member.profileImage),
+                    child: ProfileImage(
+                      image: bloc.member.profileImage,
+                      personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
+                    ),
                   ),
                   Expanded(
                     child: Column(
@@ -210,7 +213,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: ProfileImage(image: bloc.member.profileImage),
+                      child: ProfileImage(
+                        image: bloc.member.profileImage,
+                        personInitials: bloc.member.firstName[0] + bloc.member.lastName[0],
+                      ),
                     ),
                     Expanded(
                       child: Column(

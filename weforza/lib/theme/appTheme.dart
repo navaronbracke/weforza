@@ -44,6 +44,11 @@ abstract class ApplicationTheme {
   ///The profile image placeholder icon's background color.
   static const Color profileImagePlaceholderIconBackgroundColor = Color(0xFF1976D2);
 
+  static const TextStyle profileImageInitialTextStyle = TextStyle(
+      fontFamily: 'Roboto',
+      color: Colors.white,
+  );
+
   ///The background color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
   ///The background color for a selected ride attendee.

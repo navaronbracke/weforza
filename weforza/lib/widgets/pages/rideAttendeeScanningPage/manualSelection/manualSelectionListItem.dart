@@ -135,15 +135,16 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return ProfileImage(
-                image: null,//fallback to placeholder if file cannot be opened
-                icon: Icons.person,
-                size: 40
+              icon: Icons.person,
+              size: 40,
+              personInitials: widget.firstName[0] + widget.lastName[0],
             );
           }else{
             return ProfileImage(
-                image: snapshot.data,
-                icon: Icons.person,
-                size: 40
+              image: snapshot.data,
+              icon: Icons.person,
+              size: 40,
+              personInitials: widget.firstName[0] + widget.lastName[0],
             );
           }
         }else{

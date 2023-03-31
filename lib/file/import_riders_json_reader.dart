@@ -57,7 +57,6 @@ class ImportRidersJsonReader
 
   @override
   Future<List<Map<String, dynamic>>> readFile(File file) async {
-    // If the file cannot be read, don't throw a format exception.
     final fileContent = await file.readAsString();
 
     try {

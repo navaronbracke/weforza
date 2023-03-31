@@ -21,5 +21,5 @@ class DeviceRepository {
 
   Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]) => _dao.deviceExists(deviceName, ownerUuid, creationDate);
 
-  Future<HashMap<String,List<String>>> getOwnersOfAllDevices() => _dao.getOwnersOfAllDevices();
+  Future<HashMap<String,List<String>>> getOwnersOfAllDevices() => _dao.getAllOwnersGroupedByDeviceName();
 }

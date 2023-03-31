@@ -3,7 +3,6 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
-import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -32,10 +31,6 @@ abstract class IMemberDao {
 
   /// Set the active state for a given member to the new value.
   Future<void> setMemberActive(String uuid, bool value);
-
-  /// This DB migration adds [Member.lastUpdated] to all existing members.
-  /// TODO remove when migrated
-  Future<void> migrateMembersToHaveTimestamp();
 }
 
 ///This class is an implementation of [IMemberDao].
@@ -141,14 +136,5 @@ class MemberDao implements IMemberDao {
     if(await record.exists(_database)){
       await record.update(_database, { "active": value});
     }
-  }
-
-  @override
-  Future<void> migrateMembersToHaveTimestamp() async {
-    final records = await _memberStore.find(_database);
-
-    await _memberStore.records(records.map((record) => record.key)).update(_database, records.map((record) => {
-      "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds()
-    }).toList());
   }
 }

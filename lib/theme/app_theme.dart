@@ -7,7 +7,8 @@ abstract class ApplicationTheme {
   /// Primary / Secondary Theme colors.
   /// The primary color is defined as a [MaterialColor].
   static const MaterialColor primaryColor = Colors.blue;
-  static final Color secondaryColor = Colors.blue.shade300;
+
+  static const Color secondaryColor = Color(0xFF64B5F6);
 
   /// The color for a calendar day
   /// that is now or in the future, which has no ride.
@@ -206,7 +207,7 @@ abstract class ApplicationTheme {
 
   /// The iOS theme.
   static CupertinoThemeData iosTheme() {
-    return CupertinoThemeData(
+    return const CupertinoThemeData(
       primaryColor: primaryColor,
       primaryContrastingColor: secondaryColor,
     );

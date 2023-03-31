@@ -30,7 +30,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   Future<void> saveSettings() {
     // Use an artificial delay to make it look smoother.
-    return Future.delayed(const Duration(milliseconds: 500), () {
+    return Future.delayed(const Duration(milliseconds: 500), () async {
       final newSettings = Settings(
         scanDuration: scanDurationController.value.floor(),
         memberListFilter: memberFilterController.value,
@@ -38,11 +38,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
       final repository = ref.read(settingsRepositoryProvider);
 
-      return repository.write(newSettings).then((_) {
-        if (mounted) {
-          ref.read(settingsProvider.notifier).state = newSettings;
-        }
-      });
+      await repository.write(newSettings);
+
+      if (mounted) {
+        ref.read(settingsProvider.notifier).state = newSettings;
+      }
     });
   }
 

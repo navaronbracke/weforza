@@ -91,11 +91,6 @@ class AttendeeScanningBloc extends Bloc {
   /// This way we can easily map scanned device names to it.
   HashMap<String, Member> _members = HashMap();
 
-  /// This collection will keep a duplicate, sorted version, of [members.values].
-  /// This gives us the advantage of still being able to do the efficient HashMap lookup.
-  /// Albeit with increased memory footprint, for the ordered collection.
-  List<Member> sortedMembers;
-
   /// This collection keeps track of a specific set of owners.
   /// If a device with multiple possible owners is scanned,
   /// the owners that aren't scanned yet (by finding a device only they own)
@@ -144,10 +139,6 @@ class AttendeeScanningBloc extends Bloc {
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
 
-      //Start the scan.
-      //Filters the already scanned devices.
-      //Then maps the result to the device name.
-      //And finishes by filtering the devices of which there is only one owner, that was already scanned.
       scanner.scanForDevices(scanDuration)
           .where((device){
             //Remove invalid device names.
@@ -165,7 +156,6 @@ class AttendeeScanningBloc extends Bloc {
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
-        //At this point the user can also switch pages.
         isScanning.value = false;
       }, cancelOnError: false);
     }
@@ -209,12 +199,10 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   /// Load the active members.
-  /// Once loaded, the members are stored in 2 collections.
-  /// The first is a HashMap, for easy lookup further in the scanning process.
-  /// The second is a sorted list, for displaying the members in the right order in the UI.
   Future<void> _loadMembers() async {
-    sortedMembers = await memberRepo.getMembers(MemberFilterOption.ACTIVE);
-    sortedMembers.forEach((Member member) => _members[member.uuid] = member);
+    final List<Member> list = await memberRepo.getMembers(MemberFilterOption.ACTIVE);
+
+    list.forEach((Member member) => _members[member.uuid] = member);
   }
 
   /// Returns whether a given device name should be included in the scan results.
@@ -277,6 +265,11 @@ class AttendeeScanningBloc extends Bloc {
     }else{
       return [];
     }
+  }
+
+  /// Load the members for the manual selection page.
+  Future<List<Member>> loadMembersForManualSelection() {
+    return memberRepo.getMembers(MemberFilterOption.ALL);
   }
 
   ///Stop a running bluetooth scan.

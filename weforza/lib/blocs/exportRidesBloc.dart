@@ -26,8 +26,8 @@ class ExportRidesBloc extends Bloc {
   final StreamController<RideExportState> _submitController = BehaviorSubject();
   Stream<RideExportState> get submitStream => _submitController.stream;
 
-  final StreamController<bool> _fileExistsController = BehaviorSubject();
-  Stream<bool> get fileExistsStream => _fileExistsController.stream;
+  final StreamController<String> _fileNameErrorController = BehaviorSubject();
+  Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
 
   bool autoValidateFileName = false;
   final int filenameMaxLength = 80;
@@ -36,7 +36,12 @@ class ExportRidesBloc extends Bloc {
 
   FileExtension _fileExtension = FileExtension.CSV;
 
-  void onSelectFileExtension(FileExtension extension) => _fileExtension = extension;
+  void onSelectFileExtension(FileExtension extension){
+    if(_fileExtension != extension){
+      _fileNameErrorController.add("");
+      _fileExtension = extension;
+    }
+  }
 
   ///Form Error message
   String filenameError;
@@ -48,6 +53,10 @@ class ExportRidesBloc extends Bloc {
       String filenameNameMaxLengthMessage,
       String invalidFilenameMessage)
   {
+    if(_filename != filename){
+      _fileNameErrorController.add("");
+    }
+
     if(filename == null || filename.isEmpty){
       filenameError = fileNameIsRequired;
     }else if(filename.trim().isEmpty){
@@ -65,14 +74,14 @@ class ExportRidesBloc extends Bloc {
     return filenameError;
   }
 
-  Future<void> exportRidesWithAttendees() async {
+  Future<void> exportRidesWithAttendees(String fileExistsMessage) async {
     final Iterable<ExportableRide> rides = await repository.getRides();
 
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _fileExistsController.add(true);
+        _fileNameErrorController.add(fileExistsMessage);
       }else{
-        _fileExistsController.add(false);
+        _fileNameErrorController.add("");
         _submitController.add(RideExportState.EXPORTING);
         await _saveRidesToFile(file, _fileExtension.extension(), rides);
         _submitController.add(RideExportState.DONE);
@@ -113,7 +122,7 @@ class ExportRidesBloc extends Bloc {
   @override
   void dispose() {
     _submitController.close();
-    _fileExistsController.close();
+    _fileNameErrorController.close();
     fileNameController.dispose();
   }
 

@@ -94,11 +94,11 @@ class _ExportRidePageState extends State<ExportRidePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
-                    child: StreamBuilder<bool>(
-                      initialData: false,
-                      stream: widget.bloc.fileExistsStream,
+                    child: StreamBuilder<String>(
+                      initialData: "",
+                      stream: widget.bloc.fileNameErrorStream,
                       builder: (context, snapshot){
-                        return Text(snapshot.data ? S.of(context).FileExists : "");
+                        return Text(snapshot.data);
                       },
                     ),
                   ),
@@ -109,7 +109,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       child: Text(S.of(context).Export),
                       onPressed: (){
                         if(_formKey.currentState.validate()){
-                          widget.bloc.exportRide();
+                          widget.bloc.exportRide(S.of(context).FileExists);
                         }
                       },
                     ),
@@ -117,7 +117,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       child: Text(S.of(context).Export),
                       onPressed: (){
                         if (_iosValidateFilename(context)) {
-                          widget.bloc.exportRide();
+                          widget.bloc.exportRide(S.of(context).FileExists);
                         }else {
                           setState(() {});
                         }

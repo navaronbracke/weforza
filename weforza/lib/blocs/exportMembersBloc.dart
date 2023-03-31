@@ -23,8 +23,8 @@ class ExportMembersBloc extends Bloc {
   final StreamController<MembersExportState> _streamController = BehaviorSubject();
   Stream<MembersExportState> get stream => _streamController.stream;
 
-  final StreamController<bool> _fileExistsController = BehaviorSubject();
-  Stream<bool> get fileExistsStream => _fileExistsController.stream;
+  final StreamController<String> _fileNameErrorController = BehaviorSubject();
+  Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
 
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final TextEditingController filenameController = TextEditingController();
@@ -36,7 +36,12 @@ class ExportMembersBloc extends Bloc {
 
   FileExtension _fileExtension = FileExtension.CSV;
 
-  void onSelectFileExtension(FileExtension extension) => _fileExtension = extension;
+  void onSelectFileExtension(FileExtension extension){
+   if(_fileExtension != extension){
+     _fileNameErrorController.add("");
+     _fileExtension = extension;
+   }
+  }
 
   ///Form Error message
   String filenameError;
@@ -48,6 +53,10 @@ class ExportMembersBloc extends Bloc {
       String filenameNameMaxLengthMessage,
       String invalidFilenameMessage)
   {
+    if(_filename != filename){
+      _fileNameErrorController.add("");
+    }
+
     if(filename == null || filename.isEmpty){
       filenameError = fileNameIsRequired;
     }else if(filename.trim().isEmpty){
@@ -64,12 +73,12 @@ class ExportMembersBloc extends Bloc {
     return filenameError;
   }
 
-  Future<void> exportMembers(String csvHeader) async {
+  Future<void> exportMembers(String csvHeader, String fileExistsMessage) async {
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _fileExistsController.add(true);
+        _fileNameErrorController.add(fileExistsMessage);
       }else{
-        _fileExistsController.add(false);
+        _fileNameErrorController.add("");
         _streamController.add(MembersExportState.EXPORTING);
         final Iterable<ExportableMember> exports = await exportMembersRepository.getMembers();
         await _saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
@@ -106,7 +115,7 @@ class ExportMembersBloc extends Bloc {
   @override
   void dispose() {
     filenameController.dispose();
-    _fileExistsController.close();
+    _fileNameErrorController.close();
     _streamController.close();
   }
 }

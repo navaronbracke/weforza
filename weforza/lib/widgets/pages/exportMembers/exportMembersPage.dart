@@ -85,11 +85,11 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: StreamBuilder<bool>(
-                        initialData: false,
-                        stream: bloc.fileExistsStream,
+                      child: StreamBuilder<String>(
+                        initialData: "",
+                        stream: bloc.fileNameErrorStream,
                         builder: (context, snapshot){
-                          return Text(snapshot.data ? S.of(context).FileExists : "");
+                          return Text(snapshot.data);
                         },
                       ),
                     ),
@@ -100,7 +100,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if(_formKey.currentState.validate()){
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
+                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader, S.of(context).FileExists);
                           }
                         },
                       ),
@@ -108,7 +108,7 @@ class _ExportMembersPageState extends State<ExportMembersPage> {
                         child: Text(S.of(context).Export),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
-                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader);
+                            await bloc.exportMembers(S.of(context).ExportMembersCsvHeader, S.of(context).FileExists);
                           }else {
                             setState(() {});
                           }

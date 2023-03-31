@@ -7,9 +7,6 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget is shown as replacement of a [Member]'s devices, if it has none.
 class MemberDevicesListEmpty extends StatelessWidget {
-  MemberDevicesListEmpty({@required this.onPressed}): assert(onPressed != null);
-
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -28,12 +25,9 @@ class MemberDevicesListEmpty extends StatelessWidget {
           color: ApplicationTheme.listInformationalIconColor,
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
-        SizedBox(height: 5),
-        Text(S.of(context).MemberDetailsNoDevices),
-        SizedBox(height: 5),
-        FlatButton(
-          child: Text(S.of(context).MemberDetailsNoDevicesAddDevice,style: TextStyle(color: Colors.blue)),
-          onPressed: onPressed,
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(S.of(context).MemberDetailsNoDevices),
         ),
       ],
     );
@@ -48,12 +42,9 @@ class MemberDevicesListEmpty extends StatelessWidget {
           color: ApplicationTheme.listInformationalIconColor,
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
-        SizedBox(height: 5),
-        Text(S.of(context).MemberDetailsNoDevices),
-        SizedBox(height: 5),
-        CupertinoButton(
-          child: Text(S.of(context).MemberDetailsNoDevicesAddDevice),
-          onPressed: onPressed,
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(S.of(context).MemberDetailsNoDevices),
         ),
       ],
     );

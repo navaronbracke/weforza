@@ -40,7 +40,6 @@
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsNoDevices": "This member has no devices yet",
-  "MemberDetailsNoDevicesAddDevice": "Add a device",
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
 

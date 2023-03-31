@@ -40,7 +40,6 @@
 
   "MemberDetailsTitle": "Details",
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
-  "MemberDetailsNoDevicesAddDevice": "Voeg een toestel toe",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
 

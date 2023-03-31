@@ -389,7 +389,7 @@ class RideAttendeeScanningDelegate {
 
       return updatedRide;
     } catch (error) {
-      _setError(SaveScanResultsException());
+      _stateMachine.setSaveScanResultsError();
 
       rethrow;
     } finally {
@@ -438,7 +438,7 @@ class RideAttendeeScanningDelegate {
         cancelOnError: false,
       );
     } catch (error) {
-      _setError(StartScanException());
+      _stateMachine.setStartScanError();
     }
   }
 
@@ -446,26 +446,8 @@ class RideAttendeeScanningDelegate {
   ///
   /// Returns whether the scan was stopped successfully.
   Future<bool> stopScan() async {
-    // These states happen before the scan is running.
-    final beforeScanStates = <RideAttendeeScanningState>{
-      RideAttendeeScanningState.bluetoothDisabled,
-      RideAttendeeScanningState.permissionDenied,
-      RideAttendeeScanningState.requestPermissions,
-      RideAttendeeScanningState.startingScan,
-    };
-
-    final stateError = _stateMachine.errorOrNull;
-    final scannerState = _stateMachine.valueOrNull;
-
-    // If the scan never started, return early.
-    if (stateError == null && beforeScanStates.contains(scannerState)) {
-      return true;
-    }
-
-    // If the state machine encountered one of the following errors,
-    // the scan has either never started, or has already stopped.
-    if (stateError is StartScanException ||
-        stateError is SaveScanResultsException) {
+    // Return early if the scanner does not have to be stopped.
+    if (!_stateMachine.shouldStopScanner) {
       return true;
     }
 
@@ -476,7 +458,7 @@ class RideAttendeeScanningDelegate {
 
       return true;
     } catch (error) {
-      _setError(StopScanException());
+      _stateMachine.setStopScanError();
 
       return false;
     }

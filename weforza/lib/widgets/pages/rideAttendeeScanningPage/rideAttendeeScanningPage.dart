@@ -121,13 +121,11 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                           Expanded(
                             child: AnimatedList(
                               key: deviceListKey,
-                              initialItemCount: 0,//Initially we don't have scanned items yet
                               itemBuilder: (BuildContext context, int index, Animation<double> animation){
                                 return SizeTransition(
                                   sizeFactor: animation,
                                   child: ScanResultListItem(
                                       item: bloc.getScanResultAt(index),
-                                      key: ValueKey(index)
                                   ),
                                 );
                               },

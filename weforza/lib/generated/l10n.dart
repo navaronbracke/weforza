@@ -603,6 +603,26 @@ class S {
     );
   }
 
+  /// `Scan`
+  String get RideAttendeeScanningProcessScanLabel {
+    return Intl.message(
+      'Scan',
+      name: 'RideAttendeeScanningProcessScanLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Members`
+  String get RideAttendeeScanningProcessAddMembersLabel {
+    return Intl.message(
+      'Add Members',
+      name: 'RideAttendeeScanningProcessAddMembersLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Attendees`
   String get RideAttendeeAssignmentTitle {
     return Intl.message(

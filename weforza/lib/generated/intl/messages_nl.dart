@@ -147,6 +147,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "RideAttendeeAssignmentSubmitError" : MessageLookupByLibrary.simpleMessage("Kon aanwezigen niet opslaan"),
     "RideAttendeeAssignmentSubmitting" : MessageLookupByLibrary.simpleMessage("Aanwezigheden Opslaan"),
     "RideAttendeeAssignmentTitle" : MessageLookupByLibrary.simpleMessage("Aanwezigen"),
+    "RideAttendeeScanningProcessAddMembersLabel" : MessageLookupByLibrary.simpleMessage("Manueel"),
+    "RideAttendeeScanningProcessScanLabel" : MessageLookupByLibrary.simpleMessage("Scannen"),
     "RideDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u deze rit wil verwijderen?"),
     "RideDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon rit niet verwijderen"),
     "RideDeleteDialogTitle" : MessageLookupByLibrary.simpleMessage("Verwijder Rit"),

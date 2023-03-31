@@ -139,7 +139,7 @@ class _RidersIcon extends StatelessWidget {
         android: () => const Icon(Icons.people, color: Colors.white),
         ios: () => const Icon(
           CupertinoIcons.person_2_fill,
-          color: CupertinoColors.label,
+          color: CupertinoColors.activeBlue,
         ),
       ),
     );

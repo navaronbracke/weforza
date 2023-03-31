@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
 import 'package:weforza/widgets/pages/device_form/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -14,15 +12,15 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class MemberDevicesListItem extends StatelessWidget {
   const MemberDevicesListItem({
     super.key,
+    required this.deleteDeviceButton,
     required this.device,
-    required this.index,
   });
+
+  /// The button that deletes [device] from the list of devices when pressed.
+  final Widget deleteDeviceButton;
 
   /// The device that is displayed by this item.
   final Device device;
-
-  /// The index of [device] in the list of devices.
-  final int index;
 
   Widget _buildItem(BuildContext context) {
     return Row(
@@ -46,7 +44,7 @@ class MemberDevicesListItem extends StatelessWidget {
               padding: const EdgeInsets.only(left: 4),
               child: _EditDeviceButton(device: device),
             ),
-            _DeleteDeviceButton(index: index),
+            deleteDeviceButton,
           ],
         ),
       ],
@@ -63,53 +61,6 @@ class MemberDevicesListItem extends StatelessWidget {
       ios: () => Padding(
         padding: const EdgeInsets.fromLTRB(4, 16, 16, 16),
         child: _buildItem(context),
-      ),
-    );
-  }
-}
-
-class _DeleteDeviceButton extends ConsumerWidget {
-  const _DeleteDeviceButton({required this.index});
-
-  /// The index of the device to delete.
-  final int index;
-
-  Future<void> _onDeleteDevicePressed(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(selectedMemberDevicesProvider.notifier);
-
-    return notifier.deleteDevice(index).then((_) {
-      Navigator.of(context).pop();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformAwareWidget(
-      android: () => IconButton(
-        icon: const Icon(
-          Icons.delete,
-          color: ApplicationTheme.deleteItemButtonTextColor,
-        ),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (_) => DeleteDeviceDialog(
-            onDelete: () => _onDeleteDevicePressed(context, ref),
-          ),
-        ),
-      ),
-      ios: () => Padding(
-        padding: const EdgeInsets.only(left: 4),
-        child: CupertinoIconButton(
-          icon: CupertinoIcons.delete,
-          idleColor: CupertinoColors.destructiveRed,
-          onPressedColor: CupertinoColors.destructiveRed.withAlpha(150),
-          onPressed: () => showCupertinoDialog(
-            context: context,
-            builder: (_) => DeleteDeviceDialog(
-              onDelete: () => _onDeleteDevicePressed(context, ref),
-            ),
-          ),
-        ),
       ),
     );
   }

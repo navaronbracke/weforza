@@ -29,7 +29,6 @@ class DatePicker extends StatelessWidget {
     required this.delegate,
     required this.forwardButton,
     this.headerBottomPadding = 0.0,
-    this.headerHeight = 48,
     this.monthStyle,
     this.padding = EdgeInsets.zero,
     this.showWeekdays = false,
@@ -61,11 +60,6 @@ class DatePicker extends StatelessWidget {
   ///
   /// Defaults to zero.
   final double headerBottomPadding;
-
-  /// The height for the calendar header.
-  ///
-  /// Defaults to 50.
-  final double headerHeight;
 
   /// The style for the calendar month text in the header.
   final TextStyle? monthStyle;
@@ -172,7 +166,6 @@ class DatePicker extends StatelessWidget {
         Widget header = _DatePickerHeader(
           backButton: backButton,
           forwardButton: forwardButton,
-          height: headerHeight,
           monthStream: delegate.monthStream,
           style: monthStyle,
         );

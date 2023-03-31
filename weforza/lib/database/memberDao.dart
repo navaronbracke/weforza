@@ -3,6 +3,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/extensions/dateExtension.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {
@@ -134,7 +135,10 @@ class MemberDao implements IMemberDao {
     final record = _memberStore.record(uuid);
 
     if(await record.exists(_database)){
-      await record.update(_database, { "active": value});
+      await record.update(_database, {
+        "active": value,
+        "lastUpdated": DateTime.now().toUtc().toStringWithoutMilliseconds()
+      });
     }
   }
 }

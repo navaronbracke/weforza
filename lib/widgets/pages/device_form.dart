@@ -33,7 +33,7 @@ class DeviceForm extends ConsumerStatefulWidget {
 }
 
 class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
-  final _formKey = GlobalKey<FormState>();
+  final _deviceNameKey = GlobalKey<FormFieldState<String>>();
 
   late final TextEditingController _deviceNameController;
   late final PageController _deviceTypeController;
@@ -57,7 +57,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   void onFormSubmitted(BuildContext context) {
-    final formState = _formKey.currentState;
+    final formState = _deviceNameKey.currentState;
 
     if (formState == null || !formState.validate()) {
       return;
@@ -91,7 +91,29 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
           widget.device == null ? translator.AddDevice : translator.EditDevice,
         ),
       ),
-      body: _buildBody(context),
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate.fixed([
+              DeviceTypeCarousel(
+                controller: _deviceTypeController,
+                height: 120,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
+                child: _buildDeviceNameInput(context),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 24),
+                child: Center(child: _buildSubmitButton(context)),
+              ),
+            ]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -116,40 +138,29 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildBody(context),
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Flexible(
-          flex: 3,
-          child: DeviceTypeCarousel(controller: _deviceTypeController),
-        ),
-        Flexible(
-          flex: 8,
-          child: Column(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  child: _buildDeviceNameInput(context),
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                CupertinoFormSection.insetGrouped(
+                  children: [
+                    DeviceTypeCarousel(
+                      controller: _deviceTypeController,
+                      height: 120,
+                    ),
+                  ],
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 24),
-                child: Center(child: _buildSubmitButton(context)),
-              ),
-            ],
-          ),
+                CupertinoFormSection.insetGrouped(
+                  children: [
+                    _buildDeviceNameInput(context),
+                    _buildSubmitButton(context),
+                  ],
+                ),
+              ]),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -158,6 +169,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     return PlatformAwareWidget(
       android: (_) => TextFormField(
+        key: _deviceNameKey,
         focusNode: _deviceNameFocusNode,
         textInputAction: TextInputAction.done,
         keyboardType: TextInputType.text,
@@ -183,6 +195,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         autovalidateMode: AutovalidateMode.onUserInteraction,
       ),
       ios: (_) => CupertinoTextFormFieldRow(
+        key: _deviceNameKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: _deviceNameController,
         focusNode: _deviceNameFocusNode,

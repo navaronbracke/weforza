@@ -42,9 +42,9 @@ class ExportRidesBloc extends Bloc {
   }
 
   ///Form Error message
-  String filenameError = "";
+  String? filenameError;
 
-  String validateFileName(
+  String? validateFileName(
       String? filename,
       String fileNameIsRequired,
       String isWhitespaceMessage,
@@ -66,7 +66,7 @@ class ExportRidesBloc extends Bloc {
       filenameError = invalidFilenameMessage;
     }else{
       _filename = filename;
-      filenameError = "";
+      filenameError = null;
     }
 
     return filenameError;

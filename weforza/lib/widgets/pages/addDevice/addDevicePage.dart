@@ -200,6 +200,6 @@ class _AddDevicePageState extends State<AddDevicePage> {
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
         S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
         S.of(context).DeviceNameCannotContainComma,
-        S.of(context).DeviceNameBlank) == "";
+        S.of(context).DeviceNameBlank) == null;
   }
 }

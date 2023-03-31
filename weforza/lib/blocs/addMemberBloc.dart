@@ -31,16 +31,16 @@ class AddMemberBloc extends Bloc {
   Future<File?> _selectedImage = Future.value(null);
 
   ///The actual errors.
-  String firstNameError = "";
-  String lastNameError = "";
-  String aliasError = "";
+  String? firstNameError;
+  String? lastNameError;
+  String? aliasError;
 
   final int nameAndAliasMaxLength = 50;
 
   ///Validate [value] according to the first name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateFirstName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateFirstName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _firstName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -56,7 +56,7 @@ class AddMemberBloc extends Bloc {
     }
     else if(Member.personNameAndAliasRegex.hasMatch(value)){
       _firstName = value;
-      firstNameError = "";
+      firstNameError = null;
     }
     else{
       firstNameError = illegalCharacterMessage;
@@ -67,7 +67,7 @@ class AddMemberBloc extends Bloc {
   ///Validate [value] according to the last name rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateLastName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateLastName(String? value, String isRequiredMessage,String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _lastName){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
@@ -83,7 +83,7 @@ class AddMemberBloc extends Bloc {
     }
     else if(Member.personNameAndAliasRegex.hasMatch(value)){
       _lastName = value;
-      lastNameError = "";
+      lastNameError = null;
     }
     else{
       lastNameError = illegalCharacterMessage;
@@ -94,14 +94,14 @@ class AddMemberBloc extends Bloc {
   ///Validate [value] according to the alias rule.
   ///Returns null if valid or an error message otherwise.
   ///The return value is ignored on IOS, since only the Material FormValidator uses it to display an error.
-  String validateAlias(String? value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
+  String? validateAlias(String? value, String maxLengthMessage,String illegalCharacterMessage,String isBlankMessage) {
     if(value != _alias){
       //Clear the 'user exists' error when a different input is given
       _submitStateController.add(SaveMemberOrError.idle());
     }
     // Only the empty string is a valid blank value.
     // null or only spaces are disallowed.
-    if(value == null || value.trim().isEmpty){
+    if(value == null || value.isNotEmpty && value.trim().isEmpty){
       aliasError = isBlankMessage;
     }
     else if(nameAndAliasMaxLength < value.length){
@@ -109,7 +109,7 @@ class AddMemberBloc extends Bloc {
     }
     else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
       _alias = value;
-      aliasError = "";
+      aliasError = null;
     }
     else{
       aliasError = illegalCharacterMessage;

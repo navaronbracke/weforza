@@ -1,18 +1,14 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:weforza/database/memberDao.dart';
-import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
 
 ///This class provides an API to work with members.
 class MemberRepository {
-  MemberRepository(this._dao,this._fileHandler): assert(_dao != null && _fileHandler != null);
+  MemberRepository(this._dao): assert(_dao != null);
 
   ///The internal DAO instance.
   final IMemberDao _dao;
-  ///The internal [IFileHandler] instance.
-  final IFileHandler _fileHandler;
 
   Future<void> addMember(Member member) => _dao.addMember(member);
 
@@ -27,8 +23,4 @@ class MemberRepository {
   Future<void> updateMember(Member member) => _dao.updateMember(member);
 
   Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
-
-  Future<File> chooseProfileImageFromGallery() => _fileHandler.chooseProfileImageFromGallery();
-
-  Future<File> loadProfileImageFromDisk(String path) => _fileHandler.loadProfileImageFromDisk(path);
 }

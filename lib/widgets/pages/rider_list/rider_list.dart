@@ -6,8 +6,8 @@ import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
-import 'package:weforza/widgets/pages/member_list/rider_list_empty.dart';
-import 'package:weforza/widgets/pages/member_list/rider_list_item.dart';
+import 'package:weforza/widgets/pages/rider_list/rider_list_empty.dart';
+import 'package:weforza/widgets/pages/rider_list/rider_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 /// This widget represents the rider list itself.

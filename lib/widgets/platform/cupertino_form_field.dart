@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 /// This widget represents a [CupertinoTextField] that has a validation message.
@@ -7,30 +9,28 @@ class CupertinoFormField extends StatelessWidget {
     Key? key,
     this.autocorrect = false,
     required this.controller,
-    required this.errorMessageStream,
+    required this.errorController,
     required this.focusNode,
-    this.initialErrorMessage = '',
     this.keyboardType,
-    required this.onChanged,
+    this.onChanged,
     this.onSubmitted,
     this.placeholder,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
+    this.validator,
   }) : super(key: key);
 
   final bool autocorrect;
 
   final TextEditingController controller;
 
-  final Stream<String> errorMessageStream;
+  final BehaviorSubject<String> errorController;
 
   final FocusNode focusNode;
 
-  final String initialErrorMessage;
-
   final TextInputType? keyboardType;
 
-  final void Function(String) onChanged;
+  final void Function(String)? onChanged;
 
   final void Function(String)? onSubmitted;
 
@@ -40,8 +40,12 @@ class CupertinoFormField extends StatelessWidget {
 
   final TextInputAction? textInputAction;
 
+  final String? Function(String value, S translator)? validator;
+
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,12 +58,20 @@ class CupertinoFormField extends StatelessWidget {
           placeholder: placeholder,
           autocorrect: autocorrect,
           keyboardType: keyboardType,
-          onChanged: onChanged,
+          onChanged: (value) {
+            onChanged?.call(value);
+
+            if (validator == null) {
+              return;
+            }
+
+            errorController.add(validator!(value, translator) ?? '');
+          },
           onSubmitted: onSubmitted,
         ),
         StreamBuilder<String>(
-          initialData: initialErrorMessage,
-          stream: errorMessageStream,
+          initialData: errorController.valueOrNull ?? '',
+          stream: errorController,
           builder: (context, snapshot) {
             final message = snapshot.data ?? '';
 

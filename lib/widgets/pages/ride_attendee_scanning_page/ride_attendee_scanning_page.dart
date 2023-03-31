@@ -85,6 +85,7 @@ class RideAttendeeScanningPageState
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: RideAttendeeScanningStepper(
+          initialData: delegate.currentState,
           stream: delegate.stateStream,
         ),
       ),
@@ -137,6 +138,7 @@ class RideAttendeeScanningPageState
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: RideAttendeeScanningStepper(
+          initialData: delegate.currentState,
           stream: delegate.stateStream,
         ),
       ),

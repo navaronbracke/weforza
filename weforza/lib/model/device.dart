@@ -18,6 +18,8 @@ class Device {
   String name;
   DeviceType type;
 
+  static final RegExp deviceNameRegex = RegExp(r"^[^,]{1,40}$");
+
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){
     return {

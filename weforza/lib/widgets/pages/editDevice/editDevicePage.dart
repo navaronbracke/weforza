@@ -109,7 +109,8 @@ class _EditDevicePageState extends State<EditDevicePage> {
             validator: (value) => bloc.validateDeviceNameInput(
                 value,
                 S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                S.of(context).DeviceNameCannotContainComma
             ),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: 5),
@@ -134,7 +135,8 @@ class _EditDevicePageState extends State<EditDevicePage> {
                     bloc.validateDeviceNameInput(
                         value,
                         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+                        S.of(context).DeviceNameCannotContainComma
                     );
                   });
                 },
@@ -199,6 +201,7 @@ class _EditDevicePageState extends State<EditDevicePage> {
   bool iosValidateAddDevice(BuildContext context) {
     return bloc.validateDeviceNameInput(bloc.deviceNameController.text,
         S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")) == null;
+        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}"),
+        S.of(context).DeviceNameCannotContainComma) == null;
   }
 }

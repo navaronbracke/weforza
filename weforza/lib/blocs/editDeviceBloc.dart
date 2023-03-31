@@ -100,7 +100,7 @@ class EditDeviceBloc extends Bloc {
     }
   }
 
-  String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
+  String validateDeviceNameInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage, String commaIsIllegalCharacterMessage){
     if(value != deviceName){
       //Clear the 'device exists' error when a different input is given
       _submitErrorController.add("");
@@ -109,6 +109,8 @@ class EditDeviceBloc extends Bloc {
       editDeviceError = deviceNameIsRequired;
     }else if(deviceNameMaxLength < value.length){
       editDeviceError = deviceNameMaxLengthMessage;
+    }else if(value.contains(",")){
+      editDeviceError = commaIsIllegalCharacterMessage;
     }else{
       deviceName = value;
       editDeviceError = null;

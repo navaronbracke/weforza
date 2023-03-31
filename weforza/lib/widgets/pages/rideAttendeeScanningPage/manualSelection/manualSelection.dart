@@ -44,7 +44,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
           ),
           ManualSelectionSubmit(
             isSaving: bloc.isSaving,
-            onSave: () async => await bloc.saveRideAttendees(false,false).then((_){
+            onSave: () async => await bloc.saveRideAttendees(false).then((_){
               onRefreshAttendees();
               Navigator.of(context).pop();
             }, onError: (error){

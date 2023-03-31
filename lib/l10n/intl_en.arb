@@ -95,7 +95,7 @@
 	"LastNameMaxLength": "A last name can't be longer than {maxLength} characters",
 	"LastNameRequired": "A last name is required",
 	"Manual": "Manual",
-	"ManualSelectionEmpty": "There are no riders to choose from",
+	"ManualSelectionEmpty": "There are no active riders to choose from",
 	"NewRide": "New ride",
 	"NewRider": "New rider",
 	"NoDisallowedWords": "There are no disallowed words yet",

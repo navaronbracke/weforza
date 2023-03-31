@@ -170,6 +170,10 @@ class AttendeeScanningBloc extends Bloc {
     scanDuration = settingsRepo.instance.scanDuration;
   }
 
+  Future<List<Member>> loadActiveMembers(){
+    return memberRepo.getMembers(MemberFilterOption.ACTIVE);
+  }
+
   // Load the active members & all devices in parallel.
   // When both are loaded, filter out the devices that don't belong to any active owners.
   Future<void> _loadMembersAndDevices() async {
@@ -266,11 +270,6 @@ class AttendeeScanningBloc extends Bloc {
     }else{
       return [];
     }
-  }
-
-  /// Load the members for the manual selection page.
-  Future<List<Member>> loadMembersForManualSelection() {
-    return memberRepo.getMembers(MemberFilterOption.ALL);
   }
 
   ///Stop a running bluetooth scan.

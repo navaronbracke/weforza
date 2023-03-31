@@ -1,23 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/scan_duration_delegate.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ScanDurationOption extends StatefulWidget {
   const ScanDurationOption({
     Key? key,
-    required this.getValue,
-    required this.minScanValue,
-    required this.maxScanValue,
-    required this.onChanged,
-  })  : assert(minScanValue > 0 && maxScanValue > minScanValue),
-        super(key: key);
+    required this.delegate,
+  }) : super(key: key);
 
-  final void Function(double value) onChanged;
-  final double minScanValue;
-  final double maxScanValue;
-  final double Function() getValue;
+  final ScanDurationDelegate delegate;
 
   @override
   _ScanDurationOptionState createState() => _ScanDurationOptionState();
@@ -26,7 +20,7 @@ class ScanDurationOption extends StatefulWidget {
 class _ScanDurationOptionState extends State<ScanDurationOption> {
   @override
   Widget build(BuildContext context) {
-    final currentValue = widget.getValue();
+    final currentValue = widget.delegate.value;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,9 +38,11 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
                   thumbColor: ApplicationTheme.settingsScanSliderThumbColor),
               child: Slider(
                 value: currentValue,
-                onChanged: (value) => setState(() => widget.onChanged(value)),
-                min: widget.minScanValue,
-                max: widget.maxScanValue,
+                onChanged: (value) {
+                  setState(() => widget.delegate.onChanged(value));
+                },
+                min: widget.delegate.min,
+                max: widget.delegate.max,
                 divisions: 5,
               ),
             ),
@@ -55,10 +51,11 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
                 Expanded(
                   child: CupertinoSlider(
                     value: currentValue,
-                    onChanged: (value) =>
-                        setState(() => widget.onChanged(value)),
-                    min: widget.minScanValue,
-                    max: widget.maxScanValue,
+                    onChanged: (value) {
+                      setState(() => widget.delegate.onChanged(value));
+                    },
+                    min: widget.delegate.min,
+                    max: widget.delegate.max,
                     divisions: 5,
                   ),
                 ),

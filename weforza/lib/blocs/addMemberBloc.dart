@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -133,21 +132,23 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
     return phoneError;
   }
 
-  //TODO remove the callback
-  Future<void> addMember(VoidCallback onSuccess) async {
+  Future<void> addMember() async {
     _submitStateController.add(AddMemberSubmitState.SUBMIT);
     await _repository.memberExists(_firstName, _lastName, _phone).then((exists) async {
       if(exists){
         _submitStateController.add(AddMemberSubmitState.MEMBER_EXISTS);
+        return Future.error(AddMemberSubmitState.MEMBER_EXISTS);
       }else{
         await _repository.addMember(Member(_uuidGenerator.v4(),_firstName,_lastName,_phone,(_selectedImage == null) ? null : _selectedImage.path)).then((_){
-          onSuccess();
+              //the then call will be executed in the submit widget
         },onError: (error){
           _submitStateController.add(AddMemberSubmitState.ERROR);
+          return Future.error(AddMemberSubmitState.ERROR);
         });
       }
     },onError: (error){
       _submitStateController.add(AddMemberSubmitState.ERROR);
+      return Future.error(AddMemberSubmitState.ERROR);
     });
   }
 

@@ -5,7 +5,6 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
-import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_progress_indicator.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/stop_scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -15,11 +14,16 @@ class RideAttendeeScanResultsList extends StatelessWidget {
   const RideAttendeeScanResultsList({
     super.key,
     required this.delegate,
+    required this.progressBar,
     required this.scanResultsListKey,
   });
 
   /// The delegate that manages the device scan.
   final RideAttendeeScanningDelegate delegate;
+
+  /// The widget that represents the progress bar
+  /// for the remaining scan duration.
+  final Widget progressBar;
 
   /// The key for the scan results list.
   final GlobalKey<AnimatedListState> scanResultsListKey;
@@ -30,10 +34,7 @@ class RideAttendeeScanResultsList extends StatelessWidget {
       onWillPop: delegate.stopScan,
       child: Column(
         children: [
-          ScanProgressIndicator(
-            isScanning: delegate.scanner.isScanning,
-            scanDuration: Duration(seconds: delegate.settings.scanDuration),
-          ),
+          progressBar,
           Expanded(
             child: AnimatedList(
               key: scanResultsListKey,

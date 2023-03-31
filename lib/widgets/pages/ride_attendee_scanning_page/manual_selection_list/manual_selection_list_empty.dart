@@ -33,10 +33,7 @@ class ManualSelectionListEmpty extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
           ios: (context) => CupertinoButton.filled(
-            child: Text(
-              translator.GoBack,
-              style: const TextStyle(color: Colors.white),
-            ),
+            child: Text(translator.GoBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

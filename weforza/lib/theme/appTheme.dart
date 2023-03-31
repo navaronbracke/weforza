@@ -77,6 +77,7 @@ abstract class ApplicationTheme {
   static final Color memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blueGrey;
   static final Color memberDevicesListHeaderAddDeviceButtonPressedColor = Colors.blueGrey.shade100;
   static final TextStyle memberDevicesListHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+  static final TextStyle memberDevicesListAddDeviceButtonTextStyle = TextStyle(color: ApplicationTheme.primaryColor);
 
   ///The member device item edit button color for android.
   static final Color memberDevicesListEditDeviceColor = Colors.blue.shade300;

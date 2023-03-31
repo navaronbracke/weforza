@@ -1,7 +1,6 @@
-import 'dart:ui';
-import 'package:weforza/extensions/dateExtension.dart';
+import 'package:weforza/extensions/date_extension.dart';
 
-///This class represents a 'Member.'
+/// This class represents a member.
 class Member implements Comparable<Member> {
   Member({
     required this.uuid,
@@ -11,91 +10,91 @@ class Member implements Comparable<Member> {
     required this.isActiveMember,
     required this.profileImageFilePath,
     required this.lastUpdated,
-  }): assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
+  }) : assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
 
-  ///Regex for a member's first or last name or alias.
+  /// Regex for a member's first or last name or alias.
   ///
-  ///The Regex is language independent.
-  ///Allows hyphen,apostrophe and spaces.
-  ///Between 1 and 50 characters(inclusive).
-  static final RegExp personNameAndAliasRegex = RegExp(r"^([\p{Letter}\s]|['-]){1,50}$",unicode: true);
+  /// The Regex is language independent.
+  /// Allows hyphen, apostrophe and spaces.
+  /// Between 1 and 50 characters(inclusive).
+  static final personNameAndAliasRegex = RegExp(
+    r"^([\p{Letter}\s]|['-]){1,50}$",
+    unicode: true,
+  );
 
-  ///The member's GUID.
+  /// The member's GUID.
   final String uuid;
 
-  ///A member's first name.
+  /// The member's first name.
   String firstname;
 
-  ///A member's last name.
+  /// The member's last name.
   String lastname;
 
-  ///A member's alias.
+  /// The member's alias.
   String alias;
 
-  ///The path to an optional profile picture.
+  /// The path to an optional profile picture.
   String? profileImageFilePath;
 
-  // Whether this member is currently an active ride participant.
+  /// Whether this member is currently an active ride participant.
   bool isActiveMember;
 
-  // A date that tracks the last update timestamp.
+  /// The last time that this member was updated.
   final DateTime lastUpdated;
 
+  /// The member initials.
   String get initials => firstname[0] + lastname[0];
 
-  ///Convert this object to a Map.
-  Map<String,dynamic> toMap(){
+  /// This member, as a Map.
+  Map<String, Object?> toMap() {
     return {
-      "firstname": firstname,
-      "lastname": lastname,
-      "alias": alias,
-      "active": isActiveMember,
-      "profile": profileImageFilePath,
-      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
+      'firstname': firstname,
+      'lastname': lastname,
+      'alias': alias,
+      'active': isActiveMember,
+      'profile': profileImageFilePath,
+      'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
     };
   }
 
-  ///Create a member from a Map and a given uuid.
-  static Member of(String uuid, Map<String, dynamic> values){
+  /// Create a member from a Map and a given uuid.
+  static Member of(String uuid, Map<String, Object?> values) {
     assert(uuid.isNotEmpty);
     return Member(
       uuid: uuid,
-      firstname: values["firstname"],
-      lastname: values["lastname"],
-      alias: values["alias"],
-      isActiveMember: values["active"],
-      profileImageFilePath: values["profile"],
-      lastUpdated: DateTime.parse(values["lastUpdated"]),
+      firstname: values['firstname'] as String,
+      lastname: values['lastname'] as String,
+      alias: values['alias'] as String? ?? '',
+      isActiveMember: values['active'] as bool? ?? true,
+      profileImageFilePath: values['profile'] as String?,
+      lastUpdated: DateTime.parse(values['lastUpdated'] as String),
     );
   }
 
   @override
-  bool operator ==(Object other){
-    return other is Member
-        && firstname == other.firstname
-        && lastname == other.lastname
-        && alias == other.alias
-        && isActiveMember == other.isActiveMember;
+  bool operator ==(Object other) {
+    return other is Member &&
+        firstname == other.firstname &&
+        lastname == other.lastname &&
+        alias == other.alias &&
+        isActiveMember == other.isActiveMember;
   }
 
   @override
-  int get hashCode => hashValues(firstname, lastname, alias, isActiveMember);
+  int get hashCode => Object.hash(firstname, lastname, alias, isActiveMember);
 
-  ///Compare two members for use in sorting.
-  ///Returns zero if both are considered equal.
-  ///Returns a negative number if this object is regarded to be before [other] in a sorted list.
-  ///Returns a positive number otherwise.
   @override
   int compareTo(Member other) {
     final int deltaFirstName = firstname.compareTo(other.firstname);
 
-    if(deltaFirstName != 0){
+    if (deltaFirstName != 0) {
       return deltaFirstName;
     }
 
     final int deltaLastName = lastname.compareTo(other.lastname);
 
-    if(deltaLastName != 0){
+    if (deltaLastName != 0) {
       return deltaLastName;
     }
 

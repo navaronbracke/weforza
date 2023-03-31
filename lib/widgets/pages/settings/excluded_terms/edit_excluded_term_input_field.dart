@@ -53,6 +53,11 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
 
   final GlobalKey<FormFieldState<String>> textFieldKey = GlobalKey();
 
+  /// The cached viewInsets from the MediaQueryData.
+  ///
+  /// This value is cached to prevent lookup of the MediaQueryData when this widget is disposed.
+  EdgeInsets _viewInsets = EdgeInsets.zero;
+
   /// This completer is used to notify [_onDeletePressed] when the view insets
   Completer<void>? _viewInsetsHiddenCompleter;
 
@@ -104,14 +109,20 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   void _onDeletePressed(BuildContext context) async {
     deleteDialogVisible = true;
 
-    // If the text field focus node has focus, then the keyboard is still visible.
-    // The delete dialog should delay opening until the keyboard is hidden,
-    // otherwise the dialog does not animate in from the center of the screen (since it has to avoid the view insets).
     if (focusNode.hasFocus) {
-      _viewInsetsHiddenCompleter = Completer<void>();
-      focusNode.unfocus();
+      // Just give up focus, there is no on-screen keyboard.
+      if (_viewInsets.bottom == 0) {
+        focusNode.unfocus();
+      } else {
+        // The text field has focus and a keyboard is visible on screen.
+        // First, set up a completer that will complete when the bottom view insets are zero.
+        // Then, unfocus the text field to make the keyboard dissapear.
+        _viewInsetsHiddenCompleter = Completer<void>();
+        focusNode.unfocus();
 
-      await _viewInsetsHiddenCompleter?.future;
+        // Finally, await the keyboard dissapearing completely.
+        await _viewInsetsHiddenCompleter?.future;
+      }
     }
 
     if (!mounted) {
@@ -193,14 +204,14 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final EdgeInsets viewInsets = MediaQuery.viewInsetsOf(context);
+    _viewInsets = MediaQuery.viewInsetsOf(context);
 
     // If the bottom view insets collapsed back to zero, notify the waiting view insets completer.
     if (_viewInsetsHiddenCompleter == null || _viewInsetsHiddenCompleter!.isCompleted) {
       return;
     }
 
-    if (viewInsets.bottom == 0.0) {
+    if (_viewInsets.bottom == 0.0) {
       _viewInsetsHiddenCompleter?.complete();
     }
   }

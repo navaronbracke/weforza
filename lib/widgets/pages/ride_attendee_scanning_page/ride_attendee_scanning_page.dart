@@ -86,7 +86,6 @@ class RideAttendeeScanningPageState
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
-          alignment: MainAxisAlignment.start,
           stream: delegate.stateStream,
         ),
       ),
@@ -140,7 +139,6 @@ class RideAttendeeScanningPageState
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
-          alignment: MainAxisAlignment.center,
           stream: delegate.stateStream,
         ),
       ),

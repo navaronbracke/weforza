@@ -131,9 +131,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           });
         },
       ),
-      ios: () => CupertinoIconButton(
-        idleColor: ApplicationTheme.memberDevicesListEditDeviceIdleColor,
-        onPressedColor: ApplicationTheme.memberDevicesListEditDevicePressedColor,
+      ios: () => CupertinoIconButton.fromAppTheme(
         onPressed: (){
           SelectedItemProvider.of(context).selectedDevice.value = device;
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDevicePage())).then((editedDevice){

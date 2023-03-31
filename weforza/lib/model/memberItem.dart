@@ -14,4 +14,5 @@ class MemberItem {
   String get lastName => _member.lastname;
   String get uuid => _member.uuid;
   String get phone => _member.phone;
+  Member get member => _member;
 }

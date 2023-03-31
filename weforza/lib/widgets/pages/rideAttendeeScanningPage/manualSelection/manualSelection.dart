@@ -63,14 +63,14 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
             children: <Widget>[
               PlatformAwareWidget(
                 android: () => TextFormField(
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.search,
                   keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidateMode: AutovalidateMode.disabled,
                   onChanged: _queryController.add,
                   decoration: InputDecoration(
                     suffixIcon: Icon(Icons.search),
-                    labelText: S.of(context).RideAttendeeScanningManualSelectionFilterInputLabel,
+                    labelText: S.of(context).RiderSearchFilterInputLabel,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 5),
                     floatingLabelBehavior: FloatingLabelBehavior.never
@@ -79,8 +79,8 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                 ios: () => Padding(
                   padding: const EdgeInsets.all(8),
                   child: CupertinoTextField(
-                    textInputAction: TextInputAction.done,
-                    placeholder: S.of(context).RideAttendeeScanningManualSelectionFilterInputLabel,
+                    textInputAction: TextInputAction.search,
+                    placeholder: S.of(context).RiderSearchFilterInputLabel,
                     autocorrect: false,
                     keyboardType: TextInputType.text,
                     onChanged: _queryController.add,

@@ -6,9 +6,9 @@ import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
 import 'package:weforza/widgets/pages/import_riders_page.dart';
-import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
+import 'package:weforza/widgets/pages/rider_details/rider_details_page.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -34,7 +34,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
     FocusScope.of(context).unfocus();
 
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const MemberDetailsPage()),
+      MaterialPageRoute(builder: (context) => const RiderDetailsPage()),
     );
   }
 

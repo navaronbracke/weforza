@@ -151,6 +151,7 @@
   "PhoneIllegalCharacters": "Een telefoonnummer bestaat enkel uit cijfers",
   "PhoneMinLength": "Een telefoonnummer is minimum {minLength} cijfers lang",
   "PhoneMaxLength": "Een telefoonnummer is maximum {maxLength} cijfers lang",
+  "DeviceNameBlank": "De naam van een toestel mag niet leeg zijn",
 
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",

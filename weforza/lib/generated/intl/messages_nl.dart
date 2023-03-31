@@ -61,6 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("Dit toestel bestaat al"),
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Koptelefoon"),
+    "DeviceNameBlank" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag niet leeg zijn"),
     "DeviceNameCannotContainComma" : MessageLookupByLibrary.simpleMessage("De naam van een toestel mag geen , bevatten"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Naam Toestel"),
     "DeviceNameMaxLength" : m0,

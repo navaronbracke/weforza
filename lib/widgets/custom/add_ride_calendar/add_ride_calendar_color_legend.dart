@@ -6,17 +6,19 @@ import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 class AddRideCalendarColorLegend extends StatelessWidget {
   const AddRideCalendarColorLegend({super.key});
 
+  final double dotSize = 12;
+
   /// Build a row in the color legend.
   Widget _buildLegendRow({
     required Color color,
     required String label,
-    EdgeInsets? padding,
+    bool useBottomPadding = true,
   }) {
     final child = Row(
       children: [
         Container(
-          height: 20,
-          width: 20,
+          height: dotSize,
+          width: dotSize,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: color,
@@ -24,13 +26,17 @@ class AddRideCalendarColorLegend extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: Text(label, softWrap: true),
+          child: Text(
+            label,
+            softWrap: true,
+            style: const TextStyle(fontSize: 14),
+          ),
         ),
       ],
     );
 
-    if (padding != null) {
-      return Padding(padding: padding, child: child);
+    if (useBottomPadding) {
+      return Padding(padding: const EdgeInsets.only(bottom: 4), child: child);
     }
 
     return child;
@@ -48,21 +54,19 @@ class AddRideCalendarColorLegend extends StatelessWidget {
           _buildLegendRow(
             color: theme.selection,
             label: translator.CurrentSelection,
-            padding: const EdgeInsets.only(bottom: 4),
           ),
           _buildLegendRow(
             color: theme.futureRide,
             label: translator.FutureRide,
-            padding: const EdgeInsets.only(bottom: 4),
           ),
           _buildLegendRow(
             color: theme.pastRide,
             label: translator.PastDayWithRide,
-            padding: const EdgeInsets.only(bottom: 4),
           ),
           _buildLegendRow(
             color: theme.pastDay,
             label: translator.PastDayNoRide,
+            useBottomPadding: false,
           ),
         ],
       ),

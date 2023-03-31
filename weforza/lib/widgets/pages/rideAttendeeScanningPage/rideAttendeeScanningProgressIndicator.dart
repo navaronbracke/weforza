@@ -29,16 +29,8 @@ class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScan
   int _duration;
 
   @override
-  void initState() {
-    _duration = widget.getDuration();//Load the duration (from settings)
-    _controller = AnimationController(vsync: this, duration: Duration(seconds: _duration));
-    _animation = Tween(begin: 1.0,end: 0.0).animate(_controller);
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -48,6 +40,10 @@ class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScan
       valueListenable: widget.valueNotifier,
       builder: (context, value, child){
         if(value){
+          //The settings have been loaded now
+          _duration = widget.getDuration();//Load the duration (from settings)
+          _controller = AnimationController(vsync: this, duration: Duration(seconds: _duration));
+          _animation = Tween(begin: 1.0,end: 0.0).animate(_controller);
           //Make sure to start the animation
           _controller.forward();
           return AnimatedBuilder(

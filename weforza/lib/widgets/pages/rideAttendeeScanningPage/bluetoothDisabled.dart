@@ -15,13 +15,14 @@ class BluetoothDisabledWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       Icon(
         Icons.bluetooth_disabled,
         color: ApplicationTheme.listInformationalIconColor,
         size: MediaQuery.of(context).size.shortestSide * .1,
       ),
-      SizedBox(height: 5),
+      SizedBox(height: 10),
       Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
       SizedBox(height: 20),
       PlatformAwareWidget(
@@ -35,10 +36,11 @@ class BluetoothDisabledWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
+        RaisedButton(
+          color: ApplicationTheme.primaryColor,
           child: Text(
             S.of(context).RideAttendeeScanningGoToBluetoothSettings,
-            style: TextStyle(color: ApplicationTheme.rideAttendeeScanGoToSettingsButtonColor),
+            style: TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
         ),
@@ -46,7 +48,7 @@ class BluetoothDisabledWidget extends StatelessWidget {
         FlatButton(
           child: Text(
             S.of(context).RideAttendeeScanningRetryScan,
-            style: TextStyle(color: ApplicationTheme.rideAttendeeScanRetryScanButtonColor),
+            style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: onRetryScan,
         ),
@@ -58,10 +60,14 @@ class BluetoothDisabledWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CupertinoButton(
+        CupertinoButton.filled(
+          padding: const EdgeInsets.symmetric(
+            vertical: 14.0,
+            horizontal: 24.0,
+          ),
           child: Text(
             S.of(context).RideAttendeeScanningGoToBluetoothSettings,
-            style: TextStyle(color: ApplicationTheme.rideAttendeeScanGoToSettingsButtonColor),
+            style: TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
         ),
@@ -69,7 +75,7 @@ class BluetoothDisabledWidget extends StatelessWidget {
         CupertinoButton(
           child: Text(
             S.of(context).RideAttendeeScanningRetryScan,
-            style: TextStyle(color: ApplicationTheme.rideAttendeeScanRetryScanButtonColor),
+            style: TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: onRetryScan,
         ),

@@ -47,22 +47,19 @@ abstract class ApplicationTheme {
   ///The background color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
   ///The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Colors.lightBlue.withAlpha(150);
+  static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
 
-  static final TextStyle rideAttendeeSelectedFirstNameTextStyle = TextStyle(
-    color: Colors.white,
+  static final TextStyle rideAttendeeFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 16.0
   );
-  static final TextStyle rideAttendeeUnselectedFirstNameTextStyle = TextStyle(
-      fontWeight: FontWeight.bold, fontSize: 16.0
+  static final TextStyle rideAttendeeLastNameTextStyle = TextStyle(
+    fontSize: 14.0
   );
-  static final TextStyle rideAttendeeSelectedLastNameTextStyle = TextStyle(
-    color: Colors.white, fontSize: 12.0
+  static final TextStyle rideAttendeePhoneTextStyle = TextStyle(
+      fontSize: 12.0, fontStyle: FontStyle.italic
   );
-  static final TextStyle rideAttendeeUnselectedLastNameTextStyle = TextStyle(
-      fontSize: 12.0
-  );
+
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 18,fontWeight: FontWeight.w500);
@@ -103,11 +100,10 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
-  static final Color rideAttendeeScanGoToSettingsButtonColor = Colors.blue.shade300;
-  static final Color rideAttendeeScanRetryScanButtonColor = Colors.blue;
   static final Color rideAttendeeScanResultWarningColor = Colors.orange;
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
-  static final Color rideAttendeeScanResultLoadingColor = primaryColor;
+
+  static final TextStyle rideAttendeeScanResultOwnerLabelTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 

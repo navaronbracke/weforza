@@ -15,9 +15,10 @@ class ManualSelectionListItem extends StatefulWidget {
     @required this.profileImageFuture,
     @required this.firstName,
     @required this.lastName,
+    @required this.phone
   }): assert(
     isSelected != null && canSelect != null && profileImageFuture != null &&
-        onTap != null && firstName != null && lastName != null
+        onTap != null && firstName != null && lastName != null && phone != null
   );
 
   final bool Function() isSelected;
@@ -26,6 +27,7 @@ class ManualSelectionListItem extends StatefulWidget {
   final Future<File> profileImageFuture;
   final String firstName;
   final String lastName;
+  final String phone;
 
   @override
   _ManualSelectionListItemState createState() => _ManualSelectionListItemState();
@@ -36,6 +38,8 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   Color itemDecorationBackgroundColor;
   TextStyle firstNameStyle;
   TextStyle lastNameStyle;
+  TextStyle phoneTextStyle;
+  Color phoneLabelIconColor;
 
   @override
   void initState() {
@@ -52,19 +56,19 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           setState(() => _setColors());
         }
       },
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          children: <Widget>[
-            _getProfileImage(),
-            SizedBox(width: 5),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: itemDecorationBackgroundColor,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+      child: Container(
+        decoration: BoxDecoration(
+            color: itemDecorationBackgroundColor
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 5),
+                child: _getProfileImage(),
+              ),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -73,31 +77,54 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
                       style: firstNameStyle,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      widget.lastName,
-                      style: lastNameStyle,
-                      overflow: TextOverflow.ellipsis,
+                    SizedBox(height: 5),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            widget.lastName,
+                            style: lastNameStyle,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.phone,
+                                size: 15,
+                                color: phoneLabelIconColor,
+                              ),
+                              Text(" ${widget.phone}", style: phoneTextStyle),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      )
+      ),
     );
   }
 
   void _setColors(){
     if(widget.isSelected()){
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeSelectedFirstNameTextStyle;
-      lastNameStyle = ApplicationTheme.rideAttendeeSelectedLastNameTextStyle;
+      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle.copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle.copyWith(color: Colors.white);
+      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle.copyWith(color: Colors.white);
+      phoneLabelIconColor = Colors.white;
     }else{
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeUnselectedFirstNameTextStyle;
-      lastNameStyle = ApplicationTheme.rideAttendeeUnselectedLastNameTextStyle;
+      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle;
+      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle;
+      phoneTextStyle = ApplicationTheme.rideAttendeePhoneTextStyle;
+      phoneLabelIconColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
     }
   }
 

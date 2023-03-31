@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -25,17 +26,17 @@ class ManualSelectionSubmit extends StatelessWidget {
               return PlatformAwareLoadingIndicator();
             }else{
               return PlatformAwareWidget(
-                android: () => RaisedButton(
+                android: () => FlatButton(
                   child: Text(
                       S.of(context).RideAttendeeScanningSaveManualResults,
-                      style: TextStyle(color: Colors.white)
+                      style: TextStyle(color: ApplicationTheme.primaryColor)
                   ),
                   onPressed: onSave,
                 ),
-                ios: () => CupertinoButton.filled(
+                ios: () => CupertinoButton(
                     child: Text(
                         S.of(context).RideAttendeeScanningSaveManualResults,
-                        style: TextStyle(color: Colors.white)
+                        style: TextStyle(color: ApplicationTheme.primaryColor)
                     ),
                     onPressed: onSave,
                 ),

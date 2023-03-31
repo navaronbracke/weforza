@@ -11,15 +11,15 @@ import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelection.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/saveScanOrSkipButton.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/bluetoothDisabled.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection.dart';
-import 'package:weforza/widgets/pages/rideAttendeeScanningPage/noMembersForScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/preparingScan.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningProgressIndicator.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningStepper.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
@@ -67,7 +67,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
-          isScanning: bloc.isScanning,
+          isScanStep: bloc.isScanStep,
         ),
       ),
       body: _buildBody()
@@ -80,7 +80,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
-          isScanning: bloc.isScanning,
+          isScanStep: bloc.isScanStep,
         ),
       ),
       child: _buildBody(),
@@ -103,27 +103,30 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
             stream: bloc.scanStepStream,
             builder: (context, snapshot){
               if(snapshot.hasError){
-                return GenericScanErrorWidget();
+                return Center(child: GenericScanErrorWidget());
               }else{
                 switch(snapshot.data){
-                  case ScanProcessStep.INIT: return PreparingScanWidget();
-                  case ScanProcessStep.BLUETOOTH_DISABLED: return BluetoothDisabledWidget(
-                    onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
-                    onRetryScan: () => bloc.scanFuture = bloc.retryDeviceScan(_onDeviceFound),
+                  case ScanProcessStep.INIT: return Center(child: PreparingScanWidget());
+                  case ScanProcessStep.BLUETOOTH_DISABLED: return Center(
+                    child: BluetoothDisabledWidget(
+                      onGoToSettings: () async => await AppSettings.openBluetoothSettings(),
+                      onRetryScan: () => bloc.scanFuture = bloc.retryDeviceScan(_onDeviceFound),
+                    ),
                   );
                   case ScanProcessStep.SCAN:
                     return WillPopScope(
-                      onWillPop: () async => bloc.isScanning.value ? await bloc.stopScan() : true,
+                      onWillPop: () => bloc.stopScan(),
                       child: Column(
                         children: <Widget>[
                           Expanded(
                             child: AnimatedList(
                               key: deviceListKey,
-                              initialItemCount: 0,//Initially we don't have scanned items yet
                               itemBuilder: (BuildContext context, int index, Animation<double> animation){
                                 return SizeTransition(
                                   sizeFactor: animation,
-                                  child: ScanResultListItem(item: bloc.getScanResultAt(index)),
+                                  child: ScanResultListItem(
+                                      item: bloc.getScanResultAt(index),
+                                  ),
                                 );
                               },
                             ),
@@ -135,7 +138,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                                 isSaving: bloc.isSaving,
                                 isScanning: bloc.isScanning,
                                 onSkip: () => bloc.skipScan(),
-                                onSave: () async => await bloc.saveScanResults().then((_){
+                                onSave: () async => await bloc.saveRideAttendees(true,true).then((_){
                                   widget.onRefreshAttendees();
                                 }, onError: (error){
                                   //do nothing
@@ -151,8 +154,8 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         bloc: bloc,
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
-                  case ScanProcessStep.NO_MEMBERS: return NoMembersForScanWidget();
-                  default: return GenericScanErrorWidget();
+                  case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
+                  default: return Center(child: GenericScanErrorWidget());
                 }
               }
             },
@@ -164,7 +167,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   ///Trigger an insertion for a new item in the AnimatedList.
   void _onDeviceFound(String deviceName, Future<Member> memberLookup){
-    if(deviceListKey.currentState != null){
+    if(deviceListKey.currentState != null && deviceName != null && deviceName.isNotEmpty){
       bloc.addScanResult(ScanResultItem(deviceName: deviceName, memberLookup: memberLookup));
       deviceListKey.currentState.insertItem(0);
     }

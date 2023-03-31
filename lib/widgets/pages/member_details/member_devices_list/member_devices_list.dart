@@ -100,9 +100,9 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   }
 
   Future<void> onDeleteDevice(BuildContext context, int index) async {
-    final notifier = ref.read(selectedMemberDevicesProvider.notifier);
-
-    final device = await notifier.deleteDevice(index);
+    final device = await ref
+        .read(selectedMemberDevicesProvider.notifier)
+        .deleteDevice(index);
 
     if (!mounted) {
       return;
@@ -126,8 +126,10 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
       ),
     );
 
+    final devicesList = ref.read(selectedMemberDevicesProvider);
+
     // Switch to the empty list widget.
-    if (notifier.hasNoDevices) {
+    if (devicesList is AsyncData<List<Device>> && devicesList.value.isEmpty) {
       setState(() {});
     }
   }

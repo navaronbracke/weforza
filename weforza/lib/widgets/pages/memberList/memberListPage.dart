@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
+import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -134,24 +134,28 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildList(BuildContext context){
-    return FutureBuilder<List<MemberItem>>(
+    return FutureBuilder<List<Member>>(
       future: bloc.membersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
             return GenericError(text: S.of(context).MemberListLoadingFailed);
           } else {
-            List<MemberItem> data = snapshot.data;
-            return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) =>
-                    MemberWithPictureListItem(
-                        item: data[index], onTap: (){
-                      SelectedItemProvider.of(context).selectedMember.value = data[index];
+            return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  final member = snapshot.data[index];
+                  return MemberListItem(
+                        member: member,
+                        memberProfileImage: bloc.getMemberProfileImage(member.profileImageFilePath),
+                        memberAttendingCount: bloc.getMemberAttendingCount(member.uuid),
+                        onTap: (){
+                      SelectedItemProvider.of(context).selectedMember.value = snapshot.data[index];
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => MemberDetailsPage())
                       ).then((_)=> onReturnToMemberListPage(context));
-                    }));
+                    });
+                });
           }
         } else {
           return Center(child: PlatformAwareLoadingIndicator());

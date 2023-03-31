@@ -10,7 +10,6 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideExportState.dart';
 
@@ -32,7 +31,7 @@ class ExportRideBloc extends Bloc {
   final String Function() resolveInitialFilename;
   final IFileHandler fileHandler;
   final Ride ride;
-  final Future<List<MemberItem>> loadedAttendees;
+  final Future<List<Member>> loadedAttendees;
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   TextEditingController fileNameController;
 
@@ -57,8 +56,7 @@ class ExportRideBloc extends Bloc {
 
   void loadRideAttendees() async {
     _streamController.add(RideExportState.INIT);
-    final attendees = await loadedAttendees;//These are already loaded!
-    rideAttendees = attendees.map((a) => a.member).toList();
+    rideAttendees =  await loadedAttendees;//These are already loaded!
     _streamController.add(RideExportState.IDLE);
   }
 

@@ -19,7 +19,7 @@ class RideRepository {
   Future<List<Ride>> getRides() => _dao.getRides();
 
   Future<List<DateTime>> getRideDates() => _dao.getRideDates();
-  
+
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees) => _dao.updateRide(ride, attendees);
 
   Future<List<Member>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);

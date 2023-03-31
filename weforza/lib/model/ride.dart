@@ -24,7 +24,7 @@ class Ride {
   ///
   /// For compatibility reasons, this variable is nullable.
   /// I.e. A new or existing ride without this attribute does not have a value.
-  final int? scannedAttendees;
+  int? scannedAttendees;
 
   ///Get [date], but formatted with a day prefix.
   ///This method can return a short or long format, depending on [shortForm].
@@ -49,10 +49,11 @@ class Ride {
   }
 
   @override
-  bool operator ==(Object other) => other is Ride && date == other.date;
+  bool operator ==(Object other) => other is Ride
+      && date == other.date && scannedAttendees == other.scannedAttendees;
 
   @override
-  int get hashCode => date.hashCode;
+  int get hashCode => hashValues(date, scannedAttendees);
 
   String dateToDDMMYYYY() => "${date.day}-${date.month}-${date.year}";
 

@@ -53,7 +53,7 @@ class RideListPage extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(S.of(context).Rides),
               ),
             ),
@@ -66,7 +66,7 @@ class RideListPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: const EdgeInsets.only(left: 12),
               child: CupertinoIconButton.fromAppTheme(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const ExportRidePage()),

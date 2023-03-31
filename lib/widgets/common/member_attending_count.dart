@@ -21,7 +21,7 @@ class MemberAttendingCount extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Padding(padding: EdgeInsets.only(right: 5), child: Text('?')),
+                Padding(padding: EdgeInsets.only(right: 4), child: Text('?')),
                 Icon(
                   Icons.directions_bike,
                   color: ApplicationTheme.primaryColor,
@@ -35,7 +35,7 @@ class MemberAttendingCount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 4),
                 child: Text(snapshot.data.toString()),
               ),
               const Icon(

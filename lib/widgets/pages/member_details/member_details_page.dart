@@ -81,7 +81,7 @@ class MemberDetailsPage extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(translator.Details),
               ),
             ),
@@ -106,7 +106,7 @@ class MemberDetailsPage extends StatelessWidget {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(left: 16),
                   child: CupertinoIconButton.fromAppTheme(
                     icon: CupertinoIcons.delete,
                     onPressed: () => showCupertinoDialog(
@@ -134,14 +134,14 @@ class MemberDetailsPage extends StatelessWidget {
         Row(
           children: const <Widget>[
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.all(8),
               child: MemberProfileImage(),
             ),
             Expanded(child: MemberName()),
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
           child: Row(
             children: [
               Consumer(

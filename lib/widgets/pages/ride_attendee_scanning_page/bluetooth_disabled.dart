@@ -27,7 +27,7 @@ class BluetoothDisabledWidget extends StatelessWidget {
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 20),
+          padding: const EdgeInsets.only(top: 8, bottom: 20),
           child: Text(translator.ScanAbortedBluetoothDisabled),
         ),
         PlatformAwareWidget(

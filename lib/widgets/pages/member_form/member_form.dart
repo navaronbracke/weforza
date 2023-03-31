@@ -227,7 +227,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                   onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                  padding: const EdgeInsets.only(top: 12, bottom: 24),
                   child: Center(
                     child: MemberFormSubmitButton(
                       initialData: _delegate.isSubmitting,
@@ -350,7 +350,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+                    padding: const EdgeInsets.only(top: 12, bottom: 24),
                     child: Center(
                       child: MemberFormSubmitButton(
                         initialData: _delegate.isSubmitting,

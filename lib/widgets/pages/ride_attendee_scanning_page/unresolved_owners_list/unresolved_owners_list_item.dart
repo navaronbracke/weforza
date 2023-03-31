@@ -46,7 +46,7 @@ class UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
       child: DecoratedBox(
         decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: MemberNameAndAlias(
             firstNameStyle: firstNameStyle,
             lastNameStyle: lastNameStyle,

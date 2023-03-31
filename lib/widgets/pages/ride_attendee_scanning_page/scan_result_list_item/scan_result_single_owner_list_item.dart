@@ -15,11 +15,11 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(4),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 5),
+            padding: const EdgeInsets.only(right: 4),
             child: PlatformAwareWidget(
               android: () => const Icon(
                 Icons.person,

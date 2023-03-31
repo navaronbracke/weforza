@@ -58,11 +58,11 @@ class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: () => Padding(
-        padding: const EdgeInsets.fromLTRB(10, 0, 5, 5),
+        padding: const EdgeInsets.only(left: 8, right: 4, bottom: 4),
         child: _buildItem(context),
       ),
       ios: () => Padding(
-        padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+        padding: const EdgeInsets.fromLTRB(4, 16, 16, 16),
         child: _buildItem(context),
       ),
     );
@@ -72,7 +72,7 @@ class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
     return Row(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(right: 5),
+          padding: const EdgeInsets.only(right: 4),
           child: DeviceIcon(type: device.type),
         ),
         Expanded(
@@ -87,7 +87,7 @@ class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 5),
+              padding: const EdgeInsets.only(left: 4),
               child: _buildEditDeviceButton(context),
             ),
             _buildDeleteDeviceButton(context),
@@ -126,7 +126,7 @@ class MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
         ),
       ),
       ios: () => Padding(
-        padding: const EdgeInsets.only(left: 5),
+        padding: const EdgeInsets.only(left: 4),
         child: CupertinoIconButton(
           icon: CupertinoIcons.delete,
           idleColor: CupertinoColors.destructiveRed,

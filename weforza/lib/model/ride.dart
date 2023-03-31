@@ -18,8 +18,6 @@ class Ride {
 
   /// The amount of attendees that were automatically scanned for this ride.
   /// This is a statistical piece of information, that is not exported.
-  /// Only attendees that were automatically scanned
-  /// by the algorithm are considered.
   ///
   /// For compatibility reasons, this variable is nullable.
   /// I.e. A new or existing ride without this attribute does not have a value.

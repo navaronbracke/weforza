@@ -23,8 +23,13 @@ class BluetoothDisabledError extends StatelessWidget {
           size: MediaQuery.of(context).size.shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 20),
-          child: Text(translator.ScanAbortedBluetoothDisabled),
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
+          child: Text(
+            translator.ScanAbortedBluetoothDisabled,
+            textAlign: TextAlign.center,
+            softWrap: true,
+            maxLines: 3,
+          ),
         ),
         Wrap(
           spacing: 16,

@@ -61,7 +61,7 @@ class AddRideFormState extends ConsumerState<AddRideForm> {
               children: [
                 AddRideCalendar(delegate: delegate),
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: EdgeInsets.only(top: 4),
                   child: AddRideCalendarColorLegend(),
                 ),
                 _AddRideFormSubmitButton(delegate: delegate),
@@ -143,7 +143,7 @@ class _AddRideFormSubmitButtonState extends State<_AddRideFormSubmitButton> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 2),
           child: Text(errorMessage),
         ),
         PlatformAwareWidget(

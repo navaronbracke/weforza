@@ -15,23 +15,27 @@ class MemberAttendingCount extends StatelessWidget {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
-                  child: Text("?"),
+                  child: Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
                 ),
-                Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor)
+                Text("?")
               ],
             );
           }
 
           return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
-                child: Text(snapshot.data.toString()),
+                child: Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor),
               ),
-              Icon(Icons.directions_bike, color: ApplicationTheme.primaryColor)
+              Text(snapshot.data.toString())
             ],
           );
         }else{

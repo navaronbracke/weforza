@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/settings_bloc.dart';
+import 'package:weforza/model/save_settings_delegate.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsSubmit extends StatefulWidget {
-  const SettingsSubmit({Key? key, required this.bloc}) : super(key: key);
+  const SettingsSubmit({
+    Key? key,
+    required this.delegate,
+  }) : super(key: key);
 
-  final SettingsBloc bloc;
+  final SaveSettingsDelegate delegate;
 
   @override
   _SettingsSubmitState createState() => _SettingsSubmitState();
@@ -17,29 +20,25 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: widget.bloc.saveSettingsFuture,
+      future: widget.delegate.future,
       builder: (context, snapshot) {
-        // We did not submit yet, show the submit button.
-        if (snapshot.connectionState == ConnectionState.none) {
-          return _buildSubmitButton();
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return _buildError();
-          } else {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
             return _buildSubmitButton();
-          }
-        } else {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Center(
-              child: PlatformAwareWidget(
-                android: () => const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          case ConnectionState.done:
+            return snapshot.hasError ? _buildError() : _buildSubmitButton();
+          default:
+            return Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Center(
+                child: PlatformAwareWidget(
+                  android: () => const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  ios: () => const CupertinoActivityIndicator(),
                 ),
-                ios: () => const CupertinoActivityIndicator(),
               ),
-            ),
-          );
+            );
         }
       },
     );
@@ -79,7 +78,7 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
 
   void onSaveSettings() {
     setState(() {
-      widget.bloc.saveSettings();
+      widget.delegate.saveSettings();
     });
   }
 }

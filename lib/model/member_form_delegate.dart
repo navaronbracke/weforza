@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/repository/member_repository.dart';
@@ -24,16 +23,6 @@ class MemberFormDelegate {
 
   /// Add a new member.
   Future<void> addMember(MemberPayload model) async {
-    final exists = await repository.memberExists(
-      model.firstName,
-      model.lastName,
-      model.alias,
-    );
-
-    if (exists) {
-      return Future.error(MemberExistsException());
-    }
-
     final image = await model.profileImage.catchError(
       (_) => Future<File?>.value(),
     );
@@ -59,17 +48,6 @@ class MemberFormDelegate {
 
     if (uuid == null) {
       return Future.error(ArgumentError.notNull('uuid'));
-    }
-
-    final exists = await repository.memberExists(
-      model.firstName,
-      model.lastName,
-      model.alias,
-      uuid,
-    );
-
-    if (exists) {
-      return Future.error(MemberExistsException());
     }
 
     final profileImage = await model.profileImage.catchError((error) {

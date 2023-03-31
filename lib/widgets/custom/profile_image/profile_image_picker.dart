@@ -69,18 +69,16 @@ class _AsyncProfileImage extends StatelessWidget {
   const _AsyncProfileImage({
     this.future,
     required this.icon,
-    this.size = 40,
+    required this.size,
   });
 
   /// The future that represents the loading of the image.
   final Future<File?>? future;
 
-  /// The icon that is used as fallback if [personInitials] is null or empty.
+  /// The icon that is used as fallback if the image is not available.
   final IconData icon;
 
   /// The size of this widget.
-  ///
-  /// Defaults to 40.
   final double size;
 
   @override

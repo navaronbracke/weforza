@@ -28,13 +28,6 @@ class MemberRepository {
 
   Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
 
-  Future<List<Member>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);
-
-  Future<List<String>> getRideAttendeeIds(DateTime date) async {
-    final attendees = await getRideAttendees(date);
-    return attendees.map((attendee) => attendee.uuid).toList();
-  }
-
   Future<File> chooseProfileImageFromGallery() => _fileHandler.chooseProfileImageFromGallery();
 
   Future<File> loadProfileImageFromDisk(String path) => _fileHandler.loadProfileImageFromDisk(path);

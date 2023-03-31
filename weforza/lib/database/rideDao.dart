@@ -1,6 +1,7 @@
 
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/databaseProvider.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 
@@ -28,6 +29,9 @@ abstract class IRideDao {
 
   ///Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
+
+  ///Get the [Member]s of a given ride.
+  Future<List<Member>> getRideAttendees(DateTime date);
 }
 
 class RideDao implements IRideDao {
@@ -39,6 +43,8 @@ class RideDao implements IRideDao {
   final _rideAttendeeStore = DatabaseProvider.rideAttendeeStore;
   ///A reference to the [Ride] store.
   final _rideStore = DatabaseProvider.rideStore;
+  ///A reference to the [Member] store.
+  final _memberStore = DatabaseProvider.memberStore;
 
 
   @override
@@ -99,5 +105,20 @@ class RideDao implements IRideDao {
   @override
   Future<void> updateRide(Ride ride) async {
     return await _rideStore.update(_database, ride.toMap(),finder: Finder(filter: Filter.byKey(ride.date.toIso8601String())));
+  }
+
+  @override
+  Future<List<Member>> getRideAttendees(DateTime date) async {
+    assert(date != null);
+    //fetch the attendees of the ride and map to their uuid's
+    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
+        finder: Finder(filter: Filter.equals("date", date.toIso8601String())));
+    final attendeeIds = rideAttendeeRecords.map((record) => record.value["attendee"]).toList();
+    //fetch the members that belong to the attendee uuid's
+    final memberRecords = await _memberStore.find(_database,
+        finder: Finder(filter: Filter.custom((record) => attendeeIds.contains(record.key)),
+            sortOrders: [SortOrder("firstname"),SortOrder("lastname")]));
+    //map the record snapshots
+    return memberRecords.map((record) => Member.of(record.key, record.value)).toList();
   }
 }

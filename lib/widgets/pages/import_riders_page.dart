@@ -189,11 +189,20 @@ class _ImportRidersButton extends StatelessWidget {
             child: CupertinoFormRow(
               error: errorMessage == null
                   ? null
-                  : Center(child: Text(errorMessage!)),
+                  : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
               child: Center(
-                child: CupertinoButton(
+                child: CupertinoButton.filled(
                   onPressed: onPressed,
-                  child: Text(label),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Icon(CupertinoIcons.arrow_down_doc),
+                      ),
+                      Text(label),
+                    ],
+                  ),
                 ),
               ),
             ),

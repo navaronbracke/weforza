@@ -200,8 +200,29 @@ class RideAttendeeScanningDelegate {
     _rideAttendeeController.add(items);
   }
 
+  /// Go to the manual selection screen.
+  void continueToManualSelection() {
+    _changeState(RideAttendeeScanningState.manualSelection);
+  }
+
   /// Get the scanned device at the given [index].
   ScannedDevice getScanResult(int index) => _scannedDevices[index];
+
+  /// Stop a running scan and switch to the next state in the scanning process.
+  ///
+  /// The [isScanning] parameter indicates if a scan is in progress.
+  void maybeSkipScan({required bool isScanning}) async {
+    // Try to stop the running scan first.
+    if (isScanning && !await stopScan()) {
+      return;
+    }
+
+    final newState = _unresolvedOwners.isEmpty
+        ? RideAttendeeScanningState.manualSelection
+        : RideAttendeeScanningState.unresolvedOwnersSelection;
+
+    _changeState(newState);
+  }
 
   /// Start a new device scan.
   ///

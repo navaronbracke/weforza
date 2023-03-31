@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceList/deviceManagementListEmpty.dart';
 import 'package:weforza/widgets/pages/deviceManagement/deviceList/deviceManagementListItem.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
@@ -78,6 +79,8 @@ class DeviceManagementListState extends State<DeviceManagementList> {
         onPressed: ()=> widget.deviceManager.requestAddForm(),
       ),
       ios: () => CupertinoIconButton(
+          onPressedColor: ApplicationTheme.primaryColor,
+          idleColor: ApplicationTheme.accentColor,
           icon: Icons.add,
           onPressed: ()=> widget.deviceManager.requestAddForm()
       ),

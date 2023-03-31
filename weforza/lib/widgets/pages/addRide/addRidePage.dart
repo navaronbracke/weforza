@@ -5,6 +5,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendar.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
@@ -89,6 +90,8 @@ class _AddRidePageState extends State<AddRidePage> {
               child: Center(child: Text(S.of(context).AddRideTitle)),
             ),
             CupertinoIconButton(
+              onPressedColor: ApplicationTheme.primaryColor,
+              idleColor: ApplicationTheme.accentColor,
               icon: Icons.delete_sweep,
               onPressed: () => _bloc.onRequestClear(),
             ),

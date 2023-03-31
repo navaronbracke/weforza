@@ -95,19 +95,19 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate.fixed([
-              DeviceTypeCarousel(
-                controller: _deviceTypeController,
-                height: 120,
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: DeviceTypeCarousel(
+                  controller: _deviceTypeController,
+                  height: 120,
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildDeviceNameInput(context),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 24),
+                padding: const EdgeInsets.only(top: 16, bottom: 24),
                 child: Center(child: _buildSubmitButton(context)),
               ),
             ]),

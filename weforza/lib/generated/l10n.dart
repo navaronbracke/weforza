@@ -653,6 +653,16 @@ class S {
     );
   }
 
+  /// `Something went wrong.`
+  String get RideAttendeeScanningGenericError {
+    return Intl.message(
+      'Something went wrong.',
+      name: 'RideAttendeeScanningGenericError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

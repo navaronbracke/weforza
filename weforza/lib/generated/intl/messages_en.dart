@@ -135,6 +135,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("A phone number can only contain digits"),
     "PhoneMaxLength" : m9,
     "PhoneMinLength" : m10,
+    "RideAttendeeScanningGenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong."),
     "RideAttendeeScanningGoBack" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Cannot start a scan, there are no members."),
     "RideAttendeeScanningPreparingScan" : MessageLookupByLibrary.simpleMessage("Preparing Scan"),

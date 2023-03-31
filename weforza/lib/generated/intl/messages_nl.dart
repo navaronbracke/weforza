@@ -135,6 +135,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een telefoonnummer bestaat enkel uit cijfers"),
     "PhoneMaxLength" : m9,
     "PhoneMinLength" : m10,
+    "RideAttendeeScanningGenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout."),
     "RideAttendeeScanningGoBack" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningNoMembers" : MessageLookupByLibrary.simpleMessage("Kan niet beginnen scannen, er zijn geen leden."),
     "RideAttendeeScanningPreparingScan" : MessageLookupByLibrary.simpleMessage("Scan Voorbereiden"),

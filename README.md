@@ -12,6 +12,33 @@ If a new locale is added, a [full restart is required](https://github.com/flutte
 
 See also: https://docs.flutter.dev/development/accessibility-and-localization/internationalization
 
+#### Translating the iOS Information Property List file (Info.plist)
+
+The `Info.plist` file contains `NSUsageDescription` tags that should be translated.
+These contain the descriptions for system defined permission dialogs.
+The title and button labels are provided by the system and do not have to be translated.
+
+To translate the Info.plist file do the following:
+
+A) If the InfoPlist.strings file does not yet exist:
+
+- Create a new Resource file under `ios > Runner > Runner`
+- Select the inner `Runner` target
+- Right click and select `New File`
+- Select `Strings File` under the `Resource` category
+- Create the new file with the name `InfoPlist.strings`
+- Add the baseline translations (usually in English) in this file using the format `Key="Translation";`
+- Back in XCode, select the `InfoPlist.strings` file
+- Press the `Localise` button on the right
+- Select the languages that the `InfoPlist.strings` file should be localised in
+- Add the translations to the newly created `InfoPlist.strings` variants (one per selected language)
+
+b) If the InfoPlist.strings file does exist:
+
+- Select the `InfoPlist.strings` file
+- Add the desired languages that should have their `InfoPlist.strings` variants added
+- Add the translations to the newly created `InfoPlist.strings` variants (one per selected language)
+
 ### IOS on device testing
 
 Before runing the app on a real IOS device, this checklist should be performed.
@@ -21,9 +48,10 @@ Before runing the app on a real IOS device, this checklist should be performed.
 
 - Let XCode set up the device for development.
   * Check that the device is shown in XCode as the selected device.
-  * If it is shown as `untrusted`, trust the host machine from the device when connecting.
-    The device will ask this through a confirmation dialog.
-  * When prompted, register the device with XCode. Xcode will show a dialog for this.
+  * iOS 15 and lower: If the device is shown as `untrusted`, trust the host machine from the device when connecting.
+    The device will display a confirmation dialog. When prompted, register the device with XCode.
+  * iOS 16 and higher: On iOS 16 and higher Developer mode should be enabled on the device.
+  See https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device
 
 - If required, run `pods install` in the terminal. (preferably from the flutter project dir)
   Usually the Flutter tool does this automatically when building.
@@ -31,8 +59,9 @@ Before runing the app on a real IOS device, this checklist should be performed.
 ### IOS Deployment target version
 
 To bump the minimum iOS version for a project do the following:
-
-- Open the project in XCode and set the target OS version
+- Open the project in XCode
+- Set the iOS version under `Runner > General > Minimum Deployments > iOS`
+- In `ios/Flutter/AppFrameworkInfo.plist` set `MinimumOSVersion`
 - Update the `platform :ios, <version number>` section in the Podfile.
 - Ensure that the `flutter_additional_ios_build_settings(target)` section in ios/Podfile has set `IPHONEOS_DEPLOYMENT_TARGET`
 ```
@@ -40,7 +69,7 @@ To bump the minimum iOS version for a project do the following:
       installer.pods_project.targets.each do |target|
         flutter_additional_ios_build_settings(target)
         target.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '(version number, e.g. 14.4 for iOS 14.4)'
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '<version number>'
         end
       end
     end

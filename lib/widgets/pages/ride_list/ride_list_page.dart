@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/add_ride_form.dart';
-import 'package:weforza/widgets/pages/export_ride_page.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_list/ride_list.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';

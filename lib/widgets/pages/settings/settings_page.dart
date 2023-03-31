@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
@@ -30,8 +29,7 @@ class SettingsPage extends ConsumerStatefulWidget {
   SettingsPageState createState() => SettingsPageState();
 }
 
-class SettingsPageState extends ConsumerState<SettingsPage>
-    with ArtificialDelay {
+class SettingsPageState extends ConsumerState<SettingsPage> {
   final addTermController = TextEditingController();
   final addTermFocusNode = FocusNode();
   final addTermFormKey = GlobalKey<FormFieldState<String>>();
@@ -45,8 +43,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   Future<void>? _saveSettingsFuture;
 
   Future<void> saveSettings() async {
+    // TODO: remove the delay once the changes are saved automatically
+
     // Use an artificial delay to give the loading indicator some time to appear.
-    await waitForDelay();
+    await Future.delayed(const Duration(milliseconds: 500));
 
     final newSettings = Settings(
       excludedTermsFilter: excludedTermsDelegate.terms.toSet(),

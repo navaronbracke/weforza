@@ -20,6 +20,10 @@ class ImportRidersDelegate {
 
   final SerializeRidersRepository repository;
 
+  ImportRidersState get currentState => _controller.value;
+
+  Stream<ImportRidersState> get stream => _controller;
+
   Future<Iterable<SerializableRider>> _readFileWithReader<T>(
     File file, {
     required ImportRidersFileReader<T> reader,
@@ -43,6 +47,8 @@ class ImportRidersDelegate {
   /// Read the contents of [file] and extract the [SerializableRider]s.
   ///
   /// Returns the collection of [SerializableRider]s.
+  ///
+  /// Throws a [FormatException] if the file is malformed.
   Future<Iterable<SerializableRider>> _readRidersFromFile(File file) {
     if (file.path.endsWith(FileExtension.csv.value)) {
       return _readFileWithReader<String>(
@@ -65,6 +71,12 @@ class ImportRidersDelegate {
   ///
   /// The [whenComplete] handler is called
   /// when the riders are imported successfully.
+  ///
+  /// If no file was chosen a [NoFileChosenError] is emitted through [stream].
+  /// If the chosen file has an invalid file format,
+  /// a [InvalidFileExtensionError] is emitted through the [stream].
+  ///
+  /// If the chosen file is malformed, a [FormatException] is emitted through the [stream].
   void importRiders({required void Function() whenComplete}) async {
     try {
       _controller.add(ImportRidersState.pickingFile);
@@ -72,6 +84,12 @@ class ImportRidersDelegate {
       final file = await fileHandler.pickImportRidersDataSource();
 
       if (_controller.isClosed) {
+        return;
+      }
+
+      if (file == null) {
+        _controller.addError(NoFileChosenError());
+
         return;
       }
 

@@ -16,7 +16,7 @@ void main(){
   /// Integration/regression test for the database location.
   /// Older versions of the app used to store the database
   /// in the Documents folder. Newer versions correctly store the database
-  /// in the application support directory.
+  /// in the Application Support directory.
   /*
   Run this test:
   flutter drive --driver=test_driver/integration_test.dart --target=integration_test/database_location_test.dart

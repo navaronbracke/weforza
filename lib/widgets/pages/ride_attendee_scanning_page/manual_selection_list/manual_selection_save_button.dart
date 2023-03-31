@@ -85,7 +85,7 @@ class _SaveButton extends StatelessWidget {
       android: (_) => ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.manualSelectionBottomBar.saveButtonColor,
+          backgroundColor: AppTheme.colorScheme.primary,
           foregroundColor: Colors.white,
         ),
         child: Text(text),

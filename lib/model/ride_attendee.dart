@@ -1,42 +1,43 @@
-import 'package:flutter/widgets.dart' show hashValues;
-
-///This class represents an intermediary table that connects [Ride] with [Member].
+/// This class represents a [Member] that attends a given [Ride].
 class RideAttendee {
   RideAttendee({
+    required this.isScanned,
     required this.rideDate,
     required this.uuid,
-    required this.isScanned,
   }) : assert(uuid.isNotEmpty);
 
-  ///The date of the ride that belongs to this record.
-  final DateTime rideDate;
-
-  ///The GUID of the attendee that belongs to this record.
-  final String uuid;
-
-  /// Whether the attendee was scanned or found manually.
-  final bool isScanned;
-
-  static RideAttendee of(Map<String, dynamic> values) {
+  /// Create a new ride attendee from the given [values].
+  factory RideAttendee.of(Map<String, dynamic> values) {
     return RideAttendee(
+      // The rate of automatic scanning is bigger than manual selection.
+      // Thus we use an 'optimistic' true as default.
+      isScanned: values['isScanned'] ?? true,
       rideDate: DateTime.parse(values['date']),
       uuid: values['attendee'],
-      // The rate of automatic scanning is bigger than manual selection.
-      // Thus we use an 'optimistic' true as default
-      isScanned: values['isScanned'] ?? true,
     );
   }
 
+  /// Whether the attendee was scanned.
+  ///
+  /// If this is false, the attendee was manually selected.
+  final bool isScanned;
+
+  /// The date of the ride that belongs to this record.
+  final DateTime rideDate;
+
+  /// The UUID of the attendee that belongs to this record.
+  final String uuid;
+
   Map<String, dynamic> toMap() {
     return {
-      'date': rideDate.toIso8601String(),
       'attendee': uuid,
+      'date': rideDate.toIso8601String(),
       'isScanned': isScanned,
     };
   }
 
   @override
-  int get hashCode => hashValues(rideDate, uuid, isScanned);
+  int get hashCode => Object.hash(rideDate, uuid, isScanned);
 
   @override
   bool operator ==(other) {

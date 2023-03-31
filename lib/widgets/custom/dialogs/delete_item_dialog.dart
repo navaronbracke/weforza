@@ -6,151 +6,61 @@ import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-///This dialog handles the UI for a delete item confirmation.
-class DeleteItemDialog extends StatefulWidget {
-  DeleteItemDialog({
+class DeleteItemDialog extends StatelessWidget {
+  const DeleteItemDialog({
     Key? key,
-    required this.onDelete,
-    required this.title,
     required this.description,
     required this.errorDescription,
-  })  : assert(title.isNotEmpty &&
-            description.isNotEmpty &&
-            errorDescription.isNotEmpty),
-        super(key: key);
+    required this.future,
+    required this.onDeletePressed,
+    required this.title,
+  }) : super(key: key);
 
-  //This lambda generates the delete computation.
-  final Future<void> Function() onDelete;
-  final String title;
   final String description;
   final String errorDescription;
-
-  @override
-  _DeleteItemDialogState createState() => _DeleteItemDialogState();
-}
-
-class _DeleteItemDialogState extends State<DeleteItemDialog> {
-  Future<void>? deleteItemFuture;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: deleteItemFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.none) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidConfirmDialog(context),
-            ios: () => _buildIosConfirmDialog(context),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasError) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidErrorDialog(context),
-            ios: () => _buildIosErrorDialog(context),
-          );
-        } else {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidLoadingDialog(context),
-            ios: () => const CupertinoLoadingDialog(),
-          );
-        }
-      },
-    );
-  }
+  final Future<void>? future;
+  final void Function() onDeletePressed;
+  final String title;
 
   Widget _buildAndroidConfirmDialog(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final translator = S.of(context);
+
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
-          child:
-              Text(widget.title, style: Theme.of(context).textTheme.headline6),
+          child: Text(title, style: textTheme.headline6),
         ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Text(widget.description,
-                softWrap: true, style: Theme.of(context).textTheme.subtitle1),
+            child: Text(
+              description,
+              softWrap: true,
+              style: textTheme.subtitle1,
+            ),
           ),
         ),
         ButtonBar(
           children: <Widget>[
             TextButton(
-              child: Text(S.of(context).Cancel.toUpperCase()),
+              child: Text(translator.Cancel.toUpperCase()),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text(S.of(context).Delete.toUpperCase()),
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
-              onPressed: () => _onConfirmDeletion(),
+              onPressed: onDeletePressed,
+              child: Text(translator.Delete.toUpperCase()),
             ),
           ],
         ),
       ],
     );
 
-    return _buildAndroidDialog(content);
-  }
-
-  Widget _buildAndroidErrorDialog(BuildContext context) {
-    final content = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
-          child:
-              Text(widget.title, style: Theme.of(context).textTheme.headline6),
-        ),
-        Expanded(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
-                  child: Icon(Icons.error_outline,
-                      size: 30,
-                      color: ApplicationTheme.deleteItemButtonTextColor),
-                ),
-                Text(
-                  widget.errorDescription,
-                  softWrap: true,
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ],
-            ),
-          ),
-        ),
-        ButtonBar(
-          children: <Widget>[
-            TextButton(
-              child: Text(S.of(context).Ok.toUpperCase()),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      ],
-    );
-    return _buildAndroidDialog(content);
-  }
-
-  Widget _buildAndroidLoadingDialog(BuildContext context) {
-    final content = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-          child:
-              Text(widget.title, style: Theme.of(context).textTheme.headline6),
-        ),
-        const Expanded(
-          child: Center(child: PlatformAwareLoadingIndicator()),
-        ),
-      ],
-    );
     return _buildAndroidDialog(content);
   }
 
@@ -173,19 +83,82 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     );
   }
 
+  Widget _buildAndroidErrorDialog(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+          child: Text(title, style: textTheme.headline6),
+        ),
+        Expanded(
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4),
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 30,
+                    color: ApplicationTheme.deleteItemButtonTextColor,
+                  ),
+                ),
+                Text(
+                  errorDescription,
+                  softWrap: true,
+                  style: textTheme.subtitle1,
+                ),
+              ],
+            ),
+          ),
+        ),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(S.of(context).Ok.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      ],
+    );
+
+    return _buildAndroidDialog(content);
+  }
+
+  Widget _buildAndroidLoadingDialog(BuildContext context) {
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+          child: Text(title, style: Theme.of(context).textTheme.headline6),
+        ),
+        const Expanded(child: Center(child: PlatformAwareLoadingIndicator())),
+      ],
+    );
+
+    return _buildAndroidDialog(content);
+  }
+
   Widget _buildIosConfirmDialog(BuildContext context) {
+    final translator = S.of(context);
+
     return CupertinoAlertDialog(
-      title: Text(widget.title),
-      content: Text(widget.description),
+      title: Text(title),
+      content: Text(description),
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
-          child: Text(S.of(context).Delete),
-          onPressed: () => _onConfirmDeletion(),
+          onPressed: onDeletePressed,
+          child: Text(translator.Delete),
         ),
         CupertinoDialogAction(
-          child: Text(S.of(context).Cancel),
           onPressed: () => Navigator.of(context).pop(),
+          child: Text(translator.Cancel),
         ),
       ],
     );
@@ -193,7 +166,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
 
   Widget _buildIosErrorDialog(BuildContext context) {
     return CupertinoAlertDialog(
-      title: Text(widget.title),
+      title: Text(title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -206,7 +179,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
               color: CupertinoColors.destructiveRed,
             ),
           ),
-          Text(widget.errorDescription),
+          Text(errorDescription),
         ],
       ),
       actions: [
@@ -218,9 +191,31 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
     );
   }
 
-  void _onConfirmDeletion() {
-    deleteItemFuture = widget.onDelete();
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: future,
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return PlatformAwareWidget(
+                android: () => _buildAndroidErrorDialog(context),
+                ios: () => _buildIosErrorDialog(context),
+              );
+            }
 
-    setState(() {});
+            return PlatformAwareWidget(
+              android: () => _buildAndroidLoadingDialog(context),
+              ios: () => const CupertinoLoadingDialog(),
+            );
+          default:
+            return PlatformAwareWidget(
+              android: () => _buildAndroidConfirmDialog(context),
+              ios: () => _buildIosConfirmDialog(context),
+            );
+        }
+      },
+    );
   }
 }

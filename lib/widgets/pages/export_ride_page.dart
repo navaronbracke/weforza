@@ -1,50 +1,92 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/export_ride_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/export_data_or_error.dart';
+import 'package:weforza/model/ride.dart';
+import 'package:weforza/riverpod/ride/export_rides_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/file_extension_selection.dart';
+import 'package:weforza/widgets/common/filename_input_field.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_checkmark.dart';
-import 'package:weforza/widgets/platform/cupertino_form_error_formatter.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class ExportRidePage extends StatefulWidget {
-  const ExportRidePage({Key? key, required this.bloc}) : super(key: key);
+/// This widget represents a page for exporting rides.
+/// It supports both exporting a single ride and exporting all rides.
+class ExportRidePage extends ConsumerStatefulWidget {
+  const ExportRidePage({Key? key, this.rideToExport}) : super(key: key);
 
-  final ExportRideBloc bloc;
+  final Ride? rideToExport;
 
   @override
-  _ExportRidePageState createState() => _ExportRidePageState();
+  ExportRidePageState createState() => ExportRidePageState();
 }
 
-class _ExportRidePageState extends State<ExportRidePage> {
+class ExportRidePageState extends ConsumerState<ExportRidePage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  late final TextEditingController _filenameController;
+  final _filenameErrorController = BehaviorSubject.seeded('');
+  late final ExportRidesProvider exportProvider;
 
-  @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidLayout(context),
-        ios: () => _buildIosLayout(context),
+  Future<void>? _exportFuture;
+
+  FileExtension _fileExtension = FileExtension.csv;
+
+  void onSelectFileExtension(FileExtension value) {
+    if (_fileExtension != value) {
+      _filenameErrorController.add('');
+      _fileExtension = value;
+    }
+  }
+
+  Future<void> _submitForm(S translator) {
+    try {
+      return exportProvider.exportRidesWithAttendees(
+        fileExtension: _fileExtension.ext,
+        fileName: _filenameController.text,
+        ride: widget.rideToExport?.date,
       );
+    } catch (error) {
+      // Forward the file exists exception to the validation label.
+      if (error is FileExistsException && !_filenameErrorController.isClosed) {
+        _filenameErrorController.add(translator.FileExists);
+      }
+
+      rethrow;
+    }
+  }
 
   Widget _buildAndroidLayout(BuildContext context) {
+    final translator = S.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(S.of(context).ExportRideTitle),
+        title: Text(
+          widget.rideToExport == null
+              ? translator.ExportRides
+              : translator.ExportRide,
+        ),
       ),
       body: Center(child: _buildBody(context)),
     );
   }
 
   Widget _buildIosLayout(BuildContext context) {
+    final translator = S.of(context);
+
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).ExportRideTitle),
+        middle: Text(
+          widget.rideToExport == null
+              ? translator.ExportRides
+              : translator.ExportRide,
+        ),
         transitionBetweenRoutes: false,
       ),
       child: Center(child: _buildBody(context)),
@@ -52,155 +94,104 @@ class _ExportRidePageState extends State<ExportRidePage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<ExportDataOrError>(
-      initialData: ExportDataOrError.idle(),
-      stream: widget.bloc.stream,
+    return FutureBuilder<void>(
+      future: _exportFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return GenericError(text: S.of(context).GenericError);
-        } else {
-          if (snapshot.data!.exporting) {
+        final translator = S.of(context);
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return _buildForm(translator);
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            final label = widget.rideToExport == null
+                ? translator.ExportingAllRides
+                : translator.ExportingRide;
+
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const PlatformAwareLoadingIndicator(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(S.of(context).ExportRideExportingToFile),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: PlatformAwareLoadingIndicator(),
                 ),
+                Text(label),
               ],
             );
-          } else if (snapshot.data!.success) {
+          case ConnectionState.done:
+            final error = snapshot.error;
+
+            if (error is FileExistsException) {
+              return _buildForm(translator);
+            }
+
+            if (error != null) {
+              return GenericError(text: translator.GenericError);
+            }
+
             return LayoutBuilder(
               builder: (context, constraints) {
                 final paintSize = constraints.biggest.shortestSide * .3;
+
                 return Center(
-                    child: SizedBox(
-                  width: paintSize,
-                  height: paintSize,
-                  child: Center(
-                    child: AnimatedCheckmark(
-                      color: ApplicationTheme.secondaryColor,
-                      size: Size.square(paintSize),
-                    ),
+                  child: AnimatedCheckmark(
+                    color: ApplicationTheme.secondaryColor,
+                    size: Size.square(paintSize),
                   ),
-                ));
+                );
               },
             );
-          } else {
-            return Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: _buildFilenameInputField(context),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: FileExtensionSelection(
-                      onExtensionSelected: (ext) =>
-                          widget.bloc.onSelectFileExtension(ext),
-                      initialValue: FileExtension.csv,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: StreamBuilder<bool>(
-                      initialData: false,
-                      stream: widget.bloc.fileNameExistsStream,
-                      builder: (context, snapshot) {
-                        return Text(
-                            snapshot.data! ? S.of(context).FileExists : '');
-                      },
-                    ),
-                  ),
-                  PlatformAwareWidget(
-                    android: () => ElevatedButton(
-                      child: Text(S.of(context).Export),
-                      onPressed: () {
-                        final formState = _formKey.currentState;
-
-                        if (formState != null && formState.validate()) {
-                          widget.bloc.exportRide();
-                        }
-                      },
-                    ),
-                    ios: () => CupertinoButton.filled(
-                      child: Text(
-                        S.of(context).Export,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        if (_iosValidateFilename(context)) {
-                          widget.bloc.exportRide();
-                        } else {
-                          setState(() {});
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
         }
       },
     );
   }
 
-  Widget _buildFilenameInputField(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: PlatformAwareWidget(
-        android: () => TextFormField(
-          textInputAction: TextInputAction.done,
-          keyboardType: TextInputType.text,
-          autocorrect: false,
-          controller: widget.bloc.fileNameController,
-          validator: (value) => widget.bloc.validateFileName(
-              value,
-              S.of(context).ValueIsRequired(S.of(context).Filename),
-              S.of(context).FilenameWhitespace,
-              S
-                  .of(context)
-                  .FilenameMaxLength('${widget.bloc.filenameMaxLength}'),
-              S.of(context).InvalidFilename),
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-            labelText: S.of(context).Filename,
-            helperText: ' ',
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-        ),
-        ios: () => Column(
+  Widget _buildForm(S translator) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CupertinoTextField(
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              placeholder: S.of(context).Filename,
-              autocorrect: false,
-              controller: widget.bloc.fileNameController,
-              onChanged: (value) {
-                setState(() {
-                  widget.bloc.validateFileName(
-                      value,
-                      S.of(context).ValueIsRequired(S.of(context).Filename),
-                      S.of(context).FilenameWhitespace,
-                      S.of(context).FilenameMaxLength(
-                          '${widget.bloc.filenameMaxLength}'),
-                      S.of(context).InvalidFilename);
-                });
-              },
+            FileNameInputField(
+              controller: _filenameController,
+              errorController: _filenameErrorController,
+              padding: const EdgeInsets.only(bottom: 8),
             ),
-            Row(
-              children: [
-                Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(
-                        widget.bloc.filenameError),
-                    style: ApplicationTheme.iosFormErrorStyle),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: FileExtensionSelection(
+                onExtensionSelected: onSelectFileExtension,
+                initialValue: FileExtension.csv,
+              ),
+            ),
+            PlatformAwareWidget(
+              android: () => ElevatedButton(
+                child: Text(translator.Export),
+                onPressed: () {
+                  final formState = _formKey.currentState;
+
+                  if (formState != null && formState.validate()) {
+                    _exportFuture = _submitForm(translator);
+
+                    setState(() {});
+                  }
+                },
+              ),
+              ios: () => CupertinoButton.filled(
+                child: Text(
+                  translator.Export,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  if (_filenameErrorController.value.isEmpty) {
+                    _exportFuture = _submitForm(translator);
+                  }
+
+                  setState(() {});
+                },
+              ),
             ),
           ],
         ),
@@ -208,19 +199,34 @@ class _ExportRidePageState extends State<ExportRidePage> {
     );
   }
 
-  bool _iosValidateFilename(BuildContext context) {
-    return widget.bloc.validateFileName(
-            widget.bloc.fileNameController.text,
-            S.of(context).ValueIsRequired(S.of(context).Filename),
-            S.of(context).FilenameWhitespace,
-            S.of(context).FilenameMaxLength('${widget.bloc.filenameMaxLength}'),
-            S.of(context).InvalidFilename) ==
-        null;
+  @override
+  void initState() {
+    super.initState();
+    exportProvider = ref.read(exportRidesProvider);
+
+    if (widget.rideToExport == null) {
+      _filenameController = TextEditingController();
+    } else {
+      _filenameController = TextEditingController(
+        text: S.current.ExportRideFileNamePlaceholder(
+          widget.rideToExport!.dateAsDayMonthYear,
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => _buildAndroidLayout(context),
+      ios: () => _buildIosLayout(context),
+    );
   }
 
   @override
   void dispose() {
-    widget.bloc.dispose();
+    _filenameController.dispose();
+    _filenameErrorController.close();
     super.dispose();
   }
 }

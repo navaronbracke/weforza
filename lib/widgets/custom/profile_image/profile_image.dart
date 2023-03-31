@@ -49,43 +49,34 @@ class ProfileImage extends StatelessWidget {
         return Container(
           height: size,
           width: size,
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: backgroundColor),
-          child: Center(
-            child: Icon(
-              icon,
-              color: iconColor,
-              size: .7 * size,
-            ),
-          ),
-        );
-      } else {
-        return Container(
-          height: size,
-          width: size,
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: _getBackgroundColor(personInitials!),
+            borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+            color: backgroundColor,
           ),
-          child: Center(
-            child: Text(
-              personInitials!.toUpperCase(),
-              style: ApplicationTheme.personInitialsTextStyle.copyWith(
-                fontSize: .5 * size,
-              ),
-            ),
-          ),
+          child: Center(child: Icon(icon, color: iconColor, size: .7 * size)),
         );
       }
+
+      return Container(
+        height: size,
+        width: size,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+          color: _getBackgroundColor(personInitials!),
+        ),
+        child: Center(
+          child: Text(
+            personInitials!.toUpperCase(),
+            style: ApplicationTheme.personInitialsTextStyle.copyWith(
+              fontSize: .5 * size,
+            ),
+          ),
+        ),
+      );
     }
 
     return ClipOval(
-      child: Image.file(
-        image!,
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-      ),
+      child: Image.file(image!, width: size, height: size, fit: BoxFit.cover),
     );
   }
 }

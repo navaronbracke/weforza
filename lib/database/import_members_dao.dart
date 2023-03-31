@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/importable_member.dart';
@@ -16,10 +15,6 @@ abstract class IImportMembersDao {
 
 class ImportMembersDao implements IImportMembersDao {
   ImportMembersDao(this._database, this._memberStore, this._deviceStore);
-
-  ImportMembersDao.withProvider(ApplicationDatabase provider)
-      : this(
-            provider.getDatabase(), provider.memberStore, provider.deviceStore);
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;

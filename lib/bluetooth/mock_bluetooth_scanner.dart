@@ -1,10 +1,9 @@
+import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 class MockBluetoothScanner implements BluetoothDeviceScanner {
-  /// This flag handles the internal for requesting the scan permission.
-  /// This value can be changed for testing.
-  bool isPermissionGranted = true;
+  final _scanningController = BehaviorSubject.seeded(false);
 
   @override
   Future<bool> isBluetoothEnabled() {
@@ -13,6 +12,8 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
+    _scanningController.add(true);
+
     final BluetoothPeripheral duplicateOwner =
         BluetoothPeripheral(id: '1', deviceName: 'rudy1');
     final BluetoothPeripheral duplicateDevice =
@@ -28,7 +29,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       await Future.delayed(const Duration(seconds: 2), () {});
 
       if (i == 1) {
-        yield* Stream.error(Exception('some error'), StackTrace.current);
+        yield* Stream.error(ArgumentError('some error'), StackTrace.current);
       }
 
       if (i == 2 || i == 3) {
@@ -57,15 +58,17 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  Future<void> stopScan() => Future<void>.value(null);
+  Future<void> stopScan() {
+    _scanningController.add(false);
+
+    return Future<void>.value();
+  }
 
   @override
-  void requestScanPermission(
-      {required void Function() onGranted, required void Function() onDenied}) {
-    if (isPermissionGranted) {
-      onGranted();
-    } else {
-      onDenied();
-    }
+  Stream<bool> get isScanning => _scanningController;
+
+  @override
+  void dispose() {
+    _scanningController.close();
   }
 }

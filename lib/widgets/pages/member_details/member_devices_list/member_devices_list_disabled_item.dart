@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/widgets/common/device_widget_utils.dart';
+import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListDisabledItem extends StatelessWidget {
@@ -15,16 +15,16 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4),
       child: Row(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(right: 5),
-            child: getDeviceIcon(device.type),
+            padding: const EdgeInsets.only(right: 4),
+            child: DeviceIcon(type: device.type),
           ),
           Expanded(child: Text(device.name, overflow: TextOverflow.ellipsis)),
           Padding(
-            padding: const EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 4),
             child: _buildButtonWhitespace(),
           ),
         ],

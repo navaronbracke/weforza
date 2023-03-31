@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:sembast/sembast.dart';
 
-import 'package:weforza/database/database.dart';
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/device.dart';
 
@@ -32,13 +31,6 @@ abstract class IDeviceDao {
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
   DeviceDao(this._database, this._deviceStore, this._memberStore);
-
-  DeviceDao.withProvider(ApplicationDatabase provider)
-      : this(
-          provider.getDatabase(),
-          provider.deviceStore,
-          provider.memberStore,
-        );
 
   ///A reference to the database, which is needed by the Store.
   final Database _database;

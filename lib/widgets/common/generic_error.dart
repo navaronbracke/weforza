@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents a 'something went wrong'-like generic error widget.
+/// This class represents a generic error widget.
+///
+/// This widget centers itself within its parent.
 class GenericError extends StatelessWidget {
   GenericError({
     Key? key,
@@ -19,9 +21,11 @@ class GenericError extends StatelessWidget {
   /// Returns the result of [iconBuilder]
   /// or a default warning icon.
   Widget _buildIcon(BuildContext context) {
-    final _builder = iconBuilder;
+    final builder = iconBuilder;
 
-    if (_builder != null) return _builder(context);
+    if (builder != null) {
+      return builder(context);
+    }
 
     return PlatformAwareWidget(
       android: () => Icon(
@@ -45,7 +49,7 @@ class GenericError extends StatelessWidget {
         children: <Widget>[
           _buildIcon(context),
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 4),
             child: Text(text),
           )
         ],

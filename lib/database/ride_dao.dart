@@ -1,11 +1,10 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
-import 'package:weforza/model/ride_attendee_scan_result.dart';
+import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 
-///This interface provides a contract for manipulating [Ride]s in persistent storage.
+/// This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {
   /// Add rides to the database.
   Future<void> addRides(List<Ride> rides);
@@ -16,8 +15,15 @@ abstract class IRideDao {
   /// Delete all rides & attendant records.
   Future<void> deleteRideCalendar();
 
-  /// Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
+  /// Get the current amount of rides.
+  Future<int> getCurrentRideCount();
+
+  /// Get all rides. This method will load all the stored [Ride]s
+  /// and populate their attendee count.
   Future<List<Ride>> getRides();
+
+  /// Get a stream of changes to the amount of rides.
+  Stream<int> getRideCount();
 
   /// Update the scanned attendees counter and attendees list for the given ride.
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
@@ -28,32 +34,30 @@ abstract class IRideDao {
   /// Get the [Member]s of a given ride.
   Future<List<Member>> getRideAttendees(DateTime date);
 
-  ///Get the amount of attendees for a given ride.
-  Future<int> getAmountOfRideAttendees(DateTime rideDate);
-
-  /// Get the attendees of the ride, converted to [RideAttendeeScanResult]s.
-  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
-      DateTime date);
+  /// Get the attendees of the ride, converted to [ScannedRideAttendee]s.
+  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
+    DateTime date,
+  );
 }
 
 class RideDao implements IRideDao {
-  RideDao(this._database, this._memberStore, this._rideStore,
-      this._rideAttendeeStore);
+  RideDao(
+    this._database,
+    this._memberStore,
+    this._rideStore,
+    this._rideAttendeeStore,
+  );
 
-  RideDao.withProvider(ApplicationDatabase provider)
-      : this(provider.getDatabase(), provider.memberStore, provider.rideStore,
-            provider.rideAttendeeStore);
-
-  ///A reference to the database.
+  /// A reference to the database.
   final Database _database;
 
-  ///A reference to the [RideAttendee] store.
+  /// A reference to the [RideAttendee] store.
   final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
-  ///A reference to the [Ride] store.
+  /// A reference to the [Ride] store.
   final StoreRef<String, Map<String, dynamic>> _rideStore;
 
-  ///A reference to the [Member] store.
+  /// A reference to the [Member] store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
   @override
@@ -84,13 +88,22 @@ class RideDao implements IRideDao {
   }
 
   @override
+  Future<int> getCurrentRideCount() => _rideStore.count(_database);
+
+  @override
   Future<List<Ride>> getRides() async {
-    final rideRecords = await _rideStore.find(_database,
-        finder: Finder(sortOrders: [SortOrder(Field.key, false)]));
+    final rideRecords = await _rideStore.find(
+      _database,
+      finder: Finder(sortOrders: [SortOrder(Field.key, false)]),
+    );
+
     return rideRecords
         .map((record) => Ride.of(DateTime.parse(record.key), record.value))
         .toList();
   }
+
+  @override
+  Stream<int> getRideCount() => _rideStore.onCount(_database);
 
   @override
   Future<List<DateTime>> getRideDates() async {
@@ -100,29 +113,25 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Member>> getRideAttendees(DateTime date) async {
-    //fetch the attendees of the ride and map to their uuid's
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals('date', date.toIso8601String())));
+    final rideAttendeeRecords = await _rideAttendeeStore.find(
+      _database,
+      finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
+    );
+
     final attendeeIds =
         rideAttendeeRecords.map((record) => record.value['attendee']).toList();
-    //fetch the members that belong to the attendee uuid's
-    final memberRecords = await _memberStore.find(_database,
-        finder: Finder(
-            filter: Filter.custom((record) => attendeeIds.contains(record.key)),
-            sortOrders: [SortOrder('firstname'), SortOrder('lastname')]));
-    //map the record snapshots
+
+    final memberRecords = await _memberStore.find(
+      _database,
+      finder: Finder(
+        filter: Filter.custom((record) => attendeeIds.contains(record.key)),
+        sortOrders: [SortOrder('firstname'), SortOrder('lastname')],
+      ),
+    );
+
     return memberRecords
         .map((record) => Member.of(record.key, record.value))
         .toList();
-  }
-
-  @override
-  Future<int> getAmountOfRideAttendees(DateTime rideDate) async {
-    //fetch the attendees of the ride
-    final attendees = await _rideAttendeeStore.count(_database,
-        filter: Filter.equals('date', rideDate.toIso8601String()));
-
-    return attendees;
   }
 
   @override
@@ -150,13 +159,16 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
-      DateTime date) async {
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals('date', date.toIso8601String())));
+  Future<List<ScannedRideAttendee>> getRideAttendeesAsScanResults(
+    DateTime date,
+  ) async {
+    final rideAttendeeRecords = await _rideAttendeeStore.find(
+      _database,
+      finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
+    );
 
     return rideAttendeeRecords
-        .map((record) => RideAttendeeScanResult.of(record.value))
+        .map((record) => ScannedRideAttendee.of(record.value))
         .toList();
   }
 }

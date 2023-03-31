@@ -120,7 +120,7 @@ class _DatePickerHeader extends StatelessWidget {
           final month = snapshot.data?.dateTime;
 
           if (month == null) {
-            return Container(height: 50);
+            return const SizedBox(height: 50);
           }
 
           final languageCode = Localizations.localeOf(context).languageCode;

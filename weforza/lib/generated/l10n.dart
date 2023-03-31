@@ -1173,11 +1173,21 @@ class S {
     );
   }
 
-  /// `Tablet`
-  String get DeviceTablet {
+  /// `Power meter`
+  String get DevicePowerMeter {
     return Intl.message(
-      'Tablet',
-      name: 'DeviceTablet',
+      'Power meter',
+      name: 'DevicePowerMeter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cadence meter`
+  String get DeviceCadenceMeter {
+    return Intl.message(
+      'Cadence meter',
+      name: 'DeviceCadenceMeter',
       desc: '',
       args: [],
     );

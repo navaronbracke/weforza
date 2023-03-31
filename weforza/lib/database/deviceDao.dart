@@ -35,14 +35,25 @@ class DeviceDao implements IDeviceDao {
 
   @override
   Future<bool> deviceExists(Device device,[String ownerId]) async {
-    final filters = [
-      Filter.equals("deviceName", device.name),
-    ];
+    final record = await _deviceStore.findFirst(
+        _database,
+        finder: Finder(
+            filter: Filter.equals("deviceName", device.name)
+        ),
+    );
+
+    if(record == null) return false;//No device with this name
+
+    //If an owner ID is given and the device we found has the same owner ID,
+    //then it doesn't exist. This only happens when we are editing a device and
+    //the device name was unchanged.
     if(ownerId != null && ownerId.isNotEmpty){
-      filters.add(Filter.notEquals("owner", ownerId));
-      filters.add(Filter.equals("type", device.type.index));
+      final device = Device.of(record.key, record.value);
+      return device.ownerId != ownerId;
     }
-    return await _deviceStore.findFirst(_database,finder: Finder(filter: Filter.and(filters))) != null;
+
+    //The device record was found and we are not editing, thus the owner is never the same person.
+    return true;
   }
 
   @override

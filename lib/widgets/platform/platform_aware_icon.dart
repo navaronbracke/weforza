@@ -6,27 +6,27 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class PlatformAwareIcon extends StatelessWidget {
   const PlatformAwareIcon({
     super.key,
-    this.androidColor = Colors.blue,
+    this.androidColor,
     required this.androidIcon,
-    this.iosColor = CupertinoColors.activeBlue,
+    this.iosColor,
     required this.iosIcon,
     this.size,
   });
 
   /// The color for the [androidIcon].
   ///
-  /// Defaults to [Colors.blue].
-  final Color androidColor;
+  /// Defaults to [ThemeData.primaryColor] if this is null.
+  final Color? androidColor;
 
   /// The icon for Android.
   final IconData androidIcon;
 
   /// The color for the [iosIcon].
-  final Color iosColor;
+  ///
+  /// Defaults to [CupertinoThemeData.primaryColor] if this is null.
+  final Color? iosColor;
 
   /// The icon for iOS.
-  ///
-  /// Defaults to [CupertinoColors.activeBlue].
   final IconData iosIcon;
 
   /// The size for the icon.
@@ -35,8 +35,16 @@ class PlatformAwareIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (_) => Icon(androidIcon, color: androidColor, size: size),
-      ios: (_) => Icon(iosIcon, color: iosColor, size: size),
+      android: (context) => Icon(
+        androidIcon,
+        color: androidColor ?? Theme.of(context).primaryColor,
+        size: size,
+      ),
+      ios: (context) => Icon(
+        iosIcon,
+        color: iosColor ?? CupertinoTheme.of(context).primaryColor,
+        size: size,
+      ),
     );
   }
 }

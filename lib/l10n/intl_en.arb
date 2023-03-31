@@ -83,6 +83,7 @@
 	"Inactive": "Inactive",
 	"InvalidFilename": "Invalid filename",
 	"KeywordExists": "This keyword already exists",
+	"KeywordMaxLength": "A keyword can't be longer than {maxLength} characters",
 	"KeywordRequired": "A keyword cannot be empty",
 	"LastName": "Last Name",
 	"LastNameBlank": "Last name can't be only whitespace",

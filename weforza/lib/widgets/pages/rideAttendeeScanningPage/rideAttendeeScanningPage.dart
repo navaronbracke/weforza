@@ -145,7 +145,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
               );
             case ScanProcessStep.MANUAL:
               return RideAttendeeManualSelection(
-                items: bloc.members.values.toList(),
+                items: bloc.sortedMembers,
                 itemBuilder: _buildManualSelectionListItem,
                 saveButtonBuilder: _buildSaveButton,
               );

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/blocs/exportRidesBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -15,31 +15,29 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ExportRidesPage extends StatefulWidget {
+  const ExportRidesPage({Key? key}) : super(key: key);
 
   @override
   _ExportRidesPageState createState() => _ExportRidesPageState(
-    bloc: ExportRidesBloc(
-      repository: InjectionContainer.get<ExportRidesRepository>(),
-      fileHandler: InjectionContainer.get<IFileHandler>(),
-    )
-  );
+          bloc: ExportRidesBloc(
+        repository: InjectionContainer.get<ExportRidesRepository>(),
+        fileHandler: InjectionContainer.get<IFileHandler>(),
+      ));
 }
 
 class _ExportRidesPageState extends State<ExportRidesPage> {
-  _ExportRidesPageState({
-    required this.bloc
-  });
+  _ExportRidesPageState({required this.bloc});
 
   final ExportRidesBloc bloc;
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIosLayout(context),
-  );
+        android: () => _buildAndroidLayout(context),
+        ios: () => _buildIosLayout(context),
+      );
 
-  Widget _buildAndroidLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -49,7 +47,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
     );
   }
 
-  Widget _buildIosLayout(BuildContext context){
+  Widget _buildIosLayout(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
@@ -60,44 +58,43 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
     );
   }
 
-  Widget _buildBody(BuildContext context){
+  Widget _buildBody(BuildContext context) {
     return StreamBuilder<ExportDataOrError>(
       stream: bloc.stream,
       initialData: ExportDataOrError.idle(),
-      builder: (context, snapshot){
-        if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
           return GenericError(text: S.of(context).GenericError);
-        }else{
-          if(snapshot.data!.exporting){
+        } else {
+          if (snapshot.data!.exporting) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 5),
                   child: PlatformAwareLoadingIndicator(),
                 ),
                 Text(S.of(context).ExportingRidesDescription),
               ],
             );
-          }else if(snapshot.data!.success){
+          } else if (snapshot.data!.success) {
             return LayoutBuilder(
-              builder: (context,constraints){
+              builder: (context, constraints) {
                 final paintSize = constraints.biggest.shortestSide * .3;
                 return Center(
                     child: SizedBox(
-                      width: paintSize,
-                      height: paintSize,
-                      child: Center(
-                        child: AnimatedCheckmark(
-                          color: ApplicationTheme.secondaryColor,
-                          size: Size.square(paintSize),
-                        ),
-                      ),
-                    )
-                );
+                  width: paintSize,
+                  height: paintSize,
+                  child: Center(
+                    child: AnimatedCheckmark(
+                      color: ApplicationTheme.secondaryColor,
+                      size: Size.square(paintSize),
+                    ),
+                  ),
+                ));
               },
             );
-          }else{
+          } else {
             return Form(
               key: _formKey,
               child: Padding(
@@ -112,7 +109,8 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: FileExtensionSelection(
-                        onExtensionSelected: (ext) => bloc.onSelectFileExtension(ext),
+                        onExtensionSelected: (ext) =>
+                            bloc.onSelectFileExtension(ext),
                         initialValue: FileExtension.CSV,
                       ),
                     ),
@@ -121,8 +119,9 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                       child: StreamBuilder<bool>(
                         initialData: false,
                         stream: bloc.fileNameExistsStream,
-                        builder: (context, snapshot){
-                          return Text(snapshot.data! ? S.of(context).FileExists : "");
+                        builder: (context, snapshot) {
+                          return Text(
+                              snapshot.data! ? S.of(context).FileExists : '');
                         },
                       ),
                     ),
@@ -132,7 +131,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         onPressed: () async {
                           final formState = _formKey.currentState;
 
-                          if(formState != null && formState.validate()){
+                          if (formState != null && formState.validate()) {
                             await bloc.exportRidesWithAttendees();
                           }
                         },
@@ -140,12 +139,12 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                       ios: () => CupertinoButton.filled(
                         child: Text(
                           S.of(context).Export,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
                           if (_iosValidateFilename(context)) {
                             await bloc.exportRidesWithAttendees();
-                          }else {
+                          } else {
                             setState(() {});
                           }
                         },
@@ -161,7 +160,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
     );
   }
 
-  Widget _buildFilenameField(BuildContext context){
+  Widget _buildFilenameField(BuildContext context) {
     return PlatformAwareWidget(
       android: () => TextFormField(
         textInputAction: TextInputAction.done,
@@ -172,56 +171,56 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
             value,
             S.of(context).ValueIsRequired(S.of(context).Filename),
             S.of(context).FilenameWhitespace,
-            S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-            S.of(context).InvalidFilename
-        ),
+            S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
+            S.of(context).InvalidFilename),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 5),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
           labelText: S.of(context).Filename,
-          helperText: " ",
+          helperText: ' ',
         ),
         autovalidateMode: AutovalidateMode.onUserInteraction,
-      ), ios: () => Column(
+      ),
+      ios: () => Column(
+        children: [
+          CupertinoTextField(
+            textInputAction: TextInputAction.done,
+            keyboardType: TextInputType.text,
+            placeholder: S.of(context).Filename,
+            autocorrect: false,
+            controller: bloc.fileNameController,
+            onChanged: (value) {
+              setState(() {
+                bloc.validateFileName(
+                  value,
+                  S.of(context).ValueIsRequired(S.of(context).Filename),
+                  S.of(context).FilenameWhitespace,
+                  S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
+                  S.of(context).InvalidFilename,
+                );
+              });
+            },
+          ),
+          Row(
             children: [
-              CupertinoTextField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.text,
-                placeholder: S.of(context).Filename,
-                autocorrect: false,
-                controller: bloc.fileNameController,
-                onChanged: (value){
-                  setState(() {
-                    bloc.validateFileName(
-                      value,
-                      S.of(context).ValueIsRequired(S.of(context).Filename),
-                      S.of(context).FilenameWhitespace,
-                      S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-                      S.of(context).InvalidFilename,
-                    );
-                  });
-                },
-              ),
-              Row(
-                children: [
-                  Text(
-                    CupertinoFormErrorFormatter.formatErrorMessage(bloc.filenameError),
-                    style: ApplicationTheme.iosFormErrorStyle
-                  ),
-                ],
-              ),
+              Text(
+                  CupertinoFormErrorFormatter.formatErrorMessage(
+                      bloc.filenameError),
+                  style: ApplicationTheme.iosFormErrorStyle),
             ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
   bool _iosValidateFilename(BuildContext context) {
     return bloc.validateFileName(
-        bloc.fileNameController.text,
-        S.of(context).ValueIsRequired(S.of(context).Filename),
-        S.of(context).FilenameWhitespace,
-        S.of(context).FilenameMaxLength("${bloc.filenameMaxLength}"),
-        S.of(context).InvalidFilename
-    ) == null;
+            bloc.fileNameController.text,
+            S.of(context).ValueIsRequired(S.of(context).Filename),
+            S.of(context).FilenameWhitespace,
+            S.of(context).FilenameMaxLength('${bloc.filenameMaxLength}'),
+            S.of(context).InvalidFilename) ==
+        null;
   }
 
   @override

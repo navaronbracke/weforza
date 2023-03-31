@@ -35,7 +35,7 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
               onPressed: () async {
                 final result = await showDialog(
                   context: context,
-                  builder: (context) => ResetRideCalendarDialog(),
+                  builder: (context) => const ResetRideCalendarDialog(),
                 );
 
                 if (result != null && result) {
@@ -57,7 +57,7 @@ class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
                   onPressed: () async {
                     final result = await showCupertinoDialog(
                       context: context,
-                      builder: (context) => ResetRideCalendarDialog(),
+                      builder: (context) => const ResetRideCalendarDialog(),
                     );
 
                     if (result != null && result) {

@@ -53,14 +53,15 @@ class _RideListPageState extends State<RideListPage> {
               icon: const Icon(Icons.add),
               color: Colors.white,
               onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => AddRidePage()))
+                  .push(MaterialPageRoute(
+                      builder: (context) => const AddRidePage()))
                   .then((_) => onReturnToRideListPage(context)),
             ),
             IconButton(
               icon: const Icon(Icons.file_upload),
               color: Colors.white,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ExportRidesPage())),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ExportRidesPage())),
             ),
           ],
         ),
@@ -82,15 +83,15 @@ class _RideListPageState extends State<RideListPage> {
               CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.add,
                 onPressed: () => Navigator.of(context)
-                    .push(
-                        MaterialPageRoute(builder: (context) => AddRidePage()))
+                    .push(MaterialPageRoute(
+                        builder: (context) => const AddRidePage()))
                     .then((_) => onReturnToRideListPage(context)),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: CupertinoIconButton.fromAppTheme(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ExportRidesPage())),
+                      builder: (context) => const ExportRidesPage())),
                   icon: CupertinoIcons.arrow_up_doc_fill,
                 ),
               ),
@@ -126,7 +127,7 @@ class _RideListPageState extends State<RideListPage> {
                         Navigator.of(context)
                             .push(
                               MaterialPageRoute(
-                                builder: (context) => RideDetailsPage(),
+                                builder: (context) => const RideDetailsPage(),
                               ),
                             )
                             .then((_) => onReturnToRideListPage(context));

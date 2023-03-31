@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 /// This widget resembles the toggle switch for the 'active' state of a member.
 class MemberActiveToggle extends StatelessWidget {
   MemberActiveToggle({
+    Key? key,
     required this.label,
     required this.stream,
     required this.onChanged,
     required this.onErrorBuilder,
-    required this.initialValue
-  }): assert(label.isNotEmpty);
+    required this.initialValue,
+  })  : assert(label.isNotEmpty),
+        super(key: key);
 
   final bool initialValue;
   final String label;
@@ -29,8 +30,8 @@ class MemberActiveToggle extends StatelessWidget {
           child: StreamBuilder<bool>(
             stream: stream,
             initialData: initialValue,
-            builder: (context, snapshot){
-              if(snapshot.hasError){
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
                 return onErrorBuilder();
               }
 

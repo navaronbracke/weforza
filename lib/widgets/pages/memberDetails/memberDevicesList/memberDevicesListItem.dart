@@ -1,7 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -13,11 +11,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class MemberDevicesListItem extends StatefulWidget {
-  MemberDevicesListItem({
+  const MemberDevicesListItem({
+    Key? key,
     required this.device,
     required this.onDelete,
     required this.index,
-  });
+  }) : super(key: key);
 
   //Initial value from the list builder
   final Device device;
@@ -33,7 +32,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
   late Device device;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     //Set the initial data
     device = widget.device;
@@ -41,17 +40,17 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => Padding(
-      padding: const EdgeInsets.fromLTRB(10,0,5,5),
-      child: _buildItem(context),
-    ),
-    ios: () => Padding(
-      padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
-      child: _buildItem(context),
-    ),
-  );
+        android: () => Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 5, 5),
+          child: _buildItem(context),
+        ),
+        ios: () => Padding(
+          padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+          child: _buildItem(context),
+        ),
+      );
 
-  Widget _buildItem(BuildContext context){
+  Widget _buildItem(BuildContext context) {
     return Row(
       children: <Widget>[
         Padding(
@@ -64,7 +63,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
             overflow: TextOverflow.ellipsis,
             softWrap: true,
             maxLines: 2,
-            style: TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 15),
           ),
         ),
         Row(
@@ -80,17 +79,20 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
     );
   }
 
-  Widget _buildEditDeviceButton(BuildContext context){
+  Widget _buildEditDeviceButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => IconButton(
         icon: Icon(
-            Icons.edit,
-            color: ApplicationTheme.memberDevicesListEditDeviceColor,
+          Icons.edit,
+          color: ApplicationTheme.memberDevicesListEditDeviceColor,
         ),
-        onPressed: (){
+        onPressed: () {
           SelectedItemProvider.of(context).selectedDevice.value = device;
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDevicePage())).then((editedDevice){
-            if(editedDevice != null){
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => const EditDevicePage()))
+              .then((editedDevice) {
+            if (editedDevice != null) {
               setState(() {
                 device = editedDevice;
               });
@@ -99,10 +101,13 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
         },
       ),
       ios: () => CupertinoIconButton.fromAppTheme(
-        onPressed: (){
+        onPressed: () {
           SelectedItemProvider.of(context).selectedDevice.value = device;
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDevicePage())).then((editedDevice){
-            if(editedDevice != null){
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => const EditDevicePage()))
+              .then((editedDevice) {
+            if (editedDevice != null) {
               setState(() {
                 device = editedDevice;
               });
@@ -114,10 +119,10 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
     );
   }
 
-  Widget _buildDeleteDeviceButton(BuildContext context){
+  Widget _buildDeleteDeviceButton(BuildContext context) {
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.delete,
           color: ApplicationTheme.deleteItemButtonTextColor,
         ),
@@ -151,4 +156,3 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
     );
   }
 }
-

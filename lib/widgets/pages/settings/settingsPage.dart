@@ -56,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           }
         } else {
-          return LoadingSettings();
+          return const LoadingSettings();
         }
       },
     );

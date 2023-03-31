@@ -26,6 +26,8 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 ///This [Widget] will display a list of members.
 class MemberListPage extends StatefulWidget {
+  const MemberListPage({Key? key}) : super(key: key);
+
   @override
   _MemberListPageState createState() => _MemberListPageState(
           bloc: MemberListBloc(
@@ -44,7 +46,7 @@ class _MemberListPageState extends State<MemberListPage> {
   // This controller manages the query stream.
   // The input field creates it's own TextEditingController,
   // as it starts with an empty string.
-  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
+  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded('');
 
   List<Member> filterData(List<Member> list, String query) {
     query = query.trim().toLowerCase();
@@ -107,7 +109,8 @@ class _MemberListPageState extends State<MemberListPage> {
               color: Colors.white,
             ),
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => AddMemberPage()))
+                .push(MaterialPageRoute(
+                    builder: (context) => const AddMemberPage()))
                 .then((_) => onReturnToMemberListPage(context)),
           ),
           IconButton(
@@ -115,14 +118,14 @@ class _MemberListPageState extends State<MemberListPage> {
             color: Colors.white,
             onPressed: () => Navigator.of(context)
                 .push(MaterialPageRoute(
-                    builder: (context) => ImportMembersPage()))
+                    builder: (context) => const ImportMembersPage()))
                 .then((_) => onReturnToMemberListPage(context)),
           ),
           IconButton(
             icon: const Icon(Icons.file_upload),
             color: Colors.white,
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ExportMembersPage())),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ExportMembersPage())),
           ),
         ],
       ),
@@ -153,7 +156,7 @@ class _MemberListPageState extends State<MemberListPage> {
                 icon: CupertinoIcons.person_badge_plus_fill,
                 onPressed: () => Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => AddMemberPage()))
+                        builder: (context) => const AddMemberPage()))
                     .then((_) => onReturnToMemberListPage(context))),
             Padding(
               padding: const EdgeInsets.only(left: 15),
@@ -161,7 +164,7 @@ class _MemberListPageState extends State<MemberListPage> {
                 icon: CupertinoIcons.arrow_down_doc_fill,
                 onPressed: () => Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => ImportMembersPage()))
+                        builder: (context) => const ImportMembersPage()))
                     .then((_) => onReturnToMemberListPage(context)),
               ),
             ),
@@ -170,7 +173,7 @@ class _MemberListPageState extends State<MemberListPage> {
               child: CupertinoIconButton.fromAppTheme(
                 icon: CupertinoIcons.arrow_up_doc_fill,
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ExportMembersPage())),
+                    builder: (context) => const ExportMembersPage())),
               ),
             ),
           ],
@@ -199,7 +202,7 @@ class _MemberListPageState extends State<MemberListPage> {
           }
 
           if (futureSnapshot.data == null || futureSnapshot.data!.isEmpty) {
-            return Center(child: MemberListEmpty());
+            return const Center(child: MemberListEmpty());
           }
 
           return Column(
@@ -233,7 +236,7 @@ class _MemberListPageState extends State<MemberListPage> {
                   builder: (context, streamSnapshot) {
                     final data = filterData(
                       futureSnapshot.data ?? [],
-                      streamSnapshot.data ?? "",
+                      streamSnapshot.data ?? '',
                     );
 
                     if (data.isEmpty) {
@@ -264,7 +267,8 @@ class _MemberListPageState extends State<MemberListPage> {
     provider.selectedMemberAttendingCount.value = attendingCount;
     provider.selectedMemberProfileImage.value = profileImage;
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => MemberDetailsPage()))
+        .push(
+            MaterialPageRoute(builder: (context) => const MemberDetailsPage()))
         .then((_) => onReturnToMemberListPage(context));
   }
 

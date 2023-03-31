@@ -11,11 +11,12 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesList extends StatefulWidget {
-  MemberDevicesList({
+  const MemberDevicesList({
+    Key? key,
     required this.future,
     required this.onDeleteDevice,
-    required this.onAddDeviceButtonPressed
-  });
+    required this.onAddDeviceButtonPressed,
+  }) : super(key: key);
 
   final Future<List<Device>>? future;
   final Future<void> Function(Device device) onDeleteDevice;
@@ -26,43 +27,44 @@ class MemberDevicesList extends StatefulWidget {
 }
 
 class _MemberDevicesListState extends State<MemberDevicesList> {
-
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Device>>(
       future: widget.future,
-      builder: (context,snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            return GenericError(
-                text: S.of(context).GenericError
-            );
-          }else{
-            return snapshot.data == null || snapshot.data!.isEmpty ? MemberDevicesListEmpty(
-              onAddDevicePageButtonPressed: widget.onAddDeviceButtonPressed,
-            ): _buildDevicesList(context, snapshot.data!);
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return GenericError(text: S.of(context).GenericError);
+          } else {
+            return snapshot.data == null || snapshot.data!.isEmpty
+                ? MemberDevicesListEmpty(
+                    onAddDevicePageButtonPressed:
+                        widget.onAddDeviceButtonPressed,
+                  )
+                : _buildDevicesList(context, snapshot.data!);
           }
-        }else{
-          return Center(child: PlatformAwareLoadingIndicator());
+        } else {
+          return const Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );
   }
 
-  Widget _buildDevicesList(BuildContext context, List<Device> devices){
+  Widget _buildDevicesList(BuildContext context, List<Device> devices) {
     return Column(
       children: <Widget>[
-        MemberDevicesListHeader(),
+        const MemberDevicesListHeader(),
         Expanded(
           child: AnimatedList(
             key: _listKey,
             initialItemCount: devices.length,
-            itemBuilder: (context,index, animation) => MemberDevicesListItem(
+            itemBuilder: (context, index, animation) => MemberDevicesListItem(
               device: devices[index],
               index: index,
-              onDelete: (device, index) => onDeleteDevice(context,device,index,devices),
+              onDelete: (device, index) =>
+                  onDeleteDevice(context, device, index, devices),
             ),
           ),
         ),
@@ -80,7 +82,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
               onPressed: widget.onAddDeviceButtonPressed,
               child: Text(
                 S.of(context).AddDeviceTitle,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
@@ -89,25 +91,27 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
     );
   }
 
-  Future<void> onDeleteDevice(BuildContext context, Device device, int index, List<Device> devices){
+  Future<void> onDeleteDevice(
+      BuildContext context, Device device, int index, List<Device> devices) {
     //delete it from the database
-    return widget.onDeleteDevice(device).then((_){
-      Navigator.of(context).pop();//get rid of the dialog
+    return widget.onDeleteDevice(device).then((_) {
+      Navigator.of(context).pop(); //get rid of the dialog
 
       final listState = _listKey.currentState;
 
-      if(listState != null){
-        final device = devices.removeAt(index);//remove it from memory
+      if (listState != null) {
+        final device = devices.removeAt(index); //remove it from memory
         //and remove it from the animated list
-        listState.removeItem(index, (context, animation) => SizeTransition(
-          sizeFactor: animation,
-          child: MemberDevicesListDisabledItem(device: device),
-        ));
-        if(devices.isEmpty){
-          setState(() {});//switch to the is empty list widget
+        listState.removeItem(
+            index,
+            (context, animation) => SizeTransition(
+                  sizeFactor: animation,
+                  child: MemberDevicesListDisabledItem(device: device),
+                ));
+        if (devices.isEmpty) {
+          setState(() {}); //switch to the is empty list widget
         }
       }
     });
   }
 }
-

@@ -71,7 +71,7 @@ dependencies:
   path: ^1.8.1
 
   # For OS-specific directory paths.
-  path_provider: ^2.0.11
+  path_provider: ^2.0.13
 
   # The permission_handler packages provides utilities for requesting permissions.
   permission_handler: ^10.2.0

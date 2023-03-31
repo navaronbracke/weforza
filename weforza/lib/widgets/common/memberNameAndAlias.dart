@@ -7,11 +7,12 @@ class MemberNameAndAlias extends StatelessWidget {
     @required this.lastNameStyle,
     @required this.firstName,
     @required this.lastName,
-    @required this.alias
+    @required this.alias,
+    this.isTwoLine = true,
   }): assert(
   firstNameStyle != null && lastNameStyle != null && firstName != null &&
       firstName.isNotEmpty && lastName != null && lastName.isNotEmpty
-      && alias != null
+      && alias != null && isTwoLine != null
   );
 
   final String firstName;
@@ -19,32 +20,15 @@ class MemberNameAndAlias extends StatelessWidget {
   final String alias;
   final TextStyle firstNameStyle;
   final TextStyle lastNameStyle;
+  /// Whether to use the two line variant.
+  final bool isTwoLine;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: _combineFirstNameAndAlias(),
-        ),
-        Text(lastName, style: lastNameStyle, overflow: TextOverflow.ellipsis),
-      ],
-    );
-  }
-
-  // Combine the first name with the alias.
-  Widget _combineFirstNameAndAlias(){
-    if(alias.isEmpty){
-      return Text(
-        firstName,
-        style: firstNameStyle,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
-
-    return Text.rich(
+  Widget _buildTwoLineVariant(){
+    final Widget firstNameAndAlias = alias.isEmpty ? Text(
+      firstName,
+      style: firstNameStyle,
+      overflow: TextOverflow.ellipsis,
+    ): Text.rich(
       TextSpan(
           text: firstName,
           style: firstNameStyle,
@@ -58,5 +42,49 @@ class MemberNameAndAlias extends StatelessWidget {
       softWrap: true,
       overflow: TextOverflow.ellipsis,
     );
+
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: firstNameAndAlias,
+        ),
+        Text(lastName, style: lastNameStyle, overflow: TextOverflow.ellipsis),
+      ],
+    );
   }
+
+  Widget _buildOneLineVariant(){
+    return alias.isEmpty ? Text(
+        "$firstName $lastName",
+        softWrap: true,
+        style: lastNameStyle,
+        overflow: TextOverflow.ellipsis
+    ): Text.rich(
+      TextSpan(
+          text: firstName,
+          style: lastNameStyle,
+          children: <InlineSpan>[
+            TextSpan(
+              text: " '$alias' ",
+              style: lastNameStyle.copyWith(
+                  fontStyle: FontStyle.italic
+              ),
+            ),
+            TextSpan(
+              text: lastName,
+              style: lastNameStyle,
+            ),
+          ]
+      ),
+      softWrap: true,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context)
+    => isTwoLine? _buildTwoLineVariant(): _buildOneLineVariant();
 }

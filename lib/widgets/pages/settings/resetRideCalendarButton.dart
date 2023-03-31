@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/custom/resetRideCalendarDialog/resetRideCalendarDialog.dart';
+import 'package:weforza/widgets/custom/dialogs/reset_ride_calendar_dialog.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ResetRideCalendarButton extends StatefulWidget {

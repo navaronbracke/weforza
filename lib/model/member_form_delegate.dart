@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
@@ -32,17 +30,13 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
       return;
     }
 
-    final image = await model.profileImage.catchError(
-      (_) => Future<File?>.value(),
-    );
-
     final member = Member(
       active: true,
       alias: model.alias,
       firstName: model.firstName,
       lastName: model.lastName,
       lastUpdated: DateTime.now(),
-      profileImageFilePath: image?.path,
+      profileImageFilePath: model.profileImage?.path,
       uuid: _uuidGenerator.v4(),
     );
 
@@ -76,17 +70,13 @@ class MemberFormDelegate extends AsyncComputationDelegate<void> {
         throw ArgumentError.notNull('uuid');
       }
 
-      final profileImage = await model.profileImage.catchError((error) {
-        return Future<File?>.value();
-      });
-
       final newMember = Member(
         active: model.activeMember,
         alias: model.alias,
         firstName: model.firstName,
         lastName: model.lastName,
         lastUpdated: DateTime.now(),
-        profileImageFilePath: profileImage?.path,
+        profileImageFilePath: model.profileImage?.path,
         uuid: uuid,
       );
 

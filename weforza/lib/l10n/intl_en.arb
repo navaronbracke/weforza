@@ -83,6 +83,7 @@
   "RideAttendeeDeselectScannedMemberDialogTitle": "Deselect Rider",
   "RideAttendeeDeselectScannedMemberDialogDescription": "Are you sure that you want to uncheck this rider?",
   "RideAttendeeDeselectScannedMemberDialogConfirm": "Uncheck",
+  "RideAttendeeScanningManualSelectionShowScannedRidersLabel": "Scanned riders",
 
   "RiderSearchFilterNoResults": "No riders found for the specified search term.",
   "RiderSearchFilterInputLabel": "Search riders",

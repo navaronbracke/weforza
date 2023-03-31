@@ -25,7 +25,7 @@ import 'package:weforza/repository/rider_repository.dart';
 class RideAttendeeScanningDelegate {
   RideAttendeeScanningDelegate({
     required this.deviceRepository,
-    required this.memberRepository,
+    required this.riderRepository,
     required this.onDeviceFound,
     required this.ride,
     required this.rideRepository,
@@ -44,7 +44,7 @@ class RideAttendeeScanningDelegate {
   final DeviceRepository deviceRepository;
 
   /// The repository that loads the active riders.
-  final RiderRepository memberRepository;
+  final RiderRepository riderRepository;
 
   /// The handler that is called
   /// when the delegate found a new `device` scan result.
@@ -63,13 +63,13 @@ class RideAttendeeScanningDelegate {
   /// The settings for the delegate.
   final Settings settings;
 
-  /// This map contains all the active members mapped to their [Rider.uuid].
-  final _activeMembers = <String, Rider>{};
+  /// This map contains all the active riders mapped to their [Rider.uuid].
+  final _activeRiders = <String, Rider>{};
 
   /// This map contains the uuids of owners per device name.
   ///
   /// The keys are device names.
-  /// The values are the uuids of the active members,
+  /// The values are the uuids of the active riders,
   /// that own a device with the [MapEntry.key] as device name.
   final _deviceOwners = <String, Set<String>>{};
 
@@ -104,8 +104,8 @@ class RideAttendeeScanningDelegate {
   /// because then there are multiple valid options.
   final _unresolvedOwners = <Rider>{};
 
-  /// Get the list of active members.
-  List<Rider> get activeMembers => _activeMembers.values.toList();
+  /// Get the list of active riders.
+  List<Rider> get activeRiders => _activeRiders.values.toList();
 
   /// Get the amount of selected ride attendees.
   int get attendeeCount => _rideAttendeeController.value.length;
@@ -118,8 +118,8 @@ class RideAttendeeScanningDelegate {
   /// Get the current state of the state machine.
   RideAttendeeScanningState get currentState => _stateMachine.currentState;
 
-  /// Returns whether there are active members.
-  bool get hasActiveMembers => _activeMembers.isNotEmpty;
+  /// Returns whether there are active riders.
+  bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
   /// Get the controller for the scan progress bar.
   AnimationController get progressBarController => _scanProgressBarController;
@@ -156,7 +156,7 @@ class RideAttendeeScanningDelegate {
 
     // Get the owners of the device.
     final owners = _deviceOwners[deviceName]?.map(
-      (uuid) => _activeMembers[uuid]!,
+      (uuid) => _activeRiders[uuid]!,
     );
 
     // The device is a known device that has one or more possible owners.
@@ -240,20 +240,20 @@ class RideAttendeeScanningDelegate {
     }
   }
 
-  /// Load the active members and their devices.
-  Future<void> _loadActiveMembersWithDevices() async {
-    final activeMembers = await memberRepository.getRiders(
+  /// Load the active riders and their devices.
+  Future<void> _loadActiveRidersWithDevices() async {
+    final activeRiders = await riderRepository.getRiders(
       RiderFilterOption.active,
     );
 
-    for (final activeMember in activeMembers) {
-      _activeMembers[activeMember.uuid] = activeMember;
+    for (final activeRider in activeRiders) {
+      _activeRiders[activeRider.uuid] = activeRider;
     }
 
     final devices = await deviceRepository.getAllDevices();
 
-    // Keep the devices that are owned by active members.
-    devices.retainWhere((device) => _activeMembers[device.ownerId] != null);
+    // Keep the devices that are owned by active riders.
+    devices.retainWhere((device) => _activeRiders[device.ownerId] != null);
 
     // Collect the possible owners of each device.
     for (final device in devices) {
@@ -282,7 +282,7 @@ class RideAttendeeScanningDelegate {
   /// The former is used to detect whether a person is already an attendant.
   /// The latter is used to map incoming device scan results to one or more owners.
   Future<void> _prepareScan() {
-    return Future.wait([_loadRideAttendees(), _loadActiveMembersWithDevices()]);
+    return Future.wait([_loadRideAttendees(), _loadActiveRidersWithDevices()]);
   }
 
   /// Remove [item] from the selection of ride attendees.
@@ -363,10 +363,10 @@ class RideAttendeeScanningDelegate {
   /// Get the scanned device at the given [index].
   ScannedDevice getScannedDevice(int index) => _scannedDevices[index];
 
-  /// Get the selected ride attendee for the member with the given [uuid].
+  /// Get the selected ride attendee for the rider with the given [uuid].
   ///
   /// Returns the selected ride attendee
-  /// or null if the member is currently not selected.
+  /// or null if the rider is currently not selected.
   ScannedRideAttendee? getSelectedRideAttendee(String uuid) {
     // Lookup if an attendee with the given uuid is selected.
     // The isScanned value is irrelevant, as it is merely presentational.
@@ -380,9 +380,9 @@ class RideAttendeeScanningDelegate {
   List<Rider> getUnresolvedDeviceOwners() {
     final rideAttendees = _rideAttendeeController.value;
 
-    return _unresolvedOwners.where((Rider member) {
+    return _unresolvedOwners.where((Rider rider) {
       return !rideAttendees.contains(
-        ScannedRideAttendee(uuid: member.uuid, isScanned: false),
+        ScannedRideAttendee(uuid: rider.uuid, isScanned: false),
       );
     }).toList();
   }
@@ -516,7 +516,7 @@ class RideAttendeeScanningDelegate {
     }
   }
 
-  /// Toggle the selection state for the given active member.
+  /// Toggle the selection state for the given active rider.
   ///
   /// If the [item] is selected and the item was manually added,
   /// it is removed from the selection.
@@ -532,7 +532,7 @@ class RideAttendeeScanningDelegate {
   /// If the selection is locked, the selection is also not modified.
   ///
   /// Returns whether the selection was updated.
-  Future<bool> toggleSelectionForActiveMember(
+  Future<bool> toggleSelectionForActiveRider(
     ScannedRideAttendee item,
     Future<bool> Function() requestUnselectConfirmation,
   ) async {

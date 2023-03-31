@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings.dart';
-import 'package:weforza/repository/settings_repository.dart';
+import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/member_list_filter.dart';
@@ -26,8 +26,6 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   late final BehaviorSubject<double> scanDurationController;
 
-  late final SettingsRepository settingsRepository;
-
   Future<void>? _saveSettingsFuture;
 
   Future<void> saveSettings() {
@@ -38,7 +36,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         memberListFilter: memberFilterController.value,
       );
 
-      return settingsRepository.writeApplicationSettings(newSettings).then((_) {
+      final repository = ref.read(settingsRepositoryProvider);
+
+      return repository.writeApplicationSettings(newSettings).then((_) {
         if (mounted) {
           ref.read(settingsProvider.notifier).state = newSettings;
         }

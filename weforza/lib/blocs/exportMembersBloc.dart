@@ -61,7 +61,7 @@ class ExportMembersBloc extends Bloc {
     return filenameError;
   }
 
-  void exportMembers(String csvHeader) async {
+  Future<void> exportMembers(String csvHeader) async {
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
         _fileExistsController.add(true);

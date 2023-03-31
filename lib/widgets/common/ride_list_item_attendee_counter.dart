@@ -38,7 +38,8 @@ class RideListItemAttendeeCounterState
     future = ref
         .read(rideRepositoryProvider)
         .getRideAttendees(widget.rideDate)
-        .then((value) => value.length);
+        .then((value) => value.length)
+        .catchError(Future<int>.error);
   }
 
   @override

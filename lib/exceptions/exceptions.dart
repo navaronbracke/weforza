@@ -10,10 +10,6 @@ class InvalidFileExtensionError extends ArgumentError {
   InvalidFileExtensionError() : super('Invalid file extension.');
 }
 
-class JsonFormatIncompatibleException extends ArgumentError {
-  JsonFormatIncompatibleException() : super('The given json is incompatible.');
-}
-
 class MemberExistsException implements Exception {}
 
 class NoFileChosenError extends ArgumentError {

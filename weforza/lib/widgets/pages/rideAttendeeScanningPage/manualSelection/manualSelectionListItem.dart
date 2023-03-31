@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 
 class ManualSelectionListItem extends StatefulWidget {
   ManualSelectionListItem({
+    @required this.isActiveMember,
     @required this.isSelected,
     @required this.onTap,
     @required this.profileImageFuture,
@@ -17,10 +19,12 @@ class ManualSelectionListItem extends StatefulWidget {
     @required this.alias,
     @required this.personInitials,
   }): assert(
-    isSelected != null && profileImageFuture != null && personInitials != null && personInitials.isNotEmpty &&
-        onTap != null && firstName != null && lastName != null && alias != null
+    isSelected != null && profileImageFuture != null && personInitials != null
+        && personInitials.isNotEmpty && onTap != null && firstName != null
+        && lastName != null && alias != null && isActiveMember != null
   );
 
+  final bool isActiveMember;
   final bool Function() isSelected;
   final VoidCallback onTap;
   final Future<File> profileImageFuture;
@@ -38,6 +42,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   Color itemDecorationBackgroundColor;
   TextStyle firstNameStyle;
   TextStyle lastNameStyle;
+  TextStyle inactiveLabelStyle;
 
   @override
   void initState() {
@@ -47,6 +52,28 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget content = widget.isActiveMember ? MemberNameAndAlias(
+      firstNameStyle: firstNameStyle,
+      lastNameStyle: lastNameStyle,
+      firstName: widget.firstName,
+      lastName: widget.lastName,
+      alias: widget.alias,
+    ): Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: MemberNameAndAlias(
+            firstNameStyle: firstNameStyle,
+            lastNameStyle: lastNameStyle,
+            firstName: widget.firstName,
+            lastName: widget.lastName,
+            alias: widget.alias,
+          ),
+        ),
+        Text(S.of(context).Inactive.toUpperCase(), style: inactiveLabelStyle),
+      ],
+    );
+
     return GestureDetector(
       onTap: (){
         if(mounted){
@@ -70,15 +97,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
                   personInitials: widget.personInitials,
                 ),
               ),
-              Expanded(
-                child: MemberNameAndAlias(
-                  firstNameStyle: firstNameStyle,
-                  lastNameStyle: lastNameStyle,
-                  firstName: widget.firstName,
-                  lastName: widget.lastName,
-                  alias: widget.alias,
-                ),
-              ),
+              Expanded(child: content),
             ],
           ),
         ),
@@ -91,10 +110,12 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(color: Colors.white);
       lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(color: Colors.white);
+      inactiveLabelStyle = ApplicationTheme.rideAttendeeManualSelectionSelectedInactiveLabelStyle;
     }else{
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
       lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
+      inactiveLabelStyle = ApplicationTheme.rideAttendeeManualSelectionUnselectedInactiveLabelStyle;
     }
   }
 }

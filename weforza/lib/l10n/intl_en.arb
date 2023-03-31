@@ -78,6 +78,8 @@
   "RideAttendeeScanningBluetoothDisabled": "Cannot start scanning, Bluetooth is disabled.",
   "RideAttendeeScanningGoToBluetoothSettings": "Go to settings",
   "RideAttendeeScanningRetryScan": "Retry Scan",
+  "RideAttendeeScanningSkipScan": "Skip Scan",
+  "RideAttendeeScanningSaveScanResults": "Save Scan Results",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",

@@ -78,6 +78,8 @@
   "RideAttendeeScanningBluetoothDisabled": "Kan niet scannen, Bluetooth staat uit.",
   "RideAttendeeScanningGoToBluetoothSettings": "Naar Instellingen",
   "RideAttendeeScanningRetryScan": "Opnieuw Scannen",
+  "RideAttendeeScanningSkipScan": "Scan Overslaan",
+  "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

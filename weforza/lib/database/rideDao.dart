@@ -19,9 +19,9 @@ abstract class IRideDao {
   ///Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
   Future<List<Ride>> getRides();
 
-  ///Update the [Attendee]s for the [Ride].
-  ///The attendees of the [Ride] will be replaced by [attendees].
-  Future<void> updateAttendeesForRideWithDate(Ride ride, List<RideAttendee> attendees);
+  ///Update the attendees for the ride with the given date.
+  ///The old attendees of the ride will be removed and the new ones will be created.
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees);
 
   ///Update a [ride]'s properties, excluding its attendees.
   Future<void> updateRide(Ride ride);
@@ -76,21 +76,17 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateAttendeesForRideWithDate(Ride ride, List<RideAttendee> attendees) async {
-    assert(ride != null && ride.date != null && attendees != null);
-    final date = ride.date.toIso8601String();
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees) async {
+    assert(rideDate != null && attendees != null);
+    final date = rideDate.toIso8601String();
     final finder = Finder(filter: Filter.equals("date", date));
 
     await _database.transaction((txn) async {
       //Delete old ones, replace by new ones.
       await _rideAttendeeStore.delete(txn,finder: finder);
+      //The keys are the date + uuid of the person.
       await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
           .put(txn, attendees.map((a)=> a.toMap()).toList());
-      //create the updated ride object from the existing ride, but with the new count.
-      final updatedRide = ride.toMap();
-      updatedRide["attendees"] = attendees.length;
-      //update the ride.
-      await _rideStore.update(txn, updatedRide,finder: Finder(filter: Filter.byKey(date)));
     });
   }
 

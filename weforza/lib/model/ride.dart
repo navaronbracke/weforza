@@ -1,17 +1,17 @@
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 ///This class represents a Ride.
 class Ride {
   Ride({
     @required this.date,
-    this.numberOfAttendees = 0,
     this.title,
     this.startAddress,
     this.destinationAddress,
     this.distance = 0.0
-  }): assert(date != null && numberOfAttendees != null && distance != null);
+  }): assert(date != null && distance != null);
 
   ///Date formatting patterns
   static final String longDatePattern = "EEEE d MMMM yyyy";
@@ -70,7 +70,6 @@ class Ride {
   ///Convert this object to a Map.
   ///The date is excluded since this is the record's key.
   Map<String,dynamic> toMap() => {
-    "attendees": numberOfAttendees,
     "title": title,
     "start": startAddress,
     "destination": destinationAddress,
@@ -82,7 +81,6 @@ class Ride {
     assert(date != null && values != null);
     return Ride(
       date: date,
-      numberOfAttendees: values["attendees"],
       title: values["title"],
       destinationAddress: values["destination"],
       startAddress: values["start"],

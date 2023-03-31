@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/rider_model.dart';
+import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/repository/member_repository.dart';
 
 /// This class represents the delegate for the rider form.

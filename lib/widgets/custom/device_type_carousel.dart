@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/device_type.dart';
+import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
 
 /// This widget represents a carousel for selecting a device type.

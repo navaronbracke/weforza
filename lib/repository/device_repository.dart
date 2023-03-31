@@ -1,5 +1,5 @@
 import 'package:weforza/database/device_dao.dart';
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device/device.dart';
 
 class DeviceRepository {
   DeviceRepository(this._dao);

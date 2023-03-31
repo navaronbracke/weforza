@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:weforza/model/export/export_delegate.dart';
-import 'package:weforza/model/export_file_format.dart';
+import 'package:weforza/model/export/export_file_format.dart';
 import 'package:weforza/repository/serialize_riders_repository.dart';
 
 /// This class represents the export options for a [ExportRidersDelegate].

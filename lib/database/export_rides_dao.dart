@@ -1,6 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
-import 'package:weforza/model/exportable_ride.dart';
+import 'package:weforza/model/export/exportable_ride.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';

@@ -9,6 +9,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 // Set up a Production injector and run the app.
@@ -40,18 +41,20 @@ class _WeForzaAppState extends State<WeForzaApp> {
 
     return SelectedItemProvider(
       child: ReloadDataProvider(
-        child: GestureDetector(
-          child: PlatformAwareWidget(
-            android: () => _buildAndroidWidget(),
-            ios: () => _buildIosWidget(),
+        child: RideAttendeeFutureProvider(
+          child: GestureDetector(
+            child: PlatformAwareWidget(
+              android: () => _buildAndroidWidget(),
+              ios: () => _buildIosWidget(),
+            ),
+            onTap: (){
+              //enable tap to dismiss keyboard
+              final FocusScopeNode currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+            },
           ),
-          onTap: (){
-            //enable tap to dismiss keyboard
-            final FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
         ),
       ),
     );

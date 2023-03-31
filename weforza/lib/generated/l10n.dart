@@ -832,6 +832,16 @@ class S {
     );
   }
 
+  /// `Choose an owner from the list`
+  String get RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel {
+    return Intl.message(
+      'Choose an owner from the list',
+      name: 'RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(

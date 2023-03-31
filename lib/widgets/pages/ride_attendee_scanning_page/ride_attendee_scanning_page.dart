@@ -84,7 +84,6 @@ class RideAttendeeScanningPageState
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
           stream: delegate.stateStream,
         ),
@@ -137,7 +136,6 @@ class RideAttendeeScanningPageState
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
           stream: delegate.stateStream,
         ),

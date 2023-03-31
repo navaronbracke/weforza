@@ -93,6 +93,9 @@ class RideAttendeeScanningDelegate {
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
 
+  /// The scroll controller for the scanning page stepper.
+  final _stepperScrollController = ScrollController();
+
   /// This set will contain all the owners
   /// that could not be resolved automatically.
   ///
@@ -117,6 +120,12 @@ class RideAttendeeScanningDelegate {
 
   /// Returns whether there are active members.
   bool get hasActiveMembers => _activeMembers.isNotEmpty;
+
+  /// Get the controller for the scan progress bar.
+  AnimationController get progressBarController => _scanProgressBarController;
+
+  /// Get the scroll controller for the scan stepper.
+  ScrollController get stepperScrollController => _stepperScrollController;
 
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stream => _stateMachine.stateStream;
@@ -562,5 +571,6 @@ class RideAttendeeScanningDelegate {
     _startScanningSubscription?.cancel();
     _startScanningSubscription = null;
     _scanProgressBarController.dispose();
+    _stepperScrollController.dispose();
   }
 }

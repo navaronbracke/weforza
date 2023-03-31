@@ -14,25 +14,24 @@ class MemberDetailsBloc extends Bloc {
     @required this.deviceRepository,
     @required this.member,
     @required this.profileImage,
+    @required this.attendingCountFuture
   }): assert(
-    memberRepository != null && deviceRepository != null && member != null && profileImage != null
+    memberRepository != null && deviceRepository != null && member != null
+        && profileImage != null && attendingCountFuture != null
   );
 
   final MemberRepository memberRepository;
   final DeviceRepository deviceRepository;
+
+  final Future<int> attendingCountFuture;
   Member member;
   Future<File> profileImage;
 
   Future<List<Device>> devicesFuture;
 
-  Future<int> attendingCountFuture;
-
-  void loadDevicesAndAttendingCount(){
+  void loadDevices(){
     if(devicesFuture == null){
       devicesFuture = getMemberDevices();
-    }
-    if(attendingCountFuture == null){
-      attendingCountFuture = getAttendingCount();
     }
   }
 
@@ -46,8 +45,6 @@ class MemberDetailsBloc extends Bloc {
   Future<void> deleteDevice(Device device) => deviceRepository.removeDevice(device);
 
   Future<void> deleteMember() => memberRepository.deleteMember(member.uuid);
-
-  Future<int> getAttendingCount() => memberRepository.getAttendingCountForAttendee(member.uuid);
 
   Future<List<Device>> getMemberDevices() => deviceRepository.getOwnerDevices(member.uuid);
 }

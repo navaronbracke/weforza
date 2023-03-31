@@ -11,7 +11,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
 
   final List<Member> items;
   final Widget Function(Member item) itemBuilder;
-  final Widget Function() saveButtonBuilder;
+  final Widget Function(BuildContext context) saveButtonBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
               itemCount: items.length,
             ),
           ),
-          saveButtonBuilder(),
+          saveButtonBuilder(context),
         ],
       );
     }

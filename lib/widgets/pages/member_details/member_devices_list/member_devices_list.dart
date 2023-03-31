@@ -42,7 +42,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
 
         return _buildDevicesList(context, devices);
       },
-      error: (error, _) => GenericError(text: S.of(context).GenericError),
+      error: (error, _) => const Center(child: GenericError()),
       loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }

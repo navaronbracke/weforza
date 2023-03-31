@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
@@ -36,7 +35,6 @@ class MemberList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final memberList = ref.watch(memberListProvider);
-    final translator = S.of(context);
 
     return memberList.when(
       data: (items) {
@@ -72,7 +70,7 @@ class MemberList extends ConsumerWidget {
           ),
         );
       },
-      error: (error, stackTrace) => GenericError(text: translator.GenericError),
+      error: (error, stackTrace) => const Center(child: GenericError()),
       loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }

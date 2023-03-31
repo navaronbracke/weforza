@@ -92,7 +92,7 @@ class MemberDaoImpl implements MemberDao {
     final lastName = member.lastName;
 
     if (await _memberExists(firstName, lastName, alias)) {
-      return Future.error(MemberExistsException());
+      return Future.error(RiderExistsException());
     }
 
     await recordRef.add(_database, member.toMap());
@@ -170,7 +170,7 @@ class MemberDaoImpl implements MemberDao {
     final uuid = member.uuid;
 
     if (await _memberExists(firstName, lastName, alias, uuid)) {
-      return Future.error(MemberExistsException());
+      return Future.error(RiderExistsException());
     }
 
     await _memberStore.record(member.uuid).update(_database, member.toMap());

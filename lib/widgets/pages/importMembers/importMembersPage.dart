@@ -8,7 +8,7 @@ import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/import_members_repository.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';
+import 'package:weforza/widgets/custom/animated_checkmark.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';

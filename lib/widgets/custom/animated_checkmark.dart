@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/custom/animatedPathPainter/animatedPathPainter.dart';
+import 'package:weforza/widgets/custom/animated_path_painter.dart';
 
 class AnimatedCheckmark extends StatefulWidget {
   const AnimatedCheckmark({

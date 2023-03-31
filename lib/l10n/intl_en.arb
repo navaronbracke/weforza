@@ -66,8 +66,6 @@
 	"ExportingAllRides": "Exporting all rides",
 	"ExportingRide": "Exporting ride",
 	"ExportingRiders": "Exporting riders",
-	"FileCsvExtension": "csv",
-	"FileJsonExtension": "json",
 	"FileMalformed": "The chosen file is incompatible",
 	"FileName": "Filename",
 	"FileNameExists": "This file already exists",

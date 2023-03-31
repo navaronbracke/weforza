@@ -66,8 +66,6 @@
 	"ExportingAllRides": "Alle ritten exporteren",
 	"ExportingRide": "Rit exporteren",
 	"ExportingRiders": "Renners exporteren",
-	"FileCsvExtension": "csv",
-	"FileJsonExtension": "json",
 	"FileMalformed": "Het gekozen bestand is incompatibel",
 	"FileName": "Bestandsnaam",
 	"FileNameExists": "Dit bestand bestaat al",

@@ -14,7 +14,7 @@ class RideListEmpty extends StatelessWidget {
           PlatformAwareIcon(
             androidIcon: Icons.directions_bike,
             iosIcon: Icons.directions_bike,
-            size: MediaQuery.of(context).size.shortestSide * .1,
+            size: MediaQuery.sizeOf(context).shortestSide * .1,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4, right: 16, left: 16),

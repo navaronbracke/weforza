@@ -46,7 +46,7 @@ class GenericError extends StatelessWidget {
         PlatformAwareIcon(
           androidIcon: androidIcon ?? Icons.warning,
           iosIcon: iosIcon ?? CupertinoIcons.exclamationmark_triangle_fill,
-          size: MediaQuery.of(context).size.shortestSide * .1,
+          size: MediaQuery.sizeOf(context).shortestSide * .1,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),

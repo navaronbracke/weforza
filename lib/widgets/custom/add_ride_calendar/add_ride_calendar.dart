@@ -15,6 +15,11 @@ class AddRideCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final calendarDelegate = delegate.calendarDelegate;
 
+    const double dayItemPadding = 4;
+    const double dayItemSize = 40;
+    // A weekday is as wide as a single day item and its horizontal padding.
+    const double weekDayWidth = (dayItemPadding * 2) + dayItemSize;
+
     return DatePicker(
       backButton: PlatformAwareWidget(
         android: () => IconButton(
@@ -34,11 +39,16 @@ class AddRideCalendar extends StatelessWidget {
       ),
       constraints: const BoxConstraints(maxHeight: 364),
       dayBuilder: (DateTime date, bool isCurrentMonth) {
-        if (!isCurrentMonth) {
-          return const SizedBox.square(dimension: 40);
-        }
-
-        return AddRideCalendarItem(date: date, delegate: delegate);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: dayItemPadding),
+          child: isCurrentMonth
+              ? AddRideCalendarItem(
+                  date: date,
+                  delegate: delegate,
+                  size: dayItemSize,
+                )
+              : const SizedBox.square(dimension: dayItemSize),
+        );
       },
       delegate: calendarDelegate,
       forwardButton: PlatformAwareWidget(
@@ -59,8 +69,8 @@ class AddRideCalendar extends StatelessWidget {
       monthStyle: const TextStyle(
         color: ApplicationTheme.rideCalendarHeaderColor,
       ),
-      weekDayWidth: 40,
-      weekPadding: const EdgeInsets.symmetric(vertical: 4),
+      weekDayWidth: weekDayWidth,
+      weekPadding: const EdgeInsets.symmetric(vertical: dayItemPadding),
       showWeekdays: true,
     );
   }

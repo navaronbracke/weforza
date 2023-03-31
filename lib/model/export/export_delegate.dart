@@ -2,38 +2,31 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
+import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
   ExportDelegate({
     required this.fileHandler,
-  }) : fileNameController = TextEditingController();
+    Directory? initialDirectory,
+  })  : fileNameController = TextEditingController(),
+        directoryController = DirectorySelectionController(fileHandler: fileHandler, initialValue: initialDirectory) {
+    directoryController.addListener(_onDirectoryChanged);
+  }
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The name of the last file that is known to exist.
-  ///
-  /// When the [File.existsSync] method determines that a given file name already exists,
-  /// then this field is set to that file name.
-  ///
-  /// When the file name is validated using the relevant validator function,
-  /// it invokes [fileExists] with the current file name,
-  /// which checks equality against this field.
-  ///
-  /// If a new file format is set using [setFileFormat],
-  /// then this field is reset, since the old value is no longer valid
-  /// because the extension in the file name has changed.
-  String? _lastExistingFileName;
+  /// The directory that manages the selected directory.
+  final DirectorySelectionController directoryController;
 
-  /// The file handler that will manage the underlying file.
+  /// The file handler that will provide directories.
   final FileHandler fileHandler;
 
   /// The controller that manages the selected file name.
@@ -48,11 +41,17 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
 
+  void _onDirectoryChanged() {
+    // If a new directory was selected,
+    // the `File Exists` message may be outdated.
+    fileNameKey.currentState?.validate();
+  }
+
   /// Export the currently available data to a file.
   ///
   /// See [writeToFile].
-  void exportDataToFile(Options options) async {
-    final formState = fileNameKey.currentState;
+  void exportDataToFile(BuildContext context, Options options) async {
+    final FormState? formState = Form.maybeOf(context);
 
     if (formState == null || !formState.validate() || !canStartComputation()) {
       return;
@@ -60,6 +59,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
+    final directory = directoryController.directory;
 
     try {
       // Sanity-check that the file name ends with the correct extension.
@@ -72,16 +72,24 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
-      final file = await fileHandler.getFile(fileName);
+      // Sanity-check that the directory was provided.
+      // This should have been validated with the form state as well.
+      if (directory == null) {
+        throw ArgumentError.notNull('directory');
+      }
 
-      // If the file exists, set the last file name
-      // of which it is known that it exists,
-      // and revalidate the form to trigger the validation message.
+      // Sanity-check that the directory exists.
+      // This should have been validated with the form state as well.
+      if (!directory.existsSync()) {
+        throw StateError('The given directory $directory does not exist');
+      }
+
+      final file = File(directory.path + Platform.pathSeparator + fileName);
+
+      // Sanity-check that the file does not exist.
+      // This should have been validated with the form state as well.
       if (file.existsSync()) {
-        _lastExistingFileName = fileName;
-        fileNameKey.currentState?.validate();
-
-        throw FileExistsException();
+        throw StateError('The given file $file already exists');
       }
 
       await writeToFile(file, fileFormat, options);
@@ -90,15 +98,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     } catch (error, stackTrace) {
       setError(error, stackTrace);
     }
-  }
-
-  /// Returns whether the given [fileName] matches the [_lastExistingFileName].
-  bool fileExists(String fileName) {
-    if (_lastExistingFileName == null) {
-      return false;
-    }
-
-    return _lastExistingFileName == fileName;
   }
 
   /// Set the selected file format to [value].
@@ -129,12 +128,11 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       );
     }
 
+    _fileFormatController.add(value);
+
     // If a new file format was selected,
     // the `File Exists` message may be outdated.
-    _lastExistingFileName = null;
     fileNameKey.currentState?.validate();
-
-    _fileFormatController.add(value);
   }
 
   /// Write the export data to the given [file], using the given [fileFormat].
@@ -147,6 +145,8 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
+    directoryController.removeListener(_onDirectoryChanged);
+    directoryController.dispose();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

@@ -1,33 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
-import 'package:weforza/model/export/export_file_format.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
+import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage<T> extends StatelessWidget {
-  ExportDataPage({
+  const ExportDataPage({
     required this.checkmarkAnimationController,
     required this.delegate,
-    required this.onPressed,
+    required this.options,
     required this.title,
     super.key,
-  }) : inputFormatters = [
-          FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
-          LengthLimitingTextInputFormatter(maxLength),
-        ];
-
-  /// The maximum length for the file name input field.
-  static const int maxLength = 80;
+  });
 
   /// The animation controller for the 'Done' checkmark widget.
   final AnimationController checkmarkAnimationController;
@@ -35,14 +30,27 @@ class ExportDataPage<T> extends StatelessWidget {
   /// The delegate that handles the export.
   final ExportDelegate<T> delegate;
 
-  /// The input formatters for the file name input field.
-  final List<TextInputFormatter> inputFormatters;
-
-  /// The onPressed handler for the export button.
-  final void Function() onPressed;
+  /// The options for the export handler.
+  final T options;
 
   /// The title for the page.
   final String title;
+
+  String? _validateDirectory(Directory? directory, S translator) {
+    if (directory == null) {
+      return translator.directoryRequired;
+    }
+
+    if (!directory.existsSync()) {
+      return translator.directoryDoesNotExist;
+    }
+
+    if (Platform.isAndroid && directory.path == Platform.pathSeparator) {
+      return translator.directoryIsProtected;
+    }
+
+    return null;
+  }
 
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
@@ -51,37 +59,23 @@ class ExportDataPage<T> extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
       child: Column(
         children: [
+          ExportDataFileNameTextField<T>(delegate: delegate),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: TextFormField(
-              autocorrect: false,
+            padding: const EdgeInsets.only(top: 32, bottom: 48),
+            child: DirectorySelectionFormField(
+              controller: delegate.directoryController,
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: delegate.fileNameController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                labelText: translator.fileName,
-                errorMaxLines: 3,
-              ),
-              inputFormatters: inputFormatters,
-              key: delegate.fileNameKey,
-              keyboardType: TextInputType.text,
-              maxLength: maxLength,
-              textInputAction: TextInputAction.done,
-              validator: (fileName) => _validateFileName(fileName, translator),
+              validator: (directory) => _validateDirectory(directory, translator),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 40),
+            padding: const EdgeInsets.only(bottom: 40),
             child: Row(
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 6, right: 8),
-                    child: Text(
-                      translator.fileFormat,
-                      style: Theme.of(context).textTheme.labelMedium,
-                      maxLines: 2,
-                    ),
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Text(translator.fileFormat, maxLines: 2),
                   ),
                 ),
                 ExportFileFormatSelection(
@@ -100,10 +94,8 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// Build the body of the export page.
   ///
-  /// The [builder] function is used to build the form when the export has not started yet,
-  /// or when the export failed with a [FileExistsException].
-  /// If the export failed because of a different error,
-  /// the [genericErrorIndicator] is displayed.
+  /// The [builder] function is used to build the form when the export has not started yet.
+  /// If the export failed because of an error, the [genericErrorIndicator] is displayed.
   ///
   /// The [doneIndicator] is shown when the export has finished successfully.
   Widget _buildBody({
@@ -111,30 +103,24 @@ class ExportDataPage<T> extends StatelessWidget {
     required Widget doneIndicator,
     required Widget genericErrorIndicator,
   }) {
-    return StreamBuilder<AsyncValue<void>?>(
-      initialData: delegate.currentState,
-      stream: delegate.stream,
-      builder: (context, snapshot) {
-        final value = snapshot.data;
+    return Form(
+      child: StreamBuilder<AsyncValue<void>?>(
+        initialData: delegate.currentState,
+        stream: delegate.stream,
+        builder: (context, snapshot) {
+          final value = snapshot.data;
 
-        if (value == null) {
-          return FocusAbsorber(child: builder(context, isExporting: false));
-        }
+          if (value == null) {
+            return FocusAbsorber(child: builder(context, isExporting: false));
+          }
 
-        return value.when(
-          data: (_) => doneIndicator,
-          error: (error, stackTrace) {
-            if (error is FileExistsException) {
-              return FocusAbsorber(child: builder(context, isExporting: false));
-            }
-
-            return genericErrorIndicator;
-          },
-          loading: () => FocusAbsorber(
-            child: builder(context, isExporting: true),
-          ),
-        );
-      },
+          return value.when(
+            data: (_) => doneIndicator,
+            error: (error, stackTrace) => genericErrorIndicator,
+            loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
+          );
+        },
+      ),
     );
   }
 
@@ -143,20 +129,14 @@ class ExportDataPage<T> extends StatelessWidget {
 
     return CupertinoFormSection.insetGrouped(
       children: [
-        CupertinoTextFormFieldRow(
-          autocorrect: false,
+        ExportDataFileNameTextField<T>(delegate: delegate),
+        DirectorySelectionFormField(
+          controller: delegate.directoryController,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: delegate.fileNameController,
-          inputFormatters: inputFormatters,
-          key: delegate.fileNameKey,
-          keyboardType: TextInputType.text,
-          maxLength: maxLength,
-          placeholder: translator.fileName,
-          textInputAction: TextInputAction.done,
-          validator: (fileName) => _validateFileName(fileName, translator),
+          validator: (directory) => _validateDirectory(directory, translator),
         ),
         CupertinoFormRow(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 6, 20),
           prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
           child: ExportFileFormatSelection(
             initialValue: delegate.currentFileFormat,
@@ -167,35 +147,6 @@ class ExportDataPage<T> extends StatelessWidget {
         child,
       ],
     );
-  }
-
-  /// Validate the given [fileName].
-  ///
-  /// Returns an error message or null if the file name is valid.
-  String? _validateFileName(String? fileName, S translator) {
-    if (fileName == null || fileName.isEmpty) {
-      return translator.fileNameRequired;
-    }
-
-    if (fileName.startsWith('.')) {
-      return translator.fileNameCantStartWithDot;
-    }
-
-    final ExportFileFormat fileFormat = delegate.currentFileFormat;
-    final String fileExtension = fileFormat.formatExtension;
-
-    if (!fileName.endsWith(fileExtension)) {
-      return translator.fileNameInvalidExtension(
-        fileFormat.asUpperCase,
-        fileExtension,
-      );
-    }
-
-    if (delegate.fileExists(fileName)) {
-      return translator.fileNameExists;
-    }
-
-    return null;
   }
 
   @override
@@ -220,7 +171,7 @@ class ExportDataPage<T> extends StatelessWidget {
             context,
             child: isExporting
                 ? const FixedHeightSubmitButton.loading()
-                : FixedHeightSubmitButton(label: label, onPressed: onPressed),
+                : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
@@ -246,7 +197,7 @@ class ExportDataPage<T> extends StatelessWidget {
               context,
               child: isExporting
                   ? const FixedHeightSubmitButton.loading()
-                  : FixedHeightSubmitButton(label: label, onPressed: onPressed),
+                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
             ),
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,

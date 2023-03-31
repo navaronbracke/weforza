@@ -14,8 +14,7 @@ class ExportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidersPage> createState() => _ExportRidersPageState();
 }
 
-class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
-    with SingleTickerProviderStateMixin {
+class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with SingleTickerProviderStateMixin {
   late final ExportRidersDelegate _delegate;
 
   late final AnimationController checkmarkController;
@@ -26,6 +25,7 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
     _delegate = ExportRidersDelegate(
       fileHandler: ref.read(fileHandlerProvider),
       serializeRidersRepository: ref.read(serializeRidersRepositoryProvider),
+      initialDirectory: ref.read(exportDataDefaultDirectoryProvider),
     );
 
     checkmarkController = AnimationController(
@@ -37,8 +37,7 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _delegate.fileNameController.text =
-        S.of(context).exportRidersDefaultFileName;
+    _delegate.fileNameController.text = S.of(context).exportRidersDefaultFileName;
   }
 
   @override
@@ -48,9 +47,7 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
     return ExportDataPage(
       checkmarkAnimationController: checkmarkController,
       delegate: _delegate,
-      onPressed: () => _delegate.exportDataToFile(
-        ExportRidersOptions(csvHeader: translator.exportRidersCsvHeader),
-      ),
+      options: ExportRidersOptions(csvHeader: translator.exportRidersCsvHeader),
       title: translator.exportRiders,
     );
   }

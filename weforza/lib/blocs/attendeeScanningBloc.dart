@@ -50,6 +50,15 @@ class AttendeeScanningBloc extends Bloc {
   ///the user from going back to the details screen.
   final ValueNotifier<bool> isScanStep = ValueNotifier<bool>(true);
 
+  final StreamController<bool> _choiceRequiredStreamController = BehaviorSubject.seeded(false);
+  Stream<bool> get choiceRequiredStream => _choiceRequiredStreamController.stream;
+
+  final StreamController<bool> _menuEnabledStreamController = BehaviorSubject.seeded(false);
+  Stream<bool> get menuEnabledStream => _menuEnabledStreamController.stream;
+
+  final StreamController<String> _lastSelectedOwnerStreamController = BehaviorSubject.seeded(null);
+  Stream<String> get lastSelectedOwnerStream => _lastSelectedOwnerStreamController.stream;
+
   ///The repositories connect the bloc with the database.
   final SettingsRepository settingsRepo;
   final MemberRepository memberRepo;
@@ -267,6 +276,9 @@ class AttendeeScanningBloc extends Bloc {
   @override
   void dispose() {
     _scanStepController.close();
+    _choiceRequiredStreamController.close();
+    _menuEnabledStreamController.close();
+    _lastSelectedOwnerStreamController.close();
   }
 
   bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);

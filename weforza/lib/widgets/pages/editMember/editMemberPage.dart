@@ -158,6 +158,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   ),
                   SizedBox(height: 10),
                   CupertinoTextField(
+                    textCapitalization: TextCapitalization.words,
                     focusNode: _firstNameFocusNode,
                     textInputAction: TextInputAction.next,
                     controller: _firstNameController,
@@ -184,6 +185,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                       style: ApplicationTheme.iosFormErrorStyle),
                   SizedBox(height: 5),
                   CupertinoTextField(
+                    textCapitalization: TextCapitalization.words,
                     focusNode: _lastNameFocusNode,
                     textInputAction: TextInputAction.next,
                     controller: _lastNameController,
@@ -283,6 +285,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   focusNode: _firstNameFocusNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
@@ -309,6 +312,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 ),
                 SizedBox(height: 5),
                 TextFormField(
+                  textCapitalization: TextCapitalization.words,
                   focusNode: _lastNameFocusNode,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(

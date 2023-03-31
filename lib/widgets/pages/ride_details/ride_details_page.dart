@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -120,6 +118,30 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
     );
   }
 
+  void _onDeleteRideOptionSelected(BuildContext context) {
+    final targetPlatform = Theme.of(context).platform;
+
+    switch (targetPlatform) {
+      case TargetPlatform.android:
+        showDialog(
+          context: context,
+          builder: (_) => const DeleteRideDialog(),
+        );
+        break;
+      case TargetPlatform.iOS:
+        showCupertinoDialog(
+          context: context,
+          builder: (_) => const DeleteRideDialog(),
+        );
+        break;
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.macOS:
+      case TargetPlatform.windows:
+        break;
+    }
+  }
+
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {
     switch (option) {
       case RideDetailsPageOptions.export:
@@ -134,19 +156,8 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         );
         break;
       case RideDetailsPageOptions.delete:
-        if (Platform.isAndroid) {
-          showDialog(
-            context: context,
-            builder: (_) => const DeleteRideDialog(),
-          );
-        } else if (Platform.isIOS) {
-          showCupertinoDialog(
-            context: context,
-            builder: (_) => const DeleteRideDialog(),
-          );
-        }
+        _onDeleteRideOptionSelected(context);
         break;
-
       default:
         break;
     }

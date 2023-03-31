@@ -114,6 +114,8 @@ abstract class ApplicationTheme {
 
   static final Color deleteItemButtonTextColor = Colors.red;
 
+  static final TextStyle importExportChoiceTextStyle = TextStyle(fontSize: 14, color: primaryColor);
+
   ///Provide the Android theme.
   static ThemeData androidTheme(){
      return ThemeData(

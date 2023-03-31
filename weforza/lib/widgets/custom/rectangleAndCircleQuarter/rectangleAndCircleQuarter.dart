@@ -10,10 +10,15 @@ import 'package:flutter/widgets.dart';
 class RectangleAndCircleQuarter extends StatelessWidget {
   final Color color;
   final Size size;
+  // Whether to draw a half circle instead of a quarter.
+  // If this is true, the center position is moved upwards
+  // so that the circle joins the upper and lower sides of the rectangle.
+  final bool drawHalfCircle;
 
   RectangleAndCircleQuarter({
     required this.color,
     required this.size,
+    this.drawHalfCircle = false,
   }): assert(size.width > 0 && size.height > 0 && size.width > size.height);
 
   @override
@@ -25,6 +30,7 @@ class RectangleAndCircleQuarter extends StatelessWidget {
         child: CustomPaint(
           painter: _RectangleAndCircleQuarterPainter(
             color: color,
+            drawHalfCircle: drawHalfCircle
           ),
         ),
       ),
@@ -35,8 +41,9 @@ class RectangleAndCircleQuarter extends StatelessWidget {
 /// The internal [CustomPainter] for [RectangleAndCircleQuarter].
 class _RectangleAndCircleQuarterPainter extends CustomPainter {
   final Color color;
+  final bool drawHalfCircle;
 
-  _RectangleAndCircleQuarterPainter({required this.color});
+  _RectangleAndCircleQuarterPainter({required this.color, required this.drawHalfCircle});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -48,13 +55,27 @@ class _RectangleAndCircleQuarterPainter extends CustomPainter {
     // and the remainder of the width - the circle quarter radius.
     canvas.drawRect(Rect.fromLTWH(0, 0, rectWidth, size.height), paint);
 
-    // Draw a circle that overlaps the entire height
-    // and enough of the right side portion of the width for its radius.
-    //
-    // The circle's center point is located here:
-    // x:  right bottom corner of the rectangle
-    // y:  bottom of the canvas
-    canvas.drawCircle(Offset(rectWidth, size.height), size.height, paint);
+    // Whether to draw the circle at half the regular size.
+    // This also adjusts the center y position
+    // to be half the height instead of the height.
+    if(drawHalfCircle){
+      final halfHeight = size.height / 2;
+      // Draw a half circle that overlaps the entire height
+      // and enough of the right side portion of the width for its radius.
+      //
+      // The circle's center point is located here:
+      // x:  right bottom corner of the rectangle
+      // y:  half of the canvas height.
+      canvas.drawCircle(Offset(rectWidth, halfHeight), halfHeight, paint);
+    }else{
+      // Draw a circle quarter that overlaps the entire height
+      // and enough of the right side portion of the width for its radius.
+      //
+      // The circle's center point is located here:
+      // x:  right bottom corner of the rectangle
+      // y:  bottom of the canvas
+      canvas.drawCircle(Offset(rectWidth, size.height), size.height, paint);
+    }
   }
 
   @override

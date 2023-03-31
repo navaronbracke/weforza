@@ -50,7 +50,11 @@ class _MemberListPageState extends State<MemberListPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
+              if(ReloadDataProvider.of(context).reloadMembers.value){
+                //TODO reload members
+              }
+            }),
           ),
         ],
       ),
@@ -70,7 +74,11 @@ class _MemberListPageState extends State<MemberListPage> {
                 idleColor: ApplicationTheme.accentColor,
                 icon: Icons.person_add,
                 onPressed: ()=> Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context)=> AddMemberPage()))
+                    .push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
+                      if(ReloadDataProvider.of(context).reloadMembers.value){
+                        //TODO reload members
+                      }
+                    })
             ),
           ],
         ),

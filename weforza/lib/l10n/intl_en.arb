@@ -30,6 +30,7 @@
 
   "RideDetailsLoadAttendeesError": "Could not load attendees",
   "RideDetailsNoAttendees": "This ride has no attendees",
+  "RideDetailsAttendeesListHeader": "Attendees",
   "RideDetailsExportOption": "Export",
   "RideDetailsDeleteOption": "Delete",
 

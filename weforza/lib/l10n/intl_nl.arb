@@ -30,6 +30,7 @@
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsAttendeesListHeader": "Aanwezigen",
   "RideDetailsEditOption": "Bewerken",
   "RideDetailsDeleteOption": "Verwijderen",
 

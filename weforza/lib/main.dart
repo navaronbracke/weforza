@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -18,6 +19,10 @@ void main() async {
   //Await the injection setup.
   //We initialize a production database, hence its async here.
   await InjectionContainer.initProductionInjector();
+
+  //TODO remove this migration (and the dao method!) when done on test devices
+  final RideDao dao = RideDao.withProvider(InjectionContainer.get<ApplicationDatabase>());
+  await dao.stripDataFromAllRides();
 
   runApp(WeForzaApp());
 }

@@ -8,7 +8,6 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 
 ///This is the [Bloc] for AddMemberPage.
 class AddMemberBloc extends Bloc implements IProfileImagePicker {
@@ -24,9 +23,9 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   Stream<AddMemberSubmitState> get submitStream => _submitStateController.stream;
 
   @override
-  Stream<ProfileImagePickingState> get stream => _imagePickingController.stream;
+  Stream<bool> get stream => _imagePickingController.stream;
 
-  StreamController<ProfileImagePickingState> _imagePickingController = BehaviorSubject();
+  StreamController<bool> _imagePickingController = BehaviorSubject();
 
   ///The actual inputs.
   String _firstName;
@@ -154,12 +153,12 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
 
   @override
   void pickProfileImage() async {
-    _imagePickingController.add(ProfileImagePickingState.LOADING);
+    _imagePickingController.add(true);
     await _repository.chooseProfileImageFromGallery().then((img){
       if(img != null){
         _selectedImage = img;
       }
-      _imagePickingController.add(ProfileImagePickingState.IDLE);
+      _imagePickingController.add(false);
     },onError: (error){
       _imagePickingController.addError(Exception("Could not pick a profile image"));
     });
@@ -168,9 +167,9 @@ class AddMemberBloc extends Bloc implements IProfileImagePicker {
   @override
   void clearSelectedImage() {
     if(_selectedImage != null){
-      _imagePickingController.add(ProfileImagePickingState.LOADING);
+      _imagePickingController.add(true);
       _selectedImage = null;
-      _imagePickingController.add(ProfileImagePickingState.IDLE);
+      _imagePickingController.add(false);
     }
   }
 

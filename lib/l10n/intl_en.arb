@@ -99,6 +99,8 @@
 	"NewRide": "New ride",
 	"NewRider": "New rider",
 	"NoDisallowedWords": "There are no disallowed words yet",
+	"NoRiders": "There are no riders yet",
+	"NoRides": "The ride calendar is empty",
 	"Ok": "Ok",
 	"PastDayNoRide": "Day in the past",
 	"PastDayWithRide": "Ride in the past",

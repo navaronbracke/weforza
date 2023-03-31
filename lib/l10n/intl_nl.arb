@@ -99,6 +99,8 @@
 	"NewRide": "Nieuwe rit",
 	"NewRider": "Nieuwe renner",
 	"NoDisallowedWords": "Er zijn nog geen verboden woorden",
+	"NoRiders": "Er zijn nog geen renners",
+	"NoRides": "De rittenkalender is leeg",
 	"Ok": "Ok",
 	"PastDayNoRide": "Dag in het verleden",
 	"PastDayWithRide": "Gepasseerde rit",

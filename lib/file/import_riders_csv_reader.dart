@@ -10,13 +10,21 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 /// This class represents an [ImportRidersFileReader]
 /// that handles the CSV format.
 class ImportRidersCsvReader implements ImportRidersFileReader<String> {
-  const ImportRidersCsvReader({required this.headerRegex});
+  const ImportRidersCsvReader._({required this.headerRegex});
+
+  /// The minimum expected amount of columns for a valid data source.
+  ///
+  /// A CSV file is considered a valid import data source
+  /// if and only if it has the following columns:
+  /// Column 1: First Name
+  /// Column 2: Last Name
+  /// Column 3: Alias (This cell can be empty)
+  /// Column 4: Active
+  /// Column 5: Last Updated On
+  static const requiredColumns = 5;
 
   /// The regular expression that validates the first line in the input file.
   final RegExp headerRegex;
-
-  /// The minimum amount of expected cells per chunk.
-  final int minimumCellCount = 5;
 
   @override
   Future<void> processChunk(
@@ -26,7 +34,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     final List<String> cells = chunk.split(',');
 
     // Skip this line if it does not have enough cells.
-    if (cells.length < minimumCellCount) {
+    if (cells.length < requiredColumns) {
       return;
     }
 
@@ -72,9 +80,9 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
 
     // Any remaining cells after the required cells are parsed as device names.
     // Any invalid device names are skipped.
-    if (cells.length > minimumCellCount) {
+    if (cells.length > requiredColumns) {
       devices.addAll(cells
-          .sublist(minimumCellCount)
+          .sublist(requiredColumns)
           .where(Device.deviceNameRegex.hasMatch));
     }
 

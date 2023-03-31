@@ -11,7 +11,7 @@ import 'package:weforza/model/rider/rider_form_delegate.dart';
 import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/model/rider/rider_validator.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
@@ -123,7 +123,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     );
 
     _delegate = RiderFormDelegate(
-      repository: ref.read(memberRepositoryProvider),
+      repository: ref.read(riderRepositoryProvider),
     );
 
     _firstNameController = TextEditingController(

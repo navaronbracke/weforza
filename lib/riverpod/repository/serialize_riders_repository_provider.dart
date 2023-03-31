@@ -6,6 +6,6 @@ final serializeRidersRepositoryProvider = Provider(
   (ref) => SerializeRidersRepository(
     ref.read(deviceDaoProvider),
     ref.read(importRidersDaoProvider),
-    ref.read(memberDaoProvider),
+    ref.read(riderDaoProvider),
   ),
 );

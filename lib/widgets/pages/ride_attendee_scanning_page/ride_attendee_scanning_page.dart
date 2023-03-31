@@ -5,8 +5,8 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/riverpod/bluetooth_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
+import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
@@ -39,7 +39,7 @@ class RideAttendeeScanningPageState
 
     delegate = RideAttendeeScanningDelegate(
       deviceRepository: ref.read(deviceRepositoryProvider),
-      memberRepository: ref.read(memberRepositoryProvider),
+      memberRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
       scanner: ref.read(bluetoothProvider),

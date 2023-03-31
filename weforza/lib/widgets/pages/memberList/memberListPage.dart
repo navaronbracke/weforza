@@ -105,8 +105,9 @@ class _MemberListPageState extends State<MemberListPage> {
         middle: Row(
           children: <Widget>[
             Expanded(
-                child: Center(
-                    child: _buildTitle(context),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: _buildTitle(context),
                 ),
             ),
             CupertinoIconButton.fromAppTheme(
@@ -115,18 +116,22 @@ class _MemberListPageState extends State<MemberListPage> {
                     MaterialPageRoute(builder: (context)=> AddMemberPage())
                 ).then((_)=> onReturnToMemberListPage(context))
             ),
-            SizedBox(width: 15),
-            CupertinoIconButton.fromAppTheme(
-              icon: Icons.file_download,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportMembersPage())
-              ).then((_) => onReturnToMemberListPage(context)),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child:  CupertinoIconButton.fromAppTheme(
+                icon: Icons.file_download,
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=> ImportMembersPage())
+                ).then((_) => onReturnToMemberListPage(context)),
+              ),
             ),
-            SizedBox(width: 15),
-            CupertinoIconButton.fromAppTheme(
-              icon: Icons.file_upload,
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ExportMembersPage())
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: CupertinoIconButton.fromAppTheme(
+                icon: Icons.file_upload,
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=> ExportMembersPage())
+                ),
               ),
             ),
           ],

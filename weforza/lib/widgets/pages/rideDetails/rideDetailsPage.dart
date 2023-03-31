@@ -107,11 +107,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Center(
-                  child: Text(
-                    bloc.ride.getFormattedDate(context),
-                    style: TextStyle(fontSize: 16),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  bloc.ride.getFormattedDate(context),
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
             Row(

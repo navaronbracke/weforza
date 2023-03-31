@@ -26,7 +26,7 @@ class DeviceTypeCarousel extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return DeviceIcon(
-                  size: constraints.biggest.shortestSide * .9,
+                  size: constraints.biggest.shortestSide,
                   type: deviceType,
                 );
               },
@@ -67,7 +67,13 @@ class DeviceTypeCarousel extends StatelessWidget {
           AnimatedBuilder(
             animation: controller,
             builder: (context, child) {
-              final page = controller.page?.round() ?? controller.initialPage;
+              int? page;
+
+              // When hot-reloading, the old page view might still be attached.
+              // Accessing `controller.page` will throw in that case.
+              if (controller.positions.length == 1) {
+                page = controller.page?.round() ?? controller.initialPage;
+              }
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,

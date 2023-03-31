@@ -145,6 +145,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
+                      initialImage: _bloc.initialImage,
                       fileHandler: _fileHandler,
                       onClearSelectedImage: _bloc.clearSelectedImage,
                       setSelectedImage: _bloc.setSelectedImage,
@@ -266,6 +267,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
+                    initialImage: _bloc.initialImage,
                     fileHandler: _fileHandler,
                     onClearSelectedImage: _bloc.clearSelectedImage,
                     setSelectedImage: _bloc.setSelectedImage,

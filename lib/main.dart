@@ -19,6 +19,9 @@ void main() async {
   // Setup the database and other dependencies.
   await InjectionContainer.initProductionInjector();
 
+  // TODO: remove this delay when upgrading to the next Flutter version
+  await Future.delayed(const Duration(milliseconds: 500));
+
   runApp(const WeForzaApp());
 }
 

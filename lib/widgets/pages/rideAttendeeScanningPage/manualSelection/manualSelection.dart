@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/genericError.dart';
@@ -10,7 +9,8 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeManualSelection extends StatelessWidget {
-  RideAttendeeManualSelection({
+  const RideAttendeeManualSelection({
+    Key? key,
     required this.activeMembersFuture,
     required this.isMemberScanned,
     required this.itemBuilder,
@@ -19,7 +19,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
     required this.onQueryChanged,
     required this.showScanned,
     required this.query,
-  });
+  }) : super(key: key);
 
   final Future<List<Member>> activeMembersFuture;
   final Widget Function(Member item, bool isScanned) itemBuilder;
@@ -30,23 +30,26 @@ class RideAttendeeManualSelection extends StatelessWidget {
   final Stream<String> query;
   final Stream<bool> showScanned;
 
-  List<Member> filterOnQueryString(List<Member> list, String query){
+  List<Member> filterOnQueryString(List<Member> list, String query) {
     query = query.trim().toLowerCase();
 
-    if(query.isEmpty){
+    if (query.isEmpty) {
       return list;
     }
 
-    return list.where((Member member){
-      return member.firstname.toLowerCase().contains(query) || member.lastname.toLowerCase().contains(query)
-      // If the alias is not empty, we can match it against the query string.
-          || (member.alias.isNotEmpty && member.alias.toLowerCase().contains(query));
+    return list.where((Member member) {
+      return member.firstname.toLowerCase().contains(query) ||
+          member.lastname.toLowerCase().contains(query)
+          // If the alias is not empty, we can match it against the query string.
+          ||
+          (member.alias.isNotEmpty &&
+              member.alias.toLowerCase().contains(query));
     }).toList();
   }
 
-  List<Member> filterOnShowScanned(List<Member> list, bool showScanned){
+  List<Member> filterOnShowScanned(List<Member> list, bool showScanned) {
     // Show everything, including the scanned members.
-    if(showScanned){
+    if (showScanned) {
       return list;
     }
 
@@ -58,14 +61,14 @@ class RideAttendeeManualSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<List<Member>>(
       future: activeMembersFuture,
-      builder: (context, futureSnapshot){
-        if(futureSnapshot.connectionState == ConnectionState.done){
-          if(futureSnapshot.hasError){
+      builder: (context, futureSnapshot) {
+        if (futureSnapshot.connectionState == ConnectionState.done) {
+          if (futureSnapshot.hasError) {
             return GenericError(text: S.of(context).GenericError);
           }
           final list = futureSnapshot.data;
 
-          if(list == null || list.isEmpty){
+          if (list == null || list.isEmpty) {
             return Center(child: ManualSelectionListEmpty());
           }
 
@@ -79,12 +82,11 @@ class RideAttendeeManualSelection extends StatelessWidget {
                   autovalidateMode: AutovalidateMode.disabled,
                   onChanged: onQueryChanged,
                   decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    labelText: S.of(context).RiderSearchFilterInputLabel,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                    floatingLabelBehavior: FloatingLabelBehavior.never
-                  ),
+                      suffixIcon: const Icon(Icons.search),
+                      labelText: S.of(context).RiderSearchFilterInputLabel,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                      floatingLabelBehavior: FloatingLabelBehavior.never),
                 ),
                 ios: () => Padding(
                   padding: const EdgeInsets.all(8),
@@ -101,39 +103,38 @@ class RideAttendeeManualSelection extends StatelessWidget {
           );
         }
 
-        return Center(child: PlatformAwareLoadingIndicator());
+        return const Center(child: PlatformAwareLoadingIndicator());
       },
     );
   }
 
   /// Build the [StreamBuilder] for the query string.
-  Widget _buildQueryStringStreamBuilder(List<Member> data){
+  Widget _buildQueryStringStreamBuilder(List<Member> data) {
     return StreamBuilder<String>(
-      stream: query,
-      builder: (_, snapshot){
-        final filteredData = filterOnQueryString(data, snapshot.data ?? "");
+        stream: query,
+        builder: (_, snapshot) {
+          final filteredData = filterOnQueryString(data, snapshot.data ?? '');
 
-        if(filteredData.isEmpty){
-          return RiderSearchFilterEmpty();
-        }
+          if (filteredData.isEmpty) {
+            return const RiderSearchFilterEmpty();
+          }
 
-        return ListView.builder(
-          itemBuilder: (context, index){
-            final item = filteredData[index];
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              final item = filteredData[index];
 
-            return itemBuilder(item, isMemberScanned(item.uuid));
-          },
-          itemCount: filteredData.length,
-        );
-      }
-    );
+              return itemBuilder(item, isMemberScanned(item.uuid));
+            },
+            itemCount: filteredData.length,
+          );
+        });
   }
 
   /// Build the [StreamBuilder] for the scanned filter.
-  Widget _buildScannedStreamBuilder(List<Member> data){
+  Widget _buildScannedStreamBuilder(List<Member> data) {
     return StreamBuilder<bool>(
       stream: showScanned,
-      builder: (_, snapshot){
+      builder: (_, snapshot) {
         final showAll = snapshot.data ?? true;
         final list = filterOnShowScanned(data, showAll);
 

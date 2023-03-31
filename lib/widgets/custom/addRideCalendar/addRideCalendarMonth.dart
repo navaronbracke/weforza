@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarItem.dart';
 
 class AddRideCalendarMonth extends StatelessWidget {
-  AddRideCalendarMonth({
+  const AddRideCalendarMonth({
     required this.pageDate,
     required this.daysInMonth,
     required ValueKey<DateTime> key,
@@ -12,7 +12,7 @@ class AddRideCalendarMonth extends StatelessWidget {
     required this.isBeforeToday,
     required this.rideScheduledDuringCurrentSession,
     required this.rideScheduledOn,
-  }): super(key: key);
+  }) : super(key: key);
 
   final DateTime pageDate;
   final int daysInMonth;
@@ -37,9 +37,9 @@ class AddRideCalendarMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    children: _buildCalendarRows(),
-  );
+        mainAxisSize: MainAxisSize.min,
+        children: _buildCalendarRows(),
+      );
 
   List<Widget> _buildCalendarRows() {
     //Calculate the start offset
@@ -49,7 +49,7 @@ class AddRideCalendarMonth extends StatelessWidget {
     List<Widget> items = [];
     //Add start offset widgets first
     for (int i = 0; i < offset; i++) {
-      items.add(SizedBox.fromSize(size: Size.square(40)));
+      items.add(SizedBox.fromSize(size: const Size.square(40)));
     }
 
     //Add days of month
@@ -73,7 +73,7 @@ class AddRideCalendarMonth extends StatelessWidget {
 
     // Add end-offset widgets at the end of the list.
     for (int i = 0; i < offset; i++) {
-      items.add(SizedBox.fromSize(size: Size.square(40)));
+      items.add(SizedBox.fromSize(size: const Size.square(40)));
     }
 
     // The aforementioned items, but grouped in rows.

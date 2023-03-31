@@ -1,22 +1,22 @@
-
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/saveMemberOrError.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AddMemberSubmit extends StatelessWidget {
-  AddMemberSubmit({
+  const AddMemberSubmit({
+    Key? key,
     required this.stream,
-    required this.onPressed
-  });
+    required this.onPressed,
+  }) : super(key: key);
 
   final Stream<SaveMemberOrError> stream;
   final VoidCallback onPressed;
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     // Create the submit button in advance, for reuse later.
     final Widget button = PlatformAwareWidget(
       android: () => ElevatedButton(
@@ -26,7 +26,7 @@ class AddMemberSubmit extends StatelessWidget {
       ios: () => CupertinoButton.filled(
         child: Text(
           S.of(context).AddMemberSubmit,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         onPressed: onPressed,
       ),
@@ -35,14 +35,14 @@ class AddMemberSubmit extends StatelessWidget {
     return StreamBuilder<SaveMemberOrError>(
       initialData: SaveMemberOrError.idle(),
       stream: stream,
-      builder: (context,snapshot){
-        if(snapshot.hasError){
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
           return Text(S.of(context).GenericError);
-        }else{
-          if(snapshot.data!.saving){
-            return PlatformAwareLoadingIndicator();
-          }else {
-            if(snapshot.data!.memberExists){
+        } else {
+          if (snapshot.data!.saving) {
+            return const PlatformAwareLoadingIndicator();
+          } else {
+            if (snapshot.data!.memberExists) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -59,9 +59,9 @@ class AddMemberSubmit extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 //Show an empty text widget, to prevent popping when an already existing member is entered.
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(""),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Text(''),
                 ),
                 button
               ],

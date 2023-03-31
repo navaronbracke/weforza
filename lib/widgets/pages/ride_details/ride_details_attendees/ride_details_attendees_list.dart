@@ -112,7 +112,7 @@ class _ScannedAttendeesBottomBar extends StatelessWidget {
   }
 
   Widget _buildIosLayout() {
-    return CupertinoBottomBar.tabBar(
+    return CupertinoBottomBar.constrained(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(

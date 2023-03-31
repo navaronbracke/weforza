@@ -8,23 +8,15 @@ class SettingsRepository {
 
   final ISettingsDao _dao;
 
-  Settings instance;
+  Future<Settings> loadApplicationSettings() async {
+    final settings = await _dao.readApplicationSettings();
 
-  bool get shouldLoadSettings => instance == null;
+    // Append the package info to the settings.
+    settings.packageInfo = await PackageInfo.fromPlatform();
 
-  Future<void> loadApplicationSettings() async {
-    if(shouldLoadSettings){
-      instance = await _dao.readApplicationSettings();
-      //Read the application package info as well
-      instance.packageInfo = await PackageInfo.fromPlatform();
-    }
+    return settings;
   }
 
-  Future<void> writeApplicationSettings(Settings settings) async {
-    final packageInfo = instance.packageInfo;
-    await _dao.writeApplicationSettings(settings);
-    instance = settings;
-    //Don't forget to reparent the package info
-    instance.packageInfo = packageInfo;
-  }
+  Future<void> writeApplicationSettings(Settings settings)
+    => _dao.writeApplicationSettings(settings);
 }

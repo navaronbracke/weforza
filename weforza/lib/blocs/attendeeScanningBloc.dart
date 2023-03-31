@@ -288,7 +288,7 @@ class AttendeeScanningBloc extends Bloc {
     _scanStepController.close();
   }
 
-  bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
+  bool isItemSelected(String uuid) => rideAttendees.contains(uuid);
 
   void onMemberSelected(String memberUuid){
     if(rideAttendees.contains(memberUuid)){

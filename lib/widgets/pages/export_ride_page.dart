@@ -209,7 +209,7 @@ class ExportRidePageState extends ConsumerState<ExportRidePage> {
     } else {
       _filenameController = TextEditingController(
         text: S.current.ExportRideFileNamePlaceholder(
-          widget.rideToExport!.dateToDDMMYYYY(),
+          widget.rideToExport!.dateAsDayMonthYear,
         ),
       );
     }

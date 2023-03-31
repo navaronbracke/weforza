@@ -15,9 +15,18 @@ class ScanPermissionDenied extends StatelessWidget {
         color: ApplicationTheme.listInformationalIconColor,
         size: MediaQuery.of(context).size.shortestSide * .1,
       ),
-      SizedBox(height: 5),
-      Text(S.of(context).RideAttendeeScanningPermissionDenied, softWrap: true),
-      SizedBox(height: 20),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 5, 0, 20),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(S.of(context).RideAttendeeScanningPermissionDenied, softWrap: true),
+              Text(S.of(context).RideAttendeeScanningPermissionDeniedDescription, softWrap: true),
+            ],
+          ),
+        ),
+      ),
       PlatformAwareWidget(
         android: () => _buildAndroidButtons(context),
         ios: () => _buildIosButtons(context),

@@ -7,7 +7,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/member.dart';
 
-/// This class will read the contents of CSV files.
+/// This class implements a line reader for CSV files.
 class CsvFileReader implements ImportMembersFileReader<String> {
   CsvFileReader({
     required this.headerRegex,
@@ -15,11 +15,11 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
   final String headerRegex;
 
-  //Process the given data and add it to the given collection, if it is valid.
-  //This function is a future, so we can process multiple lines at once.
   @override
   Future<void> processData(
-      String data, List<ExportableMember> collection) async {
+    String data,
+    List<ExportableMember> collection,
+  ) async {
     final List<String> values = data.split(',');
 
     // If the line doesn't have enough cells
@@ -70,35 +70,32 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     // there are more values.
     // These are the device names: Device1, Device2,... , DeviceN
     if (values.length > 5) {
-      //Filter the invalid device names.
-      devices.addAll(values
-          .sublist(5)
-          .where((deviceName) => Device.deviceNameRegex.hasMatch(deviceName)));
+      devices.addAll(values.sublist(5).where(Device.deviceNameRegex.hasMatch));
     }
 
-    collection.add(ExportableMember(
-      firstName: firstName,
-      lastName: lastName,
-      alias: alias,
-      active: isActive,
-      devices: devices,
-      lastUpdated: lastUpdated,
-    ));
+    collection.add(
+      ExportableMember(
+        firstName: firstName,
+        lastName: lastName,
+        alias: alias,
+        active: isActive,
+        devices: devices,
+        lastUpdated: lastUpdated,
+      ),
+    );
   }
 
-  /// Read the individual lines of the given [file].
-  /// Throws a [CsvHeaderMissingError] if the first line doesn't match [headerRegex].
-  /// Returns the lines that were read from the file.
-  /// Returns an empty list if the file is empty.
   @override
   Future<List<String>> readFile(File file) async {
-    final List<String> lines = await file
+    final lines = await file
         .openRead()
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .toList();
 
-    if (lines.isEmpty) return lines;
+    if (lines.isEmpty) {
+      return lines;
+    }
 
     // Check that the header is present.
     if (!RegExp('^$headerRegex\$').hasMatch(lines.first.toLowerCase())) {

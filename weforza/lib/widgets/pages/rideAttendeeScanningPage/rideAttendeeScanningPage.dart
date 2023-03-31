@@ -201,7 +201,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildManualSelectionListItem(Member item){
     return ManualSelectionListItem(
-      isActiveMember: item.isActiveMember,
       profileImageFuture: widget.fileHandler.loadProfileImageFromDisk(item.profileImageFilePath),
       firstName: item.firstname,
       lastName: item.lastname,

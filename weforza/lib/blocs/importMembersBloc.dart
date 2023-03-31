@@ -32,18 +32,25 @@ class ImportMembersBloc extends Bloc {
   Stream<ImportMembersState> get importStream => _importStreamController.stream;
 
   //Pick a file through a file picker and save the members that were read from the returned file.
-  void pickFileAndImportMembers(String headerRegex, ValueNotifier<bool> reloadMembers) async {
+  void pickFileAndImportMembers(
+      String headerRegex,
+      ValueNotifier<bool> reloadMembers,
+      ValueNotifier<bool> reloadDevices) async
+  {
     _importStreamController.add(ImportMembersState.PICKING_FILE);
 
     await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
       _importStreamController.add(ImportMembersState.IMPORTING);
       final Iterable<ExportableMember> members = await _readMemberDataFromFile(file, headerRegex);
       //Quick exit when there are no members to insert
-      //(you can have a dataset full of members without devices however)
-      if(members.isEmpty) return;
+      if(members.isEmpty) {
+        _importStreamController.add(ImportMembersState.DONE);
+        return;
+      }
 
       await repository.saveMembersWithDevices(members, () => _uuidGenerator.v4());
       reloadMembers.value = true;
+      reloadDevices.value = true;
       _importStreamController.add(ImportMembersState.DONE);
     }).catchError((e){
       _importStreamController.addError(e);

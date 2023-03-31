@@ -135,7 +135,7 @@ class EditMemberBloc extends Bloc {
       ///Wait for the File to be resolved.
       ///If it failed do a fallback to null.
       final File? profileImage = await profileImageFuture.catchError((error){
-        return Future<File>.value(null);
+        return Future<File?>.value(null);
       });
 
       final Member newMember = Member(
@@ -144,7 +144,8 @@ class EditMemberBloc extends Bloc {
         lastname: lastName,
         alias: alias,
         profileImageFilePath: profileImage?.path,
-        isActiveMember: isActiveMember
+        isActiveMember: isActiveMember,
+        lastUpdated: DateTime.now().toUtc(),
       );
 
       await repository.updateMember(newMember);

@@ -29,7 +29,7 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: Icon(
-                      Icons.device_unknown,
+                      Icons.people,
                       color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
                   ),
                 ),
@@ -37,9 +37,12 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
               ],
             ),
           ),
-          Text(
-            S.of(context).RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(amountOfPossibleOwners),
-            style: ApplicationTheme.rideAttendeeScanResultMultipleOwnersLabelStyle,
+          Padding(
+            padding: const EdgeInsets.only(left: 5),
+            child: Text(
+              S.of(context).RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(amountOfPossibleOwners),
+              style: ApplicationTheme.rideAttendeeScanResultMultipleOwnersLabelStyle,
+            ),
           ),
         ],
       ),

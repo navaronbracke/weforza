@@ -58,6 +58,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'be.weforza.app'
 }
 
 flutter {

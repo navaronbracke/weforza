@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/model/device/device_type.dart';
 
@@ -15,14 +16,12 @@ class DeviceIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Icon(type.icon, color: theme.primaryColor, size: size);
+        return Icon(type.icon, color: Theme.of(context).primaryColor, size: size);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Icon(

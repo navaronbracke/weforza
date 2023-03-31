@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device/device_type.dart';
@@ -78,8 +79,7 @@ class DeviceTypeCarousel extends StatelessWidget {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (int i = 0; i < DeviceType.values.length; i++)
-                    _DeviceTypeCarouselDot(selected: i == page),
+                  for (int i = 0; i < DeviceType.values.length; i++) _DeviceTypeCarouselDot(selected: i == page),
                 ],
               );
             },
@@ -99,23 +99,18 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color;
 
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        color = selected
-            ? theme.primaryColor
-            : theme.disabledColor.withOpacity(0.2);
+        final theme = Theme.of(context);
+        color = selected ? theme.primaryColor : theme.disabledColor.withOpacity(0.2);
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final cupertinoTheme = CupertinoTheme.of(context);
-        color = selected
-            ? cupertinoTheme.primaryColor
-            : CupertinoColors.systemGrey4;
+        color = selected ? cupertinoTheme.primaryColor : CupertinoColors.systemGrey4;
         break;
     }
 

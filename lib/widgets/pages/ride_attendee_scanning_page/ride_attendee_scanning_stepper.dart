@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
@@ -53,8 +54,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
           stream: stream,
           builder: (context, snapshot) {
             // Every step before the manual selection should highlight the `Scan` label.
-            final isScanStep =
-                snapshot.data != RideAttendeeScanningState.manualSelection;
+            final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
 
             return Row(
               mainAxisSize: MainAxisSize.min,
@@ -94,7 +94,7 @@ class _RideAttendeeScanningStepperLabel extends StatelessWidget {
     Color selectedColor;
     Color unselectedColor;
 
-    switch (Theme.of(context).platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// This class represents a widget that adapts its layout
@@ -20,9 +21,7 @@ class PlatformAwareWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final targetPlatform = Theme.of(context).platform;
-
-    switch (targetPlatform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android(context);
       case TargetPlatform.iOS:
@@ -31,9 +30,7 @@ class PlatformAwareWidget extends StatelessWidget {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
-        throw FlutterError(
-          'The current target platform: $targetPlatform is unsupported.',
-        );
+        throw UnsupportedError('The platform $defaultTargetPlatform is not supported.');
     }
   }
 }

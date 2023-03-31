@@ -43,9 +43,8 @@ class ExportDataPage extends StatelessWidget {
     final translator = S.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
@@ -210,20 +209,18 @@ class ExportDataPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(title: Text(title)),
         body: _buildBody(
-          builder: (context, {bool isExporting = false}) => Center(
-            child: _buildAndroidForm(
-              context,
-              child: isExporting
-                  ? const PlatformAwareLoadingIndicator()
-                  : ElevatedButton(
-                      onPressed: onPressed,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.colorScheme.primary,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: Text(exportLabel),
+          builder: (context, {bool isExporting = false}) => _buildAndroidForm(
+            context,
+            child: isExporting
+                ? const PlatformAwareLoadingIndicator()
+                : ElevatedButton(
+                    onPressed: onPressed,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppTheme.colorScheme.primary,
+                      foregroundColor: Colors.white,
                     ),
-            ),
+                    child: Text(exportLabel),
+                  ),
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,

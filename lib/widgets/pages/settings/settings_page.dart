@@ -174,6 +174,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       delegate: excludedTermsDelegate,
       index: index,
       excludedTerm: term,
+      scrollController: scrollController,
     );
   }
 

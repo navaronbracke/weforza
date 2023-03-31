@@ -9,7 +9,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/widgets/common/attendeeListCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/exportRide/exportRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
@@ -53,16 +52,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             bloc.ride.getFormattedDate(context),
             style: TextStyle(fontSize: 16),
         ),
-        bottom: PreferredSize(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: _buildAttendeesListAttendingCount(
-              context,
-              bloc.attendeesFuture?.then((list)=> list.length),
-            ),
-          ),
-          preferredSize: Size.fromHeight(10.0),
-        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.bluetooth_searching),
@@ -94,7 +83,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           ),
         ],
       ),
-      body: RideDetailsAttendeesList(future: bloc.attendeesFuture),
+      body: RideDetailsAttendeesList(
+        future: bloc.attendeesFuture,
+        scannedAttendees: bloc.ride.scannedAttendees,
+      ),
     );
   }
 
@@ -123,7 +115,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: CupertinoIconButton.fromAppTheme(
-                      icon: Icons.more_vert,
+                      icon: CupertinoIcons.ellipsis_vertical,
                       onPressed: () async {
                         final RideDetailsPageOptions? option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
                           return CupertinoActionSheet(
@@ -158,50 +150,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: _buildAttendeesListAttendingCount(
-                  context,
-                  bloc.attendeesFuture?.then((list)=> list.length),
-                ),
-              ),
-            ),
-            Expanded(
-              child: RideDetailsAttendeesList(future: bloc.attendeesFuture),
-            ),
-          ],
+        child: RideDetailsAttendeesList(
+          future: bloc.attendeesFuture,
+          scannedAttendees: bloc.ride.scannedAttendees,
         ),
       ),
-    );
-  }
-
-  Widget _buildAttendeesListAttendingCount(BuildContext context, Future<int>? future){
-    return FutureBuilder<int>(
-      future: future,
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError){
-            // When there is an error, the generic error widget is shown.
-            return SizedBox.shrink();
-          }else{
-            final count = snapshot.data;
-
-            // There are no attendees.
-            // We show an empty list widget instead.
-            if(count == null || count == 0){
-              return SizedBox.shrink();
-            }
-
-            return AttendeeListCounter(count: count);
-          }
-        }else{
-          // When the list is still loading, the loading indicator is shown.
-          return SizedBox.shrink();
-        }
-      },
     );
   }
 
@@ -213,17 +166,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         ))
     ).then((_){
       final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
-      //When its not null, a new future has been submitted.
-      if(attendeeProvider.value != null){
-        final void Function() callback = (){
-          //Also set reload for the rides, the counters need to refresh.
+
+      final void Function() callback = (){
+        // The attendee counters need an update too.
+        if(attendeeProvider.value != null){
           ReloadDataProvider.of(context).reloadRides.value = true;
           bloc.attendeesFuture = attendeeProvider.value!;
           attendeeProvider.value = null;
-        };
+        }
+      };
 
-        setState(callback);
-      }
+      // Update the UI with the new bloc.ride value.
+      // Also trigger an optional refresh of the attendees.
+      setState(callback);
     });
   }
 

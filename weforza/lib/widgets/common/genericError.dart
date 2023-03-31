@@ -1,15 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-///This widget represents a 'something went wrong'-like generic error widget.
+/// This widget represents a 'something went wrong'-like generic error widget.
 class GenericError extends StatelessWidget {
   GenericError({
     required this.text,
-    this.icon = Icons.warning,
+    this.iconBuilder,
   }): assert(text.isNotEmpty);
 
   final String text;
-  final IconData icon;
+  final Widget Function(BuildContext context)? iconBuilder;
+
+  /// Build a Widget that serves as the icon.
+  /// Returns the result of [iconBuilder]
+  /// or a default warning icon.
+  Widget _buildIcon(BuildContext context){
+    final _builder = iconBuilder;
+
+    if(_builder != null) return _builder(context);
+
+    return PlatformAwareWidget(
+      android: () => Icon(
+        Icons.warning,
+        color: ApplicationTheme.listInformationalIconColor,
+        size: MediaQuery.of(context).size.shortestSide * .1,
+      ),
+      ios: () => Icon(
+        CupertinoIcons.exclamationmark_triangle_fill,
+        color: ApplicationTheme.listInformationalIconColor,
+        size: MediaQuery.of(context).size.shortestSide * .1,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context){
@@ -17,11 +41,7 @@ class GenericError extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            icon,
-            color: ApplicationTheme.listInformationalIconColor,
-            size: MediaQuery.of(context).size.shortestSide * .1,
-          ),
+          _buildIcon(context),
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Text(text),

@@ -20,9 +20,8 @@ abstract class IRideDao {
   ///Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
   Future<List<Ride>> getRides();
 
-  ///Update the attendees for the ride with the given date.
-  ///The old attendees of the ride will be removed and the new ones will be created.
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees);
+  /// Update the scanned attendees counter and attendees list for the given ride.
+  Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
 
   ///Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
@@ -91,18 +90,6 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees) async {
-    final date = rideDate.toIso8601String();
-    //Delete all the old ones and insert the new ones.
-    final finder = Finder(filter: Filter.equals("date", date));
-    await _database.transaction((txn) async {
-      await _rideAttendeeStore.delete(txn, finder: finder);
-      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}"))
-          .put(txn, attendees.map((a)=> a.toMap()).toList());
-    });
-  }
-
-  @override
   Future<List<DateTime>> getRideDates() async {
     final rides = await _rideStore.findKeys(_database);
     return rides.map((ride) => DateTime.parse(ride)).toList();
@@ -129,5 +116,28 @@ class RideDao implements IRideDao {
         filter: Filter.equals("date", rideDate.toIso8601String()));
 
     return attendees;
+  }
+
+  @override
+  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) async {
+    // The key for the ride record is the ride date as an ISO 8601 date string.
+    final rideRecordKey = ride.date.toIso8601String();
+    // Find the attendees that have the ride record key as date field.
+    final rideAttendeeFinder = Finder(filter: Filter.equals("date", rideRecordKey));
+
+    await _database.transaction((txn) async {
+      // Update the ride scanned attendees counter in the record.
+      await _rideStore.record(rideRecordKey).update(txn, ride.toMap());
+
+      // To update the attendees for the given ride we do the following:
+      // - Clear all the old ones
+      // - Insert the given attendees (both old and new)
+      await _rideAttendeeStore.delete(txn, finder: rideAttendeeFinder);
+      // The attendees use the ride record key concatenated with their own UUID
+      // as own database record key.
+      await _rideAttendeeStore.records(
+          attendees.map((a)=> "$rideRecordKey${a.attendeeId}")
+      ).put(txn, attendees.map((a)=> a.toMap()).toList());
+    });
   }
 }

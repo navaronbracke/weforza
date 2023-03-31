@@ -21,11 +21,11 @@ abstract class ApplicationTheme {
   static final Color rideCalendarSelectedDayFontColor = Colors.white;
   
   //Ride Calendar Item Styling for an item that is in the past and doesn't have a ride.
-  static final Color rideCalendarPastDayWithoutRideBackgroundColor = Colors.blueGrey.shade100;
+  static final Color rideCalendarPastDayWithoutRideBackgroundColor = Colors.grey.shade400;
   static final Color rideCalendarPastDayWithoutRideFontColor = Colors.white;
 
   //Ride Calendar Item Styling for an item that is in the past and does have a ride.
-  static final Color rideCalendarPastDayWithRideBackgroundColor = Colors.blueGrey.shade600;
+  static final Color rideCalendarPastDayWithRideBackgroundColor = Colors.grey.shade700;
   static final Color rideCalendarPastDayWithRideFontColor = Colors.white;
 
   //Ride Calendar Header Font Color
@@ -68,14 +68,14 @@ abstract class ApplicationTheme {
 
   static final TextStyle androidRideAttendeeListCounterTextStyle = TextStyle(fontSize: 14.0, color: Colors.white);
 
-  static final Color deviceIconColor = Colors.blueGrey;
-  static final Color deviceTypePickerDotColor = Colors.blueGrey.shade100;
-  static final Color deviceTypePickerCurrentDotColor = Colors.blueGrey;
+  static final Color deviceIconColor = Colors.blue;
+  static final Color deviceTypePickerDotColor = Colors.blue.shade100;
+  static final Color deviceTypePickerCurrentDotColor = Colors.blue;
   ///The member devices list header + button color for android.
-  static final Color memberDevicesListHeaderAddDeviceButtonColor = Colors.blueGrey;
+  static final Color memberDevicesListHeaderAddDeviceButtonColor = Colors.blue;
   ///The member devices list header + button colors for IOS.
-  static final Color memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blueGrey;
-  static final Color memberDevicesListHeaderAddDeviceButtonPressedColor = Colors.blueGrey.shade100;
+  static final Color memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blue;
+  static final Color memberDevicesListHeaderAddDeviceButtonPressedColor = Colors.blue.shade100;
   static final TextStyle memberDevicesListHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
 
   ///The member device item edit button color for android.
@@ -93,16 +93,22 @@ abstract class ApplicationTheme {
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
-  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
   static final TextStyle iosSettingsResetRideCalendarTextStyle = TextStyle(color: Colors.white);
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
-  static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
+  static final Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
+  static final Color rideAttendeeScanResultMultipleOwnerColor = Colors.orange;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
   static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
-  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
+  static final TextStyle rideAttendeeScanResultMultipleOwnersLabelStyle = TextStyle(
+      fontStyle: FontStyle.italic,
+      fontSize: 12,
+      color: rideAttendeeScanResultMultipleOwnerColor,
+  );
+
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
   static final TextStyle rideAttendeeMultipleOwnersListTooltipStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
 
@@ -118,7 +124,7 @@ abstract class ApplicationTheme {
 
   static final TextStyle appVersionTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
-  static final Color rideListItemEvenMonthColor = Colors.blue.shade400;
+  static final Color rideListItemEvenMonthColor = Colors.blue;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

@@ -11,10 +11,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// for the ride attendee scanning page.
 class ScanResultsList extends StatelessWidget {
   const ScanResultsList({
-    super.key,
     required this.delegate,
     required this.progressBar,
     required this.scanResultsListKey,
+    super.key,
   });
 
   /// The delegate that manages the device scan.

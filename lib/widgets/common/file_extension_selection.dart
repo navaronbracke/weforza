@@ -7,10 +7,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a file extension selection.
 class FileExtensionSelection extends StatelessWidget {
   const FileExtensionSelection({
-    super.key,
     required this.initialValue,
     required this.onExtensionSelected,
     required this.stream,
+    super.key,
   });
 
   /// The initially selected value.

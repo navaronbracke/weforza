@@ -3,24 +3,24 @@ import 'package:flutter/material.dart';
 /// This widget displays the first name, alias and last name of a member.
 class MemberNameAndAlias extends StatelessWidget {
   const MemberNameAndAlias.singleLine({
-    super.key,
     required this.alias,
     required this.firstName,
     required this.lastName,
-    this.overflow = TextOverflow.ellipsis,
     required TextStyle style,
+    super.key,
+    this.overflow = TextOverflow.ellipsis,
   })  : _isTwoLine = false,
         firstLineStyle = style,
         secondLineStyle = null;
 
   const MemberNameAndAlias.twoLines({
-    super.key,
     required this.alias,
     required this.firstLineStyle,
     required this.firstName,
     required this.lastName,
-    this.overflow = TextOverflow.ellipsis,
     required this.secondLineStyle,
+    super.key,
+    this.overflow = TextOverflow.ellipsis,
   }) : _isTwoLine = true;
 
   /// The alias to display.

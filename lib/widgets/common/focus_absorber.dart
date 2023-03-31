@@ -5,7 +5,10 @@ import 'package:flutter/widgets.dart';
 /// It removes focus from the currently focused widget that is contained within
 /// [child]'s subtree when it intercepts a tap event.
 class FocusAbsorber extends StatelessWidget {
-  const FocusAbsorber({super.key, required this.child});
+  const FocusAbsorber({
+    required this.child,
+    super.key,
+  });
 
   final Widget child;
 

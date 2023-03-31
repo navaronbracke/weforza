@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 class PlatformAwareWidget extends StatelessWidget {
   /// The default constructor.
   const PlatformAwareWidget({
-    super.key,
     required this.android,
     required this.ios,
+    super.key,
   });
 
   /// The builder that is invoked for [TargetPlatform.android].

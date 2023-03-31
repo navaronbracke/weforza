@@ -4,11 +4,11 @@ import 'package:rxdart/rxdart.dart';
 /// This widget represents a [CupertinoTextField] that has a validation message.
 class CupertinoFormField extends StatelessWidget {
   const CupertinoFormField({
-    super.key,
-    this.autocorrect = false,
     required this.controller,
     required this.errorController,
     required this.focusNode,
+    super.key,
+    this.autocorrect = false,
     this.keyboardType,
     this.onChanged,
     this.onSubmitted,

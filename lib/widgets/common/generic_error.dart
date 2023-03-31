@@ -8,10 +8,10 @@ import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 /// This widget centers itself within its parent.
 class GenericError extends StatelessWidget {
   const GenericError({
+    required this.text,
     super.key,
     this.androidIcon,
     this.iosIcon,
-    required this.text,
   });
 
   final IconData? androidIcon;

@@ -6,11 +6,11 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_lis
 /// This widget should be placed inside a [CustomScrollView].
 class ExcludedTermsList extends StatelessWidget {
   const ExcludedTermsList({
-    super.key,
     required this.addTermInputField,
     required this.builder,
     required this.initialData,
     required this.stream,
+    super.key,
   });
 
   /// The input field that handles adding new terms.

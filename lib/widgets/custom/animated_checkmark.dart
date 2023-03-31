@@ -5,10 +5,10 @@ import 'package:weforza/widgets/custom/animated_path_painter.dart';
 /// This widget represents a checkmark that animates its path being painted.
 class AnimatedCheckmark extends StatefulWidget {
   const AnimatedCheckmark({
+    required this.size,
     super.key,
     this.color,
     this.duration = const Duration(milliseconds: 500),
-    required this.size,
     this.strokeCap = StrokeCap.round,
     this.strokeJoin = StrokeJoin.round,
     this.strokeWidth = 4.0,

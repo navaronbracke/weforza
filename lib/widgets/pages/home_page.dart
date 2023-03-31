@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _buildPageView(context),
       bottomNavigationBar: Theme(
         data: ThemeData(

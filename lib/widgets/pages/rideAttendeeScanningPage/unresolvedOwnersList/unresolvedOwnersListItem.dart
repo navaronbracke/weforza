@@ -3,13 +3,14 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class UnresolvedOwnersListItem extends StatefulWidget {
-  UnresolvedOwnersListItem({
+  const UnresolvedOwnersListItem({
+    Key? key,
     required this.isSelected,
     required this.onTap,
     required this.firstName,
     required this.lastName,
-    required this.alias
-  });
+    required this.alias,
+  }) : super(key: key);
 
   final bool Function() isSelected;
   final VoidCallback onTap;
@@ -18,11 +19,11 @@ class UnresolvedOwnersListItem extends StatefulWidget {
   final String alias;
 
   @override
-  _UnresolvedOwnerListItemState createState() => _UnresolvedOwnerListItemState();
+  _UnresolvedOwnerListItemState createState() =>
+      _UnresolvedOwnerListItemState();
 }
 
 class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
-
   late Color itemDecorationBackgroundColor;
   late TextStyle firstNameStyle;
   late TextStyle lastNameStyle;
@@ -36,16 +37,14 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        if(mounted){
+      onTap: () {
+        if (mounted) {
           widget.onTap();
           setState(() => _setColors());
         }
       },
       child: Container(
-        decoration: BoxDecoration(
-            color: itemDecorationBackgroundColor
-        ),
+        decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           child: MemberNameAndAlias(
@@ -60,16 +59,19 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
     );
   }
 
-  void _setColors(){
-    if(widget.isSelected()){
-      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(color: Colors.white);
-      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(color: Colors.white);
-    }else{
-      itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
+  void _setColors() {
+    if (widget.isSelected()) {
+      itemDecorationBackgroundColor =
+          ApplicationTheme.rideAttendeeSelectedBackgroundColor;
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle
+          .copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle
+          .copyWith(color: Colors.white);
+    } else {
+      itemDecorationBackgroundColor =
+          ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
       firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
       lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
     }
   }
 }
-

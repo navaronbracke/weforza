@@ -8,12 +8,14 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 /// This widget asynchronously loads a given profile image.
 /// When the image could not be loaded, the given initials are displayed.
 class AsyncProfileImage extends StatelessWidget {
-  AsyncProfileImage({
+  const AsyncProfileImage({
+    Key? key,
     this.personInitials,
     required this.icon,
     required this.future,
-    this.size = 40
-  }): assert(size > 0);
+    this.size = 40,
+  })  : assert(size > 0),
+        super(key: key);
 
   final Future<File?> future;
   final String? personInitials;
@@ -24,16 +26,17 @@ class AsyncProfileImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<File?>(
       future: future,
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.done){
-          if(snapshot.hasError || snapshot.data == null){
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError || snapshot.data == null) {
             return ProfileImage(
               icon: icon,
               image: null,
               size: size,
               personInitials: personInitials,
               iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
-              backgroundColor: ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
+              backgroundColor:
+                  ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
             );
           }
 
@@ -43,15 +46,14 @@ class AsyncProfileImage extends StatelessWidget {
             size: size,
             personInitials: personInitials,
             iconColor: ApplicationTheme.profileImagePlaceholderIconColor,
-            backgroundColor: ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
+            backgroundColor:
+                ApplicationTheme.profileImagePlaceholderIconBackgroundColor,
           );
-        }else{
+        } else {
           return SizedBox(
             width: size,
             height: size,
-            child: Center(
-                child: PlatformAwareLoadingIndicator()
-            ),
+            child: const Center(child: PlatformAwareLoadingIndicator()),
           );
         }
       },

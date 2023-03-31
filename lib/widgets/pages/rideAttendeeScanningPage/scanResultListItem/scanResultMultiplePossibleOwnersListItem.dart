@@ -6,10 +6,11 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
   ScanResultMultiplePossibleOwnersListItem({
+    Key? key,
     required this.deviceName,
-    required this.amountOfPossibleOwners
-  }): assert(deviceName.isNotEmpty && amountOfPossibleOwners > 1);
-
+    required this.amountOfPossibleOwners,
+  })  : assert(deviceName.isNotEmpty && amountOfPossibleOwners > 1),
+        super(key: key);
 
   final String deviceName;
   final int amountOfPossibleOwners;
@@ -28,25 +29,32 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: PlatformAwareWidget(
-                    android: () => Icon(
+                    android: () => const Icon(
                       Icons.people,
-                      color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor,
+                      color: ApplicationTheme
+                          .rideAttendeeScanResultMultipleOwnerColor,
                     ),
-                    ios: () => Icon(
+                    ios: () => const Icon(
                       CupertinoIcons.person_2_fill,
-                      color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor, 
+                      color: ApplicationTheme
+                          .rideAttendeeScanResultMultipleOwnerColor,
                     ),
                   ),
                 ),
-                SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
+                SelectableText(deviceName,
+                    scrollPhysics: const ClampingScrollPhysics()),
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Text(
-              S.of(context).RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(amountOfPossibleOwners),
-              style: ApplicationTheme.rideAttendeeScanResultMultipleOwnersLabelStyle,
+              S
+                  .of(context)
+                  .RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(
+                      amountOfPossibleOwners),
+              style: ApplicationTheme
+                  .rideAttendeeScanResultMultipleOwnersLabelStyle,
             ),
           ),
         ],

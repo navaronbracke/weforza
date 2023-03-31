@@ -4,9 +4,10 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarMonth.dart';
 
 class AddRideCalendarBody extends StatelessWidget {
-  AddRideCalendarBody({
+  const AddRideCalendarBody({
+    Key? key,
     required this.bloc,
-  });
+  }) : super(key: key);
 
   final AddRideBloc bloc;
 
@@ -81,7 +82,7 @@ class AddRideCalendarBody extends StatelessWidget {
             height: 320,
             child: PageView.builder(
               controller: bloc.pageController,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: bloc.calendarItemCount,
               itemBuilder: (context, index) => AddRideCalendarMonth(
                 pageDate: bloc.pageDate,
@@ -90,7 +91,8 @@ class AddRideCalendarBody extends StatelessWidget {
                 isBeforeToday: bloc.isBeforeToday,
                 onTap: bloc.onDayPressed,
                 rideScheduledOn: bloc.rideScheduledOn,
-                rideScheduledDuringCurrentSession: bloc.rideScheduledDuringCurrentSession,
+                rideScheduledDuringCurrentSession:
+                    bloc.rideScheduledDuringCurrentSession,
                 register: bloc.registerResetFunction,
                 unregister: bloc.unregisterResetFunction,
               ),

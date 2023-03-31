@@ -5,11 +5,12 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AddDeviceSubmit extends StatelessWidget {
-  AddDeviceSubmit({
+  const AddDeviceSubmit({
+    Key? key,
     required this.isSubmittingStream,
     required this.submitErrorStream,
     required this.onSubmit,
-  });
+  }) : super(key: key);
 
   final Stream<String> submitErrorStream;
   final Stream<bool> isSubmittingStream;
@@ -23,36 +24,36 @@ class AddDeviceSubmit extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Center(
             child: StreamBuilder<String>(
-              initialData: "",
+              initialData: '',
               stream: submitErrorStream,
-              builder: (context, snapshot){
-                return snapshot.hasError ?
-                Text(S.of(context).GenericError):
-                Text(snapshot.data!);
+              builder: (context, snapshot) {
+                return snapshot.hasError
+                    ? Text(S.of(context).GenericError)
+                    : Text(snapshot.data!);
               },
             ),
           ),
         ),
         Center(
-          child: StreamBuilder<bool>(
-            initialData: false,
-            stream: isSubmittingStream,
-            builder: (context,snapshot) => snapshot.data! ? PlatformAwareLoadingIndicator() :
-            PlatformAwareWidget(
-                android: () => ElevatedButton(
-                  child: Text(S.of(context).AddDeviceSubmit),
-                  onPressed: onSubmit,
-                ),
-                ios: () => CupertinoButton.filled(
-                  child: Text(
-                    S.of(context).AddDeviceSubmit,
-                    style: TextStyle(color: Colors.white),
+            child: StreamBuilder<bool>(
+          initialData: false,
+          stream: isSubmittingStream,
+          builder: (context, snapshot) => snapshot.data!
+              ? const PlatformAwareLoadingIndicator()
+              : PlatformAwareWidget(
+                  android: () => ElevatedButton(
+                    child: Text(S.of(context).AddDeviceSubmit),
+                    onPressed: onSubmit,
                   ),
-                  onPressed: onSubmit,
+                  ios: () => CupertinoButton.filled(
+                    child: Text(
+                      S.of(context).AddDeviceSubmit,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    onPressed: onSubmit,
+                  ),
                 ),
-            ),
-          )
-        ),
+        )),
       ],
     );
   }

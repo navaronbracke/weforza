@@ -17,6 +17,7 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
 ///TODO use page nr with pagesize in _loadMembers(pageSize,pageNr)
+///TODO scanning stream cancel on error = false doesn't work
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
     @required this.rideDate,
@@ -150,13 +151,13 @@ class AttendeeScanningBloc extends Bloc {
         //Start the lookup for the member, giving the device name as placeholder.
         onDeviceFound(deviceName, _findOwnerOfDevice(deviceName));
       }, onError: (error){
-        //ignore scan errors
+        //skip the error
       }, onDone: (){
         //Set is scanning to false
         //so the value listenable builder for the button updates.
         //At this point the user can also switch pages.
         isScanning.value = false;
-      });
+      }, cancelOnError: false);
     }
   }
 

@@ -703,20 +703,20 @@ class S {
     );
   }
 
-  /// `Cannot start scanning, Bluetooth is disabled.`
+  /// `Scan aborted, Bluetooth is disabled`
   String get RideAttendeeScanningBluetoothDisabled {
     return Intl.message(
-      'Cannot start scanning, Bluetooth is disabled.',
+      'Scan aborted, Bluetooth is disabled',
       name: 'RideAttendeeScanningBluetoothDisabled',
       desc: '',
       args: [],
     );
   }
 
-  /// `Go to settings`
+  /// `Go to Settings`
   String get RideAttendeeScanningGoToBluetoothSettings {
     return Intl.message(
-      'Go to settings',
+      'Go to Settings',
       name: 'RideAttendeeScanningGoToBluetoothSettings',
       desc: '',
       args: [],

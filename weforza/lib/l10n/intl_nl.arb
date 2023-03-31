@@ -81,7 +81,7 @@
   "RideAttendeeScanningNoMembers": "Kan niet beginnen scannen, er zijn geen leden.",
   "RideAttendeeScanningGoBack": "Terug naar detailpagina",
   "RideAttendeeScanningGenericError": "Er liep iets fout.",
-  "RideAttendeeScanningBluetoothDisabled": "Kan niet scannen, Bluetooth staat uit.",
+  "RideAttendeeScanningBluetoothDisabled": "Scan geannuleerd, Bluetooth staat uit",
   "RideAttendeeScanningGoToBluetoothSettings": "Naar Instellingen",
   "RideAttendeeScanningRetryScan": "Opnieuw Scannen",
   "RideAttendeeScanningSkipScan": "Scan Overslaan",

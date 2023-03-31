@@ -113,7 +113,7 @@ class _RideListPageState extends State<RideListPage> {
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return GenericError(text: S.of(context).RideListLoadingRidesError);
+            return GenericError(text: S.of(context).GenericError);
           }else{
             if(snapshot.data == null || snapshot.data.isEmpty){
               return RideListEmpty();

@@ -34,7 +34,7 @@ class AddRideSubmit extends StatelessWidget {
             );
           }
 
-          return Text(S.of(context).AddRideError);
+          return Text(S.of(context).GenericError);
         }else{
           if(snapshot.data.saving){
             return PlatformAwareLoadingIndicator();

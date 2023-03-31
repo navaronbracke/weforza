@@ -40,7 +40,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return GenericError(
-                text: S.of(context).MemberDetailsLoadDevicesError
+                text: S.of(context).GenericError
             );
           }else{
             return snapshot.data.isEmpty ? MemberDevicesListEmpty(

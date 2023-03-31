@@ -134,7 +134,7 @@ class _AddRidePageState extends State<AddRidePage> {
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
               return Center(
-                child: Text(S.of(context).AddRideLoadingFailed),
+                child: Text(S.of(context).GenericError),
               );
             }
             else{

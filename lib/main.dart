@@ -1,40 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/theme/appTheme.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/pages/homePage.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
-// Set up a Production injector and run the app.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //Await the injection setup.
-  //We initialize a production database, hence its async here.
+  // Setup the database and other dependencies.
   await InjectionContainer.initProductionInjector();
 
-  runApp(WeForzaApp());
+  runApp(const WeForzaApp());
 }
 
-///This class represents the application.
+/// This class represents the application.
 class WeForzaApp extends StatefulWidget {
+  const WeForzaApp({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _WeForzaAppState();
 }
 
 class _WeForzaAppState extends State<WeForzaApp> {
-  final String _appName = "WeForza";
+  static const _appName = 'WeForza';
 
   @override
-  Widget build(BuildContext context){
-    //force portrait
+  Widget build(BuildContext context) {
+    // Only portrait is supported at the moment.
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -48,8 +49,8 @@ class _WeForzaAppState extends State<WeForzaApp> {
               android: () => _buildAndroidWidget(),
               ios: () => _buildIosWidget(),
             ),
-            onTap: (){
-              //enable tap to dismiss keyboard
+            onTap: () {
+              // Enable tap to dismiss the keyboard.
               final FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
                 currentFocus.focusedChild?.unfocus();
@@ -64,22 +65,22 @@ class _WeForzaAppState extends State<WeForzaApp> {
   Widget _buildAndroidWidget() {
     return MaterialApp(
       title: _appName,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate],
+        GlobalWidgetsLocalizations.delegate
+      ],
       supportedLocales: S.delegate.supportedLocales,
       theme: ApplicationTheme.androidTheme(),
       home: HomePage(),
     );
   }
 
-
   Widget _buildIosWidget() {
     return CupertinoApp(
       title: _appName,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         S.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -97,5 +98,3 @@ class _WeForzaAppState extends State<WeForzaApp> {
     super.dispose();
   }
 }
-
-

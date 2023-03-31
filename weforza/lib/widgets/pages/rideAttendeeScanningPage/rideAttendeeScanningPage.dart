@@ -201,6 +201,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       firstName: item.firstname,
       lastName: item.lastname,
       alias: item.alias,
+      personInitials: item.initials,
       isSelected: () => bloc.isItemSelected(item.uuid),
       onTap: (){
         if(!bloc.isSaving.value){

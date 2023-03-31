@@ -78,7 +78,7 @@ class EditDeviceBloc extends Bloc {
         creationDate: deviceCreationDate
     );
 
-    final bool exists = await repository.deviceExists(deviceName, deviceOwnerId).catchError((error){
+    final bool exists = await repository.deviceExists(deviceName, deviceOwnerId, deviceCreationDate).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);

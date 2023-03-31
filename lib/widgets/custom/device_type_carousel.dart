@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device_type.dart';
-import 'package:weforza/theme/app_theme.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
@@ -22,7 +22,7 @@ class DeviceTypeCarousel extends StatelessWidget {
               builder: (context, constraints) {
                 return Icon(
                   deviceType.icon,
-                  color: ApplicationTheme.deviceTypePickerCurrentDotColor,
+                  color: AppTheme.deviceTypePicker.selectedColor,
                   size: constraints.biggest.shortestSide * .9,
                 );
               },
@@ -43,6 +43,8 @@ class DeviceTypeCarousel extends StatelessWidget {
   }
 
   Widget _buildPageDot(bool isCurrentPage) {
+    const theme = AppTheme.deviceTypePicker;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Container(
@@ -50,9 +52,7 @@ class DeviceTypeCarousel extends StatelessWidget {
         height: 12,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(6)),
-          color: isCurrentPage
-              ? ApplicationTheme.deviceTypePickerCurrentDotColor
-              : ApplicationTheme.deviceTypePickerDotColor,
+          color: isCurrentPage ? theme.selectedColor : theme.unselectedColor,
         ),
       ),
     );

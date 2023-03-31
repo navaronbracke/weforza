@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
+  /// The device type picker theme.
+  static const deviceTypePicker = DeviceTypePickerTheme();
+
   /// The member list item theme.
   static const memberListItem = MemberListItemTheme();
 
@@ -10,6 +13,17 @@ abstract class AppTheme {
 
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
+}
+
+/// This class represents the theme for the device type picker.
+class DeviceTypePickerTheme {
+  const DeviceTypePickerTheme();
+
+  /// The color for a selected device type.
+  final Color selectedColor = Colors.blue;
+
+  /// The color for an unselected device type.
+  final Color unselectedColor = const Color(0xFFBBDEFB);
 }
 
 /// This class defines the theme for member list items.

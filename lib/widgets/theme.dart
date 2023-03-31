@@ -1,13 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
+  /// The [ThemeData] for the [MaterialApp].
+  static final androidTheme = ThemeData(
+    appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: Colors.blue,
+        minimumSize: const Size(88, 36),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(2)),
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        onPrimary: Colors.white,
+        primary: Colors.blue,
+        minimumSize: const Size(88, 36),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(2)),
+        ),
+      ),
+    ),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue),
+  );
+
   /// The theme for destructive actions, such as delete buttons.
   static final desctructiveAction = DestructiveActionTheme();
 
   /// The device type picker theme.
   static const deviceTypePicker = DeviceTypePickerTheme();
+
+  /// The [CupertinoThemeData] for the [CupertinoApp].
+  static const iosTheme = CupertinoThemeData(
+    primaryColor: CupertinoColors.activeBlue,
+  );
 
   /// The theme for the bottom bar on the manual selection.
   static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();

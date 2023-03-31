@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/selected_member_attending_count_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 /// The provider for the attending count of a single member list item
@@ -23,8 +23,28 @@ class _MemberAttendingCount extends StatelessWidget {
 
   final AsyncValue<int?> value;
 
+  Widget _buildBikeIcon(BuildContext context) {
+    final theme = Theme.of(context);
+
+    switch (theme.platform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        return Icon(Icons.directions_bike, color: theme.primaryColor);
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        return Icon(
+          Icons.directions_bike,
+          color: CupertinoTheme.of(context).primaryColor,
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final icon = _buildBikeIcon(context);
+
     return value.when(
       data: (count) {
         return Row(
@@ -35,22 +55,16 @@ class _MemberAttendingCount extends StatelessWidget {
               padding: const EdgeInsets.only(right: 4),
               child: Text('${count ?? '?'}'),
             ),
-            const Icon(
-              Icons.directions_bike,
-              color: ApplicationTheme.primaryColor,
-            ),
+            icon,
           ],
         );
       },
       error: (error, stackTrace) => Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Padding(padding: EdgeInsets.only(right: 4), child: Text('?')),
-          Icon(
-            Icons.directions_bike,
-            color: ApplicationTheme.primaryColor,
-          ),
+        children: [
+          const Padding(padding: EdgeInsets.only(right: 4), child: Text('?')),
+          icon,
         ],
       ),
       loading: () => const PlatformAwareLoadingIndicator(),

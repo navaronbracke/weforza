@@ -49,7 +49,7 @@ class DeviceTypeCarousel extends StatelessWidget {
         width: 12,
         height: 12,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
           color: isCurrentPage
               ? ApplicationTheme.deviceTypePickerCurrentDotColor
               : ApplicationTheme.deviceTypePickerDotColor,

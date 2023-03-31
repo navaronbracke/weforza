@@ -93,23 +93,20 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
         );
       },
       behavior: HitTestBehavior.opaque,
-      child: Container(
-        decoration: const BoxDecoration(),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 4),
-                child: _buildProfileImage(),
-              ),
-              Expanded(child: _buildName()),
-              Padding(
-                padding: const EdgeInsets.only(left: 4),
-                child: MemberAttendingCount(future: memberAttendingCount),
-              ),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: _buildProfileImage(),
+            ),
+            Expanded(child: _buildName()),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: MemberAttendingCount(future: memberAttendingCount),
+            ),
+          ],
         ),
       ),
     );

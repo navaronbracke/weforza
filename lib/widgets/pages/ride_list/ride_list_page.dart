@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/add_ride/add_ride_page.dart';
-import 'package:weforza/widgets/pages/export_rides_page.dart';
+import 'package:weforza/widgets/pages/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_list/ride_list.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -36,7 +36,7 @@ class RideListPage extends StatelessWidget {
             icon: const Icon(Icons.file_upload),
             color: Colors.white,
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const ExportRidesPage()),
+              MaterialPageRoute(builder: (_) => const ExportRidePage()),
             ),
           ),
         ],
@@ -69,9 +69,7 @@ class RideListPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 15),
               child: CupertinoIconButton.fromAppTheme(
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ExportRidesPage(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const ExportRidePage()),
                 ),
                 icon: CupertinoIcons.arrow_up_doc_fill,
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class UnresolvedOwnersListItem extends StatefulWidget {
   UnresolvedOwnersListItem({
@@ -50,19 +51,12 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: _combineFirstNameAndAlias(),
-              ),
-              Text(
-                widget.lastName,
-                style: lastNameStyle,
-                overflow: TextOverflow.ellipsis,
-              )
-            ],
+          child: MemberNameAndAlias(
+            firstNameStyle: firstNameStyle,
+            lastNameStyle: lastNameStyle,
+            firstName: widget.firstName,
+            lastName: widget.lastName,
+            alias: widget.alias,
           ),
         ),
       ),
@@ -72,39 +66,13 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
   void _setColors(){
     if(widget.isSelected()){
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle.copyWith(color: Colors.white);
-      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle.copyWith(color: Colors.white);
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(color: Colors.white);
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle.copyWith(color: Colors.white);
     }else{
       itemDecorationBackgroundColor = ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
-      firstNameStyle = ApplicationTheme.rideAttendeeFirstNameTextStyle;
-      lastNameStyle = ApplicationTheme.rideAttendeeLastNameTextStyle;
+      firstNameStyle = ApplicationTheme.memberListItemFirstNameTextStyle;
+      lastNameStyle = ApplicationTheme.memberListItemLastNameTextStyle;
     }
-  }
-
-  //Combine the first name with the alias.
-  Widget _combineFirstNameAndAlias(){
-    if(widget.alias.isEmpty){
-      return Text(
-        widget.firstName,
-        style: firstNameStyle,
-        overflow: TextOverflow.ellipsis,
-      );
-    }
-
-    // Firstname 'alias'
-    return Text.rich(
-      TextSpan(
-          text: widget.firstName,
-          style: firstNameStyle,
-          children: [
-            TextSpan(
-              text: " '${widget.alias}'",
-              style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
-            ),
-          ]
-      ),
-      overflow: TextOverflow.ellipsis,
-    );
   }
 }
 

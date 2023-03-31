@@ -25,14 +25,19 @@ class SettingsBloc extends Bloc {
   double get minScanValue => 10;
 
   void loadSettings(){
-    //We put an artificial delay here to decrease the feeling of popping in.
-    //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
-    settingsFuture = Future.delayed(Duration(seconds: 1),() async {
-      final settings = await _repository.loadApplicationSettings();
-      _scanDuration = settings.scanDuration.toDouble();
-    });
+    if(_repository.instance == null){
+      //We put an artificial delay here to decrease the feeling of popping in.
+      //See https://www.youtube.com/watch?v=O6ZQ9r8a3iw
+      settingsFuture = Future.delayed(Duration(seconds: 1),() async {
+        final settings = await _repository.loadApplicationSettings();
+        _scanDuration = settings.scanDuration.toDouble();
+      });
+    } else {
+      _scanDuration = _repository.instance.scanDuration.toDouble();
+      settingsFuture = Future.value(null);
+    }
   }
-  
+
   Future<void> saveSettings() async {
     _submitController.add(true);
     await Future.delayed(Duration(milliseconds: 400), () async {

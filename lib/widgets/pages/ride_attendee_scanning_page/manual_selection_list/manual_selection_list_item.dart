@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
@@ -29,22 +30,18 @@ class _ManualSelectionListItemState
     extends ConsumerState<ManualSelectionListItem> {
   BoxDecoration? _getDecoration(BuildContext context, bool isSelected) {
     if (isSelected) {
-      RideAttendeeScanResultTheme theme;
+      final theme = Theme.of(context);
 
-      switch (Theme.of(context).platform) {
+      switch (theme.platform) {
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          theme = AppTheme.rideAttendeeScanResult.android;
-          break;
+          return BoxDecoration(color: theme.primaryColorDark);
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
-          theme = AppTheme.rideAttendeeScanResult.ios;
-          break;
+          return BoxDecoration(color: CupertinoTheme.of(context).primaryColor);
       }
-
-      return BoxDecoration(color: theme.selectedBackgroundColor);
     }
 
     return null;

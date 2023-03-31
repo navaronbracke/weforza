@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
@@ -127,22 +128,18 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   Color _getSelectedBackgroundColor(BuildContext context) {
-    RideAttendeeScanResultTheme theme;
+    final theme = Theme.of(context);
 
-    switch (Theme.of(context).platform) {
+    switch (theme.platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        theme = AppTheme.rideAttendeeScanResult.android;
-        break;
+        return theme.primaryColorDark;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        theme = AppTheme.rideAttendeeScanResult.ios;
-        break;
+        return CupertinoTheme.of(context).primaryColor;
     }
-
-    return theme.selectedBackgroundColor;
   }
 
   @override

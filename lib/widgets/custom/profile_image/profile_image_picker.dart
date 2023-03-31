@@ -7,6 +7,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker_placeholder.dart';
+import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -58,6 +59,24 @@ class ProfileImagePicker extends StatelessWidget {
     );
   }
 
+  void _showDeleteProfileImageDialog(BuildContext context) {
+    final translator = S.of(context);
+
+    showWeforzaDialog<void>(
+      context,
+      builder: (context) => WeforzaAlertDialog.defaultButtons(
+        confirmButtonLabel: translator.Delete,
+        description: Text(translator.RemovePhotoDescription, softWrap: true),
+        isDestructive: true,
+        onConfirmPressed: () {
+          delegate.clear();
+          Navigator.of(context).pop();
+        },
+        title: translator.RemovePhoto,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
@@ -79,7 +98,7 @@ class ProfileImagePicker extends StatelessWidget {
 
     final deleteImageButton = _ProfileImagePickerButton(
       label: translator.RemovePhoto,
-      onPressed: () {}, // TODO: implement show delete dialog
+      onPressed: () => _showDeleteProfileImageDialog(context),
       isDestructive: true,
     );
 

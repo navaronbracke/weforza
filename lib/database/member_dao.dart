@@ -1,6 +1,5 @@
 import 'package:sembast/sembast.dart';
 
-import 'package:weforza/database/database.dart';
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
@@ -42,12 +41,12 @@ abstract class IMemberDao {
 
 ///This class is an implementation of [IMemberDao].
 class MemberDao implements IMemberDao {
-  MemberDao(this._database, this._memberStore, this._rideAttendeeStore,
-      this._deviceStore);
-
-  MemberDao.withProvider(ApplicationDatabase provider)
-      : this(provider.getDatabase(), provider.memberStore,
-            provider.rideAttendeeStore, provider.deviceStore);
+  MemberDao(
+    this._database,
+    this._memberStore,
+    this._rideAttendeeStore,
+    this._deviceStore,
+  );
 
   ///A reference to the application database.
   final Database _database;

@@ -1,32 +1,57 @@
 import 'package:sembast/sembast.dart';
+import 'package:uuid/uuid.dart';
+import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportable_member.dart';
 import 'package:weforza/model/importable_member.dart';
 import 'package:weforza/model/member.dart';
 
-abstract class IImportMembersDao {
-  /// Save the given [ExportableMember]s to the database.
-  /// [generateId] is used to generate UUID's for members that are inserted.
-  Future<void> saveMembersWithDevices(
-      Iterable<ExportableMember> members, String Function() generateId);
+/// This interface defines a method to import a collection of members.
+abstract class ImportMembersDao {
+  /// Save the given [members].
+  Future<void> saveMembersWithDevices(Iterable<ExportableMember> members);
 }
 
-class ImportMembersDao implements IImportMembersDao {
-  ImportMembersDao(this._database, this._memberStore, this._deviceStore);
+/// The default implementation of [ImportMembersDao].
+class ImportMembersDaoImpl implements ImportMembersDao {
+  ImportMembersDaoImpl(this._database, DatabaseTables tables)
+      : _deviceStore = tables.device,
+        _memberStore = tables.member;
 
-  ///A reference to the database, which is needed by the Store.
+  /// A reference to the database.
   final Database _database;
 
-  ///A reference to the [Member] store.
-  final StoreRef<String, Map<String, dynamic>> _memberStore;
-
-  ///A reference to the [Device] store.
+  /// A reference to the [Device] store.
   final StoreRef<String, Map<String, dynamic>> _deviceStore;
 
-  /// Get all the existing members
-  /// and populate the given collection with the items.
-  Future<void> _getExistingMembers(
-      Map<ImportableMemberKey, Member> collection) async {
+  /// A reference to the [Member] store.
+  final StoreRef<String, Map<String, dynamic>> _memberStore;
+
+  /// Get all the existing devices.
+  /// Returns a map of device names per owner uuid.
+  Future<Map<String, Set<String>>> _getExistingDevices() async {
+    final collection = <String, Set<String>>{};
+
+    final records = await _deviceStore.find(_database);
+
+    for (final record in records) {
+      final Device device = Device.of(record.key, record.value);
+
+      if (collection[device.ownerId] == null) {
+        collection[device.ownerId] = <String>{device.name};
+      } else {
+        collection[device.ownerId]!.add(device.name);
+      }
+    }
+
+    return collection;
+  }
+
+  /// Get the existing members.
+  /// Returns a map of [Member]s mapped to [ImportableMemberKey]s.
+  Future<Map<ImportableMemberKey, Member>> _getExistingMembers() async {
+    final collection = <ImportableMemberKey, Member>{};
+
     final records = await _memberStore.find(_database);
 
     for (final record in records) {
@@ -40,124 +65,117 @@ class ImportMembersDao implements IImportMembersDao {
         collection[key] = Member.of(record.key, record.value);
       }
     }
-  }
 
-  /// Get all the existing devices
-  /// and populate the given collection with the items.
-  Future<void> _getExistingDevices(Map<String, Set<String>> collection) async {
-    final records = await _deviceStore.find(_database);
-
-    for (final record in records) {
-      final Device device = Device.of(record.key, record.value);
-
-      if (collection[device.ownerId] == null) {
-        collection[device.ownerId] = <String>{device.name};
-      } else {
-        collection[device.ownerId]!.add(device.name);
-      }
-    }
+    return collection;
   }
 
   @override
   Future<void> saveMembersWithDevices(
-      Iterable<ExportableMember> members, String Function() generateId) async {
-    // This Map holds the existing members,
-    // behind their combined first name, last name and alias.
-    // With this collection we can check
-    // if a given member is an existing one or not.
-    // We can also retrieve properties of the existing member easily.
-    final existingMembers = <ImportableMemberKey, Member>{};
-    // This Map holds the existing devices per member uuid.
-    // We can only filter on the name of the device.
-    final existingDevices = <String, Set<String>>{};
-    // This set holds the members that are scheduled for an update.
-    final Set<ImportableMember> membersToUpdate = {};
-    // This set holds the members that are scheduled for insertion.
-    final Set<Member> newMembers = {};
-    // This set holds the devices that are scheduled for insertion.
-    final Set<Device> newDevices = {};
+    Iterable<ExportableMember> members,
+  ) async {
+    final existingDevicesFuture = _getExistingDevices();
+    final existingMembersFuture = _getExistingMembers();
 
-    await Future.wait<void>(<Future<void>>[
-      _getExistingMembers(existingMembers),
-      _getExistingDevices(existingDevices),
-    ]);
+    final existingDevices = await existingDevicesFuture;
+    final existingMembers = await existingMembersFuture;
 
-    for (ExportableMember exportableMember in members) {
-      final existingMember = existingMembers[ImportableMemberKey(
-        firstName: exportableMember.firstName,
-        lastName: exportableMember.lastName,
-        alias: exportableMember.alias,
-      )];
+    // The existing members that should be updated.
+    final membersToUpdate = <ImportableMember>{};
+
+    // The new members that should be added.
+    final newMembers = <Member>{};
+
+    // The new devices that should be added.
+    final newDevices = <Device>{};
+
+    const uuidGenerator = Uuid();
+
+    for (final exportedMember in members) {
+      final existingMember = existingMembers[exportedMember.importKey];
 
       if (existingMember != null) {
-        // There is a more recent update to this member's devices.
-        // Add the new devices and update the member's timestamp.
-        if (exportableMember.lastUpdated.isAfter(existingMember.lastUpdated)) {
-          membersToUpdate.add(ImportableMember(
-            uuid: existingMember.uuid,
-            // By importing this member, we 'sync' the updatedOn timestamp.
-            updatedOn: exportableMember.lastUpdated,
-          ));
+        final uuid = existingMember.uuid;
 
-          final Set<String> excludedDevicesForMember =
-              existingDevices[existingMember.uuid] ?? {};
+        // The exported member is newer than the existing member.
+        // Adjust the last updated timestamp of the existing member,
+        // and add the new devices of the exported member.
+        if (exportedMember.lastUpdated.isAfter(existingMember.lastUpdated)) {
+          membersToUpdate.add(
+            ImportableMember(uuid: uuid, updatedOn: exportedMember.lastUpdated),
+          );
 
-          // Add the devices for the member.
-          newDevices.addAll(exportableMember.devices.where((String device) {
-            // Filter out the existing devices for the given member.
-            return !excludedDevicesForMember.contains(device);
-          }).map((String device) {
-            return Device(
-              creationDate: DateTime.now(),
-              name: device,
-              ownerId: existingMember.uuid,
+          final memberExistingDevices = existingDevices[uuid] ?? {};
+
+          for (final device in exportedMember.devices) {
+            // Skip existing devices for this member.
+            if (memberExistingDevices.contains(device)) {
+              continue;
+            }
+
+            newDevices.add(
+              Device(creationDate: DateTime.now(), name: device, ownerId: uuid),
             );
-          }));
+          }
         }
       } else {
-        // Add the new member and all its devices.
-        final newMember = Member(
-          uuid: generateId(),
-          firstname: exportableMember.firstName,
-          lastname: exportableMember.lastName,
-          alias: exportableMember.alias,
-          isActiveMember: exportableMember.isActiveMember,
-          lastUpdated: exportableMember.lastUpdated,
-          profileImageFilePath: null,
-        );
-        newMembers.add(newMember);
+        final newUuid = uuidGenerator.v4();
 
-        newDevices.addAll(exportableMember.devices.map((String device) {
-          return Device(
-            creationDate: DateTime.now(),
-            name: device,
-            ownerId: newMember.uuid,
+        // The member does not yet exist.
+        // Add a new member and add the devices of this member.
+        newMembers.add(
+          Member(
+            uuid: newUuid,
+            firstname: exportedMember.firstName,
+            lastname: exportedMember.lastName,
+            alias: exportedMember.alias,
+            isActiveMember: exportedMember.active,
+            lastUpdated: exportedMember.lastUpdated,
+            profileImageFilePath: null,
+          ),
+        );
+
+        for (final device in exportedMember.devices) {
+          newDevices.add(
+            Device(
+              creationDate: DateTime.now(),
+              name: device,
+              ownerId: newUuid,
+            ),
           );
-        }));
+        }
       }
     }
 
-    // Apply the database transaction.
-    // - update existing members
-    // - add new members
-    // - add new devices
     await _database.transaction((txn) async {
+      final updateMemberRecords = _memberStore.records(
+        membersToUpdate.map((member) => member.uuid),
+      );
+
       // Update the existing members.
-      await _memberStore
-          .records(membersToUpdate.map((member) => member.uuid))
-          .update(
-              txn, membersToUpdate.map((member) => member.toMap()).toList());
+      await updateMemberRecords.update(
+        txn,
+        membersToUpdate.map((member) => member.toMap()).toList(),
+      );
+
+      final addMemberRecords = _memberStore.records(
+        newMembers.map((member) => member.uuid),
+      );
 
       // Add the new members.
-      await _memberStore
-          .records(newMembers.map((member) => member.uuid))
-          .add(txn, newMembers.map((member) => member.toMap()).toList());
+      await addMemberRecords.add(
+        txn,
+        newMembers.map((member) => member.toMap()).toList(),
+      );
+
+      final addDevicesRecords = _deviceStore.records(
+        newDevices.map((device) => device.creationDate.toIso8601String()),
+      );
 
       // Add the new devices.
-      await _deviceStore
-          .records(
-              newDevices.map((device) => device.creationDate.toIso8601String()))
-          .add(txn, newDevices.map((device) => device.toMap()).toList());
+      await addDevicesRecords.add(
+        txn,
+        newDevices.map((device) => device.toMap()).toList(),
+      );
     });
   }
 }

@@ -68,11 +68,11 @@ class SettingsPageState extends ConsumerState<SettingsPage>
 
   @override
   Widget build(BuildContext context) {
-    final translator = S.of(context);
-
-    return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(translator),
-      ios: () => _buildIosWidget(translator),
+    return FocusAbsorber(
+      child: PlatformAwareWidget(
+        android: () => _buildAndroidWidget(context),
+        ios: () => _buildIosWidget(context),
+      ),
     );
   }
 

@@ -46,9 +46,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     excludedTermsDelegate = ExcludedTermsDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter
-          .map((t) => ExcludedTerm(term: t))
-          .toList(),
+      initialValue: currentSettings.excludedTermsFilter.map((t) => ExcludedTerm(term: t)).toList(),
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,
@@ -86,6 +84,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     final textTheme = theme.textTheme;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text(translator.settings)),
       body: SettingsPageScrollView(
         excludedTermsListHeader: const Padding(
@@ -183,6 +182,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
 
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: CupertinoColors.systemGroupedBackground,
       child: SettingsPageScrollView(
         excludedTermsList: SliverPadding(

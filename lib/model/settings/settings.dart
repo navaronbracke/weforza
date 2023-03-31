@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
-import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines the persistent application settings.
 class Settings {
   Settings({
     this.excludedTermsFilter = const {},
-    this.memberListFilter = MemberFilterOption.all,
+    this.memberListFilter = RiderFilterOption.all,
     this.scanDuration = 20,
   }) : assert(
           scanDuration > 0,
@@ -20,8 +20,8 @@ class Settings {
     return Settings(
       excludedTermsFilter: Set.of(excludedTermsFilter?.cast<String>() ?? []),
       memberListFilter: memberListFilter == null
-          ? MemberFilterOption.all
-          : MemberFilterOption.values[memberListFilter],
+          ? RiderFilterOption.all
+          : RiderFilterOption.values[memberListFilter],
       scanDuration: scanDuration ?? 20,
     );
   }
@@ -30,7 +30,7 @@ class Settings {
   final Set<String> excludedTermsFilter;
 
   /// The persisted member list filter.
-  final MemberFilterOption memberListFilter;
+  final RiderFilterOption memberListFilter;
 
   /// The duration of a device scan, in seconds.
   /// Defaults to 20 seconds.
@@ -39,7 +39,7 @@ class Settings {
   /// Create a copy of this object, replacing any non-null values.
   Settings copyWith({
     Set<String>? excludedTermsFilter,
-    MemberFilterOption? memberListFilter,
+    RiderFilterOption? memberListFilter,
     int? scanDuration,
   }) {
     return Settings(

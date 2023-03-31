@@ -87,7 +87,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                     //Pop both the dialog and the detail screen
                     navigator.pop();
                     navigator.pop();
-                }),
+                  }),
               ),
             ),
           ),
@@ -144,10 +144,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           title: S.of(context).RideDeleteDialogTitle,
                           description: S.of(context).RideDeleteDialogDescription,
                           errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                          onDelete: () => Future.delayed(Duration(seconds: 3), () => Future.error("some error")),
-                          //TODO ios dialog implementation
-                          /*
-                          *                           onDelete: () => bloc.deleteRide().then((_){
+                          onDelete: () => bloc.deleteRide().then((_){
                             //trigger the reload of rides
                             ReloadDataProvider.of(context).reloadRides.value = true;
                             final navigator = Navigator.of(context);
@@ -155,7 +152,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                             navigator.pop();
                             navigator.pop();
                           }),
-                          * */
                         ),
                     ),
                 ),

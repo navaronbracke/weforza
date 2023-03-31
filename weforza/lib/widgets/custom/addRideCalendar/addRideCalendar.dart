@@ -10,6 +10,11 @@ class AddRideCalendar extends StatelessWidget {
 
   final AddRideBloc bloc;
 
+  // TODO: Fix the responseive design on small screens.
+  // The calendar items should be slightly smaller.
+  // The font size for the days should be smaller.
+  // The pageview height constraint should be smaller.
+
   @override
   Widget build(BuildContext context) {
     return Column(

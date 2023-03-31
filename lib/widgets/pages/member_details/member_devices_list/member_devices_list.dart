@@ -87,7 +87,7 @@ class _MemberDevicesListState extends ConsumerState<MemberDevicesList> {
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: TextButton(
               onPressed: () => onAddDevicePressed(context),
-              child: Text(S.of(context).AddDeviceTitle),
+              child: Text(S.of(context).AddDevice),
             ),
           ),
           ios: () => Padding(
@@ -95,7 +95,7 @@ class _MemberDevicesListState extends ConsumerState<MemberDevicesList> {
             child: CupertinoButton.filled(
               onPressed: () => onAddDevicePressed(context),
               child: Text(
-                S.of(context).AddDeviceTitle,
+                S.of(context).AddDevice,
                 style: const TextStyle(color: Colors.white),
               ),
             ),

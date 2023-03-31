@@ -49,12 +49,12 @@ class MemberDevicesListEmpty extends StatelessWidget {
               PlatformAwareWidget(
                 android: () => ElevatedButton(
                   onPressed: () => onAddDevicePressed(context),
-                  child: Text(translator.AddDeviceTitle),
+                  child: Text(translator.AddDevice),
                 ),
                 ios: () => CupertinoButton.filled(
                   onPressed: () => onAddDevicePressed(context),
                   child: Text(
-                    translator.AddDeviceTitle,
+                    translator.AddDevice,
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),

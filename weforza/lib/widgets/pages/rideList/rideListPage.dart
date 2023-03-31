@@ -55,15 +55,7 @@ class _RideListPageState extends State<RideListPage> {
               color: Colors.white,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_){
-                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                if(reloadNotifier.value){
-                  reloadNotifier.value = false;
-                  setState(() {
-                    bloc.reloadRides();
-                  });
-                }
-              }),
+              ).then((_)=> onReturnToRideListPage(context)),
             ),
           ],
         ),
@@ -86,15 +78,7 @@ class _RideListPageState extends State<RideListPage> {
               icon: Icons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())
-              ).then((_){
-                final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                if(reloadNotifier.value){
-                  reloadNotifier.value = false;
-                  setState(() {
-                    bloc.reloadRides();
-                  });
-                }
-              }),
+              ).then((_) => onReturnToRideListPage(context)),
             ),
           ],
         ),
@@ -130,15 +114,7 @@ class _RideListPageState extends State<RideListPage> {
                           MaterialPageRoute(
                             builder: (context) => RideDetailsPage(),
                           ),
-                        ).then((_){
-                          final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
-                          if(reloadNotifier.value){
-                            reloadNotifier.value = false;
-                            setState(() {
-                              bloc.reloadRides();
-                            });
-                          }
-                        });
+                        ).then((_) => onReturnToRideListPage(context));
                       },
                     );
                   });
@@ -149,5 +125,15 @@ class _RideListPageState extends State<RideListPage> {
         }
       },
     );
+  }
+
+  void onReturnToRideListPage(BuildContext context){
+    final reloadNotifier = ReloadDataProvider.of(context).reloadRides;
+    if(reloadNotifier.value){
+      reloadNotifier.value = false;
+      setState(() {
+        bloc.reloadRides();
+      });
+    }
   }
 }

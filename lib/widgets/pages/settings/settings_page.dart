@@ -38,7 +38,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
       final repository = ref.read(settingsRepositoryProvider);
 
-      return repository.writeApplicationSettings(newSettings).then((_) {
+      return repository.write(newSettings).then((_) {
         if (mounted) {
           ref.read(settingsProvider.notifier).state = newSettings;
         }

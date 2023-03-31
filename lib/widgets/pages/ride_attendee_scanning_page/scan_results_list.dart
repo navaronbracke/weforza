@@ -112,36 +112,38 @@ class _ScanResultsListItem extends StatelessWidget {
   }
 
   Widget _buildSingleOwnerListItem(BuildContext context) {
-    final owner = device.owners.first;
-    TextStyle textStyle;
-    Widget icon;
+    Color color;
+    IconData icon;
 
-    switch (Theme.of(context).platform) {
+    final theme = Theme.of(context);
+
+    switch (theme.platform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        textStyle = TextStyle(
-          color: AppTheme.rideAttendeeScanResult.android.singleOwnerColor,
-          fontWeight: FontWeight.bold,
-        );
-        icon = Icon(Icons.person, color: textStyle.color);
+        color = theme.primaryColor;
+        icon = Icons.person;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        textStyle = TextStyle(
-          color: AppTheme.rideAttendeeScanResult.ios.singleOwnerColor,
-          fontWeight: FontWeight.bold,
-        );
-        icon = Icon(CupertinoIcons.person_fill, color: textStyle.color);
+        color = CupertinoTheme.of(context).primaryColor;
+        icon = CupertinoIcons.person_fill;
         break;
     }
+
+    final textStyle = TextStyle(
+      color: color,
+      fontWeight: FontWeight.bold,
+    );
+
+    final owner = device.owners.first;
 
     return Row(
       children: [
         Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: icon,
+          child: Icon(icon, color: textStyle.color),
         ),
         MemberNameAndAlias(
           alias: owner.alias,

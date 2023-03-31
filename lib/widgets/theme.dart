@@ -265,7 +265,6 @@ class RideAttendeeScanResultTheme {
     required this.multipleOwnersDescriptionStyle,
     required this.multipleOwnersLabelStyle,
     required this.selectedBackgroundColor,
-    required this.singleOwnerColor,
   });
 
   /// The style for the multiple owners description label.
@@ -276,9 +275,6 @@ class RideAttendeeScanResultTheme {
 
   /// The background color for a selected item.
   final Color selectedBackgroundColor;
-
-  /// The color for a scan result that has a single owner.
-  final Color singleOwnerColor;
 }
 
 /// This class represents the theme for ride attendee scan results.
@@ -298,7 +294,6 @@ class RideAttendeeScanResultThemes {
       color: Colors.orange,
     ),
     selectedBackgroundColor: Color(0xFF1976D2),
-    singleOwnerColor: Colors.blue,
   );
 
   /// The scan result theme for iOS.
@@ -314,6 +309,5 @@ class RideAttendeeScanResultThemes {
       color: CupertinoColors.activeOrange,
     ),
     selectedBackgroundColor: CupertinoColors.activeBlue,
-    singleOwnerColor: CupertinoColors.activeBlue,
   );
 }

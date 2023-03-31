@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a submit button for a form.
 class FormSubmitButton<T> extends StatelessWidget {
@@ -118,16 +117,7 @@ class FixedHeightSubmitButton extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return loading
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                onPressed: onPressed,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.colorScheme.primary,
-                  foregroundColor: Colors.white,
-                ),
-                child: Text(label),
-              );
+        return loading ? const CircularProgressIndicator() : ElevatedButton(onPressed: onPressed, child: Text(label));
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return loading

@@ -65,47 +65,41 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
   }) {
     final translator = S.of(context);
 
-    return Theme(
-      data: ThemeData(
-        useMaterial3: true,
-        colorScheme: AppTheme.colorScheme,
-      ),
-      child: BottomAppBar(
-        height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Tooltip(
-              margin: const EdgeInsets.only(bottom: 12),
-              message: translator.total,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.people, color: AppTheme.colorScheme.primary),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text('$total'),
-                  ),
-                ],
-              ),
+    return BottomAppBar(
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Tooltip(
+            margin: const EdgeInsets.only(bottom: 12),
+            message: translator.total,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.people, color: AppTheme.colorScheme.primary),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Text('$total'),
+                ),
+              ],
             ),
-            Tooltip(
-              margin: const EdgeInsets.only(bottom: 12),
-              message: translator.scanned,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('${scannedAttendees ?? '-'}'),
-                  Icon(
-                    Icons.bluetooth_searching,
-                    color: AppTheme.colorScheme.primary,
-                  ),
-                ],
-              ),
+          ),
+          Tooltip(
+            margin: const EdgeInsets.only(bottom: 12),
+            message: translator.scanned,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('${scannedAttendees ?? '-'}'),
+                Icon(
+                  Icons.bluetooth_searching,
+                  color: AppTheme.colorScheme.primary,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -12,7 +12,6 @@ import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage<T> extends StatelessWidget {
@@ -93,13 +92,7 @@ class ExportDataPage<T> extends StatelessWidget {
               ],
             ),
           ),
-          Theme(
-            data: ThemeData(
-              useMaterial3: true,
-              colorScheme: AppTheme.colorScheme,
-            ),
-            child: child,
-          ),
+          child,
         ],
       ),
     );

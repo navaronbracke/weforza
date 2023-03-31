@@ -119,13 +119,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               translator.ridersListFilter,
               style: textTheme.titleMedium,
             ),
-            Theme(
-              data: ThemeData(
-                useMaterial3: true,
-                segmentedButtonTheme: theme.segmentedButtonTheme,
-              ),
-              child: RiderListFilter(delegate: riderFilterDelegate),
-            ),
+            RiderListFilter(delegate: riderFilterDelegate),
             Text(
               translator.ridersListFilterDescription,
               style: textTheme.bodySmall?.copyWith(

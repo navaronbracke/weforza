@@ -88,12 +88,12 @@ class ProfileImagePicker extends StatelessWidget {
 
     final openGalleryButton = _ProfileImagePickerButton(
       label: translator.SelectPhoto,
-      onPressed: delegate.selectImageFromGallery,
+      onPressed: delegate.selectProfileImageFromGallery,
     );
 
     final openCameraButton = _ProfileImagePickerButton(
       label: translator.TakePhoto,
-      onPressed: () {}, // TODO: implement open camera button
+      onPressed: delegate.takePhoto,
     );
 
     final deleteImageButton = _ProfileImagePickerButton(

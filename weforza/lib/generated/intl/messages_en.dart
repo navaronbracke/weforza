@@ -43,7 +43,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m12(value) => "${value} is required";
+  static m12(amount) => "${amount} people have a device with this name";
+
+  static m13(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

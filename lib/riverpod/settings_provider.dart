@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/settings.dart';
+import 'package:weforza/model/settings/settings.dart';
 
 /// This provider provides the application settings.
 ///

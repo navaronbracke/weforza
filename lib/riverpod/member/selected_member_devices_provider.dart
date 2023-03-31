@@ -15,36 +15,40 @@ final selectedMemberDevicesProvider = StateNotifierProvider((ref) {
   );
 });
 
-class SelectedMemberDevicesNotifier extends StateNotifier<List<Device>> {
+class SelectedMemberDevicesNotifier
+    extends StateNotifier<AsyncValue<List<Device>>> {
   SelectedMemberDevicesNotifier({
     required this.repository,
     String? uuid,
-  }) : super([]) {
+  }) : super(const AsyncLoading()) {
     if (uuid == null) {
-      future = Future.error(ArgumentError.notNull('uuid'));
+      state = AsyncError(ArgumentError.notNull('uuid'));
 
       return;
     }
 
-    future = repository.getOwnerDevices(uuid).then((devices) {
-      if (!mounted) {
-        return;
+    repository.getOwnerDevices(uuid).then((devices) {
+      if (mounted) {
+        state = AsyncData(devices);
       }
-
-      state = devices;
+    }).catchError((error) {
+      if (mounted) {
+        state = AsyncError(error);
+      }
     });
   }
 
   /// The repository that manages the devices.
   final DeviceRepository repository;
 
-  /// The future that represents the loading of the devices.
-  ///
-  /// When this future completes, [state] contains the devices.
-  late final Future<void> future;
-
   Future<Device> deleteDevice(int index) async {
-    final newDevices = List.of(state);
+    if (state is! AsyncData<List<Device>>) {
+      throw StateError(
+        'A device can only be deleted when the devices list was loaded',
+      );
+    }
+
+    final newDevices = List.of(state.value!);
 
     final device = newDevices[index];
 
@@ -52,7 +56,7 @@ class SelectedMemberDevicesNotifier extends StateNotifier<List<Device>> {
 
     newDevices.removeAt(index);
 
-    state = newDevices;
+    state = AsyncData(newDevices);
 
     return device;
   }

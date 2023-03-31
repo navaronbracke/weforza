@@ -81,9 +81,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
       final file = await fileHandler.getFile(fileName);
 
-      // If the file exists, set the last file name
-      // of which it is known that it exists,
-      // and revalidate the form to trigger the validation message.
+      // If the file exists, revalidate the form to trigger the validation message.
       if (file.existsSync()) {
         fileNameKey.currentState?.validate();
 
@@ -119,6 +117,10 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       }
 
       _selectDirectoryController.add(AsyncData(directory));
+
+      // If a new directory was selected,
+      // the `File Exists` message may be outdated.
+      fileNameKey.currentState?.validate();
     } catch (error, stackTrace) {
       if (!mounted) {
         return;

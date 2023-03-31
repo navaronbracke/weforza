@@ -47,10 +47,10 @@ dependencies:
   rxdart: ^0.26.0
 
   # This package provides platform independent file picking.
-  file_picker: ^3.0.0
+  file_picker: ^4.5.0
 
   # This package provides Bluetooth Low Energy functionality.
-  flutter_blue: ^0.8.0
+  flutter_blue: ^0.8.0 # TODO: migrate to flutter_blue_plus
 
   # This package provides easy access to app settings.
   app_settings: ^4.1.1

@@ -94,7 +94,7 @@
 	"PastDayNoRide": "Gepasseerde Dag Zonder Rit",
 	"PastDayWithRide": "Gepasseerde Dag Met Rit",
 	"ResetRideCalendar": "Kalender Resetten",
-	"ResetRideCalendarDescription": "Dit zal alle ritten verwijderen.\nDe aanwezigheden worden terug op nul gezet.",
+	"ResetRideCalendarDescription": "Het resetten van de rittenkalender zal alle ritten verwijderen.\nDe aanwezigheden van alle renners worden terug op nul gezet.",
 	"ResetRideCalendarDialogDescription": "Bent u zeker dat u alle ritten wil verwijderen?",
 	"ResetRideCalendarError": "Kan de rittenkalender niet verwijderen",
 	"RetryScan": "Opnieuw Scannen",

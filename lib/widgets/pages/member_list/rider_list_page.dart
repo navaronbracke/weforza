@@ -26,7 +26,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
 
   final _searchController = DebounceSearchDelegate();
 
-  void _onMemberSelected(BuildContext context) {
+  void _onRiderSelected(BuildContext context) {
     // Clear the search query.
     _controller.clear();
 
@@ -98,7 +98,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
         ],
       ),
       body: RiderList(
-        onRiderSelected: () => _onMemberSelected(context),
+        onRiderSelected: () => _onRiderSelected(context),
         filter: _filterOnSearchQuery,
         searchQueryStream: _searchController.searchQuery,
         searchField: TextFormField(
@@ -161,7 +161,7 @@ class _RiderListPageState extends ConsumerState<RiderListPage> {
       child: SafeArea(
         bottom: false,
         child: RiderList(
-          onRiderSelected: () => _onMemberSelected(context),
+          onRiderSelected: () => _onRiderSelected(context),
           filter: _filterOnSearchQuery,
           searchQueryStream: _searchController.searchQuery,
           searchField: Padding(

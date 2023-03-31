@@ -41,6 +41,7 @@ abstract class AsyncComputationDelegate<T> {
     _controller.add(null);
   }
 
+  /// Set the current state to the done state, using the given [data] as value.
   @protected
   void setDone(T data) {
     if (mounted) {

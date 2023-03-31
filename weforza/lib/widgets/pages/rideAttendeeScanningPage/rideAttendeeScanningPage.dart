@@ -39,9 +39,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
               child: Center(
                   child: Icon(
                       Icons.arrow_forward_ios,
-                      color: isScanStep ? ApplicationTheme.androidRideAttendeeScanProcessCurrentStepColor:
-                        ApplicationTheme.androidRideAttendeeScanProcessOtherStepColor
-                  )
+                      color: ApplicationTheme.androidRideAttendeeScanProcessArrowColor)
               ),
             ),
             Text(
@@ -81,8 +79,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
               child: Center(
                   child: Icon(
                       Icons.arrow_forward_ios,
-                      color: isScanStep ? ApplicationTheme.iosRideAttendeeScanProcessCurrentStepColor:
-                        ApplicationTheme.iosRideAttendeeScanProcessOtherStepColor
+                      color: ApplicationTheme.iosRideAttendeeScanProcessArrowColor
                   )
               ),
             ),

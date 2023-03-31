@@ -80,8 +80,10 @@ abstract class ApplicationTheme {
 
   static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
   static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
+  static final Color androidRideAttendeeScanProcessArrowColor = Colors.lightBlue.shade200;
   static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
+  static final Color iosRideAttendeeScanProcessArrowColor = Colors.grey.shade500;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

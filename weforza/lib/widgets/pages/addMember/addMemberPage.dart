@@ -132,7 +132,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
-                      imageHandler: _bloc,
+                      isSelecting: _bloc.stream,
+                      selectImage: _bloc.pickProfileImage,
+                      clear: _bloc.clearSelectedImage,
+                      getImage: () => _bloc.selectedImage,
                       errorMessage: S.of(context).MemberPickImageError,
                       size: 100,
                     ),
@@ -256,7 +259,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
-                    imageHandler: _bloc,
+                    selectImage: _bloc.pickProfileImage,
+                    isSelecting: _bloc.stream,
+                    getImage: () => _bloc.selectedImage,
+                    clear: _bloc.clearSelectedImage,
                     errorMessage: S.of(context).MemberPickImageError,
                     size: 100,
                   ),

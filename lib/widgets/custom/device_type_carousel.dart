@@ -80,12 +80,12 @@ class DeviceTypeCarousel extends StatelessWidget {
             child: AnimatedBuilder(
               animation: controller,
               builder: (context, child) {
-                final currentPage = controller.page?.round();
+                final page = controller.page?.round() ?? controller.initialPage;
 
                 final children = <Widget>[];
 
                 for (int i = 0; i < DeviceType.values.length; i++) {
-                  children.add(_buildPageDot(i == currentPage));
+                  children.add(_buildPageDot(i == page));
                 }
 
                 return Row(

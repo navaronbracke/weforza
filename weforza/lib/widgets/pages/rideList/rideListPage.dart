@@ -9,11 +9,11 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addRide/addRidePage.dart';
 import 'package:weforza/widgets/pages/importExport/importAndExportPage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListEmpty.dart';
-import 'package:weforza/widgets/pages/rideList/rideListError.dart';
 import 'package:weforza/widgets/pages/rideList/rideListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -119,7 +119,7 @@ class _RideListPageState extends State<RideListPage> {
       builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return RideListError();
+            return GenericError(text: S.of(context).RideListLoadingRidesError);
           }else{
             if(snapshot.data == null || snapshot.data.isEmpty){
               return RideListEmpty();

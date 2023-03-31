@@ -8,12 +8,12 @@ import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/importExport/importAndExportPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
-import 'package:weforza/widgets/pages/memberList/memberListError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -114,7 +114,7 @@ class _MemberListPageState extends State<MemberListPage> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return MemberListError();
+            return GenericError(text: S.of(context).MemberListLoadingFailed);
           } else {
             List<MemberItem> data = snapshot.data;
             return (data == null || data.isEmpty) ? MemberListEmpty() : ListView.builder(

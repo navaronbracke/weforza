@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class MemberDevicesListError extends StatelessWidget {
+///This widget represents a 'something went wrong'-like generic error widget.
+class GenericError extends StatelessWidget {
+  GenericError({@required this.text}): assert(text != null && text.isNotEmpty);
+
+  final String text;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -16,7 +19,7 @@ class MemberDevicesListError extends StatelessWidget {
             size: MediaQuery.of(context).size.shortestSide * .1,
           ),
           SizedBox(height: 5),
-          Text(S.of(context).MemberDetailsLoadDevicesError),
+          Text(text)
         ],
       ),
     );

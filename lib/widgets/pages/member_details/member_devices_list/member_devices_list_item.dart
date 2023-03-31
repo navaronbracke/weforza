@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device/device.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
@@ -72,13 +72,13 @@ class _EditDeviceButton extends ConsumerWidget {
   final Device device;
 
   void _onEditDevicePressed(BuildContext context, WidgetRef ref) {
-    final selectedMember = ref.read(selectedMemberProvider);
+    final selectedRider = ref.read(selectedRiderProvider);
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DeviceForm(
           device: device,
-          ownerUuid: selectedMember!.uuid,
+          ownerUuid: selectedRider!.uuid,
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class MemberName extends ConsumerWidget {
@@ -9,15 +9,15 @@ class MemberName extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firstName = ref.watch(
-      selectedMemberProvider.select((value) => value!.firstName),
+      selectedRiderProvider.select((value) => value!.firstName),
     );
 
     final lastName = ref.watch(
-      selectedMemberProvider.select((value) => value!.lastName),
+      selectedRiderProvider.select((value) => value!.lastName),
     );
 
     final alias = ref.watch(
-      selectedMemberProvider.select((value) => value!.alias),
+      selectedRiderProvider.select((value) => value!.alias),
     );
 
     const textTheme = AppTheme.riderTextTheme;

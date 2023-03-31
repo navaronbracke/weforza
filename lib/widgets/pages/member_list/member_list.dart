@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
@@ -23,7 +23,7 @@ class MemberList extends ConsumerWidget {
   /// The function that handles filtering results.
   final List<Rider> Function(List<Rider> data, String query) filter;
 
-  /// The function that is called after a member is selected.
+  /// The function that is called after a rider is selected.
   final void Function() onMemberSelected;
 
   /// The widget that provides the search field.
@@ -34,9 +34,9 @@ class MemberList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memberList = ref.watch(memberListProvider);
+    final riderList = ref.watch(riderListProvider);
 
-    return memberList.when(
+    return riderList.when(
       data: (items) {
         if (items.isEmpty) {
           return const Center(child: MemberListEmpty());

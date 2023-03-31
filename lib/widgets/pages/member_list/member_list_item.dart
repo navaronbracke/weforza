@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
@@ -15,12 +15,12 @@ class MemberListItem extends ConsumerWidget {
     required this.onPressed,
   }) : super(key: ValueKey(member.uuid));
 
-  /// The member that is displayed in this item.
+  /// The rider that is displayed in this item.
   final Rider member;
 
   /// The onTap handler for this item.
   ///
-  /// This function is called after the selected member was updated.
+  /// This function is called after the selected rider was updated.
   final void Function() onPressed;
 
   @override
@@ -29,11 +29,11 @@ class MemberListItem extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        final notifier = ref.read(selectedMemberProvider.notifier);
+        final notifier = ref.read(selectedRiderProvider.notifier);
 
         notifier.setSelectedMember(member);
 
-        ref.invalidate(selectedMemberDevicesProvider);
+        ref.invalidate(selectedRiderDevicesProvider);
 
         onPressed();
       },

@@ -66,6 +66,8 @@ dependencies:
 dev_dependencies:
   file_testing: 3.0.0
 
+  flutter_lints: ^1.0.4
+
   test: any
 
   integration_test:

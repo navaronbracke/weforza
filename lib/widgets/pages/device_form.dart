@@ -144,9 +144,12 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
               delegate: SliverChildListDelegate.fixed([
                 CupertinoFormSection.insetGrouped(
                   children: [
-                    DeviceTypeCarousel(
-                      controller: _deviceTypeController,
-                      height: 120,
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: DeviceTypeCarousel(
+                        controller: _deviceTypeController,
+                        height: 120,
+                      ),
                     ),
                   ],
                 ),

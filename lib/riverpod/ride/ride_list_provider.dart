@@ -14,11 +14,11 @@ final rideListProvider = FutureProvider<List<Ride>>((ref) {
 final rideListCountProvider = StreamProvider<int>((ref) async* {
   final repository = ref.read(rideRepositoryProvider);
 
-  final curentRideCount = await repository.getCurrentRideCount();
+  final curentRideCount = await repository.getRidesCount();
 
   final controller = BehaviorSubject.seeded(curentRideCount);
 
-  final subscription = repository.getRideCount().listen((event) {
+  final subscription = repository.watchRidesCount().listen((event) {
     if (controller.isClosed) {
       return;
     }

@@ -19,7 +19,8 @@ class ManualSelectionSaveButton extends StatefulWidget {
   final void Function() onPressed;
 
   @override
-  State<ManualSelectionSaveButton> createState() => _ManualSelectionSaveButtonState();
+  State<ManualSelectionSaveButton> createState() =>
+      _ManualSelectionSaveButtonState();
 }
 
 class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {

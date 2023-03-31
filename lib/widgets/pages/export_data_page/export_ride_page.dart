@@ -22,7 +22,8 @@ class ExportRidePage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidePage> createState() => _ExportRidePageState();
 }
 
-class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTickerProviderStateMixin {
+class _ExportRidePageState extends ConsumerState<ExportRidePage>
+    with SingleTickerProviderStateMixin {
   late final ExportRidesDelegate _delegate;
 
   late final AnimationController checkmarkController;
@@ -52,7 +53,8 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _delegate.fileNameController.text = _getFileNameForRide(context, widget.selectedRide);
+    _delegate.fileNameController.text =
+        _getFileNameForRide(context, widget.selectedRide);
   }
 
   @override
@@ -66,7 +68,8 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
       onPressed: () => _delegate.exportDataToFile(
         ExportRidesOptions(ride: selectedRide?.date),
       ),
-      title: selectedRide == null ? translator.exportRides : translator.exportRide,
+      title:
+          selectedRide == null ? translator.exportRides : translator.exportRide,
     );
   }
 

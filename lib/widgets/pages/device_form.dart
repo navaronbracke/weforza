@@ -245,7 +245,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
-    final label = widget.device == null ? translator.addDevice : translator.editDevice;
+    final label =
+        widget.device == null ? translator.addDevice : translator.editDevice;
 
     return FormSubmitButton<void>(
       delegate: _delegate,

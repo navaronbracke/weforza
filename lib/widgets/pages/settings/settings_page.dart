@@ -46,7 +46,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     excludedTermsDelegate = ExcludedTermsDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter.map((t) => ExcludedTerm(term: t)).toList(),
+      initialValue: currentSettings.excludedTermsFilter
+          .map((t) => ExcludedTerm(term: t))
+          .toList(),
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,

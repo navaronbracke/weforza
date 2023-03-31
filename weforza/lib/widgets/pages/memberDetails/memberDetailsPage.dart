@@ -89,7 +89,6 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             icon: Icon(Icons.delete),
             onPressed: () => showDialog(
                 context: context,
-                barrierDismissible: false,
                 builder: (context) => DeleteItemDialog(
                   title: S.of(context).MemberDeleteDialogTitle,
                   description: S.of(context).MemberDeleteDialogDescription,

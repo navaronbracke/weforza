@@ -42,7 +42,6 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
   Widget build(BuildContext context) => PlatformAwareWidget(
     android: () => GestureDetector(
       onLongPress: () => showDialog(
-          barrierDismissible: false,
           context: context,
           builder: (_) => DeleteItemDialog(
             title: S.of(context).DeleteDeviceTitle,

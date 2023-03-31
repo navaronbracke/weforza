@@ -1071,10 +1071,10 @@ class S {
     );
   }
 
-  /// `Clear Calendar`
+  /// `Clear`
   String get SettingsResetRideCalendarDialogConfirm {
     return Intl.message(
-      'Clear Calendar',
+      'Clear',
       name: 'SettingsResetRideCalendarDialogConfirm',
       desc: '',
       args: [],

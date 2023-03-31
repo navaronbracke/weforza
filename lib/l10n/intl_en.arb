@@ -61,6 +61,7 @@
 	"ExportMembersTitle": "Export Riders",
 	"ExportRide": "Export Ride",
 	"ExportRideFileNamePlaceholder": "ride_{date}",
+	"ExportRiders": "Export riders",
 	"ExportRides": "Export rides",
 	"ExportingAllRides": "Exporting all rides",
 	"ExportingRide": "Exporting ride",

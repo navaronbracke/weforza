@@ -10,28 +10,10 @@ import 'package:weforza/repository/rideRepository.dart';
 
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
-  AddRideBloc(this._repository){
-    assert(_repository != null);
-    onDayPressed = (date){
-      DateTime today = DateTime.now();
-      //This date is in the past OR there is a ride with this date.
-      if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)) return false;
-
-      //This is a selected ride, unselect it.
-      if(_ridesToAdd.contains(date)){
-        _ridesToAdd.remove(date);
-        _submitController.add(AddRideSubmitState.IDLE);
-        return true;
-      }else{
-        _ridesToAdd.add(date);
-        _submitController.add(AddRideSubmitState.IDLE);
-        return true;
-      }
-    };
-  }
+  AddRideBloc({@required this.repository}): assert(repository != null);
 
   ///The repository that will handle the submit.
-  final RideRepository _repository;
+  final RideRepository repository;
 
   final StreamController<AddRideSubmitState> _submitController = BehaviorSubject();
   Stream<AddRideSubmitState> get submitStream => _submitController.stream;
@@ -48,13 +30,30 @@ class AddRideBloc extends Bloc {
   ///The rides to add on a submit.
   List<DateTime> _ridesToAdd = List();
 
-  ///A callback function for when a date is pressed.
-  bool Function(DateTime date) onDayPressed;
-
   ///A callback function that is fired when a selection clear is requested.
   VoidCallback _onSelectionCleared;
 
   set onSelectionCleared(VoidCallback function) => _onSelectionCleared = function;
+
+  //Intercept a day pressed event.
+  bool onDayPressed(DateTime date){
+    DateTime today = DateTime.now();
+    //This date is in the past OR there is a ride with this date.
+    if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)){
+      return false;
+    }
+
+    //This is a selected ride, unselect it.
+    if(_ridesToAdd.contains(date)){
+      _ridesToAdd.remove(date);
+      _submitController.add(AddRideSubmitState.IDLE);
+      return true;
+    }else{
+      _ridesToAdd.add(date);
+      _submitController.add(AddRideSubmitState.IDLE);
+      return true;
+    }
+  }
 
   ///This function clears the current ride dates selection.
   void onRequestClear(){
@@ -66,14 +65,14 @@ class AddRideBloc extends Bloc {
   }
 
   ///Load the existing ride dates.
-  Future loadRideDates() async => _existingRides = await _repository.getRideDates();
+  Future<List<DateTime>> loadRideDates() async => _existingRides = await repository.getRideDates();
 
   ///Whether a day, has or had a ride planned beforehand.
   bool dayHasRidePlanned(DateTime date){
     assert(date != null);
     return _existingRides.contains(date) || _ridesToAdd.contains(date);
   }
-
+  
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
   bool dayIsNewlyScheduledRide(DateTime date){
     assert(date != null);
@@ -112,7 +111,7 @@ class AddRideBloc extends Bloc {
   Future<void> addRides(VoidCallback onSuccess) async {
     if(_ridesToAdd.isNotEmpty){
       _submitController.add(AddRideSubmitState.SUBMIT);
-      await _repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).then((_)
+      await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).then((_)
       {
         onSuccess();
       },onError: (error){

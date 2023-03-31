@@ -81,6 +81,18 @@ class RideAttendeeScanningDelegate {
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stateStream => _stateMachine;
 
+  /// Add the given [uuid] as a new ride attendee.
+  ///
+  /// The [isScanned] parameter indicates if this ride attendee
+  /// was found automatically, or if it was manually added.
+  void _addRideAttendee(String uuid, {required bool isScanned}) {
+    final items = _rideAttendeeController.value;
+
+    items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
+
+    _rideAttendeeController.add(items);
+  }
+
   /// Add [device] to the list of scanned devices.
   void _addScannedDevice(BluetoothPeripheral device) {
     if (_stateMachine.isClosed) {
@@ -102,7 +114,7 @@ class RideAttendeeScanningDelegate {
         _unresolvedOwners.addAll(owners);
       } else {
         // Otherwise the single owner can be resolved automatically.
-        addRideAttendee(owners.first.uuid, isScanned: true);
+        _addRideAttendee(owners.first.uuid, isScanned: true);
       }
     }
 
@@ -186,18 +198,6 @@ class RideAttendeeScanningDelegate {
     }
 
     return true;
-  }
-
-  /// Add the given [uuid] as a new ride attendee.
-  ///
-  /// The [isScanned] parameter indicates if this ride attendee
-  /// was found automatically, or if it was manually added.
-  void addRideAttendee(String uuid, {required bool isScanned}) {
-    final items = _rideAttendeeController.value;
-
-    items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
-
-    _rideAttendeeController.add(items);
   }
 
   /// Go to the manual selection screen.
@@ -330,20 +330,20 @@ class RideAttendeeScanningDelegate {
     }
   }
 
-  /// Toggle the selection state for the given [item].
+  /// Toggle the selection state for the given unresolved owner.
   ///
-  /// If the item was selected, it is removed from the selection.
+  /// If the [item] was selected, it is removed from the selection.
   ///
-  /// If the item was not selected,
+  /// If the [item] was not selected,
   /// it is added to the selection as a manually selected item.
-  void toggleSelectionForItem(ScannedRideAttendee item) {
+  void toggleSelectionForUnresolvedOwner(ScannedRideAttendee item) {
     final currentSelection = _rideAttendeeController.value;
 
     if (currentSelection.contains(item)) {
       currentSelection.remove(item);
       _rideAttendeeController.add(currentSelection);
     } else {
-      addRideAttendee(item.uuid, isScanned: false);
+      _addRideAttendee(item.uuid, isScanned: false);
     }
   }
 

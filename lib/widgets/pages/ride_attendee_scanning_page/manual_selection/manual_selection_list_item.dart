@@ -208,14 +208,12 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       return showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
-          title:
-              Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
-          content: Text(
-              translator.RideAttendeeDeselectScannedMemberDialogDescription),
+          title: Text(translator.UncheckRiderTitle),
+          content: Text(translator.UncheckRiderDescription),
           actions: [
             TextButton(
               child: Text(
-                translator.RideAttendeeDeselectScannedMemberDialogConfirm,
+                translator.Uncheck,
                 textAlign: TextAlign.end,
                 style: const TextStyle(color: Colors.red),
               ),
@@ -232,15 +230,12 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
       return showCupertinoDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(
-          title:
-              Text(translator.RideAttendeeDeselectScannedMemberDialogConfirm),
-          content: Text(
-              translator.RideAttendeeDeselectScannedMemberDialogDescription),
+          title: Text(translator.UncheckRiderTitle),
+          content: Text(translator.UncheckRiderDescription),
           actions: [
             CupertinoDialogAction(
               isDestructiveAction: true,
-              child: Text(
-                  translator.RideAttendeeDeselectScannedMemberDialogConfirm),
+              child: Text(translator.Uncheck),
               onPressed: () => Navigator.of(context).pop(true),
             ),
             CupertinoDialogAction(

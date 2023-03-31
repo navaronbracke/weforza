@@ -46,9 +46,7 @@ class MemberWithPictureListItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(item.firstName,
-                      style: ApplicationTheme.memberListItemFirstNameTextStyle,
-                      overflow: TextOverflow.ellipsis),
+                  _combineFirstNameAndAlias(),
                   SizedBox(height: 4),
                   Text(item.lastName,
                       style: ApplicationTheme.memberListItemLastNameTextStyle,
@@ -59,6 +57,34 @@ class MemberWithPictureListItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  //Combine the first name with the alias.
+  Widget _combineFirstNameAndAlias(){
+    if(item.alias.isEmpty){
+      return Text(
+        item.firstName,
+        style: ApplicationTheme.memberListItemFirstNameTextStyle,
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+
+    // Firstname 'alias'
+    return Text.rich(
+      TextSpan(
+          text: item.firstName,
+          style: ApplicationTheme.memberListItemFirstNameTextStyle,
+          children: [
+            TextSpan(
+              text: " '${item.alias}'",
+              style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(
+                  fontStyle: FontStyle.italic
+              ),
+            ),
+          ]
+      ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

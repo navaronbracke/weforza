@@ -5,15 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
 import 'package:weforza/provider/memberProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePicker.dart';
-import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberSubmit.dart';
 import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 
@@ -25,7 +22,7 @@ class AddMemberPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [AddMemberPage].
-class _AddMemberPageState extends State<AddMemberPage> implements IProfileImagePicker {
+class _AddMemberPageState extends State<AddMemberPage> {
   _AddMemberPageState(this._bloc): assert(_bloc != null);
 
   ///The key for the form.
@@ -233,39 +230,24 @@ class _AddMemberPageState extends State<AddMemberPage> implements IProfileImageP
                   ),
                   Flexible(
                     flex: 1,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          StreamBuilder<ProfileImagePickingState>(
-                            initialData: ProfileImagePickingState.IDLE,
-                            stream: _bloc.imagePickingStream,
-                            builder: (context,snapshot){
-                              if(snapshot.hasError){
-                                return Center(child: Text(S.of(context).MemberPickImageError,softWrap: true));
-                              }else{
-                                return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                  width: 80,
-                                  height: 80,
-                                  child: Center(
-                                    child: PlatformAwareLoadingIndicator(),
-                                  ),
-                                ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
-                              }
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          AddMemberSubmit(_bloc.submitStream,() async {
-                            if (_formKey.currentState.validate()) {
-                              await _bloc.addMember((){
-                                MemberProvider.reloadMembers = true;
-                                Navigator.pop(context);
-                              });
-                            }
-                          }),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ProfileImagePicker(
+                          imageHandler: _bloc,
+                          errorMessage: S.of(context).MemberPickImageError,
+                          size: 100,
+                        ),
+                        SizedBox(height: 20),
+                        AddMemberSubmit(_bloc.submitStream,() async {
+                          if (_formKey.currentState.validate()) {
+                            await _bloc.addMember((){
+                              MemberProvider.reloadMembers = true;
+                              Navigator.pop(context);
+                            });
+                          }
+                        }),
+                      ],
                     ),
                   ),
                 ],
@@ -386,41 +368,26 @@ class _AddMemberPageState extends State<AddMemberPage> implements IProfileImageP
                       ),
                       Flexible(
                         flex: 3,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              StreamBuilder<ProfileImagePickingState>(
-                                initialData: ProfileImagePickingState.IDLE,
-                                stream: _bloc.imagePickingStream,
-                                builder: (context,snapshot){
-                                  if(snapshot.hasError){
-                                    return Center(child: Text(S.of(context).MemberPickImageError,softWrap: true));
-                                  }else{
-                                    return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                                      width: 80,
-                                      height: 80,
-                                      child: Center(
-                                        child: PlatformAwareLoadingIndicator(),
-                                      ),
-                                    ) : Center(child: ProfileImagePicker(this,_bloc.image,100));
-                                  }
-                                },
-                              ),
-                              SizedBox(height: 20),
-                              AddMemberSubmit(_bloc.submitStream,() async {
-                                if (_iosAllFormInputValidator()) {
-                                  await _bloc.addMember((){
-                                    MemberProvider.reloadMembers = true;
-                                    Navigator.pop(context);
-                                  });
-                                }else {
-                                  setState(() {});
-                                }
-                              }),
-                            ],
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ProfileImagePicker(
+                              imageHandler: _bloc,
+                              errorMessage: S.of(context).MemberPickImageError,
+                              size: 100,
+                            ),
+                            SizedBox(height: 20),
+                            AddMemberSubmit(_bloc.submitStream,() async {
+                              if (_iosAllFormInputValidator()) {
+                                await _bloc.addMember((){
+                                  MemberProvider.reloadMembers = true;
+                                  Navigator.pop(context);
+                                });
+                              }else {
+                                setState(() {});
+                              }
+                            }),
+                          ],
                         ),
                       ),
                     ],
@@ -450,20 +417,10 @@ class _AddMemberPageState extends State<AddMemberPage> implements IProfileImageP
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Center(
-                    child: StreamBuilder<ProfileImagePickingState>(
-                      initialData: ProfileImagePickingState.IDLE,
-                      stream: _bloc.imagePickingStream,
-                      builder: (context,snapshot){
-                        if(snapshot.hasError){
-                          return Text(S.of(context).MemberPickImageError,softWrap: true);
-                        }else{
-                          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                            width: 80,
-                            height: 80,
-                            child: PlatformAwareLoadingIndicator(),
-                          ) : ProfileImagePicker(this,_bloc.image,100);
-                        }
-                      },
+                    child: ProfileImagePicker(
+                      imageHandler: _bloc,
+                      errorMessage: S.of(context).MemberPickImageError,
+                      size: 100,
                     ),
                   ),
                   SizedBox(height: 10),
@@ -584,20 +541,10 @@ class _AddMemberPageState extends State<AddMemberPage> implements IProfileImageP
             child: Column(
               children: <Widget>[
                 Center(
-                  child: StreamBuilder<ProfileImagePickingState>(
-                    initialData: ProfileImagePickingState.IDLE,
-                    stream: _bloc.imagePickingStream,
-                    builder: (context,snapshot){
-                      if(snapshot.hasError){
-                        return Text(S.of(context).MemberPickImageError,softWrap: true);
-                      }else{
-                        return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: PlatformAwareLoadingIndicator(),
-                        ) : ProfileImagePicker(this,_bloc.image,100);
-                      }
-                    },
+                  child: ProfileImagePicker(
+                    imageHandler: _bloc,
+                    errorMessage: S.of(context).MemberPickImageError,
+                    size: 100,
                   ),
                 ),
                 SizedBox(height: 10),
@@ -699,11 +646,6 @@ class _AddMemberPageState extends State<AddMemberPage> implements IProfileImageP
       ),
     );
   }
-
-  ///See [IProfileImagePicker].
-  @override
-  Future<void> pickProfileImage() async => await _bloc.pickImage();
-
 
   void _focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();

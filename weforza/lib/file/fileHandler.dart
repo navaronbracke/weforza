@@ -54,9 +54,6 @@ abstract class IFileHandler {
   ///The extension determines how the data is structured inside the file.
   Future<void> saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides);
 
-  //Read the given CSV file and return the lines that were read.
-  Future<List<String>> readCsvFile(File file);
-
   //Create a file with the given name and extension.
   Future<File> createFile(String fileName, String extension);
 
@@ -67,9 +64,6 @@ abstract class IFileHandler {
 
 ///This class is an implementation of [IFileHandler].
 class FileHandler implements IFileHandler {
-  @override
-  Future<List<String>> readCsvFile(File file)
-    => file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
 
   @override
   Future<File> chooseProfileImageFromGallery() async {

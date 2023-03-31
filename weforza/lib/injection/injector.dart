@@ -1,6 +1,5 @@
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
-import 'package:weforza/bluetooth/mockBluetoothDeviceScanner.dart';
 import 'package:weforza/database/databaseProvider.dart';
 import 'package:weforza/database/deviceDao.dart';
 import 'package:weforza/database/memberDao.dart';
@@ -37,9 +36,7 @@ class InjectionContainer {
     //file handler
     _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
     //bluetooth scanner
-    //TODO enable the real one when done testing
-    _injector.map<BluetoothDeviceScanner>((i) => MockBluetoothDeviceScannerImpl(),isSingleton: true);
-    //_injector.map<BluetoothDeviceScanner>((i) => BluetoothDeviceScannerImpl(),isSingleton: true);
+    _injector.map<BluetoothDeviceScanner>((i) => BluetoothDeviceScannerImpl(),isSingleton: true);
 
     //other
   }

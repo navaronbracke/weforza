@@ -16,7 +16,7 @@ import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selecti
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget represents the list of active members that is shown
+/// This widget represents the list of active riders that is shown
 /// after the device scan has ended,
 /// and any conflicts with unresolved owners have been corrected.
 class ManualSelectionList extends StatefulWidget {
@@ -25,7 +25,7 @@ class ManualSelectionList extends StatefulWidget {
     super.key,
   });
 
-  /// The delegate that manages the list of active members.
+  /// The delegate that manages the list of active riders.
   final RideAttendeeScanningDelegate delegate;
 
   @override
@@ -33,13 +33,13 @@ class ManualSelectionList extends StatefulWidget {
 }
 
 class _ManualSelectionListState extends State<ManualSelectionList> {
-  Future<List<Rider>>? _activeMembersFuture;
+  Future<List<Rider>>? _activeRidersFuture;
 
   final _filtersController = ManualSelectionFilterDelegate();
 
   Future<void>? _saveFuture;
 
-  List<Rider> _filterActiveMembers(
+  List<Rider> _filterActiveRiders(
     List<Rider> items,
     ManualSelectionFilterOptions filters,
   ) {
@@ -87,9 +87,9 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
     );
   }
 
-  /// Sort the active members on their name and alias.
-  Future<List<Rider>> _sortActiveMembers() async {
-    final items = widget.delegate.activeMembers;
+  /// Sort the active riders on their name and alias.
+  Future<List<Rider>> _sortActiveRiders() async {
+    final items = widget.delegate.activeRiders;
 
     items.sort((Rider m1, Rider m2) => m1.compareTo(m2));
 
@@ -100,12 +100,12 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   void initState() {
     super.initState();
 
-    if (widget.delegate.hasActiveMembers) {
-      _activeMembersFuture = _sortActiveMembers();
+    if (widget.delegate.hasActiveRiders) {
+      _activeRidersFuture = _sortActiveRiders();
     }
   }
 
-  Widget _buildActiveMembersList(BuildContext context, List<Rider> items) {
+  Widget _buildActiveRidersList(BuildContext context, List<Rider> items) {
     final translator = S.of(context);
 
     return FocusAbsorber(
@@ -140,7 +140,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
               initialData: _filtersController.currentFilters,
               stream: _filtersController.filters,
               builder: (context, snapshot) {
-                final results = _filterActiveMembers(items, snapshot.data!);
+                final results = _filterActiveRiders(items, snapshot.data!);
 
                 if (results.isEmpty) {
                   return const RiderSearchFilterEmpty();
@@ -177,16 +177,16 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.delegate.hasActiveMembers) {
+    if (widget.delegate.hasActiveRiders) {
       return FutureBuilder<List<Rider>>(
-        future: _activeMembersFuture,
+        future: _activeRidersFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return const Center(child: GenericScanError());
             }
 
-            return _buildActiveMembersList(context, snapshot.data ?? []);
+            return _buildActiveRidersList(context, snapshot.data ?? []);
           }
 
           return const Center(child: PlatformAwareLoadingIndicator());

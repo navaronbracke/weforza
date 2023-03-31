@@ -39,7 +39,7 @@ class RideAttendeeScanningPageState
 
     delegate = RideAttendeeScanningDelegate(
       deviceRepository: ref.read(deviceRepositoryProvider),
-      memberRepository: ref.read(riderRepositoryProvider),
+      riderRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
       scanner: ref.read(bluetoothProvider),

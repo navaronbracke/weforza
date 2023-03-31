@@ -6,7 +6,7 @@ class SettingsPageScrollView extends StatelessWidget {
   const SettingsPageScrollView({
     required this.excludedTermsList,
     required this.excludedTermsListFooter,
-    required this.memberListFilter,
+    required this.riderListFilter,
     required this.resetRideCalendarButton,
     required this.scanDurationOption,
     required this.version,
@@ -24,8 +24,8 @@ class SettingsPageScrollView extends StatelessWidget {
   /// The widget that represents the header for the excluded terms list.
   final Widget? excludedTermsListHeader;
 
-  /// The widget that represents the member list filter.
-  final Widget memberListFilter;
+  /// The widget that represents the rider list filter.
+  final Widget riderListFilter;
 
   /// The sliver navigation bar that is placed first in the scrollview.
   final Widget? navigationBar;
@@ -46,7 +46,7 @@ class SettingsPageScrollView extends StatelessWidget {
         if (navigationBar != null) navigationBar!,
         SliverList(
           delegate: SliverChildListDelegate.fixed([
-            memberListFilter,
+            riderListFilter,
             scanDurationOption,
             if (excludedTermsListHeader != null) excludedTermsListHeader!,
           ]),

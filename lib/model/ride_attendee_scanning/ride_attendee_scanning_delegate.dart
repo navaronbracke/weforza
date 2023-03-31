@@ -79,6 +79,9 @@ class RideAttendeeScanningDelegate {
   /// The controller that manages the attendees for [ride].
   final _rideAttendeeController = BehaviorSubject<Set<ScannedRideAttendee>>();
 
+  /// The set of scanned Bluetooth peripherals.
+  final Set<BluetoothPeripheral> _scannedDevices = {};
+
   /// The controller for the scanning progress bar.
   final AnimationController _scanProgressBarController;
 
@@ -174,11 +177,13 @@ class RideAttendeeScanningDelegate {
     onDeviceFound(device);
   }
 
-  /// Check whether a given [BluetoothPeripheral.deviceName]
-  /// should be accepted as a scan result.
+  /// Check whether a given [BluetoothPeripheral] should be accepted as a scan result.
   ///
-  /// Returns false for device names that are empty,
-  /// or consist only of whitespace.
+  /// Returns false for invalid devices,
+  /// in other words devices with a [BluetoothPeripheral.deviceName] or [BluetoothPeripheral.id]
+  /// that is empty or consist solely of whitespace.
+  ///
+  /// Returns false for devices that were already scanned before.
   ///
   /// Returns false for device names that contain any value of the
   /// [Settings.excludedTermsFilter] values.
@@ -193,11 +198,15 @@ class RideAttendeeScanningDelegate {
   /// Returns false for devices with a single owner,
   /// if said owner was already scanned during the currently running scan.
   bool _includeScanResult(BluetoothPeripheral device) {
-    final deviceName = device.deviceName;
+    final deviceName = device.deviceName.trim();
+    final deviceId = device.id.trim();
 
-    if (deviceName.trim().isEmpty) {
+    // Discard invalid devices and devices that were already scanned.
+    if (deviceId.isEmpty || deviceName.isEmpty || _scannedDevices.contains(device)) {
       return false;
     }
+
+    _scannedDevices.add(device);
 
     final excludedTerms = settings.excludedTermsFilter;
 

@@ -28,15 +28,9 @@ class WeForzaAppState extends ConsumerState<WeForzaApp> {
       DeviceOrientation.portraitDown,
     ]);
 
-    return GestureDetector(
-      child: PlatformAwareWidget(
-        android: () => _buildAndroidWidget(),
-        ios: () => _buildIosWidget(),
-      ),
-      onTap: () {
-        // Enable tap to dismiss the keyboard.
-        FocusScope.of(context).unfocus();
-      },
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(),
+      ios: () => _buildIosWidget(),
     );
   }
 

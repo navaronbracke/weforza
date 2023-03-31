@@ -46,7 +46,7 @@ class RideDaoImpl implements RideDao {
   final Database _database;
 
   /// A reference to the [Rider] store.
-  final _memberStore = DatabaseTables.member;
+  final _memberStore = DatabaseTables.rider;
 
   /// A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseTables.rideAttendee;

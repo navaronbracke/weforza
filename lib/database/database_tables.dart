@@ -5,11 +5,11 @@ class DatabaseTables {
   /// The device database table.
   static final device = stringMapStoreFactory.store('device');
 
-  /// The member database table.
-  static final member = stringMapStoreFactory.store('member');
-
   /// The ride database table.
   static final ride = stringMapStoreFactory.store('ride');
+
+  /// The rider database table.
+  static final rider = stringMapStoreFactory.store('member');
 
   /// The ride attendee database table.
   static final rideAttendee = stringMapStoreFactory.store('rideAttendee');

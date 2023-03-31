@@ -39,7 +39,7 @@ class MemberDaoImpl implements MemberDao {
   final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Rider] store.
-  final _memberStore = DatabaseTables.member;
+  final _memberStore = DatabaseTables.rider;
 
   /// A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseTables.rideAttendee;

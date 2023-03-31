@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/model/add_ride_form_delegate.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class AddRideCalendar extends StatelessWidget {
   const AddRideCalendar({super.key, required this.delegate});
@@ -14,6 +14,7 @@ class AddRideCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final calendarDelegate = delegate.calendarDelegate;
+    const theme = AppTheme.rideCalendar;
 
     const double dayItemPadding = 4;
     const double dayItemSize = 40;
@@ -24,8 +25,7 @@ class AddRideCalendar extends StatelessWidget {
       backButton: PlatformAwareWidget(
         android: () => IconButton(
           icon: const Icon(Icons.arrow_back),
-          color: ApplicationTheme.choiceArrowIdleColor,
-          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+          color: theme.changeMonthButton,
           onPressed: calendarDelegate.goBackOneMonth,
         ),
         ios: () => Padding(
@@ -54,8 +54,7 @@ class AddRideCalendar extends StatelessWidget {
       forwardButton: PlatformAwareWidget(
         android: () => IconButton(
           icon: const Icon(Icons.arrow_forward),
-          color: ApplicationTheme.choiceArrowIdleColor,
-          splashColor: ApplicationTheme.choiceArrowOnPressedColor,
+          color: theme.changeMonthButton,
           onPressed: calendarDelegate.goForwardOneMonth,
         ),
         ios: () => Padding(
@@ -65,9 +64,6 @@ class AddRideCalendar extends StatelessWidget {
             onPressed: calendarDelegate.goForwardOneMonth,
           ),
         ),
-      ),
-      monthStyle: const TextStyle(
-        color: ApplicationTheme.rideCalendarHeaderColor,
       ),
       weekDayWidth: weekDayWidth,
       weekPadding: const EdgeInsets.symmetric(vertical: dayItemPadding),

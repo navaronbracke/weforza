@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class MemberListItem extends ConsumerWidget {
   MemberListItem({
@@ -24,6 +24,8 @@ class MemberListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const theme = AppTheme.memberListItem;
+
     return GestureDetector(
       onTap: () {
         final notifier = ref.read(selectedMemberProvider.notifier);
@@ -47,12 +49,10 @@ class MemberListItem extends ConsumerWidget {
             Expanded(
               child: MemberNameAndAlias(
                 alias: member.alias,
-                firstLineStyle:
-                    ApplicationTheme.memberListItemFirstNameTextStyle,
+                firstLineStyle: theme.firstNameStyle,
                 firstName: member.firstName,
                 lastName: member.lastName,
-                secondLineStyle:
-                    ApplicationTheme.memberListItemLastNameTextStyle,
+                secondLineStyle: theme.lastNameStyle,
               ),
             ),
             Padding(

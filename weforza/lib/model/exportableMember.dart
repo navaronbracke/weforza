@@ -27,7 +27,7 @@ class ExportableMember {
       "firstName": firstName,
       "lastName": lastName,
       "alias": alias,
-      "devices": devices
+      "devices": List<String>.of(devices)
     };
   }
 }

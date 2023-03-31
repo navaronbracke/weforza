@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/member/selected_member_attending_count_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';

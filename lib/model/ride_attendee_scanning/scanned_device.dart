@@ -1,4 +1,4 @@
-import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents a device that was found during a Bluetooth scan.
 class ScannedDevice {

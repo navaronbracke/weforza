@@ -1,4 +1,4 @@
-import 'package:weforza/model/member.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 mixin RiderValidator {
   String? validateAlias({

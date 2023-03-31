@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:weforza/database/member_dao.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class provides an API to work with members.
 class MemberRepository {

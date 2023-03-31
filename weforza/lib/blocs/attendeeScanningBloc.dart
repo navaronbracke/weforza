@@ -290,11 +290,11 @@ class AttendeeScanningBloc extends Bloc {
 
   bool isItemSelected(Member item) => rideAttendees.contains(item.uuid);
 
-  void onMemberSelected(Member item){
-    if(rideAttendees.contains(item.uuid)){
-      rideAttendees.remove(item.uuid);
+  void onMemberSelected(String memberUuid){
+    if(rideAttendees.contains(memberUuid)){
+      rideAttendees.remove(memberUuid);
     }else{
-      rideAttendees.add(item.uuid);
+      rideAttendees.add(memberUuid);
     }
   }
 

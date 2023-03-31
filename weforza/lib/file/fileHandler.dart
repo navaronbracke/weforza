@@ -1,10 +1,8 @@
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:weforza/model/exportableMember.dart';
 
 enum FileExtension {
   JSON, CSV
@@ -45,11 +43,6 @@ abstract class IFileHandler {
 
   //Create a file with the given name and extension.
   Future<File> createFile(String fileName, String extension);
-
-  //TODO move
-  /// Save the given [ExportableMember]s to the given file,
-  /// using a write algorithm compatible with the given extension.
-  Future<void> saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader);
 }
 
 ///This class is an implementation of [IFileHandler].
@@ -107,29 +100,5 @@ class FileHandler implements IFileHandler {
     final String path = directory.path + Platform.pathSeparator + fileName + extension;
 
     return File(path);
-  }
-
-
-  @override
-  Future<void> saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader) async {
-    if(extension == FileExtension.CSV.extension()){
-      final buffer = StringBuffer();
-
-      buffer.writeln(csvHeader);
-
-      members.forEach((exportedMember) {
-        buffer.writeln(exportedMember.toCsv());
-      });
-
-      await file.writeAsString(buffer.toString());
-    }else if(extension == FileExtension.JSON.extension()){
-      final Map<String, dynamic> data = {
-        "members": members.map((ExportableMember member) => member.toJson()).toList()
-      };
-
-      await file.writeAsString(jsonEncode(data));
-    }else{
-      return Future.error(InvalidFileFormatError());
-    }
   }
 }

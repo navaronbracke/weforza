@@ -2,36 +2,26 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/file/importMembersFileReader.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/model/member.dart';
 
 /// This class will read the contents of CSV files.
-class CsvFileReader {
+class CsvFileReader implements ImportMembersFileReader<String> {
+  CsvFileReader({
+    @required this.headerRegex,
+  }): assert(headerRegex != null && headerRegex.isNotEmpty);
 
-  /// Read the individual lines of the given [file].
-  /// Throws a [CsvHeaderMissingError] if the first line doesn't match [headerRegex].
-  /// Returns the lines that were read from the file.
-  /// Returns an empty list if the file is empty.
-  Future<List<String>> readLines(File file, String headerRegex) async {
-    final List<String> lines = await file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
+  final String headerRegex;
 
-    if(lines.isEmpty) return lines;
-
-    // Check that the header is present.
-    if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
-      return Future.error(CsvHeaderMissingError());
-    }
-
-    // Return the lines, without the header.
-    return lines.sublist(1);
-  }
-
-  //Process the given line of data and add it to the given collection, if it is valid.
+  //Process the given data and add it to the given collection, if it is valid.
   //This function is a future, so we can process multiple lines at once.
-  Future<void> processLine(String line, List<ExportableMember> collection) async {
-    final List<String> values = line.split(',');
+  @override
+  Future<void> processData(String data, List<ExportableMember> collection) async {
+    final List<String> values = data.split(',');
 
     //If the line doesn't have enough cells to fill the required fields
     // (first name, last name and alias, in that order), skip it
@@ -56,10 +46,29 @@ class CsvFileReader {
     }
 
     collection.add(ExportableMember(
-      firstName: values[0],
-      lastName: values[1],
-      alias: values[2],
-      devices: devices
+        firstName: values[0],
+        lastName: values[1],
+        alias: values[2],
+        devices: devices
     ));
+  }
+
+  /// Read the individual lines of the given [file].
+  /// Throws a [CsvHeaderMissingError] if the first line doesn't match [headerRegex].
+  /// Returns the lines that were read from the file.
+  /// Returns an empty list if the file is empty.
+  @override
+  Future<List<String>> readFile(File file) async {
+    final List<String> lines = await file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
+
+    if(lines.isEmpty) return lines;
+
+    // Check that the header is present.
+    if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
+      return Future.error(CsvHeaderMissingError());
+    }
+
+    // Return the lines, without the header.
+    return lines.sublist(1);
   }
 }

@@ -6,7 +6,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   final _scanningController = BehaviorSubject.seeded(false);
 
   @override
-  Future<bool> isBluetoothEnabled() => Future.value(true);
+  Future<bool> isBluetoothEnabled() async => true;
 
   @override
   Stream<bool> get isScanning => _scanningController;

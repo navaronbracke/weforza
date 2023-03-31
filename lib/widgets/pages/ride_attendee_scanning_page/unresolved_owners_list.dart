@@ -30,12 +30,12 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
 
   /// Filter out the owners that have already been scanned
   /// and sort the remaining unresolved owners.
-  Future<List<Member>> _filterAndSortItems() {
+  Future<List<Member>> _filterAndSortItems() async {
     final filtered = widget.delegate.getUnresolvedDeviceOwners();
 
     filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
 
-    return Future.value(filtered);
+    return filtered;
   }
 
   TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {

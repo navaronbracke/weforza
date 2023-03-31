@@ -88,12 +88,12 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   /// Sort the active members on their name and alias.
-  Future<List<Member>> _sortActiveMembers() {
+  Future<List<Member>> _sortActiveMembers() async {
     final items = widget.delegate.activeMembers;
 
     items.sort((Member m1, Member m2) => m1.compareTo(m2));
 
-    return Future.value(items);
+    return items;
   }
 
   @override

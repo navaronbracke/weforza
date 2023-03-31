@@ -5,20 +5,21 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-abstract class ScanDurationHandler {
-  double get maxScanValue;
-
-  double get minScanValue;
-
-  void Function(double value) onChanged;
-
-  double get currentValue;
-}
-
 class ScanDurationOption extends StatefulWidget {
-  ScanDurationOption(this.handler): assert(handler != null);
+  ScanDurationOption({
+    @required this.getValue,
+    @required this.minScanValue,
+    @required this.maxScanValue,
+    @required this.onChanged,
+  }): assert(
+    onChanged != null && getValue != null && minScanValue > 0
+    && maxScanValue > minScanValue
+  );
 
-  final ScanDurationHandler handler;
+  final void Function(double value) onChanged;
+  final double minScanValue;
+  final double maxScanValue;
+  final double Function() getValue;
 
   @override
   _ScanDurationOptionState createState() => _ScanDurationOptionState();
@@ -33,6 +34,7 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
   );
 
   Widget _buildAndroidWidget(BuildContext context){
+    final currentValue = widget.getValue();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -46,20 +48,21 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
               thumbColor: ApplicationTheme.settingsScanSliderThumbColor
             ),
             child: Slider(
-              value: widget.handler.currentValue,
-              onChanged: (value)=> setState(() => widget.handler.onChanged(value)),
-              min: widget.handler.minScanValue,
-              max: widget.handler.maxScanValue,
+              value: currentValue,
+              onChanged: (value)=> setState(() => widget.onChanged(value)),
+              min: widget.minScanValue,
+              max: widget.maxScanValue,
               divisions: 5,
             ),
           ),
         ),
-        Center(child: Text("${widget.handler.currentValue.floor()}s")),
+        Center(child: Text("${currentValue.floor()}s")),
       ],
     );
   }
 
   Widget _buildIosWidget(BuildContext context){
+    final currentValue = widget.getValue();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -74,17 +77,17 @@ class _ScanDurationOptionState extends State<ScanDurationOption> {
             children: <Widget>[
               Expanded(
                 child: CupertinoSlider(
-                  value: widget.handler.currentValue,
-                  onChanged: (value) => setState(() => widget.handler.onChanged(value)),
-                  min: widget.handler.minScanValue,
-                  max: widget.handler.maxScanValue,
+                  value: currentValue,
+                  onChanged: (value) => setState(() => widget.onChanged(value)),
+                  min: widget.minScanValue,
+                  max: widget.maxScanValue,
                   divisions: 5,
                 ),
               ),
             ],
           ),
         ),
-        Center(child: Text("${widget.handler.currentValue.floor()}s")),
+        Center(child: Text("${currentValue.floor()}s")),
       ],
     );
   }

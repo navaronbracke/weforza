@@ -14,4 +14,15 @@ class SelectedMember {
 
   /// The member that was selected.
   final Member value;
+
+  @override
+  int get hashCode => Object.hash(attendingCount, profileImage, value);
+
+  @override
+  bool operator ==(Object other) {
+    return other is SelectedMember &&
+        attendingCount == other.attendingCount &&
+        profileImage == other.profileImage &&
+        value == other.value;
+  }
 }

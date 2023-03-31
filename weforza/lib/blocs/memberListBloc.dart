@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/blocs/bloc.dart';
 
@@ -15,15 +16,11 @@ class MemberListBloc extends Bloc {
 
   Future<List<Member>> membersFuture;
 
-  void loadMembersIfNotLoaded(){
-    if(membersFuture == null){
-      membersFuture = _loadMembers();
-    }
+  /// Load the members, using the given filter option.
+  /// Defaults to using no filter.
+  void loadMembers([MemberFilterOption filter = MemberFilterOption.ALL]){
+    membersFuture = _repository.getMembers(filter);
   }
-
-  void reloadMembers() => membersFuture = _loadMembers();
-
-  Future<List<Member>> _loadMembers() => _repository.getMembers();
 
   Future<File> getMemberProfileImage(String path) => _fileHandler.loadProfileImageFromDisk(path);
 

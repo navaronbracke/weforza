@@ -10,6 +10,7 @@ import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_data_folder_selection.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
@@ -42,11 +43,19 @@ class ExportDataPage<T> extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 16),
             child: ExportDataFileNameTextField<T>(delegate: delegate),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 40),
+            padding: const EdgeInsets.only(bottom: 32),
+            child: ExportDataFolderSelection(
+              initialData: delegate.selectedDirectory,
+              selectDirectory: selectDirectory,
+              stream: delegate.selectedDirectoryStream,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 40),
             child: Row(
               children: [
                 Expanded(
@@ -119,6 +128,11 @@ class ExportDataPage<T> extends StatelessWidget {
     return CupertinoFormSection.insetGrouped(
       children: [
         ExportDataFileNameTextField<T>(delegate: delegate),
+        ExportDataFolderSelection(
+          initialData: delegate.selectedDirectory,
+          selectDirectory: selectDirectory,
+          stream: delegate.selectedDirectoryStream,
+        ),
         CupertinoFormRow(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
           prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),

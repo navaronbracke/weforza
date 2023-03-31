@@ -11,17 +11,6 @@ class ManualSelectionFilterOptions {
   /// Whether scanned results should be shown.
   final bool showScannedResults;
 
-  /// Create a copy of this object.
-  ManualSelectionFilterOptions copyWith({
-    String? query,
-    bool? showScannedResults,
-  }) {
-    return ManualSelectionFilterOptions(
-      query: query ?? this.query,
-      showScannedResults: showScannedResults ?? this.showScannedResults,
-    );
-  }
-
   @override
   int get hashCode => Object.hash(query, showScannedResults);
 

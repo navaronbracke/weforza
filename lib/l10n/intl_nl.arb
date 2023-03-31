@@ -66,6 +66,7 @@
 	"ExportingAllRides": "Alle ritten exporteren",
 	"ExportingRide": "Rit exporteren",
 	"ExportingRiders": "Renners exporteren",
+	"FileFormat": "Bestandsformaat",
 	"FileMalformed": "Het gekozen bestand is incompatibel",
 	"FileName": "Bestandsnaam",
 	"FileNameExists": "Dit bestand bestaat al",

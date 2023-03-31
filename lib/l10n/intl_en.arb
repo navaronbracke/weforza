@@ -66,6 +66,7 @@
 	"ExportingAllRides": "Exporting all rides",
 	"ExportingRide": "Exporting ride",
 	"ExportingRiders": "Exporting riders",
+	"FileFormat": "File format",
 	"FileMalformed": "The chosen file is incompatible",
 	"FileName": "Filename",
 	"FileNameExists": "This file already exists",

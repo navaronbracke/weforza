@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -12,10 +11,11 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideDetailsAttendeesList extends StatelessWidget {
-  RideDetailsAttendeesList({
+  const RideDetailsAttendeesList({
+    Key? key,
     required this.future,
     required this.scannedAttendees,
-  });
+  }) : super(key: key);
 
   final Future<List<Member>>? future;
   final int? scannedAttendees;
@@ -30,7 +30,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
             return GenericError(text: S.of(context).GenericError);
           } else {
             if (snapshot.data == null || snapshot.data!.isEmpty) {
-              return RideDetailsAttendeesListEmpty();
+              return const RideDetailsAttendeesListEmpty();
             } else {
               final list = snapshot.data!;
 
@@ -60,7 +60,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
             }
           }
         } else {
-          return const Center(child: const PlatformAwareLoadingIndicator());
+          return const Center(child: PlatformAwareLoadingIndicator());
         }
       },
     );

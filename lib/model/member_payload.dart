@@ -4,6 +4,7 @@ import 'dart:io';
 class MemberPayload {
   /// The default constructor.
   const MemberPayload({
+    this.activeMember = true,
     required this.alias,
     required this.firstName,
     required this.lastName,
@@ -11,8 +12,8 @@ class MemberPayload {
     required this.uuid,
   });
 
-  /// The uuid of the member, or null if the member should be created.
-  final String? uuid;
+  /// Whether this member is an active member.
+  final bool activeMember;
 
   /// The alias for the member.
   final String alias;
@@ -25,4 +26,7 @@ class MemberPayload {
 
   /// The file that represents the member's profile image.
   final Future<File?> profileImage;
+
+  /// The uuid of the member, or null if the member should be created.
+  final String? uuid;
 }

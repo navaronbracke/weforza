@@ -110,6 +110,8 @@
 	"ScanAbortedBluetoothDisabled": "Bluetooth needs to be enabled to start scanning",
 	"ScanAbortedNoRiders": "The scan was aborted because the list of riders is empty. Add some riders and try again later.",
 	"ScanAbortedPermissionDenied": "Scanning requires access to Bluetooth and your current location",
+	"ScanSettings": "Scan settings",
+	"ScanSettingsDurationDescription": "Duration of a scan (in seconds)",
 	"Scanned": "Scanned",
 	"ScannedRiders": "Scanned riders",
 	"SearchRiders": "Search riders",

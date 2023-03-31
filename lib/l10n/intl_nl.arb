@@ -110,6 +110,8 @@
 	"ScanAbortedBluetoothDisabled": "Bluetooth moet worden ingeschakeld om te kunnen scannen",
 	"ScanAbortedNoRiders": "De scan werd geannuleerd omdat de lijst van renners leeg is. Voeg een paar renners toe en probeer het later opnieuw.",
 	"ScanAbortedPermissionDenied": "Scannen vereist toegang tot Bluetooth en uw huidige locatie",
+	"ScanSettings": "Scan instellingen",
+	"ScanSettingsDurationDescription": "Duur van een scan (in seconden)",
 	"Scanned": "Gescand",
 	"ScannedRiders": "Gescande renners",
 	"SearchRiders": "Renners zoeken",

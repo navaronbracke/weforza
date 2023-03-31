@@ -5,7 +5,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/database_factory.dart';
-import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
@@ -27,7 +26,7 @@ void main() async {
 
   // Preload the settings.
   final settingsRepository = SettingsRepository(
-    SettingsDaoImpl(database.getDatabase(), DatabaseTables()),
+    SettingsDaoImpl(database.getDatabase()),
   );
   final settings = await settingsRepository.read();
 

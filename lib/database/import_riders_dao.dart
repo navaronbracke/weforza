@@ -13,18 +13,16 @@ abstract class ImportRidersDao {
 
 /// The default implementation of [ImportRidersDao].
 class ImportRidersDaoImpl implements ImportRidersDao {
-  ImportRidersDaoImpl(this._database, DatabaseTables tables)
-      : _deviceStore = tables.device,
-        _riderStore = tables.member;
+  ImportRidersDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
 
   /// A reference to the [Device] store.
-  final StoreRef<String, Map<String, dynamic>> _deviceStore;
+  final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Rider] store.
-  final StoreRef<String, Map<String, dynamic>> _riderStore;
+  final _riderStore = DatabaseTables.member;
 
   /// Get all the existing devices.
   /// Returns a map of device names per owner uuid.
@@ -55,9 +53,9 @@ class ImportRidersDaoImpl implements ImportRidersDao {
 
     for (final record in records) {
       final key = SerializableRiderKey(
-        alias: record.value['alias'],
-        firstName: record.value['firstname'],
-        lastName: record.value['lastname'],
+        alias: record.value['alias'] as String,
+        firstName: record.value['firstname'] as String,
+        lastName: record.value['lastname'] as String,
       );
 
       if (collection[key] == null) {

@@ -333,21 +333,21 @@ class S {
     );
   }
 
-  /// `Manage Devices`
-  String get DeviceOverviewTitle {
+  /// `Devices`
+  String get DevicesListHeader {
     return Intl.message(
-      'Manage Devices',
-      name: 'DeviceOverviewTitle',
+      'Devices',
+      name: 'DevicesListHeader',
       desc: '',
       args: [],
     );
   }
 
-  /// `No Devices`
-  String get DeviceOverviewNoDevices {
+  /// `No devices to show`
+  String get DevicesListNoDevices {
     return Intl.message(
-      'No Devices',
-      name: 'DeviceOverviewNoDevices',
+      'No devices to show',
+      name: 'DevicesListNoDevices',
       desc: '',
       args: [],
     );
@@ -363,11 +363,11 @@ class S {
     );
   }
 
-  /// `Devices`
-  String get DevicesHeader {
+  /// `Add Device`
+  String get AddDeviceTitle {
     return Intl.message(
-      'Devices',
-      name: 'DevicesHeader',
+      'Add Device',
+      name: 'AddDeviceTitle',
       desc: '',
       args: [],
     );
@@ -393,10 +393,10 @@ class S {
     );
   }
 
-  /// `Add Device`
+  /// `Create Device`
   String get AddDeviceSubmit {
     return Intl.message(
-      'Add Device',
+      'Create Device',
       name: 'AddDeviceSubmit',
       desc: '',
       args: [],

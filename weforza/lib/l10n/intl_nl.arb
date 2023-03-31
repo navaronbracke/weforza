@@ -37,13 +37,14 @@
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
 
-  "DeviceOverviewTitle" : "Toestellen Beheren",
-  "DeviceOverviewNoDevices": "Er zijn geen toestellen",
+  "DevicesListHeader": "Toestellen",
+  "DevicesListNoDevices": "Geen toestellen om te tonen",
   "DeviceNameLabel": "Naam Toestel",
-  "DevicesHeader": "Toestellen",
+
+  "AddDeviceTitle": "Toestel Toevoegen",
   "AddDeviceError": "Kon toestel niet toevoegen",
   "AddDeviceGenericError": "Er liep iets fout",
-  "AddDeviceSubmit": "Toestel Toevoegen",
+  "AddDeviceSubmit": "Toestel Aanmaken",
 
   "EditMemberTitle": "Lid Bewerken",
   "EditMemberError": "Kon de wijzigingen niet opslaan",

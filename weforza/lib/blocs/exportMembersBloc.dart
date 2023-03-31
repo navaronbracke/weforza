@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';
@@ -98,7 +99,7 @@ class ExportMembersBloc extends Bloc {
 
       await file.writeAsString(jsonEncode(data));
     }else{
-      return Future.error(InvalidFileFormatError());
+      return Future.error(InvalidFileExtensionError());
     }
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeCounter extends StatelessWidget {
@@ -31,7 +30,7 @@ class RideAttendeeCounter extends StatelessWidget {
                   child: Icon(
                       Icons.people,
                       size: iconSize,
-                      color: ApplicationTheme.rideAttendeeCounterIconColor
+                      color: counterStyle.color,
                   ),
                 ),
               ],
@@ -45,7 +44,7 @@ class RideAttendeeCounter extends StatelessWidget {
                   child: Icon(
                       Icons.people,
                       size: iconSize,
-                      color: ApplicationTheme.rideAttendeeCounterIconColor
+                      color: counterStyle.color,
                   ),
                 ),
               ],
@@ -58,7 +57,9 @@ class RideAttendeeCounter extends StatelessWidget {
             child: Center(
               child: invisibleWhenLoadingOrError ? null : PlatformAwareWidget(
                 android: () => SizedBox(
-                  child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                  child: Center(
+                      child: CircularProgressIndicator(strokeWidth: 2)
+                  ),
                   width: iconSize * .8,
                   height: iconSize * .8,
                 ),

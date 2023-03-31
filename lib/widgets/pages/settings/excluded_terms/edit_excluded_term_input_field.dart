@@ -13,6 +13,7 @@ class EditExcludedTermInputField extends StatefulWidget {
     required this.delegate,
     required this.index,
     required this.excludedTerm,
+    required this.scrollController,
   }) : super(key: ValueKey(excludedTerm.term));
 
   /// The delegate that manages the excluded terms.
@@ -24,19 +25,36 @@ class EditExcludedTermInputField extends StatefulWidget {
   /// The term that this widget represents.
   final ExcludedTerm excludedTerm;
 
+  /// The scroll controller that manages the enclosing scroll view.
+  final ScrollController scrollController;
+
   @override
-  State<EditExcludedTermInputField> createState() =>
-      _EditExcludedTermInputFieldState();
+  State<EditExcludedTermInputField> createState() => _EditExcludedTermInputFieldState();
 }
 
-class _EditExcludedTermInputFieldState
-    extends State<EditExcludedTermInputField> {
+class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField> {
   // This flag is used to keep the edit menu open when the delete dialog is shown.
   bool deleteDialogVisible = false;
 
   final focusNode = FocusNode();
 
   final GlobalKey<FormFieldState<String>> textFieldKey = GlobalKey();
+
+  /// Request that this widget is made fully visible in the scroll view.
+  void _ensureVisible() {
+    if (!mounted || !widget.scrollController.hasClients) {
+      return;
+    }
+
+    final RenderObject? renderObject = context.findRenderObject();
+
+    if (renderObject != null) {
+      widget.scrollController.position.ensureVisible(
+        renderObject,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
+  }
 
   void _handleFocusChange() {
     if (!mounted) {
@@ -51,6 +69,12 @@ class _EditExcludedTermInputFieldState
 
     // Update the button bar visibility.
     setState(() {});
+
+    // If the edit excluded term widget gained focus, it will display its button bar.
+    // Request that the bottom of the entire widget's RenderObject is shown on screen.
+    if (focusNode.hasFocus) {
+      _ensureVisible();
+    }
   }
 
   void _onCommitValidTerm(String value, BuildContext context) {

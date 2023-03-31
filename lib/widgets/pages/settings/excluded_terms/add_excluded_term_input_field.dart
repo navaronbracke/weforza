@@ -17,7 +17,6 @@ class AddExcludedTermInputField extends StatelessWidget {
     required this.delegate,
     required this.focusNode,
     required this.formKey,
-    required this.onTap,
   });
 
   /// The controller for the text field.
@@ -31,9 +30,6 @@ class AddExcludedTermInputField extends StatelessWidget {
 
   /// The global key that is used to validate the text field.
   final GlobalKey<FormFieldState<String>> formKey;
-
-  /// The onTap handler for the text field.
-  final void Function() onTap;
 
   void _onEditingComplete() {
     final formState = formKey.currentState;
@@ -51,12 +47,11 @@ class AddExcludedTermInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return ExcludedTermInputField.editable(
+    return ExcludedTermInputField(
       controller: controller,
       focusNode: focusNode,
       maxLength: delegate.maxLength,
       onEditingComplete: _onEditingComplete,
-      onTap: onTap,
       suffix: _AddExcludedTermSuffixIcon(
         controller: controller,
         onTap: _onEditingComplete,

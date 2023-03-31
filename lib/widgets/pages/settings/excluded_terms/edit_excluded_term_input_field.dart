@@ -2,51 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/excluded_terms_delegate.dart';
-import 'package:weforza/model/selected_excluded_term.dart';
-import 'package:weforza/model/selected_excluded_term_delegate.dart';
 import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field_button_bar.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
-import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the input field for editing an existing excluded term.
-///
-/// It manages a text field that resets itself to its initial value when it loses focus.
-/// The input field will show an edit menu centered below the text field.
-/// This edit menu contains buttons for undoing the pending edit,
-/// committing the pending edit and deleting the term.
 class EditExcludedTermInputField extends StatefulWidget {
-  const EditExcludedTermInputField({
-    super.key,
+  EditExcludedTermInputField({
     required this.delegate,
     required this.index,
-    required this.onSelected,
-    required this.selectionDelegate,
     required this.term,
-    required this.textFormFieldKey,
-  });
+  }) : super(key: ValueKey(term));
 
   /// The delegate that manages the excluded terms.
   final ExcludedTermsDelegate delegate;
 
-  /// The index of [term].
+  /// The index of [term] in the list of terms.
   final int index;
 
-  /// The function that handles the selection of a term.
-  final void Function(String term) onSelected;
-
-  /// The delegate that manages the selected excluded term.
-  final SelectedExcludedTermDelegate selectionDelegate;
-
-  /// The term to edit.
+  /// The term that this widget represents.
   final String term;
-
-  /// The key for the selected term text field.
-  ///
-  /// This key is used to validate the currently selected term.
-  final GlobalKey<FormFieldState<String>> textFormFieldKey;
 
   @override
   State<EditExcludedTermInputField> createState() =>
@@ -55,43 +31,95 @@ class EditExcludedTermInputField extends StatefulWidget {
 
 class _EditExcludedTermInputFieldState
     extends State<EditExcludedTermInputField> {
-  void _onConfirmPressed(TextEditingValue textEditingValue) {
-    if (textEditingValue.text == widget.term) {
-      widget.selectionDelegate.clearSelection();
+  late final TextEditingController controller;
 
+  // This flag is used to keep the edit menu open when the delete dialog is shown.
+  bool deleteDialogVisible = false;
+
+  final focusNode = FocusNode();
+
+  final GlobalKey<FormFieldState<String>> textFieldKey = GlobalKey();
+
+  void _handleFocusChange() {
+    if (!mounted) {
       return;
     }
 
-    final formState = widget.textFormFieldKey.currentState;
-
-    if (formState == null || !formState.validate()) {
-      return;
+    // If the focus node lost focus and the delete dialog is not shown,
+    // undo the pending edit.
+    if (!deleteDialogVisible && !focusNode.hasFocus) {
+      _onUndoPressed();
     }
 
-    widget.delegate.editTerm(formState.value!, widget.index);
-    widget.selectionDelegate.clearSelection();
+    // Update the button bar visibility.
+    setState(() {});
+  }
+
+  void _onCommitValidTerm(String value, BuildContext context) {
+    if (value != widget.term) {
+      widget.delegate.editTerm(value, widget.index);
+    }
+
+    FocusScope.of(context).unfocus();
   }
 
   void _onDeletePressed(BuildContext context) async {
+    deleteDialogVisible = true;
+
     final result = await showWeforzaDialog<bool>(
       context,
       builder: (_) => DeleteExcludedTermDialog(term: widget.term),
     );
 
-    if (result ?? false) {
-      widget.delegate.deleteTerm(widget.term);
-    }
-  }
-
-  void _onEditingComplete() {
-    final formState = widget.textFormFieldKey.currentState;
-
-    if (formState == null || !formState.validate()) {
+    if (!mounted) {
       return;
     }
 
-    widget.delegate.editTerm(formState.value!, widget.index);
+    deleteDialogVisible = false;
+
+    if (result ?? false) {
+      widget.delegate.deleteTerm(widget.term);
+
+      // When the delete dialog's modal route closes, the wrong widget gets focus.
+      // Usually its the add term focus node which greedily grabs focus.
+      // Instead of giving focus to a text field, return it back to the navigator,
+      // like when the settings page is first opened.
+      //
+      // Be aware that using the focus manager directly is very rare.
+      WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
+    }
+  }
+
+  void _onEditingComplete(BuildContext context) {
+    final formState = textFieldKey.currentState;
+
+    if (formState == null) {
+      return;
+    }
+
+    final currentValue = formState.value;
+
+    if (currentValue == null || currentValue == widget.term) {
+      FocusScope.of(context).unfocus();
+      return;
+    }
+
+    if (!formState.validate()) {
+      return;
+    }
+
+    widget.delegate.editTerm(currentValue, widget.index);
     formState.reset();
+    FocusScope.of(context).unfocus();
+  }
+
+  void _onUndoPressed() {
+    // Reset the text editing value back to the original,
+    // and keep the cursor at the end of the text.
+    controller.value = TextEditingValue(
+      text: widget.term,
+      selection: TextSelection.collapsed(offset: widget.term.length),
+    );
   }
 
   String? _validateTerm(BuildContext context, String? value) {
@@ -103,146 +131,56 @@ class _EditExcludedTermInputFieldState
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<SelectedExcludedTerm?>(
-      initialData: widget.selectionDelegate.selectedTerm,
-      stream: widget.selectionDelegate.stream,
-      builder: (context, snapshot) {
-        final selectedValue = snapshot.data;
-
-        if (selectedValue != null && selectedValue.value == widget.term) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ExcludedTermInputField.editable(
-                controller: selectedValue.controller,
-                focusNode: selectedValue.focusNode,
-                maxLength: widget.delegate.maxLength,
-                onEditingComplete: _onEditingComplete,
-                textFieldKey: widget.textFormFieldKey,
-                validator: (value) => _validateTerm(context, value),
-              ),
-              _EditExcludedTermInputFieldButtonBar(
-                controller: selectedValue.controller,
-                onConfirmPressed: _onConfirmPressed,
-                onDeletePressed: _onDeletePressed,
-                onUndoPressed: widget.selectionDelegate.undoPendingEdit,
-                term: widget.term,
-                validator: _validateTerm,
-              ),
-            ],
-          );
-        }
-
-        return ExcludedTermInputField.readOnly(
-          initialValue: widget.term,
-          onTap: () => widget.onSelected(widget.term),
-        );
-      },
-    );
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.term);
+    focusNode.addListener(_handleFocusChange);
   }
-}
-
-/// This widget represents the button bar for a [EditExcludedTermInputField].
-///
-/// It provides a button to delete the original term,
-/// a confirm button to commit the pending edit,
-/// and an undo button to revert the pending edit.
-class _EditExcludedTermInputFieldButtonBar extends StatelessWidget {
-  const _EditExcludedTermInputFieldButtonBar({
-    required this.controller,
-    required this.onConfirmPressed,
-    required this.onDeletePressed,
-    required this.onUndoPressed,
-    required this.term,
-    required this.validator,
-  });
-
-  /// The controller that provides updates about the current text editing value.
-  final ValueNotifier<TextEditingValue> controller;
-
-  /// The onTap handler for the confirm button.
-  final void Function(TextEditingValue textEditingValue) onConfirmPressed;
-
-  /// The onTap handler for the delete button.
-  final void Function(BuildContext context) onDeletePressed;
-
-  /// The onTap handler for the undo button.
-  final void Function() onUndoPressed;
-
-  /// The current value of the term.
-  final String term;
-
-  /// The validator for the term value.
-  final String? Function(BuildContext context, String? value) validator;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      // The delete button is always shown.
-      child: PlatformAwareWidget(
-        android: (context) {
-          return IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: AppTheme.desctructiveAction.androidDefaultErrorStyle.color,
-            ),
-            onPressed: () => onDeletePressed(context),
-            padding: EdgeInsets.zero,
-          );
-        },
-        ios: (context) => CupertinoIconButton(
-          color: CupertinoColors.systemRed,
-          icon: CupertinoIcons.delete,
-          onPressed: () => onDeletePressed(context),
-        ),
-      ),
-      builder: (context, child) {
-        final currentValue = controller.value;
-
-        final isValid = validator(context, currentValue.text) == null;
-
-        final confirmButton = PlatformAwareWidget(
-          android: (_) => IconButton(
-            color: Colors.blue,
-            icon: const Icon(Icons.check),
-            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
-          ),
-          ios: (_) => CupertinoIconButton(
-            color: CupertinoColors.activeBlue,
-            icon: CupertinoIcons.checkmark_alt,
-            onPressed: isValid ? () => onConfirmPressed(currentValue) : null,
-          ),
-        );
-
-        // The undo button is disabled if the value is the same.
-        final undoButton = PlatformAwareWidget(
-          android: (_) => IconButton(
-            color: Colors.black,
-            icon: const Icon(Icons.undo),
-            onPressed: currentValue.text == term ? null : onUndoPressed,
-          ),
-          ios: (_) => CupertinoIconButton(
-            color: CupertinoColors.black,
-            icon: CupertinoIcons.arrow_counterclockwise,
-            onPressed: currentValue.text == term ? null : onUndoPressed,
-          ),
-        );
-
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            undoButton,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: confirmButton,
-            ),
-            child!,
-          ],
-        );
-      },
+    final textFieldWidget = ExcludedTermInputField(
+      controller: controller,
+      focusNode: focusNode,
+      maxLength: widget.delegate.maxLength,
+      onEditingComplete: () => _onEditingComplete(context),
+      textFieldKey: textFieldKey,
+      validator: (value) => _validateTerm(context, value),
     );
+
+    // If the delete dialog is visible, the edit menu should not be closed.
+    if (deleteDialogVisible || focusNode.hasFocus) {
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          // Consume gestures so that they are not handled by the focus absorber.
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            textFieldWidget,
+            EditExcludedTermInputFieldButtonBar(
+              controller: controller,
+              onCommitValidTerm: (value) => _onCommitValidTerm(value, context),
+              onDeletePressed: _onDeletePressed,
+              onUndoPressed: _onUndoPressed,
+              term: widget.term,
+              validator: _validateTerm,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return textFieldWidget;
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(_handleFocusChange);
+    focusNode.dispose();
+    controller.dispose();
+    super.dispose();
   }
 }

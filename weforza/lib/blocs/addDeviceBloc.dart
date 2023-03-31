@@ -39,28 +39,31 @@ class AddDeviceBloc extends Bloc implements DeviceTypePickerHandler {
     _submitErrorController.close();
   }
 
-  //TODO remove the callback (use then.(onsuccess).catcherror(e -> //do nothing))
-  Future<void> addDevice(String ownerId, void Function(Device addedDevice) onSuccess,String deviceExistsMessage, String genericErrorMessage) async {
+  Future<Device> addDevice(String ownerId,String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add(" ");//remove the previous error.
     final device = Device(ownerId: ownerId, name: _newDeviceName,type: _type,creationDate: DateTime.now());
     await _repository.deviceExists(device).then((exists) async {
       if(!exists){
         await _repository.addDevice(device).then((_){
-          onSuccess(device);
           _submitButtonController.add(false);
+          return device;
         },onError: (error){
           _submitButtonController.add(false);
           _submitErrorController.add(genericErrorMessage);
+          return Future.error(genericErrorMessage);
         });
       }else{
         _submitButtonController.add(false);
         _submitErrorController.add(deviceExistsMessage);
+        return Future.error(deviceExistsMessage);
       }
     },onError: (error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
+      return Future.error(genericErrorMessage);
     });
+    return Future.error(genericErrorMessage);
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){

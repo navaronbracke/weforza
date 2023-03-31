@@ -1,7 +1,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/device.dart';
@@ -24,11 +23,12 @@ class DeleteDeviceBloc extends Bloc {
   final StreamController<bool> _deviceDeletingStream = BehaviorSubject();
   Stream<bool> get isDeletedStream => _deviceDeletingStream.stream;
 
-  //TODO remove the callback
-  Future<void> deleteDevice(String deleteDeviceError, VoidCallback onSuccess) async {
+  Future<void> deleteDevice(String deleteDeviceError) async {
     _deviceDeletingStream.add(true);
-    await _repository.removeDevice(device.name).then((_) => onSuccess(),
-        onError: (e) => _deviceDeletingStream.addError(deleteDeviceError));
+    await _repository.removeDevice(device.name).catchError((e){
+      _deviceDeletingStream.addError(deleteDeviceError);
+      return Future.error(deleteDeviceError);
+    });
   }
 
   @override

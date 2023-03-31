@@ -13,11 +13,15 @@ class RideListBloc extends Bloc {
 
   void loadRidesIfNotLoaded(){
     if(ridesFuture == null){
-      ridesFuture = loadRides();
+      ridesFuture = _loadRides();
     }
   }
 
-  Future<List<Ride>> loadRides() => _repository.getRides();
+  void reloadRides(){
+    ridesFuture = _loadRides();
+  }
+
+  Future<List<Ride>> _loadRides() => _repository.getRides();
 
   Future<int> getAmountOfRideAttendees(DateTime rideDate) => _repository.getAmountOfRideAttendees(rideDate);
 

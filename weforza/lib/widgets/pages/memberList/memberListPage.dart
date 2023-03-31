@@ -51,8 +51,12 @@ class _MemberListPageState extends State<MemberListPage> {
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
-              if(ReloadDataProvider.of(context).reloadMembers.value){
-                //TODO reload members
+              final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
+              if(reloadNotifier.value){
+                reloadNotifier.value = false;
+                setState(() {
+                  bloc.reloadMembers();
+                });
               }
             }),
           ),
@@ -75,8 +79,12 @@ class _MemberListPageState extends State<MemberListPage> {
                 icon: Icons.person_add,
                 onPressed: ()=> Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
-                      if(ReloadDataProvider.of(context).reloadMembers.value){
-                        //TODO reload members
+                      final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
+                      if(reloadNotifier.value){
+                        reloadNotifier.value = false;
+                        setState(() {
+                          bloc.reloadMembers();
+                        });
                       }
                     })
             ),
@@ -91,23 +99,8 @@ class _MemberListPageState extends State<MemberListPage> {
   }
 
   Widget _buildList(BuildContext context){
-    final listenable = ReloadDataProvider.of(context).reloadMembers;
-    return ValueListenableBuilder<bool>(
-      valueListenable: listenable,
-      child: _listFutureBuilder(bloc.membersFuture),
-      builder: (context, reload, child){
-        if(reload){
-          listenable.value = false;
-          bloc.membersFuture = bloc.loadMembers();
-        }
-        return child;
-      },
-    );
-  }
-
-  Widget _listFutureBuilder(Future<List<MemberItem>> future) {
     return FutureBuilder<List<MemberItem>>(
-      future: future,
+      future: bloc.membersFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
@@ -118,9 +111,17 @@ class _MemberListPageState extends State<MemberListPage> {
                 itemCount: data.length,
                 itemBuilder: (context, index) =>
                     MemberWithPictureListItem(
-                      item: data[index], onTap: (){
-                        SelectedItemProvider.of(context).selectedMember.value = data[index];
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MemberDetailsPage()));
+                        item: data[index], onTap: (){
+                      SelectedItemProvider.of(context).selectedMember.value = data[index];
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MemberDetailsPage())).then((_){
+                        final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
+                        if(reloadNotifier.value){
+                          reloadNotifier.value = false;
+                          setState(() {
+                            bloc.reloadMembers();
+                          });
+                        }
+                      });
                     }));
           }
         } else {

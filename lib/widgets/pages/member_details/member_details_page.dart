@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
-import 'package:weforza/widgets/common/member_attending_count.dart';
+import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
@@ -141,7 +141,7 @@ class MemberDetailsPage extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
           child: Row(
             children: const [
-              SelectedMemberAttendingCount(),
+              SelectedRiderAttendingCount(),
               Expanded(child: Center()),
               MemberActiveToggle(),
             ],

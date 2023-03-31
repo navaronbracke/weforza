@@ -7,9 +7,9 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
 import 'package:weforza/widgets/pages/import_riders_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_details_page.dart';
-import 'package:weforza/widgets/pages/member_form.dart';
 import 'package:weforza/widgets/pages/member_list/member_list.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_title.dart';
+import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -74,7 +74,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
               return IconButton(
                 icon: const Icon(Icons.person_add),
                 onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MemberForm()),
+                  MaterialPageRoute(builder: (context) => const RiderForm()),
                 ),
               );
             },
@@ -136,7 +136,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
             CupertinoIconButton(
               icon: CupertinoIcons.person_badge_plus_fill,
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const MemberForm()),
+                MaterialPageRoute(builder: (context) => const RiderForm()),
               ),
             ),
             CupertinoIconButton(

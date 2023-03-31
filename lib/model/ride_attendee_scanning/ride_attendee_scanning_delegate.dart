@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
@@ -17,25 +16,19 @@ import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
-import 'package:weforza/riverpod/bluetooth_provider.dart';
-import 'package:weforza/riverpod/repository/device_repository_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
-import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
 
 /// This class represents the delegate
 /// that manages the attendants for a given ride.
 class RideAttendeeScanningDelegate {
   RideAttendeeScanningDelegate({
+    required this.deviceRepository,
+    required this.memberRepository,
     required this.onDeviceFound,
-    required this.ref,
-  })  : deviceRepository = ref.read(deviceRepositoryProvider),
-        memberRepository = ref.read(memberRepositoryProvider),
-        ride = ref.read(selectedRideProvider)!,
-        rideRepository = ref.read(rideRepositoryProvider),
-        scanner = ref.read(bluetoothProvider),
-        settings = ref.read(settingsProvider);
+    required this.ride,
+    required this.rideRepository,
+    required this.scanner,
+    required this.settings,
+  });
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -46,10 +39,6 @@ class RideAttendeeScanningDelegate {
   /// The handler that is called
   /// when the delegate found a new `device` scan result.
   final void Function(BluetoothPeripheral device) onDeviceFound;
-
-  /// The WidgetRef that will be used to refresh the necessary providers
-  /// when the list of attendees has been changed.
-  final WidgetRef ref;
 
   /// The ride for which this delegate will scan attendants.
   final Ride ride;

@@ -12,6 +12,9 @@ import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/model/member_validator.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
@@ -72,9 +75,22 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
 
     if (memberUuid == null) {
-      _delegate.addMember(model, whenComplete: navigator.pop);
+      _delegate.addMember(model, whenComplete: () {
+        // A new item was added to the list.
+        ref.invalidate(memberListProvider);
+        navigator.pop();
+      });
     } else {
-      _delegate.editMember(model, whenComplete: navigator.pop);
+      final notifier = ref.read(selectedMemberProvider.notifier);
+
+      _delegate.editMember(model, whenComplete: (updatedRider) {
+        // Update the selected rider.
+        notifier.setSelectedMember(updatedRider);
+
+        // An item in the list was updated.
+        ref.invalidate(memberListProvider);
+        navigator.pop();
+      });
     }
   }
 
@@ -88,7 +104,9 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
       initialValue: profileImagePath == null ? null : File(profileImagePath),
     );
 
-    _delegate = MemberFormDelegate(ref);
+    _delegate = MemberFormDelegate(
+      repository: ref.read(memberRepositoryProvider),
+    );
 
     _firstNameController = TextEditingController(
       text: widget.member?.firstName,

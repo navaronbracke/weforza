@@ -73,6 +73,7 @@ class _RideAttendeeManualSelectionState extends State<RideAttendeeManualSelectio
                     labelText: S.of(context).RideAttendeeScanningManualSelectionFilterInputLabel,
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                    floatingLabelBehavior: FloatingLabelBehavior.never
                   ),
                 ),
                 ios: () => Padding(

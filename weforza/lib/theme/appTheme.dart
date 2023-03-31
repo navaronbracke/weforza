@@ -6,7 +6,7 @@ abstract class ApplicationTheme {
 
   ///Primary/Accent Theme colors.
   static final Color primaryColor = Colors.blue;
-  static final Color accentColor = Color(0xFF64B5F6);
+  static final Color accentColor = Colors.blue.shade300;
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -42,7 +42,7 @@ abstract class ApplicationTheme {
   ///The profile image placeholder's icon color.
   static const Color profileImagePlaceholderIconColor = Colors.white;
   ///The profile image placeholder icon's background color.
-  static const Color profileImagePlaceholderIconBackgroundColor = Color(0xFF1976D2);
+  static final Color profileImagePlaceholderIconBackgroundColor = Colors.blue.shade700;
 
   static const TextStyle personInitialsTextStyle = TextStyle(
       fontFamily: 'Roboto',
@@ -52,7 +52,7 @@ abstract class ApplicationTheme {
   ///The background color for an unselected ride attendee.
   static final Color rideAttendeeUnSelectedBackgroundColor = Colors.transparent;
   ///The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
+  static final Color rideAttendeeSelectedBackgroundColor = Colors.blue.shade700;
 
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 18,fontWeight: FontWeight.w500);
@@ -62,8 +62,6 @@ abstract class ApplicationTheme {
 
   //Cupertino Form Input Error Text Style
   static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);
-
-  static final Color rideAttendeeCounterIconColor = Colors.black87;
 
   static final TextStyle androidRideAttendeeListCounterTextStyle = TextStyle(fontSize: 14.0, color: Colors.white);
   static final TextStyle iosRideAttendeeListCounterTextStyle = TextStyle(fontSize: 12.0);
@@ -116,6 +114,9 @@ abstract class ApplicationTheme {
   static final Color importMembersDoneIconColor = Colors.green;
 
   static final TextStyle appVersionTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
+
+  static final Color rideListItemOddMonthColor = Colors.blue.shade900;
+  static final Color rideListItemEvenMonthColor = Colors.blue.shade400;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

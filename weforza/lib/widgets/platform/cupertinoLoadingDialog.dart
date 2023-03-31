@@ -8,7 +8,7 @@ class CupertinoLoadingDialog extends StatelessWidget {
     return Center(
       child: CupertinoPopupSurface(
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           child: CupertinoActivityIndicator(),
         ),
       ),

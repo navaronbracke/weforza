@@ -214,13 +214,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
                     autocorrect: false,
                     keyboardType: TextInputType.text,
                     placeholder: _aliasLabel,
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
                     onChanged: (value) {
                       setState(() {
                         _bloc.validateAlias(
-                            _aliasController.text,
+                            value,
                             _aliasMaxLengthMessage,
                             _aliasIllegalCharactersMessage,
                             _aliasBlankMessage);
@@ -345,7 +342,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   autocorrect: false,
                   keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateAlias(
-                      _aliasController.text,
+                      value,
                       _aliasMaxLengthMessage,
                       _aliasIllegalCharactersMessage,
                       _aliasBlankMessage),
@@ -353,7 +350,6 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   onChanged: (value)=> setState(() {
                     _bloc.autoValidateAlias = true;
                   }),
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   onFieldSubmitted: (value){
                     _aliasFocusNode.unfocus();
                   },

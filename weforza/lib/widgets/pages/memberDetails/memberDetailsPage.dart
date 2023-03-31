@@ -11,6 +11,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberAttendingCount.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
+import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -102,7 +103,43 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     return Column(
       children: <Widget>[
         _buildMemberInfoSection(context),
-        Expanded(child: MemberDevicesList(bloc: bloc)),
+        Expanded(
+            child: MemberDevicesList(
+              future: bloc.devicesFuture,
+              onDeleteDevice: bloc.deleteDevice,
+            )
+        ),
+        FutureBuilder<int>(
+          future: bloc.devicesFuture.then((list) => list.length),
+          builder: (context, snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              if(snapshot.hasError){
+                // We show an error widget instead.
+                return SizedBox.shrink();
+              }else{
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: PlatformAwareWidget(
+                    android: () => FlatButton(
+                      onPressed: () => goToAddDevicePage(context),
+                      child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+                    ),
+                    ios: () => CupertinoButton(
+                      onPressed: () => goToAddDevicePage(context),
+                      child: Text(
+                          S.of(context).AddDeviceTitle,
+                          style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+                      ),
+                    ),
+                  ),
+                );
+              }
+            }else{
+              // We show a loading indicator instead.
+              return SizedBox.shrink();
+            }
+          },
+        ),
       ],
     );
   }
@@ -203,6 +240,18 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         )
       ],
     );
+  }
+
+  void goToAddDevicePage(BuildContext context){
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context)=> AddDevicePage())
+    ).then((_){
+      final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
+      if(reloadDevicesNotifier.value){
+        reloadDevicesNotifier.value = false;
+        setState(() => bloc.reloadDevices());
+      }
+    });
   }
 
   @override

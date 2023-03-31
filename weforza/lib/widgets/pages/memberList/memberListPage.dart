@@ -54,7 +54,7 @@ class _MemberListPageState extends State<MemberListPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(S.of(context).MemberListTitle),
+        Text(S.of(context).Members),
         Padding(
           padding: const EdgeInsets.only(left: 5),
           child: FutureBuilder<int>(

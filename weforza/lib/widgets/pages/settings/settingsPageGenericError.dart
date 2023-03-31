@@ -10,14 +10,14 @@ class SettingsPageGenericError extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).SettingsTitle),
+          title: Text(S.of(context).Settings),
         ),
         body: GenericError(text: S.of(context).GenericError),
       ),
       ios: () => CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           transitionBetweenRoutes: false,
-          middle: Text(S.of(context).SettingsTitle),
+          middle: Text(S.of(context).Settings),
         ),
         child: GenericError(text: S.of(context).GenericError),
       ),

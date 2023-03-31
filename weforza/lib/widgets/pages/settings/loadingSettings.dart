@@ -10,13 +10,13 @@ class LoadingSettings extends StatelessWidget {
   Widget build(BuildContext context) => PlatformAwareWidget(
     android: () => Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).SettingsTitle),
+        title: Text(S.of(context).Settings),
       ),
       body: _buildBody(context),
     ),
     ios: () => CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).SettingsTitle),
+        middle: Text(S.of(context).Settings),
         transitionBetweenRoutes: false,
       ),
       child: _buildBody(context),

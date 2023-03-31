@@ -32,16 +32,6 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `WeForza`
-  String get AppName {
-    return Intl.message(
-      'WeForza',
-      name: 'AppName',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Version: {version}`
   String AppVersionNumber(Object version) {
     return Intl.message(
@@ -132,51 +122,31 @@ class S {
     );
   }
 
-  /// `Unknown Date`
-  String get UnknownDate {
-    return Intl.message(
-      'Unknown Date',
-      name: 'UnknownDate',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Rides`
-  String get HomePageRidesTab {
+  String get Rides {
     return Intl.message(
       'Rides',
-      name: 'HomePageRidesTab',
+      name: 'Rides',
       desc: '',
       args: [],
     );
   }
 
   /// `Members`
-  String get HomePageMembersTab {
+  String get Members {
     return Intl.message(
       'Members',
-      name: 'HomePageMembersTab',
+      name: 'Members',
       desc: '',
       args: [],
     );
   }
 
   /// `Settings`
-  String get HomePageSettingsTab {
+  String get Settings {
     return Intl.message(
       'Settings',
-      name: 'HomePageSettingsTab',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Members`
-  String get MemberListTitle {
-    return Intl.message(
-      'Members',
-      name: 'MemberListTitle',
+      name: 'Settings',
       desc: '',
       args: [],
     );
@@ -207,16 +177,6 @@ class S {
     return Intl.message(
       'Add members by using the menu above',
       name: 'MemberListAddMemberInstruction',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rides`
-  String get RideListRidesHeader {
-    return Intl.message(
-      'Rides',
-      name: 'RideListRidesHeader',
       desc: '',
       args: [],
     );
@@ -1157,16 +1117,6 @@ class S {
     return Intl.message(
       'Could not delete the device',
       name: 'DeleteDeviceErrorDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Settings`
-  String get SettingsTitle {
-    return Intl.message(
-      'Settings',
-      name: 'SettingsTitle',
       desc: '',
       args: [],
     );

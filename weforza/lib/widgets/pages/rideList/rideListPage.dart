@@ -48,7 +48,7 @@ class _RideListPageState extends State<RideListPage> {
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).RideListRidesHeader),
+          title: Text(S.of(context).Rides),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
@@ -79,7 +79,7 @@ class _RideListPageState extends State<RideListPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).RideListRidesHeader),
+                child: Text(S.of(context).Rides),
               ),
             ),
             CupertinoIconButton.fromAppTheme(

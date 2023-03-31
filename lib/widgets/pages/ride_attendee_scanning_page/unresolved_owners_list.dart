@@ -148,10 +148,10 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
       widget.item.uuid,
     );
 
-    const theme = AppTheme.memberListItem;
+    const textTheme = AppTheme.riderTextTheme;
 
-    TextStyle firstNameStyle = theme.firstNameStyle;
-    TextStyle lastNameStyle = theme.lastNameStyle;
+    TextStyle firstNameStyle = textTheme.firstNameStyle;
+    TextStyle lastNameStyle = textTheme.lastNameStyle;
 
     if (selectedAttendee != null) {
       firstNameStyle = firstNameStyle.copyWith(color: Colors.white);

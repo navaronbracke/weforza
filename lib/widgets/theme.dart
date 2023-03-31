@@ -53,11 +53,11 @@ abstract class AppTheme {
   /// The theme for the bottom bar on the manual selection.
   static const manualSelectionBottomBar = ManualSelectionBottomBarTheme();
 
-  /// The member list item theme.
-  static const memberListItem = MemberListItemTheme();
-
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
+
+  /// The text theme for rider names.
+  static const riderTextTheme = RiderTextTheme();
 
   /// The theme for the scan stepper.
   static const scanStepper = ScanStepperThemes();
@@ -76,20 +76,6 @@ class ManualSelectionBottomBarTheme {
 
   /// The active track color for the filter switch.
   final Color switchActiveTrackColor = const Color(0xFF81D4FA);
-}
-
-/// This class defines the theme for member list items.
-class MemberListItemTheme {
-  const MemberListItemTheme();
-
-  /// The text style for the first name.
-  final TextStyle firstNameStyle = const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
-
-  /// The text style for the last name.
-  final TextStyle lastNameStyle = const TextStyle(fontSize: 14);
 }
 
 /// This class represents the theme for the ride calendar date picker.
@@ -112,6 +98,36 @@ class RideCalendarTheme {
 
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);
+}
+
+/// This class defines the text theme for rider names.
+@immutable
+class RiderTextTheme {
+  const RiderTextTheme();
+
+  /// The text style for rider aliases.
+  final TextStyle aliasStyle = const TextStyle(
+    fontSize: 14,
+    fontStyle: FontStyle.italic,
+  );
+
+  /// The style for rider first names, slightly larger than [firstNameStyle].
+  final TextStyle firstNameLargeStyle = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// The style for rider first names.
+  final TextStyle firstNameStyle = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// The style for rider last names, slightly larger than [lastNameStyle].
+  final TextStyle lastNameLargeStyle = const TextStyle(fontSize: 20);
+
+  /// The style for rider last names.
+  final TextStyle lastNameStyle = const TextStyle(fontSize: 14);
 }
 
 /// This class represents the data for a [ScanStepperTheme] sub theme.

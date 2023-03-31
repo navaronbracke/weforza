@@ -31,15 +31,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m5(date) => "rit_${date}";
 
-  static m6(maxLength) => "Voornaam kan niet langer zijn dan ${maxLength} letters";
+  static m6(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m7(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m7(maxLength) => "Voornaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m8(maxLength) => "Een telefoonnummer is maximum ${maxLength} cijfers lang";
+  static m8(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m9(minLength) => "Een telefoonnummer is minimum ${minLength} cijfers lang";
+  static m9(maxLength) => "Een telefoonnummer is maximum ${maxLength} cijfers lang";
 
-  static m10(value) => "${value} is verplicht";
+  static m10(minLength) => "Een telefoonnummer is minimum ${minLength} cijfers lang";
+
+  static m11(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -104,13 +106,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "ExportRideCsvExtension" : MessageLookupByLibrary.simpleMessage("csv"),
     "ExportRideExportedToPathMessage" : m4,
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Rit exporteren naar bestand"),
-    "ExportRideFileNameLabel" : MessageLookupByLibrary.simpleMessage("Bestandsnaam"),
     "ExportRideFileNamePlaceholder" : m5,
+    "ExportRideFilenameMaxLength" : m6,
     "ExportRideJsonExtension" : MessageLookupByLibrary.simpleMessage("json"),
     "ExportRideTitle" : MessageLookupByLibrary.simpleMessage("Rit Exporteren"),
+    "Filename" : MessageLookupByLibrary.simpleMessage("Bestandsnaam"),
+    "FilenameWhitespace" : MessageLookupByLibrary.simpleMessage("Een bestandsnaam mag niet enkel witruimte zijn"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("Voornaam mag niet enkel witruimte zijn"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Voornaam mag enkel letters, spaties of \' - bevatten"),
-    "FirstNameMaxLength" : m6,
+    "FirstNameMaxLength" : m7,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Vr"),
     "GenericError" : MessageLookupByLibrary.simpleMessage("Er liep iets fout"),
     "GoBack" : MessageLookupByLibrary.simpleMessage("Keer Terug"),
@@ -124,9 +128,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "ImportMembersPageTitle" : MessageLookupByLibrary.simpleMessage("Importeer Leden"),
     "ImportMembersPickFile" : MessageLookupByLibrary.simpleMessage("Kies Bestand"),
     "ImportMembersPickFileWarning" : MessageLookupByLibrary.simpleMessage("Een bestand is vereist om leden te importeren"),
+    "InvalidFilename" : MessageLookupByLibrary.simpleMessage("Ongeldige bestandsnaam"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Familienaam mag niet enkel witruimte zijn"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Familienaam mag enkel letters,spaties of \' - bevatten"),
-    "LastNameMaxLength" : m7,
+    "LastNameMaxLength" : m8,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("Dit lid bestaat al"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Bent u zeker dat u dit lid wil verwijderen?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Kon lid niet verwijderen"),
@@ -146,8 +151,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Familienaam"),
     "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telefoon"),
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Een telefoonnummer bestaat enkel uit cijfers"),
-    "PhoneMaxLength" : m8,
-    "PhoneMinLength" : m9,
+    "PhoneMaxLength" : m9,
+    "PhoneMinLength" : m10,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Scan geannuleerd, Bluetooth staat uit"),
     "RideAttendeeScanningGoBackToDetailPage" : MessageLookupByLibrary.simpleMessage("Terug naar detailpagina"),
     "RideAttendeeScanningGoToSettings" : MessageLookupByLibrary.simpleMessage("Naar Instellingen"),
@@ -188,7 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Do"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Di"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Onbekende Datum"),
-    "ValueIsRequired" : m10,
+    "ValueIsRequired" : m11,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wo")
   };
 }

@@ -27,23 +27,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m3(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
 
-  static m4(maxLength) => "Een adres mag niet langer zijn dan ${maxLength} karakters";
+  static m4(date) => "rit_${date}";
 
-  static m5(maxDistance) => "De afstand van een rit mag niet groter zijn dan ${maxDistance} Km";
+  static m5(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m6(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
+  static m6(maxLength) => "Een voornaam is maximum ${maxLength} letters";
 
-  static m7(date) => "rit_${date}";
+  static m7(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m8(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m8(amount) => "${amount} personen hebben een toestel met deze naam";
 
-  static m9(maxLength) => "Een voornaam is maximum ${maxLength} letters";
-
-  static m10(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
-
-  static m11(amount) => "${amount} personen hebben een toestel met deze naam";
-
-  static m12(value) => "${value} is verplicht";
+  static m9(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

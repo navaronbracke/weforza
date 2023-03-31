@@ -25,20 +25,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The controller that manages the selected directory.
   final BehaviorSubject<AsyncValue<Directory?>> _selectDirectoryController;
 
-  /// The name of the last file that is known to exist.
-  ///
-  /// When the [File.existsSync] method determines that a given file name already exists,
-  /// then this field is set to that file name.
-  ///
-  /// When the file name is validated using the relevant validator function,
-  /// it invokes [fileExists] with the current file name,
-  /// which checks equality against this field.
-  ///
-  /// If a new file format is set using [setFileFormat],
-  /// then this field is reset, since the old value is no longer valid
-  /// because the extension in the file name has changed.
-  String? _lastExistingFileName;
-
   /// The file handler that will manage the underlying file.
   final FileHandler fileHandler;
 
@@ -99,7 +85,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       // of which it is known that it exists,
       // and revalidate the form to trigger the validation message.
       if (file.existsSync()) {
-        _lastExistingFileName = fileName;
         fileNameKey.currentState?.validate();
 
         throw FileExistsException();
@@ -111,15 +96,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     } catch (error, stackTrace) {
       setError(error, stackTrace);
     }
-  }
-
-  /// Returns whether the given [fileName] matches the [_lastExistingFileName].
-  bool fileExists(String fileName) {
-    if (_lastExistingFileName == null) {
-      return false;
-    }
-
-    return _lastExistingFileName == fileName;
   }
 
   /// Select a new directory as the parent folder of the export file.
@@ -185,7 +161,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     // If a new file format was selected,
     // the `File Exists` message may be outdated.
-    _lastExistingFileName = null;
     fileNameKey.currentState?.validate();
 
     _fileFormatController.add(value);

@@ -56,7 +56,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             style: TextStyle(fontSize: 16)),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.person_pin),
+            icon: Icon(Icons.bluetooth_searching),
             onPressed: () => goToScanningPage(context),
           ),
           IconButton(
@@ -114,7 +114,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
-                    icon: Icons.person_pin,
+                    icon: Icons.bluetooth_searching,
                     onPressed: () => goToScanningPage(context),
                 ),
                 SizedBox(width: 10),

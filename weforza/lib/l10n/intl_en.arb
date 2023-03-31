@@ -77,7 +77,7 @@
   "RideAttendeeScanningGoToSettings": "Go to Settings",
   "RideAttendeeScanningRetryScan": "Retry Scan",
   "RideAttendeeScanningSkipScan": "Skip Scan",
-  "RideAttendeeScanningContinue": "Proceed to next step",
+  "RideAttendeeScanningContinue": "Continue",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no riders to choose from",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} riders have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",

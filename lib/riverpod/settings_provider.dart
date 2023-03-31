@@ -46,7 +46,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
   /// Save the [riderListFilter] value.
   Future<void> saveRiderListFilter(RiderFilterOption riderListFilter) {
     final Settings newSettings = state.copyWith(
-      memberListFilter: riderListFilter,
+      riderListFilter: riderListFilter,
     );
 
     return _saveSettings(newSettings);

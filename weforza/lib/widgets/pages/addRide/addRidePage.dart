@@ -4,6 +4,7 @@ import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/rideRepository.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendar.dart';
 import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarColorLegend.dart';
 import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
@@ -73,9 +74,21 @@ class _AddRidePageState extends State<AddRidePage> {
       appBar: AppBar(
         title: Text(S.of(context).AddRideTitle),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.delete_sweep),
-            onPressed: bloc.onClearSelection,
+          StreamBuilder<bool>(
+            initialData: false,
+            stream: bloc.showDeleteSelectionStream,
+            builder: (context, snapshot){
+              bool? show = snapshot.data;
+
+              if(show == null || !show){
+                return SizedBox.shrink();
+              }
+
+              return IconButton(
+                icon: Icon(Icons.delete_sweep),
+                onPressed: bloc.onClearSelection,
+              );
+            },
           ),
         ],
       ),
@@ -87,9 +100,23 @@ class _AddRidePageState extends State<AddRidePage> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        trailing: CupertinoIconButton.fromAppTheme(
-          icon: Icons.delete_sweep,
-          onPressed: bloc.onClearSelection,
+        trailing: StreamBuilder<bool>(
+          initialData: false,
+          stream: bloc.showDeleteSelectionStream,
+          builder: (context, snapshot){
+            bool? show = snapshot.data;
+
+            if(show == null || !show){
+              return SizedBox.shrink();
+            }
+
+            return CupertinoIconButton(
+              idleColor: ApplicationTheme.deleteItemButtonTextColor,
+              onPressedColor: Colors.red.shade300,
+              icon: CupertinoIcons.xmark_rectangle_fill,
+              onPressed: bloc.onClearSelection,
+            );
+          },
         ),
         middle: Text(S.of(context).AddRideTitle),
       ),

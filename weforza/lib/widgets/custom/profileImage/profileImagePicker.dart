@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   ProfileImagePicker({
@@ -51,10 +53,17 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
               child: PlatformAwareLoadingIndicator(),
             ),
           ): GestureDetector(
-            child: AsyncProfileImage(
-              future: snapshot.data!.image,
-              icon: Icons.camera_alt,
-              size: widget.size,
+            child: PlatformAwareWidget(
+              android: () => AsyncProfileImage(
+                future: snapshot.data!.image,
+                icon: Icons.camera_alt,
+                size: widget.size,
+              ),
+              ios: () => AsyncProfileImage(
+                future: snapshot.data!.image,
+                icon: CupertinoIcons.camera_fill,
+                size: widget.size,
+              ),
             ),
             onTap: pickProfileImage,
             onLongPress: clearSelectedImage,

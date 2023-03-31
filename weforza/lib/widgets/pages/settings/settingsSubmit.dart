@@ -50,13 +50,16 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
   Widget _buildSubmitButton(){
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: Icon(Icons.done,color: Colors.white),
+        icon: Icon(
+          Icons.done,
+          color: Colors.white,
+        ),
         onPressed: onSaveSettings,
       ),
       ios: () => Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: CupertinoIconButton.fromAppTheme(
-          icon: Icons.done,
+          icon: CupertinoIcons.checkmark_alt,
           onPressed: onSaveSettings,
         ),
       ),
@@ -67,8 +70,14 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: PlatformAwareWidget(
-        android: () => Icon(Icons.warning, color: Colors.orange.shade200),
-        ios: () => Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.orange),
+        android: () => Icon(
+          Icons.warning,
+          color: Colors.orange.shade200,
+        ),
+        ios: () => Icon(
+          CupertinoIcons.exclamationmark_triangle_fill,
+          color: Colors.orange,
+        ),
       ),
     );
   }

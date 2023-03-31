@@ -1,21 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListDisabledItem.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListHeader.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesList extends StatefulWidget {
   MemberDevicesList({
     @required this.future,
-    @required this.onDeleteDevice
-  }): assert(future != null && onDeleteDevice != null);
+    @required this.onDeleteDevice,
+    @required this.onAddDeviceButtonPressed
+  }): assert(
+    future != null && onDeleteDevice != null && onAddDeviceButtonPressed != null
+  );
 
   final Future<List<Device>> future;
   final Future<void> Function(Device device) onDeleteDevice;
+  final void Function() onAddDeviceButtonPressed;
 
   @override
   _MemberDevicesListState createState() => _MemberDevicesListState();
@@ -33,11 +40,12 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return GenericError(
-                text: S.of(context).MemberDetailsLoadDevicesError
+                text: S.of(context).GenericError
             );
           }else{
-            return snapshot.data.isEmpty ? MemberDevicesListEmpty():
-              _buildDevicesList(context, snapshot.data);
+            return snapshot.data.isEmpty ? MemberDevicesListEmpty(
+              onAddDevicePageButtonPressed: widget.onAddDeviceButtonPressed,
+            ): _buildDevicesList(context, snapshot.data);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());
@@ -48,7 +56,6 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
 
   Widget _buildDevicesList(BuildContext context, List<Device> devices){
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         MemberDevicesListHeader(),
         Expanded(
@@ -62,6 +69,25 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             ),
           ),
         ),
+        PlatformAwareWidget(
+          android: () => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: FlatButton(
+              onPressed: widget.onAddDeviceButtonPressed,
+              child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+            ),
+          ),
+          ios: () => Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 15),
+            child: CupertinoButton(
+              onPressed: widget.onAddDeviceButtonPressed,
+              child: Text(
+                S.of(context).AddDeviceTitle,
+                style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

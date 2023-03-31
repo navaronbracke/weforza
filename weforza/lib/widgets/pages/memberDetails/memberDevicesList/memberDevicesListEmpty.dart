@@ -7,46 +7,47 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This widget is shown as replacement of a [Member]'s devices, if it has none.
 class MemberDevicesListEmpty extends StatelessWidget {
+  MemberDevicesListEmpty({
+    @required this.onAddDevicePageButtonPressed
+  }): assert(onAddDevicePageButtonPressed != null);
+
+  final void Function() onAddDevicePageButtonPressed;
 
   @override
   Widget build(BuildContext context) => Center(
-    child: PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context),
-      ios: () => _buildIosWidget(context),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        PlatformAwareWidget(
+          android: () => Icon(
+            Icons.devices_other,
+            color: ApplicationTheme.listInformationalIconColor,
+            size: MediaQuery.of(context).size.shortestSide * .1,
+          ),
+          ios: () => Icon(
+            Icons.devices_other,
+            color: ApplicationTheme.listInformationalIconColor,
+            size: MediaQuery.of(context).size.shortestSide * .1,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          child: Text(S.of(context).MemberDetailsNoDevices),
+        ),
+        PlatformAwareWidget(
+          android: () => FlatButton(
+            onPressed: onAddDevicePageButtonPressed,
+            child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+          ),
+          ios: () => CupertinoButton(
+            onPressed: onAddDevicePageButtonPressed,
+            child: Text(
+                S.of(context).AddDeviceTitle,
+                style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+            ),
+          ),
+        )
+      ],
     ),
   );
-
-  Widget _buildAndroidWidget(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          Icons.devices_other,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: MediaQuery.of(context).size.shortestSide * .1,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Text(S.of(context).MemberDetailsNoDevices),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          Icons.devices_other,
-          color: ApplicationTheme.listInformationalIconColor,
-          size: MediaQuery.of(context).size.shortestSide * .1,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Text(S.of(context).MemberDetailsNoDevices),
-        ),
-      ],
-    );
-  }
 }

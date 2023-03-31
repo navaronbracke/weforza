@@ -13,6 +13,7 @@ import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
+import 'package:weforza/widgets/pages/memberDetails/memberActiveToggle.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -39,6 +40,10 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
         bloc.profileImage = SelectedItemProvider.of(context).selectedMemberProfileImage.value;
       });
     });
+  }
+
+  void onMemberActiveChanged(bool value, BuildContext context){
+    bloc.setMemberActive(value, () => ReloadDataProvider.of(context).reloadMembers.value = true);
   }
 
   Future<void> onDeleteMember(BuildContext context) async {
@@ -74,7 +79,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).MemberDetailsTitle),
+        title: Text(S.of(context).Details),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
@@ -88,7 +93,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                 builder: (context) => DeleteItemDialog(
                   title: S.of(context).MemberDeleteDialogTitle,
                   description: S.of(context).MemberDeleteDialogDescription,
-                  errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                  errorDescription: S.of(context).GenericError,
                   onDelete: () => onDeleteMember(context),
                 ),
             ),
@@ -107,38 +112,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             child: MemberDevicesList(
               future: bloc.devicesFuture,
               onDeleteDevice: bloc.deleteDevice,
+              onAddDeviceButtonPressed: () => goToAddDevicePage(context),
             )
-        ),
-        FutureBuilder<int>(
-          future: bloc.devicesFuture.then((list) => list.length),
-          builder: (context, snapshot){
-            if(snapshot.connectionState == ConnectionState.done){
-              if(snapshot.hasError){
-                // We show an error widget instead.
-                return SizedBox.shrink();
-              }else{
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: PlatformAwareWidget(
-                    android: () => FlatButton(
-                      onPressed: () => goToAddDevicePage(context),
-                      child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
-                    ),
-                    ios: () => CupertinoButton(
-                      onPressed: () => goToAddDevicePage(context),
-                      child: Text(
-                          S.of(context).AddDeviceTitle,
-                          style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
-                      ),
-                    ),
-                  ),
-                );
-              }
-            }else{
-              // We show a loading indicator instead.
-              return SizedBox.shrink();
-            }
-          },
         ),
       ],
     );
@@ -152,7 +127,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).MemberDetailsTitle),
+                child: Text(S.of(context).Details),
               ),
             ),
             Row(
@@ -171,7 +146,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       builder: (context) => DeleteItemDialog(
                         title: S.of(context).MemberDeleteDialogTitle,
                         description: S.of(context).MemberDeleteDialogDescription,
-                        errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                        errorDescription: S.of(context).GenericError,
                         onDelete: () => onDeleteMember(context),
                       ),
                     ),
@@ -236,11 +211,32 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Center(
-            child: MemberAttendingCount(
-              future: bloc.attendingCountFuture,
-            ),
+          padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+          child: Row(
+            children: [
+              MemberAttendingCount(
+                future: bloc.attendingCountFuture,
+              ),
+              Expanded(
+                child: Center(),
+              ),
+              MemberActiveToggle(
+                initialValue: bloc.member.isActiveMember,
+                label: S.of(context).Active,
+                stream: bloc.isActiveStream,
+                onChanged: (bool value) => onMemberActiveChanged(value, context),
+                onErrorBuilder: () => PlatformAwareWidget(
+                  android: () => Switch(
+                    value: bloc.member.isActiveMember,
+                    onChanged: null,
+                  ),
+                  ios: () => CupertinoSwitch(
+                    value: bloc.member.isActiveMember,
+                    onChanged: null,
+                  ),
+                ),
+              ),
+            ],
           ),
         )
       ],
@@ -254,7 +250,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
       final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
       if(reloadDevicesNotifier.value){
         reloadDevicesNotifier.value = false;
-        setState(() => bloc.reloadDevices());
+        setState(() => bloc.loadDevices());
       }
     });
   }

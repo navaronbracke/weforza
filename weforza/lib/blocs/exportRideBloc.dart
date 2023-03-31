@@ -9,36 +9,36 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/model/exportDataOrError.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rideExportState.dart';
+import 'package:weforza/repository/rideRepository.dart';
 
 class ExportRideBloc extends Bloc {
   ExportRideBloc({
     @required this.ride,
-    @required this.loadedAttendees,
     @required this.fileHandler,
     @required this.filename,
-  }): assert(ride != null && loadedAttendees != null
-      && fileHandler != null
-      && filename != null && filename.isNotEmpty) {
+    @required this.rideRepository
+  }): assert(
+    ride != null && rideRepository != null && fileHandler != null
+        && filename != null && filename.isNotEmpty
+  ) {
     fileNameController = TextEditingController(text: filename);
   }
 
+  final RideRepository rideRepository;
   final IFileHandler fileHandler;
   final Ride ride;
-  final Future<List<Member>> loadedAttendees;
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final int filenameMaxLength = 80;
   TextEditingController fileNameController;
 
-  final StreamController<RideExportState> _streamController = BehaviorSubject();
-  Stream<RideExportState> get stream => _streamController.stream;
+  final StreamController<ExportDataOrError> _streamController = BehaviorSubject();
+  Stream<ExportDataOrError> get stream => _streamController.stream;
 
-  final StreamController<String> _fileNameErrorController = BehaviorSubject();
-  Stream<String> get fileNameErrorStream => _fileNameErrorController.stream;
-
-  List<Member> rideAttendees;
+  final StreamController<bool> _filenameExistsController = BehaviorSubject();
+  Stream<bool> get fileNameExistsStream => _filenameExistsController.stream;
 
   String filename;
 
@@ -46,19 +46,13 @@ class ExportRideBloc extends Bloc {
 
   void onSelectFileExtension(FileExtension extension){
     if(_fileExtension != extension){
-      _fileNameErrorController.add("");
+      _filenameExistsController.add(false);
       _fileExtension = extension;
     }
   }
 
   ///Form Error message
   String filenameError;
-
-  void loadRideAttendees() async {
-    _streamController.add(RideExportState.INIT);
-    rideAttendees =  await loadedAttendees;//These are already loaded!
-    _streamController.add(RideExportState.IDLE);
-  }
 
   String validateFileName(
       String value,
@@ -68,7 +62,7 @@ class ExportRideBloc extends Bloc {
       String invalidFilenameMessage)
   {
     if(filename != value){
-      _fileNameErrorController.add("");
+      _filenameExistsController.add(false);
     }
 
     if(value == null || value.isEmpty){
@@ -88,17 +82,23 @@ class ExportRideBloc extends Bloc {
     return filenameError;
   }
 
-  void exportRide(String fileExistsMessage) async {
+  void exportRide() async {
     await fileHandler.createFile(filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _fileNameErrorController.add(fileExistsMessage);
+        _filenameExistsController.add(true);
       }else{
-        _fileNameErrorController.add("");
-        _streamController.add(RideExportState.EXPORTING);
-        await _saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
-        _streamController.add(RideExportState.DONE);
+        _filenameExistsController.add(false);
+        _streamController.add(ExportDataOrError.exporting());
+
+        await _saveRideAndAttendeesToFile(
+            file,
+            _fileExtension.extension(),
+            ride,
+            await rideRepository.getRideAttendees(ride.date)
+        );
+        _streamController.add(ExportDataOrError.success());
       }
-    }).catchError((e) => _streamController.addError(e));
+    }).catchError(_streamController.addError);
   }
 
   ///Save the given ride and attendees to the given file.
@@ -125,7 +125,7 @@ class ExportRideBloc extends Bloc {
   @override
   void dispose() {
     _streamController.close();
-    _fileNameErrorController.close();
+    _filenameExistsController.close();
     fileNameController.dispose();
   }
 }

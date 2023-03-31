@@ -20,7 +20,7 @@ class SettingsSubmit extends StatelessWidget {
       stream: submitStream,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return SizedBox(width: 0,height: 0);
+          return SizedBox.shrink();
         }else{
           return snapshot.data ? Padding(
             padding: const EdgeInsets.only(right: 8.0),

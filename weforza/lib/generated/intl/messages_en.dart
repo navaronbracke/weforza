@@ -35,7 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m7(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m8(amount) => "${amount} people have a device with this name";
+  static m8(amount) => "${amount} riders have a device with this name";
 
   static m9(value) => "${value} is required";
 

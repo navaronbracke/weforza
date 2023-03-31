@@ -7,7 +7,7 @@ class ImportableMember {
   ImportableMember({
     @required this.firstName,
     @required this.lastName,
-    @required this.alias
+    @required this.alias,
   }): assert(
     firstName != null && firstName.isNotEmpty && lastName != null &&
         lastName.isNotEmpty && alias != null

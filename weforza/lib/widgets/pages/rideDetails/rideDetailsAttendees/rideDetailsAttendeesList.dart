@@ -19,7 +19,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
             return GenericError(
-                text: S.of(context).RideDetailsLoadAttendeesError
+                text: S.of(context).GenericError
             );
           } else {
             if (snapshot.data == null || snapshot.data.isEmpty) {

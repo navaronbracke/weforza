@@ -8,16 +8,16 @@ class MemberDevicesListHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
     android: () => Padding(
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+      padding: const EdgeInsets.only(top: 5),
       child: Text(
-        S.of(context).DevicesListHeader,
+        S.of(context).Devices,
         style: ApplicationTheme.memberDevicesListHeaderTextStyle,
       ),
     ),
     ios: () => Padding(
-      padding: const EdgeInsets.fromLTRB(10,15,15,10),
+      padding: const EdgeInsets.only(top: 15),
       child: Text(
-        S.of(context).DevicesListHeader,
+        S.of(context).Devices,
         style: ApplicationTheme.memberDevicesListHeaderTextStyle,
       ),
     ),

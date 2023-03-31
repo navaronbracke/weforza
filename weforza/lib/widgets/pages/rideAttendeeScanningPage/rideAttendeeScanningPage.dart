@@ -147,8 +147,9 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                 ),
               );
             case ScanProcessStep.MANUAL:
+              final Future<List<Member>> future = bloc.loadActiveMembers();
               return RideAttendeeManualSelection(
-                items: bloc.sortedMembers,
+                future: future,
                 itemBuilder: _buildManualSelectionListItem,
                 saveButtonBuilder: _buildSaveButton,
               );

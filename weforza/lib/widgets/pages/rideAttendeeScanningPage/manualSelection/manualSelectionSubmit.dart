@@ -25,7 +25,7 @@ class ManualSelectionSubmit extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: isSaving ? PlatformAwareLoadingIndicator() : FlatButton(
                 child: Text(
-                    S.of(context).RideAttendeeScanningSaveResults,
+                    S.of(context).Save,
                     style: TextStyle(color: ApplicationTheme.primaryColor)
                 ),
                 onPressed: onSave,
@@ -35,7 +35,7 @@ class ManualSelectionSubmit extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 20, top: 10),
               child: isSaving ? PlatformAwareLoadingIndicator() : CupertinoButton(
                 child: Text(
-                    S.of(context).RideAttendeeScanningSaveResults,
+                    S.of(context).Save,
                     style: TextStyle(color: ApplicationTheme.primaryColor)
                 ),
                 onPressed: onSave,

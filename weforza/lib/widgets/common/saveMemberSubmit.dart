@@ -1,19 +1,30 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/cupertino.dart';
-import 'package:weforza/generated/l10n.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weforza/model/saveMemberOrError.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
-class AddMemberSubmit extends StatelessWidget {
-  AddMemberSubmit({
+class SaveMemberSubmit extends StatelessWidget {
+  SaveMemberSubmit({
     @required this.stream,
-    @required this.onPressed
-  }): assert(stream != null && onPressed != null);
+    @required this.onPressed,
+    @required this.submitButtonLabel,
+    @required this.memberExistsMessage,
+    @required this.genericErrorMessage,
+  }): assert(
+    stream != null && onPressed != null && submitButtonLabel != null
+        && submitButtonLabel.isNotEmpty && memberExistsMessage != null
+        && memberExistsMessage.isNotEmpty && genericErrorMessage != null
+        && genericErrorMessage.isNotEmpty
+  );
 
   final Stream<SaveMemberOrError> stream;
   final VoidCallback onPressed;
+  final String submitButtonLabel;
+  final String memberExistsMessage;
+  final String genericErrorMessage;
 
   @override
   Widget build(BuildContext context){
@@ -22,14 +33,14 @@ class AddMemberSubmit extends StatelessWidget {
       android: () => RaisedButton(
         color: Theme.of(context).primaryColor,
         child: Text(
-            S.of(context).AddMemberSubmit,
+            submitButtonLabel,
             style: TextStyle(color: Colors.white)
         ),
         onPressed: onPressed,
       ),
       ios: () => CupertinoButton.filled(
         child: Text(
-            S.of(context).AddMemberSubmit,
+            submitButtonLabel,
             style: TextStyle(color: Colors.white)
         ),
         pressedOpacity: 0.5,
@@ -42,7 +53,7 @@ class AddMemberSubmit extends StatelessWidget {
       stream: stream,
       builder: (context,snapshot){
         if(snapshot.hasError){
-          return Text(S.of(context).GenericError);
+          return Text(genericErrorMessage);
         }else{
           if(snapshot.data.saving){
             return PlatformAwareLoadingIndicator();
@@ -53,7 +64,7 @@ class AddMemberSubmit extends StatelessWidget {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(S.of(context).MemberAlreadyExists),
+                    child: Text(memberExistsMessage),
                   ),
                   button
                 ],

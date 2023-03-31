@@ -17,8 +17,9 @@ class ManualSelectionListItem extends StatefulWidget {
     @required this.alias,
     @required this.personInitials,
   }): assert(
-    isSelected != null && profileImageFuture != null && personInitials != null && personInitials.isNotEmpty &&
-        onTap != null && firstName != null && lastName != null && alias != null
+    isSelected != null && profileImageFuture != null && personInitials != null
+        && personInitials.isNotEmpty && onTap != null && firstName != null
+        && lastName != null && alias != null
   );
 
   final bool Function() isSelected;
@@ -71,13 +72,13 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
                 ),
               ),
               Expanded(
-                child: MemberNameAndAlias(
-                  firstNameStyle: firstNameStyle,
-                  lastNameStyle: lastNameStyle,
-                  firstName: widget.firstName,
-                  lastName: widget.lastName,
-                  alias: widget.alias,
-                ),
+                  child: MemberNameAndAlias(
+                    firstNameStyle: firstNameStyle,
+                    lastNameStyle: lastNameStyle,
+                    firstName: widget.firstName,
+                    lastName: widget.lastName,
+                    alias: widget.alias,
+                  )
               ),
             ],
           ),

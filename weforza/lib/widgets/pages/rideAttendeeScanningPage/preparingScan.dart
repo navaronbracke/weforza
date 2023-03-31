@@ -8,8 +8,10 @@ class PreparingScanWidget extends StatelessWidget {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       PlatformAwareLoadingIndicator(),
-      SizedBox(height: 20),
-      Text(S.of(context).RideAttendeeScanningPreparingScan),
+      Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Text(S.of(context).RideAttendeeScanningPreparingScan),
+      ),
     ],
   );
 }

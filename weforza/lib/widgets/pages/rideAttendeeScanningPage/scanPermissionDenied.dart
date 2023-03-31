@@ -46,13 +46,15 @@ class ScanPermissionDenied extends StatelessWidget {
           ),
           onPressed: () async => await openAppSettings(),
         ),
-        SizedBox(width: 20),
-        FlatButton(
-          child: Text(
-            S.of(context).GoBack,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: FlatButton(
+            child: Text(
+              S.of(context).GoBack,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );
@@ -73,13 +75,15 @@ class ScanPermissionDenied extends StatelessWidget {
           ),
           onPressed: () async => await openAppSettings(),
         ),
-        SizedBox(width: 20),
-        CupertinoButton(
-          child: Text(
-            S.of(context).GoBack,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
+        Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: CupertinoButton(
+            child: Text(
+              S.of(context).GoBack,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );

@@ -20,41 +20,50 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   color: ApplicationTheme.rideCalendarPastDayWithoutRideBackgroundColor,
                 ),
               ),
-              SizedBox(width: 10),
-              Text(S.of(context).AddRideColorLegendPastDay,softWrap: true),
-            ],
-          ),
-          SizedBox(height: 5),
-          Row(
-            children: <Widget>[
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor,
-                ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(S.of(context).AddRideColorLegendPastDay,softWrap: true),
               ),
-              SizedBox(width: 10),
-              Text(S.of(context).AddRideColorLegendPastRide,softWrap: true),
             ],
           ),
-          SizedBox(height: 5),
-          Row(
-            children: <Widget>[
-              Container(
-                height: 20,
-                width: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: ApplicationTheme.rideCalendarSelectedDayBackgroundColor,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ApplicationTheme.rideCalendarPastDayWithRideBackgroundColor,
+                  ),
                 ),
-              ),
-              SizedBox(width: 10),
-              Text(S.of(context).AddRideColorLegendCurrentSelection,softWrap: true),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(S.of(context).AddRideColorLegendPastRide,softWrap: true),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 5),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  height: 20,
+                  width: 20,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ApplicationTheme.rideCalendarSelectedDayBackgroundColor,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(S.of(context).AddRideColorLegendCurrentSelection,softWrap: true),
+                ),
+              ],
+            ),
+          ),
           Row(
             children: <Widget>[
               Container(
@@ -65,8 +74,10 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   color: ApplicationTheme.rideCalendarFutureDayWithRideBackgroundColor,
                 ),
               ),
-              SizedBox(width: 10),
-              Text(S.of(context).AddRideColorLegendFutureRide,softWrap: true),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(S.of(context).AddRideColorLegendFutureRide,softWrap: true),
+              ),
             ],
           ),
         ],

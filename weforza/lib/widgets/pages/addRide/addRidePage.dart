@@ -74,6 +74,8 @@ class _AddRidePageState extends State<AddRidePage> {
                         Navigator.pop(context);
                       }).catchError((e){
                         //do nothing with the error
+                        //we throw the error to prevent the onSuccess being called
+                        //the submit handles the 'actual' error in its streambuilder
                       });
                     }),
                   ),

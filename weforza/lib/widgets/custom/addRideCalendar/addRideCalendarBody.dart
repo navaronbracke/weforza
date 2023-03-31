@@ -1,9 +1,9 @@
-//We need the body to do the following
-//- support swiping left/right -> pageview
-//- handle item taps -> update specific item
-//- update when the header changes -> listen to current date stream, animate to page if the date changes
+
 import 'package:flutter/material.dart';
+import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarItem.dart';
+import 'package:weforza/widgets/providers/addRideBlocProvider.dart';
 
 class AddRideCalendarBody extends StatefulWidget {
   @override
@@ -13,6 +13,7 @@ class AddRideCalendarBody extends StatefulWidget {
 class _AddRideCalendarBodyState extends State<AddRideCalendarBody> {
   @override
   Widget build(BuildContext context) {
+    final bloc = AddRideBlocProvider.of(context).bloc;
     return Column(
       children: <Widget>[
         Row(
@@ -27,15 +28,68 @@ class _AddRideCalendarBodyState extends State<AddRideCalendarBody> {
           ],
         ),
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: _buildCalendarRows(),
+          child: PageView.builder(
+            controller: bloc.pageController,
+            onPageChanged: (page) => bloc.onPageChanged(page),
+            itemBuilder: (context, index) => Column(
+              children: _buildCalendarRows(bloc),
             ),
-            scrollDirection: Axis.vertical,
+            itemCount: bloc.calendarItemCount,
           ),
         ),
       ],
     );
+  }
+
+  List<Widget> _buildCalendarRows(AddRideBloc bloc){
+    DateTime pageDate = bloc.pageDate;
+    //Calculate the start offset
+    //If the first day of the month is monday, this is 0. If this day is a sunday, its 6.
+    int offset = pageDate.weekday - 1;
+    //A list of filler widgets for the offset + the actual day widgets
+    List<Widget> items = List();
+    //Add start offset widgets first
+    for(int i = 0; i<offset; i++){
+      items.add(SizedBox(width: 40, height: 40));
+    }
+    //Add days of month
+    int daysInMonth = bloc.daysInMonth;
+
+    for(int i = 0; i< daysInMonth; i++){
+      final item = AddRideCalendarItem(date: DateTime(pageDate.year,pageDate.month,i+1));
+      items.add(item);
+    }
+    //Calculate the end offset
+    //if the last day of the displayed month is a sunday, this is 0. If it is a monday it is 6.
+    offset = 7 - DateTime(pageDate.year,pageDate.month,daysInMonth).weekday;
+    //Add end offset widgets last
+    for(int i = 0; i<offset; i++){
+      items.add(SizedBox(width: 40, height: 40));
+    }
+
+    //The aforementioned items, but grouped in rows
+    List<Widget> output = List();
+
+    //While we still have items to put in rows, generate a row
+    while(items.isNotEmpty){
+      List<Widget> children = List();
+      if(items.length < 7){
+        //Add remaining items
+        while(items.isNotEmpty){
+          children.add(items.removeAt(0));
+        }
+      }else{
+        //Add a week range
+        for(int i = 0; i< 7; i++){
+          children.add(items.removeAt(0));
+        }
+      }
+      Row row = Row(children: children,mainAxisAlignment: MainAxisAlignment.spaceAround);
+      output.add(Padding(
+        child: row,
+        padding: EdgeInsets.fromLTRB(0, 5,0,5),
+      ));
+    }
+    return output;
   }
 }

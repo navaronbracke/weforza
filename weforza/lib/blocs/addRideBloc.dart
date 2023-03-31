@@ -1,6 +1,8 @@
 
 import 'dart:async';
+import 'dart:collection';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +10,9 @@ import 'package:jiffy/jiffy.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/rideRepository.dart';
+
+///The on item reset callback signature.
+typedef OnReset = void Function();
 
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
@@ -42,22 +47,23 @@ class AddRideBloc extends Bloc {
   int daysInMonth = 0;
 
   ///The already persistent rides.
-  List<DateTime> _existingRides;
+  HashSet<DateTime> _existingRides;
 
   ///This future holds the loading process for initializing [_existingRides].
   Future<void> loadExistingRidesFuture;
 
   ///The rides to add on a submit.
-  List<DateTime> _ridesToAdd = List();
+  HashSet<DateTime> _ridesToAdd = HashSet();
+
+  final List<OnReset> resetCallbacks = List();
 
   //Intercept a day pressed event.
   //Returns true if the item state should be refreshed.
   bool onDayPressed(DateTime date){
     if(_currentSubmitState != AddRideSubmitState.IDLE) return false;
 
-    DateTime today = DateTime.now();
     //This date is in the past OR there is a ride with this date.
-    if(date.isBefore(DateTime(today.year,today.month,today.day)) || _existingRides.contains(date)){
+    if(isBeforeToday(date) || _existingRides.contains(date)){
       return false;
     }
 
@@ -74,6 +80,8 @@ class AddRideBloc extends Bloc {
   void onRequestClear(){
     if(_currentSubmitState == AddRideSubmitState.IDLE && _ridesToAdd.isNotEmpty){
       _ridesToAdd.clear();
+      //Notify all items to reset themselves.
+      resetCallbacks.forEach((onReset) => onReset());
     }
   }
 
@@ -87,7 +95,7 @@ class AddRideBloc extends Bloc {
 
   ///Load the existing ride dates.
   Future<void> loadRideDates() async {
-    _existingRides = await repository.getRideDates();
+    _existingRides = HashSet.of(await repository.getRideDates());
   }
 
   ///Whether a day, has or had a ride planned beforehand.
@@ -97,6 +105,7 @@ class AddRideBloc extends Bloc {
   }
 
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
+  ///Rides that were planned previously, but still have to happen aren't 'new' scheduled rides.
   bool dayIsNewlyScheduledRide(DateTime date){
     assert(date != null);
     return !_existingRides.contains(date) && _ridesToAdd.contains(date);
@@ -108,7 +117,7 @@ class AddRideBloc extends Bloc {
     final jiffyDate = Jiffy([today.year,today.month,1]);
     pageDate = jiffyDate.dateTime;
     daysInMonth = jiffyDate.daysInMonth;
-    pageController = PageController(initialPage: 0);
+    pageController = PageController(initialPage: currentPage);
     _calendarHeaderController.add(pageDate);
   }
 
@@ -138,6 +147,8 @@ class AddRideBloc extends Bloc {
 
   //The pageview wants to go forward.
   //Update the header. The pageview will update by itself.
+  //The pageview doesn't go beyond it's item count or under zero,
+  //thus we don't need to check the bounds.
   void onPageViewForward(){
     _addMonth();
     _calendarHeaderController.add(pageDate);
@@ -145,6 +156,8 @@ class AddRideBloc extends Bloc {
 
   //The pageview wants to go backward.
   //Update the header. The pageview will update by itself.
+  //The pageview doesn't go beyond it's item count or under zero,
+  //thus we don't need to check the bounds.
   void onPageViewBackward(){
     _subtractMonth();
     _calendarHeaderController.add(pageDate);
@@ -160,6 +173,7 @@ class AddRideBloc extends Bloc {
       pageDate = newDate.dateTime;
       daysInMonth = newDate.daysInMonth;
       currentPage++;
+      resetCallbacks.clear();//Remove the old callbacks
     }
   }
 
@@ -173,6 +187,7 @@ class AddRideBloc extends Bloc {
       pageDate = newDate.dateTime;
       daysInMonth = newDate.daysInMonth;
       currentPage--;
+      resetCallbacks.clear();//Remove the old callbacks
     }
   }
 
@@ -196,19 +211,38 @@ class AddRideBloc extends Bloc {
     }
   }
 
-  @override
-  int get hashCode => hashValues(pageDate, _currentSubmitState, hashList(_existingRides), hashList(_ridesToAdd));
+  ///Whether [date] is before today.
+  bool isBeforeToday(DateTime date){
+    DateTime today = DateTime.now();
+    return date.isBefore(DateTime(today.year,today.month,today.day));
+  }
+
+  ///Register an item's reset function.
+  ///Each registered item will be reset when we call onRequestClear.
+  void registerResetCallback(OnReset callback) => resetCallbacks.add(callback);
 
   @override
-  bool operator ==(Object other) => other is AddRideBloc && pageDate == other.pageDate 
-  && _currentSubmitState == other._currentSubmitState && listEquals(_ridesToAdd, other._ridesToAdd) 
-  && listEquals(_existingRides, other._existingRides);
+  int get hashCode {
+    final setEquality = SetEquality();
+    return hashValues(pageDate, _currentSubmitState, setEquality.hash(_existingRides), setEquality.hash(_ridesToAdd));
+  }
+
+  @override
+  bool operator ==(Object other){
+    final setEquality = SetEquality();
+    return other is AddRideBloc && pageDate == other.pageDate
+        && _currentSubmitState == other._currentSubmitState
+        && setEquality.equals(_ridesToAdd, other._ridesToAdd)
+        && setEquality.equals(_existingRides, other._existingRides);
+  }
   
   @override
   void dispose() {
     _submitController.close();
     _calendarHeaderController.close();
   }
+
+  void onPageChanged(int page) => page > pageController.page ? onPageViewForward() : onPageViewBackward();
 }
 
 ///This enum declares the different states for the ride submit process.

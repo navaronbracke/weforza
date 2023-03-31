@@ -132,7 +132,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           style: firstNameStyle,
           children: [
             TextSpan(
-              text: " " + widget.alias,
+              text: " '${widget.alias}'",
               style: firstNameStyle.copyWith(fontStyle: FontStyle.italic),
             ),
           ]

@@ -8,11 +8,15 @@ import 'package:weforza/widgets/common/device_icon.dart';
 class DeviceTypeCarousel extends StatelessWidget {
   const DeviceTypeCarousel({
     required this.controller,
+    required this.height,
     super.key,
   });
 
-  /// The controller that manages the currently selected page.
+  /// The controller that manages the currently selected device type index.
   final PageController controller;
+
+  /// The height for the entire carousel.
+  final double height;
 
   Widget _buildIcon(DeviceType deviceType, S translator) {
     return Column(
@@ -46,41 +50,36 @@ class DeviceTypeCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return Column(
-      children: <Widget>[
-        Flexible(
-          flex: 9,
-          child: PageView.builder(
-            itemCount: DeviceType.values.length,
-            itemBuilder: (_, index) {
-              return _buildIcon(DeviceType.values[index], translator);
-            },
-            controller: controller,
-          ),
-        ),
-        Flexible(
-          flex: 2,
-          child: Center(
-            child: AnimatedBuilder(
-              animation: controller,
-              builder: (context, child) {
-                final page = controller.page?.round() ?? controller.initialPage;
-
-                final children = <Widget>[];
-
-                for (int i = 0; i < DeviceType.values.length; i++) {
-                  children.add(_DeviceTypeCarouselDot(selected: i == page));
-                }
-
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                );
-              },
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: height),
+      child: Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              itemCount: DeviceType.values.length,
+              itemBuilder: (_, index) => _buildIcon(
+                DeviceType.values[index],
+                translator,
+              ),
+              controller: controller,
             ),
           ),
-        ),
-      ],
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              final page = controller.page?.round() ?? controller.initialPage;
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (int i = 0; i < DeviceType.values.length; i++)
+                    _DeviceTypeCarouselDot(selected: i == page),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

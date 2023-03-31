@@ -133,4 +133,10 @@ class _MemberListPageState extends State<MemberListPage> {
       });
     }
   }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
 }

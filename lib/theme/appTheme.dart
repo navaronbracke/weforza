@@ -131,7 +131,7 @@ abstract class ApplicationTheme {
   static ThemeData androidTheme(){
      return ThemeData(
       splashColor: secondaryColor.withAlpha(150),
-      appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+      appBarTheme: AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           primary: primaryColor,

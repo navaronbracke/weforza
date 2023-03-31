@@ -4,7 +4,7 @@ import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scan_result.dart';
 
-///This interface provides a contract for manipulating [Ride]s in persistent storage.
+/// This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {
   /// Add rides to the database.
   Future<void> addRides(List<Ride> rides);
@@ -15,8 +15,12 @@ abstract class IRideDao {
   /// Delete all rides & attendant records.
   Future<void> deleteRideCalendar();
 
-  /// Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
+  /// Get all rides. This method will load all the stored [Ride]s
+  /// and populate their attendee count.
   Future<List<Ride>> getRides();
+
+  /// Get the amount of rides.
+  Future<int> getRidesCount();
 
   /// Update the scanned attendees counter and attendees list for the given ride.
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
@@ -41,16 +45,16 @@ class RideDao implements IRideDao {
     this._rideAttendeeStore,
   );
 
-  ///A reference to the database.
+  /// A reference to the database.
   final Database _database;
 
-  ///A reference to the [RideAttendee] store.
+  /// A reference to the [RideAttendee] store.
   final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
-  ///A reference to the [Ride] store.
+  /// A reference to the [Ride] store.
   final StoreRef<String, Map<String, dynamic>> _rideStore;
 
-  ///A reference to the [Member] store.
+  /// A reference to the [Member] store.
   final StoreRef<String, Map<String, dynamic>> _memberStore;
 
   @override
@@ -82,12 +86,18 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Ride>> getRides() async {
-    final rideRecords = await _rideStore.find(_database,
-        finder: Finder(sortOrders: [SortOrder(Field.key, false)]));
+    final rideRecords = await _rideStore.find(
+      _database,
+      finder: Finder(sortOrders: [SortOrder(Field.key, false)]),
+    );
+
     return rideRecords
         .map((record) => Ride.of(DateTime.parse(record.key), record.value))
         .toList();
   }
+
+  @override
+  Future<int> getRidesCount() => _rideStore.count(_database);
 
   @override
   Future<List<DateTime>> getRideDates() async {
@@ -97,17 +107,22 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<Member>> getRideAttendees(DateTime date) async {
-    //fetch the attendees of the ride and map to their uuid's
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals('date', date.toIso8601String())));
+    final rideAttendeeRecords = await _rideAttendeeStore.find(
+      _database,
+      finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
+    );
+
     final attendeeIds =
         rideAttendeeRecords.map((record) => record.value['attendee']).toList();
-    //fetch the members that belong to the attendee uuid's
-    final memberRecords = await _memberStore.find(_database,
-        finder: Finder(
-            filter: Filter.custom((record) => attendeeIds.contains(record.key)),
-            sortOrders: [SortOrder('firstname'), SortOrder('lastname')]));
-    //map the record snapshots
+
+    final memberRecords = await _memberStore.find(
+      _database,
+      finder: Finder(
+        filter: Filter.custom((record) => attendeeIds.contains(record.key)),
+        sortOrders: [SortOrder('firstname'), SortOrder('lastname')],
+      ),
+    );
+
     return memberRecords
         .map((record) => Member.of(record.key, record.value))
         .toList();
@@ -139,9 +154,12 @@ class RideDao implements IRideDao {
 
   @override
   Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(
-      DateTime date) async {
-    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
-        finder: Finder(filter: Filter.equals('date', date.toIso8601String())));
+    DateTime date,
+  ) async {
+    final rideAttendeeRecords = await _rideAttendeeStore.find(
+      _database,
+      finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
+    );
 
     return rideAttendeeRecords
         .map((record) => RideAttendeeScanResult.of(record.value))

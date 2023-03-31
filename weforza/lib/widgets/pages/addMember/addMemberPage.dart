@@ -42,7 +42,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
   ///Error messages.
   String _firstNameRequiredMessage;
   String _lastNameRequiredMessage;
-  String _aliasRequiredMessage;
   String _firstNameMaxLengthMessage;
   String _firstNameIllegalCharactersMessage;
   String _firstNameBlankMessage;
@@ -68,7 +67,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
 
     _firstNameRequiredMessage = translator.ValueIsRequired(_firstNameLabel);
     _lastNameRequiredMessage = translator.ValueIsRequired(_lastNameLabel);
-    _aliasRequiredMessage = translator.ValueIsRequired(_aliasLabel);
 
     _firstNameMaxLengthMessage =
         translator.FirstNameMaxLength("${_bloc.nameAndAliasMaxLength}");
@@ -102,7 +100,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
             _lastNameBlankMessage) == null;
     final aliasValid = _bloc.validateAlias(
         _aliasController.text,
-        _aliasRequiredMessage,
         _aliasMaxLengthMessage,
         _aliasIllegalCharactersMessage,
         _aliasBlankMessage) == null;
@@ -209,7 +206,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
                       setState(() {
                         _bloc.validateAlias(
                             _aliasController.text,
-                            _aliasRequiredMessage,
                             _aliasMaxLengthMessage,
                             _aliasIllegalCharactersMessage,
                             _aliasBlankMessage);
@@ -336,7 +332,6 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateAlias(
                       _aliasController.text,
-                      _aliasRequiredMessage,
                       _aliasMaxLengthMessage,
                       _aliasIllegalCharactersMessage,
                       _aliasBlankMessage),

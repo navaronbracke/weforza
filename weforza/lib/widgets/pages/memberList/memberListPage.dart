@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/importAndExportBloc.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -11,7 +10,7 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
-import 'package:weforza/widgets/pages/importExport/importAndExportPage.dart';
+import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
@@ -58,12 +57,10 @@ class _MemberListPageState extends State<MemberListPage> {
             ).then((_) => onReturnToMemberListPage(context)),
           ),
           IconButton(
-            icon: Icon(Icons.import_export),
+            icon: Icon(Icons.file_download),
             color: Colors.white,
             onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=> ImportAndExportPage(
-                  bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
-                ))
+                MaterialPageRoute(builder: (context)=> ImportMembersPage())
             ).then((_)=> onReturnToMemberListPage(context)),
           ),
         ],
@@ -91,11 +88,9 @@ class _MemberListPageState extends State<MemberListPage> {
             CupertinoIconButton(
               onPressedColor: ApplicationTheme.primaryColor,
               idleColor: ApplicationTheme.accentColor,
-              icon: Icons.import_export,
+              icon: Icons.file_download,
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context)=> ImportAndExportPage(
-                    bloc: ImportAndExportBloc(settingsRepo: InjectionContainer.get<SettingsRepository>()),
-                  ))
+                  MaterialPageRoute(builder: (context)=> ImportMembersPage())
               ).then((_) => onReturnToMemberListPage(context)),
             ),
           ],

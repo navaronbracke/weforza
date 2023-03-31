@@ -57,6 +57,7 @@
 	"EditDisallowedWord": "Edit disallowed word",
 	"EditRider": "Edit rider",
 	"Export": "Export",
+	"ExportGenericErrorMessage": "Something went wrong during the export",
 	"ExportRide": "Export ride",
 	"ExportRideFileNamePlaceholder": "ride_{date}",
 	"ExportRiders": "Export riders",

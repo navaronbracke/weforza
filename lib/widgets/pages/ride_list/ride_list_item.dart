@@ -58,14 +58,12 @@ class RideListItemState extends ConsumerState<RideListItem> {
     );
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       child: PlatformAwareWidget(
         android: () => ListTile(title: content),
-        ios: () => Container(
-          decoration: const BoxDecoration(),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: content,
-          ),
+        ios: () => Padding(
+          padding: const EdgeInsets.all(12),
+          child: content,
         ),
       ),
       onTap: () {

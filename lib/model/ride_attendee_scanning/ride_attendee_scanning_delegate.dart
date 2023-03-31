@@ -9,9 +9,9 @@ import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
+import 'package:weforza/model/ride_attendee_scanning/bluetooth_peripheral_with_owners.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate_state_machine.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
-import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
@@ -73,11 +73,11 @@ class RideAttendeeScanningDelegate {
   /// that own a device with the [MapEntry.key] as device name.
   final _deviceOwners = <String, Set<String>>{};
 
+  /// The list of Bluetooth peripherals with possible owners per peripheral.
+  final _devicesWithOwners = <BluetoothPeripheralWithOwners>[];
+
   /// The controller that manages the attendees for [ride].
   final _rideAttendeeController = BehaviorSubject<Set<ScannedRideAttendee>>();
-
-  /// This list contains the devices that were scanned.
-  final _scannedDevices = <ScannedDevice>[];
 
   /// The controller for the scanning progress bar.
   final AnimationController _scanProgressBarController;
@@ -171,7 +171,7 @@ class RideAttendeeScanningDelegate {
       }
     }
 
-    _scannedDevices.insert(0, ScannedDevice(deviceName, [...?owners]));
+    _devicesWithOwners.insert(0, BluetoothPeripheralWithOwners(device, [...?owners]));
 
     onDeviceFound(device);
   }
@@ -360,8 +360,8 @@ class RideAttendeeScanningDelegate {
     _scrollToManualSelectionLabel();
   }
 
-  /// Get the scanned device at the given [index].
-  ScannedDevice getScannedDevice(int index) => _scannedDevices[index];
+  /// Get the scanned Bluetooth peripheral at the given [index].
+  BluetoothPeripheralWithOwners getScannedPeripheral(int index) => _devicesWithOwners[index];
 
   /// Get the selected ride attendee for the rider with the given [uuid].
   ///
@@ -477,10 +477,7 @@ class RideAttendeeScanningDelegate {
 
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
-      scanner
-          .scanForDevices(settings.scanDuration)
-          .where(_includeScanResult)
-          .listen(
+      scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
         _addScannedDevice,
         onError: (error) {
           // Ignore errors from individual events.

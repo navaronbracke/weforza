@@ -19,7 +19,6 @@ import 'package:weforza/widgets/pages/memberDetails/memberDevices.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -49,77 +48,11 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
 
   @override
   Widget build(BuildContext context)=> PlatformAwareWidget(
-    android: () => OrientationAwareWidget(
-      portrait: () => _buildAndroidPortraitLayout(context),
-      landscape: () => _buildAndroidLandscapeLayout(context),
-    ),
-    ios: () => OrientationAwareWidget(
-      portrait: () => _buildIOSPortraitLayout(context),
-      landscape: () => _buildIOSLandscapeLayout(context),
-    ),
+    android: () => _buildAndroidLayout(context),
+    ios: () => _buildIOSLayout(context),
   );
 
-  Widget _buildAndroidLandscapeLayout(BuildContext context) {
-    final member = MemberProvider.selectedMember;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).MemberDetailsTitle),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())),
-          ),
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: ()=> showDialog(context: context,barrierDismissible: false, builder: (context)=> DeleteMemberDialog(this)),
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: ProfileImage(image: member.profileImage),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                    Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Icon(Icons.phone),
-                        SizedBox(width: 5),
-                        Text(member.phone),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-              child: _buildDevicesList()
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAndroidPortraitLayout(BuildContext context) {
+  Widget _buildAndroidLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return Scaffold(
       appBar: AppBar(
@@ -188,79 +121,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
     );
   }
 
-  Widget _buildIOSLandscapeLayout(BuildContext context) {
-    final member = MemberProvider.selectedMember;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Row(
-          children: <Widget>[
-            Expanded(
-              child: Center(child: Text(S.of(context).MemberDetailsTitle)),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CupertinoIconButton(icon: Icons.edit,
-                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage()))),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    icon: Icons.delete,
-                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
-                ),
-              ],
-            ),
-          ],
-        ),
-        transitionBetweenRoutes: false,
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: ProfileImage(image: member.profileImage),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(member.firstName,style: ApplicationTheme.memberListItemFirstNameTextStyle.copyWith(fontSize: 25,fontWeight: FontWeight.w500),overflow: TextOverflow.ellipsis),
-                      Text(member.lastName,style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 20),overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Icon(Icons.phone),
-                          SizedBox(width: 5),
-                          Text(member.phone),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      _buildAttendingCountWidget(_bloc.getAttendingCount(member.uuid)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-                child: _buildDevicesList()
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIOSPortraitLayout(BuildContext context) {
+  Widget _buildIOSLayout(BuildContext context) {
     final member = MemberProvider.selectedMember;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(

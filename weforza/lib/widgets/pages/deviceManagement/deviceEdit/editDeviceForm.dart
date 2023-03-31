@@ -7,7 +7,6 @@ import 'package:weforza/widgets/pages/deviceManagement/deviceEdit/editDeviceSubm
 import 'package:weforza/widgets/pages/deviceManagement/deviceTypePicker.dart';
 import 'package:weforza/widgets/pages/deviceManagement/iDeviceManager.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
-import 'package:weforza/widgets/platform/orientationAwareWidget.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/generated/i18n.dart';
 
@@ -39,17 +38,11 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => OrientationAwareWidget(
-      portrait: () => _buildAndroidPortraitLayout(context),
-      landscape: () => _buildAndroidLandscapeLayout(context),
-    ),
-    ios: () => OrientationAwareWidget(
-      portrait: () => _buildIosPortraitLayout(context),
-      landscape: () => _buildIosLandscapeLayout(context),
-    ),
+    android: () => _buildAndroidLayout(context),
+    ios: () => _buildIosLayout(context),
   );
 
-  Widget _buildAndroidPortraitLayout(BuildContext context){
+  Widget _buildAndroidLayout(BuildContext context){
     return Form(
       key: _formKey,
       child: Column(
@@ -113,76 +106,7 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
     );
   }
 
-  Widget _buildAndroidLandscapeLayout(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: TextFormField(
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.text,
-                    autocorrect: false,
-                    controller: _editDeviceController,
-                    validator: (value) => widget.bloc.validateDeviceNameInput(
-                        value,
-                        S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                        S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
-                    ),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 5),
-                      labelText: S.of(context).DeviceNameLabel,
-                      helperText: " ",
-                    ),
-                    autovalidate: widget.bloc.autoValidateDeviceName,
-                    onChanged: (value) => setState((){
-                      widget.bloc.autoValidateDeviceName = true;
-                    }),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 4, 0),
-                    child: Center(
-                      child: DeviceTypePicker(valueChangedHandler: widget.bloc),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Center(
-                      child: EditDeviceSubmit(onPressed: () async {
-                        if(_formKey.currentState.validate()){
-                          await widget.bloc.editDevice((Device device){
-                            widget.onSuccess(device);
-                          }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
-                        }
-                      },stream: widget.bloc.submitStream)
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: StreamBuilder<String>(
-                  stream: widget.bloc.submitErrorStream,
-                  initialData: "",
-                  builder: (context,snapshot)=> Text(snapshot.data),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildIosPortraitLayout(BuildContext context){
+  Widget _buildIosLayout(BuildContext context){
     return Form(
       key: _formKey,
       child: Column(
@@ -246,83 +170,6 @@ class _EditDeviceFormState extends State<EditDeviceForm> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildIosLandscapeLayout(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Flexible(
-                  child: Column(
-                    children: <Widget>[
-                      CupertinoTextField(
-                        textInputAction: TextInputAction.done,
-                        controller: _editDeviceController,
-                        placeholder: S.of(context).DeviceNameLabel,
-                        autocorrect: false,
-                        keyboardType: TextInputType.text,
-                        onChanged: (value) {
-                          setState(() {
-                            widget.bloc.validateDeviceNameInput(
-                                value,
-                                S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                                S.of(context).DeviceNameMaxLength(widget.bloc.deviceNameMaxLength.toString())
-                            );
-                          });
-                        },
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text(
-                              CupertinoFormErrorFormatter.formatErrorMessage(widget.bloc.editDeviceError),
-                              style: ApplicationTheme.iosFormErrorStyle
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 4, 0),
-                    child: Center(
-                      child: DeviceTypePicker(valueChangedHandler: widget.bloc),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Center(
-                      child: EditDeviceSubmit(onPressed: () async {
-                        if(iosValidateEditDevice()){
-                          await widget.bloc.editDevice((Device device){
-                            widget.onSuccess(device);
-                          }, S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceError);
-                        }
-                      },stream: widget.bloc.submitStream)
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: StreamBuilder<String>(
-                  stream: widget.bloc.submitErrorStream,
-                  initialData: "",
-                  builder: (context,snapshot)=> Text(snapshot.data),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

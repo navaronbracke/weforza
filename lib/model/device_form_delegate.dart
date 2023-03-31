@@ -8,24 +8,9 @@ class DeviceFormDelegate {
   /// The notifier that handles adding and editing devices.
   final SelectedMemberDevicesNotifier notifier;
 
-  /// The future that represents the submit.
-  Future<void>? _future;
-
-  /// Get the submit future.
-  Future<void>? get future => _future;
-
   /// Add a new device.
-  void addDevice(DevicePayload model) {
-    _future = notifier.addDevice(model);
-  }
+  Future<void> addDevice(DevicePayload model) => notifier.addDevice(model);
 
   /// Edit an existing device.
-  void editDevice(DevicePayload model) {
-    _future = notifier.editDevice(model);
-  }
-
-  /// Reset the submit computation.
-  void reset() {
-    _future = null;
-  }
+  Future<void> editDevice(DevicePayload model) => notifier.editDevice(model);
 }

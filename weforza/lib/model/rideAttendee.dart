@@ -1,4 +1,4 @@
-import 'package:weforza/model/ride.dart';
+import 'package:flutter/widgets.dart';
 
 ///This class represents an intermediary table that connects [Ride] with [Member].
 class RideAttendee {
@@ -19,5 +19,14 @@ class RideAttendee {
       "date": rideDate.toIso8601String(),
       "attendee": attendeeId
     };
+  }
+
+  @override
+  int get hashCode => hashValues(rideDate, attendeeId);
+
+  @override
+  bool operator ==(other) {
+    return other is RideAttendee &&
+        rideDate == other.rideDate && attendeeId == other.attendeeId;
   }
 }

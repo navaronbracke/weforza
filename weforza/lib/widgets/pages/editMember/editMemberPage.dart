@@ -343,7 +343,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
                   ),
                   controller: _aliasController,
                   autocorrect: false,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.text,
                   validator: (value) => _bloc.validateAlias(
                       _aliasController.text,
                       _aliasMaxLengthMessage,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/i18n.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 abstract class ShowAllScanDevicesHandler {
   bool get currentValue;
@@ -11,38 +12,83 @@ abstract class ShowAllScanDevicesHandler {
 }
 
 class ShowAllScanDevicesOption extends StatefulWidget {
-  ShowAllScanDevicesOption(this.handler): assert(handler != null);
+  ShowAllScanDevicesOption(this.handler) : assert(handler != null);
 
   final ShowAllScanDevicesHandler handler;
 
   @override
-  _ShowAllScanDevicesOptionState createState() => _ShowAllScanDevicesOptionState();
+  _ShowAllScanDevicesOptionState createState() =>
+      _ShowAllScanDevicesOptionState();
 }
 
 class _ShowAllScanDevicesOptionState extends State<ShowAllScanDevicesOption> {
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(S.of(context).SettingsShowAllDevicesOptionLabel, softWrap: true, style: ApplicationTheme.settingsOptionHeaderStyle),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Switch.adaptive(value: widget.handler.currentValue, onChanged: (value){
-              setState(() {
-                widget.handler.onChanged(value);
-              });
-            }),
-          ),
-        ],
-      ),
-      Text(S.of(context).SettingsShowAllDevicesOptionDescription,
-          softWrap: true,
-          style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(fontSize: 11)
-      ),
-    ],
+  Widget build(BuildContext context) => PlatformAwareWidget(
+    android: () => _buildAndroidWidget(context),
+    ios: () => _buildIosWidget(context)
   );
+
+  Widget _buildAndroidWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(S.of(context).SettingsShowAllDevicesOptionLabel,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: ApplicationTheme.settingsOptionHeaderStyle),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Switch(
+                value: widget.handler.currentValue,
+                onChanged: (value) => setState(() => widget.handler.onChanged(value)),
+              ),
+            ),
+          ],
+        ),
+        Text(S.of(context).SettingsShowAllDevicesOptionDescription,
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: ApplicationTheme.settingsOptionHeaderStyle
+                .copyWith(fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _buildIosWidget(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(S.of(context).SettingsShowAllDevicesOptionLabel,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: ApplicationTheme.settingsOptionHeaderStyle.copyWith(
+                    fontSize: 16
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: CupertinoSwitch(
+                value: widget.handler.currentValue,
+                onChanged: (value) => setState(() => widget.handler.onChanged(value)),
+              ),
+            ),
+          ],
+        ),
+        Text(S.of(context).SettingsShowAllDevicesOptionDescription,
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: ApplicationTheme.settingsOptionHeaderStyle
+                .copyWith(fontSize: 14)),
+      ],
+    );
+  }
 }

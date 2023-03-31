@@ -19,7 +19,7 @@ abstract class IFileHandler {
 class FileHandler implements IFileHandler {
 
   @override
-  Future<File> chooseProfileImageFromGallery() => FilePicker.getFile(type: FileType.IMAGE);
+  Future<File> chooseProfileImageFromGallery() => FilePicker.getFile(type: FileType.image);
 
   @override
   Future<File> loadProfileImageFromDisk(String path) async {

@@ -1,12 +1,15 @@
-/// This class wraps a Bluetooth device's name and id.
+/// This class represents a Bluetooth device.
 class BluetoothPeripheral {
   BluetoothPeripheral({
-    required this.id,
     required this.deviceName,
+    required this.id,
   }) : assert(id.isNotEmpty);
 
-  final String id;
+  /// The name of the device.
   final String deviceName;
+
+  /// The id of the device, as exposed by the raw scan result.
+  final String id;
 
   @override
   bool operator ==(Object other) {

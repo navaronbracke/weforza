@@ -6,24 +6,23 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   final _scanningController = BehaviorSubject.seeded(false);
 
   @override
-  Future<bool> isBluetoothEnabled() {
-    return Future.value(true);
-  }
+  Future<bool> isBluetoothEnabled() => Future.value(true);
+
+  @override
+  Stream<bool> get isScanning => _scanningController;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
     _scanningController.add(true);
 
-    final BluetoothPeripheral duplicateOwner =
-        BluetoothPeripheral(id: '1', deviceName: 'rudy1');
-    final BluetoothPeripheral duplicateDevice =
-        BluetoothPeripheral(id: '2', deviceName: 'duplicate_device');
-    final BluetoothPeripheral ownedByMultiple =
-        BluetoothPeripheral(id: '3', deviceName: 'shared1');
-    final BluetoothPeripheral emptyDeviceName =
-        BluetoothPeripheral(id: '4', deviceName: '');
-    final BluetoothPeripheral blankDeviceName =
-        BluetoothPeripheral(id: '5', deviceName: '  ');
+    final duplicateOwner = BluetoothPeripheral(id: '1', deviceName: 'rudy1');
+    final duplicateDevice = BluetoothPeripheral(
+      id: '2',
+      deviceName: 'duplicate_device',
+    );
+    final ownedByMultiple = BluetoothPeripheral(id: '3', deviceName: 'shared1');
+    final emptyDeviceName = BluetoothPeripheral(id: '4', deviceName: '');
+    final blankDeviceName = BluetoothPeripheral(id: '5', deviceName: '  ');
 
     for (int i = 0; i < 10; i++) {
       await Future.delayed(const Duration(seconds: 2), () {});
@@ -63,9 +62,6 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
 
     return Future<void>.value();
   }
-
-  @override
-  Stream<bool> get isScanning => _scanningController;
 
   @override
   void dispose() {

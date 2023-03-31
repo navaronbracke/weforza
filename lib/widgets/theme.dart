@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
+  /// The theme for destructive actions, such as delete buttons.
+  static final desctructiveAction = DestructiveActionTheme();
+
   /// The device type picker theme.
   static const deviceTypePicker = DeviceTypePickerTheme();
 
@@ -32,6 +35,21 @@ abstract class AppTheme {
 
   /// The theme for the settings page.
   static const settings = SettingsTheme();
+}
+
+/// This class represents the theme for destructive action buttons.
+class DestructiveActionTheme {
+  /// The text style for Android error messages.
+  final androidErrorStyle = const TextStyle(
+    fontSize: 16,
+    color: Colors.red,
+  );
+
+  /// The theme for destructive [ElevatedButton]s.
+  final elevatedButtonTheme = ElevatedButton.styleFrom(primary: Colors.red);
+
+  /// The theme for destructive [TextButton]s.
+  final textButtonTheme = TextButton.styleFrom(primary: Colors.red);
 }
 
 /// This class represents the theme for the device type picker.

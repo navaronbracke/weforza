@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
@@ -16,7 +18,8 @@ class MemberListBloc extends Bloc {
 
   Future<List<Member>> membersFuture;
 
-  MemberFilterOption _currentFilter = MemberFilterOption.ALL;
+  BehaviorSubject<MemberFilterOption> _filterController = BehaviorSubject.seeded(MemberFilterOption.ALL);
+  Stream<MemberFilterOption> get stream => _filterController.stream;
 
   /// Load the members, using the given filter option.
   /// Defaults to using no filter.
@@ -28,20 +31,19 @@ class MemberListBloc extends Bloc {
 
   Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
 
-  void onFilterChanged(int option){
-    MemberFilterOption filter = MemberFilterOption.ALL;
-    try {
-      filter = MemberFilterOption.values[option];
-    }catch(e){
-      // use default value.
+  void onFilterChanged(MemberFilterOption option){
+    if(option == null){
+      option = MemberFilterOption.ALL;
     }
 
-    if(filter != _currentFilter){
-      _currentFilter = filter;
-      loadMembers(_currentFilter);
+    if(option != _filterController.value){
+      _filterController.add(option);
+      loadMembers(option);
     }
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    _filterController.close();
+  }
 }

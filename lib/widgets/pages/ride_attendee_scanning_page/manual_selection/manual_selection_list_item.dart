@@ -91,6 +91,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (mounted) {
           // If the search bar still has focus, unfocus it first.
@@ -106,7 +107,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           handleTap(context);
         }
       },
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -175,7 +176,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
   void handleTap(BuildContext context) async {
     // Don't allow selecting the member when locked by saving.
     // Focus changes are allowed but those have been handled already.
-    if (!widget.canTap()) {
+    if (!mounted || !widget.canTap()) {
       return;
     }
 
@@ -205,9 +206,7 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
     }
 
     // Rebuild with the new colors.
-    if (mounted) {
-      setState(() => _setColors());
-    }
+    setState(() => _setColors());
   }
 
   Future<bool?> showConfirmationDialog(BuildContext context) {

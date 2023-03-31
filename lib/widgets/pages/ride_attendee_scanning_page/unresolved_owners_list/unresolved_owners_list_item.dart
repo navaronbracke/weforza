@@ -37,13 +37,14 @@ class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         if (mounted) {
           widget.onTap();
           setState(() => _setColors());
         }
       },
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(color: itemDecorationBackgroundColor),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

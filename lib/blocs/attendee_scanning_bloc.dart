@@ -44,8 +44,13 @@ class AttendeeScanningBloc extends Bloc {
   /// The visibility controller for the scanned members.
   final _showScannedController = BehaviorSubject.seeded(true);
 
-  void onQueryChanged(String newQuery) => _queryController.add;
-  void onShowScannedChanged(bool newShowScanned) => _showScannedController.add;
+  void onQueryChanged(String newQuery) {
+    _queryController.add(newQuery);
+  }
+
+  void onShowScannedChanged(bool newShowScanned) {
+    _showScannedController.add(newShowScanned);
+  }
 
   /// This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   final _scanStepController = BehaviorSubject.seeded(ScanProcessStep.init);
@@ -384,9 +389,9 @@ class AttendeeScanningBloc extends Bloc {
   }
 
   /// Go to the manual selection screen.
-  void continueToManualSelection() => _scanStepController.add(
-        ScanProcessStep.manual,
-      );
+  void continueToManualSelection() {
+    _scanStepController.add(ScanProcessStep.manual);
+  }
 
   bool isItemSelected(RideAttendeeScanResult item) =>
       rideAttendees.contains(item);
@@ -409,7 +414,9 @@ class AttendeeScanningBloc extends Bloc {
     return rideAttendees.contains(item);
   }
 
-  void removeScanResult(RideAttendeeScanResult item) => _removeRideAttendee;
+  void removeScanResult(RideAttendeeScanResult item) {
+    _removeRideAttendee(item);
+  }
 
   void addManualScanResult(String uuid) => _addRideAttendee(uuid, false);
 

@@ -22,7 +22,7 @@ class AddMemberBloc extends Bloc {
   final _submitStateController = BehaviorSubject<SaveMemberOrError>();
   Stream<SaveMemberOrError> get submitStream => _submitStateController;
 
-  void onError(Object error) => _submitStateController.addError;
+  void onError(Object error) => _submitStateController.addError(error);
 
   ///The actual inputs.
   String _firstName = '';

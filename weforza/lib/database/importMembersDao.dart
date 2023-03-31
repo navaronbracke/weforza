@@ -5,7 +5,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 
 abstract class IImportMembersDao {
-  Future<void> saveMembersWithDevices(List<Member> members, List<Device> devices);
+  Future<void> saveMembersWithDevices(Set<Member> members, Set<Device> devices);
 }
 
 class ImportMembersDao implements IImportMembersDao {
@@ -19,7 +19,7 @@ class ImportMembersDao implements IImportMembersDao {
   final _deviceStore = DatabaseProvider.deviceStore;
 
   @override
-  Future<void> saveMembersWithDevices(List<Member> members, List<Device> devices) async {
+  Future<void> saveMembersWithDevices(Set<Member> members, Set<Device> devices) async {
     //Get the existing members and devices and do a filter pass on the inputs.
     //This removes duplicates.
     final Set<Member> existingMembers = await _memberStore.find(_database).then(

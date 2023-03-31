@@ -68,7 +68,7 @@ class EditDeviceBloc extends Bloc {
     pageController.dispose();
   }
 
-  Future<Device> editDevice(String genericErrorMessage) async {
+  Future<Device> editDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
     _submitErrorController.add("");//remove the previous error.
     final editedDevice = Device(
@@ -78,14 +78,26 @@ class EditDeviceBloc extends Bloc {
         creationDate: deviceCreationDate
     );
 
-    return await repository.updateDevice(editedDevice).then((_){
-      _submitButtonController.add(false);
-      return editedDevice;
-    }).catchError((error){
+    final bool exists = await repository.deviceExists(deviceName, deviceOwnerId).catchError((error){
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
+
+    if(exists){
+      _submitButtonController.add(false);
+      _submitErrorController.add(deviceExistsMessage);
+      return Future.error(deviceExistsMessage);
+    }else{
+      return await repository.updateDevice(editedDevice).then((_){
+        _submitButtonController.add(false);
+        return editedDevice;
+      }).catchError((error){
+        _submitButtonController.add(false);
+        _submitErrorController.add(genericErrorMessage);
+        return Future.error(genericErrorMessage);
+      });
+    }
   }
 
   String validateDeviceNameInput(

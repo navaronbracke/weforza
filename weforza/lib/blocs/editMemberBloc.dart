@@ -122,7 +122,7 @@ class EditMemberBloc extends Bloc implements IProfileImagePicker {
     else if(nameAndAliasMaxLength < value.length){
       aliasError = maxLengthMessage;
     }
-    else if(Member.personNameAndAliasRegex.hasMatch(value)){
+    else if(value.isEmpty || Member.personNameAndAliasRegex.hasMatch(value)){
       alias = value;
       aliasError = null;
     }

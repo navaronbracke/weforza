@@ -1102,16 +1102,6 @@ class S {
     );
   }
 
-  /// `Ride saved at {path}`
-  String ExportRideExportedToPathMessage(Object path) {
-    return Intl.message(
-      'Ride saved at $path',
-      name: 'ExportRideExportedToPathMessage',
-      desc: '',
-      args: [path],
-    );
-  }
-
   /// `Exporting ride to file`
   String get ExportRideExportingToFile {
     return Intl.message(
@@ -1147,6 +1137,36 @@ class S {
     return Intl.message(
       'Exporting rides and attendees',
       name: 'ExportingRidesDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Members`
+  String get ExportMembersTitle {
+    return Intl.message(
+      'Export Members',
+      name: 'ExportMembersTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exporting members and devices`
+  String get ExportingMembersDescription {
+    return Intl.message(
+      'Exporting members and devices',
+      name: 'ExportingMembersDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `firstname,lastname,alias,devices`
+  String get ExportMembersCsvHeader {
+    return Intl.message(
+      'firstname,lastname,alias,devices',
+      name: 'ExportMembersCsvHeader',
       desc: '',
       args: [],
     );

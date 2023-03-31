@@ -33,19 +33,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m6(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
 
-  static m7(path) => "Rit opgeslagen op ${path}";
+  static m7(date) => "rit_${date}";
 
-  static m8(date) => "rit_${date}";
+  static m8(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m9(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m9(maxLength) => "Een voornaam is maximum ${maxLength} letters";
 
-  static m10(maxLength) => "Een voornaam is maximum ${maxLength} letters";
+  static m10(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m11(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m11(amount) => "${amount} personen hebben een toestel met deze naam";
 
-  static m12(amount) => "${amount} personen hebben een toestel met deze naam";
-
-  static m13(value) => "${value} is verplicht";
+  static m12(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

@@ -38,7 +38,6 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
   Future<void>? saveFuture;
 
   void onSave() {
-    // Get the Future before we call setState.
     saveFuture = widget.save();
     setState(() {});
   }
@@ -61,35 +60,39 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                   child: FutureBuilder<void>(
                     future: saveFuture,
                     builder: (_, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.none) {
-                        return Center(
-                          child: ElevatedButtonTheme(
-                            data: ElevatedButtonThemeData(
-                              style: ElevatedButton.styleFrom(
-                                primary: ApplicationTheme
-                                    .androidManualSelectionSaveButtonPrimaryColor,
-                                onPrimary: Colors.white,
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Center(
+                            child: ElevatedButtonTheme(
+                              data: ElevatedButtonThemeData(
+                                style: ElevatedButton.styleFrom(
+                                  primary: ApplicationTheme
+                                      .androidManualSelectionSaveButtonPrimaryColor,
+                                  onPrimary: Colors.white,
+                                ),
+                              ),
+                              child: ElevatedButton(
+                                child: Text(translator.Save),
+                                onPressed: onSave,
                               ),
                             ),
-                            child: ElevatedButton(
-                              child: Text(translator.Save),
-                              onPressed: onSave,
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.connectionState ==
-                              ConnectionState.done &&
-                          snapshot.hasError) {
-                        return Center(
-                          child: SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: Icon(
-                              Icons.warning,
-                              color: Colors.orange.shade200,
-                            ),
-                          ),
-                        );
+                          );
+                        case ConnectionState.done:
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: Icon(
+                                  Icons.warning,
+                                  color: Colors.orange.shade200,
+                                ),
+                              ),
+                            );
+                          }
+                          break;
+                        default:
+                          break;
                       }
 
                       // The loading indicator is shown during saving
@@ -138,11 +141,8 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                   },
                 ),
                 Expanded(
-                  // FR: 'Coureurs scannés'
-                  // DE: 'Gescannte fahrer'
                   child: Text(
-                    translator
-                        .RideAttendeeScanningManualSelectionShowScannedRidersLabel,
+                    translator.ScannedRiders,
                     maxLines: 2,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
@@ -274,8 +274,7 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                 ),
                 Expanded(
                   child: Text(
-                    translator
-                        .RideAttendeeScanningManualSelectionShowScannedRidersLabel,
+                    translator.ScannedRiders,
                     maxLines: 2,
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
@@ -288,7 +287,6 @@ class _ManualSelectionSubmitState extends State<ManualSelectionSubmit> {
                 ),
                 StreamBuilder<bool>(
                   stream: widget.showScanned,
-                  // Initially we show everything.
                   initialData: true,
                   builder: (_, snapshot) {
                     return CupertinoSwitch(

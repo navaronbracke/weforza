@@ -35,7 +35,7 @@ class ExportMembersProvider {
     Iterable<ExportableMember> members,
     String csvHeader,
   ) async {
-    if (extension == FileExtension.csv.extension()) {
+    if (extension == FileExtension.csv.ext) {
       final buffer = StringBuffer();
 
       buffer.writeln(csvHeader);
@@ -49,7 +49,7 @@ class ExportMembersProvider {
       return;
     }
 
-    if (extension == FileExtension.json.extension()) {
+    if (extension == FileExtension.json.ext) {
       final Map<String, dynamic> data = {
         'riders': members.map((member) => member.toJson()).toList()
       };

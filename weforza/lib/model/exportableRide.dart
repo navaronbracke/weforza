@@ -20,7 +20,7 @@ class ExportableRideAttendee {
     this.alias = "",
   }): assert(
     firstName != null && firstName.isNotEmpty
-        && lastName != null && lastName.isNotEmpty
+        && lastName != null && lastName.isNotEmpty && alias != null
   );
 
   final String firstName;
@@ -28,4 +28,16 @@ class ExportableRideAttendee {
   //Members will have aliases in the future, as a replacement for phone numbers.
   //We add a field for the alias to be future proof.
   final String alias;
+
+  Map<String, dynamic> toJson(){
+    return {
+      "firstName": firstName,
+      "lastName": lastName,
+      "alias": alias
+    };
+  }
+
+  String toCsv(){
+    return "$firstName,$lastName${alias.isEmpty ? "": ",$alias"}";
+  }
 }

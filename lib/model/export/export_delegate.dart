@@ -55,10 +55,19 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     }
 
     final fileFormat = _fileFormatController.value;
-
-    final fileName = '${fileNameController.text}${fileFormat.formatExtension}';
+    final fileName = fileNameController.text;
 
     try {
+      // Sanity-check that the file name ends with the correct extension.
+      // This should have been validated with the form state as well.
+      if (!fileName.endsWith(fileFormat.formatExtension)) {
+        throw ArgumentError.value(
+          fileName,
+          'fileName',
+          'The file name should end with the correct file extension',
+        );
+      }
+
       final file = await fileHandler.getFile(fileName);
 
       if (file.existsSync()) {

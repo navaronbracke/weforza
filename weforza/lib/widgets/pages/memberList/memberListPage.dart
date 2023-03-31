@@ -7,6 +7,7 @@ import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
@@ -42,10 +43,30 @@ class _MemberListPageState extends State<MemberListPage> {
   final MemberListBloc bloc;
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidWidget(context),
-    ios: () => _buildIosWidget(context),
-  );
+  Widget build(BuildContext context){
+    final List<MemberListFilterItem> filterItems = <MemberListFilterItem>[
+      MemberListFilterItem(
+          value: MemberFilterOption.ALL,
+          label: S.of(context).All,
+          icon: Icons.people,
+      ),
+      MemberListFilterItem(
+          value: MemberFilterOption.ACTIVE,
+          label: S.of(context).Active,
+          icon: Icons.directions_bike
+      ),
+      MemberListFilterItem(
+          value: MemberFilterOption.INACTIVE,
+          label: S.of(context).Inactive,
+          icon: Icons.block
+      ),
+    ];
+
+    return PlatformAwareWidget(
+      android: () => _buildAndroidWidget(context, filterItems),
+      ios: () => _buildIosWidget(context, filterItems),
+    );
+  }
 
   @override
   void initState() {
@@ -57,7 +78,7 @@ class _MemberListPageState extends State<MemberListPage> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(S.of(context).Members),
+        Text(S.of(context).Riders),
         Padding(
           padding: const EdgeInsets.only(left: 5),
           child: FutureBuilder<int>(
@@ -70,7 +91,7 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  Widget _buildAndroidWidget(BuildContext context) {
+  Widget _buildAndroidWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
     return Scaffold(
       appBar: AppBar(
         title: _buildTitle(context),
@@ -97,11 +118,21 @@ class _MemberListPageState extends State<MemberListPage> {
           ),
         ],
       ),
-      body: _buildList(context),
+      body: Column(
+        children: [
+          MemberListFilter(
+            onOptionSelected: onFilterChanged,
+            items: filterItems,
+          ),
+          Expanded(
+            child: _buildList(context),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildIosWidget(BuildContext context) {
+  Widget _buildIosWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -142,41 +173,41 @@ class _MemberListPageState extends State<MemberListPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildList(context),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: MemberListFilter(
+                onOptionSelected: onFilterChanged,
+                items: filterItems,
+              ),
+            ),
+            Expanded(
+              child: _buildList(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildList(BuildContext context){
-    return Column(
-      children: [
-        PlatformAwareWidget(
-          android: () => MemberListFilter(onOptionSelected: null),
-          ios: () => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: MemberListFilter(onOptionSelected: null),
-          ),
-        ),
-        Expanded(
-          child: FutureBuilder<List<Member>>(
-            future: bloc.membersFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return GenericError(text: S.of(context).MemberListLoadingFailed);
-                } else {
-                  return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
-                  );
-                }
-              } else {
-                return Center(child: PlatformAwareLoadingIndicator());
-              }
-            },
-          ),
-        ),
-      ],
+    return FutureBuilder<List<Member>>(
+      future: bloc.membersFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            return GenericError(text: S.of(context).GenericError);
+          } else {
+            return (snapshot.data == null || snapshot.data.isEmpty) ? MemberListEmpty() : ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) => _buildListItem(context,index,snapshot.data)
+            );
+          }
+        } else {
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
     );
   }
 

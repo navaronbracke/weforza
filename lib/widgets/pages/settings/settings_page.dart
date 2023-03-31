@@ -141,7 +141,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                 style: textTheme.titleMedium,
               ),
               Theme(
-                data: ThemeData(useMaterial3: true, chipTheme: theme.chipTheme),
+                data: ThemeData(
+                  useMaterial3: true,
+                  segmentedButtonTheme: theme.segmentedButtonTheme,
+                ),
                 child: MemberListFilter(
                   initialFilter: memberFilterController.value,
                   onChanged: memberFilterController.add,

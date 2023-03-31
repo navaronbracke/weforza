@@ -9,15 +9,27 @@ abstract class AppTheme {
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,
     ),
-    chipTheme: ChipThemeData(
-      checkmarkColor: Colors.white,
-      selectedColor: colorScheme.primary,
-      secondaryLabelStyle: const TextStyle(color: Colors.white),
-      side: BorderSide(color: colorScheme.primary),
-    ),
     extensions: <ThemeExtension>[
       DestructiveButtons(errorColor: colorScheme.error),
     ],
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+
+          return null;
+        }),
+        foregroundColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+
+          return colorScheme.primary;
+        }),
+      ),
+    ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.blue,

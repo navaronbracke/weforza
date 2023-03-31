@@ -9,8 +9,6 @@ class AddRideCalendar extends StatelessWidget {
     final bloc = AddRideBlocProvider.of(context).bloc;
     return Column(children: <Widget>[
       AddRideCalenderHeader(
-        onMonthBackward: () => bloc.onHeaderBackward(),
-        onMonthForward: () => bloc.onHeaderForward(),
         stream: bloc.headerStream,
       ),
       Expanded(

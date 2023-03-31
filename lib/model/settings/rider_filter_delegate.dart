@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:weforza/model/deferred_save_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
@@ -14,6 +16,8 @@ class RiderFilterDelegate extends DeferredSaveDelegate<MemberFilterOption> {
 
   @override
   void saveValue(MemberFilterOption value) {
-    // TODO: implement partial save of rider list filter
+    unawaited(_settingsDelegate.saveRiderListFilter(value).catchError((_) {
+      // If the rider list filter could not be saved, do nothing.
+    }));
   }
 }

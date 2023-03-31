@@ -1,5 +1,4 @@
-
-import 'package:weforza/database/exportRidesDao.dart';
+import 'package:weforza/database/export_rides_dao.dart';
 import 'package:weforza/model/exportableRide.dart';
 
 class ExportRidesRepository {

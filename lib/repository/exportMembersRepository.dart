@@ -1,7 +1,7 @@
 import 'dart:collection';
 
-import 'package:weforza/database/deviceDao.dart';
-import 'package:weforza/database/memberDao.dart';
+import 'package:weforza/database/device_dao.dart';
+import 'package:weforza/database/member_dao.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';

@@ -6,10 +6,10 @@ import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/csvFileReader.dart';
-import 'package:weforza/file/fileHandler.dart';
-import 'package:weforza/file/importMembersFileReader.dart';
-import 'package:weforza/file/jsonFileReader.dart';
+import 'package:weforza/file/csv_file_reader.dart';
+import 'package:weforza/file/file_handler.dart';
+import 'package:weforza/file/import_members_file_reader.dart';
+import 'package:weforza/file/json_file_reader.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 

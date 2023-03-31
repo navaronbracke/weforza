@@ -83,6 +83,8 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
+  static final Color rideAttendeeScanGoToSettingsButtonColor = Colors.blue.shade300;
+  static final Color rideAttendeeScanRetryScanButtonColor = Colors.blue;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

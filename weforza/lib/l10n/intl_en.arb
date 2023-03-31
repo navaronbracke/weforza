@@ -75,6 +75,9 @@
   "RideAttendeeScanningNoMembers": "Cannot start a scan, there are no members.",
   "RideAttendeeScanningGoBack": "Return to detail page",
   "RideAttendeeScanningGenericError": "Something went wrong.",
+  "RideAttendeeScanningBluetoothDisabled": "Cannot start scanning, Bluetooth is disabled.",
+  "RideAttendeeScanningGoToBluetoothSettings": "Go to settings",
+  "RideAttendeeScanningRetryScan": "Retry Scan",
 
   "EditRidePageTitle": "Edit Ride",
   "EditRideTitleLabel": "Title",
@@ -132,10 +135,6 @@
   "PhoneIllegalCharacters": "A phone number can only contain digits",
   "PhoneMinLength": "A phone number is minimum {minLength} digits long",
   "PhoneMaxLength": "A phone number is maximum {maxLength} digits long",
-
-  "EnableBluetoothDialogTitle": "Enable Bluetooth",
-  "EnableBluetoothDialogDescription": "Bluetooth is required to start a scan. Do you want to go to Settings?",
-  "EnableBluetoothGoToSettings": "Go To Settings",
 
   "ValueIsRequired": "{value} is required",
   "DialogCancel": "Cancel",

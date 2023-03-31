@@ -663,6 +663,36 @@ class S {
     );
   }
 
+  /// `Cannot start scanning, Bluetooth is disabled.`
+  String get RideAttendeeScanningBluetoothDisabled {
+    return Intl.message(
+      'Cannot start scanning, Bluetooth is disabled.',
+      name: 'RideAttendeeScanningBluetoothDisabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go to settings`
+  String get RideAttendeeScanningGoToBluetoothSettings {
+    return Intl.message(
+      'Go to settings',
+      name: 'RideAttendeeScanningGoToBluetoothSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry Scan`
+  String get RideAttendeeScanningRetryScan {
+    return Intl.message(
+      'Retry Scan',
+      name: 'RideAttendeeScanningRetryScan',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Edit Ride`
   String get EditRidePageTitle {
     return Intl.message(
@@ -1170,36 +1200,6 @@ class S {
       name: 'PhoneMaxLength',
       desc: '',
       args: [maxLength],
-    );
-  }
-
-  /// `Enable Bluetooth`
-  String get EnableBluetoothDialogTitle {
-    return Intl.message(
-      'Enable Bluetooth',
-      name: 'EnableBluetoothDialogTitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bluetooth is required to start a scan. Do you want to go to Settings?`
-  String get EnableBluetoothDialogDescription {
-    return Intl.message(
-      'Bluetooth is required to start a scan. Do you want to go to Settings?',
-      name: 'EnableBluetoothDialogDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Go To Settings`
-  String get EnableBluetoothGoToSettings {
-    return Intl.message(
-      'Go To Settings',
-      name: 'EnableBluetoothGoToSettings',
-      desc: '',
-      args: [],
     );
   }
 

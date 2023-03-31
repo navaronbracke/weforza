@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_button_bar.dart';
@@ -18,17 +21,18 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents the list of active members that is shown
 /// after the device scan has ended,
 /// and any conflicts with unresolved owners have been corrected.
-class ManualSelectionList extends StatefulWidget {
+class ManualSelectionList extends ConsumerStatefulWidget {
   const ManualSelectionList({super.key, required this.delegate});
 
   /// The delegate that manages the list of active members.
   final RideAttendeeScanningDelegate delegate;
 
   @override
-  State<ManualSelectionList> createState() => _ManualSelectionListState();
+  ConsumerState<ManualSelectionList> createState() =>
+      _ManualSelectionListState();
 }
 
-class _ManualSelectionListState extends State<ManualSelectionList> {
+class _ManualSelectionListState extends ConsumerState<ManualSelectionList> {
   Future<List<Member>>? _activeMembersFuture;
 
   final _filtersController = BehaviorSubject.seeded(
@@ -76,8 +80,14 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   void _onSaveRideAttendeesButtonPressed(BuildContext context) {
     _saveAttendeesFuture = widget.delegate.saveRideAttendeeSelection().then(
-      (_) {
+      (updatedRide) {
         if (mounted) {
+          // Update the selected ride with its new `scannedAttendees` count.
+          ref.read(selectedRideProvider.notifier).setSelectedRide(updatedRide);
+
+          // Refresh the ride list so that the attendee counter for this ride
+          // updates in the list of rides.
+          ref.refresh(rideListProvider);
           Navigator.of(context).pop(); // Return back to the ride detail page.
         }
       },
@@ -164,15 +174,9 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         ),
         ManualSelectionButtonBar(
           delegate: widget.delegate,
-          saveButton: StatefulBuilder(
-            builder: (context, setState) => ManualSelectionSaveButton(
-              future: _saveAttendeesFuture,
-              onPressed: () {
-                _onSaveRideAttendeesButtonPressed(context);
-
-                setState(() {});
-              },
-            ),
+          saveButton: ManualSelectionSaveButton(
+            future: _saveAttendeesFuture,
+            onPressed: () => _onSaveRideAttendeesButtonPressed(context),
           ),
           showScannedResultsToggle: ShowScannedResultsToggle(
             initialValue: _filtersController.value.showScannedResults,

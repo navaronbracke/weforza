@@ -18,7 +18,6 @@ import 'package:weforza/riverpod/bluetooth_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
-import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 
@@ -297,7 +296,9 @@ class RideAttendeeScanningDelegate {
   }
 
   /// Save the current selection of ride attendees.
-  Future<void> saveRideAttendeeSelection() async {
+  ///
+  /// Returns the updated ride.
+  Future<Ride> saveRideAttendeeSelection() async {
     if (_selectionLocked) {
       return Future.error(
         StateError('Cannot save the selection when it is locked.'),
@@ -331,15 +332,7 @@ class RideAttendeeScanningDelegate {
 
       await rideRepository.updateRide(updatedRide, rideAttendees);
 
-      // Refresh the ride list so that the attendee counter for this ride
-      // updates in the list of rides.
-      ref.refresh(rideListProvider);
-
-      // Update the selected ride with its new `scannedAttendees` count.
-      ref.read(selectedRideProvider.notifier).setSelectedRide(updatedRide);
-
-      // The ride attendees future provider watches the selected ride for changes,
-      // so that provider does not need to be refreshed.
+      return updatedRide;
     } catch (error) {
       // Pipe the error to the state machine.
       if (!_stateMachine.isClosed) {

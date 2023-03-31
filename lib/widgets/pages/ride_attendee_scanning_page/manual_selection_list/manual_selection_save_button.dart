@@ -5,7 +5,7 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the save button for the manual selection page.
-class ManualSelectionSaveButton extends StatelessWidget {
+class ManualSelectionSaveButton extends StatefulWidget {
   const ManualSelectionSaveButton({
     super.key,
     this.future,
@@ -19,14 +19,29 @@ class ManualSelectionSaveButton extends StatelessWidget {
   final void Function() onPressed;
 
   @override
+  State<ManualSelectionSaveButton> createState() =>
+      _ManualSelectionSaveButtonState();
+}
+
+class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
+  void _onSaveButtonPressed() {
+    widget.onPressed();
+
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-      future: future,
+      future: widget.future,
       builder: (context, snapshot) {
         final translator = S.of(context);
 
         if (snapshot.connectionState == ConnectionState.none) {
-          return _SaveButton(onPressed: onPressed, text: translator.Save);
+          return _SaveButton(
+            onPressed: _onSaveButtonPressed,
+            text: translator.Save,
+          );
         }
 
         final loadingIndicator = PlatformAwareWidget(
@@ -42,7 +57,10 @@ class ManualSelectionSaveButton extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return _SaveButton(onPressed: onPressed, text: translator.TryAgain);
+            return _SaveButton(
+              onPressed: _onSaveButtonPressed,
+              text: translator.TryAgain,
+            );
           }
 
           return loadingIndicator;

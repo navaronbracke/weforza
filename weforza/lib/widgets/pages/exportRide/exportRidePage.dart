@@ -87,7 +87,15 @@ class _ExportRidePageState extends State<ExportRidePage> {
                     onExtensionSelected: (ext) => widget.bloc.onSelectFileExtension(ext),
                     initialValue: FileExtension.CSV,
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
+                  StreamBuilder<bool>(
+                    initialData: false,
+                    stream: widget.bloc.fileExistsStream,
+                    builder: (context, snapshot){
+                      return Text(snapshot.data ? S.of(context).FileExists : "");
+                    },
+                  ),
+                  SizedBox(height: 5),
                   PlatformAwareWidget(
                     android: () => RaisedButton(
                       textColor: Colors.white,

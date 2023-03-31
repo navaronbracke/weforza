@@ -196,7 +196,20 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
 
   @override
   Widget build(BuildContext context) {
-    final textFieldWidget = ExcludedTermInputField(
+    final Widget contextMenuButtonBar = EditExcludedTermInputFieldButtonBar(
+      controller: widget.excludedTerm.controller,
+      onCommitValidTerm: (value) => _onCommitValidTerm(value, context),
+      onDeletePressed: _onDeletePressed,
+      onUndoPressed: _onUndoPressed,
+      term: widget.excludedTerm.term,
+      validator: _validateTerm,
+    );
+
+    return ExcludedTermInputField(
+      // The context menu is shown when the text field has focus,
+      // or if the delete dialog is visible after pressing the delete button.
+      // When pressing the delete button focus moves to the delete dialog.
+      contextMenuButtonBar: deleteDialogVisible || focusNode.hasFocus ? contextMenuButtonBar : null,
       controller: widget.excludedTerm.controller,
       focusNode: focusNode,
       maxLength: widget.delegate.maxLength,
@@ -204,33 +217,6 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       textFieldKey: textFieldKey,
       validator: (value) => _validateTerm(context, value),
     );
-
-    // If the delete dialog is visible, the edit menu should not be closed.
-    if (deleteDialogVisible || focusNode.hasFocus) {
-      return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          // Consume gestures so that they are not handled by the focus absorber.
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            textFieldWidget,
-            EditExcludedTermInputFieldButtonBar(
-              controller: widget.excludedTerm.controller,
-              onCommitValidTerm: (value) => _onCommitValidTerm(value, context),
-              onDeletePressed: _onDeletePressed,
-              onUndoPressed: _onUndoPressed,
-              term: widget.excludedTerm.term,
-              validator: _validateTerm,
-            ),
-          ],
-        ),
-      );
-    }
-
-    return textFieldWidget;
   }
 
   @override

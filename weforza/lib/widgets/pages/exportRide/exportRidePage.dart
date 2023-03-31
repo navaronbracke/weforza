@@ -6,7 +6,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/custom/animatedCheckmark/animatedCheckmark.dart';
-import 'package:weforza/widgets/pages/exportRide/fileExtensionSelection.dart';
+import 'file:///E:/Documenten/WeForza/weforza/weforza/lib/widgets/common/fileExtensionSelection.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';

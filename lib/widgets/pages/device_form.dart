@@ -221,17 +221,25 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   Widget _buildErrorMessage(BuildContext context, Object? error) {
+    const iOSPadding = EdgeInsetsDirectional.only(start: 20, top: 6, end: 6);
+
     if (error == null) {
-      return const Text('');
+      return const GenericErrorLabel(message: '', iosPadding: iOSPadding);
     }
 
     final translator = S.of(context);
 
     if (error is DeviceExistsException) {
-      return GenericErrorLabel(message: translator.DeviceExists);
+      return GenericErrorLabel(
+        message: translator.DeviceExists,
+        iosPadding: iOSPadding,
+      );
     }
 
-    return GenericErrorLabel(message: translator.GenericError);
+    return GenericErrorLabel(
+      message: translator.GenericError,
+      iosPadding: iOSPadding,
+    );
   }
 
   Widget _buildSubmitButton(BuildContext context) {

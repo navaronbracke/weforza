@@ -87,17 +87,25 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   void _resetSubmit(String _) => _delegate.reset();
 
   Widget _buildErrorMessage(BuildContext context, Object? error) {
+    const iOSPadding = EdgeInsetsDirectional.only(start: 20, end: 6);
+
     if (error == null) {
-      return const Text('');
+      return const GenericErrorLabel(message: '', iosPadding: iOSPadding);
     }
 
     final translator = S.of(context);
 
     if (error is RiderExistsException) {
-      return GenericErrorLabel(message: translator.RiderExists);
+      return GenericErrorLabel(
+        message: translator.RiderExists,
+        iosPadding: iOSPadding,
+      );
     }
 
-    return GenericErrorLabel(message: translator.GenericError);
+    return GenericErrorLabel(
+      message: translator.GenericError,
+      iosPadding: iOSPadding,
+    );
   }
 
   @override

@@ -72,8 +72,10 @@ class _ExportRidePageState extends State<ExportRidePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PlatformAwareLoadingIndicator(),
-                SizedBox(height: 10),
-                Text(S.of(context).ExportRideExportingToFile),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(S.of(context).ExportRideExportingToFile),
+                ),
               ],
             );
             case RideExportState.IDLE: return Form(

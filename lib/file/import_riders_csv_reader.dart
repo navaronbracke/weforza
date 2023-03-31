@@ -85,9 +85,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     final regex = Rider.personNameAndAliasRegex;
 
     // If the first name, last name or alias is invalid, skip this chunk.
-    if (!regex.hasMatch(firstName) ||
-        !regex.hasMatch(lastName) ||
-        alias.isNotEmpty && !regex.hasMatch(alias)) {
+    if (!regex.hasMatch(firstName) || !regex.hasMatch(lastName) || alias.isNotEmpty && !regex.hasMatch(alias)) {
       return;
     }
 
@@ -119,9 +117,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     // Any remaining cells after the required cells are parsed as device names.
     // Any invalid device names are skipped.
     if (cells.length > requiredDataColumns) {
-      devices.addAll(cells
-          .sublist(requiredDataColumns)
-          .where(Device.deviceNameRegex.hasMatch));
+      devices.addAll(cells.sublist(requiredDataColumns).where(Device.deviceNameRegex.hasMatch));
     }
 
     serializedRiders.add(
@@ -138,11 +134,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
 
   @override
   Future<List<String>> readFile(File file) async {
-    final lines = await file
-        .openRead()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .toList();
+    final lines = await file.openRead().transform(utf8.decoder).transform(const LineSplitter()).toList();
 
     if (lines.isEmpty) {
       return lines;

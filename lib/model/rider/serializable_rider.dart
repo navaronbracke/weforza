@@ -124,9 +124,7 @@ class SerializableRiderUpdateTimestamp {
 
   @override
   bool operator ==(Object other) {
-    return other is SerializableRiderUpdateTimestamp &&
-        uuid == other.uuid &&
-        lastUpdatedOn == other.lastUpdatedOn;
+    return other is SerializableRiderUpdateTimestamp && uuid == other.uuid && lastUpdatedOn == other.lastUpdatedOn;
   }
 
   @override

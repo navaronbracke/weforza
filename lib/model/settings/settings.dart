@@ -19,9 +19,7 @@ class Settings {
 
     return Settings(
       excludedTermsFilter: Set.of(excludedTermsFilter?.cast<String>() ?? []),
-      riderListFilter: riderListFilter == null
-          ? RiderFilterOption.all
-          : RiderFilterOption.values[riderListFilter],
+      riderListFilter: riderListFilter == null ? RiderFilterOption.all : RiderFilterOption.values[riderListFilter],
       scanDuration: scanDuration ?? 20,
     );
   }

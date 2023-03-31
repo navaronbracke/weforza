@@ -7,7 +7,7 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/pages/importMembers/importMembersComplete.dart';
+import 'package:weforza/widgets/custom/checkmarkPainter/checkmarkPainter.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
@@ -142,7 +142,14 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
                     child: SizedBox(
                       width: size,
                       height: size,
-                      child: ImportMembersComplete(),
+                      child: CheckmarkPainter(
+                        color: ApplicationTheme.accentColor,
+                        size: Size.square(size),
+                        strokeWidth: 4.0,
+                        duration: Duration(milliseconds: 1000),
+                        strokeCap: StrokeCap.round,
+                        strokeJoin: StrokeJoin.round,
+                      ),
                     ),
                   );
                 },

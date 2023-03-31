@@ -109,7 +109,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
       child: Column(
         children: <Widget>[
           PlatformAwareWidget(
-            android: () => TextFormField(
+            android: (_) => TextFormField(
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               autocorrect: false,
@@ -123,7 +123,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
                 floatingLabelBehavior: FloatingLabelBehavior.never,
               ),
             ),
-            ios: () => Padding(
+            ios: (_) => Padding(
               padding: const EdgeInsets.all(8),
               child: CupertinoSearchTextField(
                 suffixIcon: const Icon(CupertinoIcons.search),

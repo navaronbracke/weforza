@@ -8,7 +8,7 @@ class ExportableRide {
 
   void toCsv(StringBuffer buffer) {
     buffer.writeln(ride.toCsv());
-    for (ExportableRideAttendee attendee in attendees) {
+    for (final attendee in attendees) {
       buffer.writeln(attendee.toCsv());
     }
   }

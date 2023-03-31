@@ -6,7 +6,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
@@ -44,12 +43,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-    android: () => _buildAndroidLayout(context),
-    ios: () => _buildIOSLayout(context),
+    android: () => _buildAndroidLayout(context,bloc.ride),
+    ios: () => _buildIOSLayout(context,bloc.ride),
   );
 
-  Widget _buildAndroidLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildAndroidLayout(BuildContext context, Ride ride) {
     return Scaffold(
       appBar: AppBar(
         title: Text(ride.getFormattedDate(context),
@@ -85,8 +83,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context) {
-    final ride = RideProvider.selectedRide;
+  Widget _buildIOSLayout(BuildContext context, Ride ride) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,

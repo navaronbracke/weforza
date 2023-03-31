@@ -193,21 +193,19 @@ class AddRideBloc extends Bloc {
 
   ///Add the selected rides.
   Future<void> addRides() async {
-    if(_currentSubmitState != AddRideSubmitState.SUBMIT){
-      _currentSubmitState = AddRideSubmitState.SUBMIT;
-      _submitController.add(_currentSubmitState);
-      if(_ridesToAdd.isNotEmpty){
-        await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).catchError((error){
-          _currentSubmitState = AddRideSubmitState.ERR_SUBMIT;
-          _submitController.add(_currentSubmitState);
-          return Future.error(_currentSubmitState);
-        });
-      }else{
-        //empty selection
-        _currentSubmitState = AddRideSubmitState.ERR_NO_SELECTION;
+    _currentSubmitState = AddRideSubmitState.SUBMIT;
+    _submitController.add(_currentSubmitState);
+    if(_ridesToAdd.isNotEmpty){
+      await repository.addRides(_ridesToAdd.map((date) => Ride(date: date)).toList()).catchError((error){
+        _currentSubmitState = AddRideSubmitState.ERR_SUBMIT;
         _submitController.add(_currentSubmitState);
         return Future.error(_currentSubmitState);
-      }
+      });
+    }else{
+      //empty selection
+      _currentSubmitState = AddRideSubmitState.ERR_NO_SELECTION;
+      _submitController.add(_currentSubmitState);
+      return Future.error(_currentSubmitState);
     }
   }
 

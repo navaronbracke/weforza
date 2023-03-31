@@ -340,6 +340,10 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         ),
                         onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: _buildSubmitButton(context),
+                      ),
                     ],
                   ),
                 ]),

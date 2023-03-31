@@ -88,7 +88,6 @@
 	"GoBackToDetailPage": "Terug naar detailpagina",
 	"GoToSettings": "Naar Instellingen",
 	"ImportRiders": "Renners Importeren",
-	"ImportRidersCsvHeaderRegex": "(voornaam),(achternaam),(alias),(actief),(laatste_update),(toestellen)(.*)",
 	"ImportRidersCsvHeaderRequired": "Bij .csv bestanden is een hoofding verplicht",
 	"ImportRidersFileRequired": "Gelieve een bestand te selecteren om renners uit te importeren",
 	"Inactive": "Inactief",

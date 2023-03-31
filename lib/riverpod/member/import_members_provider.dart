@@ -17,7 +17,50 @@ final importMembersProvider = Provider(ImportMembersNotifier.new);
 class ImportMembersNotifier {
   ImportMembersNotifier(this.ref);
 
+  /// The CSV file header format for importing members
+  /// requires 6 mandatory cells in the following order:
+  /// 1) first name
+  /// 2) last name
+  /// 3) alias (can be the empty string, but the cell needs to exist)
+  /// 4) active
+  /// 5) last updated
+  /// 6) devices
+  final int headerCellCount = 6;
+
   final Ref ref;
+
+  /// Build a regex that validates if a given string has at least [cellCount]
+  /// cells, denoted by the given [cellDelimiter].
+  ///
+  /// The resulting regex ignores anything after the last mandatory cell.
+  /// The last mandatory cell is allowed to have a cell delimiter,
+  /// but it can also be omitted.
+  ///
+  /// Returns a [RegExp] with the cell matching pattern.
+  RegExp _buildRegex({required int cellCount, String cellDelimiter = ','}) {
+    final sb = StringBuffer();
+
+    // A single cell can contain unicode letters, dashes and hyphens.
+    const cellMatcher = r'([\p{L}_-])+';
+
+    sb.write('^'); // Match the start of the string.
+
+    // Match each cell.
+    for (int i = 0; i < cellCount; i++) {
+      sb.write(cellMatcher);
+
+      // Each cell, except the last, gets a cell delimiter.
+      if (i != cellCount - 1) {
+        sb.write(cellDelimiter);
+      }
+    }
+
+    // Everything after the last mandatory cell is squashed into a wildcard.
+    // Finally, match the end of the string.
+    sb.write(r'(.*)$');
+
+    return RegExp(sb.toString(), unicode: true);
+  }
 
   Future<List<ExportableMember>> _readFile<T>(
     File file,
@@ -39,14 +82,11 @@ class ImportMembersNotifier {
     return exports;
   }
 
-  Future<Iterable<ExportableMember>> _readMemberDataFromFile(
-    File file,
-    String csvHeaderRegex,
-  ) {
+  Future<Iterable<ExportableMember>> _readMemberDataFromFile(File file) {
     if (file.path.endsWith(FileExtension.csv.ext)) {
       return _readFile<String>(
         file,
-        CsvFileReader(headerRegex: csvHeaderRegex),
+        CsvFileReader(headerRegex: _buildRegex(cellCount: headerCellCount)),
       );
     }
 
@@ -58,7 +98,6 @@ class ImportMembersNotifier {
   }
 
   void importMembers(
-    String headerRegex,
     void Function(ImportMembersState progress) onProgress,
     void Function(Object error) onError,
   ) async {
@@ -71,7 +110,7 @@ class ImportMembersNotifier {
 
       onProgress(ImportMembersState.importing);
 
-      final members = await _readMemberDataFromFile(file, headerRegex);
+      final members = await _readMemberDataFromFile(file);
 
       if (members.isEmpty) {
         onProgress(ImportMembersState.done);

@@ -102,7 +102,8 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
   static final Color rideAttendeeScanResultWarningColor = Colors.orange;
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
-  static final Color rideAttendeeScanResultLoadingColor = primaryColor;
+
+  static final TextStyle rideAttendeeScanResultOwnerLabelTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
 
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 

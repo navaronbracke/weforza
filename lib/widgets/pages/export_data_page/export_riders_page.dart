@@ -24,7 +24,6 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
     super.initState();
     _delegate = ExportRidersDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      initialFileName: S.current.ExportRidersDefaultFileName,
       serializeRidersRepository: ref.read(serializeRidersRepositoryProvider),
     );
 
@@ -32,6 +31,12 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
       vsync: this,
       duration: AnimatedCircleCheckmark.kCheckmarkAnimationDuration,
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _delegate.fileNameController.text = S.of(context).exportRidersDefaultFileName;
   }
 
   @override

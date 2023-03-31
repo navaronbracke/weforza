@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -42,6 +43,25 @@ class _MemberListPageState extends State<MemberListPage> {
 
   final MemberListBloc bloc;
 
+  // This controller manages the query stream.
+  // The input field creates it's own TextEditingController,
+  // as it starts with an empty string.
+  final BehaviorSubject<String> _queryController = BehaviorSubject.seeded("");
+
+  List<Member> filterData(List<Member> list, String query){
+    if(query.isEmpty){
+      return list;
+    }
+
+    query = query.trim().toLowerCase();
+
+    return list.where((Member member){
+      return member.firstname.toLowerCase().contains(query) || member.lastname.toLowerCase().contains(query)
+          // If the alias is not empty, we can match it against the query string.
+          || (member.alias.isNotEmpty && member.alias.toLowerCase().contains(query));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context){
     return PlatformAwareWidget(
@@ -75,6 +95,7 @@ class _MemberListPageState extends State<MemberListPage> {
 
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: _buildTitle(context),
         actions: <Widget>[
@@ -102,6 +123,20 @@ class _MemberListPageState extends State<MemberListPage> {
       ),
       body: Column(
         children: [
+          TextFormField(
+            textInputAction: TextInputAction.search,
+            keyboardType: TextInputType.text,
+            autocorrect: false,
+            autovalidateMode: AutovalidateMode.disabled,
+            onChanged: _queryController.add,
+            decoration: InputDecoration(
+                suffixIcon: Icon(Icons.search),
+                labelText: S.of(context).RiderSearchFilterInputLabel,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                floatingLabelBehavior: FloatingLabelBehavior.never
+            ),
+          ),
           Expanded(
             child: _buildList(context),
           ),
@@ -112,6 +147,7 @@ class _MemberListPageState extends State<MemberListPage> {
 
   Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         middle: Row(
@@ -153,6 +189,16 @@ class _MemberListPageState extends State<MemberListPage> {
         bottom: false,
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: CupertinoTextField(
+                textInputAction: TextInputAction.search,
+                placeholder: S.of(context).RiderSearchFilterInputLabel,
+                autocorrect: false,
+                keyboardType: TextInputType.text,
+                onChanged: _queryController.add,
+              ),
+            ),
             Expanded(
               child: _buildList(context),
             ),
@@ -219,6 +265,7 @@ class _MemberListPageState extends State<MemberListPage> {
   @override
   void dispose() {
     bloc.dispose();
+    _queryController.close();
     super.dispose();
   }
 }

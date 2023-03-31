@@ -14,7 +14,7 @@
 	"all": "Alle",
 	"amountOfRidersWithDeviceName": "{amount} renners hebben een toestel met deze naam",
 	"cancel": "Annuleren",
-	"continue": "Doorgaan",
+	"continueLabel": "Doorgaan",
 	"currentSelection": "Huidige selectie",
 	"delete": "Verwijderen",
 	"deleteDevice": "Toestel verwijderen",

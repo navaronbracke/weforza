@@ -38,7 +38,7 @@ class ImportMembersPageState extends ConsumerState<ImportMembersPage> {
       android: () => Text(
         errorMessage,
         softWrap: true,
-        style: AppTheme.desctructiveAction.androidErrorStyle,
+        style: AppTheme.desctructiveAction.androidMediumErrorStyle,
       ),
       ios: () => Text(
         errorMessage,

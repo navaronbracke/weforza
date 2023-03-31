@@ -56,6 +56,7 @@ class ExportDataPage extends StatelessWidget {
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                 labelText: translator.FileName,
+                errorMaxLines: 3,
               ),
               inputFormatters: inputFormatters,
               key: delegate.fileNameKey,
@@ -66,7 +67,7 @@ class ExportDataPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 24),
             child: Row(
               children: [
                 Expanded(

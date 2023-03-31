@@ -67,6 +67,21 @@ class SelectedMemberNotifier extends StateNotifier<SelectedMember?> {
     memberList.getMembers();
   }
 
+  void reloadDevices() {
+    final member = state;
+
+    if (member == null) {
+      return;
+    }
+
+    // Calling `setSelectedMember()` refreshes the devices list.
+    setSelectedMember(
+      attendingCount: member.attendingCount,
+      member: member.value,
+      profileImage: member.profileImage,
+    );
+  }
+
   void setMemberActive(bool value) async {
     final member = state;
 

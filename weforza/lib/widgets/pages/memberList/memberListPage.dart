@@ -7,15 +7,14 @@ import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
 import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
-import 'package:weforza/widgets/pages/memberList/memberListFilter.dart';
 import 'package:weforza/widgets/pages/memberList/memberListItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
@@ -29,6 +28,7 @@ class MemberListPage extends StatefulWidget {
   _MemberListPageState createState() => _MemberListPageState(
      bloc: MemberListBloc(
        InjectionContainer.get<MemberRepository>(),
+       InjectionContainer.get<SettingsRepository>(),
        InjectionContainer.get<IFileHandler>(),
      )
   );
@@ -44,27 +44,9 @@ class _MemberListPageState extends State<MemberListPage> {
 
   @override
   Widget build(BuildContext context){
-    final List<MemberListFilterItem> filterItems = <MemberListFilterItem>[
-      MemberListFilterItem(
-          value: MemberFilterOption.ALL,
-          label: S.of(context).All,
-          icon: Icons.people,
-      ),
-      MemberListFilterItem(
-          value: MemberFilterOption.ACTIVE,
-          label: S.of(context).Active,
-          icon: Icons.directions_bike
-      ),
-      MemberListFilterItem(
-          value: MemberFilterOption.INACTIVE,
-          label: S.of(context).Inactive,
-          icon: Icons.block
-      ),
-    ];
-
     return PlatformAwareWidget(
-      android: () => _buildAndroidWidget(context, filterItems),
-      ios: () => _buildIosWidget(context, filterItems),
+      android: () => _buildAndroidWidget(context),
+      ios: () => _buildIosWidget(context),
     );
   }
 
@@ -96,7 +78,7 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  Widget _buildAndroidWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
+  Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: _buildTitle(context),
@@ -125,11 +107,6 @@ class _MemberListPageState extends State<MemberListPage> {
       ),
       body: Column(
         children: [
-          MemberListFilter(
-            stream: bloc.stream,
-            onFilterChanged: onFilterChanged,
-            items: filterItems,
-          ),
           Expanded(
             child: _buildList(context),
           ),
@@ -138,7 +115,7 @@ class _MemberListPageState extends State<MemberListPage> {
     );
   }
 
-  Widget _buildIosWidget(BuildContext context, List<MemberListFilterItem> filterItems) {
+  Widget _buildIosWidget(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
@@ -181,11 +158,6 @@ class _MemberListPageState extends State<MemberListPage> {
         bottom: false,
         child: Column(
           children: [
-            MemberListFilter(
-              stream: bloc.stream,
-              onFilterChanged: onFilterChanged,
-              items: filterItems,
-            ),
             Expanded(
               child: _buildList(context),
             ),
@@ -243,12 +215,10 @@ class _MemberListPageState extends State<MemberListPage> {
     // Trigger the reload of members, but do an override for the filter.
     if(reloadNotifier.value){
       reloadNotifier.value = false;
-      onFilterChanged(bloc.currentFilter, true);
+      setState(() {
+        bloc.loadMembers();
+      });
     }
-  }
-
-  void onFilterChanged(MemberFilterOption option, [bool override = false]){
-    setState(() => bloc.onFilterChanged(option, override));
   }
 
   @override

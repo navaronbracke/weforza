@@ -4,12 +4,17 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class RideAttendeeCounter extends StatelessWidget {
-  RideAttendeeCounter({@required this.future,this.iconSize,this.counterStyle})
-      : assert(future != null);
+  RideAttendeeCounter({
+    @required this.future,
+    this.iconSize = 24,
+    this.counterStyle,
+    this.invisibleWhenLoadingOrError = false,
+  }): assert(future != null);
 
   final double iconSize;
   final TextStyle counterStyle;
   final Future<int> future;
+  final bool invisibleWhenLoadingOrError;
 
   @override
   Widget build(BuildContext context) {
@@ -18,36 +23,44 @@ class RideAttendeeCounter extends StatelessWidget {
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
-            return Row(
+            return invisibleWhenLoadingOrError ? SizedBox.expand(): Row(
               children: <Widget>[
-                counterStyle == null ? Text("?"): Text("?",style: counterStyle),
+                Text("?", style: counterStyle),
                 SizedBox(width: 5),
-                Icon(Icons.people,size: iconSize ?? 24,color: ApplicationTheme.rideAttendeeCounterIconColor),
+                Icon(
+                    Icons.people,
+                    size: iconSize,
+                    color: ApplicationTheme.rideAttendeeCounterIconColor
+                ),
               ],
             );
           }else{
             return Row(
               children: <Widget>[
-                counterStyle == null ? Text("${snapshot.data}"): Text("${snapshot.data}",style: counterStyle),
+                Text("${snapshot.data}", style: counterStyle),
                 SizedBox(width: 5),
-                Icon(Icons.people,size: iconSize ?? 24,color: ApplicationTheme.rideAttendeeCounterIconColor),
+                Icon(
+                    Icons.people,
+                    size: iconSize,
+                    color: ApplicationTheme.rideAttendeeCounterIconColor
+                ),
               ],
             );
           }
         }else{
-          return Row(
-            children: <Widget>[
-              SizedBox(
-                width: iconSize ?? 24,
-                height: iconSize ?? 24,
-                child: PlatformAwareWidget(
-                  android: () => CircularProgressIndicator(strokeWidth: 2),
-                  ios: () => CupertinoActivityIndicator(radius: 8),
+          return SizedBox(
+            width: iconSize,
+            height: iconSize,
+            child: Center(
+              child: invisibleWhenLoadingOrError ? null : PlatformAwareWidget(
+                android: () => SizedBox(
+                  child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                  width: iconSize * .8,
+                  height: iconSize * .8,
                 ),
+                ios: () => CupertinoActivityIndicator(radius: 8),
               ),
-              SizedBox(width: 5),
-              Icon(Icons.people,size: iconSize ?? 24,color: ApplicationTheme.rideAttendeeCounterIconColor),
-            ],
+            ),
           );
         }
       },

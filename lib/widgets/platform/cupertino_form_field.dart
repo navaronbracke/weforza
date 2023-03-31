@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/theme/app_theme.dart';
 
 /// This widget represents a [CupertinoTextField] that has a validation message.
 class CupertinoFormField extends StatelessWidget {
@@ -72,7 +71,13 @@ class CupertinoFormField extends StatelessWidget {
           builder: (context, snapshot) {
             final message = snapshot.data ?? '';
 
-            return Text(message, style: ApplicationTheme.iosFormErrorStyle);
+            return Text(
+              message,
+              style: const TextStyle(
+                color: CupertinoColors.destructiveRed,
+                fontSize: 14,
+              ),
+            );
           },
         ),
       ],

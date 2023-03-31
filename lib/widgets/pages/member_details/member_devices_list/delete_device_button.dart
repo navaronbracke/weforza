@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class DeleteDeviceButton extends StatelessWidget {
   const DeleteDeviceButton({
@@ -22,9 +22,9 @@ class DeleteDeviceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: () => IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.delete,
-          color: ApplicationTheme.deleteItemButtonTextColor,
+          color: AppTheme.desctructiveAction.androidErrorStyle.color,
         ),
         onPressed: () async {
           final result = await showDialog<bool>(

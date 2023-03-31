@@ -19,13 +19,13 @@ abstract class ApplicationTheme {
   //Ride Calendar Item Styling for an item that is part of the user's selection for new rides.
   static final Color rideCalendarSelectedDayBackgroundColor = Colors.blue.shade200;
   static final Color rideCalendarSelectedDayFontColor = Colors.white;
-
+  
   //Ride Calendar Item Styling for an item that is in the past and doesn't have a ride.
-  static final Color rideCalendarPastDayWithoutRideBackgroundColor = Colors.grey.shade400;
+  static final Color rideCalendarPastDayWithoutRideBackgroundColor = Colors.blueGrey.shade100;
   static final Color rideCalendarPastDayWithoutRideFontColor = Colors.white;
 
   //Ride Calendar Item Styling for an item that is in the past and does have a ride.
-  static final Color rideCalendarPastDayWithRideBackgroundColor = Colors.grey.shade600;
+  static final Color rideCalendarPastDayWithRideBackgroundColor = Colors.blueGrey.shade600;
   static final Color rideCalendarPastDayWithRideFontColor = Colors.white;
 
   //Ride Calendar Header Font Color

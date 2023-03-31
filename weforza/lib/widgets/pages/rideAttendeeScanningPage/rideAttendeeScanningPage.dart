@@ -13,6 +13,7 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/manualSelection/manualSelection.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/saveScanOrSkipButton.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanPermissionDenied.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/bluetoothDisabled.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/genericScanError.dart';
@@ -92,9 +93,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       children: <Widget>[
         RideAttendeeScanningProgressIndicator(
           valueNotifier: bloc.isScanning,
-          //By the time the notifier is triggered, the settings have been loaded.
-          //Thus Settings.instance.scanDuration is valid.
-          //Therefor by the time this lambda is called, it is safe to access scanDuration.
           getDuration: () => Settings.instance.scanDuration,
         ),
         Expanded(
@@ -155,6 +153,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
                   case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
+                  case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
                   default: return Center(child: GenericScanErrorWidget());
                 }
               }

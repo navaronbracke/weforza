@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 
 import 'package:weforza/database/database.dart';
-import 'package:weforza/database/databaseFactory.dart';
+import 'package:weforza/database/database_factory.dart';
 
 /// This fake database provides an implementation for testing database creation.
 /// It does not support actual transactions.

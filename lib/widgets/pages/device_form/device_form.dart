@@ -68,16 +68,12 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     try {
       if (model.creationDate == null) {
         await _delegate.addDevice(model);
-
-        if (mounted) {
-          Navigator.of(context).pop();
-        }
       } else {
-        final result = await _delegate.editDevice(model);
+        await _delegate.editDevice(model);
+      }
 
-        if (mounted) {
-          Navigator.of(context).pop(result);
-        }
+      if (mounted) {
+        Navigator.of(context).pop();
       }
     } catch (_) {
       // Ignore errors, the submit button handles them.

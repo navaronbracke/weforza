@@ -28,8 +28,8 @@ class ProfileImagePicker extends StatelessWidget {
           return Center(child: Text(errorMessage,softWrap: true));
         }else{
           return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
-            width: 80,
-            height: 80,
+            width: size,
+            height: size,
             child: Center(
               child: PlatformAwareLoadingIndicator(),
             ),
@@ -39,7 +39,8 @@ class ProfileImagePicker extends StatelessWidget {
                 size: size,
                 icon: Icons.camera_alt,
               ),
-              onTap: () => imageHandler.pickProfileImage()
+              onTap: () => imageHandler.pickProfileImage(),
+              onLongPress: () => imageHandler.clearSelectedImage(),
           );
         }
       },

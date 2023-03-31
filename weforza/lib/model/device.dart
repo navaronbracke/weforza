@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 ///A device is a piece of hardware.
@@ -46,15 +48,13 @@ class Device {
     );
   }
 
-  //Devices are unique by name.
-  //The type is never unique by itself.
-  //The owner ID on its own is not unique either.
-  //An owner ID + name is a pointless comparison, since names have to be unique.
   @override
-  bool operator ==(Object other) => other is Device && name == other.name;
+  bool operator ==(Object other) => other is Device && name == other.name
+      && ownerId == other.ownerId
+      && creationDate == other.creationDate;
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode => hashValues(name, creationDate, ownerId);
 }
 
 ///This enum declares the different device types.

@@ -56,7 +56,7 @@ class RiderDevicesListEmpty extends StatelessWidget {
 
                         onAddDevicePressed(context, selectedRider!.uuid);
                       },
-                      child: Text(translator.addDevice),
+                      child: Text(translator.addDevice, style: const TextStyle(color: CupertinoColors.white)),
                     ),
                   );
                 },

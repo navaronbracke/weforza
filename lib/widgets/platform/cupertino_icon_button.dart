@@ -38,7 +38,9 @@ class CupertinoIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Icon(
         icon,
-        color: onPressed == null ? CupertinoColors.placeholderText : color ?? CupertinoTheme.of(context).primaryColor,
+        color: onPressed == null
+            ? CupertinoColors.placeholderText.resolveFrom(context)
+            : color ?? CupertinoTheme.of(context).primaryColor,
       ),
     );
   }

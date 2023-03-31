@@ -142,9 +142,15 @@ class RideCalendarTheme {
         return RideCalendarTheme._(
           futureRide: primaryColor.withOpacity(0.4),
           padding: padding,
-          pastDay: CupertinoColors.systemGrey4,
-          pastRide: CupertinoColors.inactiveGray,
           selection: primaryColor,
+          pastDay: const CupertinoDynamicColor.withBrightness(
+            color: CupertinoColors.systemGrey4,
+            darkColor: CupertinoColors.systemGrey,
+          ),
+          pastRide: CupertinoDynamicColor.withBrightness(
+            color: CupertinoColors.systemGrey,
+            darkColor: CupertinoColors.systemGrey4.darkColor,
+          ),
         );
     }
   }

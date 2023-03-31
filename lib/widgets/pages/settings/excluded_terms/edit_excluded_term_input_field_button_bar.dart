@@ -81,8 +81,11 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
             icon: const Icon(Icons.undo),
             onPressed: currentValue == term ? null : onUndoPressed,
           ),
-          ios: (_) => CupertinoIconButton(
-            color: CupertinoColors.black,
+          ios: (context) => CupertinoIconButton(
+            color: const CupertinoDynamicColor.withBrightness(
+              color: CupertinoColors.black,
+              darkColor: CupertinoColors.white,
+            ).resolveFrom(context),
             icon: CupertinoIcons.arrow_counterclockwise,
             onPressed: currentValue == term ? null : onUndoPressed,
           ),

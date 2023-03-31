@@ -91,7 +91,7 @@ class BluetoothDisabledError extends StatelessWidget {
         ),
         ios: (_) => CupertinoButton.filled(
           onPressed: AppSettings.openBluetoothSettings,
-          child: Text(translator.goToSettings),
+          child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
         ),
       ),
       secondaryButton: PlatformAwareWidget(
@@ -127,7 +127,7 @@ class GenericScanError extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         ios: (context) => CupertinoButton.filled(
-          child: Text(translator.goBackToDetailPage),
+          child: Text(translator.goBackToDetailPage, style: const TextStyle(color: CupertinoColors.white)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -158,7 +158,7 @@ class PermissionDeniedError extends StatelessWidget {
         ),
         ios: (_) => CupertinoButton.filled(
           onPressed: AppSettings.openAppSettings,
-          child: Text(translator.goToSettings),
+          child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
         ),
       ),
       secondaryButton: PlatformAwareWidget(

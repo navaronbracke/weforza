@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addMemberBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/injection/injector.dart';
@@ -17,13 +18,18 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 class AddMemberPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() =>
-      _AddMemberPageState(AddMemberBloc(InjectionContainer.get<MemberRepository>()));
+      _AddMemberPageState(
+        AddMemberBloc(InjectionContainer.get<MemberRepository>()),
+          InjectionContainer.get<IFileHandler>()
+      );
 }
 
 ///This is the [State] class for [AddMemberPage].
 class _AddMemberPageState extends State<AddMemberPage> {
-  _AddMemberPageState(this._bloc): assert(_bloc != null);
+  _AddMemberPageState(this._bloc, this._fileHandler):
+        assert(_bloc != null && _fileHandler != null);
 
+  final IFileHandler _fileHandler;
   ///The key for the form.
   final _formKey = GlobalKey<FormState>();
 
@@ -106,6 +112,13 @@ class _AddMemberPageState extends State<AddMemberPage> {
     return firstNameValid && lastNameValid && aliasValid;
   }
 
+  void addMember(BuildContext context) async {
+    await _bloc.addMember().then((_){
+      ReloadDataProvider.of(context).reloadMembers.value = true;
+      Navigator.pop(context);
+    }).catchError(_bloc.onError);
+  }
+
   @override
   Widget build(BuildContext context) {
     _initStrings(context);
@@ -132,7 +145,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
                 children: <Widget>[
                   Center(
                     child: ProfileImagePicker(
-                      imageHandler: _bloc,
+                      initialImage: _bloc.initialImage,
+                      fileHandler: _fileHandler,
+                      onClearSelectedImage: _bloc.clearSelectedImage,
+                      setSelectedImage: _bloc.setSelectedImage,
                       errorMessage: S.of(context).MemberPickImageError,
                       size: 100,
                     ),
@@ -221,12 +237,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                     child: Center(
                       child: AddMemberSubmit(_bloc.submitStream,() async {
                         if (_iosAllFormInputValidator()) {
-                          await _bloc.addMember().then((_){
-                            ReloadDataProvider.of(context).reloadMembers.value = true;
-                            Navigator.pop(context);
-                          }).catchError((error){
-                            //do nothing
-                          });
+                          addMember(context);
                         }else {
                           setState(() {});
                         }
@@ -256,7 +267,10 @@ class _AddMemberPageState extends State<AddMemberPage> {
               children: <Widget>[
                 Center(
                   child: ProfileImagePicker(
-                    imageHandler: _bloc,
+                    initialImage: _bloc.initialImage,
+                    fileHandler: _fileHandler,
+                    onClearSelectedImage: _bloc.clearSelectedImage,
+                    setSelectedImage: _bloc.setSelectedImage,
                     errorMessage: S.of(context).MemberPickImageError,
                     size: 100,
                   ),
@@ -345,12 +359,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   child: Center(
                     child: AddMemberSubmit(_bloc.submitStream,() async {
                       if (_formKey.currentState.validate()) {
-                        await _bloc.addMember().then((_){
-                          ReloadDataProvider.of(context).reloadMembers.value = true;
-                          Navigator.pop(context);
-                        }).catchError((error){
-                          //do nothing
-                        });
+                        addMember(context);
                       }
                     }),
                   ),

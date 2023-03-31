@@ -1,16 +1,19 @@
+import 'dart:io';
 
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/blocs/bloc.dart';
 
 ///This Bloc will load the members.
 class MemberListBloc extends Bloc {
-  MemberListBloc(this._repository): assert(_repository != null);
+  MemberListBloc(this._repository, this._fileHandler):
+        assert(_repository != null && _fileHandler != null);
 
   final MemberRepository _repository;
+  final IFileHandler _fileHandler;
 
-  Future<List<MemberItem>> membersFuture;
+  Future<List<Member>> membersFuture;
 
   void loadMembersIfNotLoaded(){
     if(membersFuture == null){
@@ -20,12 +23,11 @@ class MemberListBloc extends Bloc {
 
   void reloadMembers() => membersFuture = _loadMembers();
 
-  Future<List<MemberItem>> _loadMembers() async {
-    List<Member> members = await _repository.getMembers();
-    List<Future<MemberItem>> items = members.map(
-            (member) async => MemberItem(member,await _repository.loadProfileImageFromDisk(member.profileImageFilePath))).toList();
-    return Future.wait(items);
-  }
+  Future<List<Member>> _loadMembers() => _repository.getMembers();
+
+  Future<File> getMemberProfileImage(String path) => _fileHandler.loadProfileImageFromDisk(path);
+
+  Future<int> getMemberAttendingCount(String uuid) => _repository.getAttendingCountForAttendee(uuid);
 
   @override
   void dispose() {}

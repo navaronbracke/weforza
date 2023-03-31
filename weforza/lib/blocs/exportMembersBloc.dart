@@ -24,6 +24,9 @@ class ExportMembersBloc extends Bloc {
   final StreamController<ExportDataOrError> _streamController = BehaviorSubject();
   Stream<ExportDataOrError> get stream => _streamController.stream;
 
+  final StreamController<bool> _filenameExistsController = BehaviorSubject();
+  Stream<bool> get filenameExistsStream => _filenameExistsController.stream;
+
   final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
   final TextEditingController filenameController = TextEditingController();
 
@@ -33,10 +36,10 @@ class ExportMembersBloc extends Bloc {
   FileExtension _fileExtension = FileExtension.CSV;
 
   void onSelectFileExtension(FileExtension extension){
-   if(_fileExtension != extension){
-     _streamController.add(ExportDataOrError.idle());
+    if(_fileExtension != extension){
+     _filenameExistsController.add(false);
      _fileExtension = extension;
-   }
+    }
   }
 
   ///Form Error message
@@ -50,7 +53,7 @@ class ExportMembersBloc extends Bloc {
       String invalidFilenameMessage)
   {
     if(_filename != filename){
-      _streamController.add(ExportDataOrError.idle());
+      _filenameExistsController.add(false);
     }
 
     if(filename == null || filename.isEmpty){
@@ -72,7 +75,7 @@ class ExportMembersBloc extends Bloc {
   Future<void> exportMembers(String csvHeader) async {
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
-        _streamController.add(ExportDataOrError.fileExists());
+        _filenameExistsController.add(true);
       }else{
         _streamController.add(ExportDataOrError.exporting());
         final Iterable<ExportableMember> exports = await exportMembersRepository.getMembers();
@@ -110,6 +113,7 @@ class ExportMembersBloc extends Bloc {
   @override
   void dispose() {
     filenameController.dispose();
+    _filenameExistsController.close();
     _streamController.close();
   }
 }

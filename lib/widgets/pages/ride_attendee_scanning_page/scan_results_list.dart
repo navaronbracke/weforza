@@ -10,8 +10,8 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the scan results list
 /// for the ride attendee scanning page.
-class RideAttendeeScanResultsList extends StatelessWidget {
-  const RideAttendeeScanResultsList({
+class ScanResultsList extends StatelessWidget {
+  const ScanResultsList({
     super.key,
     required this.delegate,
     required this.progressBar,
@@ -41,7 +41,7 @@ class RideAttendeeScanResultsList extends StatelessWidget {
               itemBuilder: (context, index, animation) {
                 return SizeTransition(
                   sizeFactor: animation,
-                  child: _RideAttendeeScanResultsListItem(
+                  child: _ScanResultsListItem(
                     device: delegate.getScanResult(index),
                   ),
                 );
@@ -55,9 +55,9 @@ class RideAttendeeScanResultsList extends StatelessWidget {
   }
 }
 
-/// This widget represents a single item for the [RideAttendeeScanResultsList].
-class _RideAttendeeScanResultsListItem extends StatelessWidget {
-  const _RideAttendeeScanResultsListItem({required this.device});
+/// This widget represents a single item for the [ScanResultsList].
+class _ScanResultsListItem extends StatelessWidget {
+  const _ScanResultsListItem({required this.device});
 
   final ScannedDevice device;
 

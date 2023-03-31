@@ -93,8 +93,7 @@
   "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
   "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
-  "RideAttendeeScanningScanResultDeviceOwnedByLabel": "Eigendom van: ",
-  "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Kies een eigenaar uit de lijst",
+  "RideAttendeeScanningScanResultMultipleOwnersPickAChoiceLabel": "Kies een eigenaar",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

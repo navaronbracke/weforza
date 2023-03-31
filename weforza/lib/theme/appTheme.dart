@@ -102,10 +102,10 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
   static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
-  static final Color rideAttendeeScanResultWarningColor = Colors.orange;
   static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
-
-  static final TextStyle rideAttendeeScanResultOwnerLabelTextStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12);
+  static final Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor = Colors.red;
+  static final Color rideAttendeeScanResultOwnerChoiceRequiredFontColor = Colors.white;
+  static final TextStyle rideAttendeeScanResultMultipleOwnerChoiceLabelStyle = TextStyle(fontStyle: FontStyle.italic);
 
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 

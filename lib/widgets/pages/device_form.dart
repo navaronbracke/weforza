@@ -213,6 +213,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final label =
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
+    // TODO: the platform aware widget can be removed once the event handler is
+    // a single implementation
     return PlatformAwareWidget(
       android: (context) => FormSubmitButton<void>(
         delegate: _delegate,

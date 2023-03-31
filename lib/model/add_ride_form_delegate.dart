@@ -98,6 +98,7 @@ class AddRideFormDelegate {
       newSelection.add(date);
     }
 
+    // Clear any submit errors from the last attempt.
     _submitFuture = null;
     _selectionController.add(newSelection);
   }

@@ -61,7 +61,7 @@
 	"EditDisallowedWord": "Verboden woord bewerken",
 	"EditMember": "Renner Bewerken",
 	"Export": "Exporteren",
-	"ExportMembersCsvHeader": "voornaam,achternaam,alias,actief,laatste_update,toestellen",
+	"ExportMembersCsvHeader": "voornaam,achternaam,alias,actief,datum_laatste_update,toestellen",
 	"ExportMembersTitle": "Renners Exporteren",
 	"ExportRide": "Rit Exporteren",
 	"ExportRideFileNamePlaceholder": "rit_{date}",

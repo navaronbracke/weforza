@@ -115,7 +115,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: CupertinoIconButton.fromAppTheme(
-                      icon: Icons.more_vert,
+                      icon: CupertinoIcons.ellipsis_vertical,
                       onPressed: () async {
                         final RideDetailsPageOptions? option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
                           return CupertinoActionSheet(

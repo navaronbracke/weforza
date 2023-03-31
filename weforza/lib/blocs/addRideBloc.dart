@@ -34,6 +34,9 @@ class AddRideBloc extends Bloc {
   final StreamController<DateTime> _calendarHeaderController = BehaviorSubject();
   Stream<DateTime> get headerStream => _calendarHeaderController.stream;
 
+  final StreamController<bool> _showDeleteSelectionController = BehaviorSubject();
+  Stream<bool> get showDeleteSelectionStream => _showDeleteSelectionController.stream;
+
   ///The date for the currently visible month in the calendar.
   late DateTime pageDate;
 
@@ -82,6 +85,8 @@ class AddRideBloc extends Bloc {
       }else{
         _ridesToAdd.add(date);
       }
+      _showDeleteSelectionController.add(_ridesToAdd.isNotEmpty);
+
       return true;
     }
 
@@ -95,6 +100,7 @@ class AddRideBloc extends Bloc {
     if(!_currentSubmitState.saving && !_currentSubmitState.noSelection){
       _ridesToAdd.clear();
       _resetFunctions.forEach((method) => method());
+      _showDeleteSelectionController.add(false);
 
       //unset the error -> the submit widget will show an empty string with IDLE
       _currentSubmitState = AddRidesOrError.idle();
@@ -120,13 +126,13 @@ class AddRideBloc extends Bloc {
   }
 
   ///Whether a day, has or had a ride planned beforehand.
-  bool dayHasRidePlanned(DateTime date){
+  bool rideScheduledOn(DateTime date){
     return _existingRides!.contains(date) || _ridesToAdd.contains(date);
   }
 
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
   ///Rides that were planned previously, but still have to happen aren't 'new' scheduled rides.
-  bool dayIsNewlyScheduledRide(DateTime date){
+  bool rideScheduledDuringCurrentSession(DateTime date){
     return !_existingRides!.contains(date) && _ridesToAdd.contains(date);
   }
 
@@ -225,6 +231,7 @@ class AddRideBloc extends Bloc {
     _resetFunctions.clear();
     _submitController.close();
     _calendarHeaderController.close();
+    _showDeleteSelectionController.close();
     pageController.dispose();
   }
 }

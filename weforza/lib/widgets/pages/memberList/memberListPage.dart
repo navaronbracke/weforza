@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injector.dart';
+import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/repository/memberRepository.dart';

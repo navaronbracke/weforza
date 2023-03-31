@@ -26,6 +26,7 @@ class AnimatedPathPainter extends CustomPainter {
     final path = _createAnimatedPath(createPath(size), animation.value);
 
     final Paint paint = Paint();
+    paint.style = PaintingStyle.stroke;
     paint.color = color;
     paint.strokeJoin = strokeJoin;
     paint.strokeCap = strokeCap;

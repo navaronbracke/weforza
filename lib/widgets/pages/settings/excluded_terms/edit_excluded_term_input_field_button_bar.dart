@@ -24,7 +24,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
   final ValueNotifier<TextEditingValue> controller;
 
   /// The onTap handler for the confirm button.
-  final void Function(TextEditingValue textEditingValue) onConfirmPressed;
+  final void Function(String value) onConfirmPressed;
 
   /// The onTap handler for the delete button.
   final void Function(BuildContext context) onDeletePressed;
@@ -62,9 +62,9 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         ),
       ),
       builder: (context, child) {
-        final currentValue = controller.value;
+        final currentValue = controller.value.text;
 
-        final isValid = validator(context, currentValue.text) == null;
+        final isValid = validator(context, currentValue) == null;
 
         final confirmButton = PlatformAwareWidget(
           android: (_) => IconButton(
@@ -84,12 +84,12 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
           android: (_) => IconButton(
             color: Colors.black,
             icon: const Icon(Icons.undo),
-            onPressed: currentValue.text == term ? null : onUndoPressed,
+            onPressed: currentValue == term ? null : onUndoPressed,
           ),
           ios: (_) => CupertinoIconButton(
             color: CupertinoColors.black,
             icon: CupertinoIcons.arrow_counterclockwise,
-            onPressed: currentValue.text == term ? null : onUndoPressed,
+            onPressed: currentValue == term ? null : onUndoPressed,
           ),
         );
 

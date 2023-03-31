@@ -64,7 +64,7 @@ class MemberDao implements IMemberDao {
   Future<void> addMember(Member member) async {
     final finder = Finder(filter: Filter.byKey(member.uuid));
     if (await _memberStore.findFirst(_database, finder: finder) != null) {
-      throw Exception('The uuid ${member.uuid} is already in use');
+      throw ArgumentError('The uuid ${member.uuid} is already in use');
     }
     await _memberStore.record(member.uuid).add(_database, member.toMap());
   }

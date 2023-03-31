@@ -29,7 +29,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       await Future.delayed(const Duration(seconds: 2), () {});
 
       if (i == 1) {
-        yield* Stream.error(Exception('some error'), StackTrace.current);
+        yield* Stream.error(ArgumentError('some error'), StackTrace.current);
       }
 
       if (i == 2 || i == 3) {

@@ -61,7 +61,7 @@ class ScanResultLoading extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Text(deviceName, overflow: TextOverflow.ellipsis),
+            child: SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -90,7 +90,7 @@ class ScanResultError extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Text(deviceName, overflow: TextOverflow.ellipsis),
+            child: SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -118,7 +118,7 @@ class ScanResultOwnerNotFound extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Text(deviceName, overflow: TextOverflow.ellipsis),
+            child: SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -151,7 +151,7 @@ class ScanResultOwnerFound extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(deviceName, overflow: TextOverflow.ellipsis),
+          SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
           SizedBox(height: 2),
           Row(
             children: <Widget>[

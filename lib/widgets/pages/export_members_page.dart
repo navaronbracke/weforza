@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/export_members_bloc.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/export_data_or_error.dart';
 import 'package:weforza/repository/export_members_repository.dart';
 import 'package:weforza/theme/app_theme.dart';

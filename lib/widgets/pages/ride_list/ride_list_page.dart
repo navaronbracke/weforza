@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/ride_list_bloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/common/generic_error.dart';

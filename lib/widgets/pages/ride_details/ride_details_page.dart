@@ -6,7 +6,6 @@ import 'package:weforza/blocs/export_ride_bloc.dart';
 import 'package:weforza/blocs/ride_details_bloc.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
@@ -16,7 +15,6 @@ import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_d
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
-import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideDetailsPage extends StatefulWidget {

@@ -153,7 +153,10 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
         final translator = S.of(context);
 
         final Widget child = directoryPath == null
-            ? Center(child: TextButton(onPressed: selectDirectory, child: Text(translator.selectDirectory)))
+            ? Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(onPressed: selectDirectory, child: Text(translator.selectDirectory)),
+              )
             : Text(directoryPath!, maxLines: 3, overflow: TextOverflow.ellipsis);
 
         return Column(

@@ -78,7 +78,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
           children: [
             Tooltip(
               margin: const EdgeInsets.only(bottom: 12),
-              message: translator.Total,
+              message: translator.total,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -92,7 +92,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
             ),
             Tooltip(
               margin: const EdgeInsets.only(bottom: 12),
-              message: translator.Scanned,
+              message: translator.scanned,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -23,17 +23,17 @@ class ManualSelectionListEmpty extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
           child: Text(
-            translator.ManualSelectionEmpty,
+            translator.manualSelectionEmpty,
             textAlign: TextAlign.center,
           ),
         ),
         PlatformAwareWidget(
           android: (context) => ElevatedButton(
-            child: Text(translator.GoBack),
+            child: Text(translator.goBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
           ios: (context) => CupertinoButton.filled(
-            child: Text(translator.GoBack),
+            child: Text(translator.goBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),

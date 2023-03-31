@@ -82,7 +82,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
                 padding: const EdgeInsets.only(bottom: 4),
                 child: Center(
                   child: Text(
-                    translator.UnresolvedOwnersDescription,
+                    translator.unresolvedOwnersDescription,
                     style: _getMultipleOwnersListDescriptionStyle(context),
                     softWrap: true,
                     textAlign: TextAlign.center,
@@ -102,7 +102,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
               ),
               ScanButton(
                 onPressed: widget.delegate.continueToManualSelection,
-                text: translator.Continue,
+                text: translator.continueLabel,
               ),
             ],
           );
@@ -125,8 +125,7 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
   final Rider item;
 
   @override
-  State<_UnresolvedOwnersListItem> createState() =>
-      _UnresolvedOwnersListItemState();
+  State<_UnresolvedOwnersListItem> createState() => _UnresolvedOwnersListItemState();
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {

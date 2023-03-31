@@ -14,8 +14,7 @@ class ExportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ExportRidersPage> createState() => _ExportRidersPageState();
 }
 
-class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
-    with SingleTickerProviderStateMixin {
+class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with SingleTickerProviderStateMixin {
   late final ExportRidersDelegate _delegate;
 
   late final AnimationController checkmarkController;
@@ -43,9 +42,9 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage>
       checkmarkAnimationController: checkmarkController,
       delegate: _delegate,
       onPressed: () => _delegate.exportDataToFile(
-        ExportRidersOptions(csvHeader: translator.ExportRidersCsvHeader),
+        ExportRidersOptions(csvHeader: translator.exportRidersCsvHeader),
       ),
-      title: translator.ExportRiders,
+      title: translator.exportRiders,
     );
   }
 

@@ -60,7 +60,7 @@ class ExportDataPage<T> extends StatelessWidget {
               controller: delegate.fileNameController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                labelText: translator.FileName,
+                labelText: translator.fileName,
                 errorMaxLines: 3,
               ),
               inputFormatters: inputFormatters,
@@ -79,7 +79,7 @@ class ExportDataPage<T> extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 6, right: 8),
                     child: Text(
-                      translator.FileFormat,
+                      translator.fileFormat,
                       style: Theme.of(context).textTheme.labelMedium,
                       maxLines: 2,
                     ),
@@ -158,13 +158,13 @@ class ExportDataPage<T> extends StatelessWidget {
           key: delegate.fileNameKey,
           keyboardType: TextInputType.text,
           maxLength: maxLength,
-          placeholder: translator.FileName,
+          placeholder: translator.fileName,
           textInputAction: TextInputAction.done,
           validator: (fileName) => _validateFileName(fileName, translator),
         ),
         CupertinoFormRow(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
-          prefix: Flexible(child: Text(translator.FileFormat, maxLines: 2)),
+          prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
           child: ExportFileFormatSelection(
             initialValue: delegate.currentFileFormat,
             onFormatSelected: delegate.setFileFormat,
@@ -181,25 +181,25 @@ class ExportDataPage<T> extends StatelessWidget {
   /// Returns an error message or null if the file name is valid.
   String? _validateFileName(String? fileName, S translator) {
     if (fileName == null || fileName.isEmpty) {
-      return translator.FileNameRequired;
+      return translator.fileNameRequired;
     }
 
     if (fileName.startsWith('.')) {
-      return translator.FileNameCantStartWithDot;
+      return translator.fileNameCantStartWithDot;
     }
 
     final ExportFileFormat fileFormat = delegate.currentFileFormat;
     final String fileExtension = fileFormat.formatExtension;
 
     if (!fileName.endsWith(fileExtension)) {
-      return translator.FileNameInvalidExtension(
+      return translator.fileNameInvalidExtension(
         fileFormat.asUpperCase,
         fileExtension,
       );
     }
 
     if (delegate.fileExists(fileName)) {
-      return translator.FileNameExists;
+      return translator.fileNameExists;
     }
 
     return null;
@@ -211,10 +211,10 @@ class ExportDataPage<T> extends StatelessWidget {
       controller: checkmarkAnimationController,
     );
     final translator = S.of(context);
-    final label = translator.Export;
+    final label = translator.export;
     final genericErrorIndicator = Center(
       child: GenericErrorWithBackButton(
-        message: translator.ExportGenericErrorMessage,
+        message: translator.exportGenericErrorMessage,
       ),
     );
 

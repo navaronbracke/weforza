@@ -44,7 +44,7 @@ class ScanDurationOption extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
             child: Text(
-              translator.ScanDuration,
+              translator.scanDuration,
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
@@ -70,7 +70,7 @@ class ScanDurationOption extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 6),
-                  child: Text(translator.ScanDuration),
+                  child: Text(translator.scanDuration),
                 ),
               ),
               Padding(

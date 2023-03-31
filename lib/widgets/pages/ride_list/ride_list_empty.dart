@@ -18,7 +18,7 @@ class RideListEmpty extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4, right: 16, left: 16),
-            child: Text(S.of(context).NoRides, textAlign: TextAlign.center),
+            child: Text(S.of(context).noRides, textAlign: TextAlign.center),
           ),
         ],
       ),

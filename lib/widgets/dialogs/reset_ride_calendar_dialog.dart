@@ -13,12 +13,10 @@ class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({super.key});
 
   @override
-  ConsumerState<ResetRideCalendarDialog> createState() =>
-      _ResetRideCalendarDialogState();
+  ConsumerState<ResetRideCalendarDialog> createState() => _ResetRideCalendarDialogState();
 }
 
-class _ResetRideCalendarDialogState
-    extends ConsumerState<ResetRideCalendarDialog> {
+class _ResetRideCalendarDialogState extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? future;
 
   @override
@@ -26,14 +24,14 @@ class _ResetRideCalendarDialogState
     final translator = S.of(context);
 
     return WeforzaAsyncActionDialog(
-      confirmButtonLabel: translator.Reset,
+      confirmButtonLabel: translator.reset,
       description: Text(
-        translator.ResetRideCalendarDescription,
+        translator.resetRideCalendarDescription,
         softWrap: true,
       ),
       isDestructive: true,
       errorDescription: Text(
-        translator.ResetRideCalendarErrorDescription,
+        translator.resetRideCalendarErrorDescription,
         softWrap: true,
       ),
       future: future,
@@ -57,10 +55,10 @@ class _ResetRideCalendarDialogState
         setState(() {});
       },
       pendingDescription: Text(
-        translator.ResetRideCalendarPendingDescription,
+        translator.resetRideCalendarPendingDescription,
         softWrap: true,
       ),
-      title: translator.ResetRideCalendar,
+      title: translator.resetRideCalendar,
     );
   }
 }

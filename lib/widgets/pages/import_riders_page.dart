@@ -21,8 +21,7 @@ class ImportRidersPage extends ConsumerStatefulWidget {
   ConsumerState<ImportRidersPage> createState() => _ImportRidersPageState();
 }
 
-class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
-    with SingleTickerProviderStateMixin {
+class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with SingleTickerProviderStateMixin {
   late final ImportRidersDelegate delegate;
 
   late final AnimationController checkmarkController;
@@ -58,12 +57,12 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
         stream: delegate.stream,
         builder: (context, snapshot) {
           final translator = S.of(context);
-          final buttonLabel = translator.PickFile;
+          final buttonLabel = translator.pickFile;
           final error = snapshot.error;
 
           if (error is UnsupportedFileFormatError) {
             return _ImportRidersButton(
-              errorMessage: translator.OnlyCsvOrJsonAllowed,
+              errorMessage: translator.onlyCsvOrJsonAllowed,
               label: buttonLabel,
               onPressed: _onImportRidersPressed,
             );
@@ -71,7 +70,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
 
           if (error is FileRequiredException) {
             return _ImportRidersButton(
-              errorMessage: translator.ImportRidersFileRequired,
+              errorMessage: translator.importRidersFileRequired,
               label: buttonLabel,
               onPressed: _onImportRidersPressed,
             );
@@ -79,7 +78,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
 
           if (error is FormatException) {
             return _ImportRidersButton(
-              errorMessage: translator.FileMalformed,
+              errorMessage: translator.fileMalformed,
               label: buttonLabel,
               onPressed: _onImportRidersPressed,
             );
@@ -90,7 +89,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
           if (error != null || data == null) {
             return Center(
               child: GenericErrorWithBackButton(
-                message: translator.ImportRidersGenericErrorMessage,
+                message: translator.importRidersGenericErrorMessage,
               ),
             );
           }
@@ -105,7 +104,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
               );
             case ImportRidersState.importing:
               return ProgressIndicatorWithLabel(
-                label: translator.ImportRidersProcessingFile,
+                label: translator.importRidersProcessingFile,
               );
             case ImportRidersState.pickingFile:
               return const PlatformAwareLoadingIndicator();
@@ -119,12 +118,12 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage>
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: (context) => Scaffold(
-        appBar: AppBar(title: Text(S.of(context).ImportRiders)),
+        appBar: AppBar(title: Text(S.of(context).importRiders)),
         body: _buildBody(),
       ),
       ios: (context) => CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).ImportRiders),
+          middle: Text(S.of(context).importRiders),
           transitionBetweenRoutes: false,
         ),
         child: _buildBody(),
@@ -187,9 +186,7 @@ class _ImportRidersButton extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CupertinoFormRow(
-              error: errorMessage == null
-                  ? null
-                  : Center(child: Text(errorMessage!)),
+              error: errorMessage == null ? null : Center(child: Text(errorMessage!)),
               child: Center(
                 child: CupertinoButton(
                   onPressed: onPressed,

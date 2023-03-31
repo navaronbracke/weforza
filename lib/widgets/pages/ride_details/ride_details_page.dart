@@ -77,7 +77,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                 value: RideDetailsPageOptions.export,
                 child: ListTile(
                   leading: const Icon(Icons.publish),
-                  title: Text(translator.Export),
+                  title: Text(translator.export),
                 ),
               ),
               const PopupMenuDivider(),
@@ -86,7 +86,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                 child: ListTile(
                   leading: Icon(Icons.delete, color: errorColor),
                   title: Text(
-                    translator.Delete,
+                    translator.delete,
                     style: TextStyle(color: errorColor),
                   ),
                 ),
@@ -168,7 +168,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         return CupertinoActionSheet(
           actions: [
             CupertinoActionSheetAction(
-              child: Text(translator.Export),
+              child: Text(translator.export),
               onPressed: () {
                 Navigator.of(context).pop(RideDetailsPageOptions.export);
               },
@@ -178,11 +178,11 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
               onPressed: () {
                 Navigator.of(context).pop(RideDetailsPageOptions.delete);
               },
-              child: Text(translator.Delete),
+              child: Text(translator.delete),
             ),
           ],
           cancelButton: CupertinoActionSheetAction(
-            child: Text(translator.Cancel),
+            child: Text(translator.cancel),
             onPressed: () => Navigator.of(context).pop(),
           ),
         );

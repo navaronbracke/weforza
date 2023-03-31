@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class MemberListFilter extends StatelessWidget {
   const MemberListFilter({
@@ -22,6 +22,7 @@ class MemberListFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
+    const theme = AppTheme.settings;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -29,7 +30,7 @@ class MemberListFilter extends StatelessWidget {
       children: [
         Text(
           translator.SettingsRiderFilterHeader,
-          style: ApplicationTheme.settingsOptionHeaderStyle,
+          style: theme.optionHeaderStyle,
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
@@ -98,14 +99,11 @@ class MemberListFilter extends StatelessWidget {
         PlatformAwareWidget(
           android: () => Text(
             translator.SettingsRiderFilterDescription,
-            style:
-                ApplicationTheme.settingsResetRideCalendarDescriptionTextStyle,
+            style: theme.optionDescriptionStyle,
           ),
           ios: () => Text(
             translator.SettingsRiderFilterDescription,
-            style: ApplicationTheme
-                .settingsResetRideCalendarDescriptionTextStyle
-                .copyWith(fontSize: 14),
+            style: theme.optionDescriptionStyle.copyWith(fontSize: 14),
           ),
         ),
       ],

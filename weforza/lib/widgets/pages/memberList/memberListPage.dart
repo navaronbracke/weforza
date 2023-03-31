@@ -8,6 +8,7 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/addMember/addMemberPage.dart';
+import 'package:weforza/widgets/pages/exportMembers/exportMembersPage.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersPage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDetailsPage.dart';
 import 'package:weforza/widgets/pages/memberList/memberListEmpty.dart';
@@ -78,6 +79,13 @@ class _MemberListPageState extends State<MemberListPage> {
                 MaterialPageRoute(builder: (context)=> ImportMembersPage())
             ).then((_)=> onReturnToMemberListPage(context)),
           ),
+          IconButton(
+            icon: Icon(Icons.file_upload),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context)=> ExportMembersPage())
+            ),
+          ),
         ],
       ),
       body: _buildList(context),
@@ -107,6 +115,13 @@ class _MemberListPageState extends State<MemberListPage> {
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> ImportMembersPage())
               ).then((_) => onReturnToMemberListPage(context)),
+            ),
+            SizedBox(width: 15),
+            CupertinoIconButton.fromAppTheme(
+              icon: Icons.file_upload,
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context)=> ExportMembersPage())
+              ),
             ),
           ],
         ),

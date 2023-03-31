@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultUnknownDeviceListItem extends StatelessWidget {
   ScanResultUnknownDeviceListItem({
@@ -16,10 +15,7 @@ class ScanResultUnknownDeviceListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Icon(
-                Icons.device_unknown,
-                color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
-            ),
+            child: Icon(Icons.device_unknown),
           ),
           SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),
         ],

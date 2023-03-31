@@ -26,8 +26,8 @@ class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: Icon(
-                      Icons.people,
-                      color: ApplicationTheme.rideAttendeeScanResultUnknownDeviceColor
+                    Icons.people,
+                    color: ApplicationTheme.rideAttendeeScanResultMultipleOwnerColor,
                   ),
                 ),
                 SelectableText(deviceName, scrollPhysics: ClampingScrollPhysics()),

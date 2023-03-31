@@ -69,6 +69,9 @@
   "AddRideColorLegendCurrentSelection": "Current Selection",
   "AddRideColorLegendFutureRide": "Future Ride",
 
+  "RideAttendeeScanningProcessScanLabel": "Scan",
+  "RideAttendeeScanningProcessAddMembersLabel": "Add Members",
+
   "RideAttendeeAssignmentTitle": "Attendees",
   "RideAttendeeAssignmentLoadingMembers": "Loading members for assignment",
   "RideAttendeeAssignmentScanningFailed": "The scan failed",

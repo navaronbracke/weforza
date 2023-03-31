@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 abstract class ApplicationTheme {
 
   ///Primary/Accent Theme colors.
-  static const Color primaryColor = Colors.blue;
-  static const Color accentColor = Color(0xFF64B5F6);
+  static final Color primaryColor = Colors.blue;
+  static final Color accentColor = Color(0xFF64B5F6);
 
   //Ride Calendar Item Styling for an item that is now or in the future, which has no ride.
   static final Color rideCalendarFutureDayNoRideBackgroundColor = Color.fromARGB(255, 250, 250, 250);
@@ -77,6 +77,11 @@ abstract class ApplicationTheme {
 
   static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
+
+  static final Color androidRideAttendeeScanProcessCurrentStepColor = Colors.lightGreen.shade200;
+  static final Color androidRideAttendeeScanProcessOtherStepColor = Colors.white;
+  static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
+  static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

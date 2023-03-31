@@ -24,42 +24,45 @@ class UnresolvedOwnersList extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          final list = snapshot.data ?? [];
+
           return Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 2),
                 child: Center(
-                    child: Text(
-                  S.of(context).RideAttendeeScanningUnresolvedOwnersListTooltip,
-                  style: ApplicationTheme
-                      .rideAttendeeMultipleOwnersListTooltipStyle,
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                )),
+                  child: Text(
+                    S.of(context).UnresolvedOwnersDescription,
+                    style: ApplicationTheme.multipleOwnersListTooltipStyle,
+                    softWrap: true,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
               Expanded(
                 child: ListView.builder(
-                  itemBuilder: (context, index) =>
-                      itemBuilder(snapshot.data![index]),
-                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) => itemBuilder(list[index]),
+                  itemCount: list.length,
                 ),
               ),
               Center(child: _buildButton(context)),
             ],
           );
-        } else {
-          return const Center(child: PlatformAwareLoadingIndicator());
         }
+
+        return const Center(child: PlatformAwareLoadingIndicator());
       },
     );
   }
 
   Widget _buildButton(BuildContext context) {
+    final translator = S.of(context);
+
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: TextButton(
-          child: Text(S.of(context).RideAttendeeScanningContinue),
+          child: Text(translator.Continue),
           onPressed: onButtonPressed,
         ),
       ),
@@ -70,7 +73,7 @@ class UnresolvedOwnersList extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 20 + bottomPadding, top: 10),
           child: CupertinoButton.filled(
             child: Text(
-              S.of(context).RideAttendeeScanningContinue,
+              translator.Continue,
               style: const TextStyle(color: Colors.white),
             ),
             onPressed: onButtonPressed,

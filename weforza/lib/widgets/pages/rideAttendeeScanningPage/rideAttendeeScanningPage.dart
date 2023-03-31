@@ -103,7 +103,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
             stream: bloc.scanStepStream,
             builder: (context, snapshot){
               if(snapshot.hasError){
-                return GenericScanErrorWidget();
+                return Center(child: GenericScanErrorWidget());
               }else{
                 switch(snapshot.data){
                   case ScanProcessStep.INIT: return PreparingScanWidget();
@@ -152,7 +152,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                         onRefreshAttendees: widget.onRefreshAttendees
                     );
                   case ScanProcessStep.NO_MEMBERS: return NoMembersForScanWidget();
-                  default: return GenericScanErrorWidget();
+                  default: return Center(child: GenericScanErrorWidget());
                 }
               }
             },

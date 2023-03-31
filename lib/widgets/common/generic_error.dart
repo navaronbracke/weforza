@@ -143,7 +143,7 @@ class GenericErrorWithBackButton extends StatelessWidget {
 
     return GenericError(
       actionButton: PlatformAwareWidget(
-        android: (_) => TextButton(
+        android: (_) => FilledButton.tonal(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(goBackLabel),
         ),

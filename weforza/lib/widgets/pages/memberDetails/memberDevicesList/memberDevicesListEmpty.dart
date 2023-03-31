@@ -31,8 +31,11 @@ class MemberDevicesListEmpty extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Text(S.of(context).MemberDetailsNoDevices),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+          child: Text(
+            S.of(context).MemberDetailsNoDevices,
+            textAlign: TextAlign.center,
+          ),
         ),
         PlatformAwareWidget(
           android: () => TextButton(
@@ -42,8 +45,8 @@ class MemberDevicesListEmpty extends StatelessWidget {
           ios: () => CupertinoButton(
             onPressed: onAddDevicePageButtonPressed,
             child: Text(
-                S.of(context).AddDeviceTitle,
-                style: ApplicationTheme.iosButtonTextStyle,
+              S.of(context).AddDeviceTitle,
+              style: ApplicationTheme.iosButtonTextStyle,
             ),
           ),
         )

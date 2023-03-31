@@ -31,8 +31,9 @@ class RideAttendeeManualSelection extends StatelessWidget {
                   canSelect: () => !bloc.isSaving.value,
                   firstName: item.firstname,
                   lastName: item.lastname,
+                  phone: item.phone,
                   isSelected: () => bloc.isItemSelected(item),
-                  onTap: () => bloc.addMember(item),
+                  onTap: () => bloc.onMemberSelected(item),
                 );
               },
               itemCount: bloc.currentMembersList.length,
@@ -40,6 +41,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
           ),
           ManualSelectionSubmit(
             isSaving: bloc.isSaving,
+            //TODO save with overriding! merge is only during the scan
             onSave: () async => await bloc.saveRideAttendees(false).then((_){
               onRefreshAttendees();
               Navigator.of(context).pop();

@@ -14,21 +14,26 @@ import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/riverpod/bluetooth_provider.dart';
+import 'package:weforza/riverpod/repository/device_repository_provider.dart';
+import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
+import 'package:weforza/riverpod/settings_provider.dart';
 
 /// This class represents the delegate
 /// that manages the attendants for a given ride.
 class RideAttendeeScanningDelegate {
   RideAttendeeScanningDelegate({
-    required this.deviceRepository,
-    required this.memberRepository,
     required this.onDeviceFound,
     required this.ref,
-    required this.rideRepository,
-    required this.scanner,
-    required this.settings,
-  }) : ride = ref.read(selectedRideProvider)!;
+  })  : deviceRepository = ref.read(deviceRepositoryProvider),
+        memberRepository = ref.read(memberRepositoryProvider),
+        ride = ref.read(selectedRideProvider)!,
+        rideRepository = ref.read(rideRepositoryProvider),
+        scanner = ref.read(bluetoothProvider),
+        settings = ref.read(settingsProvider);
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;

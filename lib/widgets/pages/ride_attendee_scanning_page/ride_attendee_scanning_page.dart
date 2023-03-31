@@ -5,11 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
-import 'package:weforza/riverpod/bluetooth_provider.dart';
-import 'package:weforza/riverpod/repository/device_repository_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_stepper.dart';
@@ -43,15 +38,10 @@ class RideAttendeeScanningPageState
     super.initState();
 
     delegate = RideAttendeeScanningDelegate(
-      deviceRepository: ref.read(deviceRepositoryProvider),
-      memberRepository: ref.read(memberRepositoryProvider),
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to inset it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
       ref: ref,
-      rideRepository: ref.read(rideRepositoryProvider),
-      scanner: ref.read(bluetoothProvider),
-      settings: ref.read(settingsProvider),
     );
 
     _scanProgressBarController = AnimationController(

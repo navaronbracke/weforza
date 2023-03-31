@@ -32,11 +32,14 @@ class ImportMembersBloc extends Bloc {
     await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
       _importStreamController.add(ImportMembersState.IMPORTING);
       final List<Map<String,dynamic>> data = await _readMemberDataFromFile(file, headerRegex);
+      //Quick exit when there is no data
+      if(data.isEmpty) return;
 
       await _saveMemberData(data);
       reloadMembers.value = true;
       _importStreamController.add(ImportMembersState.DONE);
     }).catchError((error){
+      print(error);
       _importStreamController.addError(error);
     });
   }
@@ -62,13 +65,15 @@ class ImportMembersBloc extends Bloc {
       //and remove the leading/trailing spaces
       //but keep the spaces inside the cells.
       final List<String> values = data.split(',').map((cellValue) => cellValue.trim()).toList();
+
       //If the line doesn't have enough cells to fill the required fields
       // (first name, last name and phone, in that order), skip it
       if(values.length < 3){
         continue;
       }
+
       //If the last cell is empty after performing the trim step, remove it
-      if(values[values.length -1].isEmpty){
+      if(values[values.length-1].isEmpty){
         values.removeLast();
       }
       //Invalid data lines are skipped
@@ -79,7 +84,8 @@ class ImportMembersBloc extends Bloc {
       //These are the device names: Device1, Device2,... , DeviceN
       if(values.length > 3){
         //Check the device names
-        final deviceNames = values.sublist(4);
+        final deviceNames = values.sublist(3);
+
         if(deviceNames.map((deviceName) => !Device.deviceNameRegex.hasMatch(deviceName)).contains(true)){
           continue;
         }
@@ -89,7 +95,7 @@ class ImportMembersBloc extends Bloc {
         "firstName": values[0],
         "lastName": values[1],
         "phone": values[2],
-        "devices": values.length > 3 ? values.sublist(4) : []
+        "devices": values.length > 3 ? values.sublist(3) : []
       });
     }
 

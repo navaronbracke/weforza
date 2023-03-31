@@ -101,9 +101,11 @@ class _ManualSelectionListItemState
       isScanned = selectedRideAttendee.isScanned;
     }
 
-    final backgroundColor = isSelected
-        ? ApplicationTheme.rideAttendeeSelectedBackgroundColor
-        : ApplicationTheme.rideAttendeeUnSelectedBackgroundColor;
+    final decoration = isSelected
+        ? BoxDecoration(
+            color: ApplicationTheme.rideAttendeeSelectedBackgroundColor,
+          )
+        : null;
 
     // The text color uses the Theme's default when unselected.
     final textColor = isSelected ? Colors.white : null;
@@ -134,7 +136,7 @@ class _ManualSelectionListItemState
         setState(() {});
       },
       child: Container(
-        decoration: BoxDecoration(color: backgroundColor),
+        decoration: decoration,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Row(
           children: [

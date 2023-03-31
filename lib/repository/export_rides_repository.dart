@@ -4,7 +4,7 @@ import 'package:weforza/model/exportable_ride.dart';
 class ExportRidesRepository {
   ExportRidesRepository(this.dao);
 
-  final IExportRidesDao dao;
+  final ExportRidesDao dao;
 
   Future<Iterable<ExportableRide>> getRides(DateTime? ride) {
     return dao.getRides(ride);

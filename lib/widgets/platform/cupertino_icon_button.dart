@@ -1,58 +1,49 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/theme/app_theme.dart';
 
-///This [Widget] represents a custom ios icon button.
+/// This widget represents an iOS variant of the Material `IconButton`.
 class CupertinoIconButton extends StatefulWidget {
   const CupertinoIconButton({
-    Key? key,
+    super.key,
     required this.icon,
+    this.idleColor = ApplicationTheme.primaryColor,
     required this.onPressed,
-    required this.onPressedColor,
-    required this.idleColor,
+    this.onPressedColor = ApplicationTheme.secondaryColor,
     this.size = 28,
-  })  : assert(size > 0),
-        super(key: key);
+  });
 
-  CupertinoIconButton.fromAppTheme({
-    Key? key,
-    required VoidCallback onPressed,
-    required IconData icon,
-    double? size,
-  }) : this(
-            key: key,
-            idleColor: ApplicationTheme.primaryColor,
-            onPressedColor: ApplicationTheme.secondaryColor,
-            icon: icon,
-            onPressed: onPressed,
-            size: size ?? 28);
-
-  ///A [VoidCallback] that is invoked when this [Widget] is pressed.
-  final VoidCallback onPressed;
-
-  ///The icon to display.
+  /// The icon for the button.
   final IconData icon;
 
-  final double size;
-
-  ///The background color when not pressed.
+  /// The color for the icon when it is not pressed.
+  ///
+  /// Defaults to [ApplicationTheme.primaryColor].
   final Color idleColor;
 
-  ///The background color when pressed.
+  /// The onTap handler for the button.
+  final void Function() onPressed;
+
+  /// The color for the icon when it is pressed.
+  ///
+  /// Defaults to [ApplicationTheme.secondaryColor].
   final Color onPressedColor;
 
+  /// The size for the button.
+  ///
+  /// Defaults to 28.
+  final double size;
+
   @override
-  CupertinoIconButtonState createState() => CupertinoIconButtonState();
+  State<CupertinoIconButton> createState() => _CupertinoIconButtonState();
 }
 
-///This is the State class for [CupertinoIconButton].
-class CupertinoIconButtonState extends State<CupertinoIconButton> {
-  ///The current background color.
-  late Color _currentColor;
+class _CupertinoIconButtonState extends State<CupertinoIconButton> {
+  late Color color;
 
   @override
   void initState() {
     super.initState();
-    _currentColor = widget.idleColor;
+    color = widget.idleColor;
   }
 
   @override
@@ -61,19 +52,15 @@ class CupertinoIconButtonState extends State<CupertinoIconButton> {
       onTap: widget.onPressed,
       onTapUp: (tapUpDetails) {
         setState(() {
-          _currentColor = widget.idleColor;
+          color = widget.idleColor;
         });
       },
       onTapDown: (tapUpDetails) {
         setState(() {
-          _currentColor = widget.onPressedColor;
+          color = widget.onPressedColor;
         });
       },
-      child: Icon(
-        widget.icon,
-        color: _currentColor,
-        size: widget.size,
-      ),
+      child: Icon(widget.icon, color: color, size: widget.size),
     );
   }
 }

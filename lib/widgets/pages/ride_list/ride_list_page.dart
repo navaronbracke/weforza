@@ -55,7 +55,7 @@ class RideListPage extends StatelessWidget {
                 child: Text(S.of(context).Rides),
               ),
             ),
-            CupertinoIconButton.fromAppTheme(
+            CupertinoIconButton(
               icon: CupertinoIcons.add,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const AddRideForm()),
@@ -63,7 +63,7 @@ class RideListPage extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 12),
-              child: CupertinoIconButton.fromAppTheme(
+              child: CupertinoIconButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const ExportRidePage()),
                 ),

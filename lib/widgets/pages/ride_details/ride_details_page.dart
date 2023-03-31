@@ -110,13 +110,13 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton.fromAppTheme(
+                CupertinoIconButton(
                   icon: Icons.bluetooth_searching,
                   onPressed: () => _goToScanningPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
-                  child: CupertinoIconButton.fromAppTheme(
+                  child: CupertinoIconButton(
                     icon: CupertinoIcons.ellipsis_vertical,
                     onPressed: () => _showCupertinoModalBottomPopup(context),
                   ),

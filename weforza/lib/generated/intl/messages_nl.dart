@@ -19,29 +19,33 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'nl';
 
-  static m0(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
+  static m0(buildNumber) => "Build Nummer: ${buildNumber}";
 
-  static m1(maxLength) => "Een adres mag niet langer zijn dan ${maxLength} karakters";
+  static m1(version) => "Versie: ${version}";
 
-  static m2(maxDistance) => "De afstand van een rit mag niet groter zijn dan ${maxDistance} Km";
+  static m2(maxLength) => "Naam Toestel is max. ${maxLength} tekens";
 
-  static m3(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
+  static m3(maxLength) => "Een adres mag niet langer zijn dan ${maxLength} karakters";
 
-  static m4(path) => "Rit opgeslagen op ${path}";
+  static m4(maxDistance) => "De afstand van een rit mag niet groter zijn dan ${maxDistance} Km";
 
-  static m5(date) => "rit_${date}";
+  static m5(maxLength) => "Een titel mag niet langer zijn dan ${maxLength} karakters";
 
-  static m6(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
+  static m6(path) => "Rit opgeslagen op ${path}";
 
-  static m7(maxLength) => "Voornaam kan niet langer zijn dan ${maxLength} letters";
+  static m7(date) => "rit_${date}";
 
-  static m8(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
+  static m8(maxLength) => "Een bestandsnaam mag niet langer zijn dan ${maxLength} karakters";
 
-  static m9(maxLength) => "Een telefoonnummer is maximum ${maxLength} cijfers lang";
+  static m9(maxLength) => "Voornaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m10(minLength) => "Een telefoonnummer is minimum ${minLength} cijfers lang";
+  static m10(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m11(value) => "${value} is verplicht";
+  static m11(maxLength) => "Een telefoonnummer is maximum ${maxLength} cijfers lang";
+
+  static m12(minLength) => "Een telefoonnummer is minimum ${minLength} cijfers lang";
+
+  static m13(value) => "${value} is verplicht";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

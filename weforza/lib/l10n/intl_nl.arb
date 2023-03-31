@@ -1,5 +1,7 @@
 {
   "AppName": "WeForza",
+  "AppVersionNumber": "Versie: {version}",
+  "AppVersionBuildNumber": "Build Nummer: {buildNumber}",
 
   "MondayPrefix": "Ma",
   "TuesdayPrefix": "Di",

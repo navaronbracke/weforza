@@ -1,3 +1,5 @@
+import 'package:package_info/package_info.dart';
+
 ///This class defines a wrapper for application settings.
 class Settings {
   Settings({
@@ -7,6 +9,9 @@ class Settings {
   ///The duration of a device scan, in seconds.
   ///Defaults to 20 seconds
   final int scanDuration;
+
+  //This variable stores the application package info.
+  PackageInfo packageInfo;
 
   ///Convert this object to a Map.
   Map<String,dynamic> toMap(){

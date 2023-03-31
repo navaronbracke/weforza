@@ -42,6 +42,8 @@ PODS:
   - flutter_blue/Protos (0.0.1):
     - Flutter
     - Protobuf (~> 3.11.4)
+  - package_info (0.0.1):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.0.1+1)":
@@ -57,6 +59,7 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
 
@@ -77,6 +80,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_blue:
     :path: ".symlinks/plugins/flutter_blue/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
@@ -89,6 +94,7 @@ SPEC CHECKSUMS:
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_blue: c82336391af501c2a18dcc042f18b53a74981651
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7

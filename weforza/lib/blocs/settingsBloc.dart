@@ -24,6 +24,10 @@ class SettingsBloc extends Bloc {
 
   double get minScanValue => 10;
 
+  String get appVersion => _repository.instance.packageInfo.version;
+
+  String get appBuildNumber => _repository.instance.packageInfo.buildNumber;
+
   void loadSettings(){
     if(_repository.instance == null){
       //We put an artificial delay here to decrease the feeling of popping in.

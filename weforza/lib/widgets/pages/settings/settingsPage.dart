@@ -73,13 +73,24 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildIosWidget(BuildContext context){
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(S.of(context).SettingsTitle),
-        trailing: SettingsSubmit(
-          submitStream: bloc.submitStream,
-          onSubmit: () async {
-            await bloc.saveSettings();
-            setState(() {});
-          },
+        middle: Row(
+          children: [
+            Expanded(
+              child: Center(child: Text(S.of(context).SettingsTitle)),
+            ),
+            SizedBox(
+              width: 40,
+              child: Center(
+                child: SettingsSubmit(
+                  submitStream: bloc.submitStream,
+                  onSubmit: () async {
+                    await bloc.saveSettings();
+                    setState(() {});
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
         transitionBetweenRoutes: false,
       ),
@@ -111,9 +122,24 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           ),
-          Text("versie: test", style:  ApplicationTheme.appVersionTextStyle),//TODO add actual version number here
+          _buildApplicationPackageInfo()
         ],
       ),
+    );
+  }
+
+  Widget _buildApplicationPackageInfo(){
+    return Column(
+      children: [
+        Text(
+          S.of(context).AppVersionNumber(bloc.appVersion),
+          style:  ApplicationTheme.appVersionTextStyle,
+        ),
+        Text(
+          S.of(context).AppVersionBuildNumber(bloc.appBuildNumber),
+          style:  ApplicationTheme.appVersionTextStyle,
+        ),
+      ],
     );
   }
 

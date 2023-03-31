@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 
 class ScanResultSingleOwnerListItem extends StatelessWidget {
@@ -21,8 +20,6 @@ class ScanResultSingleOwnerListItem extends StatelessWidget {
   }
 
   String _formatDeviceOwnerNameLabel(BuildContext context, String firstName, String lastName, String alias){
-    final String text = alias == null || alias.trim().isEmpty ? "$firstName $lastName" : "$firstName '$alias' $lastName";
-
-    return S.of(context).RideAttendeeScanningScanResultDeviceOwnedByLabel + text;
+    return alias == null || alias.trim().isEmpty ? "$firstName $lastName" : "$firstName '$alias' $lastName";
   }
 }

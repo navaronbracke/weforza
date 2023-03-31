@@ -26,6 +26,10 @@
   "Save": "Opslaan",
   "Filename": "Bestandsnaam",
 
+  "MemberListFilterActive": "Actief",
+  "MemberListFilterInactive": "Inactief",
+  "MemberListFilterAll": "Alle",
+
   "MemberListLoadingFailed": "Kon leden niet laden",
   "MemberListNoItems": "Er zijn geen leden om te tonen",
   "MemberListAddMemberInstruction": "Voeg leden toe via het menu hierboven",
@@ -44,7 +48,6 @@
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
-  "MemberDetailsActiveLabel": "Actief",
 
   "DevicesListNoDevices": "Geen toestellen om te tonen",
   "DeviceNameLabel": "Naam Toestel",

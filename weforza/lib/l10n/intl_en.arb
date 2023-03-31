@@ -26,6 +26,10 @@
   "Save": "Save",
   "Filename": "Filename",
 
+  "MemberListFilterActive": "Active",
+  "MemberListFilterInactive": "Inactive",
+  "MemberListFilterAll": "All",
+
   "MemberListLoadingFailed": "Could not load members",
   "MemberListNoItems": "There are no members to display",
   "MemberListAddMemberInstruction": "Add members by using the menu above",
@@ -44,7 +48,6 @@
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
-  "MemberDetailsActiveLabel": "Active",
 
   "DevicesListNoDevices": "No devices to show",
   "DeviceNameLabel": "Device Name",

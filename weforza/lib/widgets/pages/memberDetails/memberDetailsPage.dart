@@ -218,7 +218,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
               ),
               MemberActiveToggle(
                 initialValue: bloc.member.isActiveMember,
-                label: S.of(context).MemberDetailsActiveLabel,
+                label: S.of(context).MemberListFilterActive,
                 stream: bloc.isActiveStream,
                 onChanged: bloc.setMemberActive,
                 onErrorBuilder: () => PlatformAwareWidget(

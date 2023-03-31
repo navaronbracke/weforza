@@ -70,7 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "DevicesListNoDevices" : MessageLookupByLibrary.simpleMessage("No devices to show"),
     "DialogCancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "DialogDelete" : MessageLookupByLibrary.simpleMessage("Delete"),
-    "DialogOk" : MessageLookupByLibrary.simpleMessage("Ok"),
+    "DialogDismiss" : MessageLookupByLibrary.simpleMessage("Ok"),
     "DistanceKm" : MessageLookupByLibrary.simpleMessage("Km"),
     "EditDeviceError" : MessageLookupByLibrary.simpleMessage("Could not edit device"),
     "EditDeviceGenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),

@@ -1254,10 +1254,10 @@ class S {
   }
 
   /// `Ok`
-  String get DialogOk {
+  String get DialogDismiss {
     return Intl.message(
       'Ok',
-      name: 'DialogOk',
+      name: 'DialogDismiss',
       desc: '',
       args: [],
     );

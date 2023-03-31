@@ -28,7 +28,7 @@ class ResetRideCalendarButton extends ConsumerWidget {
                 context: context,
                 builder: (context) => const ResetRideCalendarDialog(),
               ),
-              child: Text(translator.ResetCalendar),
+              child: Text(translator.ResetRideCalendar),
             ),
             ios: () => CupertinoButton(
               color: CupertinoColors.destructiveRed,
@@ -37,20 +37,20 @@ class ResetRideCalendarButton extends ConsumerWidget {
                 builder: (context) => const ResetRideCalendarDialog(),
               ),
               child: Text(
-                translator.ResetCalendar,
+                translator.ResetRideCalendar,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
           PlatformAwareWidget(
             android: () => Text(
-              translator.ResetCalendarDescription,
+              translator.ResetRideCalendarDescription,
               style: ApplicationTheme
                   .settingsResetRideCalendarDescriptionTextStyle,
               textAlign: TextAlign.center,
             ),
             ios: () => Text(
-              translator.ResetCalendarDescription,
+              translator.ResetRideCalendarDescription,
               style: ApplicationTheme
                   .settingsResetRideCalendarDescriptionTextStyle
                   .copyWith(fontSize: 14),

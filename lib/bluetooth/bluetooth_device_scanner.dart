@@ -35,7 +35,6 @@ class BluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
     return _fBlInstance
         .scan(
-          allowDuplicates: false,
           scanMode: ScanMode.balanced,
           timeout: Duration(seconds: scanDurationInSeconds),
         )

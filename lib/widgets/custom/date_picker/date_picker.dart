@@ -5,6 +5,18 @@ import 'package:jiffy/jiffy.dart';
 
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
+/// This typedef defines the signature for the [DatePicker]'s day builder.
+///
+/// The `date` is the day that will be built.
+/// The `isCurrentMonth` flag indicates if the `date`
+/// is in the currently selected month.
+/// The `size` is the computed layout [Size] for the day item.
+typedef DatePickerDayBuilder = Widget Function(
+  DateTime date,
+  bool isCurrentMonth,
+  Size size,
+);
+
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
   /// The default constructor.
@@ -115,7 +127,7 @@ class _DatePickerBody extends StatelessWidget {
     required this.weekSpacing,
   });
 
-  final Widget Function(DateTime date, bool isCurrentMonth) dayBuilder;
+  final DatePickerDayBuilder dayBuilder;
 
   final DatePickerDelegate delegate;
 

@@ -218,15 +218,4 @@ class DeleteItemDialog extends StatelessWidget {
       },
     );
   }
-} 
-
-/*
-class _DeleteItemDialogState extends State<DeleteItemDialog> {
-  Future<void>? deleteItemFuture;
-
-  void _onConfirmDeletion() {
-    deleteItemFuture = widget.onDelete();
-
-    setState(() {});
-  }
-}*/
+}

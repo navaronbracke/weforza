@@ -42,7 +42,6 @@ class DeleteDeviceButton extends StatelessWidget {
         child: CupertinoIconButton(
           icon: CupertinoIcons.delete,
           idleColor: CupertinoColors.destructiveRed,
-          onPressedColor: CupertinoColors.destructiveRed.withAlpha(150),
           onPressed: () async {
             final result = await showCupertinoDialog<bool>(
               context: context,

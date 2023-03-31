@@ -3,20 +3,19 @@ import 'package:weforza/blocs/memberDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListDisabledItem.dart';
-import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListHeader.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 class MemberDevicesList extends StatefulWidget {
   MemberDevicesList({
     @required this.bloc,
-  }): assert(bloc != null);
+    @required this.emptyListBuilder
+  }): assert(bloc != null && emptyListBuilder != null);
 
   final MemberDetailsBloc bloc;
+  final Widget Function() emptyListBuilder;
 
   @override
   _MemberDevicesListState createState() => _MemberDevicesListState();
@@ -37,9 +36,8 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
                 text: S.of(context).MemberDetailsLoadDevicesError
             );
           }else{
-            return snapshot.data.isEmpty ?
-            MemberDevicesListEmpty(onPressed: () => goToAddDevicePage(context)):
-                _buildDevicesList(context, snapshot.data);
+            return snapshot.data.isEmpty ? widget.emptyListBuilder():
+              _buildDevicesList(context, snapshot.data);
           }
         }else{
           return Center(child: PlatformAwareLoadingIndicator());
@@ -51,9 +49,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
   Widget _buildDevicesList(BuildContext context, List<Device> devices){
     return Column(
       children: <Widget>[
-        MemberDevicesListHeader(
-          onPressed: () => goToAddDevicePage(context),
-        ),
+        MemberDevicesListHeader(),
         Expanded(
           child: AnimatedList(
             key: _listKey,
@@ -66,18 +62,6 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
           ),
         ),
       ],
-    );
-  }
-
-  void goToAddDevicePage(BuildContext context){
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context)=> AddDevicePage())).then((_){
-          final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
-          if(reloadDevicesNotifier.value){
-            reloadDevicesNotifier.value = false;
-            setState(() => widget.bloc.reloadDevices());
-        }
-      }
     );
   }
 

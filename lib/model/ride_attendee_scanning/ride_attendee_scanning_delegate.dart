@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
@@ -229,14 +232,37 @@ class RideAttendeeScanningDelegate {
   ///
   /// Returns wether or not the permissions were granted.
   Future<bool> _requestScanPermission() async {
-    final statuses = await [
-      // Without the location permission, scanning will not work.
-      Permission.locationWhenInUse,
-      // Needed to query the bluetooth adapter state.
-      Permission.bluetooth,
-      // Needed on Android 12+ for scanning. Ignored on iOS.
-      Permission.bluetoothScan,
-    ].request();
+    final permissions = <Permission>[];
+
+    final deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      final androidInfo = await deviceInfo.androidInfo;
+      final androidVersion = androidInfo.version.sdkInt!;
+
+      // Android <12 uses the legacy permissions.
+      if (androidVersion < 31) {
+        permissions.addAll([
+          // Without the location, the scan does not find devices.
+          Permission.locationWhenInUse,
+          Permission.bluetooth,
+        ]);
+      } else {
+        // Android 12+ uses the newer Bluetooth permissions.
+        permissions.add(Permission.bluetoothScan);
+      }
+    } else if (Platform.isIOS) {
+      // iOS 13+ needs Bluetooth permission.
+      // On lower versions this permission is always granted,
+      // since it does not exist.
+      // The permission plugin handles this internally,
+      // so there is no need to check the version.
+      permissions.add(Permission.bluetooth);
+    } else {
+      throw UnsupportedError('Only Android and iOS are supported');
+    }
+
+    final statuses = await permissions.request();
 
     for (final status in statuses.values) {
       if (status != PermissionStatus.granted) {

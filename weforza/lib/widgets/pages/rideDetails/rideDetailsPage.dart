@@ -28,7 +28,7 @@ class RideDetailsPage extends StatefulWidget {
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
 
-  RideDetailsBloc bloc;
+  late RideDetailsBloc bloc;
 
   @override
   void didChangeDependencies() {
@@ -36,7 +36,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     bloc = RideDetailsBloc(
       memberRepo: InjectionContainer.get<MemberRepository>(),
       rideRepo: InjectionContainer.get<RideRepository>(),
-      ride: SelectedItemProvider.of(context).selectedRide.value
+      ride: SelectedItemProvider.of(context).selectedRide.value!
     );
     bloc.loadAttendeesIfNotLoaded();
   }
@@ -59,7 +59,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             padding: const EdgeInsets.only(bottom: 4),
             child: _buildAttendeesListAttendingCount(
                 context,
-                bloc.attendeesFuture.then((list)=> list.length),
+                bloc.attendeesFuture?.then((list)=> list.length),
                 ApplicationTheme.androidRideAttendeeListCounterTextStyle
             ),
           ),
@@ -127,7 +127,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                   child: CupertinoIconButton.fromAppTheme(
                       icon: Icons.more_vert,
                       onPressed: () async {
-                        final RideDetailsPageOptions option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
+                        final RideDetailsPageOptions? option = await showCupertinoModalPopup<RideDetailsPageOptions>(context: context, builder: (context){
                           return CupertinoActionSheet(
                             actions: [
                               CupertinoActionSheetAction(
@@ -147,6 +147,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           );
                         });
 
+                        if(option == null) return;
+
                         onSelectMenuOption(context, option);
                       }
                   ),
@@ -165,7 +167,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               child: Center(
                 child: _buildAttendeesListAttendingCount(
                     context,
-                    bloc.attendeesFuture.then((list)=> list.length),
+                    bloc.attendeesFuture?.then((list)=> list.length),
                     ApplicationTheme.iosRideAttendeeListCounterTextStyle),
               ),
             ),
@@ -178,7 +180,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     );
   }
 
-  Widget _buildAttendeesListAttendingCount(BuildContext context, Future<int> future, TextStyle textStyle){
+  Widget _buildAttendeesListAttendingCount(BuildContext context, Future<int>? future, TextStyle textStyle){
     return FutureBuilder<int>(
       future: future,
       builder: (context, snapshot){
@@ -215,11 +217,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
       //When its not null, a new future has been submitted.
       if(attendeeProvider.value != null){
-        //Also set reload for the rides, the counters need to refresh.
-        ReloadDataProvider.of(context).reloadRides.value = true;
-        bloc.attendeesFuture = attendeeProvider.value;
-        setState((){});
-        attendeeProvider.value = null;
+        final void Function() callback = (){
+          //Also set reload for the rides, the counters need to refresh.
+          ReloadDataProvider.of(context).reloadRides.value = true;
+          bloc.attendeesFuture = attendeeProvider.value!;
+          attendeeProvider.value = null;
+        };
+
+        setState(callback);
       }
     });
   }

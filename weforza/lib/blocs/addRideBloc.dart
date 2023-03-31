@@ -15,18 +15,18 @@ import 'package:weforza/repository/rideRepository.dart';
 ///This class represents the BLoC for AddRidePage.
 class AddRideBloc extends Bloc {
   AddRideBloc({
-    @required this.repository
-  }): assert(repository != null);
+    required this.repository
+  });
 
   ///The repository that will handle the submit.
   final RideRepository repository;
 
-  PageController pageController;
-  //12 months in a year 3000 years range either way.
-  final int calendarItemCount = 72000;
+  late PageController pageController;
+  //12 months in a year 300 years range either way.
+  final int calendarItemCount = 7200;
 
   //We start in the middle
-  int _currentPage = 36000;
+  int _currentPage = 3600;
 
   final StreamController<AddRidesOrError> _submitController = BehaviorSubject();
   Stream<AddRidesOrError> get submitStream => _submitController.stream;
@@ -35,22 +35,22 @@ class AddRideBloc extends Bloc {
   Stream<DateTime> get headerStream => _calendarHeaderController.stream;
 
   ///The date for the currently visible month in the calendar.
-  DateTime pageDate;
+  late DateTime pageDate;
 
   final Duration _pageDuration = Duration(milliseconds: 300);
   final Curve _pageCurve = Curves.easeInOut;
 
   //The current submit state is cached, so we can check if we can allow events to alter the selected dates.
-  AddRidesOrError _currentSubmitState;
+  late AddRidesOrError _currentSubmitState;
 
   ///The days in the month of [pageDate].
   int daysInMonth = 0;
 
   ///The already persistent rides.
-  HashSet<DateTime> _existingRides;
+  HashSet<DateTime>? _existingRides;
 
   ///This future holds the loading process for initializing [_existingRides].
-  Future<void> loadExistingRidesFuture;
+  Future<void>? loadExistingRidesFuture;
 
   ///The rides to add on a submit.
   HashSet<DateTime> _ridesToAdd = HashSet();
@@ -72,7 +72,7 @@ class AddRideBloc extends Bloc {
       }
 
       //This date is in the past OR there is a ride with this date.
-      if(isBeforeToday(date) || _existingRides.contains(date)){
+      if(isBeforeToday(date) || _existingRides!.contains(date)){
         return false;
       }
 
@@ -121,15 +121,13 @@ class AddRideBloc extends Bloc {
 
   ///Whether a day, has or had a ride planned beforehand.
   bool dayHasRidePlanned(DateTime date){
-    assert(date != null);
-    return _existingRides.contains(date) || _ridesToAdd.contains(date);
+    return _existingRides!.contains(date) || _ridesToAdd.contains(date);
   }
 
   ///Whether a ride that is now selected, is a new to-be-scheduled ride.
   ///Rides that were planned previously, but still have to happen aren't 'new' scheduled rides.
   bool dayIsNewlyScheduledRide(DateTime date){
-    assert(date != null);
-    return !_existingRides.contains(date) && _ridesToAdd.contains(date);
+    return !_existingRides!.contains(date) && _ridesToAdd.contains(date);
   }
 
   ///Initialize the calendar date.

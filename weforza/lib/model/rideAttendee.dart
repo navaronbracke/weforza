@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 
 ///This class represents an intermediary table that connects [Ride] with [Member].
 class RideAttendee {
-  RideAttendee(this.rideDate,this.attendeeId): assert(rideDate != null && attendeeId != null && attendeeId.isNotEmpty);
+  RideAttendee(this.rideDate,this.attendeeId): assert(attendeeId.isNotEmpty);
 
   ///The date of the ride that belongs to this record.
   final DateTime rideDate;
@@ -10,7 +10,6 @@ class RideAttendee {
   final String attendeeId;
 
   static RideAttendee of(Map<String,dynamic> values){
-    assert(values != null);
     return RideAttendee(DateTime.parse(values["date"]),values["attendee"]);
   }
 

@@ -4,12 +4,9 @@ import 'package:weforza/theme/appTheme.dart';
 
 class ScanResultMultiplePossibleOwnersListItem extends StatelessWidget {
   ScanResultMultiplePossibleOwnersListItem({
-    @required this.deviceName,
-    @required this.amountOfPossibleOwners
-  }): assert(
-    deviceName != null && deviceName.isNotEmpty &&
-        amountOfPossibleOwners != null && amountOfPossibleOwners > 1
-  );
+    required this.deviceName,
+    required this.amountOfPossibleOwners
+  }): assert(deviceName.isNotEmpty && amountOfPossibleOwners > 1);
 
 
   final String deviceName;

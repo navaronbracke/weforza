@@ -4,15 +4,12 @@ import 'package:weforza/widgets/common/memberNameAndAlias.dart';
 
 class UnresolvedOwnersListItem extends StatefulWidget {
   UnresolvedOwnersListItem({
-    @required this.isSelected,
-    @required this.onTap,
-    @required this.firstName,
-    @required this.lastName,
-    @required this.alias
-  }): assert(
-    isSelected != null && onTap != null && firstName != null
-        && lastName != null && alias != null
-  );
+    required this.isSelected,
+    required this.onTap,
+    required this.firstName,
+    required this.lastName,
+    required this.alias
+  });
 
   final bool Function() isSelected;
   final VoidCallback onTap;
@@ -26,9 +23,9 @@ class UnresolvedOwnersListItem extends StatefulWidget {
 
 class _UnresolvedOwnerListItemState extends State<UnresolvedOwnersListItem> {
 
-  Color itemDecorationBackgroundColor;
-  TextStyle firstNameStyle;
-  TextStyle lastNameStyle;
+  late Color itemDecorationBackgroundColor;
+  late TextStyle firstNameStyle;
+  late TextStyle lastNameStyle;
 
   @override
   void initState() {

@@ -3,17 +3,21 @@ import 'package:weforza/model/member.dart';
 
 class RideAttendeeFutureProvider extends InheritedWidget {
   RideAttendeeFutureProvider({
-    Key key,
-    @required Widget child,
-  }): assert(child != null), super(key: key, child: child);
+    Key? key,
+    required Widget child,
+  }): super(key: key, child: child);
 
   //This notifier holds the refreshed ride attendee future.
   //The initial load is managed by the RideDetailsPage bloc.
   //Subsequent refreshes are stored here.
-  final ValueNotifier<Future<List<Member>>> rideAttendeeFuture = ValueNotifier(null);
+  final ValueNotifier<Future<List<Member>>?> rideAttendeeFuture = ValueNotifier(null);
 
   static RideAttendeeFutureProvider of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<RideAttendeeFutureProvider>();
+    final provider = context.dependOnInheritedWidgetOfExactType<RideAttendeeFutureProvider>();
+
+    assert(provider != null, "There is no RideAttendeeFutureProvider in the Widget tree.");
+
+    return provider!;
   }
 
   @override

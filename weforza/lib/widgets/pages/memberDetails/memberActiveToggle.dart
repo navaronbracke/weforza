@@ -6,15 +6,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 /// This widget resembles the toggle switch for the 'active' state of a member.
 class MemberActiveToggle extends StatelessWidget {
   MemberActiveToggle({
-    @required this.label,
-    @required this.stream,
-    @required this.onChanged,
-    @required this.onErrorBuilder,
-    @required this.initialValue
-  }): assert(
-    label != null && label.isNotEmpty && onChanged != null
-        && onErrorBuilder != null && initialValue != null
-  );
+    required this.label,
+    required this.stream,
+    required this.onChanged,
+    required this.onErrorBuilder,
+    required this.initialValue
+  }): assert(label.isNotEmpty);
 
   final bool initialValue;
   final String label;
@@ -39,11 +36,11 @@ class MemberActiveToggle extends StatelessWidget {
 
               return PlatformAwareWidget(
                 android: () => Switch(
-                  value: snapshot.data,
+                  value: snapshot.data!,
                   onChanged: onChanged,
                 ),
                 ios: () => CupertinoSwitch(
-                  value: snapshot.data,
+                  value: snapshot.data!,
                   onChanged: onChanged,
                 ),
               );

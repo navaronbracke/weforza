@@ -8,18 +8,23 @@ import 'package:weforza/model/ride.dart';
 ///This InheritedWidget manages the selected items for Ride and Member.
 class SelectedItemProvider extends InheritedWidget {
   SelectedItemProvider({
-    Key key,
-    @required Widget child,
-  }) : assert(child != null), super(key: key, child: child);
+    Key? key,
+    required Widget child,
+  }): super(key: key, child: child);
 
-  final ValueNotifier<Ride> selectedRide = ValueNotifier(null);
-  final ValueNotifier<Member> selectedMember = ValueNotifier(null);
-  final ValueNotifier<Future<int>> selectedMemberAttendingCount = ValueNotifier(null);
-  final ValueNotifier<Device> selectedDevice = ValueNotifier(null);
-  final ValueNotifier<Future<File>> selectedMemberProfileImage = ValueNotifier(null);
+  final ValueNotifier<Ride?> selectedRide = ValueNotifier(null);
+  final ValueNotifier<Member?> selectedMember = ValueNotifier(null);
+  final ValueNotifier<Future<int>?> selectedMemberAttendingCount = ValueNotifier(null);
+  final ValueNotifier<Device?> selectedDevice = ValueNotifier(null);
+  final ValueNotifier<Future<File?>?> selectedMemberProfileImage = ValueNotifier(null);
 
-  static SelectedItemProvider of(BuildContext context)
-   => context.dependOnInheritedWidgetOfExactType<SelectedItemProvider>();
+  static SelectedItemProvider of(BuildContext context){
+    final provider = context.dependOnInheritedWidgetOfExactType<SelectedItemProvider>();
+
+    assert(provider != null, "There is no SelectedItemProvider in the Widget tree.");
+
+    return provider!;
+  }
 
   @override
   bool updateShouldNotify(SelectedItemProvider old)

@@ -3,17 +3,19 @@ import 'package:weforza/blocs/addRideBloc.dart';
 
 class AddRideBlocProvider extends InheritedWidget {
   const AddRideBlocProvider({
-    Key key,
-    @required this.bloc,
-    @required Widget child,
-  }) : assert(bloc != null),
-       assert(child != null),
-       super(key: key, child: child);
+    Key? key,
+    required this.bloc,
+    required Widget child,
+  }): super(key: key, child: child);
 
   final AddRideBloc bloc;
 
   static AddRideBlocProvider of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AddRideBlocProvider>();
+    final provider = context.dependOnInheritedWidgetOfExactType<AddRideBlocProvider>();
+
+    assert(provider != null, "There is no AddRideBlocProvider in the Widget tree.");
+
+    return provider!;
   }
 
   @override

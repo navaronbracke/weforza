@@ -24,14 +24,10 @@ abstract class IMemberDao {
   ///If [uuid] isn't null or empty it checks if there is a member with the values and a uuid that is different from [uuid].
   ///A member with the same values and uuid means it's the owner of said values.
   ///This would merely overwrite the old one with a copy of itself and is thus harmless.
-  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]);
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String? uuid]);
 
   ///Get the number of rides a [Member] with the given id attended.
   Future<int> getAttendingCountForAttendee(String uuid);
-
-  ///Get the member with the given UUID.
-  ///Returns null if it doesn't exist.
-  Future<Member> getMemberByUuid(String uuid);
 
   /// Set the active state for a given member to the new value.
   Future<void> setMemberActive(String uuid, bool value);
@@ -43,10 +39,7 @@ class MemberDao implements IMemberDao {
       this._database,
       this._memberStore,
       this._rideAttendeeStore,
-      this._deviceStore): assert(
-        _database != null && _memberStore != null && _rideAttendeeStore != null
-            && _deviceStore != null
-  );
+      this._deviceStore);
 
   MemberDao.withProvider(ApplicationDatabase provider): this(
     provider.getDatabase(),
@@ -66,9 +59,8 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> addMember(Member member) async  {
-    assert(member != null && member.uuid != null);
     ///The uuid is already used
-    if(await _memberStore.findFirst(_database,finder: Finder(filter: Filter.byKey(member.uuid)))!= null){
+    if(await _memberStore.findFirst(_database, finder: Finder(filter: Filter.byKey(member.uuid))) != null){
       throw Exception("The member's uuid: ${member.uuid} is already in use");
     }
     await _memberStore.record(member.uuid).add(_database, member.toMap());
@@ -76,7 +68,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> deleteMember(String uuid) async {
-    assert(uuid != null);
     //delete the ride attendee records, the member's devices and the member
     final memberFinder = Finder(filter: Filter.byKey(uuid));
     final memberRidesFinder = Finder(filter: Filter.equals("attendee", uuid));
@@ -110,7 +101,6 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<void> updateMember(Member member) async {
-    assert(member != null);
     final finder = Finder(
       filter: Filter.byKey(member.uuid),
     );
@@ -119,7 +109,7 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]) async {
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String? uuid]) async {
     final List<Filter> filters = [
       Filter.equals("firstname", firstname),
       Filter.equals("lastname", lastname),
@@ -135,19 +125,8 @@ class MemberDao implements IMemberDao {
   }
 
   @override
-  Future<int> getAttendingCountForAttendee(String uuid) async {
-    final finder = Finder(filter: Filter.equals("attendee", uuid));
-
-    final records = await _rideAttendeeStore.find(_database,finder: finder);
-
-    return records.length;
-  }
-
-  @override
-  Future<Member> getMemberByUuid(String uuid) async {
-    final record = await _memberStore.record(uuid).getSnapshot(_database);
-
-    return record == null ? null : Member.of(uuid, record.value);
+  Future<int> getAttendingCountForAttendee(String uuid) {
+    return _rideAttendeeStore.count(_database, filter: Filter.equals("attendee", uuid));
   }
 
   @override

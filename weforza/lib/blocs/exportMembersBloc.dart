@@ -14,9 +14,9 @@ import 'package:weforza/repository/exportMembersRepository.dart';
 
 class ExportMembersBloc extends Bloc {
   ExportMembersBloc({
-    @required this.exportMembersRepository,
-    @required this.fileHandler
-  }): assert(exportMembersRepository != null && fileHandler != null);
+    required this.exportMembersRepository,
+    required this.fileHandler
+  });
 
   final ExportMembersRepository exportMembersRepository;
   final IFileHandler fileHandler;
@@ -31,7 +31,7 @@ class ExportMembersBloc extends Bloc {
   final TextEditingController filenameController = TextEditingController();
 
   final int filenameMaxLength = 80;
-  String _filename;
+  String _filename = "";
 
   FileExtension _fileExtension = FileExtension.CSV;
 
@@ -43,10 +43,10 @@ class ExportMembersBloc extends Bloc {
   }
 
   ///Form Error message
-  String filenameError;
+  String? filenameError;
 
-  String validateFileName(
-      String filename,
+  String? validateFileName(
+      String? filename,
       String fileNameIsRequired,
       String isWhitespaceMessage,
       String filenameNameMaxLengthMessage,
@@ -82,7 +82,9 @@ class ExportMembersBloc extends Bloc {
         await _saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
         _streamController.add(ExportDataOrError.success());
       }
-    }).catchError((e) => _streamController.addError(e));
+    }).catchError((e){
+      _streamController.addError(e);
+    });
   }
 
   /// Save the given [ExportableMember]s to the given file,

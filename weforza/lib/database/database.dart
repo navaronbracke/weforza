@@ -27,8 +27,9 @@ class ApplicationDatabase {
   ///The data store for general application settings.
   final settingsStore = stringMapStoreFactory.store("settings");
 
-  //The internal instance of the database.
-  Database _database;
+  // The internal instance of the database.
+  // We can assume that it is created before it is used.
+  late Database _database;
 
   ///Get the database instance.
   Database getDatabase() => _database;
@@ -40,5 +41,5 @@ class ApplicationDatabase {
     _database = await databaseFactoryIo.openDatabase(dbPath);
   }
 
-  void dispose() async =>  await _database?.close();
+  void dispose() async =>  await _database.close();
 }

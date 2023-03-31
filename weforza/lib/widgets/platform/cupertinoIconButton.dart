@@ -4,23 +4,17 @@ import 'package:weforza/theme/appTheme.dart';
 ///This [Widget] represents a custom ios icon button.
 class CupertinoIconButton extends StatefulWidget {
   CupertinoIconButton({
-  @required this.icon,
-  @required this.onPressed,
-  @required this.onPressedColor,
-  @required this.idleColor,
+  required this.icon,
+  required this.onPressed,
+  required this.onPressedColor,
+  required this.idleColor,
   this.size = 28,
-  }): assert(
-    icon != null
-    && onPressed != null 
-    && size != null
-    && idleColor != null
-    && onPressedColor != null
-  );
+  }): assert(size > 0);
 
   CupertinoIconButton.fromAppTheme({
-    @required VoidCallback onPressed,
-    @required IconData icon,
-    double size 
+    required VoidCallback onPressed,
+    required IconData icon,
+    double? size
   }): this(
     idleColor: ApplicationTheme.primaryColor,
     onPressedColor: ApplicationTheme.accentColor,
@@ -51,12 +45,12 @@ class CupertinoIconButton extends StatefulWidget {
 class _CupertinoIconButtonState extends State<CupertinoIconButton> {
 
   ///The current background color.
-  Color _currentColor;
+  late Color _currentColor;
 
   @override
   void initState() {
-    _currentColor = widget.idleColor;
     super.initState();
+    _currentColor = widget.idleColor;
   }
 
   @override

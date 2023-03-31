@@ -7,8 +7,8 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesListDisabledItem extends StatelessWidget {
   MemberDevicesListDisabledItem({
-    @required this.device,
-  }): assert(device != null);
+    required this.device,
+  });
 
   final Device device;
 

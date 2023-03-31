@@ -18,10 +18,7 @@ class ExportRidesDao implements IExportRidesDao {
       this._database,
       this._memberStore,
       this._rideStore,
-      this._rideAttendeeStore): assert(_database != null
-      && _memberStore != null && _rideStore != null
-      && _rideAttendeeStore != null
-  );
+      this._rideAttendeeStore);
 
   ExportRidesDao.withProvider(ApplicationDatabase provider): this(
     provider.getDatabase(),
@@ -81,7 +78,7 @@ class ExportRidesDao implements IExportRidesDao {
     records.forEach((record){
       final RideAttendee attendee = RideAttendee.of(record.value);
       if(attendees.containsKey(attendee.rideDate)){
-        attendees[attendee.rideDate].add(attendee);
+        attendees[attendee.rideDate]!.add(attendee);
       }else{
         attendees[attendee.rideDate] = Set.from([attendee]);
       }
@@ -92,8 +89,8 @@ class ExportRidesDao implements IExportRidesDao {
     final List<ExportableRide> exports = [];
 
     rides.forEach((DateTime rideDate, Ride ride) {
-      final Iterable<ExportableRideAttendee> membersAttendingRide = attendees.containsKey(rideDate) ? attendees[rideDate].map((RideAttendee attendee){
-        final Member member = members[attendee.attendeeId];
+      final Iterable<ExportableRideAttendee> membersAttendingRide = attendees.containsKey(rideDate) ? attendees[rideDate]!.map((RideAttendee attendee){
+        final Member member = members[attendee.attendeeId]!;
         return ExportableRideAttendee(
           firstName: member.firstname,
           lastName: member.lastname,

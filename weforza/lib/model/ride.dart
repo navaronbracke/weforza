@@ -1,11 +1,12 @@
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 ///This class represents a Ride.
 class Ride {
-  Ride({ @required this.date }): assert(date != null);
+  Ride({
+    required this.date
+  });
 
   ///Date formatting patterns
   static final String longDatePattern = "EEEE d MMMM yyyy";
@@ -27,7 +28,6 @@ class Ride {
 
   ///Create a [Ride] of a Map
   static Ride of(DateTime date,Map<String,dynamic> values){
-    assert(date != null && values != null);
     return Ride(date: date);
   }
 

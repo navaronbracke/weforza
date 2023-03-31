@@ -26,7 +26,9 @@ class ExportRidesPage extends StatefulWidget {
 }
 
 class _ExportRidesPageState extends State<ExportRidesPage> {
-  _ExportRidesPageState({ @required this.bloc }): assert(bloc != null);
+  _ExportRidesPageState({
+    required this.bloc
+  });
 
   final ExportRidesBloc bloc;
   final GlobalKey<FormState> _formKey = GlobalKey();
@@ -66,7 +68,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
         if(snapshot.hasError){
           return GenericError(text: S.of(context).GenericError);
         }else{
-          if(snapshot.data.exporting){
+          if(snapshot.data!.exporting){
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -77,7 +79,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                 Text(S.of(context).ExportingRidesDescription),
               ],
             );
-          }else if(snapshot.data.success){
+          }else if(snapshot.data!.success){
             return LayoutBuilder(
               builder: (context,constraints){
                 final paintSize = constraints.biggest.shortestSide * .3;
@@ -120,7 +122,7 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                         initialData: false,
                         stream: bloc.fileNameExistsStream,
                         builder: (context, snapshot){
-                          return Text(snapshot.data ? S.of(context).FileExists : "");
+                          return Text(snapshot.data! ? S.of(context).FileExists : "");
                         },
                       ),
                     ),
@@ -128,7 +130,9 @@ class _ExportRidesPageState extends State<ExportRidesPage> {
                       android: () => ElevatedButton(
                         child: Text(S.of(context).Export),
                         onPressed: () async {
-                          if(_formKey.currentState.validate()){
+                          final formState = _formKey.currentState;
+
+                          if(formState != null && formState.validate()){
                             await bloc.exportRidesWithAttendees();
                           }
                         },

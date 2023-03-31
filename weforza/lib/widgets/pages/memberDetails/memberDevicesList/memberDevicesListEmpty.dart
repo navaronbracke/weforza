@@ -8,8 +8,8 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This widget is shown as replacement of a [Member]'s devices, if it has none.
 class MemberDevicesListEmpty extends StatelessWidget {
   MemberDevicesListEmpty({
-    @required this.onAddDevicePageButtonPressed
-  }): assert(onAddDevicePageButtonPressed != null);
+    required this.onAddDevicePageButtonPressed
+  });
 
   final void Function() onAddDevicePageButtonPressed;
 

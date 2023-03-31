@@ -7,30 +7,31 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ManualSelectionSubmit extends StatelessWidget {
   ManualSelectionSubmit({
-    @required this.onSave,
-    @required this.isSaving
-  }): assert(onSave != null && isSaving != null);
+    required this.onSave,
+    required this.isSaving
+  });
 
   final void Function() onSave;
-  final ValueNotifier<bool> isSaving;
+  final Stream<bool> isSaving;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ValueListenableBuilder<bool>(
-        valueListenable: isSaving,
-        builder: (context, isSaving, child){
+      child: StreamBuilder<bool>(
+        stream: isSaving,
+        initialData: false,
+        builder: (context, snapshot){
           return PlatformAwareWidget(
             android: () => Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: isSaving ? PlatformAwareLoadingIndicator() : TextButton(
+              child: snapshot.data! ? PlatformAwareLoadingIndicator() : TextButton(
                 child: Text(S.of(context).Save),
                 onPressed: onSave,
               ),
             ),
             ios: () => Padding(
               padding: const EdgeInsets.only(bottom: 20, top: 10),
-              child: isSaving ? PlatformAwareLoadingIndicator() : CupertinoButton(
+              child: snapshot.data! ? PlatformAwareLoadingIndicator() : CupertinoButton(
                 child: Text(
                     S.of(context).Save,
                     style: TextStyle(color: ApplicationTheme.primaryColor)

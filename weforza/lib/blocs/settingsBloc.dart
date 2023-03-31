@@ -7,14 +7,14 @@ import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
 class SettingsBloc extends Bloc {
-  SettingsBloc(this._repository): assert(_repository != null);
+  SettingsBloc(this._repository);
 
   final SettingsRepository _repository;
 
   BehaviorSubject<bool> _submitController = BehaviorSubject();
   Stream<bool> get submitStream => _submitController.stream;
 
-  double _scanDuration;
+  late double _scanDuration;
 
   double get scanDuration => _scanDuration.floorToDouble();
 
@@ -31,8 +31,9 @@ class SettingsBloc extends Bloc {
   }
 
   void saveSettings() async {
+    final isSubmitting = _submitController.value!;
     // Still submitting.
-    if(_submitController.value){
+    if(isSubmitting){
       return;
     }
 
@@ -42,7 +43,9 @@ class SettingsBloc extends Bloc {
         scanDuration: _scanDuration.floor(),
       )).then((_){
         _submitController.add(false);
-      }).catchError(_submitController.addError);
+      }).catchError((e) {
+        _submitController.addError(e);
+      });
     });
   }
 

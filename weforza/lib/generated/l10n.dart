@@ -31,6 +31,13 @@ class S {
   }
 
   static S of(BuildContext context) {
+    final instance = S.maybeOf(context);
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    return instance!;
+  }
+
+  static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
 
@@ -844,10 +851,10 @@ class S {
     );
   }
 
-  /// `firstname,lastname,alias,devices`
+  /// `firstname,lastname,alias,active,devices`
   String get ExportMembersCsvHeader {
     return Intl.message(
-      'firstname,lastname,alias,devices',
+      'firstname,lastname,alias,active,devices',
       name: 'ExportMembersCsvHeader',
       desc: '',
       args: [],
@@ -1064,10 +1071,10 @@ class S {
     );
   }
 
-  /// `Clear Calendar`
+  /// `Clear`
   String get SettingsResetRideCalendarDialogConfirm {
     return Intl.message(
-      'Clear Calendar',
+      'Clear',
       name: 'SettingsResetRideCalendarDialogConfirm',
       desc: '',
       args: [],
@@ -1303,11 +1310,9 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   bool shouldReload(AppLocalizationDelegate old) => false;
 
   bool _isSupported(Locale locale) {
-    if (locale != null) {
-      for (var supportedLocale in supportedLocales) {
-        if (supportedLocale.languageCode == locale.languageCode) {
-          return true;
-        }
+    for (var supportedLocale in supportedLocales) {
+      if (supportedLocale.languageCode == locale.languageCode) {
+        return true;
       }
     }
     return false;

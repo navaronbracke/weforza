@@ -19,7 +19,7 @@ class AddDevicePage extends StatefulWidget {
 
 class _AddDevicePageState extends State<AddDevicePage> {
 
-  AddDeviceBloc bloc;
+  late AddDeviceBloc bloc;
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -28,7 +28,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
     super.didChangeDependencies();
     bloc = AddDeviceBloc(
       repository: InjectionContainer.get<DeviceRepository>(),
-      ownerId: SelectedItemProvider.of(context).selectedMember.value.uuid
+      ownerId: SelectedItemProvider.of(context).selectedMember.value!.uuid
     );
   }
 
@@ -144,7 +144,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
         isSubmittingStream: bloc.submitStream,
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
-          if(_formKey.currentState.validate()){
+          final formState = _formKey.currentState;
+
+          if(formState != null && formState.validate()){
             await bloc.addDevice(S.of(context).DeviceExists, S.of(context).GenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
               Navigator.of(context).pop();

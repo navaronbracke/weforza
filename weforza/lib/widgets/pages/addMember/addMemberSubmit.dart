@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -8,9 +8,9 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class AddMemberSubmit extends StatelessWidget {
   AddMemberSubmit({
-    @required this.stream,
-    @required this.onPressed
-  }): assert(stream != null && onPressed != null);
+    required this.stream,
+    required this.onPressed
+  });
 
   final Stream<SaveMemberOrError> stream;
   final VoidCallback onPressed;
@@ -40,10 +40,10 @@ class AddMemberSubmit extends StatelessWidget {
         if(snapshot.hasError){
           return Text(S.of(context).GenericError);
         }else{
-          if(snapshot.data.saving){
+          if(snapshot.data!.saving){
             return PlatformAwareLoadingIndicator();
           }else {
-            if(snapshot.data.memberExists){
+            if(snapshot.data!.memberExists){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

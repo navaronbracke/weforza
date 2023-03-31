@@ -6,9 +6,9 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SettingsSubmit extends StatelessWidget {
   SettingsSubmit({
-    @required this.onSubmit,
-    @required this.submitStream,
-  }): assert(onSubmit != null && submitStream != null);
+    required this.onSubmit,
+    required this.submitStream,
+  });
 
   final Stream<bool> submitStream;
   final VoidCallback onSubmit;
@@ -22,7 +22,7 @@ class SettingsSubmit extends StatelessWidget {
         if(snapshot.hasError){
           return SizedBox.shrink();
         }else{
-          return snapshot.data ? Padding(
+          return snapshot.data! ? Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: Center(
                 child: PlatformAwareWidget(

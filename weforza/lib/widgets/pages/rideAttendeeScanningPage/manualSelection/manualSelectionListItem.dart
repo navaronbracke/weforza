@@ -9,22 +9,18 @@ import 'package:weforza/widgets/custom/profileImage/asyncProfileImage.dart';
 
 class ManualSelectionListItem extends StatefulWidget {
   ManualSelectionListItem({
-    @required this.isSelected,
-    @required this.onTap,
-    @required this.profileImageFuture,
-    @required this.firstName,
-    @required this.lastName,
-    @required this.alias,
-    @required this.personInitials,
-  }): assert(
-    isSelected != null && profileImageFuture != null && personInitials != null
-        && personInitials.isNotEmpty && onTap != null && firstName != null
-        && lastName != null && alias != null
-  );
+    required this.isSelected,
+    required this.onTap,
+    required this.profileImageFuture,
+    required this.firstName,
+    required this.lastName,
+    required this.alias,
+    required this.personInitials,
+  });
 
   final bool Function() isSelected;
   final VoidCallback onTap;
-  final Future<File> profileImageFuture;
+  final Future<File?> profileImageFuture;
   final String firstName;
   final String lastName;
   final String alias;
@@ -36,9 +32,9 @@ class ManualSelectionListItem extends StatefulWidget {
 
 class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
 
-  Color itemDecorationBackgroundColor;
-  TextStyle firstNameStyle;
-  TextStyle lastNameStyle;
+  late Color itemDecorationBackgroundColor;
+  late TextStyle firstNameStyle;
+  late TextStyle lastNameStyle;
 
   @override
   void initState() {

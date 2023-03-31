@@ -8,14 +8,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This dialog handles the UI for a delete item confirmation.
 class DeleteItemDialog extends StatefulWidget {
   DeleteItemDialog({
-    @required this.onDelete,
-    @required this.title,
-    @required this.description,
-    @required this.errorDescription,
+    required this.onDelete,
+    required this.title,
+    required this.description,
+    required this.errorDescription,
   }): assert(
-    onDelete != null && title != null && title.isNotEmpty
-        && description != null && description.isNotEmpty
-        && errorDescription != null && errorDescription.isNotEmpty
+    title.isNotEmpty && description.isNotEmpty && errorDescription.isNotEmpty
   );
 
   //This lambda generates the delete computation.
@@ -30,7 +28,7 @@ class DeleteItemDialog extends StatefulWidget {
 
 class _DeleteItemDialogState extends State<DeleteItemDialog> {
 
-  Future<void> deleteItemFuture;
+  Future<void>? deleteItemFuture;
 
   @override
   Widget build(BuildContext context){
@@ -75,26 +73,24 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(S.of(context).Cancel.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(S.of(context).Cancel.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(S.of(context).Delete.toUpperCase()),
+              style: TextButton.styleFrom(
+                primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
-              TextButton(
-                child: Text(S.of(context).Delete.toUpperCase()),
-                style: TextButton.styleFrom(
-                  primary: ApplicationTheme.deleteItemButtonTextColor,
-                ),
-                onPressed: () => _onConfirmDeletion(),
-              ),
-            ],
-          ),
+              onPressed: () => _onConfirmDeletion(),
+            ),
+          ],
         ),
       ],
     );
+
     return _buildAndroidDialog(content);
   }
 
@@ -128,16 +124,13 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(S.of(context).Ok.toUpperCase()),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(S.of(context).Ok.toUpperCase()),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ),
       ],
     );
@@ -165,10 +158,14 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(
-            width: 280,//280 is the minimum for a material Dialog
-            height: 200,
-            child: content,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return SizedBox(
+                width: constraints.biggest.width,
+                height: 200,
+                child: content,
+              );
+            },
           ),
         ],
       ),
@@ -347,23 +344,29 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
   Widget _buildIosDialog(Widget content){
     return Center(
       child: CupertinoPopupSurface(
-      isSurfacePainted: true,
-      child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-            SizedBox(
-              width: 270.0,
-              height: 200,
-              child: content,
-            ),
-          ],
-        ),
+        isSurfacePainted: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return SizedBox(
+                  width: constraints.biggest.width,
+                  height: 200,
+                  child: content,
+                );
+              },
+          ),
+      ]),
       ),
     );
   }
 
   void _onConfirmDeletion() {
-    deleteItemFuture = widget.onDelete();
-    setState(() {});
+    final void Function() callback = (){
+      deleteItemFuture = widget.onDelete();
+    };
+
+    setState(callback);
   }
 }

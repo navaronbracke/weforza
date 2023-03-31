@@ -1,11 +1,10 @@
-import 'package:meta/meta.dart';
 
 /// This class is used to wrap the save state for adding or editing a Member.
 class SaveMemberOrError {
   SaveMemberOrError({
-    @required this.saving,
-    @required this.memberExists,
-  }): assert(saving != null && memberExists != null);
+    required this.saving,
+    required this.memberExists,
+  });
 
   SaveMemberOrError.idle(): this(saving: false, memberExists: false);
 

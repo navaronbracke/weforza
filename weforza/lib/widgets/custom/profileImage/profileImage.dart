@@ -10,32 +10,29 @@ class ProfileImage extends StatelessWidget {
   ProfileImage({
     this.image,
     this.size = 75,
-    @required this.icon,
+    required this.icon,
     this.iconColor,
     this.backgroundColor,
     this.personInitials,
-  }): assert(
-    icon != null && iconColor != null &&
-        backgroundColor != null && size != null && size > 0
-  );
+  }): assert(size > 0);
 
   ///The image to show.
-  final File image;
+  final File? image;
   ///The icon to use as placeholder
   final IconData icon;
   ///The width and height of the displayed [Image].
   final double size;
   ///The background color for the placeholder icon's background.
-  final Color backgroundColor;
+  final Color? backgroundColor;
   ///The icon color for the placeholder icon.
-  final Color iconColor;
+  final Color? iconColor;
 
-  final String personInitials;
+  final String? personInitials;
 
-  Color _getBackgroundColor(){
-    int index = personInitials.codeUnitAt(0);
-    if(personInitials.length == 2){
-      index += personInitials.codeUnitAt(1);
+  Color _getBackgroundColor(String initials){
+    int index = initials.codeUnitAt(0);
+    if(initials.length == 2){
+      index += initials.codeUnitAt(1);
     }
 
     return Colors.primaries[index % Colors.primaries.length];
@@ -44,7 +41,7 @@ class ProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(image == null){
-      if(personInitials == null || personInitials.isEmpty){
+      if(personInitials == null || personInitials!.isEmpty){
         return Container(
           height: size,
           width: size,
@@ -65,27 +62,28 @@ class ProfileImage extends StatelessWidget {
           height: size,
           width: size,
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _getBackgroundColor(),
+            shape: BoxShape.circle,
+            color: _getBackgroundColor(personInitials!),
           ),
           child: Center(
             child: Text(
-                personInitials.toUpperCase(),
+                personInitials!.toUpperCase(),
                 style: ApplicationTheme.personInitialsTextStyle.copyWith(
-                    fontSize: .5 * size
+                  fontSize: .5 * size,
                 ),
             ),
           ),
         );
       }
     }
+
     return ClipOval(
-        child: Image.file(
-            image,
-            width: size,
-            height: size,
-            fit: BoxFit.cover,
-        ),
+      child: Image.file(
+        image!,
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }

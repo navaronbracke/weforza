@@ -13,10 +13,10 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class MemberDevicesListItem extends StatefulWidget {
   MemberDevicesListItem({
-    @required this.device,
-    @required this.onDelete,
-    @required this.index,
-  }): assert(device != null && onDelete != null && index != null);
+    required this.device,
+    required this.onDelete,
+    required this.index,
+  });
 
   //Initial value from the list builder
   final Device device;
@@ -29,7 +29,7 @@ class MemberDevicesListItem extends StatefulWidget {
 
 class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
   //Device field that can be updated when the device is edited.
-  Device device;
+  late Device device;
 
   @override
   void initState(){
@@ -42,7 +42,6 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
   Widget build(BuildContext context) => PlatformAwareWidget(
     android: () => GestureDetector(
       onLongPress: () => showDialog(
-          barrierDismissible: false,
           context: context,
           builder: (_) => DeleteItemDialog(
             title: S.of(context).DeleteDeviceTitle,

@@ -1,13 +1,12 @@
 
 import 'dart:ui';
-import 'package:flutter/foundation.dart';
 
 ///This class wraps a Bluetooth device's name and id.
 class BluetoothPeripheral {
   BluetoothPeripheral({
-    @required this.id,
-    @required this.deviceName,
-  }): assert(id != null && id.isNotEmpty);
+    required this.id,
+    required this.deviceName,
+  }): assert(id.isNotEmpty);
 
   final String id;
   final String deviceName;

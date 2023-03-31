@@ -44,6 +44,7 @@
   "MemberDetailsNoDevices": "This member has no devices yet",
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
+  "MemberDetailsActiveLabel": "Active",
 
   "DevicesListNoDevices": "No devices to show",
   "DeviceNameLabel": "Device Name",

@@ -44,6 +44,7 @@
   "MemberDetailsNoDevices": "Dit lid heeft nog geen toestellen",
   "MemberDetailsLoadDevicesError": "Kon toestellen niet laden",
   "MemberDetailsLoadPictureError": "Kon profielfoto niet laden",
+  "MemberDetailsActiveLabel": "Actief",
 
   "DevicesListNoDevices": "Geen toestellen om te tonen",
   "DeviceNameLabel": "Naam Toestel",

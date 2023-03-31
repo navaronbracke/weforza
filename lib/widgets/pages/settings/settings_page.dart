@@ -162,21 +162,9 @@ class SettingsPageState extends ConsumerState<SettingsPage>
             ],
           ),
         ),
-        resetRideCalendarButton: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 56, 24, 0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const ResetRideCalendarButton(),
-              Text(
-                translator.ResetRideCalendarDescription,
-                style: textTheme.bodySmall?.copyWith(
-                  fontStyle: FontStyle.italic,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+        resetRideCalendarButton: const Padding(
+          padding: EdgeInsets.fromLTRB(24, 56, 24, 0),
+          child: Center(child: ResetRideCalendarButton()),
         ),
         scanDurationOption: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
@@ -320,7 +308,6 @@ class SettingsPageState extends ConsumerState<SettingsPage>
           padding: const EdgeInsets.symmetric(vertical: 32),
           child: CupertinoFormSection.insetGrouped(
             header: Text(translator.RideCalendar.toUpperCase()),
-            footer: Text(translator.ResetRideCalendarDescription),
             children: const [
               CupertinoFormRow(
                 padding: EdgeInsetsDirectional.only(

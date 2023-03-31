@@ -48,6 +48,7 @@
 	"deviceUnknown": "Unknown",
 	"deviceWatch": "Watch",
 	"devices": "Devices",
+	"directory": "Folder",
 	"directoryDoesNotExist": "This folder does not exist",
 	"directoryIsProtected": "This folder is protected. Please pick a different folder.",
 	"directoryRequired": "A folder is required",

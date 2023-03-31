@@ -49,6 +49,7 @@
 	"deviceWatch": "Watch",
 	"devices": "Devices",
 	"directoryDoesNotExist": "This folder does not exist",
+	"directoryIsProtected": "This folder is protected. Please pick a different folder.",
 	"directoryRequired": "A folder is required",
 	"disallowedWordExists": "This disallowed word already exists",
 	"disallowedWordMaxLength": "A disallowed word can't be longer than {maxLength} characters",

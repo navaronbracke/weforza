@@ -2,7 +2,7 @@ import 'package:uuid/uuid.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_model.dart';
-import 'package:weforza/repository/member_repository.dart';
+import 'package:weforza/repository/rider_repository.dart';
 
 /// This class represents the delegate for the rider form.
 class RiderFormDelegate extends AsyncComputationDelegate<void> {
@@ -10,7 +10,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
     required this.repository,
   });
 
-  final MemberRepository repository;
+  final RiderRepository repository;
 
   final _uuidGenerator = const Uuid();
 
@@ -35,7 +35,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
     );
 
     try {
-      await repository.addMember(rider);
+      await repository.addRider(rider);
 
       if (mounted) {
         setDone(null);
@@ -74,7 +74,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
         uuid: uuid,
       );
 
-      await repository.updateMember(updatedRider);
+      await repository.updateRider(updatedRider);
 
       if (mounted) {
         setDone(null);

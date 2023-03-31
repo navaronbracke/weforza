@@ -17,8 +17,8 @@ import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
-import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/repository/rider_repository.dart';
 
 /// This class represents the delegate
 /// that manages the attendants for a given ride.
@@ -43,8 +43,8 @@ class RideAttendeeScanningDelegate {
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
 
-  /// The repository that loads the active members.
-  final MemberRepository memberRepository;
+  /// The repository that loads the active riders.
+  final RiderRepository memberRepository;
 
   /// The handler that is called
   /// when the delegate found a new `device` scan result.
@@ -242,7 +242,7 @@ class RideAttendeeScanningDelegate {
 
   /// Load the active members and their devices.
   Future<void> _loadActiveMembersWithDevices() async {
-    final activeMembers = await memberRepository.getMembers(
+    final activeMembers = await memberRepository.getRiders(
       RiderFilterOption.active,
     );
 

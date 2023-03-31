@@ -107,7 +107,7 @@ class WeforzaAlertDialog extends StatelessWidget {
     BuildContext context,
     TargetPlatform platform,
   ) {
-    final label = S.of(context).Cancel;
+    final label = S.of(context).cancel;
 
     switch (platform) {
       case TargetPlatform.android:
@@ -239,7 +239,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
     BuildContext context,
     TargetPlatform platform,
   ) {
-    final label = S.of(context).Ok;
+    final label = S.of(context).ok;
 
     switch (platform) {
       case TargetPlatform.android:

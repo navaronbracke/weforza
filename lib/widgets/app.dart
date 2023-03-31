@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/home_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -24,26 +23,17 @@ class WeForzaApp extends StatelessWidget {
     return PlatformAwareWidget(
       android: (_) => MaterialApp(
         title: _appName,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
+        supportedLocales: S.supportedLocales,
         theme: AppTheme.androidTheme,
         home: const HomePage(),
       ),
-      ios: (_) => CupertinoApp(
+      ios: (_) => const CupertinoApp(
         title: _appName,
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
+        localizationsDelegates: S.localizationsDelegates,
+        supportedLocales: S.supportedLocales,
         theme: AppTheme.iosTheme,
-        home: const HomePage(),
+        home: HomePage(),
       ),
     );
   }

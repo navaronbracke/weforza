@@ -46,7 +46,7 @@ class RiderDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(translator.Details),
+        title: Text(translator.details),
         actions: <Widget>[
           Consumer(
             builder: (context, ref, child) {
@@ -89,7 +89,7 @@ class RiderDetailsPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8),
-                child: Text(translator.Details),
+                child: Text(translator.details),
               ),
             ),
             Row(

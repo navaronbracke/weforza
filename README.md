@@ -1,10 +1,16 @@
 # WeForza App
 
-### Translation setup
+### Translations
 
-This project uses [flutter i18n](https://plugins.jetbrains.com/plugin/10128-flutter-i18n) for generating i18n-related boilerplate code.
+The application uses `flutter gen-l10n` to generate the translations.
 
-Installation of the plugin is thus required.
+To generate the translations, run `flutter gen-l10n`.
+
+During hot reload the tool will regenerate translations
+for arb files that were originally passed to the build input.
+If a new locale is added, a [full restart is required](https://github.com/flutter/flutter/issues/58183).
+
+See also: https://docs.flutter.dev/development/accessibility-and-localization/internationalization
 
 ### IOS on device testing
 

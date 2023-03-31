@@ -12,8 +12,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
   ExportDelegate({
     required this.fileHandler,
-    required String initialFileName,
-  }) : fileNameController = TextEditingController(text: initialFileName);
+  }) : fileNameController = TextEditingController();
 
   /// The controller that keeps track of the selected file format.
   ///

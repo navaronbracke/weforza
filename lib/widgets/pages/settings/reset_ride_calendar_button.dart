@@ -26,7 +26,7 @@ class ResetRideCalendarButton extends ConsumerWidget {
         return ElevatedButton(
           style: styles.elevatedButtonStyle,
           onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
-          child: Text(S.of(context).ResetRideCalendar),
+          child: Text(S.of(context).resetRideCalendar),
         );
       },
       ios: (context) => CupertinoButton(
@@ -34,10 +34,8 @@ class ResetRideCalendarButton extends ConsumerWidget {
         padding: EdgeInsets.zero,
         onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
         child: Text(
-          S.of(context).ResetRideCalendar,
-          style: enabled
-              ? const TextStyle(color: CupertinoColors.destructiveRed)
-              : null,
+          S.of(context).resetRideCalendar,
+          style: enabled ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
         ),
       ),
     );

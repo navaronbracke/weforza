@@ -37,7 +37,7 @@ class GenericError extends StatelessWidget {
     String effectiveMessage = message ?? '';
 
     if (effectiveMessage.isEmpty) {
-      effectiveMessage = S.of(context).GenericError;
+      effectiveMessage = S.of(context).genericError;
     }
 
     return Column(
@@ -139,7 +139,7 @@ class GenericErrorWithBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final goBackLabel = S.of(context).GoBack;
+    final goBackLabel = S.of(context).goBack;
 
     return GenericError(
       actionButton: PlatformAwareWidget(

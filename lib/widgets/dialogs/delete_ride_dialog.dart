@@ -19,8 +19,8 @@ class _DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
     final translator = S.of(context);
 
     return DeleteItemDialog(
-      description: translator.DeleteRideDescription,
-      errorDescription: translator.DeleteRideErrorDescription,
+      description: translator.deleteRideDescription,
+      errorDescription: translator.deleteRideErrorDescription,
       future: future,
       onDeletePressed: () {
         final notifier = ref.read(selectedRideProvider.notifier);
@@ -38,8 +38,8 @@ class _DeleteRideDialogState extends ConsumerState<DeleteRideDialog> {
 
         setState(() {});
       },
-      pendingDescription: translator.DeleteRidePendingDescription,
-      title: translator.DeleteRide,
+      pendingDescription: translator.deleteRidePendingDescription,
+      title: translator.deleteRide,
     );
   }
 }

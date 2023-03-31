@@ -42,7 +42,7 @@ class _GenericScanErrorBase extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
             child: Text(
-              errorMessage ?? S.of(context).GenericError,
+              errorMessage ?? S.of(context).genericError,
               textAlign: TextAlign.center,
               softWrap: true,
             ),
@@ -79,7 +79,7 @@ class BluetoothDisabledError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
-      errorMessage: translator.ScanAbortedBluetoothDisabled,
+      errorMessage: translator.scanAbortedBluetoothDisabled,
       icon: const PlatformAwareIcon(
         androidIcon: Icons.bluetooth_disabled,
         iosIcon: Icons.bluetooth_disabled,
@@ -87,21 +87,21 @@ class BluetoothDisabledError extends StatelessWidget {
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
           onPressed: AppSettings.openBluetoothSettings,
-          child: Text(translator.GoToSettings),
+          child: Text(translator.goToSettings),
         ),
         ios: (_) => CupertinoButton.filled(
           onPressed: AppSettings.openBluetoothSettings,
-          child: Text(translator.GoToSettings),
+          child: Text(translator.goToSettings),
         ),
       ),
       secondaryButton: PlatformAwareWidget(
         android: (_) => TextButton(
           onPressed: onRetry,
-          child: Text(translator.RetryScan),
+          child: Text(translator.retryScan),
         ),
         ios: (_) => CupertinoButton(
           onPressed: onRetry,
-          child: Text(translator.RetryScan),
+          child: Text(translator.retryScan),
         ),
       ),
     );
@@ -123,11 +123,11 @@ class GenericScanError extends StatelessWidget {
       ),
       primaryButton: PlatformAwareWidget(
         android: (context) => ElevatedButton(
-          child: Text(translator.GoBackToDetailPage),
+          child: Text(translator.goBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
         ios: (context) => CupertinoButton.filled(
-          child: Text(translator.GoBackToDetailPage),
+          child: Text(translator.goBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -146,7 +146,7 @@ class PermissionDeniedError extends StatelessWidget {
     final translator = S.of(context);
 
     return _GenericScanErrorBase(
-      errorMessage: translator.ScanAbortedPermissionDenied,
+      errorMessage: translator.scanAbortedPermissionDenied,
       icon: const PlatformAwareIcon(
         androidIcon: Icons.warning,
         iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
@@ -154,20 +154,20 @@ class PermissionDeniedError extends StatelessWidget {
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
           onPressed: AppSettings.openAppSettings,
-          child: Text(translator.GoToSettings),
+          child: Text(translator.goToSettings),
         ),
         ios: (_) => CupertinoButton.filled(
           onPressed: AppSettings.openAppSettings,
-          child: Text(translator.GoToSettings),
+          child: Text(translator.goToSettings),
         ),
       ),
       secondaryButton: PlatformAwareWidget(
         android: (context) => TextButton(
-          child: Text(translator.GoBackToDetailPage),
+          child: Text(translator.goBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
         ios: (context) => CupertinoButton(
-          child: Text(translator.GoBackToDetailPage),
+          child: Text(translator.goBackToDetailPage),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

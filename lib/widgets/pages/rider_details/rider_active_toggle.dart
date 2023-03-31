@@ -13,7 +13,7 @@ class RiderActiveToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(S.of(context).Active),
+        Text(S.of(context).active),
         Padding(
           padding: const EdgeInsets.only(left: 4),
           child: Consumer(

@@ -35,7 +35,7 @@ class RiderDevicesListEmpty extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                 child: Text(
-                  translator.RiderNoDevices,
+                  translator.riderNoDevices,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -48,7 +48,7 @@ class RiderDevicesListEmpty extends StatelessWidget {
 
                         onAddDevicePressed(context, selectedRider!.uuid);
                       },
-                      child: Text(translator.AddDevice),
+                      child: Text(translator.addDevice),
                     ),
                     ios: (context) => CupertinoButton.filled(
                       onPressed: () {
@@ -56,7 +56,7 @@ class RiderDevicesListEmpty extends StatelessWidget {
 
                         onAddDevicePressed(context, selectedRider!.uuid);
                       },
-                      child: Text(translator.AddDevice),
+                      child: Text(translator.addDevice),
                     ),
                   );
                 },

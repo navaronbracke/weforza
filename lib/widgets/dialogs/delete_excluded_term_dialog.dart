@@ -23,7 +23,7 @@ class DeleteExcludedTermDialog extends StatelessWidget {
     // The translated value has one delimiter,
     // which is used to split off the value for the term.
     // That value is put in bold text, while the rest is not.
-    final description = translator.DeleteDisallowedWordDescription.split(
+    final description = translator.deleteDisallowedWordDescription.split(
       splitDelimiter,
     );
 
@@ -33,7 +33,7 @@ class DeleteExcludedTermDialog extends StatelessWidget {
     );
 
     return WeforzaAlertDialog.defaultButtons(
-      confirmButtonLabel: translator.Delete,
+      confirmButtonLabel: translator.delete,
       isDestructive: true,
       onConfirmPressed: () => Navigator.of(context).pop(true),
       description: Text.rich(
@@ -48,7 +48,7 @@ class DeleteExcludedTermDialog extends StatelessWidget {
           ],
         ),
       ),
-      title: translator.DeleteDisallowedWord,
+      title: translator.deleteDisallowedWord,
     );
   }
 }

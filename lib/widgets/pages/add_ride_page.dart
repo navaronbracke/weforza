@@ -40,7 +40,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
             if (snapshot.hasError) {
               return Center(
                 child: GenericErrorWithBackButton(
-                  message: S.of(context).AddRideCalendarGenericErrorMessage,
+                  message: S.of(context).addRideCalendarGenericErrorMessage,
                 ),
               );
             }
@@ -103,7 +103,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
     return PlatformAwareWidget(
       android: (_) => Scaffold(
         appBar: AppBar(
-          title: Text(S.of(context).NewRide),
+          title: Text(S.of(context).newRide),
           actions: [
             _buildClearSelectionButton(
               button: IconButton(
@@ -117,7 +117,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
       ),
       ios: (_) => CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).NewRide),
+          middle: Text(S.of(context).newRide),
           transitionBetweenRoutes: false,
           trailing: _buildClearSelectionButton(
             button: CupertinoIconButton(
@@ -177,11 +177,11 @@ class _AddRideSubmitButton extends StatelessWidget {
           return PlatformAwareWidget(
             android: (_) => ElevatedButton(
               onPressed: hasSelection ? onPressed : null,
-              child: Text(translator.AddSelection),
+              child: Text(translator.addSelection),
             ),
             ios: (_) => CupertinoButton.filled(
               onPressed: hasSelection ? onPressed : null,
-              child: Text(translator.AddSelection),
+              child: Text(translator.addSelection),
             ),
           );
         },
@@ -225,7 +225,7 @@ class _AddRideSubmitButton extends StatelessWidget {
           data: (_) => _buildButton(showButton: false),
           error: (error, stackTrace) => _buildButton(
             showButton: true,
-            errorMessage: S.of(context).GenericError,
+            errorMessage: S.of(context).genericError,
           ),
           loading: () => _buildButton(showButton: false),
         );

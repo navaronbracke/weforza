@@ -19,8 +19,7 @@ class ManualSelectionSaveButton extends StatefulWidget {
   final void Function() onPressed;
 
   @override
-  State<ManualSelectionSaveButton> createState() =>
-      _ManualSelectionSaveButtonState();
+  State<ManualSelectionSaveButton> createState() => _ManualSelectionSaveButtonState();
 }
 
 class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
@@ -40,7 +39,7 @@ class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
         if (snapshot.connectionState == ConnectionState.none) {
           return _SaveButton(
             onPressed: _onSaveButtonPressed,
-            text: translator.Save,
+            text: translator.save,
           );
         }
 
@@ -59,7 +58,7 @@ class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
           if (snapshot.hasError) {
             return _SaveButton(
               onPressed: _onSaveButtonPressed,
-              text: translator.TryAgain,
+              text: translator.tryAgain,
             );
           }
 

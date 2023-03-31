@@ -120,7 +120,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
               onChanged: _filtersController.onSearchQueryChanged,
               decoration: InputDecoration(
                 suffixIcon: const Icon(Icons.search),
-                labelText: translator.SearchRiders,
+                labelText: translator.searchRiders,
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                 floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -131,7 +131,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
               child: CupertinoSearchTextField(
                 suffixIcon: const Icon(CupertinoIcons.search),
                 onChanged: _filtersController.onSearchQueryChanged,
-                placeholder: translator.SearchRiders,
+                placeholder: translator.searchRiders,
               ),
             ),
           ),

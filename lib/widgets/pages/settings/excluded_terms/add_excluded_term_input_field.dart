@@ -62,7 +62,7 @@ class AddExcludedTermInputField extends StatelessWidget {
       ),
       textFieldKey: formKey,
       validator: (value) => delegate.validateTerm(value, translator),
-      placeholder: translator.AddDisallowedWord,
+      placeholder: translator.addDisallowedWord,
     );
   }
 }

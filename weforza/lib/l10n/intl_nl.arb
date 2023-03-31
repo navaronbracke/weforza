@@ -80,8 +80,11 @@
   "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen renners om uit te kiezen",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} renners hebben een toestel met deze naam",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. Je kan de aanwezige eigenaars hier selecteren.",
+  "RideAttendeeDeselectScannedMemberDialogTitle": "Renner Afvinken",
+  "RideAttendeeDeselectScannedMemberDialogDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
+  "RideAttendeeDeselectScannedMemberDialogConfirm": "Afvinken",
 
-  "RiderSearchFilterNoResults": "Geen resultaten voor de opgegeven zoekterm",
+  "RiderSearchFilterNoResults": "Geen renners gevonden voor de opgegeven zoekterm",
   "RiderSearchFilterInputLabel": "Renners zoeken",
 
   "ImportMembersPageTitle": "Importeer Renners",

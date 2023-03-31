@@ -64,9 +64,12 @@ class _SettingsSubmitState extends State<SettingsSubmit> {
   }
 
   Widget _buildError(){
-    return PlatformAwareWidget(
-      android: () => Icon(Icons.warning, color: Colors.orange),
-      ios: () => Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.orange),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: PlatformAwareWidget(
+        android: () => Icon(Icons.warning, color: Colors.orange.shade200),
+        ios: () => Icon(CupertinoIcons.exclamationmark_triangle_fill, color: Colors.orange),
+      ),
     );
   }
 

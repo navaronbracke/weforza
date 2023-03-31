@@ -33,7 +33,6 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> {
 
     return ExportDataPage(
       delegate: _delegate,
-      exportingLabel: translator.ExportingRiders,
       onPressed: () => _delegate.exportDataToFile(
         ExportRidersOptions(csvHeader: translator.ExportRidersCsvHeader),
       ),

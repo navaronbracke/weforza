@@ -23,4 +23,6 @@ class MemberRepository {
   Future<void> updateMember(Member member) => _dao.updateMember(member);
 
   Future<int> getAttendingCountForAttendee(String uuid) => _dao.getAttendingCountForAttendee(uuid);
+
+  Future<void> setMemberActive(String uuid, bool value) => _dao.setMemberActive(uuid, value);
 }

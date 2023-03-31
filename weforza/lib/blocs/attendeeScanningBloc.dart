@@ -298,8 +298,6 @@ class AttendeeScanningBloc extends Bloc {
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
     _savingStateController.add(true);
-    //TODO remove when done testing
-    await Future.delayed(Duration(seconds: 2), (){});
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
         rideAttendees.map((element) => RideAttendee(rideDate, element)).toList()

@@ -22,7 +22,7 @@ class DeviceTypeCarousel extends StatelessWidget {
     return Column(
       children: <Widget>[
         Flexible(
-          flex: 2,
+          flex: 9,
           child: PageView.builder(
             itemCount: DeviceType.values.length,
             itemBuilder: _buildIcon,
@@ -30,8 +30,8 @@ class DeviceTypeCarousel extends StatelessWidget {
             controller: controller,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        Flexible(
+          flex: 2,
           child: Center(
             child: StreamBuilder<int>(
               stream: currentPageStream,
@@ -70,7 +70,7 @@ class DeviceTypeCarousel extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: Center(
             child: Icon(
               _getIcon(index),
@@ -80,7 +80,7 @@ class DeviceTypeCarousel extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Center(
               child: Text(
                 _getLabel(context, index),

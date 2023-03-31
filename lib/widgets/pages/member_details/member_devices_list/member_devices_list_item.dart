@@ -1,54 +1,72 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/generated/l10n.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/riverpod/device/selected_device_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_widget_utils.dart';
-import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
+import 'package:weforza/widgets/custom/dialogs/delete_device_dialog.dart';
 import 'package:weforza/widgets/pages/edit_device/edit_device_page.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
-class MemberDevicesListItem extends StatefulWidget {
+class MemberDevicesListItem extends ConsumerStatefulWidget {
   const MemberDevicesListItem({
     Key? key,
     required this.device,
     required this.onDelete,
-    required this.index,
   }) : super(key: key);
 
-  //Initial value from the list builder
+  /// The initially selected device.
   final Device device;
-  final int index;
-  final Future<void> Function(Device device, int index) onDelete;
+
+  /// The function that handles deleting the device.
+  final Future<void> Function() onDelete;
 
   @override
   _MemberDevicesListItemState createState() => _MemberDevicesListItemState();
 }
 
-class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
-  //Device field that can be updated when the device is edited.
+class _MemberDevicesListItemState extends ConsumerState<MemberDevicesListItem> {
+  /// The mutable variant of the device.
+  /// This object is updated whenever the device is edited.
   late Device device;
+
+  void _onEditDevicePressed(BuildContext context) async {
+    ref.read(selectedDeviceProvider.notifier).state = device;
+
+    final updatedDevice = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const EditDevicePage()),
+    );
+
+    if (!mounted || updatedDevice == null) {
+      return;
+    }
+
+    setState(() {
+      device = updatedDevice;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    //Set the initial data
     device = widget.device;
   }
 
   @override
-  Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 5, 5),
-          child: _buildItem(context),
-        ),
-        ios: () => Padding(
-          padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
-          child: _buildItem(context),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: () => Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 5, 5),
+        child: _buildItem(context),
+      ),
+      ios: () => Padding(
+        padding: const EdgeInsets.fromLTRB(5, 15, 15, 15),
+        child: _buildItem(context),
+      ),
+    );
+  }
 
   Widget _buildItem(BuildContext context) {
     return Row(
@@ -86,34 +104,10 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           Icons.edit,
           color: ApplicationTheme.memberDevicesListEditDeviceColor,
         ),
-        onPressed: () {
-          SelectedItemProvider.of(context).selectedDevice.value = device;
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => const EditDevicePage()))
-              .then((editedDevice) {
-            if (editedDevice != null) {
-              setState(() {
-                device = editedDevice;
-              });
-            }
-          });
-        },
+        onPressed: () => _onEditDevicePressed(context),
       ),
       ios: () => CupertinoIconButton.fromAppTheme(
-        onPressed: () {
-          SelectedItemProvider.of(context).selectedDevice.value = device;
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => const EditDevicePage()))
-              .then((editedDevice) {
-            if (editedDevice != null) {
-              setState(() {
-                device = editedDevice;
-              });
-            }
-          });
-        },
+        onPressed: () => _onEditDevicePressed(context),
         icon: CupertinoIcons.pencil,
       ),
     );
@@ -128,12 +122,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
         ),
         onPressed: () => showDialog(
           context: context,
-          builder: (_) => DeleteItemDialog(
-            title: S.of(context).DeleteDeviceTitle,
-            description: S.of(context).DeleteDeviceDescription,
-            errorDescription: S.of(context).GenericError,
-            onDelete: () => widget.onDelete(device, widget.index),
-          ),
+          builder: (_) => DeleteDeviceDialog(onDelete: widget.onDelete),
         ),
       ),
       ios: () => Padding(
@@ -144,12 +133,7 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           onPressedColor: CupertinoColors.destructiveRed.withAlpha(150),
           onPressed: () => showCupertinoDialog(
             context: context,
-            builder: (_) => DeleteItemDialog(
-              title: S.of(context).DeleteDeviceTitle,
-              description: S.of(context).DeleteDeviceDescription,
-              errorDescription: S.of(context).GenericError,
-              onDelete: () => widget.onDelete(device, widget.index),
-            ),
+            builder: (_) => DeleteDeviceDialog(onDelete: widget.onDelete),
           ),
         ),
       ),

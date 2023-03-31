@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/widgets/common/device_widget_utils.dart';
+import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesListDisabledItem extends StatelessWidget {
@@ -20,7 +20,7 @@ class MemberDevicesListDisabledItem extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: getDeviceIcon(device.type),
+            child: DeviceIcon(type: device.type),
           ),
           Expanded(child: Text(device.name, overflow: TextOverflow.ellipsis)),
           Padding(

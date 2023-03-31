@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:weforza/database/member_dao.dart';
+import 'package:weforza/database/rider_dao.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/rider/rider.dart';
 
@@ -8,21 +8,21 @@ import 'package:weforza/model/rider/rider.dart';
 class MemberRepository {
   MemberRepository(this._dao);
 
-  final MemberDao _dao;
+  final RiderDao _dao;
 
-  Future<void> addMember(Rider member) => _dao.addMember(member);
+  Future<void> addMember(Rider rider) => _dao.addRider(rider);
 
-  Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
+  Future<void> deleteMember(String uuid) => _dao.deleteRider(uuid);
 
   Future<int> getAttendingCount(String uuid) => _dao.getAttendingCount(uuid);
 
   Future<List<Rider>> getMembers(MemberFilterOption filter) {
-    return _dao.getMembers(filter);
+    return _dao.getRiders(filter);
   }
 
   Future<void> setMemberActive(String uuid, {required bool value}) {
-    return _dao.setMemberActive(uuid, value: value);
+    return _dao.setRiderActive(uuid, value: value);
   }
 
-  Future<void> updateMember(Rider member) => _dao.updateMember(member);
+  Future<void> updateMember(Rider rider) => _dao.updateRider(rider);
 }

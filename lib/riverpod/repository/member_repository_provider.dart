@@ -4,5 +4,5 @@ import 'package:weforza/riverpod/database/database_dao_provider.dart';
 
 /// This provider provides the [MemberRepository].
 final memberRepositoryProvider = Provider<MemberRepository>((ref) {
-  return MemberRepository(ref.read(memberDaoProvider));
+  return MemberRepository(ref.read(riderDaoProvider));
 });

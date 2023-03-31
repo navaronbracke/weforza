@@ -26,6 +26,16 @@ class ExcludedTermsList extends StatelessWidget {
   /// The stream that provides updates to the list of terms.
   final Stream<List<ExcludedTerm>> stream;
 
+  int? _computeSemanticIndex(Widget widget, int index) {
+    // The add term input field does not need a semantic index.
+    if (index == 0) {
+      return null;
+    }
+
+    // Remove the initial offset from the add term input field.
+    return index - 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ExcludedTerm>>(
@@ -50,14 +60,16 @@ class ExcludedTermsList extends StatelessWidget {
         return SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
+              // The add term input field is always first.
               if (index == 0) {
                 return addTermInputField;
               }
 
+              // Remove the initial offset from the add term input field.
               return builder(terms, index - 1);
             },
-            // The add term input is the first item.
-            childCount: terms.length + 1,
+            childCount: terms.length + 1, // The add term input is the first item.
+            semanticIndexCallback: _computeSemanticIndex,
           ),
         );
       },

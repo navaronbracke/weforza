@@ -4,7 +4,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/common/validation_label.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class FileNameInputField extends StatelessWidget {
   FileNameInputField({
@@ -110,10 +109,16 @@ class FileNameInputField extends StatelessWidget {
             ),
           ),
           PlatformAwareWidget(
-            android: (_) => ValidationLabel(
-              stream: errorController,
-              style: AppTheme.desctructiveAction.androidMediumErrorStyle,
-            ),
+            android: (context) {
+              final theme = Theme.of(context);
+
+              return ValidationLabel(
+                stream: errorController,
+                style: theme.textTheme.labelMedium!.copyWith(
+                  color: theme.errorColor,
+                ),
+              );
+            },
             ios: (_) => ValidationLabel(
               stream: errorController,
               style: const TextStyle(

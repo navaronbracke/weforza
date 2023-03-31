@@ -13,6 +13,8 @@ abstract class IDeviceDao {
   Future<List<Device>> getOwnerDevices(String ownerId);
 
   Future<List<Device>> getAllDevices();
+
+  Future<bool> deviceExists(String deviceName, String ownerUuid);
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
@@ -54,5 +56,18 @@ class DeviceDao implements IDeviceDao {
   Future<List<Device>> getAllDevices() async {
     final records = await _deviceStore.find(_database);
     return records.map((record) => Device.of(record.key,record.value)).toList();
+  }
+
+  @override
+  Future<bool> deviceExists(String deviceName, String ownerUuid) async {
+    return await _deviceStore.find(
+        _database,
+        finder: Finder(
+          filter: Filter.and([
+            Filter.equals("deviceName", deviceName),
+            Filter.equals("owner", ownerUuid),
+          ]),
+        ),
+    ) != null;
   }
 }

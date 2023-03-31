@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/widgets/theme.dart';
+import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 /// This widget represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {
@@ -9,7 +9,8 @@ class AddRideCalendarColorLegend extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
-    const theme = AppTheme.rideCalendar;
+
+    final theme = RideCalendarTheme.fromPlatform(context);
 
     return IntrinsicWidth(
       child: Column(
@@ -59,7 +60,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   width: 20,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    color: theme.selectedDay,
+                    color: theme.selection,
                   ),
                 ),
                 Padding(

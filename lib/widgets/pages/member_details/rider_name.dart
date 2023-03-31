@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/theme.dart';
 
-class MemberName extends ConsumerWidget {
-  const MemberName({super.key});
+class RiderName extends ConsumerWidget {
+  const RiderName({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

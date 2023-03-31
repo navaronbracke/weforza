@@ -58,7 +58,7 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeSelectedPlaceholderBackgroundColor = Colors.green;
 
   //MemberList Item First Name Text Style
-  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w400);
+  static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 16,fontWeight: FontWeight.w500);
 
   //MemberList Item Last Name Text Style
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 12);
@@ -85,6 +85,11 @@ abstract class ApplicationTheme {
   static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
   static final Color rideAttendeeScanGoToSettingsButtonColor = Colors.blue.shade300;
   static final Color rideAttendeeScanRetryScanButtonColor = Colors.blue;
+  static final Color rideAttendeeScanResultWarningColor = Colors.orange;
+  static final Color rideAttendeeScanResultUnknownDeviceColor = Colors.blueGrey;
+  static final Color rideAttendeeScanResultLoadingColor = primaryColor;
+
+  static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

@@ -5,7 +5,8 @@ import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 
 /// This provider provides the devices of the selected member.
-final selectedMemberDevicesProvider = StateNotifierProvider((ref) {
+final selectedMemberDevicesProvider = StateNotifierProvider<
+    SelectedMemberDevicesNotifier, AsyncValue<List<Device>>>((ref) {
   final selectedMember = ref.watch(selectedMemberProvider);
   final repository = ref.read(deviceRepositoryProvider);
 

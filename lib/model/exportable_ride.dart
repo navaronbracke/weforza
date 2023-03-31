@@ -6,6 +6,13 @@ class ExportableRide {
   final Iterable<ExportableRideAttendee> attendees;
   final Ride ride;
 
+  void toCsv(StringBuffer buffer) {
+    buffer.writeln(ride.toCsv());
+    for (ExportableRideAttendee attendee in attendees) {
+      buffer.writeln(attendee.toCsv());
+    }
+  }
+
   Map<String, Object?> toJson() {
     return {
       'ride': ride.toJson(),

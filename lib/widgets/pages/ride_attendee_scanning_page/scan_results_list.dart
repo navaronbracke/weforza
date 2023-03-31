@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
@@ -61,7 +62,7 @@ class _ScanResultsListItem extends StatelessWidget {
     IconData icon;
     Color color;
 
-    switch (Theme.of(context).platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -115,14 +116,12 @@ class _ScanResultsListItem extends StatelessWidget {
     Color color;
     IconData icon;
 
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        color = theme.primaryColor;
+        color = Theme.of(context).primaryColor;
         icon = Icons.person;
         break;
       case TargetPlatform.iOS:

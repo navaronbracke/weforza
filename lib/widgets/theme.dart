@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -130,13 +131,13 @@ class RideCalendarTheme {
     BuildContext context, {
     EdgeInsets padding = const EdgeInsets.all(4),
   }) {
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+        final theme = Theme.of(context);
+
         return RideCalendarTheme._(
           futureRide: theme.primaryColor.withOpacity(0.4),
           padding: padding,

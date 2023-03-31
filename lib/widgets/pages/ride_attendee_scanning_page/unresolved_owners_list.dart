@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
@@ -41,7 +42,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
   TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {
     Color color;
 
-    switch (Theme.of(context).platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -125,20 +126,17 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
   final Rider item;
 
   @override
-  State<_UnresolvedOwnersListItem> createState() =>
-      _UnresolvedOwnersListItemState();
+  State<_UnresolvedOwnersListItem> createState() => _UnresolvedOwnersListItemState();
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   Color _getSelectedBackgroundColor(BuildContext context) {
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return theme.primaryColorDark;
+        return Theme.of(context).primaryColorDark;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return CupertinoTheme.of(context).primaryColor;

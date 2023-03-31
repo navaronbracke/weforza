@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// This widget represents a profile image.
@@ -100,19 +101,17 @@ class AdaptiveProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     List<Color> backgroundColors;
     Color placeholderBackgroundColor;
     IconData placeholderIcon;
 
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         backgroundColors = Colors.primaries;
-        placeholderBackgroundColor = theme.primaryColor;
+        placeholderBackgroundColor = Theme.of(context).primaryColor;
         placeholderIcon = Icons.person;
         break;
       case TargetPlatform.iOS:

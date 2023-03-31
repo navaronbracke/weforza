@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// This widget represents a checkmark inside a circle.
@@ -23,8 +24,7 @@ class AnimatedCircleCheckmark extends StatefulWidget {
   );
 
   @override
-  State<AnimatedCircleCheckmark> createState() =>
-      _AnimatedCircleCheckmarkState();
+  State<AnimatedCircleCheckmark> createState() => _AnimatedCircleCheckmarkState();
 }
 
 class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
@@ -74,14 +74,12 @@ class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
     Color backgroundColor;
     IconData checkmarkIcon;
 
-    final theme = Theme.of(context);
-
-    switch (theme.platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        backgroundColor = theme.primaryColor;
+        backgroundColor = Theme.of(context).primaryColor;
         checkmarkIcon = Icons.check_rounded;
         break;
       case TargetPlatform.iOS:

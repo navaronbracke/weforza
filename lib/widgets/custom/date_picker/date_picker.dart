@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -130,10 +131,7 @@ class DatePicker extends StatelessWidget {
       weekDayHeight = weekDayFontSize! * weekDayLineHeight!;
     }
 
-    return totalHeaderHeight +
-        totalWeekHeight +
-        totalWeekSpacing +
-        weekDayHeight;
+    return totalHeaderHeight + totalWeekHeight + totalWeekSpacing + weekDayHeight;
   }
 
   @override
@@ -141,7 +139,7 @@ class DatePicker extends StatelessWidget {
     double minInteractiveDimension;
 
     // Get the minimum recommended size per platform.
-    switch (Theme.of(context).platform) {
+    switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -163,9 +161,7 @@ class DatePicker extends StatelessWidget {
         // Compute the minimum size for a day item.
         // If the constraint with is smaller than the recommended min size,
         // scale the minimum to fit the screen.
-        final minSize = constraintWidth < minInteractiveDimension * 7
-            ? maxSize
-            : minInteractiveDimension;
+        final minSize = constraintWidth < minInteractiveDimension * 7 ? maxSize : minInteractiveDimension;
 
         final Size dayItemSize = computeDaySize(
           BoxConstraints(
@@ -375,9 +371,7 @@ class _DatePickerHeader extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Text(
-                  month == null
-                      ? ''
-                      : DateFormat.MMMM(languageCode).add_y().format(month),
+                  month == null ? '' : DateFormat.MMMM(languageCode).add_y().format(month),
                   style: style,
                 ),
               ),

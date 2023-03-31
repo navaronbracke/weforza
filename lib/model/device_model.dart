@@ -1,9 +1,9 @@
 import 'package:weforza/model/device_type.dart';
 
 /// This class represents the model to add or edit a device.
-class DevicePayload {
+class DeviceModel {
   /// The default constructor.
-  const DevicePayload({
+  const DeviceModel({
     required this.creationDate,
     required this.name,
     required this.ownerId,

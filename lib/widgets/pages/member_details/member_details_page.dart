@@ -11,7 +11,7 @@ import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
 import 'package:weforza/widgets/pages/member_details/member_name.dart';
 import 'package:weforza/widgets/pages/member_details/member_profile_image.dart';
-import 'package:weforza/widgets/pages/member_form.dart';
+import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -19,10 +19,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class MemberDetailsPage extends StatelessWidget {
   const MemberDetailsPage({super.key});
 
-  void _goToEditMemberPage(BuildContext context, Member member) {
+  void _goToEditMemberPage(BuildContext context, Member rider) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MemberForm(member: member)),
+      MaterialPageRoute(builder: (context) => RiderForm(rider: rider)),
     );
   }
 

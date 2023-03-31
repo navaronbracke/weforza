@@ -1,5 +1,5 @@
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/model/device_payload.dart';
+import 'package:weforza/model/device_model.dart';
 import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 
 /// This class represents the delegate for the add / edit device form.
@@ -12,7 +12,7 @@ class DeviceFormDelegate extends AsyncComputationDelegate<void> {
   /// Add a new device.
   /// The [whenComplete] function is called if the operation was successful.
   void addDevice(
-    DevicePayload model, {
+    DeviceModel model, {
     required void Function() whenComplete,
   }) async {
     if (!canStartComputation()) {
@@ -31,7 +31,7 @@ class DeviceFormDelegate extends AsyncComputationDelegate<void> {
   /// Edit an existing device.
   /// The [whenComplete] function is called if the operation was successful.
   void editDevice(
-    DevicePayload model, {
+    DeviceModel model, {
     required void Function() whenComplete,
   }) async {
     if (!canStartComputation()) {

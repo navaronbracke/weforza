@@ -3,14 +3,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/member_form_delegate.dart';
-import 'package:weforza/model/member_payload.dart';
-import 'package:weforza/model/member_validator.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
+import 'package:weforza/model/rider_form_delegate.dart';
+import 'package:weforza/model/rider_model.dart';
+import 'package:weforza/model/rider_validator.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
@@ -18,55 +17,46 @@ import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
-import 'package:weforza/widgets/platform/cupertino_form_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class MemberForm extends ConsumerStatefulWidget {
-  const MemberForm({super.key, this.member});
+class RiderForm extends ConsumerStatefulWidget {
+  const RiderForm({super.key, this.rider});
 
-  /// The member to edit in this form.
-  /// If this is null, a new member will be created instead.
-  final Member? member;
+  /// The rider to edit.
+  ///
+  /// If this is null, a new rider will be created instead.
+  final Member? rider;
 
   @override
-  MemberFormState createState() => MemberFormState();
+  ConsumerState<RiderForm> createState() => _RiderFormState();
 }
 
-class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
+class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
   late final TextEditingController _aliasController;
 
-  final _firstNameErrorController = BehaviorSubject.seeded('');
-  final _lastNameErrorController = BehaviorSubject.seeded('');
-  final _aliasErrorController = BehaviorSubject.seeded('');
-
   final _firstNameFocusNode = FocusNode();
   final _lastNameFocusNode = FocusNode();
   final _aliasFocusNode = FocusNode();
 
-  late final MemberFormDelegate _delegate;
+  late final RiderFormDelegate _delegate;
   late final ProfileImagePickerDelegate _profileImageDelegate;
 
-  /// Validate the iOS form inputs.
-  bool _validateCupertinoForm() {
-    final firstNameError = _firstNameErrorController.value;
-    final lastNameError = _lastNameErrorController.value;
-    final aliasError = _aliasErrorController.value;
-
-    return firstNameError.isEmpty &&
-        lastNameError.isEmpty &&
-        aliasError.isEmpty;
-  }
-
   void onFormSubmitted(BuildContext context) {
-    final navigator = Navigator.of(context);
-    final memberUuid = widget.member?.uuid;
+    final formState = _formKey.currentState;
 
-    final model = MemberPayload(
-      activeMember: widget.member?.active ?? true,
+    if (formState == null || !formState.validate()) {
+      return;
+    }
+
+    final navigator = Navigator.of(context);
+    final memberUuid = widget.rider?.uuid;
+
+    final model = RiderModel(
+      active: widget.rider?.active ?? true,
       alias: _aliasController.text,
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
@@ -75,7 +65,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
 
     if (memberUuid == null) {
-      _delegate.addMember(model, whenComplete: () {
+      _delegate.addRider(model, whenComplete: () {
         // A new item was added to the list.
         ref.invalidate(memberListProvider);
         navigator.pop();
@@ -83,7 +73,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     } else {
       final notifier = ref.read(selectedMemberProvider.notifier);
 
-      _delegate.editMember(model, whenComplete: (updatedRider) {
+      _delegate.editRider(model, whenComplete: (updatedRider) {
         // Update the selected rider.
         notifier.setSelectedMember(updatedRider);
 
@@ -94,28 +84,56 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     }
   }
 
+  void _resetSubmit(String _) => _delegate.reset();
+
+  Widget _buildErrorMessage(BuildContext context, Object? error) {
+    if (error == null) {
+      return const Text('');
+    }
+
+    final translator = S.of(context);
+
+    if (error is RiderExistsException) {
+      return GenericErrorLabel(message: translator.RiderExists);
+    }
+
+    return GenericErrorLabel(message: translator.GenericError);
+  }
+
   @override
   void initState() {
     super.initState();
-    final profileImagePath = widget.member?.profileImageFilePath;
+    final profileImagePath = widget.rider?.profileImageFilePath;
+
+    final profileImageFile =
+        profileImagePath == null ? null : File(profileImagePath);
 
     _profileImageDelegate = ProfileImagePickerDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      initialValue: profileImagePath == null ? null : File(profileImagePath),
+      initialValue:
+          profileImageFile?.existsSync() ?? false ? profileImageFile : null,
     );
 
-    _delegate = MemberFormDelegate(
+    _delegate = RiderFormDelegate(
       repository: ref.read(memberRepositoryProvider),
     );
 
     _firstNameController = TextEditingController(
-      text: widget.member?.firstName,
+      text: widget.rider?.firstName,
     );
     _lastNameController = TextEditingController(
-      text: widget.member?.lastName,
+      text: widget.rider?.lastName,
     );
     _aliasController = TextEditingController(
-      text: widget.member?.alias,
+      text: widget.rider?.alias,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformAwareWidget(
+      android: _buildAndroidLayout,
+      ios: _buildIosLayout,
     );
   }
 
@@ -123,22 +141,30 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     final strings = S.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          widget.member == null ? strings.NewRider : strings.EditRider,
+          widget.rider == null ? strings.NewRider : strings.EditRider,
         ),
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Column(
               children: <Widget>[
                 Center(
-                  child: ProfileImagePicker(
-                    delegate: _profileImageDelegate,
-                    size: 100,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: ProfileImagePicker(
+                      delegate: _profileImageDelegate,
+                      imagePreviewSize: 100,
+                      pickingIndicator: const SizedBox.square(
+                        dimension: 64,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -235,165 +261,142 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
   }
 
-  Widget _buildIOSLayout(BuildContext context) {
+  Widget _buildIosLayout(BuildContext context) {
     final strings = S.of(context);
 
+    final backgroundColor = CupertinoDynamicColor.resolve(
+      CupertinoColors.systemGroupedBackground,
+      context,
+    );
+
     return CupertinoPageScaffold(
+      backgroundColor: backgroundColor,
+      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: backgroundColor,
+        border: null,
         middle: Text(
-          widget.member == null ? strings.NewRider : strings.EditRider,
+          widget.rider == null ? strings.NewRider : strings.EditRider,
         ),
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child: ProfileImagePicker(
-                      delegate: _profileImageDelegate,
-                      size: 100,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: CupertinoFormField(
-                      textCapitalization: TextCapitalization.words,
-                      focusNode: _firstNameFocusNode,
-                      textInputAction: TextInputAction.next,
-                      controller: _firstNameController,
-                      placeholder: strings.FirstName,
-                      keyboardType: TextInputType.text,
-                      errorController: _firstNameErrorController,
-                      onChanged: _resetSubmit,
-                      validator: (value) => validateFirstOrLastName(
-                        value: value,
-                        requiredMessage: strings.FirstNameRequired,
-                        maxLengthMessage: strings.FirstNameMaxLength(
-                          Member.nameAndAliasMaxLength,
+        child: Form(
+          key: _formKey,
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  CupertinoFormSection.insetGrouped(
+                    children: [
+                      Center(
+                        child: Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
+                          child: ProfileImagePicker(
+                            delegate: _profileImageDelegate,
+                            imagePreviewSize: 64,
+                            pickingIndicator: const SizedBox.square(
+                              dimension: 88,
+                              child: Center(
+                                child: CupertinoActivityIndicator(),
+                              ),
+                            ),
+                          ),
                         ),
-                        illegalCharachterMessage:
-                            strings.FirstNameIllegalCharacters,
-                        isBlankMessage: strings.FirstNameBlank,
                       ),
-                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: CupertinoFormField(
-                      textCapitalization: TextCapitalization.words,
-                      focusNode: _lastNameFocusNode,
-                      textInputAction: TextInputAction.next,
-                      controller: _lastNameController,
-                      placeholder: strings.LastName,
-                      keyboardType: TextInputType.text,
-                      errorController: _lastNameErrorController,
-                      onChanged: _resetSubmit,
-                      validator: (value) => validateFirstOrLastName(
-                        value: value,
-                        requiredMessage: strings.LastNameRequired,
-                        maxLengthMessage: strings.LastNameMaxLength(
-                          Member.nameAndAliasMaxLength,
+                  CupertinoFormSection.insetGrouped(
+                    children: [
+                      CupertinoTextFormFieldRow(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        textCapitalization: TextCapitalization.words,
+                        focusNode: _firstNameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        controller: _firstNameController,
+                        maxLength: Member.nameAndAliasMaxLength,
+                        placeholder: strings.FirstName,
+                        keyboardType: TextInputType.text,
+                        onChanged: _resetSubmit,
+                        validator: (value) => validateFirstOrLastName(
+                          value: value,
+                          requiredMessage: strings.FirstNameRequired,
+                          maxLengthMessage: strings.FirstNameMaxLength(
+                            Member.nameAndAliasMaxLength,
+                          ),
+                          illegalCharachterMessage:
+                              strings.FirstNameIllegalCharacters,
+                          isBlankMessage: strings.FirstNameBlank,
                         ),
-                        illegalCharachterMessage:
-                            strings.LastNameIllegalCharacters,
-                        isBlankMessage: strings.LastNameBlank,
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: CupertinoFormField(
-                      focusNode: _aliasFocusNode,
-                      textInputAction: TextInputAction.done,
-                      controller: _aliasController,
-                      keyboardType: TextInputType.text,
-                      placeholder: strings.Alias,
-                      errorController: _aliasErrorController,
-                      onChanged: _resetSubmit,
-                      validator: (value) => validateAlias(
-                        value: value,
-                        maxLengthMessage: strings.AliasMaxLength(
-                          Member.nameAndAliasMaxLength,
+                      CupertinoTextFormFieldRow(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        textCapitalization: TextCapitalization.words,
+                        focusNode: _lastNameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        controller: _lastNameController,
+                        maxLength: Member.nameAndAliasMaxLength,
+                        placeholder: strings.LastName,
+                        keyboardType: TextInputType.text,
+                        onChanged: _resetSubmit,
+                        validator: (value) => validateFirstOrLastName(
+                          value: value,
+                          requiredMessage: strings.LastNameRequired,
+                          maxLengthMessage: strings.LastNameMaxLength(
+                            Member.nameAndAliasMaxLength,
+                          ),
+                          illegalCharachterMessage:
+                              strings.LastNameIllegalCharacters,
+                          isBlankMessage: strings.LastNameBlank,
                         ),
-                        illegalCharachterMessage:
-                            strings.AliasIllegalCharacters,
-                        isBlankMessage: strings.AliasBlank,
                       ),
-                      onSubmitted: (value) => _aliasFocusNode.unfocus(),
-                    ),
+                      CupertinoTextFormFieldRow(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        focusNode: _aliasFocusNode,
+                        textInputAction: TextInputAction.done,
+                        controller: _aliasController,
+                        keyboardType: TextInputType.text,
+                        maxLength: Member.nameAndAliasMaxLength,
+                        placeholder: strings.Alias,
+                        onChanged: _resetSubmit,
+                        validator: (value) => validateAlias(
+                          value: value,
+                          maxLengthMessage: strings.AliasMaxLength(
+                            Member.nameAndAliasMaxLength,
+                          ),
+                          illegalCharachterMessage:
+                              strings.AliasIllegalCharacters,
+                          isBlankMessage: strings.AliasBlank,
+                        ),
+                        onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: _buildSubmitButton(context),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 12, bottom: 24),
-                    child: Center(child: _buildSubmitButton(context)),
-                  ),
-                ],
+                ]),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildErrorMessage(BuildContext context, Object? error) {
-    if (error == null) {
-      return const Text('');
-    }
-
-    final translator = S.of(context);
-
-    if (error is RiderExistsException) {
-      return GenericErrorLabel(message: translator.RiderExists);
-    }
-
-    return GenericErrorLabel(message: translator.GenericError);
-  }
-
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
     final submitButtonLabel =
-        widget.member == null ? translator.AddRider : translator.EditRider;
+        widget.rider == null ? translator.AddRider : translator.EditRider;
 
-    return PlatformAwareWidget(
-      android: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: submitButtonLabel,
-        onPressed: () {
-          final formState = _formKey.currentState;
-
-          if (formState != null && formState.validate()) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
-      ios: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: submitButtonLabel,
-        onPressed: () {
-          if (_validateCupertinoForm()) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
-    );
-  }
-
-  void _resetSubmit(String _) => _delegate.reset();
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidLayout,
-      ios: _buildIOSLayout,
+    return FormSubmitButton<void>(
+      delegate: _delegate,
+      errorBuilder: _buildErrorMessage,
+      label: submitButtonLabel,
+      onPressed: () => onFormSubmitted(context),
     );
   }
 
@@ -407,9 +410,6 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _aliasController.dispose();
-    _firstNameErrorController.close();
-    _lastNameErrorController.close();
-    _aliasErrorController.close();
     super.dispose();
   }
 }

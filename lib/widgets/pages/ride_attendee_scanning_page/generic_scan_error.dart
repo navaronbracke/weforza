@@ -4,11 +4,13 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class GenericScanErrorWidget extends StatelessWidget {
-  const GenericScanErrorWidget({Key? key}) : super(key: key);
+class GenericScanError extends StatelessWidget {
+  const GenericScanError({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final translator = S.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -26,28 +28,22 @@ class GenericScanErrorWidget extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 20),
-          child: Text(S.of(context).GenericError),
+          child: Text(translator.GenericError),
         ),
-        _buildGoBackButton(context)
+        PlatformAwareWidget(
+          android: () => ElevatedButton(
+            child: Text(translator.GoBackToDetailPage),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          ios: () => CupertinoButton.filled(
+            child: Text(
+              translator.GoBackToDetailPage,
+              style: const TextStyle(color: Colors.white),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
       ],
-    );
-  }
-
-  Widget _buildGoBackButton(BuildContext context) {
-    final translator = S.of(context);
-
-    return PlatformAwareWidget(
-      android: () => ElevatedButton(
-        child: Text(translator.GoBackToDetailPage),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      ios: () => CupertinoButton.filled(
-        child: Text(
-          translator.GoBackToDetailPage,
-          style: const TextStyle(color: Colors.white),
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
     );
   }
 }

@@ -54,8 +54,16 @@ class ExcludedTermsDelegate {
 
   /// Validates the given [term].
   ///
-  /// Returns an error message if the term is invalid, or null otherwise.
-  String? validateTerm(String? term, S translator) {
+  /// The [originalValue] is the value of the term
+  /// before the `TextEditingValue` changed.
+  /// This value is used to prevent a term from being a duplicate of itself.
+  ///
+  /// Returns an error message if the value is null, only whitespace or empty.
+  /// Returns an error message if the value exceeded the [maxLength].
+  /// Returns an error message if the value changed from its [originalValue]
+  /// and now matches another term in the list of terms, besides itself.
+  /// Returns null otherwise.
+  String? validateTerm(String? term, S translator, {String? originalValue}) {
     if (term == null || term.trim().isEmpty) {
       return translator.KeywordRequired;
     }
@@ -64,7 +72,9 @@ class ExcludedTermsDelegate {
       return translator.KeywordMaxLength(maxLength);
     }
 
-    if (exists(term)) {
+    // If the term is equal to the original value,
+    // then the term is equal to itself, which is allowed.
+    if (term != originalValue && exists(term)) {
       return translator.KeywordExists;
     }
 

@@ -73,8 +73,6 @@ abstract class ApplicationTheme {
   ///This color is used for Icons in lists that show some information when there is nothing to show.
   static final Color listInformationalIconColor = primaryColor;
 
-  static final Color scanProgressBarStrokeColor = primaryColor;
-
   static final TextStyle settingsOptionHeaderStyle = TextStyle(fontSize: 14);
   static final Color settingsScanSliderThumbColor = Colors.blue.shade300;
 
@@ -83,6 +81,8 @@ abstract class ApplicationTheme {
   static final Color iosRideAttendeeScanProcessCurrentStepColor = Colors.green.shade200;
   static final Color iosRideAttendeeScanProcessOtherStepColor = Colors.grey;
   static final Color rideAttendeeScanProcessArrowColor = Color.fromARGB(255, 122, 220, 255);
+  static final Color rideAttendeeScanProgressbarColor = Color.fromARGB(255,98,204,98);
+  static final Color rideAttendeeScanProgressbarBackgroundColor = Color.fromARGB(120,98,204,98);
 
   ///Provide the Android theme.
   static ThemeData androidTheme(){

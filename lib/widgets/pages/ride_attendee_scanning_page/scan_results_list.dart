@@ -94,7 +94,8 @@ class _ScanResultsListItem extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4),
             child: Text(
               S.of(context).amountOfRidersWithDeviceName(peripheral.owners.length),
-              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: color),
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 14, color: color),
+              maxLines: 2,
             ),
           ),
         ],

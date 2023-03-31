@@ -11,7 +11,7 @@ import 'package:weforza/widgets/common/member_attending_count.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
 import 'package:weforza/widgets/pages/add_device/add_device_page.dart';
-import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
+import 'package:weforza/widgets/pages/edit_member_page.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberActiveToggle.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesList.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';

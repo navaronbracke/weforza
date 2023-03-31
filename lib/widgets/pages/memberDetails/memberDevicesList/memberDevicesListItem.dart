@@ -5,7 +5,7 @@ import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_widget_utils.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
-import 'package:weforza/widgets/pages/editDevice/editDevicePage.dart';
+import 'package:weforza/widgets/pages/edit_device/edit_device_page.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';

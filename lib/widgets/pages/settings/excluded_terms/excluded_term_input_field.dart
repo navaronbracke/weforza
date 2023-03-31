@@ -13,6 +13,7 @@ class ExcludedTermInputField extends StatelessWidget {
     required this.onEditingComplete,
     required this.validator,
     this.contextMenuButtonBar,
+    this.decoration,
     this.placeholder,
     this.suffix,
     this.textFieldKey,
@@ -24,6 +25,9 @@ class ExcludedTermInputField extends StatelessWidget {
 
   /// The controller for the text field.
   final TextEditingController controller;
+
+  /// The decoration to apply to the text field and the context menu.
+  final BoxDecoration? decoration;
 
   /// The focus node for the text field.
   final FocusNode focusNode;
@@ -104,13 +108,21 @@ class ExcludedTermInputField extends StatelessWidget {
     );
   }
 
+  Widget _wrapWithDecoration(Widget child, {BoxDecoration? decoration}) {
+    if (decoration == null) {
+      return child;
+    }
+
+    return DecoratedBox(decoration: decoration, child: child);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget textField = _buildTextField();
     final Widget? contextMenu = contextMenuButtonBar;
 
     if (contextMenu == null) {
-      return textField;
+      return _wrapWithDecoration(textField, decoration: decoration);
     }
 
     return GestureDetector(
@@ -119,10 +131,13 @@ class ExcludedTermInputField extends StatelessWidget {
         // Consume gestures so that they are not handled by the focus absorber.
         // Otherwise the context menu would be closed when tapping on its blank areas.
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[textField, contextMenu],
+      child: _wrapWithDecoration(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[textField, contextMenu],
+        ),
+        decoration: decoration,
       ),
     );
   }

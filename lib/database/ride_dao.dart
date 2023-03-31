@@ -98,6 +98,7 @@ class RideDao implements IRideDao {
 
   @override
   Stream<int> getRideCount() {
+    // TODO: optimize once Sembast allows for watching count
     return _rideStore.query().onSnapshots(_database).map((e) => e.length);
   }
 

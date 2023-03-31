@@ -57,6 +57,12 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   void onFormSubmitted(BuildContext context) {
+    final formState = _formKey.currentState;
+
+    if (formState == null || !formState.validate()) {
+      return;
+    }
+
     final navigator = Navigator.of(context);
 
     final selectedDeviceType = _deviceTypeController.page!.toInt();
@@ -208,31 +214,11 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final label =
         widget.device == null ? translator.AddDevice : translator.EditDevice;
 
-    // TODO: the platform aware widget can be removed once the event handler is
-    // a single implementation
-    return PlatformAwareWidget(
-      android: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: label,
-        onPressed: () {
-          final formState = _formKey.currentState;
-
-          if (formState != null && formState.validate()) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
-      ios: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: label,
-        onPressed: () {
-          if (_deviceNameErrorController.value.isEmpty) {
-            onFormSubmitted(context);
-          }
-        },
-      ),
+    return FormSubmitButton<void>(
+      delegate: _delegate,
+      errorBuilder: _buildErrorMessage,
+      label: label,
+      onPressed: () => onFormSubmitted(context),
     );
   }
 

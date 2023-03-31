@@ -7,11 +7,8 @@ import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Get a [File] with the given [fileName].
-  ///
-  /// Returns a reference to the [File].
-  /// This method does not create the underlying file.
-  Future<File> getFile(String fileName);
+  /// Get the directory where the application can store publicly accessible files.
+  Future<Directory> getPublicDocumentsDirectory();
 
   /// Choose the file to use as data source
   /// for importing riders and their devices.
@@ -28,7 +25,7 @@ abstract class FileHandler {
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
   @override
-  Future<File> getFile(String fileName) async {
+  Future<Directory> getPublicDocumentsDirectory() async {
     Directory? directory;
 
     if (Platform.isAndroid) {
@@ -43,7 +40,7 @@ class IoFileHandler implements FileHandler {
       throw ArgumentError.notNull('directory');
     }
 
-    return File(directory.path + Platform.pathSeparator + fileName);
+    return directory;
   }
 
   @override
@@ -88,7 +85,8 @@ class IoFileHandler implements FileHandler {
       case ImageSource.camera:
         // Get a new file handle
         // for a file with the same name in the documents directory.
-        final destinationFile = await getFile(file.name);
+        final Directory publicDocumentsDirectory = await getPublicDocumentsDirectory();
+        final File destinationFile = File(publicDocumentsDirectory.path + Platform.pathSeparator + file.name);
 
         await file.saveTo(destinationFile.path);
 

@@ -116,7 +116,6 @@
 	"SearchRiders": "Renners zoeken",
 	"SearchRidersEmpty": "Geen renners gevonden voor de opgegeven zoekterm",
 	"Settings": "Instellingen",
-	"SettingsLoading": "Instellingen Laden",
 	"SettingsRiderFilterDescription": "Filter renners in de rennerslijst, op basis van hun status",
 	"SettingsRiderFilterHeader": "Rennerslijst Filter",
 	"SettingsScanSliderHeader": "Duur van een scan (in seconden)",

@@ -2,9 +2,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:weforza/file/exportable.dart';
 
 ///This class represents a Ride.
-class Ride {
+class Ride implements Exportable {
   Ride({
     @required this.date,
     this.title,
@@ -93,4 +94,22 @@ class Ride {
 
   @override
   int get hashCode => hashValues(date,title,startAddress,destinationAddress,distance);
+
+  @override
+  Map<String, String> export() {
+    final Map<String, String> value = {
+      "date": "${date.day}-${date.month}-${date.year}"
+    };
+    if(title != null && title.isNotEmpty){
+      value["title"] = title;
+    }
+    if(destinationAddress != null && destinationAddress.isNotEmpty){
+      value["destination"] = destinationAddress;
+    }
+    if(startAddress != null && startAddress.isNotEmpty){
+      value["destination"] = startAddress;
+    }
+
+    return value;
+  }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/ride.dart';
@@ -278,8 +279,17 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         MaterialPageRoute(
             builder: (context) => ExportRidePage(
               bloc: ExportRideBloc(
-                  ride: bloc.ride,
-                  loadedAttendees: bloc.attendeesFuture,
+                fileHandler: InjectionContainer.get<IFileHandler>(),
+                resolveInitialFilename: (){
+                  final ride = bloc.ride;
+                  if(ride.title == null || ride.title.isEmpty){
+                    return S.of(context).ExportRideFileNamePlaceholder(ride.dateToDDMMYYY());
+                  }
+
+                  return ride.title;
+                },
+                ride: bloc.ride,
+                loadedAttendees: bloc.attendeesFuture,
               ),
             ),
         ),

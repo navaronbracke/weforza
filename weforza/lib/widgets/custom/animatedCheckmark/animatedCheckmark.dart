@@ -3,17 +3,16 @@ import 'package:weforza/widgets/custom/animatedPathPainter/animatedPathPainter.d
 
 class AnimatedCheckmark extends StatefulWidget {
   AnimatedCheckmark({
-    @required this.duration,
+    this.duration = const Duration(milliseconds: 400),
     @required this.color,
-    @required this.strokeWidth,
-    @required this.strokeCap,
-    @required this.strokeJoin,
-    @required this.size,
-    @required this.createPath,
+    this.strokeWidth = 4.0,
+    this.strokeCap = StrokeCap.round,
+    this.strokeJoin = StrokeJoin.round,
+    @required this.size
   }): assert(
     duration != null && color != null && strokeWidth != null && size != null
         && strokeWidth > 0.0 && strokeCap != null
-        && strokeJoin != null && createPath != null
+        && strokeJoin != null
   );
 
   final Duration duration;
@@ -22,7 +21,6 @@ class AnimatedCheckmark extends StatefulWidget {
   final double strokeWidth;
   final StrokeJoin strokeJoin;
   final Size size;
-  final Path Function(Size size) createPath;
 
   @override
   _AnimatedCheckmarkState createState() => _AnimatedCheckmarkState();
@@ -55,8 +53,17 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark> with SingleTicker
       strokeJoin: widget.strokeJoin,
       strokeWidth: widget.strokeWidth,
       strokeCap: widget.strokeCap,
-      createPath: widget.createPath
+      createPath: _createPath
     ),
   );
+
+  Path _createPath(Size size){
+    final xOffset = size.width *.1;
+    final yOffset = -(size.height *.1);
+    return Path()
+      ..moveTo((size.width *.8) + xOffset, (size.height *.2) + yOffset)
+      ..lineTo((size.width *.3) + xOffset, size.height + yOffset)
+      ..lineTo(xOffset, (size.height *.8) + yOffset);
+  }
 }
 

@@ -851,10 +851,10 @@ class S {
     );
   }
 
-  /// `firstname,lastname,alias,devices`
+  /// `firstname,lastname,alias,active,devices`
   String get ExportMembersCsvHeader {
     return Intl.message(
-      'firstname,lastname,alias,devices',
+      'firstname,lastname,alias,active,devices',
       name: 'ExportMembersCsvHeader',
       desc: '',
       args: [],

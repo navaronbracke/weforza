@@ -51,9 +51,6 @@ class ExcludedTermsDelegate {
     _termsController.add(terms);
   }
 
-  /// Checks whether the given [value] already exists in the list of terms.
-  bool exists(String value) => _termsController.value.contains(value);
-
   /// Validates the given [term].
   ///
   /// The [originalValue] is the value of the term
@@ -80,7 +77,7 @@ class ExcludedTermsDelegate {
 
     // If the term is equal to the original value,
     // then the term is equal to itself, which is allowed.
-    if (term != originalValue && exists(term)) {
+    if (term != originalValue && _termsController.value.contains(term)) {
       return translator.DisallowedWordExists;
     }
 

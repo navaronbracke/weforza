@@ -310,8 +310,9 @@ class AttendeeScanningBloc extends Bloc {
   Future<void> saveRideAttendees() async {
     _savingStateController.add(true);
 
-    // We did a scan but the counter was never updated due to a lack of results.
-    // Replace the unknown counter value with an actual zero.
+    // We did a scan but the counter was never updated, due to a lack of results.
+    // If there was at least one scanned person, we would have 1 as value (or higher).
+    // Replace the null counter value with an actual zero.
     if(ride.scannedAttendees == null){
       ride.scannedAttendees = 0;
     }

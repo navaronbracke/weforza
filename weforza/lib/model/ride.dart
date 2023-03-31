@@ -20,7 +20,6 @@ class Ride {
   /// This is a statistical piece of information, that is not exported.
   /// Only attendees that were automatically scanned
   /// by the algorithm are considered.
-  /// In essence this counts the attendees that belong to a single owner device.
   ///
   /// For compatibility reasons, this variable is nullable.
   /// I.e. A new or existing ride without this attribute does not have a value.
@@ -43,14 +42,13 @@ class Ride {
 
   ///Create a [Ride] of a Map
   static Ride of(DateTime date,Map<String,dynamic> values){
-    return Ride(
-      date: date, scannedAttendees: values["scannedAttendees"],
-    );
+    return Ride(date: date, scannedAttendees: values["scannedAttendees"]);
   }
 
   @override
   bool operator ==(Object other) => other is Ride
-      && date == other.date && scannedAttendees == other.scannedAttendees;
+      && date == other.date
+      && scannedAttendees == other.scannedAttendees;
 
   @override
   int get hashCode => hashValues(date, scannedAttendees);
@@ -58,6 +56,7 @@ class Ride {
   String dateToDDMMYYYY() => "${date.day}-${date.month}-${date.year}";
 
   // Exporting formats.
+  // Note: scannedAttendees is never exported.
   Map<String, String> toJson() => {"date": dateToDDMMYYYY()};
   String toCsv() => dateToDDMMYYYY();
 }

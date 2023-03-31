@@ -9,7 +9,6 @@ class ScanProgressIndicator extends StatelessWidget {
     super.key,
     required this.animationController,
     required this.isScanning,
-    required this.scanDuration,
   });
 
   /// The controller that drives the progress bar animation.
@@ -17,9 +16,6 @@ class ScanProgressIndicator extends StatelessWidget {
 
   /// The stream that indicates if there is a running scan.
   final Stream<bool> isScanning;
-
-  /// The total duration of a single scan.
-  final Duration scanDuration;
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/cupertinoLoadingDialog.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
@@ -47,7 +48,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
         }else{
           return PlatformAwareWidget(
             android: () => _buildAndroidLoadingDialog(context, translator),
-            ios: () => _buildIosLoadingDialog(context, translator),
+            ios: () => CupertinoLoadingDialog(),
           );
         }
       },
@@ -88,7 +89,7 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
-              onPressed: () => _onConfirmDeletion(context),
+              onPressed: () => _resetCalendar(context),
             ),
           ],
         ),
@@ -185,200 +186,51 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
   }
 
   Widget _buildIosConfirmDialog(BuildContext context, S translator){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
-            ),
-          ),
+    return CupertinoAlertDialog(
+      title: Text(translator.SettingsResetRideCalendarDialogTitle),
+      content: Text(translator.SettingsResetRideCalendarDialogDescription),
+      actions: [
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          child: Text(translator.SettingsResetRideCalendarDialogConfirm),
+          onPressed: () => _resetCalendar(context),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              translator.SettingsResetRideCalendarDialogDescription,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: '.SF UI Text',
-                inherit: false,
-                fontSize: 13.4,
-                fontWeight: FontWeight.w400,
-                height: 1.036,
-                letterSpacing: -0.25,
-                textBaseline: TextBaseline.alphabetic,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Flexible(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(translator.Cancel),
-                    onPressed: () => Navigator.of(context).pop(false),
-                  ),
-                ),
-              ),
-              Flexible(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(
-                      translator.SettingsResetRideCalendarDialogConfirm,
-                      style: TextStyle(
-                        color: CupertinoColors.destructiveRed,
-                      ),
-                    ),
-                    onPressed: () => _onConfirmDeletion(context),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        CupertinoDialogAction(
+          child: Text(translator.Cancel),
+          onPressed: () => Navigator.of(context).pop(false),
         ),
       ],
     );
-
-    return _buildIosDialog(content);
   }
 
   Widget _buildIosErrorDialog(BuildContext context, S translator){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
+    return CupertinoAlertDialog(
+      title: Text(translator.SettingsResetRideCalendarDialogTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Icon(
+              CupertinoIcons.exclamationmark_circle,
+              color: CupertinoColors.destructiveRed,
+              size: 25,
             ),
           ),
-        ),
-        Expanded(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Icon(
-                      CupertinoIcons.exclamationmark_circle,
-                      size: 25,
-                      color: CupertinoColors.destructiveRed,
-                  ),
-                ),
-                Text(
-                  translator.SettingsResetRideCalendarErrorMessage,
-                  softWrap: true,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: '.SF UI Text',
-                    inherit: false,
-                    fontSize: 13.4,
-                    fontWeight: FontWeight.w400,
-                    height: 1.036,
-                    letterSpacing: -0.25,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(translator.Ok),
-                    onPressed: () => Navigator.of(context).pop(false),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    return _buildIosDialog(content);
-  }
-
-  Widget _buildIosLoadingDialog(BuildContext context, S translator){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            translator.SettingsResetRideCalendarDialogTitle,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(child: PlatformAwareLoadingIndicator()),
-        ),
-      ],
-    );
-
-    return _buildIosDialog(content);
-  }
-
-  ///Build the general dialog scaffolding and inject the content.
-  ///This way, the general look is the same for each dialog,
-  ///but the content can differ.
-  Widget _buildIosDialog(Widget content){
-    return Center(
-      child: CupertinoPopupSurface(
-        isSurfacePainted: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return SizedBox(
-                  width: 270,
-                  height: 200,
-                  child: content,
-                );
-              },
-            ),
-          ],
-        ),
+          Text(translator.SettingsResetRideCalendarErrorMessage),
+        ],
       ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(translator.Ok),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+      ],
     );
   }
 
-  void _onConfirmDeletion(BuildContext context) {
+  void _resetCalendar(BuildContext context) {
     final reloadDataProvider = ReloadDataProvider.of(context);
 
     setState(() {

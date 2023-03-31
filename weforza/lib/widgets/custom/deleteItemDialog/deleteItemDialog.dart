@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/cupertinoLoadingDialog.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
@@ -48,7 +49,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
         }else{
           return PlatformAwareWidget(
             android: () => _buildAndroidLoadingDialog(context),
-            ios: () => _buildIosLoadingDialog(context),
+            ios: () => CupertinoLoadingDialog(),
           );
         }
       },
@@ -173,200 +174,53 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
   }
 
   Widget _buildIosConfirmDialog(BuildContext context){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
-            ),
-          ),
+    return CupertinoAlertDialog(
+      title: Text(widget.title),
+      content: Text(widget.description),
+      actions: [
+        CupertinoDialogAction(
+          isDestructiveAction: true,
+          child: Text(S.of(context).Delete),
+          onPressed: () => _onConfirmDeletion(),
         ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              widget.description,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: '.SF UI Text',
-                inherit: false,
-                fontSize: 13.4,
-                fontWeight: FontWeight.w400,
-                height: 1.036,
-                letterSpacing: -0.25,
-                textBaseline: TextBaseline.alphabetic,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Flexible(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(S.of(context).Cancel),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-              ),
-              Flexible(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(
-                      S.of(context).Delete,
-                      style: TextStyle(
-                        color: CupertinoColors.destructiveRed,
-                      ),
-                    ),
-                    onPressed: () => _onConfirmDeletion(),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        CupertinoDialogAction(
+          child: Text(S.of(context).Cancel),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ],
     );
-    return _buildIosDialog(content);
   }
 
   Widget _buildIosErrorDialog(BuildContext context){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
+    return CupertinoAlertDialog(
+      title: Text(widget.title),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Icon(
+              CupertinoIcons.exclamationmark_circle,
+              size: 25,
+              color: CupertinoColors.destructiveRed,
             ),
           ),
-        ),
-        Expanded(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: Icon(
-                      CupertinoIcons.exclamationmark_circle,
-                      size: 25,
-                      color: CupertinoColors.destructiveRed,
-                  ),
-                ),
-                Text(
-                  widget.errorDescription,
-                  softWrap: true,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: '.SF UI Text',
-                    inherit: false,
-                    fontSize: 13.4,
-                    fontWeight: FontWeight.w400,
-                    height: 1.036,
-                    letterSpacing: -0.25,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Center(
-                  child: CupertinoDialogAction(
-                    child: Text(S.of(context).Ok),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-    return _buildIosDialog(content);
-  }
-
-  Widget _buildIosLoadingDialog(BuildContext context){
-    final content = Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 5),
-          child: Text(
-            widget.title,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: '.SF UI Display',
-              inherit: false,
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.48,
-              textBaseline: TextBaseline.alphabetic,
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(child: PlatformAwareLoadingIndicator())
-        ),
-      ],
-    );
-    return _buildIosDialog(content);
-  }
-
-  ///Build the general dialog scaffolding and inject the content.
-  ///This way, the general look is the same for each dialog,
-  ///but the content can differ.
-  Widget _buildIosDialog(Widget content){
-    return Center(
-      child: CupertinoPopupSurface(
-        isSurfacePainted: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return SizedBox(
-                  width: 270,
-                  height: 200,
-                  child: content,
-                );
-              },
-          ),
-      ]),
+          Text(widget.errorDescription),
+        ],
       ),
+      actions: [
+        CupertinoDialogAction(
+          child: Text(S.of(context).Ok),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 
   void _onConfirmDeletion() {
-    final void Function() callback = (){
-      deleteItemFuture = widget.onDelete();
-    };
+    deleteItemFuture = widget.onDelete();
 
-    setState(callback);
+    setState((){});
   }
 }

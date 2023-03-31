@@ -131,17 +131,20 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
           ),
         ),
       ),
-      ios: () => CupertinoIconButton(
-        icon: CupertinoIcons.delete,
-        idleColor: ApplicationTheme.deleteItemButtonTextColor,
-        onPressedColor: ApplicationTheme.deleteItemButtonTextColor.withAlpha(150),
-        onPressed: () => showCupertinoDialog(
-          context: context,
-          builder: (_) => DeleteItemDialog(
-            title: S.of(context).DeleteDeviceTitle,
-            description: S.of(context).DeleteDeviceDescription,
-            errorDescription: S.of(context).GenericError,
-            onDelete: () => widget.onDelete(device, widget.index),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(left: 5),
+        child: CupertinoIconButton(
+          icon: CupertinoIcons.delete,
+          idleColor: ApplicationTheme.deleteItemButtonTextColor,
+          onPressedColor: ApplicationTheme.deleteItemButtonTextColor.withAlpha(150),
+          onPressed: () => showCupertinoDialog(
+            context: context,
+            builder: (_) => DeleteItemDialog(
+              title: S.of(context).DeleteDeviceTitle,
+              description: S.of(context).DeleteDeviceDescription,
+              errorDescription: S.of(context).GenericError,
+              onDelete: () => widget.onDelete(device, widget.index),
+            ),
           ),
         ),
       ),

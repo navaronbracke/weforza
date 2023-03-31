@@ -7,6 +7,7 @@ class AddRideCalendarItem extends StatelessWidget {
     super.key,
     required this.date,
     required this.delegate,
+    required this.size,
   });
 
   /// The date for the calendar item.
@@ -14,6 +15,9 @@ class AddRideCalendarItem extends StatelessWidget {
 
   /// The delegate that manages the selection.
   final AddRideFormDelegate delegate;
+
+  /// The size of this calendar item.
+  final double size;
 
   Color? _computeBackgroundColor() {
     if (delegate.isBeforeToday(date)) {
@@ -63,18 +67,19 @@ class AddRideCalendarItem extends StatelessWidget {
 
         return GestureDetector(
           onTap: () => delegate.onDaySelected(date),
-          child: Container(
-            width: 40,
-            height: 40,
+          child: DecoratedBox(
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
-            child: Center(
-              child: Text(
-                '${date.day}',
-                style: TextStyle(color: _computeFontColor()),
-                textAlign: TextAlign.center,
+            child: SizedBox.square(
+              dimension: size,
+              child: Center(
+                child: Text(
+                  '${date.day}',
+                  style: TextStyle(color: _computeFontColor()),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

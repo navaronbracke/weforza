@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarItem.dart';
+import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.dart';
 
 class AddRideCalendarMonth extends StatelessWidget {
   const AddRideCalendarMonth({

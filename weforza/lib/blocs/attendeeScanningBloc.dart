@@ -207,7 +207,7 @@ class AttendeeScanningBloc extends Bloc {
   void addScanResult(String deviceName){
     _scanResults.insert(0, deviceName);
     final Iterable<Member> owners = deviceOwners[deviceName].map((uuid) => members[uuid]);
-    
+
     if(owners.length > 1){
       ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
     }

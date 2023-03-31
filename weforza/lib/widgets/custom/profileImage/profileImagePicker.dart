@@ -52,6 +52,7 @@ class ProfileImagePicker extends StatelessWidget {
               child: AsyncProfileImage(
                 future: image,
                 icon: Icons.camera_alt,
+                size: size,
               ),
               onTap: selectImage,
               onLongPress: clear,

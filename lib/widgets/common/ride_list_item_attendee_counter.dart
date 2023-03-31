@@ -78,12 +78,12 @@ class RideListItemAttendeeCounterState
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: PlatformAwareWidget(
-                  android: () => Icon(
+                  android: (_) => Icon(
                     Icons.people,
                     size: widget.iconSize,
                     color: widget.counterStyle?.color,
                   ),
-                  ios: () => Icon(
+                  ios: (_) => Icon(
                     CupertinoIcons.person_2_fill,
                     size: widget.iconSize,
                     color: widget.counterStyle?.color,
@@ -98,13 +98,13 @@ class RideListItemAttendeeCounterState
           dimension: widget.iconSize,
           child: Center(
             child: PlatformAwareWidget(
-              android: () => SizedBox.square(
+              android: (_) => SizedBox.square(
                 dimension: widget.iconSize * .8,
                 child: const Center(
                   child: CircularProgressIndicator(strokeWidth: 2),
                 ),
               ),
-              ios: () => const CupertinoActivityIndicator(radius: 8),
+              ios: (_) => const CupertinoActivityIndicator(radius: 8),
             ),
           ),
         );

@@ -4,33 +4,37 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/rideAttendeeScanResult.dart';
 
 ///This interface provides a contract for manipulating [Ride]s in persistent storage.
 abstract class IRideDao {
 
-  ///Add rides to the database.
+  /// Add rides to the database.
   Future<void> addRides(List<Ride> rides);
 
-  ///Delete a ride with the given ride date.
+  /// Delete a ride with the given ride date.
   Future<void> deleteRide(DateTime date);
 
-  ///Delete all rides & attendant records.
+  /// Delete all rides & attendant records.
   Future<void> deleteRideCalendar();
 
-  ///Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
+  /// Get all rides. This method will load all the stored [Ride]s and populate their attendee count.
   Future<List<Ride>> getRides();
 
   /// Update the scanned attendees counter and attendees list for the given ride.
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
 
-  ///Get the dates of the existing rides.
+  /// Get the dates of the existing rides.
   Future<List<DateTime>> getRideDates();
 
-  ///Get the [Member]s of a given ride.
+  /// Get the [Member]s of a given ride.
   Future<List<Member>> getRideAttendees(DateTime date);
 
   ///Get the amount of attendees for a given ride.
   Future<int> getAmountOfRideAttendees(DateTime rideDate);
+
+  /// Get the attendees of the ride, converted to [RideAttendeeScanResult]s.
+  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(DateTime date);
 }
 
 class RideDao implements IRideDao {
@@ -136,8 +140,16 @@ class RideDao implements IRideDao {
       // The attendees use the ride record key concatenated with their own UUID
       // as own database record key.
       await _rideAttendeeStore.records(
-          attendees.map((a)=> "$rideRecordKey${a.attendeeId}")
+          attendees.map((a)=> "$rideRecordKey${a.uuid}")
       ).put(txn, attendees.map((a)=> a.toMap()).toList());
     });
+  }
+
+  @override
+  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(DateTime date) async {
+    final rideAttendeeRecords = await _rideAttendeeStore.find(_database,
+        finder: Finder(filter: Filter.equals("date", date.toIso8601String())));
+
+    return rideAttendeeRecords.map((record) => RideAttendeeScanResult.of(record.value)).toList();
   }
 }

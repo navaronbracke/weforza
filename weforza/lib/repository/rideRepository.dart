@@ -3,6 +3,7 @@ import 'package:weforza/database/rideDao.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
+import 'package:weforza/model/rideAttendeeScanResult.dart';
 
 ///This class will manage the rides.
 class RideRepository {
@@ -23,6 +24,8 @@ class RideRepository {
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees) => _dao.updateRide(ride, attendees);
 
   Future<List<Member>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);
+
+  Future<List<RideAttendeeScanResult>> getRideAttendeesAsScanResults(DateTime date) => _dao.getRideAttendeesAsScanResults(date);
 
   Future<int> getAmountOfRideAttendees(DateTime rideDate) => _dao.getAmountOfRideAttendees(rideDate);
 }

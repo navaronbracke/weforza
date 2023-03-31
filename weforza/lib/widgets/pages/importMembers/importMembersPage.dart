@@ -64,9 +64,24 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
           }else if(snapshot.error is CsvHeaderMissingError){
             return _buildCsvHeaderMissing(context);
           }else if(snapshot.error is JsonFormatIncompatibleException){
-            return GenericError(
-                text: S.of(context).ImportMembersIncompatibleFileJsonContents,
-                icon: Icons.insert_drive_file
+            final iconBuilder = (BuildContext ctx){
+              return PlatformAwareWidget(
+                android: () => Icon(
+                  Icons.insert_drive_file,
+                  color: ApplicationTheme.listInformationalIconColor,
+                  size: MediaQuery.of(ctx).size.shortestSide * .1,
+                ),
+                ios: () => Icon(
+                  CupertinoIcons.doc_fill,
+                  color: ApplicationTheme.listInformationalIconColor,
+                  size: MediaQuery.of(ctx).size.shortestSide * .1,
+                ),
+              );
+            };
+
+            return  GenericError(
+              text: S.of(context).ImportMembersIncompatibleFileJsonContents,
+              iconBuilder: iconBuilder, 
             );
           }else{
             return GenericError(text: S.of(context).GenericError);

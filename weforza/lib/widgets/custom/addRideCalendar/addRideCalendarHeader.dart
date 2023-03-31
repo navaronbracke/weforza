@@ -41,7 +41,7 @@ class AddRideCalenderHeader extends StatelessWidget {
       children: <Widget>[
         PlatformAwareWidget(
           android: () => IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back),
             color: ApplicationTheme.choiceArrowIdleColor,
             splashColor: ApplicationTheme.choiceArrowOnPressedColor,
             onPressed: onPageBack,
@@ -67,7 +67,7 @@ class AddRideCalenderHeader extends StatelessWidget {
         ),
         PlatformAwareWidget(
           android: () => IconButton(
-            icon: Icon(Icons.arrow_forward_ios),
+            icon: Icon(Icons.arrow_forward),
             color: ApplicationTheme.choiceArrowIdleColor,
             splashColor: ApplicationTheme.choiceArrowOnPressedColor,
             onPressed: onPageForward,

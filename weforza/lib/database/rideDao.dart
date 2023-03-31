@@ -88,14 +88,12 @@ class RideDao implements IRideDao {
   Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees) async {
     assert(rideDate != null && attendees != null);
     final date = rideDate.toIso8601String();
-    final finder = Finder(filter: Filter.equals("date", date));
 
     await _database.transaction((txn) async {
-      //Delete old ones, replace by new ones.
-      await _rideAttendeeStore.delete(txn,finder: finder);
       //The keys are the date + uuid of the person.
+      //We merge the existing ones too, since those are just date + id and nothing special.
       await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}").toList())
-          .put(txn, attendees.map((a)=> a.toMap()).toList());
+          .put(txn, attendees.map((a)=> a.toMap()).toList(), merge: true);
     });
   }
 

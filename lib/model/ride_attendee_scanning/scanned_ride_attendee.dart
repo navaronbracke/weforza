@@ -1,4 +1,10 @@
 /// This class represents a `RideAttendee` that was found during a device scan.
+///
+/// This class implements equality
+/// by comparing only the [uuid]s of two [ScannedRideAttendee]s.
+///
+/// The [isScanned] attribute is only used for presentation purposes
+/// and can thus be eliminated from the equality.
 class ScannedRideAttendee {
   const ScannedRideAttendee({required this.uuid, required this.isScanned});
 

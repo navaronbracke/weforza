@@ -112,10 +112,13 @@ class ProfileImagePicker extends StatelessWidget {
             deleteButton: image == null ? null : deleteImageButton,
           ),
           error: (error, stackTrace) => _buildPickerWithOptions(
-            imagePreview: PlatformAwareIcon(
-              androidIcon: Icons.warning,
-              iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
-              size: imagePreviewSize / 2,
+            imagePreview: SizedBox.square(
+              dimension: imagePreviewSize,
+              child: PlatformAwareIcon(
+                androidIcon: Icons.warning,
+                iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+                size: imagePreviewSize / 2,
+              ),
             ),
             openCameraButton: openCameraButton,
             openGalleryButton: openGalleryButton,

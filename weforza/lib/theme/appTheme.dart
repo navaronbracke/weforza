@@ -105,6 +105,9 @@ abstract class ApplicationTheme {
   static final TextStyle rideAttendeeScanResultFirstNameTextStyle = TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0);
   static final TextStyle rideAttendeeMultipleOwnersListTooltipStyle = TextStyle(fontStyle: FontStyle.italic, fontSize: 12, color: Colors.grey);
 
+  static final TextStyle rideAttendeeManualSelectionUnselectedInactiveLabelStyle = TextStyle(fontSize: 14, color: primaryColor);
+  static final TextStyle rideAttendeeManualSelectionSelectedInactiveLabelStyle = TextStyle(fontSize: 14, color: Colors.red);
+
   static final Color deleteItemButtonTextColor = Colors.red;
 
   static final TextStyle importMembersHeaderExampleTextStyle = TextStyle(

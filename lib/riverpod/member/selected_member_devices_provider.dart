@@ -42,14 +42,6 @@ class SelectedMemberDevicesNotifier
   /// The repository that manages the devices.
   final DeviceRepository repository;
 
-  bool get hasNoDevices {
-    if (state is! AsyncData<List<Device>>) {
-      throw StateError('The devices list was not loaded yet');
-    }
-
-    return state.value!.isEmpty;
-  }
-
   Future<Device> deleteDevice(int index) async {
     if (state is! AsyncData<List<Device>>) {
       throw StateError('The devices list was not loaded yet');

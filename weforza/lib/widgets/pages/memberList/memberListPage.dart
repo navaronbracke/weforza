@@ -43,10 +43,27 @@ class _MemberListPageState extends State<MemberListPage> {
     bloc.loadMembersIfNotLoaded();
   }
 
+  Widget _buildTitle(BuildContext context){
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(S.of(context).MemberListTitle),
+        Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: FutureBuilder<int>(
+            future: bloc.membersFuture.then((items) => items.length),
+            builder: (context, snapshot) => snapshot.connectionState == ConnectionState.done &&
+                  !snapshot.hasError ? Text("(${snapshot.data})"): SizedBox.shrink(),
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _buildAndroidWidget(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).MemberListTitle),
+        title: _buildTitle(context),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
@@ -73,7 +90,11 @@ class _MemberListPageState extends State<MemberListPage> {
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            Expanded(child: Center(child: Text(S.of(context).MemberListTitle))),
+            Expanded(
+                child: Center(
+                    child: _buildTitle(context),
+                ),
+            ),
             CupertinoIconButton.fromAppTheme(
                 icon: Icons.person_add,
                 onPressed: ()=> Navigator.of(context).push(

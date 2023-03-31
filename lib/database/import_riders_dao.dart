@@ -22,7 +22,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
   final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Rider] store.
-  final _riderStore = DatabaseTables.member;
+  final _riderStore = DatabaseTables.rider;
 
   /// Get all the existing devices.
   /// Returns a map of device names per owner uuid.

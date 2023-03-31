@@ -46,7 +46,7 @@ class RideDaoImpl implements RideDao {
   final Database _database;
 
   /// A reference to the [Rider] store.
-  final _memberStore = DatabaseTables.member;
+  final _riderStore = DatabaseTables.rider;
 
   /// A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseTables.rideAttendee;
@@ -94,7 +94,7 @@ class RideDaoImpl implements RideDao {
 
     final attendeeIds = rideAttendees.map((r) => r.value['attendee']).toList();
 
-    final memberRecords = await _memberStore.find(
+    final riderRecords = await _riderStore.find(
       _database,
       finder: Finder(
         filter: Filter.custom((record) => attendeeIds.contains(record.key)),
@@ -106,7 +106,7 @@ class RideDaoImpl implements RideDao {
       ),
     );
 
-    return memberRecords.map((r) => Rider.of(r.key, r.value)).toList();
+    return riderRecords.map((r) => Rider.of(r.key, r.value)).toList();
   }
 
   @override

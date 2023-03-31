@@ -9,10 +9,10 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
 import 'package:weforza/widgets/pages/addDevice/addDevicePage.dart';
 import 'package:weforza/widgets/pages/editMember/editMemberPage.dart';
-import 'package:weforza/widgets/pages/memberDetails/deleteMemberDialog.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesListEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesError.dart';
@@ -30,7 +30,7 @@ class MemberDetailsPage extends StatefulWidget {
 }
 
 ///This is the [State] class for [MemberDetailsPage].
-class _MemberDetailsPageState extends State<MemberDetailsPage> implements DeleteMemberHandler {
+class _MemberDetailsPageState extends State<MemberDetailsPage> {
 
 
   ///The BLoC in charge of the content.
@@ -68,7 +68,23 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: ()=> showDialog(context: context,barrierDismissible: false, builder: (context)=> DeleteMemberDialog(this)),
+            onPressed: () => showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => DeleteItemDialog(
+                  title: S.of(context).MemberDeleteDialogTitle,
+                  description: S.of(context).MemberDeleteDialogDescription,
+                  errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                  onDelete: () => bloc.deleteMember().then((_){
+                    //trigger the reload of members
+                    ReloadDataProvider.of(context).reloadMembers.value = true;
+                    final navigator = Navigator.of(context);
+                    //Pop both the dialog and the detail screen
+                    navigator.pop();
+                    navigator.pop();
+                  }),
+                ),
+            ),
           ),
         ],
       ),
@@ -163,7 +179,26 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.delete,
-                    onPressed: ()=> showCupertinoDialog(context: context,builder: (context)=> DeleteMemberDialog(this))
+                    onPressed: ()=> showCupertinoDialog(
+                        context: context,
+                        builder: (context) => DeleteItemDialog(
+                          title: S.of(context).MemberDeleteDialogTitle,
+                          description: S.of(context).MemberDeleteDialogDescription,
+                        errorDescription: S.of(context).MemberDeleteDialogErrorDescription,
+                          onDelete: () => Future.delayed(Duration(seconds: 3), () => Future.error("some error")),
+                        //TODO ios dialog implementation
+                        /*
+                        *                         onDelete: () => bloc.deleteMember().then((_){
+                          //trigger the reload of members
+                          ReloadDataProvider.of(context).reloadMembers.value = true;
+                          final navigator = Navigator.of(context);
+                          //Pop both the dialog and the detail screen
+                          navigator.pop();
+                          navigator.pop();
+                      }),
+                        * */
+                        ),
+                    ),
                 ),
               ],
             ),
@@ -282,8 +317,4 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> implements Delete
       ],
     );
   }
-
-  @override
-  Future<void> deleteMember() => bloc.deleteMember()
-      .then((_) => ReloadDataProvider.of(context).reloadMembers.value = true);
 }

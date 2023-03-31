@@ -11,8 +11,8 @@ import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
+import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
-import 'package:weforza/widgets/pages/rideDetails/deleteRideDialog.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesEmpty.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart';
@@ -28,7 +28,7 @@ class RideDetailsPage extends StatefulWidget {
   _RideDetailsPageState createState() => _RideDetailsPageState();
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRideHandler {
+class _RideDetailsPageState extends State<RideDetailsPage> {
 
   RideDetailsBloc bloc;
 
@@ -73,12 +73,24 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
           ),
           IconButton(
               icon: Icon(Icons.delete),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) => DeleteRideDialog(this));
-              }),
+              onPressed: () => showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => DeleteItemDialog(
+                  title: S.of(context).RideDeleteDialogTitle,
+                  description: S.of(context).RideDeleteDialogDescription,
+                  errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+                  onDelete: () => bloc.deleteRide().then((_){
+                    //trigger the reload of rides
+                    ReloadDataProvider.of(context).reloadRides.value = true;
+                    final navigator = Navigator.of(context);
+                    //Pop both the dialog and the detail screen
+                    navigator.pop();
+                    navigator.pop();
+                }),
+              ),
+            ),
+          ),
         ],
       ),
       body: _buildBody(bloc.ride),
@@ -128,7 +140,25 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                     icon: Icons.delete,
                     onPressed: () => showCupertinoDialog(
                         context: context,
-                        builder: (context) => DeleteRideDialog(this))),
+                        builder: (context) => DeleteItemDialog(
+                          title: S.of(context).RideDeleteDialogTitle,
+                          description: S.of(context).RideDeleteDialogDescription,
+                          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
+                          onDelete: () => Future.delayed(Duration(seconds: 3), () => Future.error("some error")),
+                          //TODO ios dialog implementation
+                          /*
+                          *                           onDelete: () => bloc.deleteRide().then((_){
+                            //trigger the reload of rides
+                            ReloadDataProvider.of(context).reloadRides.value = true;
+                            final navigator = Navigator.of(context);
+                            //Pop both the dialog and the detail screen
+                            navigator.pop();
+                            navigator.pop();
+                          }),
+                          * */
+                        ),
+                    ),
+                ),
               ],
             ),
           ],
@@ -260,7 +290,4 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
       }
     });
   }
-
-  @override
-  Future<void> deleteRide() => bloc.deleteRide();
 }

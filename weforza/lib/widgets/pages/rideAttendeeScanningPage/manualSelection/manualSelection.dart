@@ -30,7 +30,7 @@ class RideAttendeeManualSelection extends StatelessWidget {
                   profileImageFuture: bloc.loadProfileImageFromDisk(item.profileImageFilePath),
                   firstName: item.firstname,
                   lastName: item.lastname,
-                  phone: item.phone,
+                  alias: item.alias,
                   isSelected: () => bloc.isItemSelected(item),
                   onTap: (){
                     if(!bloc.isSaving.value){

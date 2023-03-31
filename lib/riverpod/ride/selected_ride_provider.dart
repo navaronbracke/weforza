@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 
@@ -35,11 +36,14 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
 
     await ref.read(rideRepositoryProvider).deleteRide(ride.date);
 
-    // Refresh the ride list.
+    // Refresh the ride list, there is a ride less in the collection.
     ref.refresh(rideListProvider);
+
+    // Refresh the member list, the members might have a reduced attending count.
+    ref.refresh(memberListProvider);
   }
 
-  void setSelectedRide(Ride ride) {
+  void setSelectedRide(Ride? ride) {
     if (state != ride) {
       state = ride;
     }

@@ -1,13 +1,22 @@
 import 'dart:io';
 
+import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 
 /// This class represents the selected member.
 class SelectedMember {
-  const SelectedMember(this.attendingCount, this.profileImage, this.value);
+  const SelectedMember({
+    required this.attendingCount,
+    required this.devices,
+    required this.profileImage,
+    required this.value,
+  });
 
   /// The attending count of [value].
   final Future<int> attendingCount;
+
+  /// The list of devices of [value].
+  final Future<List<Device>> devices;
 
   /// The profile image of [value].
   final Future<File?> profileImage;
@@ -16,12 +25,13 @@ class SelectedMember {
   final Member value;
 
   @override
-  int get hashCode => Object.hash(attendingCount, profileImage, value);
+  int get hashCode => Object.hash(attendingCount, devices, profileImage, value);
 
   @override
   bool operator ==(Object other) {
     return other is SelectedMember &&
         attendingCount == other.attendingCount &&
+        devices == other.devices &&
         profileImage == other.profileImage &&
         value == other.value;
   }

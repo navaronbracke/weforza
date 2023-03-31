@@ -13,6 +13,7 @@ import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
@@ -121,8 +122,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
           padding: const EdgeInsets.symmetric(horizontal: 12),
           sliver: ExcludedTermsList(
             delegate: excludedTermsDelegate,
-            selectedTermTextFieldKey: selectedExcludedTermFormKey,
-            selectionDelegate: selectedExcludedTermDelegate,
+            builder: _buildExcludedTermItem,
           ),
         ),
         excludedTermsListFooter: const Padding(
@@ -198,6 +198,19 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     );
   }
 
+  Widget _buildExcludedTermItem(List<String> terms, int index) {
+    final term = terms[index];
+
+    return EditExcludedTermInputField(
+      key: ValueKey(term),
+      delegate: excludedTermsDelegate,
+      index: index,
+      selectionDelegate: selectedExcludedTermDelegate,
+      term: term,
+      textFormFieldKey: selectedExcludedTermFormKey,
+    );
+  }
+
   Widget _buildIosWidget(BuildContext context) {
     final translator = S.of(context);
     final excludedTermDivider = BorderSide(
@@ -233,12 +246,10 @@ class SettingsPageState extends ConsumerState<SettingsPage>
           padding: const EdgeInsets.symmetric(horizontal: 20),
           sliver: ExcludedTermsList(
             delegate: excludedTermsDelegate,
-            selectedTermTextFieldKey: selectedExcludedTermFormKey,
-            selectionDelegate: selectedExcludedTermDelegate,
-            decorator: (child, index, terms) {
+            builder: (items, index) {
               BorderRadius borderRadius = BorderRadius.zero;
 
-              if (index == terms.length - 1) {
+              if (index == items.length - 1) {
                 borderRadius = const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
@@ -258,7 +269,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
                       height: excludedTermDivider.width,
                       margin: const EdgeInsetsDirectional.only(start: 15.0),
                     ),
-                    child,
+                    _buildExcludedTermItem(items, index),
                   ],
                 ),
               );

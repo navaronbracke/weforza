@@ -13,7 +13,6 @@
 	"AliasMaxLength": "An alias can't be longer than {maxLength} characters",
 	"All": "All",
 	"AmountOfRidersWithDeviceName": "{amount} riders have a device with this name",
-	"AppVersionNumber": "Version: {version}",
 	"ByHand": "By Hand",
 	"Cancel": "Cancel",
 	"Clear": "Clear",
@@ -124,5 +123,6 @@
 	"Uncheck": "Uncheck",
 	"UncheckRiderDescription": "Are you sure that you want to uncheck this rider?",
 	"UncheckRiderTitle": "Uncheck rider",
-	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners.\nYou can select the attending owners here."
+	"UnresolvedOwnersDescription": "Some scanned devices have multiple possible owners.\nYou can select the attending owners here.",
+	"Version": "Version"
 }

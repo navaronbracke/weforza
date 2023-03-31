@@ -10,13 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  /// The profile image placeholder's icon color.
-  static const Color profileImagePlaceholderIconColor = Colors.white;
-
-  /// The profile image placeholder icon's background color.
-  static final Color profileImagePlaceholderIconBackgroundColor =
-      Colors.blue.shade700;
-
   /// The text style for a person's initials.
   static const TextStyle personInitialsTextStyle = TextStyle(
     fontFamily: 'Roboto',

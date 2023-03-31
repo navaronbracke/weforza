@@ -2,8 +2,22 @@ import 'package:flutter/material.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
+  /// The profile image placeholder theme.
+  static const profileImagePlaceholder = ProfileImagePlaceholderTheme();
+
   /// The ride calendar theme.
   static const rideCalendar = RideCalendarTheme();
+}
+
+/// This class represents the theme for the profile image placeholder.
+class ProfileImagePlaceholderTheme {
+  const ProfileImagePlaceholderTheme();
+
+  /// The background color for the profile image placeholder.
+  final Color backgroundColor = const Color(0xFF1976D2);
+
+  /// The icon color for the profile image placeholder.
+  final Color iconColor = Colors.white;
 }
 
 /// This class represents the theme for the ride calendar date picker.

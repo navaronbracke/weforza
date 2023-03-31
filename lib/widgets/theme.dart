@@ -11,7 +11,7 @@ abstract class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Colors.blue,
+        foregroundColor: Colors.blue,
         minimumSize: const Size(88, 36),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         shape: const RoundedRectangleBorder(
@@ -21,8 +21,8 @@ abstract class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        onPrimary: Colors.white,
-        primary: Colors.blue,
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         minimumSize: const Size(88, 36),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         shape: const RoundedRectangleBorder(
@@ -84,10 +84,12 @@ class DestructiveActionTheme {
   );
 
   /// The theme for destructive [ElevatedButton]s.
-  final elevatedButtonTheme = ElevatedButton.styleFrom(primary: Colors.red);
+  final elevatedButtonTheme = ElevatedButton.styleFrom(
+    backgroundColor: Colors.red,
+  );
 
   /// The theme for destructive [TextButton]s.
-  final textButtonTheme = TextButton.styleFrom(primary: Colors.red);
+  final textButtonTheme = TextButton.styleFrom(foregroundColor: Colors.red);
 }
 
 /// This class represents the data for [DeviceTypePickerThemes].

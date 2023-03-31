@@ -79,9 +79,7 @@ class MemberDaoImpl implements MemberDao {
     final recordRef = _memberStore.record(member.uuid);
 
     if (await recordRef.exists(_database)) {
-      return Future.error(
-        ArgumentError('The uuid ${member.uuid} is already in use'),
-      );
+      throw ArgumentError('The uuid ${member.uuid} is already in use');
     }
 
     final alias = member.alias;
@@ -89,7 +87,7 @@ class MemberDaoImpl implements MemberDao {
     final lastName = member.lastName;
 
     if (await _memberExists(firstName, lastName, alias)) {
-      return Future.error(RiderExistsException());
+      throw RiderExistsException();
     }
 
     await recordRef.add(_database, member.toMap());
@@ -167,7 +165,7 @@ class MemberDaoImpl implements MemberDao {
     final uuid = member.uuid;
 
     if (await _memberExists(firstName, lastName, alias, uuid)) {
-      return Future.error(RiderExistsException());
+      throw RiderExistsException();
     }
 
     await _memberStore.record(member.uuid).update(_database, member.toMap());

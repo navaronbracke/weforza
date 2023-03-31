@@ -107,6 +107,7 @@
 	"PastDayWithRide": "Ride in the past",
 	"PickFile": "Choose a file",
 	"RemovePhoto": "Remove photo",
+	"RemovePhotoDescription": "Are you sure that you want to remove the photo for this rider?",
 	"Reset": "Reset",
 	"ResetRideCalendar": "Reset ride calendar",
 	"ResetRideCalendarDescription": "Are you sure that you want to reset the ride calendar?\n\nThis will remove all the rides and the attendances of all riders will be reset.",

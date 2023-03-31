@@ -8,20 +8,10 @@ class DeviceTypeCarousel extends StatelessWidget {
   const DeviceTypeCarousel({
     Key? key,
     required this.controller,
-    required this.onPageChanged,
-    required this.currentPageStream,
   }) : super(key: key);
 
   /// The controller that manages the currently selected page.
   final PageController controller;
-
-  /// The Stream that provides the index of the current page.
-  /// The [PageController.page] attribute is a double,
-  /// thus the controller cannot provide the page index directly.
-  final Stream<int> currentPageStream;
-
-  /// The function that handles page changes.
-  final void Function(int page) onPageChanged;
 
   Widget _buildIcon(DeviceType deviceType, S translator) {
     return Column(
@@ -81,20 +71,21 @@ class DeviceTypeCarousel extends StatelessWidget {
             itemBuilder: (_, index) {
               return _buildIcon(DeviceType.values[index], translator);
             },
-            onPageChanged: onPageChanged,
             controller: controller,
           ),
         ),
         Flexible(
           flex: 2,
           child: Center(
-            child: StreamBuilder<int>(
-              stream: currentPageStream,
-              builder: (context, snapshot) {
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, child) {
+                final currentPage = controller.page?.round();
+
                 final children = <Widget>[];
 
                 for (int i = 0; i < DeviceType.values.length; i++) {
-                  children.add(_buildPageDot(i == snapshot.data));
+                  children.add(_buildPageDot(i == currentPage));
                 }
 
                 return Row(

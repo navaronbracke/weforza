@@ -87,6 +87,7 @@
   "RideAttendeeScanningSkipScan": "Scan Overslaan",
   "RideAttendeeScanningSaveScanResults": "Scan Resultaten Opslaan",
   "RideAttendeeScanningSaveManualResults": "Selectie Opslaan",
+  "RideAttendeeScanningManualSelectionEmptyList": "Er zijn geen leden om uit te kiezen",
 
   "EditRidePageTitle": "Rit Bewerken",
   "EditRideTitleLabel": "Titel",

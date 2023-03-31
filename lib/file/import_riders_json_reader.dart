@@ -15,20 +15,10 @@ class ImportRidersJsonReader
     Map<String, dynamic> chunk,
     List<SerializableRider> serializedRiders,
   ) async {
-    bool active;
-    String alias;
-    List<String> deviceNames;
-    String firstName;
-    String lastName;
-    DateTime lastUpdated;
-
     try {
-      active = chunk['active'] as bool;
-      alias = chunk['alias'] as String;
-      deviceNames = (chunk['devices'] as List).cast<String>();
-      firstName = chunk['firstName'] as String;
-      lastName = chunk['lastName'] as String;
-      lastUpdated = DateTime.parse(chunk['lastUpdated'] as String);
+      final alias = chunk['alias'] as String? ?? '';
+      final firstName = chunk['firstName'] as String;
+      final lastName = chunk['lastName'] as String;
 
       final regex = Member.personNameAndAliasRegex;
 
@@ -39,15 +29,21 @@ class ImportRidersJsonReader
         return;
       }
 
+      final lastUpdated = DateTime.tryParse(
+        chunk['lastUpdated'] as String? ?? '',
+      );
+
+      final devices = (chunk['devices'] as List?)?.cast<String>() ?? [];
+
       serializedRiders.add(
         SerializableRider(
-          active: active,
+          active: chunk['active'] as bool? ?? false,
           alias: alias,
           // Skip any invalid device names.
-          devices: deviceNames.where(Device.deviceNameRegex.hasMatch).toSet(),
+          devices: devices.where(Device.deviceNameRegex.hasMatch).toSet(),
           firstName: firstName,
           lastName: lastName,
-          lastUpdated: lastUpdated,
+          lastUpdated: lastUpdated ?? DateTime.now(),
         ),
       );
     } catch (_) {

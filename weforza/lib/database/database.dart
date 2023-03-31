@@ -1,9 +1,10 @@
 
 import 'dart:io';
 
+import 'package:file/file.dart' show FileSystem;
 import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
+import 'package:weforza/database/databaseFactory.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
@@ -43,10 +44,10 @@ class ApplicationDatabase {
   //TODO remove when migrated to new directory.
   /// Moves the database from the old Documents directory
   /// to the Application Support directory for the current platform.
-  Future<void> _moveDatabase(String newDatabasePath) async {
+  Future<void> _moveDatabase(String newDatabasePath, FileSystem fileSystem) async {
     final oldDirectory = await getApplicationDocumentsDirectory();
     final oldDatabasePath = join(oldDirectory.path, databaseName);
-    final file = File(oldDatabasePath);
+    final file = fileSystem.file(oldDatabasePath);
 
     if(await file.exists()){
       print("Found database on old location: $oldDatabasePath");
@@ -69,14 +70,14 @@ class ApplicationDatabase {
   }
 
   ///Initialize the database.
-  Future<void> createDatabase() async {
+  Future<void> openDatabase(ApplicationDatabaseFactory databaseFactory) async {
     final databaseDirectory = await getApplicationSupportDirectory();
     final dbPath = join(databaseDirectory.path, databaseName);
 
     // Move the database to the new directory if required.
-    await _moveDatabase(dbPath);
+    await _moveDatabase(dbPath, databaseFactory.fileSystem);
 
-    _database = await databaseFactoryIo.openDatabase(dbPath);
+    _database = await databaseFactory.factory.openDatabase(dbPath);
   }
 
   void dispose() async =>  await _database.close();

@@ -1,54 +1,73 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/blocs/reset_ride_calendar_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This dialog handles the UI for the reset ride calendar confirmation.
-class ResetRideCalendarDialog extends StatefulWidget {
+class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({Key? key}) : super(key: key);
 
   @override
-  _ResetRideCalendarDialogState createState() => _ResetRideCalendarDialogState(
-        bloc: ResetRideCalendarBloc(
-          repository: InjectionContainer.get<RideRepository>(),
-        ),
-      );
+  _ResetRideCalendarDialogState createState() =>
+      _ResetRideCalendarDialogState();
 }
 
-class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
-  _ResetRideCalendarDialogState({required this.bloc});
+class _ResetRideCalendarDialogState
+    extends ConsumerState<ResetRideCalendarDialog> {
+  Future<void>? deleteFuture;
 
-  final ResetRideCalendarBloc bloc;
+  late final RideRepository repository;
+
+  late final MemberListNotifier memberList;
+
+  @override
+  void initState() {
+    super.initState();
+    repository = ref.read(rideRepositoryProvider);
+    memberList = ref.read(memberListProvider.notifier);
+  }
 
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
     return FutureBuilder<void>(
-      future: bloc.deleteCalendarFuture,
+      future: deleteFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.none) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidConfirmDialog(context, translator),
-            ios: () => _buildIosConfirmDialog(context, translator),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasError) {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidErrorDialog(context, translator),
-            ios: () => _buildIosErrorDialog(context, translator),
-          );
-        } else {
-          return PlatformAwareWidget(
-            android: () => _buildAndroidLoadingDialog(context, translator),
-            ios: () => const CupertinoLoadingDialog(),
-          );
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return PlatformAwareWidget(
+              android: () => _buildAndroidConfirmDialog(context, translator),
+              ios: () => _buildIosConfirmDialog(context, translator),
+            );
+          case ConnectionState.done:
+            return snapshot.hasError
+                ? PlatformAwareWidget(
+                    android: () => _buildAndroidErrorDialog(
+                      context,
+                      translator,
+                    ),
+                    ios: () => _buildIosErrorDialog(context, translator),
+                  )
+                : PlatformAwareWidget(
+                    android: () => _buildAndroidLoadingDialog(
+                      context,
+                      translator,
+                    ),
+                    ios: () => const CupertinoLoadingDialog(),
+                  );
+          default:
+            return PlatformAwareWidget(
+              android: () => _buildAndroidLoadingDialog(context, translator),
+              ios: () => const CupertinoLoadingDialog(),
+            );
         }
       },
     );
@@ -230,15 +249,19 @@ class _ResetRideCalendarDialogState extends State<ResetRideCalendarDialog> {
   }
 
   void _resetCalendar(BuildContext context) {
-    final reloadDataProvider = ReloadDataProvider.of(context);
+    deleteFuture = repository.deleteRideCalendar().then((_) {
+      if (!mounted) {
+        return;
+      }
 
-    setState(() {
-      bloc.deleteRideCalendar(() {
-        reloadDataProvider.reloadRides.value = true;
-        reloadDataProvider.reloadMembers.value = true;
-        // Pop the dialog with a deletion confirmation.
-        Navigator.of(context).pop(true);
-      });
+      // TODO: refresh the ride list as well, this notifier does not exist yet
+      reloadDataProvider.reloadRides.value = true;
+      memberList.getMembers();
+
+      // Pop the dialog with a deletion confirmation.
+      Navigator.of(context).pop(true);
     });
+
+    setState(() {});
   }
 }

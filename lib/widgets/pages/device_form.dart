@@ -247,6 +247,10 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
   }
 
   void _resetSubmit(String _) {
+    if (_future == null) {
+      return;
+    }
+
     setState(() {
       _future = null;
     });

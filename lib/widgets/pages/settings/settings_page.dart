@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/scan_duration_delegate.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
@@ -38,7 +39,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
-  late final BehaviorSubject<double> scanDurationController;
+  late final ScanDurationDelegate scanDurationDelegate;
 
   Future<void>? _saveSettingsFuture;
 
@@ -77,8 +78,8 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           .toList(),
     );
     memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
-    scanDurationController = BehaviorSubject.seeded(
-      settings.scanDuration.toDouble(),
+    scanDurationDelegate = ScanDurationDelegate(
+      initialValue: settings.scanDuration.toDouble(),
     );
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);
@@ -171,11 +172,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         scanDurationOption: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
-          child: ScanDurationOption(
-            initialValue: scanDurationController.value,
-            onChanged: scanDurationController.add,
-            stream: scanDurationController,
-          ),
+          child: ScanDurationOption(delegate: scanDurationDelegate),
         ),
         version: SliverFillRemaining(
           hasScrollBody: false,
@@ -316,13 +313,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         scanDurationOption: CupertinoFormSection.insetGrouped(
           header: Text(translator.ScanSettings.toUpperCase()),
-          children: [
-            ScanDurationOption(
-              initialValue: scanDurationController.value,
-              onChanged: scanDurationController.add,
-              stream: scanDurationController,
-            ),
-          ],
+          children: [ScanDurationOption(delegate: scanDurationDelegate)],
         ),
         version: SliverToBoxAdapter(
           child: CupertinoFormSection.insetGrouped(
@@ -364,7 +355,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
     memberFilterController.close();
-    scanDurationController.close();
+    scanDurationDelegate.dispose();
     super.dispose();
   }
 }

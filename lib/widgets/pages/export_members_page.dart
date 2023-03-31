@@ -147,10 +147,10 @@ class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
             FileNameInputField(
               controller: _filenameController,
               errorController: _filenameErrorController,
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+              padding: const EdgeInsets.only(bottom: 8),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.only(bottom: 8),
               child: FileExtensionSelection(
                 onExtensionSelected: onSelectFileExtension,
                 initialValue: FileExtension.csv,

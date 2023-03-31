@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/common/ride_attendee_counter.dart';
+import 'package:weforza/widgets/common/ride_list_item_attendee_counter.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_page.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a single item for the ride list page.
-class RideListItem extends ConsumerStatefulWidget {
-  RideListItem({required this.ride}) : super(key: ValueKey(ride.date));
+class RideListItem extends ConsumerWidget {
+  const RideListItem({super.key, required this.ride});
 
   final Ride ride;
 
-  @override
-  RideListItemState createState() => RideListItemState();
-}
-
-class RideListItemState extends ConsumerState<RideListItem> {
   TextStyle get itemTextStyle {
-    if (widget.ride.date.month % 2 == 0) {
+    if (ride.date.month % 2 == 0) {
       return const TextStyle(
         color: ApplicationTheme.rideListItemEvenMonthColor,
       );
@@ -30,29 +23,19 @@ class RideListItemState extends ConsumerState<RideListItem> {
     return const TextStyle();
   }
 
-  late Future<List<Member>> rideAttendees;
-
   @override
-  void initState() {
-    super.initState();
-
-    final repository = ref.read(rideRepositoryProvider);
-    rideAttendees = repository.getRideAttendees(widget.ride.date);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final content = Row(
       children: <Widget>[
         Expanded(
           child: Text(
-            widget.ride.getFormattedDate(context, false),
+            ride.getFormattedDate(context, false),
             style: itemTextStyle,
           ),
         ),
-        RideAttendeeCounter(
-          future: rideAttendees.then((list) => list.length),
+        RideListItemAttendeeCounter(
           counterStyle: itemTextStyle,
+          rideDate: ride.date,
         ),
       ],
     );
@@ -67,7 +50,7 @@ class RideListItemState extends ConsumerState<RideListItem> {
         ),
       ),
       onTap: () {
-        ref.read(selectedRideProvider.notifier).setSelectedRide(widget.ride);
+        ref.read(selectedRideProvider.notifier).setSelectedRide(ride);
 
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const RideDetailsPage()),

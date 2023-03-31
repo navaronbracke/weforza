@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
-import 'package:weforza/model/saveMemberOrError.dart';
+import 'package:weforza/model/save_member_or_error.dart';
 import 'package:weforza/repository/memberRepository.dart';
 
 class EditMemberBloc extends Bloc {

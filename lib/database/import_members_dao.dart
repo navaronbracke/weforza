@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/device.dart';
-import 'package:weforza/model/exportableMember.dart';
-import 'package:weforza/model/importableMember.dart';
+import 'package:weforza/model/exportable_member.dart';
+import 'package:weforza/model/importable_member.dart';
 import 'package:weforza/model/member.dart';
 
 abstract class IImportMembersDao {

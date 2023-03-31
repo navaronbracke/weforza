@@ -247,7 +247,7 @@ class ResetRideCalendarDialogState
 
       // Pop the dialog with a deletion confirmation.
       Navigator.of(context).pop(true);
-    }).catchError(Future.error);
+    }).catchError((error) => Future.error(error));
 
     setState(() {});
   }

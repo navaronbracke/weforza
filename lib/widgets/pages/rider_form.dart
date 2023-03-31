@@ -357,19 +357,11 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     final submitButtonLabel =
         widget.rider == null ? translator.AddRider : translator.EditRider;
 
-    return PlatformAwareWidget(
-      android: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: submitButtonLabel,
-        onPressed: () => onFormSubmitted(context),
-      ),
-      ios: (context) => FormSubmitButton<void>(
-        delegate: _delegate,
-        errorBuilder: _buildErrorMessage,
-        label: submitButtonLabel,
-        onPressed: () => onFormSubmitted(context),
-      ),
+    return FormSubmitButton<void>(
+      delegate: _delegate,
+      errorBuilder: _buildErrorMessage,
+      label: submitButtonLabel,
+      onPressed: () => onFormSubmitted(context),
     );
   }
 

@@ -6,7 +6,7 @@ import 'package:weforza/model/memberFilterOption.dart';
 
 ///This class provides an API to work with members.
 class MemberRepository {
-  MemberRepository(this._dao): assert(_dao != null);
+  MemberRepository(this._dao);
 
   ///The internal DAO instance.
   final IMemberDao _dao;
@@ -15,9 +15,7 @@ class MemberRepository {
 
   Future<List<Member>> getMembers(MemberFilterOption filter) => _dao.getMembers(filter);
 
-  Future<Member> getMemberByUuid(String uuid) => _dao.getMemberByUuid(uuid);
-
-  Future<bool> memberExists(String firstname, String lastname, String alias, [String uuid]) => _dao.memberExists(firstname, lastname, alias, uuid);
+  Future<bool> memberExists(String firstname, String lastname, String alias, [String? uuid]) => _dao.memberExists(firstname, lastname, alias, uuid);
 
   Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 

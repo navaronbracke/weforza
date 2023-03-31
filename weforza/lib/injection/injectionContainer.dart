@@ -18,7 +18,9 @@ import 'package:weforza/repository/settingsRepository.dart';
 
 ///This class will provide dependencies.
 class InjectionContainer {
-  static Injector _injector;
+  // We assume that the injector is set
+  // somewhere in the main function but before the app runs.
+  static late Injector _injector;
 
   ///Initialize an [Injector] for production.
   ///Note that this is an async function,since we initialize a production database.
@@ -66,11 +68,10 @@ class InjectionContainer {
 
   ///Get a dependency of type [T].
   static T get<T>(){
-    assert(_injector != null);
     return _injector.get<T>();
   }
 
   static void dispose(){
-    _injector?.dispose();
+    _injector.dispose();
   }
 }

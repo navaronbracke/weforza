@@ -4,9 +4,9 @@ import 'package:weforza/theme/appTheme.dart';
 ///This widget represents a 'something went wrong'-like generic error widget.
 class GenericError extends StatelessWidget {
   GenericError({
-    @required this.text,
+    required this.text,
     this.icon = Icons.warning,
-  }): assert(icon != null && text != null && text.isNotEmpty);
+  }): assert(text.isNotEmpty);
 
   final String text;
   final IconData icon;

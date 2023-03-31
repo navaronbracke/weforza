@@ -10,22 +10,19 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 class AsyncProfileImage extends StatelessWidget {
   AsyncProfileImage({
     this.personInitials,
-    @required this.icon,
-    @required this.future,
+    required this.icon,
+    required this.future,
     this.size = 40
-  }): assert(
-    icon != null && size != null && size > 0 && future != null
-        && personInitials == null || personInitials.isNotEmpty
-  );
+  }): assert(size > 0);
 
-  final Future<File> future;
-  final String personInitials;
+  final Future<File?> future;
+  final String? personInitials;
   final double size;
   final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<File>(
+    return FutureBuilder<File?>(
       future: future,
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.done){

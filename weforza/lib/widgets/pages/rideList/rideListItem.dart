@@ -8,10 +8,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget {
   RideListItem({
-    @required this.ride,
-    @required this.rideAttendeeFuture,
-    this.onPressed,
-  }): assert(ride != null && rideAttendeeFuture != null && onPressed != null);
+    required this.ride,
+    required this.rideAttendeeFuture,
+    required this.onPressed,
+  });
 
   final Ride ride;
 

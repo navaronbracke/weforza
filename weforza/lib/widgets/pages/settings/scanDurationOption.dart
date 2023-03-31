@@ -7,14 +7,11 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class ScanDurationOption extends StatefulWidget {
   ScanDurationOption({
-    @required this.getValue,
-    @required this.minScanValue,
-    @required this.maxScanValue,
-    @required this.onChanged,
-  }): assert(
-    onChanged != null && getValue != null && minScanValue > 0
-    && maxScanValue > minScanValue
-  );
+    required this.getValue,
+    required this.minScanValue,
+    required this.maxScanValue,
+    required this.onChanged,
+  }): assert(minScanValue > 0 && maxScanValue > minScanValue);
 
   final void Function(double value) onChanged;
   final double minScanValue;

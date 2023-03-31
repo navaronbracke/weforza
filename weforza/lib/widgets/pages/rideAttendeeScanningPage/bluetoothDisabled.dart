@@ -6,9 +6,9 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class BluetoothDisabledWidget extends StatelessWidget {
   BluetoothDisabledWidget({
-    @required this.onGoToSettings,
-    @required this.onRetryScan,
-  }): assert(onGoToSettings != null && onRetryScan != null);
+    required this.onGoToSettings,
+    required this.onRetryScan,
+  });
 
   final VoidCallback onGoToSettings;
   final VoidCallback onRetryScan;

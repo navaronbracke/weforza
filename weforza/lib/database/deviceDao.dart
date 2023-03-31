@@ -14,7 +14,7 @@ abstract class IDeviceDao {
 
   Future<List<Device>> getOwnerDevices(String ownerId);
 
-  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]);
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime? creationDate]);
 
   ///This groups all the devices together that belong to the same owner id.
   ///Note that device names can occur in multiple lists, as multiple people can have a device with the same name.
@@ -24,8 +24,7 @@ abstract class IDeviceDao {
 }
 ///This class is an implementation of [IDeviceDao].
 class DeviceDao implements IDeviceDao {
-  DeviceDao(this._database, this._deviceStore):
-        assert(_database != null && _deviceStore != null);
+  DeviceDao(this._database, this._deviceStore);
 
   DeviceDao.withProvider(ApplicationDatabase provider):
         this(provider.getDatabase(), provider.deviceStore);
@@ -67,7 +66,7 @@ class DeviceDao implements IDeviceDao {
   }
 
   @override
-  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime creationDate]) async {
+  Future<bool> deviceExists(String deviceName, String ownerUuid, [DateTime? creationDate]) async {
     final List<Filter> filters = [
       Filter.equals("deviceName", deviceName),
       Filter.equals("owner", ownerUuid),
@@ -94,7 +93,7 @@ class DeviceDao implements IDeviceDao {
       final String ownerUuid = record["owner"] as String;
 
       if(collection.containsKey(ownerUuid)){
-        collection[ownerUuid].add(device);
+        collection[ownerUuid]!.add(device);
       }else{
         collection[ownerUuid] = Set.of(<String>[device]);
       }

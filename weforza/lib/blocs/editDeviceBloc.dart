@@ -1,7 +1,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
@@ -10,15 +9,12 @@ import 'package:weforza/repository/deviceRepository.dart';
 
 class EditDeviceBloc extends Bloc {
   EditDeviceBloc({
-    @required this.repository,
-    @required this.deviceType,
-    @required this.deviceOwnerId,
-    @required this.deviceCreationDate,
-    @required this.deviceName,
-  }): assert(
-    repository != null && deviceOwnerId != null && deviceOwnerId.isNotEmpty &&
-    deviceCreationDate != null && deviceName != null && deviceType != null
-  ){
+    required this.repository,
+    required this.deviceType,
+    required this.deviceOwnerId,
+    required this.deviceCreationDate,
+    required this.deviceName,
+  }): assert(deviceOwnerId.isNotEmpty){
     deviceNameController = TextEditingController(text: deviceName);
     pageController = PageController(initialPage: deviceType.index);
     _typeController = BehaviorSubject.seeded(deviceType.index);
@@ -34,7 +30,7 @@ class EditDeviceBloc extends Bloc {
   int deviceNameMaxLength = 40;
 
   ///Form Error message
-  String editDeviceError;
+  String editDeviceError = "";
 
   ///This controller manages the submit button/loading indicator.
   final StreamController<bool> _submitButtonController = BehaviorSubject();
@@ -45,12 +41,12 @@ class EditDeviceBloc extends Bloc {
   Stream<String> get submitErrorStream => _submitErrorController.stream;
 
   ///This controller manages the current page dot for the type carousel.
-  StreamController<int> _typeController;
+  late StreamController<int> _typeController;
   Stream<int> get currentTypeStream => _typeController.stream;
 
-  TextEditingController deviceNameController;
+  late TextEditingController deviceNameController;
 
-  PageController pageController;
+  late PageController pageController;
 
   void onDeviceTypeChanged(int page){
     deviceType = DeviceType.values[page];
@@ -99,7 +95,7 @@ class EditDeviceBloc extends Bloc {
   }
 
   String validateDeviceNameInput(
-      String value,
+      String? value,
       String deviceNameIsRequired,
       String deviceNameMaxLengthMessage,
       String commaIsIllegalCharacterMessage,
@@ -119,7 +115,7 @@ class EditDeviceBloc extends Bloc {
       editDeviceError = commaIsIllegalCharacterMessage;
     }else{
       deviceName = value;
-      editDeviceError = null;
+      editDeviceError = "";
     }
     return editDeviceError;
   }

@@ -6,9 +6,9 @@ import 'package:weforza/model/rideAttendee.dart';
 
 ///This class will manage the rides.
 class RideRepository {
-  RideRepository(this._dao): assert(_dao != null);
+  RideRepository(this._dao);
   ///The internal DAO instance.
-  final RideDao _dao;
+  final IRideDao _dao;
 
   Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
 
@@ -20,7 +20,7 @@ class RideRepository {
 
   Future<List<DateTime>> getRideDates() => _dao.getRideDates();
 
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees)
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees)
     => _dao.updateAttendeesForRideWithDate(rideDate, attendees);
 
   Future<List<Member>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);

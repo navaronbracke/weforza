@@ -15,7 +15,6 @@ extension ToFileTypeExtension on FileExtension {
       case FileExtension.JSON: return ".json";
       case FileExtension.CSV: return ".csv";
     }
-    return null;
   }
 }
 
@@ -24,11 +23,11 @@ abstract class IFileHandler {
 
   ///Pick an image from the device gallery.
   ///Returns the [File] that was picked or null otherwise.
-  Future<File> chooseProfileImageFromGallery();
+  Future<File?> chooseProfileImageFromGallery();
 
   ///Load a file from the given [path].
   ///Returns the [File] if it exists, or null otherwise.
-  Future<File> loadProfileImageFromDisk(String path);
+  Future<File?> loadProfileImageFromDisk(String? path);
 
   ///Choose the file to use as datasource,
   ///from which to import members and their devices.
@@ -42,41 +41,50 @@ abstract class IFileHandler {
 class FileHandler implements IFileHandler {
 
   @override
-  Future<File> chooseProfileImageFromGallery() async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
+  Future<File?> chooseProfileImageFromGallery() async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
 
-    if(result == null || result.files == null || result.files.isEmpty) return null;
+    if(result == null || result.files.isEmpty) return null;
 
-    return File(result.files.first.path);
+    final path = result.files.first.path;
+
+    return path == null ? null : File(path);
   }
 
   @override
-  Future<File> loadProfileImageFromDisk(String path) async {
+  Future<File?> loadProfileImageFromDisk(String? path) async {
     if(path == null || path.isEmpty){
       return null;
     }
     else {
       File image = File(path);
+
       return await image.exists() ? image : null;
     }
   }
 
   @override
   Future<File> chooseImportMemberDatasourceFile() async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv','json']);
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: <String>['csv','json']);
 
-    if(result == null || result.files == null || result.files.isEmpty) return Future.error(NoFileChosenError());
+    if(result == null || result.files.isEmpty) return Future.error(NoFileChosenError());
 
-    if(!result.files.first.extension.endsWith('csv') && !result.files.first.extension.endsWith('json')){
+    final chosenFile = result.files.first;
+
+    if(chosenFile.extension == null || (!chosenFile.extension!.endsWith('csv') && !chosenFile.extension!.endsWith('json'))){
       return Future.error(InvalidFileExtensionError());
     }
 
-    return File(result.files.first.path);
+    if(chosenFile.path == null){
+      return Future.error(InvalidFileExtensionError());
+    }
+
+    return File(chosenFile.path!);
   }
 
   @override
   Future<File> createFile(String fileName, String extension) async {
-    Directory directory;
+    Directory? directory;
 
     if(Platform.isAndroid){
       directory = await getExternalStorageDirectory();

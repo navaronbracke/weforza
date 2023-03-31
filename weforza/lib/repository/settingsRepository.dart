@@ -4,7 +4,7 @@ import 'package:weforza/database/settingsDao.dart';
 import 'package:weforza/model/settings.dart';
 
 class SettingsRepository {
-  SettingsRepository(this._dao): assert(_dao != null);
+  SettingsRepository(this._dao);
 
   final ISettingsDao _dao;
 

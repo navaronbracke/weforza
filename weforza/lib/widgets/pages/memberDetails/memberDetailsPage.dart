@@ -31,13 +31,13 @@ class MemberDetailsPage extends StatefulWidget {
 class _MemberDetailsPageState extends State<MemberDetailsPage> {
 
   ///The BLoC in charge of the content.
-  MemberDetailsBloc bloc;
+  late MemberDetailsBloc bloc;
 
   void goToEditMemberPage(BuildContext context){
     Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
       setState(() {
-        bloc.member = SelectedItemProvider.of(context).selectedMember.value;
-        bloc.profileImage = SelectedItemProvider.of(context).selectedMemberProfileImage.value;
+        bloc.member = SelectedItemProvider.of(context).selectedMember.value!;
+        bloc.profileImage = SelectedItemProvider.of(context).selectedMemberProfileImage.value!;
       });
     });
   }
@@ -63,9 +63,9 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
     bloc = MemberDetailsBloc(
       memberRepository: InjectionContainer.get<MemberRepository>(),
       deviceRepository: InjectionContainer.get<DeviceRepository>(),
-      member: SelectedItemProvider.of(context).selectedMember.value,
-      profileImage: SelectedItemProvider.of(context).selectedMemberProfileImage.value,
-      attendingCountFuture: SelectedItemProvider.of(context).selectedMemberAttendingCount.value
+      member: SelectedItemProvider.of(context).selectedMember.value!,
+      profileImage: SelectedItemProvider.of(context).selectedMemberProfileImage.value!,
+      attendingCountFuture: SelectedItemProvider.of(context).selectedMemberAttendingCount.value!
     );
     bloc.loadDevices();
   }

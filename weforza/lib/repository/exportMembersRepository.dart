@@ -8,8 +8,7 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
 
 class ExportMembersRepository {
-  ExportMembersRepository(this.deviceDao, this.memberDao):
-        assert(deviceDao != null && memberDao != null);
+  ExportMembersRepository(this.deviceDao, this.memberDao);
 
   final IDeviceDao deviceDao;
   final IMemberDao memberDao;

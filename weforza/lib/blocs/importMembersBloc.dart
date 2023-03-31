@@ -19,9 +19,9 @@ enum ImportMembersState {
 
 class ImportMembersBloc extends Bloc {
   ImportMembersBloc({
-    @required this.fileHandler,
-    @required this.repository,
-  }): assert(fileHandler != null && repository != null);
+    required this.fileHandler,
+    required this.repository,
+  });
 
   final IFileHandler fileHandler;
   final ImportMembersRepository repository;
@@ -45,7 +45,9 @@ class ImportMembersBloc extends Bloc {
       await repository.saveMembersWithDevices(members, () => _uuidGenerator.v4());
       reloadMembers.value = true;
       _importStreamController.add(ImportMembersState.DONE);
-    }).catchError(_importStreamController.addError);
+    }).catchError((e){
+      _importStreamController.addError(e);
+    });
   }
 
   Future<Iterable<ExportableMember>> _readMemberDataFromFile(File file, String csvHeaderRegex) async {

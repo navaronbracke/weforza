@@ -8,16 +8,14 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class SaveMemberSubmit extends StatelessWidget {
   SaveMemberSubmit({
-    @required this.stream,
-    @required this.onPressed,
-    @required this.submitButtonLabel,
-    @required this.memberExistsMessage,
-    @required this.genericErrorMessage,
-  }): assert(
-    stream != null && onPressed != null && submitButtonLabel != null
-        && submitButtonLabel.isNotEmpty && memberExistsMessage != null
-        && memberExistsMessage.isNotEmpty && genericErrorMessage != null
-        && genericErrorMessage.isNotEmpty
+    required this.stream,
+    required this.onPressed,
+    required this.submitButtonLabel,
+    required this.memberExistsMessage,
+    required this.genericErrorMessage,
+  }): assert(submitButtonLabel.isNotEmpty
+      && memberExistsMessage.isNotEmpty
+      && genericErrorMessage.isNotEmpty
   );
 
   final Stream<SaveMemberOrError> stream;
@@ -51,10 +49,10 @@ class SaveMemberSubmit extends StatelessWidget {
         if(snapshot.hasError){
           return Text(genericErrorMessage);
         }else{
-          if(snapshot.data.saving){
+          if(snapshot.data!.saving){
             return PlatformAwareLoadingIndicator();
           }else {
-            if(snapshot.data.memberExists){
+            if(snapshot.data!.memberExists){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

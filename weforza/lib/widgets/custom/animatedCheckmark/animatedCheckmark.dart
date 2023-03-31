@@ -4,16 +4,12 @@ import 'package:weforza/widgets/custom/animatedPathPainter/animatedPathPainter.d
 class AnimatedCheckmark extends StatefulWidget {
   AnimatedCheckmark({
     this.duration = const Duration(milliseconds: 300),
-    @required this.color,
+    required this.color,
     this.strokeWidth = 4.0,
     this.strokeCap = StrokeCap.round,
     this.strokeJoin = StrokeJoin.round,
-    @required this.size
-  }): assert(
-    duration != null && color != null && strokeWidth != null && size != null
-        && strokeWidth > 0.0 && strokeCap != null
-        && strokeJoin != null
-  );
+    required this.size
+  }): assert(strokeWidth > 0.0);
 
   final Duration duration;
   final Color color;
@@ -27,8 +23,8 @@ class AnimatedCheckmark extends StatefulWidget {
 }
 
 class _AnimatedCheckmarkState extends State<AnimatedCheckmark> with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {

@@ -3,10 +3,10 @@ import 'package:weforza/widgets/custom/addRideCalendar/addRideCalendarItem.dart'
 
 class AddRideCalendarMonth extends StatelessWidget {
   AddRideCalendarMonth({
-    @required this.pageDate,
-    @required this.daysInMonth,
-    @required ValueKey<DateTime> key,
-  }): assert(pageDate != null && daysInMonth != null), super(key: key);
+    required this.pageDate,
+    required this.daysInMonth,
+    required ValueKey<DateTime> key,
+  }): super(key: key);
 
   final DateTime pageDate;
   final int daysInMonth;

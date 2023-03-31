@@ -10,25 +10,20 @@ import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   ProfileImagePicker({
-    @required this.errorMessage,
-    @required this.size,
-    @required this.fileHandler,
-    @required this.onClearSelectedImage,
-    @required this.setSelectedImage,
-    @required this.initialImage,
-  }): assert(
-    size != null && size > 0 && errorMessage != null && errorMessage.isNotEmpty
-        && initialImage != null && onClearSelectedImage != null
-        && setSelectedImage != null && errorMessage.isNotEmpty
-        && fileHandler != null
-  );
+    required this.errorMessage,
+    required this.size,
+    required this.fileHandler,
+    required this.onClearSelectedImage,
+    required this.setSelectedImage,
+    required this.initialImage,
+  }): assert(size > 0 && errorMessage.isNotEmpty && errorMessage.isNotEmpty);
 
   final double size;
   final String errorMessage;
   final IFileHandler fileHandler;
   final void Function() onClearSelectedImage;
-  final void Function(Future<File> image) setSelectedImage;
-  final Future<File> initialImage;
+  final void Function(Future<File?> image) setSelectedImage;
+  final Future<File?> initialImage;
 
   @override
   _ProfileImagePickerState createState() => _ProfileImagePickerState();
@@ -49,7 +44,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
         if(snapshot.hasError){
           return Center(child: Text(widget.errorMessage,softWrap: true));
         }else{
-          return snapshot.data.isSelecting ? SizedBox(
+          return snapshot.data!.isSelecting ? SizedBox(
             width: widget.size,
             height: widget.size,
             child: Center(
@@ -57,7 +52,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
             ),
           ): GestureDetector(
             child: AsyncProfileImage(
-              future: snapshot.data.image,
+              future: snapshot.data!.image,
               icon: Icons.camera_alt,
               size: widget.size,
             ),
@@ -71,11 +66,13 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
   void pickProfileImage() async {
     _imageController.add(_SelectProfileImageState(image: Future.value(null), isSelecting: true));
-    await widget.fileHandler.chooseProfileImageFromGallery().then((File image){
+    await widget.fileHandler.chooseProfileImageFromGallery().then((File? image){
       final future = Future.value(image);
       widget.setSelectedImage(future);
       _imageController.add(_SelectProfileImageState(image: future, isSelecting: false));
-    }).catchError(_imageController.addError);
+    }).catchError((e){
+      _imageController.addError(e);
+    });
   }
 
   void clearSelectedImage() {
@@ -94,13 +91,13 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 /// This wrapper is used by [ProfileImagePicker] for wrapping the selection state.
 class _SelectProfileImageState {
   _SelectProfileImageState({
-    @required this.image,
-    @required this.isSelecting
-  }): assert(image != null && isSelecting != null);
+    required this.image,
+    required this.isSelecting
+  });
 
   /// Whether the user is still busy selecting an image.
   final bool isSelecting;
   /// The Future that resolves to the selected File.
   /// The File from this Future can be null.
-  final Future<File> image;
+  final Future<File?> image;
 }

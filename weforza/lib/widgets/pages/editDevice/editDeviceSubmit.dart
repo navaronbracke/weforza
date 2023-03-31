@@ -6,12 +6,10 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class EditDeviceSubmit extends StatelessWidget {
   EditDeviceSubmit({
-    @required this.isSubmittingStream,
-    @required this.submitErrorStream,
-    @required this.onSubmit,
-  }): assert(
-    isSubmittingStream != null && submitErrorStream != null && onSubmit != null
-  );
+    required this.isSubmittingStream,
+    required this.submitErrorStream,
+    required this.onSubmit,
+  });
 
   final Stream<String> submitErrorStream;
   final Stream<bool> isSubmittingStream;
@@ -30,7 +28,7 @@ class EditDeviceSubmit extends StatelessWidget {
               builder: (context, snapshot){
                 return snapshot.hasError ?
                 Text(S.of(context).GenericError):
-                Text(snapshot.data);
+                Text(snapshot.data!);
               },
             ),
           ),
@@ -39,7 +37,7 @@ class EditDeviceSubmit extends StatelessWidget {
             child: StreamBuilder<bool>(
               initialData: false,
               stream: isSubmittingStream,
-              builder: (context,snapshot) => snapshot.data ? PlatformAwareLoadingIndicator() :
+              builder: (context,snapshot) => snapshot.data! ? PlatformAwareLoadingIndicator() :
               PlatformAwareWidget(
                 android: () => ElevatedButton(
                   child: Text(S.of(context).SaveChanges),

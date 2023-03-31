@@ -31,7 +31,7 @@ class MemberListItem extends ConsumerWidget {
       onTap: () {
         final notifier = ref.read(selectedRiderProvider.notifier);
 
-        notifier.setSelectedMember(member);
+        notifier.setSelectedRider(member);
 
         ref.invalidate(selectedRiderDevicesProvider);
 

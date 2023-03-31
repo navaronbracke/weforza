@@ -5,7 +5,7 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 class Settings {
   Settings({
     this.excludedTermsFilter = const {},
-    this.memberListFilter = RiderFilterOption.all,
+    this.riderListFilter = RiderFilterOption.all,
     this.scanDuration = 20,
   }) : assert(
           scanDuration > 0,
@@ -14,14 +14,14 @@ class Settings {
 
   factory Settings.of(Map<String, Object?> values) {
     final excludedTermsFilter = values['excludedTermsFilter'] as List?;
-    final memberListFilter = values['memberListFilter'] as int?;
+    final riderListFilter = values['memberListFilter'] as int?;
     final scanDuration = values['scanDuration'] as int?;
 
     return Settings(
       excludedTermsFilter: Set.of(excludedTermsFilter?.cast<String>() ?? []),
-      memberListFilter: memberListFilter == null
+      riderListFilter: riderListFilter == null
           ? RiderFilterOption.all
-          : RiderFilterOption.values[memberListFilter],
+          : RiderFilterOption.values[riderListFilter],
       scanDuration: scanDuration ?? 20,
     );
   }
@@ -29,8 +29,8 @@ class Settings {
   /// The set of excluded terms that are ignored during a device scan.
   final Set<String> excludedTermsFilter;
 
-  /// The persisted member list filter.
-  final RiderFilterOption memberListFilter;
+  /// The persisted rider list filter.
+  final RiderFilterOption riderListFilter;
 
   /// The duration of a device scan, in seconds.
   /// Defaults to 20 seconds.
@@ -39,12 +39,12 @@ class Settings {
   /// Create a copy of this object, replacing any non-null values.
   Settings copyWith({
     Set<String>? excludedTermsFilter,
-    RiderFilterOption? memberListFilter,
+    RiderFilterOption? riderListFilter,
     int? scanDuration,
   }) {
     return Settings(
       excludedTermsFilter: excludedTermsFilter ?? this.excludedTermsFilter,
-      memberListFilter: memberListFilter ?? this.memberListFilter,
+      riderListFilter: riderListFilter ?? this.riderListFilter,
       scanDuration: scanDuration ?? this.scanDuration,
     );
   }
@@ -53,7 +53,7 @@ class Settings {
   Map<String, dynamic> toMap() {
     return {
       'excludedTermsFilter': excludedTermsFilter.toList(),
-      'memberListFilter': memberListFilter.index,
+      'memberListFilter': riderListFilter.index,
       'scanDuration': scanDuration,
     };
   }
@@ -62,7 +62,7 @@ class Settings {
   int get hashCode {
     return Object.hash(
       scanDuration,
-      memberListFilter,
+      riderListFilter,
       Object.hashAll(excludedTermsFilter),
     );
   }
@@ -71,7 +71,7 @@ class Settings {
   bool operator ==(Object other) {
     return other is Settings &&
         scanDuration == other.scanDuration &&
-        memberListFilter == other.memberListFilter &&
+        riderListFilter == other.riderListFilter &&
         const SetEquality<String>().equals(
           excludedTermsFilter,
           other.excludedTermsFilter,

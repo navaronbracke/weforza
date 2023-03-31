@@ -1,15 +1,57 @@
+import 'dart:async';
+
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/generated/l10n.dart';
 
-/// This class represents a delegate
-/// that will manage the excluded terms for the scan filter.
+/// This class represents a single excluded term.
+///
+/// Two excluded terms are only equal if their [term]s are equal.
+class ExcludedTerm implements Comparable<ExcludedTerm> {
+  /// Construct a new excluded term.
+  ExcludedTerm({
+    required this.term,
+  }) : controller = TextEditingController(text: term);
+
+  /// The controller that manages the [TextEditingValue] which represents the
+  /// term that is being composed.
+  final TextEditingController controller;
+
+  /// The current value of the excluded term.
+  ///
+  /// When the [controller]'s text was committed,
+  /// then this value is updated to the current [TextEditingController.text].
+  String term;
+
+  @override
+  int compareTo(ExcludedTerm other) => term.compareTo(other.term);
+
+  void setValue(String value) {
+    if (term != value) {
+      term = value;
+      controller.text = term;
+    }
+  }
+
+  /// Dispose of this excluded term.
+  void dispose() => controller.dispose();
+
+  @override
+  int get hashCode => term.hashCode;
+
+  @override
+  bool operator ==(Object other) => other is ExcludedTerm && term == other.term;
+}
+
+/// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {
   /// The default constructor.
   ExcludedTermsDelegate({
-    List<String> initialValue = const [],
+    List<ExcludedTerm> initialValue = const [],
   }) : _termsController = BehaviorSubject.seeded(initialValue);
 
-  final BehaviorSubject<List<String>> _termsController;
+  final BehaviorSubject<List<ExcludedTerm>> _termsController;
 
   /// The max length for an excluded term.
   final int maxLength = 16;
@@ -17,35 +59,44 @@ class ExcludedTermsDelegate {
   final whitespaceMatcher = RegExp(r'\s');
 
   /// Get the stream of excluded terms.
-  Stream<List<String>> get stream => _termsController;
+  Stream<List<ExcludedTerm>> get stream => _termsController;
 
   /// Get the current list of terms.
-  List<String> get terms => _termsController.value;
+  List<ExcludedTerm> get terms => _termsController.value;
 
   /// Add the given [value] to the list of terms.
+  ///
+  /// This method does not validate
+  /// whether an [ExcludedTerm] with the given [value] already exists.
   void addTerm(String value) {
     final terms = _termsController.value;
 
-    terms.add(value);
+    terms.add(ExcludedTerm(term: value));
     terms.sort((a, b) => a.compareTo(b));
 
     _termsController.add(terms);
   }
 
   /// Delete the given [value] from the list of terms.
-  void deleteTerm(String value) {
+  void deleteTerm(ExcludedTerm value) {
     final terms = _termsController.value;
 
-    terms.remove(value);
+    if (terms.remove(value)) {
+      _termsController.add(terms);
 
-    _termsController.add(terms);
+      // Dispose the underlying controller by the end of the current frame,
+      // so that a consumer has time to detach from it.
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        value.dispose();
+      });
+    }
   }
 
   /// Replace the item at [index] with [newValue].
   void editTerm(String newValue, int index) {
     final terms = _termsController.value;
 
-    terms[index] = newValue;
+    terms[index].setValue(newValue);
     terms.sort((a, b) => a.compareTo(b));
 
     _termsController.add(terms);
@@ -75,9 +126,16 @@ class ExcludedTermsDelegate {
       return translator.DisallowedWordMaxLength(maxLength);
     }
 
+    // Create a temporary value to use when checking existence.
+    final ExcludedTerm valueForText = ExcludedTerm(term: term);
+
+    final bool exists = _termsController.value.contains(valueForText);
+
+    valueForText.dispose(); // Clean up the temporary value.
+
     // If the term is equal to the original value,
     // then the term is equal to itself, which is allowed.
-    if (term != originalValue && _termsController.value.contains(term)) {
+    if (term != originalValue && exists) {
       return translator.DisallowedWordExists;
     }
 
@@ -86,6 +144,14 @@ class ExcludedTermsDelegate {
 
   /// Dispose of this delegate.
   void dispose() {
-    _termsController.close();
+    if (_termsController.isClosed) {
+      return;
+    }
+
+    for (final excludedTerm in _termsController.value) {
+      excludedTerm.dispose();
+    }
+
+    unawaited(_termsController.close());
   }
 }

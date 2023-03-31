@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,13 +29,9 @@ class RideAttendeeScanningPage extends ConsumerStatefulWidget {
 class RideAttendeeScanningPageState
     extends ConsumerState<RideAttendeeScanningPage>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _scanProgressBarController;
+  late final RideAttendeeScanningDelegate delegate;
 
   final GlobalKey<AnimatedListState> _scanResultsKey = GlobalKey();
-
-  StreamSubscription<bool>? _startScanningSubscription;
-
-  late final RideAttendeeScanningDelegate delegate;
 
   @override
   void initState() {
@@ -50,32 +44,11 @@ class RideAttendeeScanningPageState
       rideRepository: ref.read(rideRepositoryProvider),
       scanner: ref.read(bluetoothProvider),
       settings: ref.read(settingsProvider),
+      vsync: this,
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to inset it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
-
-    _scanProgressBarController = AnimationController(
-      duration: Duration(seconds: delegate.settings.scanDuration),
-      vsync: this,
-      value: 1.0,
-    );
-
-    // Setup a subscription that listens to the start of the device scan
-    // and starts the progress animation.
-    _startScanningSubscription = delegate.scanner.isScanning.listen((value) {
-      // If the subscription is null, the stream is or will be disposed.
-      if (_startScanningSubscription == null || !value) {
-        return;
-      }
-
-      // Start the animation when the scan stream emits the event
-      // that indicates that the scan started.
-      // The animation starts with a filled progress bar.
-      if (_scanProgressBarController.status == AnimationStatus.completed) {
-        _scanProgressBarController.reverse();
-      }
-    });
 
     delegate.startDeviceScan();
   }
@@ -84,10 +57,10 @@ class RideAttendeeScanningPageState
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
-          alignment: MainAxisAlignment.start,
-          stream: delegate.stateStream,
+          initialData: delegate.currentState,
+          scrollController: delegate.stepperScrollController,
+          stream: delegate.stream,
         ),
       ),
       body: _buildBody(),
@@ -96,7 +69,8 @@ class RideAttendeeScanningPageState
 
   Widget _buildBody() {
     return StreamBuilder<RideAttendeeScanningState>(
-      stream: delegate.stateStream,
+      initialData: delegate.currentState,
+      stream: delegate.stream,
       builder: (context, snapshot) {
         final state = snapshot.data;
 
@@ -121,7 +95,7 @@ class RideAttendeeScanningPageState
             return ScanResultsList(
               delegate: delegate,
               progressBar: ScanProgressIndicator(
-                animationController: _scanProgressBarController,
+                animationController: delegate.progressBarController,
                 isScanning: delegate.scanner.isScanning,
               ),
               scanResultsListKey: _scanResultsKey,
@@ -138,10 +112,10 @@ class RideAttendeeScanningPageState
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
-          alignment: MainAxisAlignment.center,
-          stream: delegate.stateStream,
+          initialData: delegate.currentState,
+          scrollController: delegate.stepperScrollController,
+          stream: delegate.stream,
         ),
       ),
       child: SafeArea(
@@ -155,17 +129,17 @@ class RideAttendeeScanningPageState
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidLayout,
-      ios: _buildIOSLayout,
+    return WillPopScope(
+      onWillPop: delegate.stopScan,
+      child: PlatformAwareWidget(
+        android: _buildAndroidLayout,
+        ios: _buildIOSLayout,
+      ),
     );
   }
 
   @override
   void dispose() {
-    _startScanningSubscription?.cancel();
-    _startScanningSubscription = null;
-    _scanProgressBarController.dispose();
     delegate.dispose();
     super.dispose();
   }

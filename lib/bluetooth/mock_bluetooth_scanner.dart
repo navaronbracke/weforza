@@ -1,20 +1,14 @@
-import 'package:rxdart/subjects.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 
 class MockBluetoothScanner implements BluetoothDeviceScanner {
   final _scanningController = BehaviorSubject.seeded(false);
 
-  @override
-  Future<bool> isBluetoothEnabled() async => true;
+  final PublishSubject _stopScanPill = PublishSubject();
 
-  @override
-  Stream<bool> get isScanning => _scanningController;
-
-  @override
-  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
-    _scanningController.add(true);
-
+  /// Build a fale scan results stream.
+  Stream<BluetoothPeripheral> _buildScanResultsStream() async* {
     final duplicateOwner = BluetoothPeripheral(id: '1', deviceName: 'rudy1');
     final duplicateDevice = BluetoothPeripheral(
       id: '2',
@@ -25,7 +19,7 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
     final blankDeviceName = BluetoothPeripheral(id: '5', deviceName: '  ');
 
     for (int i = 0; i < 10; i++) {
-      await Future.delayed(const Duration(seconds: 2), () {});
+      await Future.delayed(const Duration(seconds: 2));
 
       if (i == 1) {
         yield* Stream.error(ArgumentError('some error'), StackTrace.current);
@@ -54,21 +48,43 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
       // Emit unknown devices as fallback.
       yield BluetoothPeripheral(id: '$i', deviceName: 'Device $i');
     }
+  }
 
+  @override
+  Future<bool> isBluetoothEnabled() async => true;
+
+  @override
+  Stream<bool> get isScanning => _scanningController;
+
+  @override
+  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) async* {
+    if (_scanningController.value) {
+      throw Exception('Another scan is already in progress.');
+    }
+
+    _scanningController.add(true);
+
+    final killStreams = <Stream>[
+      _stopScanPill,
+      Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
+    ];
+
+    yield* _buildScanResultsStream()
+        .takeUntil(Rx.merge(killStreams))
+        .doOnDone(stopScan);
+  }
+
+  @override
+  Future<void> stopScan() async {
     if (!_scanningController.isClosed) {
+      _stopScanPill.add(null);
       _scanningController.add(false);
     }
   }
 
   @override
-  Future<void> stopScan() {
-    _scanningController.add(false);
-
-    return Future<void>.value();
-  }
-
-  @override
   void dispose() {
+    _stopScanPill.close();
     _scanningController.close();
   }
 }

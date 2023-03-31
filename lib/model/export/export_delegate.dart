@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
+import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
@@ -43,8 +43,8 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// Export the currently available data to a file.
   ///
   /// See [writeToFile].
-  void exportDataToFile(Options options) async {
-    final formState = fileNameKey.currentState;
+  void exportDataToFile(BuildContext context, Options options) async {
+    final FormState? formState = Form.maybeOf(context);
 
     if (formState == null || !formState.validate() || !canStartComputation()) {
       return;
@@ -66,11 +66,11 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       }
 
       if (directory == null) {
-        throw DirectoryRequiredException();
+        throw ArgumentError.notNull('directory');
       }
 
       if (!directory.existsSync()) {
-        throw DirectoryNotFoundException();
+        throw StateError('The given directory $directory does not exist');
       }
 
       final file = File(directory.path + Platform.pathSeparator + fileName);

@@ -34,10 +34,10 @@ class Rider implements Comparable<Rider> {
   /// Regex for a rider's first name, last name or alias.
   ///
   /// The regex is language independent,
-  /// allows hyphens, apostrophes and spaces,
+  /// allows hyphens, left and right single quotation marks and spaces,
   /// and requires a length between 1 and 50.
   static final personNameAndAliasRegex = RegExp(
-    r"^([\p{L}\s]|['-]){1,50}$",
+    r'^([\p{L}\s]|[\u2018\u2019-]){1,50}$',
     unicode: true,
   );
 

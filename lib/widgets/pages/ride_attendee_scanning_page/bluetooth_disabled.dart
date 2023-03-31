@@ -15,26 +15,30 @@ class BluetoothDisabledWidget extends StatelessWidget {
   final VoidCallback onRetryScan;
 
   @override
-  Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Icon(
-            Icons.bluetooth_disabled,
-            color: ApplicationTheme.listInformationalIconColor,
-            size: MediaQuery.of(context).size.shortestSide * .1,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 20),
-            child: Text(S.of(context).RideAttendeeScanningBluetoothDisabled),
-          ),
-          PlatformAwareWidget(
-            android: () => _buildAndroidButtons(context),
-            ios: () => _buildIosButtons(context),
-          )
-        ],
-      );
+  Widget build(BuildContext context) {
+    final translator = S.of(context);
 
-  Widget _buildAndroidButtons(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(
+          Icons.bluetooth_disabled,
+          color: ApplicationTheme.listInformationalIconColor,
+          size: MediaQuery.of(context).size.shortestSide * .1,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 20),
+          child: Text(translator.ScanAbortedBluetoothDisabled),
+        ),
+        PlatformAwareWidget(
+          android: () => _buildAndroidButtons(translator),
+          ios: () => _buildIosButtons(translator),
+        )
+      ],
+    );
+  }
+
+  Widget _buildAndroidButtons(S translator) {
     return Wrap(
       spacing: 16,
       runSpacing: 8,
@@ -42,18 +46,18 @@ class BluetoothDisabledWidget extends StatelessWidget {
       direction: Axis.horizontal,
       children: [
         ElevatedButton(
-          child: Text(S.of(context).RideAttendeeScanningGoToSettings),
+          child: Text(translator.GoToSettings),
           onPressed: onGoToSettings,
         ),
         TextButton(
-          child: Text(S.of(context).RideAttendeeScanningRetryScan),
+          child: Text(translator.RetryScan),
           onPressed: onRetryScan,
         ),
       ],
     );
   }
 
-  Widget _buildIosButtons(BuildContext context) {
+  Widget _buildIosButtons(S translator) {
     return Wrap(
       spacing: 16,
       runSpacing: 8,
@@ -62,14 +66,14 @@ class BluetoothDisabledWidget extends StatelessWidget {
       children: [
         CupertinoButton.filled(
           child: Text(
-            S.of(context).RideAttendeeScanningGoToSettings,
+            translator.GoToSettings,
             style: const TextStyle(color: Colors.white),
           ),
           onPressed: onGoToSettings,
         ),
         CupertinoButton(
           child: Text(
-            S.of(context).RideAttendeeScanningRetryScan,
+            translator.RetryScan,
             style: const TextStyle(color: ApplicationTheme.primaryColor),
           ),
           onPressed: onRetryScan,

@@ -3,34 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class UnresolvedOwnersList extends StatelessWidget {
   UnresolvedOwnersList({
-    @required this.items,
+    @required this.future,
     @required this.itemBuilder,
     @required this.onButtonPressed,
-  }): assert(
-    items != null && items.isNotEmpty && itemBuilder != null
-        && onButtonPressed != null
-  );
+  }): assert(future != null && itemBuilder != null && onButtonPressed != null);
 
-  final List<Member> items;
+  final Future<List<Member>> future;
   final Widget Function(Member member) itemBuilder;
   final void Function() onButtonPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemBuilder: (context, index) => itemBuilder(items[index]),
-            itemCount: items.length,
-          ),
-        ),
-        Center(child: _buildButton(context)),
-      ],
+    return FutureBuilder<List<Member>>(
+      future: future,
+      builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.done){
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context, index) => itemBuilder(snapshot.data[index]),
+                  itemCount: snapshot.data.length,
+                ),
+              ),
+              Center(child: _buildButton(context)),
+            ],
+          );
+        }else{
+          return Center(child: PlatformAwareLoadingIndicator());
+        }
+      },
     );
   }
 

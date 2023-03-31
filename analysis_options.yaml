@@ -4,5 +4,4 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    # The original files are in camel case, not snake case.
-    file_names: false
+    directives_ordering: true

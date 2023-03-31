@@ -70,7 +70,7 @@ dependencies:
   # For shared state management.
   flutter_riverpod: ^2.0.0-dev.9
 
-  file: ^6.1.2
+  file: ^6.1.4
 
 dev_dependencies:
   file_testing: 3.0.0

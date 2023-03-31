@@ -33,19 +33,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m6(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m7(path) => "Ride saved at ${path}";
+  static m7(date) => "ride_${date}";
 
-  static m8(date) => "ride_${date}";
+  static m8(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m9(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
+  static m9(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m10(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m10(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m11(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m11(amount) => "${amount} people have a device with this name";
 
-  static m12(amount) => "${amount} people have a device with this name";
-
-  static m13(value) => "${value} is required";
+  static m12(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

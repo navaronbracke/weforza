@@ -1,37 +1,37 @@
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/fileHandler.dart';
-import 'package:weforza/model/exportableRide.dart';
-import 'package:weforza/model/rideExportState.dart';
-import 'package:weforza/repository/exportRidesRepository.dart';
+import 'package:weforza/model/exportableMember.dart';
+import 'package:weforza/repository/exportMembersRepository.dart';
 
-class ExportRidesBloc extends Bloc {
-  ExportRidesBloc({
-    @required this.repository,
-    @required this.fileHandler,
-  });
+class ExportMembersBloc extends Bloc {
+  ExportMembersBloc({
+    @required this.exportMembersRepository,
+    @required this.fileHandler
+  }): assert(exportMembersRepository != null && fileHandler != null);
 
-  final ExportRidesRepository repository;
+  final ExportMembersRepository exportMembersRepository;
   final IFileHandler fileHandler;
-  final TextEditingController fileNameController = TextEditingController();
-  final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
 
-  final StreamController<RideExportState> _submitController = BehaviorSubject();
-  Stream<RideExportState> get submitStream => _submitController.stream;
+  final StreamController<MembersExportState> _streamController = BehaviorSubject();
+  Stream<MembersExportState> get stream => _streamController.stream;
 
   final StreamController<bool> _fileExistsController = BehaviorSubject();
   Stream<bool> get fileExistsStream => _fileExistsController.stream;
 
-  bool autoValidateFileName = false;
-  final int filenameMaxLength = 80;
+  final RegExp filenamePattern = RegExp(r"^[\w\s-]{1,80}$");
+  final TextEditingController filenameController = TextEditingController();
 
+  bool autoValidateFileName = false;
+
+  final int filenameMaxLength = 80;
   String _filename;
 
   FileExtension _fileExtension = FileExtension.CSV;
@@ -53,7 +53,6 @@ class ExportRidesBloc extends Bloc {
     }else if(filename.trim().isEmpty){
       filenameError = isWhitespaceMessage;
     }else if(filenameMaxLength < filename.length){
-      //The full title is the biggest thing we allow
       filenameError = filenameNameMaxLengthMessage;
     }else if(!filenamePattern.hasMatch(filename)){
       filenameError = invalidFilenameMessage;
@@ -65,43 +64,37 @@ class ExportRidesBloc extends Bloc {
     return filenameError;
   }
 
-  Future<void> exportRidesWithAttendees() async {
-    final Iterable<ExportableRide> rides = await repository.getRides();
-
+  Future<void> exportMembers(String csvHeader) async {
     await fileHandler.createFile(_filename, _fileExtension.extension()).then((file) async {
       if(await file.exists()){
         _fileExistsController.add(true);
       }else{
         _fileExistsController.add(false);
-        _submitController.add(RideExportState.EXPORTING);
-        await _saveRidesToFile(file, _fileExtension.extension(), rides);
-        _submitController.add(RideExportState.DONE);
+        _streamController.add(MembersExportState.EXPORTING);
+        final Iterable<ExportableMember> exports = await exportMembersRepository.getMembers();
+        await _saveMembersToFile(file, _fileExtension.extension(), exports, csvHeader);
+        _streamController.add(MembersExportState.DONE);
       }
-    }).catchError((e)=> _submitController.addError(e));
+    }).catchError((e) => _streamController.addError(e));
   }
 
-  ///Save the given [ExportableRide]s to the given file.
-  ///The extension determines how the data is structured inside the file.
-  Future<void> _saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides) async {
+  /// Save the given [ExportableMember]s to the given file,
+  /// using a write algorithm compatible with the given extension.
+  /// In case of CSV files, the [csvHeader] is used as first line.
+  Future<void> _saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader) async {
     if(extension == FileExtension.CSV.extension()){
       final buffer = StringBuffer();
 
-      rides.forEach((exportedRide) {
-        buffer.writeln(exportedRide.ride.toCsv());
-        buffer.writeln();
-        for(ExportableRideAttendee attendee in exportedRide.attendees){
-          buffer.writeln(attendee.toCsv());
-        }
-        buffer.writeln();
+      buffer.writeln(csvHeader);
+
+      members.forEach((exportedMember) {
+        buffer.writeln(exportedMember.toCsv());
       });
 
       await file.writeAsString(buffer.toString());
     }else if(extension == FileExtension.JSON.extension()){
       final Map<String, dynamic> data = {
-        "rides": rides.map((ExportableRide exportableRide) => {
-          "ride": exportableRide.ride.toJson(),
-          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson()).toList()
-        }).toList()
+        "members": members.map((ExportableMember member) => member.toJson()).toList()
       };
 
       await file.writeAsString(jsonEncode(data));
@@ -112,9 +105,14 @@ class ExportRidesBloc extends Bloc {
 
   @override
   void dispose() {
-    _submitController.close();
+    filenameController.dispose();
     _fileExistsController.close();
-    fileNameController.dispose();
+    _streamController.close();
   }
+}
 
+enum MembersExportState {
+  IDLE,
+  EXPORTING,
+  DONE
 }

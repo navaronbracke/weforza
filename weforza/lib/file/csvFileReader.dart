@@ -10,61 +10,38 @@ import 'package:weforza/model/member.dart';
 /// This class will read the contents of CSV files.
 class CsvFileReader {
 
-  /// Read the lines from the given file.
-  Future<List<String>> _readLines(File file){
-    return file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
-  }
+  /// Read the individual lines of the given [file].
+  /// Throws a [CsvHeaderMissingError] if the first line doesn't match [headerRegex].
+  /// Returns the lines that were read from the file.
+  /// Returns an empty list if the file is empty.
+  Future<List<String>> readLines(File file, String headerRegex) async {
+    final List<String> lines = await file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
 
-  /// Read the [Member]s and their [Device]s from the given file.
-  /// The [headerRegex] is used to strip any possible csv header.
-  Future<Iterable<ExportableMember>> readMembersFromFile(File file, String headerRegex) async {
-    // This list will hold the final output.
-    final List<ExportableMember> exports = [];
+    if(lines.isEmpty) return lines;
 
-    List<String> lines = await _readLines(file);
-
-    //Return fast when there are no lines.
-    if(lines.isEmpty) return exports;
-
-    // This list contains the line readers that will run in parallel.
-    final List<Future<void>> lineReaders = [];
-
-    //Remove all the spaces in the possible and turn into lower case.
-    //This way we can do a regex check for the header presence.
-    final possibleHeader = lines[0].toLowerCase();
-
-    // Check that the header is required.
-    if(!RegExp("^$headerRegex\$").hasMatch(possibleHeader)){
+    // Check that the header is present.
+    if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
       return Future.error(CsvHeaderMissingError());
     }
 
-    // Remove the header.
-    lines = lines.sublist(1);
-
-    //Add a line processor for each line and run them in parallel.
-    for(String line in lines){
-      lineReaders.add(_processLine(line, exports));
-    }
-
-    await Future.wait(lineReaders);
-
-    return exports;
+    // Return the lines, without the header.
+    return lines.sublist(1);
   }
 
-  //Process the given line of data and add the member and devices to the given collection.
+  //Process the given line of data and add it to the given collection, if it is valid.
   //This function is a future, so we can process multiple lines at once.
-  Future<void> _processLine(String line, List<ExportableMember> collection) async {
+  Future<void> processLine(String line, List<ExportableMember> collection) async {
     final List<String> values = line.split(',');
 
     //If the line doesn't have enough cells to fill the required fields
     // (first name, last name and alias, in that order), skip it
     if(values.length < 3){
-      return;
+      return null;
     }
 
     //Invalid data lines are skipped
     if(!Member.personNameAndAliasRegex.hasMatch(values[0]) || !Member.personNameAndAliasRegex.hasMatch(values[1]) || (values[2].isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(values[2]))){
-      return;
+      return null;
     }
 
     // This Set will keep the device names.

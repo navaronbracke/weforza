@@ -77,7 +77,8 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       // Notify the animated list that a device was inserted.
       _future = _delegate.addDevice(model).then((_) => navigator.pop(true));
     } else {
-      _future = _delegate.editDevice(model);
+      // The animated list does not need to insert an item when it was edited.
+      _future = _delegate.editDevice(model).then((_) => navigator.pop());
     }
 
     setState(() {});

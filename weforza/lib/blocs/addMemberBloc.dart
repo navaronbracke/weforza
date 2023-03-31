@@ -132,7 +132,7 @@ class AddMemberBloc extends Bloc {
         lastname: _lastName,
         alias: _alias,
         profileImageFilePath: image?.path,
-        isActiveMember: false,
+        isActiveMember: true,
         lastUpdated: DateTime.now().toUtc()
       );
 

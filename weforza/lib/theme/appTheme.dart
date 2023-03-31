@@ -49,11 +49,6 @@ abstract class ApplicationTheme {
       color: Colors.white,
   );
 
-  ///The background color for an unselected ride attendee.
-  static final Color rideAttendeeUnSelectedBackgroundColor = Colors.white;
-  ///The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
-
   static final TextStyle rideAttendeeFirstNameTextStyle = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 16.0

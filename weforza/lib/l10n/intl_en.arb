@@ -133,8 +133,6 @@
   "SettingsLoadingError": "Could not load the settings",
   "SettingsGenericError": "Something went wrong",
   "SettingsSubmitError": "Could not save the settings",
-  "SettingsShowAllDevicesOptionLabel": "Show All Scanned Devices",
-  "SettingsShowAllDevicesOptionDescription": "Show all scanned devices, regardless if they belong to a known person or not.",
 
   "PersonFirstNameLabel": "First Name",
   "PersonLastNameLabel": "Last Name",

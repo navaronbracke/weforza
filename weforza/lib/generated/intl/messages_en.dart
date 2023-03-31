@@ -162,8 +162,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "SettingsLoading" : MessageLookupByLibrary.simpleMessage("Loading Settings"),
     "SettingsLoadingError" : MessageLookupByLibrary.simpleMessage("Could not load the settings"),
     "SettingsScanSliderHeader" : MessageLookupByLibrary.simpleMessage("Duration of a scan (in seconds)"),
-    "SettingsShowAllDevicesOptionDescription" : MessageLookupByLibrary.simpleMessage("Show all scanned devices, regardless if they belong to a known person or not."),
-    "SettingsShowAllDevicesOptionLabel" : MessageLookupByLibrary.simpleMessage("Show All Scanned Devices"),
     "SettingsSubmitError" : MessageLookupByLibrary.simpleMessage("Could not save the settings"),
     "SettingsTitle" : MessageLookupByLibrary.simpleMessage("Settings"),
     "SundayPrefix" : MessageLookupByLibrary.simpleMessage("Sun"),

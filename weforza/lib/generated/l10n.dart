@@ -1173,26 +1173,6 @@ class S {
     );
   }
 
-  /// `Show All Scanned Devices`
-  String get SettingsShowAllDevicesOptionLabel {
-    return Intl.message(
-      'Show All Scanned Devices',
-      name: 'SettingsShowAllDevicesOptionLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Show all scanned devices, regardless if they belong to a known person or not.`
-  String get SettingsShowAllDevicesOptionDescription {
-    return Intl.message(
-      'Show all scanned devices, regardless if they belong to a known person or not.',
-      name: 'SettingsShowAllDevicesOptionDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `First Name`
   String get PersonFirstNameLabel {
     return Intl.message(

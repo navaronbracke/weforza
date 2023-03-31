@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/memberListBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
@@ -24,7 +25,10 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 class MemberListPage extends StatefulWidget {
   @override
   _MemberListPageState createState() => _MemberListPageState(
-     bloc: MemberListBloc(InjectionContainer.get<MemberRepository>())
+     bloc: MemberListBloc(
+       InjectionContainer.get<MemberRepository>(),
+       InjectionContainer.get<IFileHandler>(),
+     )
   );
 }
 

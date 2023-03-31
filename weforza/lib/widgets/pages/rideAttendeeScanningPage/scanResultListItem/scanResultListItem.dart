@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/model/scanResultItem.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultListItemWithDeviceNameAndIconSlot.dart';
+import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultMultipleOwnerListItem.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/scanResultListItem/scanResultSingleOwnerListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
@@ -50,11 +51,9 @@ class ScanResultListItem extends StatelessWidget {
                     deviceName: item.deviceName,
                     owner: snapshot.data.first,
                   );
-                }else{
-                  //TODO multiple items -> owner selection widget (close dropdown upon selecting a new one of these)
-                  //TODO device name should also be selectable text here
-                  return Center();//temporary until we get a new widget here
                 }
+
+                return ScanResultMultipleOwnerListItem();
               }
             }
           }else{

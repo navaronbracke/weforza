@@ -4,7 +4,10 @@ class RideAttendee {
     required this.isScanned,
     required this.rideDate,
     required this.uuid,
-  }) : assert(uuid.isNotEmpty);
+  }) : assert(
+          uuid.isNotEmpty,
+          'The uuid of a ride attendee should not be empty',
+        );
 
   /// Create a new ride attendee from the given [values].
   factory RideAttendee.of(Map<String, dynamic> values) {

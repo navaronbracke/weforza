@@ -4,7 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/database_factory.dart';
+import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
+import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/app.dart';
 
 void main() async {
@@ -22,11 +26,19 @@ void main() async {
     ),
   );
 
+  // Preload the settings.
+  final settingsRepository = SettingsRepository(
+    SettingsDao(database.getDatabase(), DatabaseTables().settings),
+  );
+  final settings = await settingsRepository.loadApplicationSettings();
+
   runApp(
     ProviderScope(
       overrides: [
         // Inject the database after it is ready.
         databaseProvider.overrideWithValue(database),
+        // Inject the preloaded settings.
+        settingsProvider.overrideWithValue(StateController(settings)),
       ],
       child: const WeForzaApp(),
     ),

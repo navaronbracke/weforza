@@ -32,6 +32,9 @@ dependencies:
   # Used by tests.
   file: ^6.1.4
 
+  # This package provides platform independent file picking.
+  file_picker: ^5.2.4
+
   flutter:
     sdk: flutter
 

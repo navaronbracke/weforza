@@ -7,11 +7,12 @@ import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberItem.dart';
 import 'package:weforza/repository/memberRepository.dart';
+import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
 
-class EditMemberBloc extends Bloc {
+class EditMemberBloc extends Bloc implements IProfileImagePicker {
   EditMemberBloc(this._repository,this.member): assert(_repository != null && member != null){
-    image = member.profileImage;
+    _selectedImage = member.profileImage;
     firstName = member.firstName;
     lastName = member.lastName;
     phone = member.phone;
@@ -25,14 +26,18 @@ class EditMemberBloc extends Bloc {
   Stream<EditMemberSubmitState> get submitStream => _submitStateController.stream;
 
   StreamController<ProfileImagePickingState> _imagePickingController = BehaviorSubject();
-  Stream<ProfileImagePickingState> get imagePickingStream => _imagePickingController.stream;
+
+  @override
+  Stream<ProfileImagePickingState> get stream => _imagePickingController.stream;
 
   ///The actual inputs.
   String firstName;
   String lastName;
   String phone;
+  File _selectedImage;
 
-  File image;
+  @override
+  File get selectedImage => _selectedImage;
 
   ///The actual errors.
   String firstNameError;
@@ -140,14 +145,14 @@ class EditMemberBloc extends Bloc {
       firstName,
       lastName,
       phone,
-      (image == null) ? null : image.path,
+      (_selectedImage == null) ? null : _selectedImage.path,
     );
     await _repository.memberExists(firstName, lastName, phone,member.uuid).then((exists) async {
       if(exists){
         _submitStateController.add(EditMemberSubmitState.MEMBER_EXISTS);
       }else{
         await _repository.updateMember(newMember).then((_){
-          onSuccess(MemberItem(newMember,image));
+          onSuccess(MemberItem(newMember,_selectedImage));
         },onError: (error){
           _submitStateController.add(EditMemberSubmitState.ERROR);
         });
@@ -157,10 +162,13 @@ class EditMemberBloc extends Bloc {
     });
   }
 
-  Future<void> pickImage() async {
+  @override
+  void pickProfileImage() async {
     _imagePickingController.add(ProfileImagePickingState.LOADING);
     await _repository.chooseProfileImageFromGallery().then((img){
-      image = img;
+      if(img != null){
+        _selectedImage = img;
+      }
       _imagePickingController.add(ProfileImagePickingState.IDLE);
     },onError: (error){
       _imagePickingController.addError(Exception("Could not pick a profile image"));
@@ -171,6 +179,15 @@ class EditMemberBloc extends Bloc {
   void dispose() {
     _submitStateController.close();
     _imagePickingController.close();
+  }
+
+  @override
+  void clearSelectedImage() {
+    if(_selectedImage != null){
+      _imagePickingController.add(ProfileImagePickingState.LOADING);
+      _selectedImage = null;
+      _imagePickingController.add(ProfileImagePickingState.IDLE);
+    }
   }
 }
 

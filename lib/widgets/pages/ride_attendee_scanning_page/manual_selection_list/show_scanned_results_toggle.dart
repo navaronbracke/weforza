@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the toggle for showing or hiding
 /// the scanned results on the manual selection page.
@@ -31,13 +31,16 @@ class ShowScannedResultsToggle extends StatelessWidget {
         final showScannedResults = snapshot.data!;
 
         return PlatformAwareWidget(
-          android: () => Switch(
-            activeColor: Colors.white,
-            activeTrackColor:
-                ApplicationTheme.androidManualSelectionSwitchActiveTrackColor,
-            onChanged: onChanged,
-            value: showScannedResults,
-          ),
+          android: () {
+            const theme = AppTheme.manualSelectionBottomBar;
+
+            return Switch(
+              activeColor: Colors.white,
+              activeTrackColor: theme.switchActiveTrackColor,
+              onChanged: onChanged,
+              value: showScannedResults,
+            );
+          },
           ios: () => CupertinoSwitch(
             onChanged: onChanged,
             value: showScannedResults,

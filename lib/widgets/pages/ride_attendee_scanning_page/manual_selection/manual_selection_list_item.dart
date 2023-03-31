@@ -226,7 +226,9 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
           ],
         ),
       );
-    } else if (Platform.isIOS) {
+    }
+
+    if (Platform.isIOS) {
       return showCupertinoDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(

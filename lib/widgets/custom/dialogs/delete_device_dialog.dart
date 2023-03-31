@@ -12,10 +12,10 @@ class DeleteDeviceDialog extends ConsumerStatefulWidget {
   final Future<void> Function() onDelete;
 
   @override
-  _DeleteDeviceDialogState createState() => _DeleteDeviceDialogState();
+  DeleteDeviceDialogState createState() => DeleteDeviceDialogState();
 }
 
-class _DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
+class DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
   Future<void>? future;
 
   @override

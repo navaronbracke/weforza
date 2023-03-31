@@ -14,10 +14,10 @@ class WeForzaApp extends ConsumerStatefulWidget {
   const WeForzaApp({Key? key}) : super(key: key);
 
   @override
-  _WeForzaAppState createState() => _WeForzaAppState();
+  WeForzaAppState createState() => WeForzaAppState();
 }
 
-class _WeForzaAppState extends ConsumerState<WeForzaApp> {
+class WeForzaAppState extends ConsumerState<WeForzaApp> {
   static const _appName = 'WeForza';
 
   @override

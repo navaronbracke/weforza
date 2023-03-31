@@ -23,10 +23,10 @@ class ExportRidePage extends ConsumerStatefulWidget {
   final Ride? rideToExport;
 
   @override
-  _ExportRidePageState createState() => _ExportRidePageState();
+  ExportRidePageState createState() => ExportRidePageState();
 }
 
-class _ExportRidePageState extends ConsumerState<ExportRidePage> {
+class ExportRidePageState extends ConsumerState<ExportRidePage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   late final TextEditingController _filenameController;
   final _filenameErrorController = BehaviorSubject.seeded('');

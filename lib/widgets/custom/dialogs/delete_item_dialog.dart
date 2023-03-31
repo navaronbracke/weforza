@@ -50,11 +50,11 @@ class DeleteItemDialog extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: Text(translator.Delete.toUpperCase()),
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
               onPressed: onDeletePressed,
+              child: Text(translator.Delete.toUpperCase()),
             ),
           ],
         ),
@@ -153,12 +153,12 @@ class DeleteItemDialog extends StatelessWidget {
       actions: [
         CupertinoDialogAction(
           isDestructiveAction: true,
-          child: Text(translator.Delete),
           onPressed: onDeletePressed,
+          child: Text(translator.Delete),
         ),
         CupertinoDialogAction(
-          child: Text(translator.Cancel),
           onPressed: () => Navigator.of(context).pop(),
+          child: Text(translator.Cancel),
         ),
       ],
     );

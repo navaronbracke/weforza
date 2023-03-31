@@ -21,10 +21,10 @@ class AnimatedCheckmark extends StatefulWidget {
   final Size size;
 
   @override
-  _AnimatedCheckmarkState createState() => _AnimatedCheckmarkState();
+  AnimatedCheckmarkState createState() => AnimatedCheckmarkState();
 }
 
-class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
+class AnimatedCheckmarkState extends State<AnimatedCheckmark>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;

@@ -14,11 +14,10 @@ class ResetRideCalendarDialog extends ConsumerStatefulWidget {
   const ResetRideCalendarDialog({Key? key}) : super(key: key);
 
   @override
-  _ResetRideCalendarDialogState createState() =>
-      _ResetRideCalendarDialogState();
+  ResetRideCalendarDialogState createState() => ResetRideCalendarDialogState();
 }
 
-class _ResetRideCalendarDialogState
+class ResetRideCalendarDialogState
     extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? deleteFuture;
 
@@ -100,13 +99,11 @@ class _ResetRideCalendarDialogState
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: Text(
-                translator.Clear.toUpperCase(),
-              ),
               style: TextButton.styleFrom(
                 primary: ApplicationTheme.deleteItemButtonTextColor,
               ),
               onPressed: () => _resetCalendar(context),
+              child: Text(translator.Clear.toUpperCase()),
             ),
           ],
         ),

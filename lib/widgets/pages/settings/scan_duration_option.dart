@@ -14,10 +14,10 @@ class ScanDurationOption extends StatefulWidget {
   final ScanDurationDelegate delegate;
 
   @override
-  _ScanDurationOptionState createState() => _ScanDurationOptionState();
+  ScanDurationOptionState createState() => ScanDurationOptionState();
 }
 
-class _ScanDurationOptionState extends State<ScanDurationOption> {
+class ScanDurationOptionState extends State<ScanDurationOption> {
   @override
   Widget build(BuildContext context) {
     final currentValue = widget.delegate.currentScanDuration;

@@ -37,8 +37,8 @@ class SkipScanButton extends StatelessWidget {
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ElevatedButton(
-          child: Text(translator.SkipScan),
           onPressed: onSkip,
+          child: Text(translator.SkipScan),
         ),
       ),
       ios: () {
@@ -47,11 +47,11 @@ class SkipScanButton extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
           child: CupertinoButton.filled(
+            onPressed: onSkip,
             child: Text(
               translator.SkipScan,
               style: const TextStyle(color: Colors.white),
             ),
-            onPressed: onSkip,
           ),
         );
       },
@@ -65,8 +65,8 @@ class SkipScanButton extends StatelessWidget {
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ElevatedButton(
-          child: Text(translator.Continue),
           onPressed: onContinue,
+          child: Text(translator.Continue),
         ),
       ),
       ios: () {
@@ -75,11 +75,11 @@ class SkipScanButton extends StatelessWidget {
         return Padding(
           padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
           child: CupertinoButton.filled(
+            onPressed: onContinue,
             child: Text(
               translator.Continue,
               style: const TextStyle(color: Colors.white),
             ),
-            onPressed: onContinue,
           ),
         );
       },

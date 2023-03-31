@@ -16,10 +16,10 @@ class RideListItem extends ConsumerStatefulWidget {
   final Ride ride;
 
   @override
-  _RideListItemState createState() => _RideListItemState();
+  RideListItemState createState() => RideListItemState();
 }
 
-class _RideListItemState extends ConsumerState<RideListItem> {
+class RideListItemState extends ConsumerState<RideListItem> {
   TextStyle get itemTextStyle {
     if (widget.ride.date.month % 2 == 0) {
       return const TextStyle(

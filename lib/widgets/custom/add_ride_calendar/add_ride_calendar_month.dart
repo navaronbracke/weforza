@@ -98,8 +98,8 @@ class AddRideCalendarMonth extends StatelessWidget {
       output.add(Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
         child: Row(
-          children: children,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: children,
         ),
       ));
     }

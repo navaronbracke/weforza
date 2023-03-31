@@ -49,13 +49,13 @@ class _HomePageState extends State<HomePage>
 
   Widget _buildPageView() {
     return PageView(
-      children: _pages,
       controller: _pageController,
       onPageChanged: (page) {
         setState(() {
           _selectedIndex = page;
         });
       },
+      children: _pages,
     );
   }
 

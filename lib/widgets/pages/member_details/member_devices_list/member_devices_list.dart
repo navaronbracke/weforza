@@ -19,10 +19,10 @@ class MemberDevicesList extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  _MemberDevicesListState createState() => _MemberDevicesListState();
+  MemberDevicesListState createState() => MemberDevicesListState();
 }
 
-class _MemberDevicesListState extends ConsumerState<MemberDevicesList> {
+class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
   late final SelectedMemberNotifier selectedMemberNotifier;

@@ -35,7 +35,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m7(maxLength) => "Familienaam kan niet langer zijn dan ${maxLength} letters";
 
-  static m8(amount) => "${amount} personen hebben een toestel met deze naam";
+  static m8(amount) => "${amount} renners hebben een toestel met deze naam";
 
   static m9(value) => "${value} is verplicht";
 

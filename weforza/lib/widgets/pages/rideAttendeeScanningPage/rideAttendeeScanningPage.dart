@@ -197,6 +197,8 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
     return ManualSelectionSubmit(
       isSaving: bloc.saving,
       onSave: () => _onSaveScanResults(context),
+      getAttendeeCount: bloc.getRideAttendeeCount,
+      attendeeCountStream: bloc.attendeeCount,
     );
   }
 

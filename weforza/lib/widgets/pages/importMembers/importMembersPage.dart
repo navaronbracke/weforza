@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/importMembersBloc.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/injection/injector.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/importMembers/importMembersComplete.dart';
@@ -17,7 +19,9 @@ class ImportMembersPage extends StatefulWidget {
 
 class _ImportMembersPageState extends State<ImportMembersPage> {
 
-  final ImportMembersBloc bloc = ImportMembersBloc();
+  final ImportMembersBloc bloc = ImportMembersBloc(fileHandler: InjectionContainer.get<IFileHandler>());
+
+  Future<void> importMembersFuture;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
 
   Widget _buildBody(BuildContext context){
     return FutureBuilder<void>(
-      initialData: bloc.importMembersFuture,
+      initialData: importMembersFuture,
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
@@ -114,14 +118,18 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
     );
   }
 
+  void onImportMembers(BuildContext context){
+    importMembersFuture = bloc.pickFileAndImportMembers(
+        S.of(context).ImportMembersCsvHeaderRegex
+    ).then((_)=> ReloadDataProvider.of(context).reloadMembers.value = true);
+
+    setState(() {});
+  }
+
   Widget _buildButton(BuildContext context){
     return PlatformAwareWidget(
       android: () => RaisedButton(
-        onPressed: () => setState(() =>
-            bloc.pickFileAndImportMembers(
-                ReloadDataProvider.of(context).reloadMembers
-            )
-        ),
+        onPressed: () => onImportMembers(context),
         color: ApplicationTheme.primaryColor,
         child: Text(
           S.of(context).ImportMembersPickFile,
@@ -129,12 +137,8 @@ class _ImportMembersPageState extends State<ImportMembersPage> {
         ),
       ),
       ios: () => CupertinoButton.filled(
-          child: Text(S.of(context).ImportMembersPickFile),
-          onPressed: () => setState(() =>
-              bloc.pickFileAndImportMembers(
-                  ReloadDataProvider.of(context).reloadMembers
-              )
-          )
+        child: Text(S.of(context).ImportMembersPickFile),
+        onPressed: () => onImportMembers(context),
       ),
     );
   }

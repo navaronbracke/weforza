@@ -103,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Titel"),
     "EditRideTitleMaxLength" : m3,
     "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("Een titel mag niet enkel witruimte zijn"),
+    "Export" : MessageLookupByLibrary.simpleMessage("Exporteren"),
     "ExportRideCsvExtension" : MessageLookupByLibrary.simpleMessage("csv"),
     "ExportRideExportedToPathMessage" : m4,
     "ExportRideExportingToFile" : MessageLookupByLibrary.simpleMessage("Rit exporteren naar bestand"),

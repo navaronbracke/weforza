@@ -28,6 +28,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.5
 
+  # device info_plus provides access to device specific information.
+  device_info_plus: ^8.0.0  
+
   # Provides an injectable file system abstraction.
   # Used by tests.
   file: ^6.1.4

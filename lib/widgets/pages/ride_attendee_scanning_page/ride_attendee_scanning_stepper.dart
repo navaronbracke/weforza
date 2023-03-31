@@ -53,7 +53,8 @@ class RideAttendeeScanningStepper extends StatelessWidget {
           stream: stream,
           builder: (context, snapshot) {
             // Every step before the manual selection should highlight the `Scan` label.
-            final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
+            final isScanStep =
+                snapshot.data != RideAttendeeScanningState.manualSelection;
 
             return Row(
               mainAxisSize: MainAxisSize.min,

@@ -113,11 +113,13 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     super.initState();
     final profileImagePath = widget.rider?.profileImageFilePath;
 
-    final profileImageFile = profileImagePath == null ? null : File(profileImagePath);
+    final profileImageFile =
+        profileImagePath == null ? null : File(profileImagePath);
 
     _profileImageDelegate = ProfileImagePickerDelegate(
       fileHandler: ref.read(fileHandlerProvider),
-      initialValue: profileImageFile?.existsSync() ?? false ? profileImageFile : null,
+      initialValue:
+          profileImageFile?.existsSync() ?? false ? profileImageFile : null,
     );
 
     _delegate = RiderFormDelegate(
@@ -195,7 +197,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       maxLengthMessage: strings.firstNameMaxLength(
                         Rider.nameAndAliasMaxLength,
                       ),
-                      illegalCharachterMessage: strings.firstNameIllegalCharacters,
+                      illegalCharachterMessage:
+                          strings.firstNameIllegalCharacters,
                       isBlankMessage: strings.firstNameBlank,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -223,7 +226,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       maxLengthMessage: strings.lastNameMaxLength(
                         Rider.nameAndAliasMaxLength,
                       ),
-                      illegalCharachterMessage: strings.lastNameIllegalCharacters,
+                      illegalCharachterMessage:
+                          strings.lastNameIllegalCharacters,
                       isBlankMessage: strings.lastNameBlank,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -295,7 +299,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                     children: [
                       Center(
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
                           child: ProfileImagePicker(
                             delegate: _profileImageDelegate,
                             imagePreviewSize: 80,
@@ -328,7 +333,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           maxLengthMessage: strings.firstNameMaxLength(
                             Rider.nameAndAliasMaxLength,
                           ),
-                          illegalCharachterMessage: strings.firstNameIllegalCharacters,
+                          illegalCharachterMessage:
+                              strings.firstNameIllegalCharacters,
                           isBlankMessage: strings.firstNameBlank,
                         ),
                       ),
@@ -348,7 +354,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           maxLengthMessage: strings.lastNameMaxLength(
                             Rider.nameAndAliasMaxLength,
                           ),
-                          illegalCharachterMessage: strings.lastNameIllegalCharacters,
+                          illegalCharachterMessage:
+                              strings.lastNameIllegalCharacters,
                           isBlankMessage: strings.lastNameBlank,
                         ),
                       ),
@@ -366,7 +373,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           maxLengthMessage: strings.aliasMaxLength(
                             Rider.nameAndAliasMaxLength,
                           ),
-                          illegalCharachterMessage: strings.aliasIllegalCharacters,
+                          illegalCharachterMessage:
+                              strings.aliasIllegalCharacters,
                           isBlankMessage: strings.aliasBlank,
                         ),
                         onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
@@ -389,7 +397,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   Widget _buildSubmitButton(BuildContext context) {
     final translator = S.of(context);
 
-    final submitButtonLabel = widget.rider == null ? translator.addRider : translator.editRider;
+    final submitButtonLabel =
+        widget.rider == null ? translator.addRider : translator.editRider;
 
     return FormSubmitButton<void>(
       delegate: _delegate,

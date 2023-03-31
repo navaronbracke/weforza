@@ -25,7 +25,7 @@ class RiderForm extends ConsumerStatefulWidget {
   /// The rider to edit.
   ///
   /// If this is null, a new rider will be created instead.
-  final Member? rider;
+  final Rider? rider;
 
   @override
   ConsumerState<RiderForm> createState() => _RiderFormState();
@@ -195,7 +195,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       value: value,
                       requiredMessage: strings.FirstNameRequired,
                       maxLengthMessage: strings.FirstNameMaxLength(
-                        Member.nameAndAliasMaxLength,
+                        Rider.nameAndAliasMaxLength,
                       ),
                       illegalCharachterMessage:
                           strings.FirstNameIllegalCharacters,
@@ -224,7 +224,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       value: value,
                       requiredMessage: strings.LastNameRequired,
                       maxLengthMessage: strings.LastNameMaxLength(
-                        Member.nameAndAliasMaxLength,
+                        Rider.nameAndAliasMaxLength,
                       ),
                       illegalCharachterMessage:
                           strings.LastNameIllegalCharacters,
@@ -249,7 +249,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                   validator: (value) => validateAlias(
                     value: value,
                     maxLengthMessage: strings.AliasMaxLength(
-                      Member.nameAndAliasMaxLength,
+                      Rider.nameAndAliasMaxLength,
                     ),
                     illegalCharachterMessage: strings.AliasIllegalCharacters,
                     isBlankMessage: strings.AliasBlank,
@@ -323,7 +323,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         focusNode: _firstNameFocusNode,
                         textInputAction: TextInputAction.next,
                         controller: _firstNameController,
-                        maxLength: Member.nameAndAliasMaxLength,
+                        maxLength: Rider.nameAndAliasMaxLength,
                         placeholder: strings.FirstName,
                         keyboardType: TextInputType.text,
                         onChanged: _resetSubmit,
@@ -331,7 +331,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           value: value,
                           requiredMessage: strings.FirstNameRequired,
                           maxLengthMessage: strings.FirstNameMaxLength(
-                            Member.nameAndAliasMaxLength,
+                            Rider.nameAndAliasMaxLength,
                           ),
                           illegalCharachterMessage:
                               strings.FirstNameIllegalCharacters,
@@ -344,7 +344,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         focusNode: _lastNameFocusNode,
                         textInputAction: TextInputAction.next,
                         controller: _lastNameController,
-                        maxLength: Member.nameAndAliasMaxLength,
+                        maxLength: Rider.nameAndAliasMaxLength,
                         placeholder: strings.LastName,
                         keyboardType: TextInputType.text,
                         onChanged: _resetSubmit,
@@ -352,7 +352,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           value: value,
                           requiredMessage: strings.LastNameRequired,
                           maxLengthMessage: strings.LastNameMaxLength(
-                            Member.nameAndAliasMaxLength,
+                            Rider.nameAndAliasMaxLength,
                           ),
                           illegalCharachterMessage:
                               strings.LastNameIllegalCharacters,
@@ -365,13 +365,13 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         textInputAction: TextInputAction.done,
                         controller: _aliasController,
                         keyboardType: TextInputType.text,
-                        maxLength: Member.nameAndAliasMaxLength,
+                        maxLength: Rider.nameAndAliasMaxLength,
                         placeholder: strings.Alias,
                         onChanged: _resetSubmit,
                         validator: (value) => validateAlias(
                           value: value,
                           maxLengthMessage: strings.AliasMaxLength(
-                            Member.nameAndAliasMaxLength,
+                            Rider.nameAndAliasMaxLength,
                           ),
                           illegalCharachterMessage:
                               strings.AliasIllegalCharacters,

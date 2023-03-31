@@ -10,13 +10,13 @@ class MemberRepository {
 
   final MemberDao _dao;
 
-  Future<void> addMember(Member member) => _dao.addMember(member);
+  Future<void> addMember(Rider member) => _dao.addMember(member);
 
   Future<void> deleteMember(String uuid) => _dao.deleteMember(uuid);
 
   Future<int> getAttendingCount(String uuid) => _dao.getAttendingCount(uuid);
 
-  Future<List<Member>> getMembers(MemberFilterOption filter) {
+  Future<List<Rider>> getMembers(MemberFilterOption filter) {
     return _dao.getMembers(filter);
   }
 
@@ -24,5 +24,5 @@ class MemberRepository {
     return _dao.setMemberActive(uuid, value: value);
   }
 
-  Future<void> updateMember(Member member) => _dao.updateMember(member);
+  Future<void> updateMember(Rider member) => _dao.updateMember(member);
 }

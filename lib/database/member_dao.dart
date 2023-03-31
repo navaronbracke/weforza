@@ -9,7 +9,7 @@ import 'package:weforza/model/rider/rider.dart';
 /// This class defines an interface to work with members.
 abstract class MemberDao {
   /// Add a [member].
-  Future<void> addMember(Member member);
+  Future<void> addMember(Rider member);
 
   /// Delete the member with the given [uuid].
   Future<void> deleteMember(String uuid);
@@ -18,13 +18,13 @@ abstract class MemberDao {
   Future<int> getAttendingCount(String uuid);
 
   /// Get the list of members that satisfy the given [filter].
-  Future<List<Member>> getMembers(MemberFilterOption filter);
+  Future<List<Rider>> getMembers(MemberFilterOption filter);
 
   /// Toggle the active state of the member with the given [uuid].
   Future<void> setMemberActive(String uuid, {required bool value});
 
   /// Update the given [member].
-  Future<void> updateMember(Member member);
+  Future<void> updateMember(Rider member);
 }
 
 /// This class represents the default implementation of [MemberDao].
@@ -38,7 +38,7 @@ class MemberDaoImpl implements MemberDao {
   /// A reference to the [Device] store.
   final _deviceStore = DatabaseTables.device;
 
-  /// A reference to the [Member] store.
+  /// A reference to the [Rider] store.
   final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
@@ -74,7 +74,7 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> addMember(Member member) async {
+  Future<void> addMember(Rider member) async {
     final recordRef = _memberStore.record(member.uuid);
 
     if (await recordRef.exists(_database)) {
@@ -116,7 +116,7 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<List<Member>> getMembers(MemberFilterOption filter) async {
+  Future<List<Rider>> getMembers(MemberFilterOption filter) async {
     final finder = Finder(
       sortOrders: [
         SortOrder('firstname'),
@@ -138,7 +138,7 @@ class MemberDaoImpl implements MemberDao {
 
     final records = await _memberStore.find(_database, finder: finder);
 
-    return records.map((r) => Member.of(r.key, r.value)).toList();
+    return records.map((r) => Rider.of(r.key, r.value)).toList();
   }
 
   @override
@@ -157,7 +157,7 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> updateMember(Member member) async {
+  Future<void> updateMember(Rider member) async {
     final alias = member.alias;
     final firstName = member.firstName;
     final lastName = member.lastName;

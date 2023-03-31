@@ -24,7 +24,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
       return;
     }
 
-    final rider = Member(
+    final rider = Rider(
       active: true,
       alias: model.alias,
       firstName: model.firstName,
@@ -51,7 +51,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
   /// the [whenComplete] function is called with the updated rider.
   void editRider(
     RiderModel model, {
-    required void Function(Member updatedRider) whenComplete,
+    required void Function(Rider updatedRider) whenComplete,
   }) async {
     if (!canStartComputation()) {
       return;
@@ -64,7 +64,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
         throw ArgumentError.notNull('uuid');
       }
 
-      final updatedRider = Member(
+      final updatedRider = Rider(
         active: model.active,
         alias: model.alias,
         firstName: model.firstName,

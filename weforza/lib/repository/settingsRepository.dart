@@ -17,6 +17,7 @@ class SettingsRepository {
     return settings;
   }
 
-  Future<void> writeApplicationSettings(Settings settings)
-    => _dao.writeApplicationSettings(settings);
+  Future<void> writeApplicationSettings(Settings settings) async {
+    await _dao.writeApplicationSettings(settings);
+  }
 }

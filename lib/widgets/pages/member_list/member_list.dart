@@ -9,22 +9,28 @@ import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_empty.dart';
 import 'package:weforza/widgets/pages/member_list/member_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the member list itself.
 class MemberList extends ConsumerWidget {
   const MemberList({
     Key? key,
-    required this.onSearchQueryChanged,
-    required this.searchQueryStream,
     required this.filter,
+    required this.onMemberSelected,
+    required this.searchField,
+    required this.searchQueryStream,
   }) : super(key: key);
 
-  final void Function(String query) onSearchQueryChanged;
-
-  final Stream<String> searchQueryStream;
-
+  /// The function that handles filtering results.
   final List<Member> Function(List<Member> data, String query) filter;
+
+  /// The function that is called after a member is selected.
+  final void Function() onMemberSelected;
+
+  /// The widget that provides the search field.
+  final Widget searchField;
+
+  /// The stream that provides updates about the search query.
+  final Stream<String> searchQueryStream;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,30 +45,7 @@ class MemberList extends ConsumerWidget {
 
         return Column(
           children: [
-            PlatformAwareWidget(
-              android: () => TextFormField(
-                textInputAction: TextInputAction.search,
-                keyboardType: TextInputType.text,
-                autocorrect: false,
-                autovalidateMode: AutovalidateMode.disabled,
-                onChanged: onSearchQueryChanged,
-                decoration: InputDecoration(
-                  suffixIcon: const Icon(Icons.search),
-                  labelText: translator.SearchRiders,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                ),
-              ),
-              ios: () => Padding(
-                padding: const EdgeInsets.all(8),
-                child: CupertinoSearchTextField(
-                  suffixIcon: const Icon(CupertinoIcons.search),
-                  onChanged: onSearchQueryChanged,
-                  placeholder: translator.SearchRiders,
-                ),
-              ),
-            ),
+            searchField,
             Expanded(
               child: StreamBuilder<String>(
                 stream: searchQueryStream,
@@ -77,6 +60,7 @@ class MemberList extends ConsumerWidget {
                     itemCount: results.length,
                     itemBuilder: (_, index) => MemberListItem(
                       member: results[index],
+                      onPressed: onMemberSelected,
                     ),
                   );
                 },

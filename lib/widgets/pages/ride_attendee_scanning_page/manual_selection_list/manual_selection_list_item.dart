@@ -34,7 +34,7 @@ class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListIte
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          return BoxDecoration(color: Theme.of(context).primaryColorDark);
+          return BoxDecoration(color: Theme.of(context).primaryColor.withOpacity(0.6));
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
           return BoxDecoration(color: CupertinoTheme.of(context).primaryColor);

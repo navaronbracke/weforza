@@ -33,9 +33,8 @@ class ScanProgressIndicator extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null || !value) {
-          // If there is no running scan yet,
-          // reserve the height of the progress indicator as blank space.
-          return const SizedBox(height: 4);
+          // If there is no running scan, do not reserve space for the progress bar.
+          return const SizedBox.shrink();
         }
 
         return PreferredSize(

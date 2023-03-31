@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/model/exportableMember.dart';
-import 'package:weforza/model/exportableRide.dart';
 
 enum FileExtension {
   JSON, CSV
@@ -44,13 +43,10 @@ abstract class IFileHandler {
   ///from which to import members and their devices.
   Future<File> chooseImportMemberDatasourceFile();
 
-  ///Save the given [ExportableRide]s to the given file.
-  ///The extension determines how the data is structured inside the file.
-  Future<void> saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides);
-
   //Create a file with the given name and extension.
   Future<File> createFile(String fileName, String extension);
 
+  //TODO move
   /// Save the given [ExportableMember]s to the given file,
   /// using a write algorithm compatible with the given extension.
   Future<void> saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader);
@@ -113,34 +109,6 @@ class FileHandler implements IFileHandler {
     return File(path);
   }
 
-  @override
-  Future<void> saveRidesToFile(File file, String extension, Iterable<ExportableRide> rides) async {
-    if(extension == FileExtension.CSV.extension()){
-      final buffer = StringBuffer();
-
-      rides.forEach((exportedRide) {
-        buffer.writeln(exportedRide.ride.toCsv());
-        buffer.writeln();
-        for(ExportableRideAttendee attendee in exportedRide.attendees){
-          buffer.writeln(attendee.toCsv());
-        }
-        buffer.writeln();
-      });
-
-      await file.writeAsString(buffer.toString());
-    }else if(extension == FileExtension.JSON.extension()){
-      final Map<String, dynamic> data = {
-        "rides": rides.map((ExportableRide exportableRide) => {
-          "ride": exportableRide.ride.toJson(),
-          "attendees": exportableRide.attendees.map((attendee) => attendee.toJson()).toList()
-        }).toList()
-      };
-
-      await file.writeAsString(jsonEncode(data));
-    }else{
-      return Future.error(InvalidFileFormatError());
-    }
-  }
 
   @override
   Future<void> saveMembersToFile(File file, String extension, Iterable<ExportableMember> members, String csvHeader) async {

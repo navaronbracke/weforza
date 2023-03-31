@@ -157,7 +157,11 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                 Center(
                   child: ProfileImagePicker(
                     delegate: _profileImageDelegate,
-                    size: 100,
+                    imagePreviewSize: 64,
+                    pickingIndicator: const SizedBox.square(
+                      dimension: 64,
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
                   ),
                 ),
                 Padding(

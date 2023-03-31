@@ -62,7 +62,7 @@ dependencies:
   intl: any
 
   # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^5.0.0
+  jiffy: ^6.1.0
 
   # package_info_plus provides access to app specific information such as build number & version.
   package_info_plus: ^3.0.3

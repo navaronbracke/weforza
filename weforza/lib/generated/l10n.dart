@@ -732,21 +732,21 @@ class S {
     );
   }
 
-  /// `Scan aborted, permission was denied`
+  /// `Scan aborted, permission was denied.`
   String get RideAttendeeScanningPermissionDenied {
     return Intl.message(
-      'Scan aborted, permission was denied',
+      'Scan aborted, permission was denied.',
       name: 'RideAttendeeScanningPermissionDenied',
       desc: '',
       args: [],
     );
   }
 
-  /// `Scanning requires permission to use your location`
-  String get RideAttendeeScanningPermissionDescription {
+  /// `Scanning requires permission to use your location.`
+  String get RideAttendeeScanningPermissionDeniedDescription {
     return Intl.message(
-      'Scanning requires permission to use your location',
-      name: 'RideAttendeeScanningPermissionDescription',
+      'Scanning requires permission to use your location.',
+      name: 'RideAttendeeScanningPermissionDeniedDescription',
       desc: '',
       args: [],
     );
@@ -792,21 +792,21 @@ class S {
     );
   }
 
-  /// `Save Scan Results`
-  String get RideAttendeeScanningSaveScanResults {
+  /// `Proceed to next step`
+  String get RideAttendeeScanningContinue {
     return Intl.message(
-      'Save Scan Results',
-      name: 'RideAttendeeScanningSaveScanResults',
+      'Proceed to next step',
+      name: 'RideAttendeeScanningContinue',
       desc: '',
       args: [],
     );
   }
 
-  /// `Save Selection`
-  String get RideAttendeeScanningSaveManualResults {
+  /// `Save`
+  String get RideAttendeeScanningSaveResults {
     return Intl.message(
-      'Save Selection',
-      name: 'RideAttendeeScanningSaveManualResults',
+      'Save',
+      name: 'RideAttendeeScanningSaveResults',
       desc: '',
       args: [],
     );
@@ -822,11 +822,21 @@ class S {
     );
   }
 
-  /// `Owned by: `
-  String get RideAttendeeScanningScanResultDeviceOwnedByLabel {
+  /// `{amount} people have a device with this name`
+  String RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel(Object amount) {
     return Intl.message(
-      'Owned by: ',
-      name: 'RideAttendeeScanningScanResultDeviceOwnedByLabel',
+      '$amount people have a device with this name',
+      name: 'RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel',
+      desc: '',
+      args: [amount],
+    );
+  }
+
+  /// `Some scanned devices have multiple possible owners. You can select the attending owners here.`
+  String get RideAttendeeScanningUnresolvedOwnersListTooltip {
+    return Intl.message(
+      'Some scanned devices have multiple possible owners. You can select the attending owners here.',
+      name: 'RideAttendeeScanningUnresolvedOwnersListTooltip',
       desc: '',
       args: [],
     );
@@ -1262,21 +1272,21 @@ class S {
     );
   }
 
-  /// `This device already exists`
-  String get DeviceAlreadyExists {
-    return Intl.message(
-      'This device already exists',
-      name: 'DeviceAlreadyExists',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `A device name can't be empty`
   String get DeviceNameBlank {
     return Intl.message(
       'A device name can\'t be empty',
       name: 'DeviceNameBlank',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This person already has a device with this name`
+  String get DeviceExists {
+    return Intl.message(
+      'This person already has a device with this name',
+      name: 'DeviceExists',
       desc: '',
       args: [],
     );

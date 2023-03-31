@@ -63,7 +63,8 @@ class _RideAttendeeScanningProgressIndicatorState extends State<RideAttendeeScan
           );
         }else{
           //Show nothing when not scanning.
-          return SizedBox.shrink();
+          //Fill the space with a 4dp blank sized box. 4dp is the default height of the progress indicator.
+          return SizedBox(height: 4);
         }
       },
     );

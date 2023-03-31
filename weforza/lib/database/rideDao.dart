@@ -22,7 +22,7 @@ abstract class IRideDao {
 
   ///Update the attendees for the ride with the given date.
   ///The old attendees of the ride will be removed and the new ones will be created.
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees, bool mergeResults);
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees);
 
   ///Update a [ride]'s properties, excluding its attendees.
   Future<void> updateRide(Ride ride);
@@ -99,26 +99,16 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees, bool mergeResults) async {
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees) async {
     assert(rideDate != null && attendees != null);
     final date = rideDate.toIso8601String();
-    if(mergeResults){
-      //Add the new results, but also keep the old ones.
-      await _database.transaction((txn) async {
-        //The keys are the date + uuid of the person.
-        //We merge the existing ones too, since those are just date + id and nothing special.
-        await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}"))
-            .put(txn, attendees.map((a)=> a.toMap()).toList(), merge: true);
-      });
-    }else{
-      //Delete all the old ones and insert the new ones.
-      final finder = Finder(filter: Filter.equals("date", date));
-      await _database.transaction((txn) async {
-        await _rideAttendeeStore.delete(txn, finder: finder);
-        await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}"))
-            .put(txn, attendees.map((a)=> a.toMap()).toList());
-      });
-    }
+    //Delete all the old ones and insert the new ones.
+    final finder = Finder(filter: Filter.equals("date", date));
+    await _database.transaction((txn) async {
+      await _rideAttendeeStore.delete(txn, finder: finder);
+      await _rideAttendeeStore.records(attendees.map((a)=> "$date${a.attendeeId}"))
+          .put(txn, attendees.map((a)=> a.toMap()).toList());
+    });
   }
 
   @override

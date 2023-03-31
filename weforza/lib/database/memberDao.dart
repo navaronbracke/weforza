@@ -87,13 +87,15 @@ class MemberDao implements IMemberDao {
 
   @override
   Future<List<Member>> getMembers() async {
-    final finder = Finder(
+    final Finder finder = Finder(
         sortOrders: [SortOrder("firstname"),SortOrder("lastname"),SortOrder("alias")]
     );
 
-    final records = await _memberStore.find(_database,finder: finder);
+    final Iterable<Member> members = await _memberStore.find(_database,finder: finder).then((records){
+      return records.map((record)=> Member.of(record.key, record.value));
+    });
 
-    return records.map((record)=> Member.of(record.key, record.value)).toList();
+    return members.toList();
   }
 
   @override

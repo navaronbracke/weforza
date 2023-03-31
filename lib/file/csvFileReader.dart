@@ -64,7 +64,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
 
     // This Set will keep the device names.
     // Since its a Set, duplicates are ignored.
-    final Set<String> devices = Set();
+    final Set<String> devices = {};
 
     // Besides First Name, Last Name, Alias, Active, Last Update
     // there are more values.

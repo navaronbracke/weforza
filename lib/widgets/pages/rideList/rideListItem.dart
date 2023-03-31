@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
@@ -7,11 +6,12 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget {
-  RideListItem({
+  const RideListItem({
+    Key? key,
     required this.ride,
     required this.rideAttendeeFuture,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   final Ride ride;
 
@@ -20,23 +20,20 @@ class RideListItem extends StatelessWidget {
   final Future<int> rideAttendeeFuture;
 
   @override
-  Widget build(BuildContext context){
-    final textStyle = ride.date.month % 2 == 0 ? TextStyle(
-      color: ApplicationTheme.rideListItemEvenMonthColor,
-    ) : TextStyle();
+  Widget build(BuildContext context) {
+    final textStyle = ride.date.month % 2 == 0
+        ? TextStyle(
+            color: ApplicationTheme.rideListItemEvenMonthColor,
+          )
+        : const TextStyle();
 
     final content = Row(
       children: <Widget>[
         Expanded(
-            child: Text(
-              ride.getFormattedDate(context, false),
-              style: textStyle
-          ),
+          child: Text(ride.getFormattedDate(context, false), style: textStyle),
         ),
         RideAttendeeCounter(
-            future: rideAttendeeFuture,
-            counterStyle: textStyle
-        ),
+            future: rideAttendeeFuture, counterStyle: textStyle),
       ],
     );
 
@@ -44,7 +41,7 @@ class RideListItem extends StatelessWidget {
       child: PlatformAwareWidget(
         android: () => ListTile(title: content),
         ios: () => Container(
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: content,

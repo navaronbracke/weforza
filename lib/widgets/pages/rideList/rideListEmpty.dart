@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 
 class RideListEmpty extends StatelessWidget {
   const RideListEmpty({Key? key}) : super(key: key);

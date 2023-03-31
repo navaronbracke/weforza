@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/theme/app_theme.dart';
 
 ///This [Widget] displays a round profile icon or a placeholder if no image is present.
 class ProfileImage extends StatelessWidget {

@@ -4,104 +4,118 @@ import 'package:weforza/extensions/date_extension.dart';
 class Member implements Comparable<Member> {
   /// The default constuctor.
   Member({
-    required this.uuid,
-    required this.firstname,
-    required this.lastname,
+    required this.active,
     required this.alias,
-    required this.isActiveMember,
-    required this.profileImageFilePath,
+    required this.firstName,
+    required this.lastName,
     required this.lastUpdated,
-  }) : assert(uuid.isNotEmpty && firstname.isNotEmpty && lastname.isNotEmpty);
+    required this.profileImageFilePath,
+    required this.uuid,
+  }) : assert(uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty);
 
   /// Create a member from the given [uuid] and [values].
   factory Member.of(String uuid, Map<String, Object?> values) {
     assert(uuid.isNotEmpty);
 
     return Member(
-      uuid: uuid,
-      firstname: values['firstname'] as String,
-      lastname: values['lastname'] as String,
+      active: values['active'] as bool? ?? true,
       alias: values['alias'] as String? ?? '',
-      isActiveMember: values['active'] as bool? ?? true,
-      profileImageFilePath: values['profile'] as String?,
+      firstName: values['firstname'] as String,
+      lastName: values['lastname'] as String,
       lastUpdated: DateTime.parse(values['lastUpdated'] as String),
+      profileImageFilePath: values['profile'] as String?,
+      uuid: uuid,
     );
   }
 
-  /// Regex for a member's first or last name or alias.
+  /// Regex for a member's first name, last name or alias.
   ///
-  /// The Regex is language independent.
-  /// Allows hyphen, apostrophe and spaces.
-  /// Between 1 and 50 characters(inclusive).
+  /// The regex is language independent,
+  /// allows hyphens, apostrophes and spaces,
+  /// and requires a length between 1 and 50.
   static final personNameAndAliasRegex = RegExp(
     r"^([\p{Letter}\s]|['-]){1,50}$",
     unicode: true,
   );
 
+  /// The maximum length for the first name, last name and alias.
   static const int nameAndAliasMaxLength = 50;
 
-  /// The member's GUID.
-  final String uuid;
-
-  /// The member's first name.
-  String firstname;
-
-  /// The member's last name.
-  String lastname;
+  /// Whether this member is currently an active ride participant.
+  final bool active;
 
   /// The member's alias.
-  String alias;
+  final String alias;
 
-  /// The path to an optional profile picture.
-  String? profileImageFilePath;
+  /// The member's first name.
+  final String firstName;
 
-  /// Whether this member is currently an active ride participant.
-  bool isActiveMember;
+  /// The member's last name.
+  final String lastName;
 
   /// The last time that this member was updated.
   final DateTime lastUpdated;
 
-  /// The member initials.
-  String get initials => firstname[0] + lastname[0];
+  /// The path to the member's profile image on disk.
+  final String? profileImageFilePath;
 
-  /// This member, as a Map.
-  Map<String, Object?> toMap() {
-    return {
-      'firstname': firstname,
-      'lastname': lastname,
-      'alias': alias,
-      'active': isActiveMember,
-      'profile': profileImageFilePath,
-      'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
-    };
-  }
+  /// The member's UUID.
+  final String uuid;
 
-  @override
-  bool operator ==(Object other) {
-    return other is Member &&
-        firstname == other.firstname &&
-        lastname == other.lastname &&
-        alias == other.alias &&
-        isActiveMember == other.isActiveMember;
-  }
-
-  @override
-  int get hashCode => Object.hash(firstname, lastname, alias, isActiveMember);
+  /// Get the member's initials.
+  String get initials => firstName[0] + lastName[0];
 
   @override
   int compareTo(Member other) {
-    final int deltaFirstName = firstname.compareTo(other.firstname);
+    final int deltaFirstName = firstName.compareTo(other.firstName);
 
     if (deltaFirstName != 0) {
       return deltaFirstName;
     }
 
-    final int deltaLastName = lastname.compareTo(other.lastname);
+    final int deltaLastName = lastName.compareTo(other.lastName);
 
     if (deltaLastName != 0) {
       return deltaLastName;
     }
 
     return alias.compareTo(other.alias);
+  }
+
+  /// Convert this member into a map.
+  Map<String, Object?> toMap() {
+    return {
+      'active': active,
+      'alias': alias,
+      'firstname': firstName,
+      'lastname': lastName,
+      'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
+      'profile': profileImageFilePath,
+    };
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      uuid,
+      firstName,
+      lastName,
+      alias,
+      active,
+      lastUpdated,
+      profileImageFilePath,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Member &&
+        uuid == other.uuid &&
+        firstName == other.firstName &&
+        lastName == other.lastName &&
+        alias == other.alias &&
+        active == other.active &&
+        lastUpdated == other.lastUpdated &&
+        profileImageFilePath == other.profileImageFilePath;
   }
 }

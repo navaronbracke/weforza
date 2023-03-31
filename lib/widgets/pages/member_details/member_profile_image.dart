@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
-import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 
 class MemberProfileImage extends ConsumerWidget {
   const MemberProfileImage({super.key});
@@ -14,19 +13,10 @@ class MemberProfileImage extends ConsumerWidget {
       selectedMemberProvider.select((selectedMember) => selectedMember!),
     );
 
-    return PlatformAwareWidget(
-      android: () => AsyncProfileImage(
-        icon: Icons.person,
-        size: 75,
-        personInitials: selectedMember.value.initials,
-        future: selectedMember.profileImage,
-      ),
-      ios: () => AsyncProfileImage(
-        icon: CupertinoIcons.person_fill,
-        size: 75,
-        personInitials: selectedMember.value.initials,
-        future: selectedMember.profileImage,
-      ),
+    return AdaptiveProfileImage.path(
+      imagePath: selectedMember.profileImageFilePath,
+      personInitials: selectedMember.initials,
+      size: 72,
     );
   }
 }

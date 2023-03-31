@@ -19,7 +19,7 @@ class MemberActiveToggle extends StatelessWidget {
           child: Consumer(
             builder: (_, ref, child) {
               final isActive = ref.watch(
-                selectedMemberProvider.select((m) => m!.value.isActiveMember),
+                selectedMemberProvider.select((m) => m!.active),
               );
 
               return PlatformAwareWidget(

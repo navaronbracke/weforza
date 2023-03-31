@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,11 +5,9 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
-import 'package:weforza/widgets/custom/profile_image/async_profile_image.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 
 /// This widget represents an item in the manual selection list.
 class ManualSelectionListItem extends ConsumerStatefulWidget {
@@ -31,8 +27,6 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
 
 class _ManualSelectionListItemState
     extends ConsumerState<ManualSelectionListItem> {
-  late final Future<File?> profileImage;
-
   /// Show a confirmation dialog for unselecting a scanned item.
   /// Unselecting a scanned item is a destructive operation since it reduces
   /// the amount of items that have been automatically resolved during a device scan.
@@ -94,16 +88,6 @@ class _ManualSelectionListItemState
   }
 
   @override
-  void initState() {
-    super.initState();
-    final fileHandler = ref.read(fileHandlerProvider);
-
-    profileImage = fileHandler.loadProfileImageFromDisk(
-      widget.item.profileImageFilePath,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
       widget.item.uuid,
@@ -156,26 +140,18 @@ class _ManualSelectionListItemState
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
-              child: PlatformAwareWidget(
-                android: () => AsyncProfileImage(
-                  icon: Icons.person,
-                  future: profileImage,
-                  personInitials: widget.item.initials,
-                ),
-                ios: () => AsyncProfileImage(
-                  icon: CupertinoIcons.person_fill,
-                  future: profileImage,
-                  personInitials: widget.item.initials,
-                ),
+              child: AdaptiveProfileImage.path(
+                imagePath: widget.item.profileImageFilePath,
+                personInitials: widget.item.initials,
               ),
             ),
             Expanded(
               child: MemberNameAndAlias(
-                firstLineStyle: firstNameStyle,
-                secondLineStyle: lastNameStyle,
-                firstName: widget.item.firstname,
-                lastName: widget.item.lastname,
                 alias: widget.item.alias,
+                firstLineStyle: firstNameStyle,
+                firstName: widget.item.firstName,
+                lastName: widget.item.lastName,
+                secondLineStyle: lastNameStyle,
               ),
             ),
             if (isSelected)

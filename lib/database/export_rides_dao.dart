@@ -117,9 +117,9 @@ class ExportRidesDaoImpl implements ExportRidesDao {
         if (member != null) {
           exportableRideAttendees.add(
             ExportableRideAttendee(
-              firstName: member.firstname,
-              lastName: member.lastname,
               alias: member.alias,
+              firstName: member.firstName,
+              lastName: member.lastName,
             ),
           );
         }

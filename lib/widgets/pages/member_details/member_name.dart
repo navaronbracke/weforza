@@ -9,15 +9,15 @@ class MemberName extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final firstName = ref.watch(
-      selectedMemberProvider.select((value) => value!.value.firstname),
+      selectedMemberProvider.select((value) => value!.firstName),
     );
 
     final lastName = ref.watch(
-      selectedMemberProvider.select((value) => value!.value.lastname),
+      selectedMemberProvider.select((value) => value!.lastName),
     );
 
     final alias = ref.watch(
-      selectedMemberProvider.select((value) => value!.value.alias),
+      selectedMemberProvider.select((value) => value!.alias),
     );
 
     return Column(

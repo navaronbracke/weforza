@@ -167,11 +167,11 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
         decoration: BoxDecoration(color: backgroundColor),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: MemberNameAndAlias(
-          firstLineStyle: firstNameStyle,
-          secondLineStyle: lastNameStyle,
-          firstName: widget.item.firstname,
-          lastName: widget.item.lastname,
           alias: widget.item.alias,
+          firstLineStyle: firstNameStyle,
+          firstName: widget.item.firstName,
+          lastName: widget.item.lastName,
+          secondLineStyle: lastNameStyle,
         ),
       ),
     );

@@ -45,7 +45,7 @@ class MemberDetailsPage extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  final member = ref.read(selectedMemberProvider)!.value;
+                  final member = ref.read(selectedMemberProvider)!;
 
                   _goToEditMemberPage(context, member);
                 },
@@ -95,7 +95,7 @@ class MemberDetailsPage extends StatelessWidget {
                     return CupertinoIconButton(
                       icon: CupertinoIcons.pencil,
                       onPressed: () {
-                        final member = ref.read(selectedMemberProvider)!.value;
+                        final member = ref.read(selectedMemberProvider)!;
 
                         _goToEditMemberPage(context, member);
                       },
@@ -127,9 +127,9 @@ class MemberDetailsPage extends StatelessWidget {
 
   Widget _buildMemberInfoSection(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         Row(
-          children: const <Widget>[
+          children: const [
             Padding(
               padding: EdgeInsets.all(8),
               child: MemberProfileImage(),
@@ -140,18 +140,10 @@ class MemberDetailsPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
           child: Row(
-            children: [
-              Consumer(
-                builder: (_, ref, child) {
-                  final future = ref.watch(
-                    selectedMemberProvider.select((m) => m!.attendingCount),
-                  );
-
-                  return MemberAttendingCount(future: future);
-                },
-              ),
-              const Expanded(child: Center()),
-              const MemberActiveToggle(),
+            children: const [
+              SelectedMemberAttendingCount(),
+              Expanded(child: Center()),
+              MemberActiveToggle(),
             ],
           ),
         )

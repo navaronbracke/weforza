@@ -54,13 +54,13 @@ class MemberFormDelegate {
       );
 
       final member = Member(
-        uuid: _uuidGenerator.v4(),
-        firstname: model.firstName,
-        lastname: model.lastName,
+        active: true,
         alias: model.alias,
+        firstName: model.firstName,
+        lastName: model.lastName,
+        lastUpdated: DateTime.now(),
         profileImageFilePath: image?.path,
-        isActiveMember: true,
-        lastUpdated: DateTime.now().toUtc(),
+        uuid: _uuidGenerator.v4(),
       );
 
       await repository.addMember(member);
@@ -101,24 +101,21 @@ class MemberFormDelegate {
       });
 
       final newMember = Member(
-        uuid: uuid,
-        firstname: model.firstName,
-        lastname: model.lastName,
+        active: model.activeMember,
         alias: model.alias,
+        firstName: model.firstName,
+        lastName: model.lastName,
+        lastUpdated: DateTime.now(),
         profileImageFilePath: profileImage?.path,
-        isActiveMember: model.activeMember,
-        lastUpdated: DateTime.now().toUtc(),
+        uuid: uuid,
       );
 
       await repository.updateMember(newMember);
 
       final notifier = ref.read(selectedMemberProvider.notifier);
 
-      // Update the selected member and its profile image.
-      notifier.updateSelectedMember(
-        member: newMember,
-        profileImage: model.profileImage,
-      );
+      // Update the selected member.
+      notifier.setSelectedMember(newMember);
 
       // An item in the list was updated.
       ref.refresh(memberListProvider);

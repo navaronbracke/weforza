@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:weforza/blocs/exportRideBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
@@ -11,6 +12,7 @@ import 'package:weforza/repository/memberRepository.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/widgets/common/rideAttendeeCounter.dart';
 import 'package:weforza/widgets/custom/deleteItemDialog/deleteItemDialog.dart';
+import 'package:weforza/widgets/pages/exportRide/exportRidePage.dart';
 import 'package:weforza/widgets/pages/rideAttendeeScanningPage/rideAttendeeScanningPage.dart';
 import 'package:weforza/widgets/pages/editRide/editRidePage.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesList.dart';
@@ -271,8 +273,17 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     });
   }
 
-  void goToExportPage(BuildContext context){
-    //TODO navigate to export page
+  void goToExportPage(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => ExportRidePage(
+              bloc: ExportRideBloc(
+                  ride: bloc.ride,
+                  loadedAttendees: bloc.attendeesFuture,
+              ),
+            ),
+        ),
+    );
   }
 
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option){

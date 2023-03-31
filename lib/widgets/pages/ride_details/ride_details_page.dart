@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_details_page_options.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_ride_dialog.dart';
 import 'package:weforza/widgets/pages/export_ride_page.dart';
@@ -20,6 +22,23 @@ class RideDetailsPage extends ConsumerStatefulWidget {
 }
 
 class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
+  void _goToScanningPage(BuildContext context) async {
+    final updatedRide = await Navigator.of(context).push<Ride>(
+      MaterialPageRoute(builder: (_) => const RideAttendeeScanningPage()),
+    );
+
+    if (mounted && updatedRide != null) {
+      // Update the selected ride with its new `scannedAttendees` count.
+      // The counter gets updates about this value.
+      // The attendees list refreshes when the ride is updated.
+      ref.read(selectedRideProvider.notifier).setSelectedRide(updatedRide);
+
+      // Refresh the ride list so that the attendee counter for this ride
+      // updates in the list of rides.
+      ref.refresh(rideListProvider);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
@@ -37,13 +56,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.bluetooth_searching),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const RideAttendeeScanningPage(),
-                ),
-              );
-            },
+            onPressed: () => _goToScanningPage(context),
           ),
           PopupMenuButton<RideDetailsPageOptions>(
             icon: const Icon(Icons.more_vert, color: Colors.white),
@@ -94,13 +107,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
               children: <Widget>[
                 CupertinoIconButton.fromAppTheme(
                   icon: Icons.bluetooth_searching,
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const RideAttendeeScanningPage(),
-                      ),
-                    );
-                  },
+                  onPressed: () => _goToScanningPage(context),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 12),

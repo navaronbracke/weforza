@@ -684,9 +684,19 @@ class S {
   }
 
   /// `Return to detail page`
-  String get RideAttendeeScanningGoBack {
+  String get RideAttendeeScanningGoBackToDetailPage {
     return Intl.message(
       'Return to detail page',
+      name: 'RideAttendeeScanningGoBackToDetailPage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Back`
+  String get RideAttendeeScanningGoBack {
+    return Intl.message(
+      'Go Back',
       name: 'RideAttendeeScanningGoBack',
       desc: '',
       args: [],
@@ -703,6 +713,26 @@ class S {
     );
   }
 
+  /// `Scan aborted, permission was denied`
+  String get RideAttendeeScanningPermissionDenied {
+    return Intl.message(
+      'Scan aborted, permission was denied',
+      name: 'RideAttendeeScanningPermissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scanning requires permission to use your location`
+  String get RideAttendeeScanningPermissionDescription {
+    return Intl.message(
+      'Scanning requires permission to use your location',
+      name: 'RideAttendeeScanningPermissionDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Scan aborted, Bluetooth is disabled`
   String get RideAttendeeScanningBluetoothDisabled {
     return Intl.message(
@@ -714,10 +744,10 @@ class S {
   }
 
   /// `Go to Settings`
-  String get RideAttendeeScanningGoToBluetoothSettings {
+  String get RideAttendeeScanningGoToSettings {
     return Intl.message(
       'Go to Settings',
-      name: 'RideAttendeeScanningGoToBluetoothSettings',
+      name: 'RideAttendeeScanningGoToSettings',
       desc: '',
       args: [],
     );

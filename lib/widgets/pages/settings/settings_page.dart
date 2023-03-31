@@ -162,94 +162,111 @@ class SettingsPageState extends ConsumerState<SettingsPage>
   Widget _buildIosWidget(S translator) {
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
-      child: CustomScrollView(
-        slivers: [
-          CupertinoSliverNavigationBar(
-            backgroundColor: CupertinoColors.systemGroupedBackground,
-            border: null,
-            largeTitle: Text(translator.Settings),
-            transitionBetweenRoutes: false,
-            trailing: SizedBox(
-              width: 40,
-              child: Center(child: _buildSubmitButton()),
+      child: _SettingsPageScrollView(
+        addExcludedTermInputField: SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverToBoxAdapter(
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                color: CupertinoColors.secondarySystemGroupedBackground,
+              ),
+              child: AddExcludedTermInputField(
+                excludedTermsDelegate: excludedTermsDelegate,
+              ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                switch (index) {
-                  case 0:
-                    return CupertinoFormSection.insetGrouped(
-                      header: Text(translator.ScanSettings.toUpperCase()),
-                      children: [
-                        ScanDurationOption(
-                          initialValue: scanDurationController.value,
-                          onChanged: scanDurationController.add,
-                          stream: scanDurationController,
-                        ),
-                      ],
-                    );
-                  case 1:
-                    return CupertinoFormSection.insetGrouped(
-                      header: Text(translator.Riders.toUpperCase()),
-                      footer: Text(translator.RiderListFilterDescription),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(6),
-                          child: Center(
-                            child: MemberListFilter(
-                              initialFilter: memberFilterController.value,
-                              onChanged: memberFilterController.add,
-                              stream: memberFilterController,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  case 2:
-                    return CupertinoFormSection.insetGrouped(
-                      header: Text(translator.RideCalendar.toUpperCase()),
-                      footer: Text(translator.ResetRideCalendarDescription),
-                      children: const [
-                        CupertinoFormRow(
-                          padding: EdgeInsetsDirectional.only(
-                            start: 20,
-                            end: 6,
-                          ),
-                          prefix: ResetRideCalendarButton(),
-                          child: SizedBox.shrink(),
-                        ),
-                      ],
-                    );
-                  case 3:
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 32),
-                      child: CupertinoFormSection.insetGrouped(
-                        children: [
-                          CupertinoFormRow(
-                            prefix: Text(translator.Version),
-                            child: AppVersion(
-                              builder: (version) {
-                                return Text(
-                                  version,
-                                  style: const TextStyle(
-                                    color: CupertinoColors.systemGrey,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  default:
-                    return null;
-                }
-              },
-              childCount: 4,
-            ),
+        ),
+        excludedTermsList: SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: ExcludedTermsList(
+            decorator: (index, terms) {
+              BorderRadius borderRadius = BorderRadius.zero;
+
+              if (index == terms.length - 1) {
+                borderRadius = const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                );
+              }
+
+              return BoxDecoration(
+                borderRadius: borderRadius,
+                color: CupertinoColors.secondarySystemGroupedBackground,
+              );
+            },
+            delegate: excludedTermsDelegate,
           ),
-        ],
+        ),
+        memberListFilter: CupertinoFormSection.insetGrouped(
+          header: Text(translator.Riders.toUpperCase()),
+          footer: Text(translator.RiderListFilterDescription),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: Center(
+                child: MemberListFilter(
+                  initialFilter: memberFilterController.value,
+                  onChanged: memberFilterController.add,
+                  stream: memberFilterController,
+                ),
+              ),
+            ),
+          ],
+        ),
+        navigationBar: CupertinoSliverNavigationBar(
+          backgroundColor: CupertinoColors.systemGroupedBackground,
+          border: null,
+          largeTitle: Text(translator.Settings),
+          transitionBetweenRoutes: false,
+          trailing: SizedBox(
+            width: 40,
+            child: Center(child: _buildSubmitButton()),
+          ),
+        ),
+        resetRideCalendarButton: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 32),
+          child: CupertinoFormSection.insetGrouped(
+            header: Text(translator.RideCalendar.toUpperCase()),
+            footer: Text(translator.ResetRideCalendarDescription),
+            children: const [
+              CupertinoFormRow(
+                padding: EdgeInsetsDirectional.only(
+                  start: 20,
+                  end: 6,
+                ),
+                prefix: ResetRideCalendarButton(),
+                child: SizedBox.shrink(),
+              ),
+            ],
+          ),
+        ),
+        scanDurationOption: CupertinoFormSection.insetGrouped(
+          header: Text(translator.ScanSettings.toUpperCase()),
+          children: [
+            ScanDurationOption(
+              initialValue: scanDurationController.value,
+              onChanged: scanDurationController.add,
+              stream: scanDurationController,
+            ),
+          ],
+        ),
+        version: CupertinoFormSection.insetGrouped(
+          children: [
+            CupertinoFormRow(
+              prefix: Text(translator.Version),
+              child: AppVersion(
+                builder: (version) => Text(
+                  version,
+                  style: const TextStyle(color: CupertinoColors.systemGrey),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

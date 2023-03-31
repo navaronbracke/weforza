@@ -50,15 +50,9 @@ class _MemberListPageState extends State<MemberListPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_add, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
-              final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
-              if(reloadNotifier.value){
-                reloadNotifier.value = false;
-                setState(() {
-                  bloc.reloadMembers();
-                });
-              }
-            }),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context)=> AddMemberPage())
+            ).then((_) => onReturnToMemberListPage(context)),
           ),
         ],
       ),
@@ -77,16 +71,9 @@ class _MemberListPageState extends State<MemberListPage> {
                 onPressedColor: ApplicationTheme.primaryColor,
                 idleColor: ApplicationTheme.accentColor,
                 icon: Icons.person_add,
-                onPressed: ()=> Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context)=> AddMemberPage())).then((_){
-                      final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
-                      if(reloadNotifier.value){
-                        reloadNotifier.value = false;
-                        setState(() {
-                          bloc.reloadMembers();
-                        });
-                      }
-                    })
+                onPressed: ()=> Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=> AddMemberPage())
+                ).then((_)=> onReturnToMemberListPage(context))
             ),
           ],
         ),
@@ -113,15 +100,9 @@ class _MemberListPageState extends State<MemberListPage> {
                     MemberWithPictureListItem(
                         item: data[index], onTap: (){
                       SelectedItemProvider.of(context).selectedMember.value = data[index];
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MemberDetailsPage())).then((_){
-                        final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
-                        if(reloadNotifier.value){
-                          reloadNotifier.value = false;
-                          setState(() {
-                            bloc.reloadMembers();
-                          });
-                        }
-                      });
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => MemberDetailsPage())
+                      ).then((_)=> onReturnToMemberListPage(context));
                     }));
           }
         } else {
@@ -129,5 +110,15 @@ class _MemberListPageState extends State<MemberListPage> {
         }
       },
     );
+  }
+
+  void onReturnToMemberListPage(BuildContext context){
+    final reloadNotifier = ReloadDataProvider.of(context).reloadMembers;
+    if(reloadNotifier.value){
+      reloadNotifier.value = false;
+      setState(() {
+        bloc.reloadMembers();
+      });
+    }
   }
 }

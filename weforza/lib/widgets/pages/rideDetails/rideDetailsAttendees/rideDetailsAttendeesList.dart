@@ -103,7 +103,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
   }
 
   Widget _buildIosLayout(BuildContext context, int total, int? scannedNumber){
-    return CupertinoBottomBar(
+    return CupertinoBottomBar.tabBar(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(

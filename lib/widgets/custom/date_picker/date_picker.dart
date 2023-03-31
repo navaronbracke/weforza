@@ -245,18 +245,20 @@ class _DatePickerMonth extends StatelessWidget {
   const _DatePickerMonth({
     required super.key,
     required this.days,
-    required this.weekPadding,
+    required this.weekSpacing,
   });
 
   /// The days for this month.
   final List<Widget> days;
 
-  /// The padding for a single week.
-  final EdgeInsets weekPadding;
+  /// The spacing between weeks.
+  final double weekSpacing;
 
   /// Iterate over the [days] and build the rows that represent the weeks.
   List<Widget> _buildCalendarRows() {
     final weeks = <Widget>[];
+
+    int weekCounter = 1;
 
     while (days.isNotEmpty) {
       final children = <Widget>[];
@@ -268,15 +270,21 @@ class _DatePickerMonth extends StatelessWidget {
         children.add(days.removeAt(0));
       }
 
-      weeks.add(
-        Padding(
-          padding: weekPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
-          ),
-        ),
+      Widget week = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
       );
+
+      // Only the last week does not get bottom spacing.
+      if (weekSpacing > 0 && weekCounter < 6) {
+        week = Padding(
+          padding: EdgeInsets.only(bottom: weekSpacing),
+          child: week,
+        );
+      }
+
+      weeks.add(week);
+      weekCounter += 1;
     }
 
     return weeks;

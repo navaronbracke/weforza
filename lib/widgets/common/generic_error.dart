@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
 /// This class represents a generic error widget.
 ///
 /// This widget centers itself within its parent.
 class GenericError extends StatelessWidget {
-  GenericError({
+  const GenericError({
     super.key,
     this.androidIcon,
     this.iosIcon,
     required this.text,
-  }) : assert(text.isNotEmpty);
+  });
 
   final IconData? androidIcon;
 
@@ -32,7 +33,7 @@ class GenericError extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: Text(text),
+            child: Text(text.isEmpty ? S.of(context).GenericError : text),
           )
         ],
       ),

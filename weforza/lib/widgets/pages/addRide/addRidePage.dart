@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';

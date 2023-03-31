@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/rideAttendeeAssignmentBloc.dart';
 import 'package:weforza/blocs/rideDetailsBloc.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/bluetooth/bluetoothScanner.dart';
 import 'package:weforza/model/memberItem.dart';

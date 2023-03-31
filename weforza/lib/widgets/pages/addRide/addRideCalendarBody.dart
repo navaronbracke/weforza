@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/blocs/addRideCalendarItemBloc.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendarItem.dart';
 import 'package:weforza/widgets/pages/addRide/addRideCalendarPaginator.dart';
 

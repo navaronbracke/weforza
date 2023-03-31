@@ -1,4 +1,4 @@
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/appTheme.dart';
 

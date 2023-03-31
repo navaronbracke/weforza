@@ -1,6 +1,6 @@
 
 import 'package:flutter/widgets.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 
 class DeviceFoundPopup extends StatefulWidget {
   DeviceFoundPopup({@required String deviceName}):

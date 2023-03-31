@@ -112,6 +112,7 @@
   "ImportMembersImporting": "Leden Importeren",
   "ImportMembersCsvHeaderRegex": "(voornaam)\\,(achternaam|familienaam),(telefoon|telefoonnummer|gsm)\\,(toestellen|apparaten)",
   "ImportMembersInvalidFileFormat": "Enkel CSV bestanden zijn toegelaten",
+  "ImportMembersHeaderStrippedMessage": "Als er een hoofding aanwezig is wordt deze verwijderd",
 
   "RideStart": "Vertrek",
   "RideDestination": "Bestemming",

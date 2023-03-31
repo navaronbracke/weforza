@@ -993,6 +993,16 @@ class S {
     );
   }
 
+  /// `If a header exists, it will be removed`
+  String get ImportMembersHeaderStrippedMessage {
+    return Intl.message(
+      'If a header exists, it will be removed',
+      name: 'ImportMembersHeaderStrippedMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(

@@ -6,6 +6,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
+import 'package:weforza/widgets/common/search_field_with_clear_button.dart';
 import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_bottom_bar.dart';
@@ -15,7 +16,6 @@ import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selecti
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_save_button.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/show_scanned_results_toggle.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the list of active riders that is shown
 /// after the device scan has ended,
@@ -37,6 +37,8 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   Future<List<Rider>>? _activeRidersFuture;
 
   final _filtersController = ManualSelectionFilterDelegate();
+  final _searchFieldFocusNode = FocusNode();
+  final _searchFieldController = TextEditingController();
 
   Future<void>? _saveFuture;
 
@@ -107,34 +109,14 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   Widget _buildActiveRidersList(BuildContext context, List<Rider> items) {
-    final translator = S.of(context);
-
     return FocusAbsorber(
       child: Column(
         children: <Widget>[
-          PlatformAwareWidget(
-            android: (_) => TextFormField(
-              textInputAction: TextInputAction.search,
-              keyboardType: TextInputType.text,
-              autocorrect: false,
-              autovalidateMode: AutovalidateMode.disabled,
-              onChanged: _filtersController.onSearchQueryChanged,
-              decoration: InputDecoration(
-                suffixIcon: const Icon(Icons.search),
-                labelText: translator.searchRiders,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-              ),
-            ),
-            ios: (_) => Padding(
-              padding: const EdgeInsets.all(8),
-              child: CupertinoSearchTextField(
-                suffixIcon: const Icon(CupertinoIcons.search),
-                onChanged: _filtersController.onSearchQueryChanged,
-                placeholder: translator.searchRiders,
-              ),
-            ),
+          SearchFieldWithClearButton(
+            controller: _searchFieldController,
+            focusNode: _searchFieldFocusNode,
+            onChanged: _filtersController.onSearchQueryChanged,
+            placeholder: S.of(context).searchRiders,
           ),
           Expanded(
             child: StreamBuilder<ManualSelectionFilterOptions>(
@@ -203,6 +185,8 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   @override
   void dispose() {
+    _searchFieldController.dispose();
+    _searchFieldFocusNode.dispose();
     _filtersController.dispose();
     super.dispose();
   }

@@ -237,15 +237,12 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
-  ///Save the current contents of [rideAttendees] to the database.
-  ///[mergeResults] dictates if the contents of [rideAttendees] should be merged in with the existing data.
-  ///[mergeResults] should only be true during the Scan step.
-  Future<void> saveRideAttendees(bool mergeResults) async {
+  /// Save the current contents of [rideAttendees] to the database.
+  Future<void> saveRideAttendees() async {
     isSaving.value = true;
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element)),
-        mergeResults
+        rideAttendees.map((element) => RideAttendee(rideDate, element))
     ).catchError((error){
       _scanStepController.addError(error);
       isSaving.value = false;

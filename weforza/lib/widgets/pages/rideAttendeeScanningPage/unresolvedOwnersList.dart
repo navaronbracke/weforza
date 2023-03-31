@@ -8,17 +8,15 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 class UnresolvedOwnersList extends StatelessWidget {
   UnresolvedOwnersList({
     @required this.items,
-    @required this.onItemPressed,
     @required this.itemBuilder,
     @required this.onButtonPressed,
   }): assert(
     items != null && items.isNotEmpty && itemBuilder != null
-        && onButtonPressed != null && onItemPressed != null
+        && onButtonPressed != null
   );
 
   final List<Member> items;
-  final void Function(Member item) onItemPressed;
-  final Widget Function(BuildContext context, int index, Function(Member item) onPressed) itemBuilder;
+  final Widget Function(BuildContext context, Member member) itemBuilder;
   final void Function() onButtonPressed;
 
   @override
@@ -27,7 +25,7 @@ class UnresolvedOwnersList extends StatelessWidget {
       children: [
         Expanded(
           child: ListView.builder(
-            itemBuilder: (context, index) => itemBuilder(context, index, onItemPressed),
+            itemBuilder: (context, index) => itemBuilder(context, items[index]),
             itemCount: items.length,
           ),
         ),

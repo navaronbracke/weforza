@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/extensions/artificial_delay_mixin.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/excluded_terms_delegate.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/riverpod/repository/settings_repository_provider.dart';
@@ -24,7 +25,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 class SettingsPageState extends ConsumerState<SettingsPage>
     with ArtificialDelay {
-  late final BehaviorSubject<Set<String>> excludedTermsController;
+  late final ExcludedTermsDelegate excludedTermsController;
 
   late final BehaviorSubject<MemberFilterOption> memberFilterController;
 
@@ -37,7 +38,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     await waitForDelay();
 
     final newSettings = Settings(
-      excludedTermsFilter: excludedTermsController.value,
+      excludedTermsFilter: excludedTermsController.terms.toSet(),
       scanDuration: scanDurationController.value.floor(),
       memberListFilter: memberFilterController.value,
     );
@@ -56,8 +57,8 @@ class SettingsPageState extends ConsumerState<SettingsPage>
     super.initState();
     final settings = ref.read(settingsProvider);
 
-    excludedTermsController = BehaviorSubject.seeded(
-      settings.excludedTermsFilter,
+    excludedTermsController = ExcludedTermsDelegate(
+      initialValue: settings.excludedTermsFilter.toList(),
     );
     memberFilterController = BehaviorSubject.seeded(settings.memberListFilter);
     scanDurationController = BehaviorSubject.seeded(
@@ -269,7 +270,7 @@ class SettingsPageState extends ConsumerState<SettingsPage>
 
   @override
   void dispose() {
-    excludedTermsController.close();
+    excludedTermsController.dispose();
     memberFilterController.close();
     scanDurationController.close();
     super.dispose();

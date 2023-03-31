@@ -1,7 +1,6 @@
-import 'package:weforza/extensions/dateExtension.dart';
+import 'package:weforza/extensions/date_extension.dart';
 
-
-/// This class is used as format for exporting members
+/// This class is used as format for exporting members.
 class ExportableMember {
   ExportableMember({
     required this.firstName,
@@ -10,7 +9,7 @@ class ExportableMember {
     required this.isActiveMember,
     required this.devices,
     required this.lastUpdated,
-  }): assert(firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
 
   final bool isActiveMember;
   final String firstName;
@@ -19,19 +18,21 @@ class ExportableMember {
   final Set<String> devices;
   final DateTime lastUpdated;
 
-  String toCsv(){
-    final String devicesString = devices.isEmpty ? "" : devices.join(",");
-    return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},${lastUpdated.toStringWithoutMilliseconds()},$devicesString";
+  String toCsv() {
+    final String devicesString = devices.isEmpty ? '' : devices.join(',');
+
+    return '$firstName,$lastName,$alias,${isActiveMember ? 1 : 0},'
+        '${lastUpdated.toStringWithoutMilliseconds()},$devicesString';
   }
 
-  Map<String,dynamic> toJson(){
+  Map<String, Object?> toJson() {
     return {
-      "firstName": firstName,
-      "lastName": lastName,
-      "alias": alias,
-      "active": isActiveMember,
-      "lastUpdated": lastUpdated.toStringWithoutMilliseconds(),
-      "devices": List<String>.of(devices)
+      'firstName': firstName,
+      'lastName': lastName,
+      'alias': alias,
+      'active': isActiveMember,
+      'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
+      'devices': devices.toList(),
     };
   }
 }

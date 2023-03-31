@@ -1,42 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
-import 'package:weforza/model/export/export_file_format.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage<T> extends StatelessWidget {
-  ExportDataPage({
+  const ExportDataPage({
     required this.checkmarkAnimationController,
     required this.delegate,
     required this.onPressed,
     required this.title,
     super.key,
-  }) : inputFormatters = [
-          FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
-          LengthLimitingTextInputFormatter(maxLength),
-        ];
-
-  /// The maximum length for the file name input field.
-  static const int maxLength = 80;
+  });
 
   /// The animation controller for the 'Done' checkmark widget.
   final AnimationController checkmarkAnimationController;
 
   /// The delegate that handles the export.
   final ExportDelegate<T> delegate;
-
-  /// The input formatters for the file name input field.
-  final List<TextInputFormatter> inputFormatters;
 
   /// The onPressed handler for the export button.
   final void Function() onPressed;
@@ -53,22 +43,7 @@ class ExportDataPage<T> extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: TextFormField(
-              autocorrect: false,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: delegate.fileNameController,
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-                labelText: translator.fileName,
-                errorMaxLines: 3,
-              ),
-              inputFormatters: inputFormatters,
-              key: delegate.fileNameKey,
-              keyboardType: TextInputType.text,
-              maxLength: maxLength,
-              textInputAction: TextInputAction.done,
-              validator: (fileName) => _validateFileName(fileName, translator),
-            ),
+            child: ExportDataFileNameTextField<T>(delegate: delegate),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 24, bottom: 40),
@@ -143,18 +118,7 @@ class ExportDataPage<T> extends StatelessWidget {
 
     return CupertinoFormSection.insetGrouped(
       children: [
-        CupertinoTextFormFieldRow(
-          autocorrect: false,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: delegate.fileNameController,
-          inputFormatters: inputFormatters,
-          key: delegate.fileNameKey,
-          keyboardType: TextInputType.text,
-          maxLength: maxLength,
-          placeholder: translator.fileName,
-          textInputAction: TextInputAction.done,
-          validator: (fileName) => _validateFileName(fileName, translator),
-        ),
+        ExportDataFileNameTextField<T>(delegate: delegate),
         CupertinoFormRow(
           padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
           prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
@@ -167,35 +131,6 @@ class ExportDataPage<T> extends StatelessWidget {
         child,
       ],
     );
-  }
-
-  /// Validate the given [fileName].
-  ///
-  /// Returns an error message or null if the file name is valid.
-  String? _validateFileName(String? fileName, S translator) {
-    if (fileName == null || fileName.isEmpty) {
-      return translator.fileNameRequired;
-    }
-
-    if (fileName.startsWith('.')) {
-      return translator.fileNameCantStartWithDot;
-    }
-
-    final ExportFileFormat fileFormat = delegate.currentFileFormat;
-    final String fileExtension = fileFormat.formatExtension;
-
-    if (!fileName.endsWith(fileExtension)) {
-      return translator.fileNameInvalidExtension(
-        fileFormat.asUpperCase,
-        fileExtension,
-      );
-    }
-
-    if (delegate.fileExists(fileName)) {
-      return translator.fileNameExists;
-    }
-
-    return null;
   }
 
   @override

@@ -77,6 +77,8 @@
   "RideAttendeeScanningSkipScan": "Skip Scan",
   "RideAttendeeScanningContinue": "Proceed to next step",
   "RideAttendeeScanningManualSelectionEmptyList": "There are no riders to choose from",
+  "RideAttendeeScanningManualSelectionFilterNoResults": "Nothing found for the specified search term",
+  "RideAttendeeScanningManualSelectionFilterInputLabel": "Search riders",
   "RideAttendeeScanningDeviceWithMultiplePossibleOwnersLabel": "{amount} riders have a device with this name",
   "RideAttendeeScanningUnresolvedOwnersListTooltip": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
 

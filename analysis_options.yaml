@@ -2,6 +2,11 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude:
+    - lib/generated/l10n.dart
+    - lib/generated/intl/*
+
 linter:
   rules:
     always_declare_return_types: true

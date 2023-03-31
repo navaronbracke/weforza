@@ -34,8 +34,8 @@ dependencies:
   sembast: ^2.4.4+1
 
   # For OS-specific directory paths.
-  path_provider: ^1.6.10
-  path: ^1.6.4
+  path_provider: ^2.0.1
+  path: ^1.8.0
 
   # UUID generator for globally unique ids.
   uuid: ^2.0.4
@@ -50,7 +50,7 @@ dependencies:
   rxdart: ^0.24.1
 
   # This package provides platform independent file picking.
-  file_picker: ^2.0.0
+  file_picker: ^3.0.0
 
   # This package provides Bluetooth Low Energy functionality.
   flutter_blue: ^0.7.2
@@ -59,7 +59,7 @@ dependencies:
   app_settings: ^4.0.0
 
   # The permission_handler packages provides utilities for requesting permissions.
-  permission_handler: ^5.0.1+1
+  permission_handler: ^6.1.0
 
   # package_info provides access to app specific information such as build number & version.
   package_info: ^0.4.3

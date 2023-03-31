@@ -68,22 +68,25 @@ class _MemberDevicesListItemState extends State<MemberDevicesListItem> {
   );
 
   Widget _buildItem(BuildContext context){
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 5),
-            child: _mapDeviceTypeToIcon(),
-          ),
-          Expanded(
-              child: Text(device.name, overflow: TextOverflow.ellipsis)
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: _buildEditDeviceButton(context),
-          ),
-        ],
+    return Container(
+      decoration: BoxDecoration(),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: _mapDeviceTypeToIcon(),
+            ),
+            Expanded(
+                child: Text(device.name, overflow: TextOverflow.ellipsis)
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: _buildEditDeviceButton(context),
+            ),
+          ],
+        ),
       ),
     );
   }

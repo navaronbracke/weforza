@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/member/member_list_provider.dart';
+import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/platform/cupertino_loading_dialog.dart';
@@ -21,14 +22,11 @@ class ResetRideCalendarDialogState
     extends ConsumerState<ResetRideCalendarDialog> {
   Future<void>? deleteFuture;
 
-  late final RideListNotifier rideList;
-
   late final MemberListNotifier memberList;
 
   @override
   void initState() {
     super.initState();
-    rideList = ref.read(rideListProvider.notifier);
     memberList = ref.read(memberListProvider.notifier);
   }
 
@@ -245,12 +243,14 @@ class ResetRideCalendarDialogState
   }
 
   void _resetCalendar(BuildContext context) {
-    deleteFuture = rideList.repository.deleteRideCalendar().then((_) {
+    final repository = ref.read(rideRepositoryProvider);
+
+    deleteFuture = repository.deleteRideCalendar().then((_) {
       if (!mounted) {
         return;
       }
 
-      rideList.getRides();
+      ref.refresh(rideListProvider);
       memberList.getMembers();
 
       // Pop the dialog with a deletion confirmation.

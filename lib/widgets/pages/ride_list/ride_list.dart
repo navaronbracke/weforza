@@ -25,24 +25,14 @@ class RideList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final future = ref.watch(rideListProvider);
+    final ridesList = ref.watch(rideListProvider);
 
-    return FutureBuilder<List<Ride>>(
-      future: future,
-      builder: (context, snapshot) {
-        final translator = S.of(context);
-
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            final items = snapshot.data;
-
-            return snapshot.hasError
-                ? GenericError(text: translator.GenericError)
-                : _buildList(items ?? []);
-          default:
-            return const Center(child: PlatformAwareLoadingIndicator());
-        }
+    return ridesList.when(
+      data: _buildList,
+      error: (error, stackTrace) {
+        return GenericError(text: S.of(context).GenericError);
       },
+      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }
 }

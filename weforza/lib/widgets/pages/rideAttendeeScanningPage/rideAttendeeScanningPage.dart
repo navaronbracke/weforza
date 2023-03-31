@@ -154,16 +154,18 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                     );
                   case ScanProcessStep.STOPPING_SCAN: return Center(child: PlatformAwareLoadingIndicator());
                   case ScanProcessStep.PERMISSION_DENIED: return Center(child: ScanPermissionDenied());
-                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return UnresolvedOwnersList(
-                    future: bloc.filterAndSortMultipleOwnersList(),
-                    itemBuilder: (Member member) => UnresolvedOwnersListItem(
-                      firstName: member.firstname,
-                      lastName: member.lastname,
-                      alias: member.alias,
-                      isSelected: () => bloc.isItemSelected(member.uuid),
-                      onTap: () => bloc.onMemberSelected(member.uuid),
+                  case ScanProcessStep.RESOLVE_MULTIPLE_OWNERS: return Center(
+                    child: UnresolvedOwnersList(
+                      future: bloc.filterAndSortMultipleOwnersList(),
+                      itemBuilder: (Member member) => UnresolvedOwnersListItem(
+                        firstName: member.firstname,
+                        lastName: member.lastname,
+                        alias: member.alias,
+                        isSelected: () => bloc.isItemSelected(member.uuid),
+                        onTap: () => bloc.onMemberSelected(member.uuid),
+                      ),
+                      onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
                     ),
-                    onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
                   );
                   default: return Center(child: GenericScanErrorWidget());
                 }

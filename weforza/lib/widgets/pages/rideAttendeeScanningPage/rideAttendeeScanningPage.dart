@@ -96,7 +96,6 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       ),
       child: SafeArea(
         child: _buildBody(),
-        bottom: false
       ),
     );
   }
@@ -197,6 +196,8 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
     return ManualSelectionSubmit(
       isSaving: bloc.saving,
       onSave: () => _onSaveScanResults(context),
+      getAttendeeCount: bloc.getRideAttendeeCount,
+      attendeeCountStream: bloc.attendeeCount,
     );
   }
 

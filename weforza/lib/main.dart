@@ -52,7 +52,7 @@ class _WeForzaAppState extends State<WeForzaApp> {
               //enable tap to dismiss keyboard
               final FocusScopeNode currentFocus = FocusScope.of(context);
               if (!currentFocus.hasPrimaryFocus) {
-                currentFocus.unfocus();
+                currentFocus.focusedChild?.unfocus();
               }
             },
           ),

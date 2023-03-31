@@ -79,8 +79,7 @@ class CsvFileReader implements ImportMembersFileReader<String> {
     final List<String> lines = await file.openRead().transform(utf8.decoder).transform(LineSplitter()).toList();
 
     if(lines.isEmpty) return lines;
-
-    // FIXME: check that the header that is written by the export function is compatible.
+    
     // Check that the header is present.
     if(!RegExp("^$headerRegex\$").hasMatch(lines.first.toLowerCase())){
       return Future.error(CsvHeaderMissingError());

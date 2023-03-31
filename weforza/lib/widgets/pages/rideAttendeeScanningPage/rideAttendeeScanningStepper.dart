@@ -9,14 +9,14 @@ import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 ///It shows if the user is in the scanning step or the manual assignment step.
 class RideAttendeeScanningStepper extends StatelessWidget {
   RideAttendeeScanningStepper({
-    @required this.isScanning,
-  }): assert(isScanning != null);
+    @required this.isScanStep,
+  }): assert(isScanStep != null);
 
-  final ValueListenable<bool> isScanning;
+  final ValueListenable<bool> isScanStep;
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<bool>(
-    valueListenable: isScanning,
+    valueListenable: isScanStep,
     builder: (context, value, child) => PlatformAwareWidget(
         android: () => _buildAndroidWidget(context, value),
         ios: () => _buildIosWidget(context, value),

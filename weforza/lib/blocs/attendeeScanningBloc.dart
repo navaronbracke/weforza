@@ -45,6 +45,9 @@ class AttendeeScanningBloc extends Bloc {
 
   ///This value notifier manages the state for the selected label in the UI.
   ///It gets updated after the scan save step.
+  ///We keep track of this separately,
+  ///since the step chance shouldn't prevent
+  ///the user from going back to the details screen.
   final ValueNotifier<bool> isScanStep = ValueNotifier<bool>(true);
 
   ///The repositories connect the bloc with the database.
@@ -229,9 +232,10 @@ class AttendeeScanningBloc extends Bloc {
 
   ///Cancel a running scan and continue to the manual assignment step.
   void skipScan() async {
-    await stopScan().then(
-            (_) => _scanStepController.add(ScanProcessStep.MANUAL)
-    );
+    await stopScan().then((_){
+      _scanStepController.add(ScanProcessStep.MANUAL);
+      isScanStep.value = false;
+    });
   }
 
   Future<void> saveScanResults([bool continueToManualAssignment = true]) async {
@@ -240,6 +244,7 @@ class AttendeeScanningBloc extends Bloc {
     await ridesRepo.updateAttendeesForRideWithDate(rideDate, attendeesToSave).then((_){
         if(continueToManualAssignment){
           isSaving.value = false;
+          isScanStep.value = false;
           _scanStepController.add(ScanProcessStep.MANUAL);
         }
       //The manual assignment step will pop when submitted.

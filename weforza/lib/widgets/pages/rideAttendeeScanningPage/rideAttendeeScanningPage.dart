@@ -67,7 +67,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: RideAttendeeScanningStepper(
-          isScanning: bloc.isScanning,
+          isScanStep: bloc.isScanStep,
         ),
       ),
       body: _buildBody()
@@ -80,7 +80,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
         transitionBetweenRoutes: false,
         automaticallyImplyLeading: false,
         middle: RideAttendeeScanningStepper(
-          isScanning: bloc.isScanning,
+          isScanStep: bloc.isScanStep,
         ),
       ),
       child: _buildBody(),

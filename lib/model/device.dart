@@ -3,12 +3,25 @@ import 'package:weforza/model/device_type.dart';
 /// A device is a piece of hardware that is owned by a person.
 /// Each device has a [creationDate], a [name], an [ownerId] and a [type].
 class Device {
+  /// The default constructor.
   Device({
     required this.creationDate,
     required this.name,
     required this.ownerId,
     this.type = DeviceType.unknown,
   }) : assert(ownerId.isNotEmpty && name.isNotEmpty);
+
+  /// Create a device from the given [key] and [values].
+  factory Device.of(String key, Map<String, dynamic> values) {
+    assert(key.isNotEmpty);
+
+    return Device(
+      creationDate: DateTime.parse(key),
+      name: values['deviceName'] as String,
+      ownerId: values['owner'] as String,
+      type: DeviceType.fromTypeIndex(values['type'] as int),
+    );
+  }
 
   /// The creation date of this device.
   /// This creation date is not indicative of the actual creation date
@@ -32,18 +45,6 @@ class Device {
   /// Convert this object to a Map.
   Map<String, dynamic> toMap() {
     return {'deviceName': name, 'owner': ownerId, 'type': type.typeIndex};
-  }
-
-  /// Create a device from the given [key] and [values].
-  static Device of(String key, Map<String, dynamic> values) {
-    assert(key.isNotEmpty);
-
-    return Device(
-      creationDate: DateTime.parse(key),
-      name: values['deviceName'] as String,
-      ownerId: values['owner'] as String,
-      type: DeviceType.fromTypeIndex(values['type'] as int),
-    );
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'package:weforza/model/member.dart';
 
-mixin MemberValidator {
+mixin RiderValidator {
   String? validateAlias({
     required String? value,
     required String maxLengthMessage,

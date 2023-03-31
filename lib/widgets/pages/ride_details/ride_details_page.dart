@@ -107,39 +107,9 @@ class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15),
                   child: CupertinoIconButton.fromAppTheme(
-                      icon: CupertinoIcons.ellipsis_vertical,
-                      onPressed: () async {
-                        final RideDetailsPageOptions? option =
-                            await showCupertinoModalPopup<
-                                    RideDetailsPageOptions>(
-                                context: context,
-                                builder: (context) {
-                                  return CupertinoActionSheet(
-                                    actions: [
-                                      CupertinoActionSheetAction(
-                                        child: Text(S.of(context).Export),
-                                        onPressed: () => Navigator.of(context)
-                                            .pop(RideDetailsPageOptions.export),
-                                      ),
-                                      CupertinoActionSheetAction(
-                                        child: Text(S.of(context).Delete),
-                                        isDestructiveAction: true,
-                                        onPressed: () => Navigator.of(context)
-                                            .pop(RideDetailsPageOptions.delete),
-                                      ),
-                                    ],
-                                    cancelButton: CupertinoActionSheetAction(
-                                      child: Text(S.of(context).Cancel),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                    ),
-                                  );
-                                });
-
-                        if (option == null) return;
-
-                        onSelectMenuOption(context, option);
-                      }),
+                    icon: CupertinoIcons.ellipsis_vertical,
+                    onPressed: () => _showCupertinoModalBottomPopup(context),
+                  ),
                 ),
               ],
             ),
@@ -182,5 +152,42 @@ class _RideDetailsPageState extends ConsumerState<RideDetailsPage> {
       default:
         break;
     }
+  }
+
+  void _showCupertinoModalBottomPopup(BuildContext context) async {
+    final translator = S.of(context);
+
+    final option = await showCupertinoModalPopup<RideDetailsPageOptions>(
+      context: context,
+      builder: (context) {
+        return CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text(translator.Export),
+              onPressed: () {
+                Navigator.of(context).pop(RideDetailsPageOptions.export);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text(translator.Delete),
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop(RideDetailsPageOptions.delete);
+              },
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            child: Text(translator.Cancel),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        );
+      },
+    );
+
+    if (!mounted || option == null) {
+      return;
+    }
+
+    onSelectMenuOption(context, option);
   }
 }

@@ -54,15 +54,6 @@ abstract class ApplicationTheme {
   ///The background color for a selected ride attendee.
   static final Color rideAttendeeSelectedBackgroundColor = Color(0xFF1976D2);
 
-  static final TextStyle rideAttendeeFirstNameTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 16.0
-  );
-  static final TextStyle rideAttendeeLastNameTextStyle = TextStyle(
-    fontSize: 14.0
-  );
-
-
   //MemberList Item First Name Text Style
   static final TextStyle memberListItemFirstNameTextStyle = TextStyle(fontSize: 18,fontWeight: FontWeight.w500);
 

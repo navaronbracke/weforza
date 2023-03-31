@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/common/genericError.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListDisabledItem.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListEmpty.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListHeader.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDevicesList/memberDevicesListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platformAwareWidget.dart';
 
 class MemberDevicesList extends StatefulWidget {
   MemberDevicesList({
@@ -67,6 +70,24 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             ),
           ),
         ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: PlatformAwareWidget(
+              android: () => FlatButton(
+                onPressed: widget.onAddDeviceButtonPressed,
+                child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+              ),
+              ios: () => CupertinoButton(
+                onPressed: widget.onAddDeviceButtonPressed,
+                child: Text(
+                    S.of(context).AddDeviceTitle,
+                    style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+                ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

@@ -28,22 +28,14 @@ class MemberDetailsBloc extends Bloc {
   final DeviceRepository deviceRepository;
 
   StreamController<bool> _isActiveController;
-
   Stream<bool> get isActiveStream => _isActiveController.stream;
 
   final Future<int> attendingCountFuture;
   Member member;
   Future<File> profileImage;
-
   Future<List<Device>> devicesFuture;
 
   void loadDevices(){
-    if(devicesFuture == null){
-      devicesFuture = getMemberDevices();
-    }
-  }
-
-  void reloadDevices(){
     devicesFuture = getMemberDevices();
   }
 

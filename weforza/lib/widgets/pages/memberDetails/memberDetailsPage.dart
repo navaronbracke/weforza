@@ -74,7 +74,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).MemberDetailsTitle),
+        title: Text(S.of(context).Details),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),
@@ -107,38 +107,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             child: MemberDevicesList(
               future: bloc.devicesFuture,
               onDeleteDevice: bloc.deleteDevice,
+              onAddDeviceButtonPressed: () => goToAddDevicePage(context),
             )
-        ),
-        FutureBuilder<int>(
-          future: bloc.devicesFuture.then((list) => list.length),
-          builder: (context, snapshot){
-            if(snapshot.connectionState == ConnectionState.done){
-              if(snapshot.hasError){
-                // We show an error widget instead.
-                return SizedBox.shrink();
-              }else{
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: PlatformAwareWidget(
-                    android: () => FlatButton(
-                      onPressed: () => goToAddDevicePage(context),
-                      child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
-                    ),
-                    ios: () => CupertinoButton(
-                      onPressed: () => goToAddDevicePage(context),
-                      child: Text(
-                          S.of(context).AddDeviceTitle,
-                          style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
-                      ),
-                    ),
-                  ),
-                );
-              }
-            }else{
-              // We show a loading indicator instead.
-              return SizedBox.shrink();
-            }
-          },
         ),
       ],
     );
@@ -152,7 +122,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: Text(S.of(context).MemberDetailsTitle),
+                child: Text(S.of(context).Details),
               ),
             ),
             Row(
@@ -254,7 +224,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
       final reloadDevicesNotifier = ReloadDataProvider.of(context).reloadDevices;
       if(reloadDevicesNotifier.value){
         reloadDevicesNotifier.value = false;
-        setState(() => bloc.reloadDevices());
+        setState(() => bloc.loadDevices());
       }
     });
   }

@@ -190,6 +190,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               color: CupertinoColors.secondarySystemGroupedBackground,
             ),
+            bottom: Container(
+              color: excludedTermDivider.color,
+              height: excludedTermDivider.width,
+              margin: const EdgeInsetsDirectional.only(start: 15.0),
+            ),
             delegate: excludedTermsDelegate,
             focusNode: addTermFocusNode,
             formKey: addTermFormKey,

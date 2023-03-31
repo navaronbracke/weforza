@@ -16,7 +16,7 @@ class ExportableMember {
   final Set<String> devices;
 
   String toCsv(){
-    final String devicesString = devices.isEmpty ? "" : ",${devices.join(",")}";
+    final String devicesString = devices.isEmpty ? "" : "${devices.join(",")}";
     return "$firstName,$lastName,$alias,${isActiveMember ? 1: 0},$devicesString";
   }
 

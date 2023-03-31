@@ -149,34 +149,6 @@ class RideAttendeeScanningDelegate {
     _rideAttendeeController.add(items);
   }
 
-  /// Add [device] to the list of scanned devices.
-  void _addScannedDevice(BluetoothPeripheral device) {
-    if (_stateMachine.isClosed) {
-      return;
-    }
-
-    final deviceName = device.deviceName;
-
-    // Get the owners of the device.
-    final owners = _deviceOwners[deviceName]?.map((uuid) => _activeRiders[uuid]!) ?? [];
-
-    // The device is a known device that has one or more possible owners.
-    if (owners.isNotEmpty) {
-      if (owners.length > 1) {
-        // If the device has multiple possible owners,
-        // add the conflicting owners to the unresolved owners.
-        _unresolvedOwners.addAll(owners);
-      } else {
-        // Otherwise the single owner can be resolved automatically.
-        _addRideAttendee(owners.first.uuid, isScanned: true);
-      }
-    }
-
-    _devicesWithOwners.insert(0, BluetoothPeripheralWithOwners(device, owners.toList()));
-
-    onDeviceFound(device);
-  }
-
   /// Check whether a given [BluetoothPeripheral] should be accepted as a scan result.
   ///
   /// Returns false for invalid devices,
@@ -302,6 +274,41 @@ class RideAttendeeScanningDelegate {
 
     currentSelection.remove(item);
     _rideAttendeeController.add(currentSelection);
+  }
+
+  /// Resolve the list of possible owners for the given [device] and add the device to the list of found devices.
+  ///
+  /// If the device has one owner, its owner is added to the list of scanned ride attendees.
+  /// If the device has multiple possible owners,
+  /// the list of possible owners for [device] is added to the list of unresolved device owners.
+  void _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList(BluetoothPeripheral device) {
+    if (_stateMachine.isClosed) {
+      return;
+    }
+
+    // Trim any excess spacing around the name, to allow for more flexible matching.
+    final deviceName = device.deviceName.trim();
+
+    // Get the owners of the device.
+    final owners = _deviceOwners[deviceName]?.map((uuid) => _activeRiders[uuid]!) ?? [];
+
+    // The device is a known device that has one or more possible owners.
+    if (owners.isNotEmpty) {
+      if (owners.length > 1) {
+        // If the device has multiple possible owners,
+        // add the conflicting owners to the unresolved owners.
+        _unresolvedOwners.addAll(owners);
+
+        return;
+      }
+
+      // Otherwise the single owner can be resolved automatically.
+      _addRideAttendee(owners.first.uuid, isScanned: true);
+    }
+
+    // Finally, add the device to the list of found devices and emit the device found signal.
+    _devicesWithOwners.insert(0, BluetoothPeripheralWithOwners(device, owners.toList()));
+    onDeviceFound(device);
   }
 
   /// Request permission to check the bluetooth adapter state and
@@ -485,13 +492,13 @@ class RideAttendeeScanningDelegate {
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
       scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
-        _addScannedDevice,
+        _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
+        // Don't stop scanning even if an event was an error.
+        cancelOnError: false,
         onError: (error) {
           // Ignore errors from individual events.
           // Otherwise the next scan results might be dropped.
         },
-        // Don't stop scanning even if an event was an error.
-        cancelOnError: false,
       );
     } catch (error) {
       _stateMachine.setStartScanError();

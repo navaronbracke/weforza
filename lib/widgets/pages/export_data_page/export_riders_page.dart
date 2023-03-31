@@ -48,10 +48,6 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
       checkmarkAnimationController: checkmarkController,
       delegate: _delegate,
       options: ExportRidersOptions(csvHeader: translator.exportRidersCsvHeader),
-      onPressed: () => _delegate.exportDataToFile(
-        context,
-        ExportRidersOptions(csvHeader: translator.exportRidersCsvHeader),
-      ),
       title: translator.exportRiders,
     );
   }

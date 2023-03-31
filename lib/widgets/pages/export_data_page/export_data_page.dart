@@ -19,7 +19,6 @@ class ExportDataPage<T> extends StatelessWidget {
   const ExportDataPage({
     required this.checkmarkAnimationController,
     required this.delegate,
-    required this.onPressed,
     required this.options,
     required this.title,
     super.key,
@@ -30,9 +29,6 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// The delegate that handles the export.
   final ExportDelegate<T> delegate;
-
-  /// The onPressed handler for the export button.
-  final void Function() onPressed;
 
   /// The options for the export handler.
   final T options;
@@ -182,7 +178,7 @@ class ExportDataPage<T> extends StatelessWidget {
             context,
             child: isExporting
                 ? const FixedHeightSubmitButton.loading()
-                : FixedHeightSubmitButton(label: label, onPressed: onPressed),
+                : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
@@ -208,7 +204,7 @@ class ExportDataPage<T> extends StatelessWidget {
               context,
               child: isExporting
                   ? const FixedHeightSubmitButton.loading()
-                  : FixedHeightSubmitButton(label: label, onPressed: onPressed),
+                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
             ),
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,

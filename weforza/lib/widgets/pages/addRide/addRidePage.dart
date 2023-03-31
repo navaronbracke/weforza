@@ -16,20 +16,24 @@ import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
   @override
-  _AddRidePageState createState() => _AddRidePageState(AddRideBloc(InjectionContainer.get<RideRepository>()));
+  _AddRidePageState createState() => _AddRidePageState(
+      bloc: AddRideBloc(repository: InjectionContainer.get<RideRepository>())
+  );
 }
 
+//TODO redo the calendar code
 ///This class is the State for [AddRidePage].
 class _AddRidePageState extends State<AddRidePage> {
-  _AddRidePageState(this._bloc): assert(_bloc != null);
+  _AddRidePageState({@required this.bloc}): assert(bloc != null);
 
   ///The BLoC for this page.
-  final AddRideBloc _bloc;
+  final AddRideBloc bloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc.initCalendarDate();
+    bloc.initCalendarDate();
+    bloc.loadRideDatesIfNotLoaded();
   }
 
   @override
@@ -45,7 +49,7 @@ class _AddRidePageState extends State<AddRidePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_sweep),
-            onPressed: () => _bloc.onRequestClear(),
+            onPressed: () => bloc.onRequestClear(),
           ),
         ],
       ),
@@ -60,12 +64,12 @@ class _AddRidePageState extends State<AddRidePage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: AddRideColorLegend(),
+                  child: RideCalendarColorLegend(),
                 ),
                 Expanded(
                   child: Center(
-                    child: AddRideSubmit(_bloc.submitStream,() async {
-                      await _bloc.addRides((){
+                    child: AddRideSubmit(bloc.submitStream,() async {
+                      await bloc.addRides((){
                         ReloadDataProvider.of(context).reloadRides.value = true;
                         Navigator.pop(context);
                       });
@@ -93,7 +97,7 @@ class _AddRidePageState extends State<AddRidePage> {
               onPressedColor: ApplicationTheme.primaryColor,
               idleColor: ApplicationTheme.accentColor,
               icon: Icons.delete_sweep,
-              onPressed: () => _bloc.onRequestClear(),
+              onPressed: () => bloc.onRequestClear(),
             ),
           ],
         ),
@@ -111,12 +115,12 @@ class _AddRidePageState extends State<AddRidePage> {
                 child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: AddRideColorLegend(),
+                      child: RideCalendarColorLegend(),
                     ),
                     Expanded(
                       child: Center(
-                        child: AddRideSubmit(_bloc.submitStream,() async {
-                          await _bloc.addRides((){
+                        child: AddRideSubmit(bloc.submitStream,() async {
+                          await bloc.addRides((){
                             ReloadDataProvider.of(context).reloadRides.value = true;
                             Navigator.pop(context);
                           });
@@ -135,8 +139,9 @@ class _AddRidePageState extends State<AddRidePage> {
 
   ///Build the calendar.
   Widget _buildCalendar(){
-    return FutureBuilder(
-      future: _bloc.loadRideDates(),
+    //TODO the calendar should use an inherited widget to get the bloc
+    return FutureBuilder<void>(
+      future: bloc.loadExistingRidesFuture,
         builder: (context,snapshot){
           if (snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
@@ -145,7 +150,7 @@ class _AddRidePageState extends State<AddRidePage> {
               );
             }
             else{
-              return AddRideCalendar(_bloc);
+              return AddRideCalendar();
             }
           }else {
             return Center(
@@ -158,7 +163,7 @@ class _AddRidePageState extends State<AddRidePage> {
 
   @override
   void dispose() {
-    _bloc.dispose();
+    bloc.dispose();
     super.dispose();
   }
 }

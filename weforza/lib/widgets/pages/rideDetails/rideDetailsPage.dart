@@ -20,33 +20,33 @@ import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideDetailsPage extends StatefulWidget {
   @override
-  _RideDetailsPageState createState() => _RideDetailsPageState(RideDetailsBloc(
-      InjectionContainer.get<MemberRepository>(),
-      InjectionContainer.get<RideRepository>()));
+  _RideDetailsPageState createState() => _RideDetailsPageState();
 }
 
-class _RideDetailsPageState extends State<RideDetailsPage>
-    implements DeleteRideHandler {
-  _RideDetailsPageState(this._bloc) : assert(_bloc != null);
+class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRideHandler {
 
-  final RideDetailsBloc _bloc;
-
-  Future<List<MemberItem>> attendeesFuture;
+  RideDetailsBloc bloc;
 
   @override
-  void initState() {
-    super.initState();
-    attendeesFuture = _bloc.loadRideAttendees(RideProvider.selectedRide.date);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    bloc = RideDetailsBloc(
+      memberRepo: InjectionContainer.get<MemberRepository>(),
+      rideRepo: InjectionContainer.get<RideRepository>(),
+      ride: SelectedItemProvider.of(context).selectedRide.value
+    );
+    bloc.loadAttendeesIfNotLoaded();
   }
 
   @override
   Widget build(BuildContext context) => PlatformAwareWidget(
-        android: () => _buildAndroidLayout(context),
-        ios: () => _buildIOSLayout(context),
-      );
+    android: () => _buildAndroidLayout(context),
+    ios: () => _buildIOSLayout(context),
+  );
 
   Widget _buildAndroidLayout(BuildContext context) {
     final ride = RideProvider.selectedRide;
@@ -59,6 +59,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
             icon: Icon(Icons.person_pin),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
+                //TODO: the scan page should return a future for attendeesFuture and then call set state if its not null
                       builder: (context) => RideAttendeeScanningPage())
               );
             },
@@ -140,7 +141,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
   ///Build the ride attendees list.
   Widget _buildAttendeesList() {
     return FutureBuilder<List<MemberItem>>(
-      future: attendeesFuture,
+      future: bloc.attendeesFuture,
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if (snapshot.hasError) {
@@ -194,7 +195,7 @@ class _RideDetailsPageState extends State<RideDetailsPage>
             RideAttendeeCounter(
               //We need the attendee names + images for displaying in the list.
               //But we need the total of people for the counter, thus we map to the length when its done loading.
-              future: attendeesFuture.then((attendees) => attendees.length)
+              future: bloc.attendeesFuture.then((attendees) => attendees.length)
             ),
           ],
         ),
@@ -241,5 +242,5 @@ class _RideDetailsPageState extends State<RideDetailsPage>
   }
 
   @override
-  Future<void> deleteRide() => _bloc.deleteRide(RideProvider.selectedRide.date);
+  Future<void> deleteRide() => bloc.deleteRide();
 }

@@ -11,8 +11,6 @@ import 'package:weforza/model/member_payload.dart';
 import 'package:weforza/model/member_validator.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
-import 'package:weforza/riverpod/member/member_list_provider.dart';
-import 'package:weforza/riverpod/repository/member_repository_provider.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
 import 'package:weforza/widgets/pages/member_form/member_form_submit_button.dart';
 import 'package:weforza/widgets/platform/cupertino_form_field.dart';
@@ -106,10 +104,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
       ),
     );
 
-    _delegate = MemberFormDelegate(
-      ref.read(memberRepositoryProvider),
-      ref.read(memberListProvider.notifier),
-    );
+    _delegate = MemberFormDelegate(ref);
 
     _firstNameController = TextEditingController(
       text: widget.member?.firstname,

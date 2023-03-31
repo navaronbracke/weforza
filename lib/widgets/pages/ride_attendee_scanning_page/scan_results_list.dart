@@ -42,7 +42,7 @@ class ScanResultsList extends StatelessWidget {
                 return SizeTransition(
                   sizeFactor: animation,
                   child: _ScanResultsListItem(
-                    device: delegate.getScanResult(index),
+                    device: delegate.getScannedDevice(index),
                   ),
                 );
               },

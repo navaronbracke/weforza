@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/widgets/pages/memberDetails/memberDeviceItem.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';

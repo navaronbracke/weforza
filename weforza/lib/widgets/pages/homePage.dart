@@ -4,7 +4,7 @@ import 'package:weforza/widgets/pages/memberList/memberListPage.dart';
 import 'package:weforza/widgets/pages/rideList/rideListPage.dart';
 import 'package:weforza/widgets/pages/settings/settingsPage.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
-import 'package:weforza/generated/i18n.dart';
+import 'package:weforza/generated/l10n.dart';
 
 ///This [Widget] represents the app landing page.
 ///It allows navigating between [RideListPage] and [MemberListPage].

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/device_form/device_form.dart';
@@ -13,10 +14,13 @@ import 'package:weforza/widgets/pages/member_details/member_devices_list/member_
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
+// TODO: use a separate backing list to drive the animated list
+// if deleting devices is broken (i.e. the list does not update properly)
+
+// TODO: can we eliminate the setState() at the bottom and turn this into a ConsumerWidget?
+
 class MemberDevicesList extends ConsumerStatefulWidget {
-  const MemberDevicesList({
-    Key? key,
-  }) : super(key: key);
+  const MemberDevicesList({super.key});
 
   @override
   MemberDevicesListState createState() => MemberDevicesListState();
@@ -24,8 +28,6 @@ class MemberDevicesList extends ConsumerStatefulWidget {
 
 class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
-  late final SelectedMemberNotifier selectedMemberNotifier;
 
   void onAddDevicePressed(BuildContext context, String ownerUuid) {
     Navigator.of(context).push(
@@ -36,37 +38,19 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    selectedMemberNotifier = ref.read(selectedMemberProvider.notifier);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final future = ref.watch(
-      selectedMemberProvider.select((value) => value?.devices),
-    );
+    final devicesList = ref.watch(selectedMemberDevicesProvider);
 
-    return FutureBuilder<List<Device>>(
-      future: future,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return GenericError(text: S.of(context).GenericError);
-            }
-
-            final data = snapshot.data ?? [];
-
-            if (data.isEmpty) {
-              return const MemberDevicesListEmpty();
-            }
-
-            return _buildDevicesList(context, data);
-          default:
-            return const Center(child: PlatformAwareLoadingIndicator());
+    return devicesList.when(
+      data: (devices) {
+        if (devices.isEmpty) {
+          return const MemberDevicesListEmpty();
         }
+
+        return _buildDevicesList(context, devices);
       },
+      error: (error, _) => GenericError(text: S.of(context).GenericError),
+      loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
   }
 
@@ -116,7 +100,9 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
   }
 
   Future<void> onDeleteDevice(BuildContext context, int index) async {
-    final device = await selectedMemberNotifier.deleteDevice(index);
+    final notifier = ref.read(selectedMemberDevicesProvider.notifier);
+
+    final device = await notifier.deleteDevice(index);
 
     if (!mounted) {
       return;
@@ -141,7 +127,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
     );
 
     // Switch to the empty list widget.
-    if (selectedMemberNotifier.hasNoDevices) {
+    if (notifier.hasNoDevices) {
       setState(() {});
     }
   }

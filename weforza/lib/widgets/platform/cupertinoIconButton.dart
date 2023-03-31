@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:weforza/theme/appTheme.dart';
 
 ///This [Widget] represents a custom ios icon button.
 class CupertinoIconButton extends StatefulWidget {
@@ -14,6 +15,18 @@ class CupertinoIconButton extends StatefulWidget {
     && size != null
     && idleColor != null
     && onPressedColor != null
+  );
+
+  CupertinoIconButton.fromAppTheme({
+    @required VoidCallback onPressed,
+    @required IconData icon,
+    double size 
+  }): this(
+    idleColor: ApplicationTheme.primaryColor,
+    onPressedColor: ApplicationTheme.accentColor,
+    icon: icon,
+    onPressed: onPressed,
+    size: size ?? 24
   );
 
   ///A [VoidCallback] that is invoked when this [Widget] is pressed.

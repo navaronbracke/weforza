@@ -72,9 +72,7 @@ class _RideListPageState extends State<RideListPage> {
             Expanded(
               child: Center(child: Text(S.of(context).RideListRidesHeader)),
             ),
-            CupertinoIconButton(
-              onPressedColor: ApplicationTheme.primaryColor,
-              idleColor: ApplicationTheme.accentColor,
+            CupertinoIconButton.fromAppTheme(
               icon: Icons.add,
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context)=> AddRidePage())

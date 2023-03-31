@@ -127,16 +127,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
+                CupertinoIconButton.fromAppTheme(
                     icon: Icons.bluetooth_searching,
                     onPressed: () => goToScanningPage(context),
                 ),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
+                SizedBox(width: 15),
+                CupertinoIconButton.fromAppTheme(
                     icon: Icons.more_vert,
                     onPressed: () => showCupertinoModalPopup(context: context, builder: (context){
                       return CupertinoActionSheet(
@@ -178,21 +174,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         ),
                       );
                     })
-                ),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
-                    icon: Icons.delete,
-                    onPressed: () => showCupertinoDialog(
-                        context: context,
-                        builder: (context) => DeleteItemDialog(
-                          title: S.of(context).RideDeleteDialogTitle,
-                          description: S.of(context).RideDeleteDialogDescription,
-                          errorDescription: S.of(context).RideDeleteDialogErrorDescription,
-                          onDelete: () => deleteRide(context),
-                        ),
-                    ),
                 ),
               ],
             ),

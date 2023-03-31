@@ -165,9 +165,7 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
+                CupertinoIconButton.fromAppTheme(
                     icon: Icons.edit,
                     onPressed: ()=> Navigator.push(context, MaterialPageRoute(builder: (context) => EditMemberPage())).then((_){
                       setState(() {
@@ -175,10 +173,8 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       });
                     })
                 ),
-                SizedBox(width: 10),
-                CupertinoIconButton(
-                    onPressedColor: ApplicationTheme.primaryColor,
-                    idleColor: ApplicationTheme.accentColor,
+                SizedBox(width: 15),
+                CupertinoIconButton.fromAppTheme(
                     icon: Icons.delete,
                     onPressed: ()=> showCupertinoDialog(
                         context: context,

@@ -22,7 +22,7 @@ class RideRepository {
 
   Future<void> editRide(Ride ride) => _dao.updateRide(ride);
 
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees) => _dao.updateAttendeesForRideWithDate(rideDate, attendees);
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees) => _dao.updateAttendeesForRideWithDate(rideDate, attendees);
 
   Future<List<Member>> getRideAttendees(DateTime date) => _dao.getRideAttendees(date);
 

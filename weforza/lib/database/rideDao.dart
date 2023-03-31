@@ -85,7 +85,7 @@ class RideDao implements IRideDao {
   }
 
   @override
-  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, List<RideAttendee> attendees) async {
+  Future<void> updateAttendeesForRideWithDate(DateTime rideDate, Iterable<RideAttendee> attendees) async {
     assert(rideDate != null && attendees != null);
     final date = rideDate.toIso8601String();
 

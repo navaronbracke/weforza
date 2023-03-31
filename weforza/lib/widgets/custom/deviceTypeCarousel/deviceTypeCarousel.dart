@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/theme/appTheme.dart';
+import 'package:weforza/widgets/common/deviceWidgetUtils.dart';
 
 class DeviceTypeCarousel extends StatelessWidget {
   DeviceTypeCarousel({
@@ -72,7 +73,7 @@ class DeviceTypeCarousel extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints){
                 return Icon(
-                  _getIcon(index),
+                  getDeviceTypeIconData(index),
                   color: ApplicationTheme.deviceTypePickerCurrentDotColor,
                   size: constraints.biggest.shortestSide * .9
                 );
@@ -103,19 +104,6 @@ class DeviceTypeCarousel extends StatelessWidget {
       case DeviceType.GPS: return S.of(context).DeviceGPS;
       case DeviceType.PULSE_MONITOR: return S.of(context).DevicePulseMonitor;
       default: return S.of(context).DeviceUnknown;
-    }
-  }
-
-  IconData _getIcon(int index){
-    switch(DeviceType.values[index]){
-      case DeviceType.HEADSET: return Icons.headset;
-      case DeviceType.WATCH: return Icons.watch;
-      case DeviceType.POWER_METER: return Icons.flash_on;
-      case DeviceType.CADENCE_METER: return Icons.fitness_center;
-      case DeviceType.PHONE: return Icons.smartphone;
-      case DeviceType.GPS: return Icons.gps_fixed;
-      case DeviceType.PULSE_MONITOR: return Icons.favorite_border;
-      default: return Icons.device_unknown;
     }
   }
 }

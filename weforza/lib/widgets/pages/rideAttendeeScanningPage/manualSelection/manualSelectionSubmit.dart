@@ -16,34 +16,37 @@ class ManualSelectionSubmit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Center(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: isSaving,
-          builder: (context, isSaving, child){
-            if(isSaving){
-              return PlatformAwareLoadingIndicator();
-            }else{
-              return PlatformAwareWidget(
-                android: () => FlatButton(
+    return Center(
+      child: ValueListenableBuilder<bool>(
+        valueListenable: isSaving,
+        builder: (context, isSaving, child){
+          if(isSaving){
+            return PlatformAwareLoadingIndicator();
+          }else{
+            return PlatformAwareWidget(
+              android: () => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: FlatButton(
                   child: Text(
                       S.of(context).RideAttendeeScanningSaveManualResults,
                       style: TextStyle(color: ApplicationTheme.primaryColor)
                   ),
                   onPressed: onSave,
                 ),
-                ios: () => CupertinoButton(
+              ),
+              ios: () => Padding(
+                padding: const EdgeInsets.only(bottom: 20, top: 10),
+                child: CupertinoButton(
                     child: Text(
                         S.of(context).RideAttendeeScanningSaveManualResults,
                         style: TextStyle(color: ApplicationTheme.primaryColor)
                     ),
                     onPressed: onSave,
                 ),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          }
+        },
       ),
     );
   }

@@ -24,7 +24,7 @@ class AddRideCalendar extends StatelessWidget {
     return DatePicker(
       // Use the smallest size for now.
       computeDaySize: (constraints) => constraints.smallest,
-      dayBuilder: (day, isCurrentMonth, size) {
+      dayBuilder: (day, size, {bool isCurrentMonth = false}) {
         if (isCurrentMonth) {
           return AddRideCalendarItem(
             date: day,

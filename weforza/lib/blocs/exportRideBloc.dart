@@ -92,7 +92,7 @@ class ExportRideBloc extends Bloc {
       }else{
         _fileExistsController.add(false);
         _streamController.add(RideExportState.EXPORTING);
-        await saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
+        await _saveRideAndAttendeesToFile(file, _fileExtension.extension(), ride, rideAttendees);
         _streamController.add(RideExportState.DONE);
       }
     }).catchError((e) => _streamController.addError(e));
@@ -100,7 +100,7 @@ class ExportRideBloc extends Bloc {
 
   ///Save the given ride and attendees to the given file.
   ///The extension determines how the data is structured inside the file.
-  Future<void> saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees) async {
+  Future<void> _saveRideAndAttendeesToFile(File file, String extension, Ride ride, List<Member> attendees) async {
     if(extension == FileExtension.CSV.extension()){
       final buffer = StringBuffer();
       buffer.writeln(ride.toCsv());

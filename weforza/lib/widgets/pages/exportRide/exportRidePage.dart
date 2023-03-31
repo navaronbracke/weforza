@@ -43,7 +43,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
       appBar: AppBar(
         title: Text(S.of(context).ExportRideTitle),
       ),
-      body: _buildBody(context),
+      body: Center(child: _buildBody(context)),
     );
   }
 

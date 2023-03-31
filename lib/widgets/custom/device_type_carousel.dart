@@ -40,8 +40,8 @@ class DeviceTypeCarousel extends StatelessWidget {
                   children.add(_buildPageDot(i == snapshot.data));
                 }
                 return Row(
-                  children: children,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  children: children,
                 );
               },
             ),

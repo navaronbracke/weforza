@@ -51,15 +51,15 @@ class AddDeviceSubmit extends StatelessWidget {
 
               return PlatformAwareWidget(
                 android: () => ElevatedButton(
-                  child: Text(translator.AddDevice),
                   onPressed: onSubmit,
+                  child: Text(translator.AddDevice),
                 ),
                 ios: () => CupertinoButton.filled(
+                  onPressed: onSubmit,
                   child: Text(
                     translator.AddDevice,
                     style: const TextStyle(color: Colors.white),
                   ),
-                  onPressed: onSubmit,
                 ),
               );
             },

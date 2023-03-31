@@ -9,11 +9,10 @@ class ResetRideCalendarButton extends StatefulWidget {
   const ResetRideCalendarButton({Key? key}) : super(key: key);
 
   @override
-  _ResetRideCalendarButtonState createState() =>
-      _ResetRideCalendarButtonState();
+  ResetRideCalendarButtonState createState() => ResetRideCalendarButtonState();
 }
 
-class _ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
+class ResetRideCalendarButtonState extends State<ResetRideCalendarButton> {
   // An internal flag to track the deletion.
   bool _deleted = false;
 

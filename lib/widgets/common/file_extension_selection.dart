@@ -16,10 +16,10 @@ class FileExtensionSelection extends StatefulWidget {
   final void Function(FileExtension value) onExtensionSelected;
 
   @override
-  _FileExtensionSelectionState createState() => _FileExtensionSelectionState();
+  FileExtensionSelectionState createState() => FileExtensionSelectionState();
 }
 
-class _FileExtensionSelectionState extends State<FileExtensionSelection> {
+class FileExtensionSelectionState extends State<FileExtensionSelection> {
   late FileExtension currentValue;
 
   @override

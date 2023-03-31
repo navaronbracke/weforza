@@ -71,11 +71,10 @@ class ManualSelectionListItem extends StatefulWidget {
   final String uuid;
 
   @override
-  _ManualSelectionListItemState createState() =>
-      _ManualSelectionListItemState();
+  ManualSelectionListItemState createState() => ManualSelectionListItemState();
 }
 
-class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
+class ManualSelectionListItemState extends State<ManualSelectionListItem> {
   late Color itemDecorationBackgroundColor;
   late TextStyle firstNameStyle;
   late TextStyle lastNameStyle;

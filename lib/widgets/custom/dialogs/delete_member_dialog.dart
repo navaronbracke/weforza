@@ -8,10 +8,10 @@ class DeleteMemberDialog extends ConsumerStatefulWidget {
   const DeleteMemberDialog({Key? key}) : super(key: key);
 
   @override
-  _DeleteMemberDialogState createState() => _DeleteMemberDialogState();
+  DeleteMemberDialogState createState() => DeleteMemberDialogState();
 }
 
-class _DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
+class DeleteMemberDialogState extends ConsumerState<DeleteMemberDialog> {
   Future<void>? future;
 
   @override

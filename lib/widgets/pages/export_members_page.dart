@@ -18,10 +18,10 @@ class ExportMembersPage extends ConsumerStatefulWidget {
   const ExportMembersPage({Key? key}) : super(key: key);
 
   @override
-  _ExportMembersPageState createState() => _ExportMembersPageState();
+  ExportMembersPageState createState() => ExportMembersPageState();
 }
 
-class _ExportMembersPageState extends ConsumerState<ExportMembersPage> {
+class ExportMembersPageState extends ConsumerState<ExportMembersPage> {
   late final ExportMembersProvider exportProvider;
 
   final GlobalKey<FormState> _formKey = GlobalKey();

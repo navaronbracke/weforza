@@ -5,7 +5,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
-import 'package:weforza/widgets/pages/add_device/add_device_page.dart';
+import 'package:weforza/widgets/pages/device_form/device_form.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_disabled_item.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
@@ -27,9 +27,11 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
 
   late final SelectedMemberNotifier selectedMemberNotifier;
 
-  void onAddDevicePressed(BuildContext context) {
+  void onAddDevicePressed(BuildContext context, String ownerUuid) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const AddDevicePage()),
+      MaterialPageRoute(
+        builder: (context) => DeviceForm(ownerUuid: ownerUuid),
+      ),
     );
   }
 
@@ -86,14 +88,22 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
           android: () => Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: TextButton(
-              onPressed: () => onAddDevicePressed(context),
+              onPressed: () {
+                final selectedMember = ref.read(selectedMemberProvider);
+
+                onAddDevicePressed(context, selectedMember!.value.uuid);
+              },
               child: Text(S.of(context).AddDevice),
             ),
           ),
           ios: () => Padding(
             padding: const EdgeInsets.only(top: 4, bottom: 12),
             child: CupertinoButton.filled(
-              onPressed: () => onAddDevicePressed(context),
+              onPressed: () {
+                final selectedMember = ref.read(selectedMemberProvider);
+
+                onAddDevicePressed(context, selectedMember!.value.uuid);
+              },
               child: Text(
                 S.of(context).AddDevice,
                 style: const TextStyle(color: Colors.white),

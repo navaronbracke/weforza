@@ -333,21 +333,21 @@ class S {
     );
   }
 
-  /// `Manage Devices`
-  String get DeviceOverviewTitle {
+  /// `Devices`
+  String get DevicesListHeader {
     return Intl.message(
-      'Manage Devices',
-      name: 'DeviceOverviewTitle',
+      'Devices',
+      name: 'DevicesListHeader',
       desc: '',
       args: [],
     );
   }
 
-  /// `No Devices`
-  String get DeviceOverviewNoDevices {
+  /// `No devices to show`
+  String get DevicesListNoDevices {
     return Intl.message(
-      'No Devices',
-      name: 'DeviceOverviewNoDevices',
+      'No devices to show',
+      name: 'DevicesListNoDevices',
       desc: '',
       args: [],
     );
@@ -363,11 +363,11 @@ class S {
     );
   }
 
-  /// `Devices`
-  String get DevicesHeader {
+  /// `Add Device`
+  String get AddDeviceTitle {
     return Intl.message(
-      'Devices',
-      name: 'DevicesHeader',
+      'Add Device',
+      name: 'AddDeviceTitle',
       desc: '',
       args: [],
     );
@@ -393,11 +393,51 @@ class S {
     );
   }
 
-  /// `Add Device`
+  /// `Create Device`
   String get AddDeviceSubmit {
     return Intl.message(
-      'Add Device',
+      'Create Device',
       name: 'AddDeviceSubmit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Device`
+  String get EditDeviceTitle {
+    return Intl.message(
+      'Edit Device',
+      name: 'EditDeviceTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not edit device`
+  String get EditDeviceError {
+    return Intl.message(
+      'Could not edit device',
+      name: 'EditDeviceError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong`
+  String get EditDeviceGenericError {
+    return Intl.message(
+      'Something went wrong',
+      name: 'EditDeviceGenericError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save Changes`
+  String get EditDeviceSubmit {
+    return Intl.message(
+      'Save Changes',
+      name: 'EditDeviceSubmit',
       desc: '',
       args: [],
     );
@@ -893,16 +933,6 @@ class S {
     );
   }
 
-  /// `Device Type`
-  String get DeviceTypeLabel {
-    return Intl.message(
-      'Device Type',
-      name: 'DeviceTypeLabel',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Unknown`
   String get DeviceUnknown {
     return Intl.message(
@@ -990,46 +1020,6 @@ class S {
       name: 'DeviceAlreadyExists',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `Found {device}`
-  String DeviceFound(Object device) {
-    return Intl.message(
-      'Found $device',
-      name: 'DeviceFound',
-      desc: '',
-      args: [device],
-    );
-  }
-
-  /// `Edit Device`
-  String get EditDeviceSubmit {
-    return Intl.message(
-      'Edit Device',
-      name: 'EditDeviceSubmit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete {device}?`
-  String DeleteDeviceDescription(Object device) {
-    return Intl.message(
-      'Delete $device?',
-      name: 'DeleteDeviceDescription',
-      desc: '',
-      args: [device],
-    );
-  }
-
-  /// `Could not delete {device}`
-  String DeleteDeviceError(Object device) {
-    return Intl.message(
-      'Could not delete $device',
-      name: 'DeleteDeviceError',
-      desc: '',
-      args: [device],
     );
   }
 

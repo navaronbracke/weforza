@@ -37,13 +37,19 @@
   "MemberDetailsLoadDevicesError": "Could not load devices",
   "MemberDetailsLoadPictureError": "Could not load profile picture",
 
-  "DeviceOverviewTitle" : "Manage Devices",
-  "DeviceOverviewNoDevices": "No Devices",
+  "DevicesListHeader": "Devices",
+  "DevicesListNoDevices": "No devices to show",
   "DeviceNameLabel": "Device Name",
-  "DevicesHeader": "Devices",
+
+  "AddDeviceTitle": "Add Device",
   "AddDeviceError": "Could not add device",
   "AddDeviceGenericError": "Something went wrong",
-  "AddDeviceSubmit": "Add Device",
+  "AddDeviceSubmit": "Create Device",
+
+  "EditDeviceTitle": "Edit Device",
+  "EditDeviceError": "Could not edit device",
+  "EditDeviceGenericError": "Something went wrong",
+  "EditDeviceSubmit": "Save Changes",
 
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",
@@ -101,7 +107,6 @@
   "RideStart": "Start",
   "RideDestination": "Destination",
 
-  "DeviceTypeLabel": "Device Type",
   "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",
   "DevicePhone": "Phone",
@@ -111,10 +116,6 @@
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
   "DeviceAlreadyExists": "This device already exists",
-  "DeviceFound": "Found {device}",
-  "EditDeviceSubmit": "Edit Device",
-  "DeleteDeviceDescription": "Delete {device}?",
-  "DeleteDeviceError": "Could not delete {device}",
 
   "SettingsTitle": "Settings",
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",

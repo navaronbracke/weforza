@@ -111,7 +111,6 @@ class _EditMemberPageState extends State<EditMemberPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _initStrings(context);
     final MemberItem member = SelectedItemProvider.of(context).selectedMember.value;
     _bloc = EditMemberBloc(
       repository: InjectionContainer.get<MemberRepository>(),
@@ -124,6 +123,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _firstNameController = TextEditingController(text: _bloc.firstName);
     _lastNameController = TextEditingController(text: _bloc.lastName);
     _phoneController = TextEditingController(text: _bloc.phone);
+    _initStrings(context);
   }
 
   @override

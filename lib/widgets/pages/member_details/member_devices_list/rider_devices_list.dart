@@ -8,20 +8,20 @@ import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/delete_device_button.dart';
-import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
-import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
-import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_item.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/rider_devices_list_empty.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/rider_devices_list_header.dart';
+import 'package:weforza/widgets/pages/member_details/member_devices_list/rider_devices_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-class MemberDevicesList extends ConsumerStatefulWidget {
-  const MemberDevicesList({super.key});
+class RiderDevicesList extends ConsumerStatefulWidget {
+  const RiderDevicesList({super.key});
 
   @override
-  MemberDevicesListState createState() => MemberDevicesListState();
+  ConsumerState<RiderDevicesList> createState() => _RiderDevicesListState();
 }
 
-class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
+class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
   void onAddDevicePressed(BuildContext context, String ownerUuid) {
     Navigator.of(context).push<void>(
       MaterialPageRoute(
@@ -37,7 +37,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
     return devicesList.when(
       data: (devices) {
         if (devices.isEmpty) {
-          return const MemberDevicesListEmpty();
+          return const RiderDevicesListEmpty();
         }
 
         return _buildDevicesList(context, devices);
@@ -51,13 +51,13 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          const MemberDevicesListHeader(),
+          const RiderDevicesListHeader(),
           Expanded(
             child: ListView.builder(
               itemBuilder: (context, index) {
                 final device = devices[index];
 
-                return MemberDevicesListItem(
+                return RiderDevicesListItem(
                   device: device,
                   deleteDeviceButton: DeleteDeviceButton(index: index),
                 );

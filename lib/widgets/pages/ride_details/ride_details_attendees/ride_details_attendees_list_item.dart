@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/widgets/common/member_name_and_alias.dart';
+import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
@@ -21,7 +21,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
-      child: MemberNameAndAlias.singleLine(
+      child: RiderNameAndAlias.singleLine(
         firstName: firstName,
         lastName: lastName,
         alias: alias,

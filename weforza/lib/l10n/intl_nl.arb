@@ -28,13 +28,12 @@
   "All": "Alle",
   "Filter": "Filter",
 
-  "AttendeeCounterOne": "Één aanwezige",
-  "AttendeeCounterMany": "{count} aanwezigen",
-
   "ListEmpty": "Er is niets om te tonen",
   "RidersListTitle": "Renners ({amount})",
 
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsTotalAttendeesTooltip": "Totaal",
+  "RideDetailsScannedAttendeesTooltip": "Gescand",
 
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",

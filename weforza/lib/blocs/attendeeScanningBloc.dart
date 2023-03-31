@@ -9,6 +9,7 @@ import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';
+import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/rideAttendee.dart';
 import 'package:weforza/model/scanProcessStep.dart';
 import 'package:weforza/repository/deviceRepository.dart';
@@ -18,7 +19,7 @@ import 'package:weforza/repository/settingsRepository.dart';
 
 class AttendeeScanningBloc extends Bloc {
   AttendeeScanningBloc({
-    required this.rideDate,
+    required this.ride,
     required this.scanner,
     required this.settingsRepo,
     required this.memberRepo,
@@ -49,9 +50,9 @@ class AttendeeScanningBloc extends Bloc {
   final DeviceRepository deviceRepo;
   final RideRepository ridesRepo;
 
-  ///The date of the ride that will get attendees assigned
+  ///The ride that will get attendees assigned
   ///during the scan / manual assignment.
-  final DateTime rideDate;
+  final Ride ride;
 
   ///The scan future is stored here.
   ///During init state [doInitialDeviceScan] is stored here.
@@ -83,15 +84,14 @@ class AttendeeScanningBloc extends Bloc {
   /// This list holds all the devices that are used during the owner lookup.
   late List<Device> _devices;
 
-  /// This collection keeps track of a specific set of owners.
-  /// If a device with multiple possible owners is scanned,
-  /// the owners that aren't scanned yet (by finding a device only they own)
-  /// are added to this list.
+  /// This collection contains the owners of
+  /// devices that could not be resolved automatically.
+  /// A device that could not be resolved has multiple possible owners,
+  /// which prevents the automatic selection of the single owner.
+  /// (as there are multiple correct selections)
   ///
-  /// This list effectively collects the owners
-  /// that are passed to the multiple possible owners resolution screen.
-  /// On this screen the user can select the members from this list that weren't automatically resolved.
-  Set<Member> ownersOfScannedDevicesWithMultiplePossibleOwners = HashSet();
+  /// This list will not contain owners that have already been scanned.
+  Set<Member> unresolvedDevicesOwners = HashSet();
 
   ///This controller maintains the general UI state as divided in steps by [ScanProcessStep].
   ///For each step it will trigger a rebuild of the UI accordingly.
@@ -112,7 +112,7 @@ class AttendeeScanningBloc extends Bloc {
           onGranted: () async {
             await Future.wait([
               _loadSettings(),
-              _loadRideAttendees(rideDate),
+              _loadRideAttendees(ride.date),
               _loadMembersAndDevices()
             ]).then((_) => _startDeviceScan(onDeviceFound), onError: _scanStepController.addError);
           },
@@ -235,7 +235,7 @@ class AttendeeScanningBloc extends Bloc {
 
   /// Add the given [deviceName] to the scan results list.
   /// If the given device has multiple possible owners,
-  /// these [Member]s are added to [ownersOfScannedDevicesWithMultiplePossibleOwners].
+  /// these [Member]s are added to [unresolvedDevicesOwners].
   void addScanResult(String deviceName){
     //Notify the backing list.
     _scanResults.insert(0, deviceName);
@@ -248,11 +248,20 @@ class AttendeeScanningBloc extends Bloc {
     // We assume that at this point the owner is not null.
     final Iterable<Member> owners = ownersGroupedByDevice[deviceName]!.map((uuid) => _members[uuid]!);
 
-    // This device belongs to multiple possible owners, add them to the list.
+    // This device belongs to multiple possible owners.
+    // Add all the owners to the unresolvedDevicesOwners list.
     if(owners.length > 1){
-      ownersOfScannedDevicesWithMultiplePossibleOwners.addAll(owners);
+      unresolvedDevicesOwners.addAll(owners);
     }else{
-      //Add the single owner to the attendees instead.
+      // It's a single owner, increment the scanned attendees counter.
+      if(ride.scannedAttendees == null){
+        // It's the first one ever, set it to 1.
+        ride.scannedAttendees = 1;
+      }else{
+        ride.scannedAttendees = (ride.scannedAttendees! + 1);
+      }
+
+      // Add the single owner to the attendees instead.
       rideAttendees.add(owners.first.uuid);
     }
   }
@@ -285,12 +294,14 @@ class AttendeeScanningBloc extends Bloc {
     return result;
   }
 
-  ///Cancel a running scan and continue to the next step.
-  ///This can lead to either manual selection or owner resolution.
+  /// Cancel a running scan and continue to the manual selection screen.
+  /// The unresolved owners list is deliberately skipped.
   void skipScan() async {
     await stopScan().then((scanStopped){
       if(scanStopped){
-        tryAdvanceToManualSelection();
+        // We do not check unresolvedDevicesOwners.isEmpty !
+        // Skipping should send the user directly to the last screen.
+        continueToManualSelection();
       }
     });
   }
@@ -298,9 +309,16 @@ class AttendeeScanningBloc extends Bloc {
   /// Save the current contents of [rideAttendees] to the database.
   Future<void> saveRideAttendees() async {
     _savingStateController.add(true);
-    await ridesRepo.updateAttendeesForRideWithDate(
-        rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element)).toList()
+
+    // We did a scan but the counter was never updated, due to a lack of results.
+    // If there was at least one scanned person, we would have 1 as value (or higher).
+    // Replace the null counter value with an actual zero.
+    if(ride.scannedAttendees == null){
+      ride.scannedAttendees = 0;
+    }
+    await ridesRepo.updateRide(
+        ride,
+        rideAttendees.map((element) => RideAttendee(ride.date, element)).toList()
     ).catchError((error){
       _scanStepController.addError(error);
       _savingStateController.add(false);
@@ -308,23 +326,22 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
-  /// Try to go to the manual selection screen.
-  /// If we have items in [ownersOfScannedDevicesWithMultiplePossibleOwners],
-  /// we go to the multiple owners resolution screen and [isScanStep] stays true.
-  /// Otherwise we go to the manual selection screen and [isScanStep] becomes false.
-  ///
-  /// If [override] is true, we go to manual selection anyway.
-  void tryAdvanceToManualSelection({bool override = false}){
-    if(override || ownersOfScannedDevicesWithMultiplePossibleOwners.isEmpty){
-      //Multiple invocations of this method, cannot alter isScanning.
-      if(_isScanStepController.value!){
-        _isScanStepController.add(false);
-      }
-      _scanStepController.add(ScanProcessStep.MANUAL);
-    }else{
-      // There are owners that we cannot resolve ourselves, scan step stays unmodified.
+  /// Go to the unresolved owners list page.
+  /// If [unresolvedDevicesOwners.isEmpty] is true,
+  /// continue to manual selection instead.
+  void continueToUnresolvedOwnersList(){
+    if(unresolvedDevicesOwners.isEmpty){
+      continueToManualSelection();
+    }else {
+      // Resolving the multiple owners is still part of the 'Scan' step.
       _scanStepController.add(ScanProcessStep.RESOLVE_MULTIPLE_OWNERS);
     }
+  }
+
+  /// Go to the manual selection screen.
+  void continueToManualSelection(){
+    _isScanStepController.add(false);
+    _scanStepController.add(ScanProcessStep.MANUAL);
   }
 
   @override
@@ -360,7 +377,9 @@ class AttendeeScanningBloc extends Bloc {
   // Remove the already scanned owners and sort the remaining ones.
   // This is useful for preparing the multiple owners resolution list screen.
   Future<List<Member>> filterAndSortMultipleOwnersList() {
-    final filtered = ownersOfScannedDevicesWithMultiplePossibleOwners.where((Member member) => !rideAttendees.contains(member.uuid)).toList();
+    final filtered = unresolvedDevicesOwners.where(
+          (Member member) => !rideAttendees.contains(member.uuid)
+    ).toList();
 
     filtered.sort((Member m1, Member m2) => m1.compareTo(m2));
 

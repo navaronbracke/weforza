@@ -53,7 +53,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     bloc = AttendeeScanningBloc(
-      rideDate: SelectedItemProvider.of(context).selectedRide.value!.date,
+      ride: SelectedItemProvider.of(context).selectedRide.value!,
       settingsRepo: InjectionContainer.get<SettingsRepository>(),
       deviceRepo: InjectionContainer.get<DeviceRepository>(),
       memberRepo: InjectionContainer.get<MemberRepository>(),
@@ -146,7 +146,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                     SkipScanButton(
                       isScanning: bloc.scanning,
                       onSkip: () => bloc.skipScan(),
-                      onPressed: () => bloc.tryAdvanceToManualSelection(),
+                      onContinue: () => bloc.continueToUnresolvedOwnersList(),
                     ),
                   ],
                 ),
@@ -169,7 +169,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                   isSelected: () => bloc.isItemSelected(member.uuid),
                   onTap: () => bloc.onMemberSelected(member.uuid),
                 ),
-                onButtonPressed: () => bloc.tryAdvanceToManualSelection(override: true),
+                onButtonPressed: () => bloc.continueToManualSelection(),
               ),
             );
             default: return Center(child: GenericScanErrorWidget());

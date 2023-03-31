@@ -11,8 +11,8 @@ import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
+import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
-import 'package:weforza/widgets/pages/export_data_page/export_data_folder_selection.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
@@ -56,46 +56,48 @@ class ExportDataPage<T> extends StatelessWidget {
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16),
-            child: ExportDataFileNameTextField<T>(delegate: delegate),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 32),
-            child: ExportDataFolderSelection(
-              initialData: delegate.selectedDirectory,
-              selectDirectory: delegate.selectDirectory,
-              stream: delegate.selectedDirectoryStream,
+    return Form(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 24),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: ExportDataFileNameTextField<T>(delegate: delegate),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6, right: 8),
-                    child: Text(
-                      translator.fileFormat,
-                      style: Theme.of(context).textTheme.labelMedium,
-                      maxLines: 2,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 32),
+              child: DirectorySelectionFormField(
+                controller: delegate.directoryController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (directory) => _validateDirectory(directory, translator),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 6, right: 8),
+                      child: Text(
+                        translator.fileFormat,
+                        style: Theme.of(context).textTheme.labelMedium,
+                        maxLines: 2,
+                      ),
                     ),
                   ),
-                ),
-                ExportFileFormatSelection(
-                  initialValue: delegate.currentFileFormat,
-                  onFormatSelected: delegate.setFileFormat,
-                  stream: delegate.fileFormatStream,
-                ),
-              ],
+                  ExportFileFormatSelection(
+                    initialValue: delegate.currentFileFormat,
+                    onFormatSelected: delegate.setFileFormat,
+                    stream: delegate.fileFormatStream,
+                  ),
+                ],
+              ),
             ),
-          ),
-          child,
-        ],
+            child,
+          ],
+        ),
       ),
     );
   }
@@ -142,25 +144,27 @@ class ExportDataPage<T> extends StatelessWidget {
   Widget _buildIosForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
-    return CupertinoFormSection.insetGrouped(
-      children: [
-        ExportDataFileNameTextField<T>(delegate: delegate),
-        ExportDataFolderSelection(
-          initialData: delegate.selectedDirectory,
-          selectDirectory: delegate.selectDirectory,
-          stream: delegate.selectedDirectoryStream,
-        ),
-        CupertinoFormRow(
-          padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
-          prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
-          child: ExportFileFormatSelection(
-            initialValue: delegate.currentFileFormat,
-            onFormatSelected: delegate.setFileFormat,
-            stream: delegate.fileFormatStream,
+    return Form(
+      child: CupertinoFormSection.insetGrouped(
+        children: [
+          ExportDataFileNameTextField<T>(delegate: delegate),
+          DirectorySelectionFormField(
+            controller: delegate.directoryController,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (directory) => _validateDirectory(directory, translator),
           ),
-        ),
-        child,
-      ],
+          CupertinoFormRow(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 6, 16),
+            prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
+            child: ExportFileFormatSelection(
+              initialValue: delegate.currentFileFormat,
+              onFormatSelected: delegate.setFileFormat,
+              stream: delegate.fileFormatStream,
+            ),
+          ),
+          child,
+        ],
+      ),
     );
   }
 

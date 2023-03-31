@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/attendeeScanningBloc.dart';
 import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
+import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/scanProcessStep.dart';
@@ -31,10 +32,12 @@ import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideAttendeeScanningPage extends StatefulWidget {
   RideAttendeeScanningPage({
-    @required this.onRefreshAttendees
-  }): assert(onRefreshAttendees != null);
+    @required this.onRefreshAttendees,
+    @required this.fileHandler
+  }): assert(onRefreshAttendees != null && fileHandler != null);
 
   final void Function() onRefreshAttendees;
+  final IFileHandler fileHandler;
 
   @override
   _RideAttendeeScanningPageState createState() => _RideAttendeeScanningPageState();
@@ -197,7 +200,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
 
   Widget _buildManualSelectionListItem(Member item){
     return ManualSelectionListItem(
-      profileImageFuture: bloc.loadProfileImageFromDisk(item.profileImageFilePath),
+      profileImageFuture: widget.fileHandler.loadProfileImageFromDisk(item.profileImageFilePath),
       firstName: item.firstname,
       lastName: item.lastname,
       alias: item.alias,

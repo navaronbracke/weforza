@@ -1,7 +1,6 @@
 
 import 'dart:async';
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -312,8 +311,6 @@ class AttendeeScanningBloc extends Bloc {
       _scanStepController.add(ScanProcessStep.RESOLVE_MULTIPLE_OWNERS);
     }
   }
-  
-  Future<File> loadProfileImage(String path) => memberRepo.loadProfileImageFromDisk(path);
 
   @override
   void dispose() {
@@ -329,8 +326,6 @@ class AttendeeScanningBloc extends Bloc {
       rideAttendees.add(memberUuid);
     }
   }
-
-  loadProfileImageFromDisk(String path) => memberRepo.loadProfileImageFromDisk(path);
 
   Future<List<Member>> filterAndSortMultipleOwnersList() {
     final filtered = ownersOfScannedDevicesWithMultiplePossibleOwners.where((Member member) => !rideAttendees.contains(member.uuid)).toList();

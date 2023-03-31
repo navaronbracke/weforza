@@ -6,8 +6,8 @@ import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/device_widget_utils.dart';
 import 'package:weforza/widgets/custom/dialogs/delete_item_dialog.dart';
 import 'package:weforza/widgets/pages/edit_device/edit_device_page.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class MemberDevicesListItem extends StatefulWidget {

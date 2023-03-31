@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 ///This Widget represents the stepper at the top of the scanning page.
 ///It shows if the user is in the scanning step or the manual assignment step.

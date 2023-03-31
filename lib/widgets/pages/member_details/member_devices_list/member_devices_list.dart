@@ -7,8 +7,8 @@ import 'package:weforza/widgets/pages/member_details/member_devices_list/member_
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_empty.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_header.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list_item.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class MemberDevicesList extends StatefulWidget {
   const MemberDevicesList({

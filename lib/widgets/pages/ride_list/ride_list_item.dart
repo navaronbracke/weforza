@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/ride_attendee_counter.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 ///This class represents a single item for the ride list page.
 class RideListItem extends StatelessWidget {

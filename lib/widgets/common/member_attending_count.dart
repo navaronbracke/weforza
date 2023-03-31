@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 class MemberAttendingCount extends StatelessWidget {
   const MemberAttendingCount({

@@ -117,7 +117,7 @@ class DeviceTypePickerThemes {
   /// The device type picker theme for iOS.
   final ios = const DeviceTypePickerTheme(
     selectedColor: CupertinoColors.activeBlue,
-    unselectedColor: CupertinoColors.systemTeal,
+    unselectedColor: CupertinoColors.systemGrey4,
   );
 }
 

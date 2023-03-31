@@ -1,19 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/memberItem.dart';
+import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/genericError.dart';
-import 'package:weforza/widgets/common/memberWithPictureListItem.dart';
 import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesListEmpty.dart';
+import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendees/rideDetailsAttendeesListItem.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 class RideDetailsAttendeesList extends StatelessWidget {
   RideDetailsAttendeesList({@required this.future}): assert(future != null);
 
-  final Future<List<MemberItem>> future;
+  final Future<List<Member>> future;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MemberItem>>(
+    return FutureBuilder<List<Member>>(
       future: future,
       builder: (context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
@@ -27,7 +27,12 @@ class RideDetailsAttendeesList extends StatelessWidget {
             } else {
               return ListView.builder(
                   itemBuilder: (context, index) {
-                    return MemberWithPictureListItem(item: snapshot.data[index]);
+                    final member = snapshot.data[index];
+                    return RideDetailsAttendeesListItem(
+                      firstName: member.firstname,
+                      lastName: member.lastname,
+                      alias: member.alias,
+                    );
                   },
                   itemCount: snapshot.data.length);
             }

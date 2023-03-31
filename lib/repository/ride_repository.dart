@@ -1,8 +1,8 @@
 import 'package:weforza/database/ride_dao.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents the repository that manages the rides.
 class RideRepository {

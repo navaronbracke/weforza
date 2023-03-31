@@ -1,9 +1,9 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
-import 'package:weforza/model/member.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents an interface for working with rides.
 abstract class RideDao {

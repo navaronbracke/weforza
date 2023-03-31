@@ -50,6 +50,8 @@ PODS:
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
+  - "permission_handler (5.0.1+1)":
+    - Flutter
   - Protobuf (3.11.4)
   - SDWebImage (5.8.1):
     - SDWebImage/Core (= 5.8.1)
@@ -65,6 +67,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
 
 SPEC REPOS:
   trunk:
@@ -91,6 +94,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_linux/ios"
   path_provider_macos:
     :path: ".symlinks/plugins/path_provider_macos/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
 
 SPEC CHECKSUMS:
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
@@ -98,11 +103,12 @@ SPEC CHECKSUMS:
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_blue: eeb381dc4727a0954dede73515f683865494b370
+  flutter_blue: c82336391af501c2a18dcc042f18b53a74981651
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40

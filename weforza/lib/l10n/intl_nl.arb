@@ -26,6 +26,9 @@
 
   "RideDetailsLoadAttendeesError": "Kon de aanwezigen niet laden",
   "RideDetailsNoAttendees": "Deze rit heeft geen aanwezigen",
+  "RideDetailsEditOption": "Bewerken",
+  "RideDetailsExportOption": "Exporteren",
+  "RideDetailsDeleteOption": "Verwijderen",
 
   "RideDeleteDialogTitle": "Verwijder Rit",
   "RideDeleteDialogDescription": "Bent u zeker dat u deze rit wil verwijderen?",

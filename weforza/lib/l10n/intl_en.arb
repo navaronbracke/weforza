@@ -26,6 +26,9 @@
 
   "RideDetailsLoadAttendeesError": "Could not load attendees",
   "RideDetailsNoAttendees": "This ride has no attendees",
+  "RideDetailsEditOption": "Edit",
+  "RideDetailsExportOption": "Export",
+  "RideDetailsDeleteOption": "Delete",
 
   "RideDeleteDialogTitle": "Delete Ride",
   "RideDeleteDialogDescription": "Are you sure that you want to delete this ride?",

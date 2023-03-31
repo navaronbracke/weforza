@@ -253,6 +253,36 @@ class S {
     );
   }
 
+  /// `Edit`
+  String get RideDetailsEditOption {
+    return Intl.message(
+      'Edit',
+      name: 'RideDetailsEditOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get RideDetailsExportOption {
+    return Intl.message(
+      'Export',
+      name: 'RideDetailsExportOption',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get RideDetailsDeleteOption {
+    return Intl.message(
+      'Delete',
+      name: 'RideDetailsDeleteOption',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Delete Ride`
   String get RideDeleteDialogTitle {
     return Intl.message(

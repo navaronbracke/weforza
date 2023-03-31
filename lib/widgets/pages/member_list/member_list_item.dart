@@ -38,7 +38,7 @@ class MemberListItemState extends ConsumerState<MemberListItem> {
   late final Future<File?> memberProfileImage;
 
   void getProfileImageAndAttendingCount(
-    IFileHandler fileHander,
+    FileHandler fileHander,
     MemberRepository memberRepository,
   ) {
     memberProfileImage = fileHander.loadProfileImageFromDisk(

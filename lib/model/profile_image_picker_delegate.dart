@@ -17,7 +17,7 @@ class ProfileImagePickerDelegate {
         );
 
   /// The file handler for this delegate.
-  final IFileHandler fileHandler;
+  final FileHandler fileHandler;
 
   final BehaviorSubject<SelectProfileImageState> _imageController;
 

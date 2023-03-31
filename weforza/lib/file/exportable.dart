@@ -1,4 +1,6 @@
 
 abstract class Exportable {
-  Map<String, dynamic> export();
+  Map<String, dynamic> exportToJson();
+
+  String exportToCsv();
 }

@@ -159,7 +159,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
             value,
             S.of(context).ValueIsRequired(S.of(context).Filename),
             S.of(context).FilenameWhitespace,
-            S.of(context).ExportRideFilenameMaxLength("${Ride.titleMaxLength}"),
+            S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
             S.of(context).InvalidFilename
           ),
           decoration: InputDecoration(
@@ -186,7 +186,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
                       value,
                       S.of(context).ValueIsRequired(S.of(context).Filename),
                       S.of(context).FilenameWhitespace,
-                      S.of(context).ExportRideFilenameMaxLength("${Ride.titleMaxLength}"),
+                      S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
                       S.of(context).InvalidFilename
                   );
                 });
@@ -211,7 +211,7 @@ class _ExportRidePageState extends State<ExportRidePage> {
         widget.bloc.fileNameController.text,
         S.of(context).ValueIsRequired(S.of(context).Filename),
         S.of(context).FilenameWhitespace,
-        S.of(context).ExportRideFilenameMaxLength("${Ride.titleMaxLength}"),
+        S.of(context).FilenameMaxLength("${Ride.titleMaxLength}"),
         S.of(context).InvalidFilename
     ) == null;
   }

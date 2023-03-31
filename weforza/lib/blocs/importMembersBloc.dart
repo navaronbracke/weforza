@@ -21,7 +21,7 @@ class ImportMembersBloc extends Bloc {
       if(file == null){
         return Future.error("No file chosen");
       }else{
-        final List<Map<String,dynamic>> data = await _readMemberDataFromFile(file, headerRegex);
+        final List<Map<String,String>> data = await _readMemberDataFromFile(file, headerRegex);
 
         //TODO save the list of maps to the database
       }
@@ -29,7 +29,7 @@ class ImportMembersBloc extends Bloc {
   }
 
   //TODO mention that the csv needs a header in the UI (we could use a dialog for this, users could tap it)
-  Future<List<Map<String, dynamic>>> _readMemberDataFromFile(File file, String headerRegex) async {
+  Future<List<Map<String, String>>> _readMemberDataFromFile(File file, String headerRegex) async {
     List<String> lines = await file.readAsLines();
 
     //Remove all the spaces and turn into lower case

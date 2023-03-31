@@ -40,12 +40,12 @@ class ExportRidesDao implements IExportRidesDao {
   ///A reference to the [RideAttendee] store.
   final StoreRef<String, Map<String, dynamic>> _rideAttendeeStore;
 
+  final HashMap<DateTime, Ride> rides = HashMap();
+  final HashMap<String, Member> members = HashMap();
+  final HashMap<DateTime, Set<RideAttendee>> attendees = HashMap();
+
   @override
   Future<Iterable<ExportableRide>> getRides() async {
-    HashMap<DateTime, Ride> rides = HashMap();
-    HashMap<String, Member> members = HashMap();
-    List<RideAttendee> attendees = [];
-
     //Fetch the rides/members and attendees in parallel.
     //This populates the given collections with data.
     await Future.wait([
@@ -57,66 +57,56 @@ class ExportRidesDao implements IExportRidesDao {
     return _joinRidesAndAttendees(rides, members, attendees);
   }
 
-  ///Fetch the rides and store them in [collection].
-  ///A HashMap is used for fast lookup later.
-  ///We return a Future<void> for use with Future.wait().
-  Future<void> _fetchRides(HashMap<DateTime, Ride> collection) async {
+  Future<void> _fetchRides(HashMap<DateTime, Ride> rides) async {
     final records = await _rideStore.find(_database);
 
-    records.map((record){
+    records.forEach((record) {
       final Ride ride = Ride.of(DateTime.parse(record.key), record.value);
-      collection[ride.date] = ride;
+      rides[ride.date] = ride;
     });
   }
 
-  ///Fetch the members and store them in [collection].
-  ///A HashMap is used for fast lookup later.
-  ///We return a Future<void> for use with Future.wait().
-  Future<void> _fetchMembers(HashMap<String, Member> collection) async {
+  Future<void> _fetchMembers(HashMap<String, Member> members) async {
     final records = await _memberStore.find(_database);
 
-    records.map((record){
+    records.forEach((record){
       final Member member = Member.of(record.key, record.value);
-      collection[member.uuid] = member;
+      members[member.uuid] = member;
     });
   }
 
-  ///Fetch the ride attendees and store them in [collection].
-  ///An Iterable is used, since all we do with the attendees is do a data match per item, by using the ride/member HashMaps.
-  ///We return a Future<void> for use with Future.wait().
-  Future<void> _fetchAttendees(List<RideAttendee> collection) async {
+  Future<void> _fetchAttendees(HashMap<DateTime, Set<RideAttendee>> attendees) async {
     final records = await _rideAttendeeStore.find(_database);
-
-    records.map((record) => collection.add(RideAttendee.of(record.value)));
-  }
-
-  Iterable<ExportableRide> _joinRidesAndAttendees(HashMap<DateTime, Ride> rides, HashMap<String, Member> members, Iterable<RideAttendee> attendees) {
-    final HashMap<DateTime, ExportableRide> exports = HashMap();
-
-    attendees.forEach((attendee) {
-      final Ride ride = rides[attendee.rideDate];
-      final Member member = members[attendee.attendeeId];
-
-      if(exports.containsKey(ride.date)){
-        //The ride itself is already set. Append the attendees.
-        exports[ride].attendees.add(ExportableRideAttendee(
-          //TODO once we add aliases add them here too
-          firstName: member.firstname,
-          lastName: member.lastname,
-        ));
+    
+    records.forEach((record){
+      final RideAttendee attendee = RideAttendee.of(record.value);
+      if(attendees.containsKey(attendee.rideDate)){
+        attendees[attendee.rideDate].add(attendee);
       }else{
-        //The ride wasn't stored yet. Add the ride + the current attendee.
-        exports[ride.date] = ExportableRide(
-          ride: ride,
-          attendees: [ExportableRideAttendee(
-            //TODO once we add aliases add them here too
-            firstName: member.firstname,
-            lastName: member.lastname,
-          )],
-        );
+        attendees[attendee.rideDate] = Set.from([attendee]);
       }
     });
+  }
 
-    return exports.values;
+  Iterable<ExportableRide> _joinRidesAndAttendees(HashMap<DateTime, Ride> rides, HashMap<String, Member> members, HashMap<DateTime, Set<RideAttendee>> attendees) {
+    final List<ExportableRide> exports = [];
+
+    rides.forEach((DateTime rideDate, Ride ride) {
+      final Iterable<ExportableRideAttendee> membersAttendingRide = attendees.containsKey(rideDate) ? attendees[rideDate].map((RideAttendee attendee){
+        final Member member = members[attendee.attendeeId];
+        return ExportableRideAttendee(
+          firstName: member.firstname,
+          lastName: member.lastname,
+          alias: "",//TODO add alias here once its a property of Member
+        );
+      }) : [];
+
+      exports.add(ExportableRide(
+          ride: ride,
+          attendees: membersAttendingRide
+      ));
+    });
+
+    return exports;
   }
 }

@@ -8,7 +8,7 @@ class ExportableRide {
     @required this.attendees
   }): assert(ride != null && attendees != null);
 
-  final List<ExportableRideAttendee> attendees;
+  final Iterable<ExportableRideAttendee> attendees;
   final Ride ride;
 }
 

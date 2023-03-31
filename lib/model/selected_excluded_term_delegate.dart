@@ -17,8 +17,12 @@ class SelectedExcludedTermDelegate {
   void clearSelection() {
     final previous = _controller.valueOrNull;
 
+    if (previous == null) {
+      return;
+    }
+
     _controller.add(null);
-    previous?.dispose(); // Clean up the old selection value.
+    previous.dispose(); // Clean up the old selection value.
   }
 
   /// Set the selected term.

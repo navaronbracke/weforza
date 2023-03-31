@@ -29,7 +29,7 @@ class CupertinoBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double bottomPadding = MediaQuery.of(context).padding.bottom;
+    final double bottomPadding = MediaQuery.paddingOf(context).bottom;
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
 
     const border = Border(

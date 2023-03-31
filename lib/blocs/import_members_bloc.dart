@@ -13,7 +13,7 @@ import 'package:weforza/file/json_file_reader.dart';
 import 'package:weforza/model/exportableMember.dart';
 import 'package:weforza/repository/importMembersRepository.dart';
 
-enum ImportMembersState { IDLE, IMPORTING, DONE, PICKING_FILE }
+enum ImportMembersState { idle, importing, done, pickingFile }
 
 class ImportMembersBloc extends Bloc {
   ImportMembersBloc({
@@ -27,7 +27,7 @@ class ImportMembersBloc extends Bloc {
   final Uuid _uuidGenerator = const Uuid();
 
   final StreamController<ImportMembersState> _importStreamController =
-      BehaviorSubject.seeded(ImportMembersState.IDLE);
+      BehaviorSubject.seeded(ImportMembersState.idle);
   Stream<ImportMembersState> get importStream => _importStreamController.stream;
 
   //Pick a file through a file picker and save the members that were read from the returned file.
@@ -35,15 +35,15 @@ class ImportMembersBloc extends Bloc {
       String headerRegex,
       ValueNotifier<bool> reloadMembers,
       ValueNotifier<bool> reloadDevices) async {
-    _importStreamController.add(ImportMembersState.PICKING_FILE);
+    _importStreamController.add(ImportMembersState.pickingFile);
 
     await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
-      _importStreamController.add(ImportMembersState.IMPORTING);
+      _importStreamController.add(ImportMembersState.importing);
       final Iterable<ExportableMember> members =
           await _readMemberDataFromFile(file, headerRegex);
       //Quick exit when there are no members to insert
       if (members.isEmpty) {
-        _importStreamController.add(ImportMembersState.DONE);
+        _importStreamController.add(ImportMembersState.done);
         return;
       }
 
@@ -51,7 +51,7 @@ class ImportMembersBloc extends Bloc {
           members, () => _uuidGenerator.v4());
       reloadMembers.value = true;
       reloadDevices.value = true;
-      _importStreamController.add(ImportMembersState.DONE);
+      _importStreamController.add(ImportMembersState.done);
     }).catchError((e) {
       _importStreamController.addError(e);
     });
@@ -59,10 +59,10 @@ class ImportMembersBloc extends Bloc {
 
   Future<Iterable<ExportableMember>> _readMemberDataFromFile(
       File file, String csvHeaderRegex) async {
-    if (file.path.endsWith(FileExtension.CSV.extension())) {
+    if (file.path.endsWith(FileExtension.csv.extension())) {
       return await _readFile<String>(
           file, CsvFileReader(headerRegex: csvHeaderRegex));
-    } else if (file.path.endsWith(FileExtension.JSON.extension())) {
+    } else if (file.path.endsWith(FileExtension.json.extension())) {
       return await _readFile<Map<String, dynamic>>(file, JsonFileReader());
     } else {
       return Future.error(InvalidFileExtensionError());

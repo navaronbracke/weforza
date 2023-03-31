@@ -13,11 +13,11 @@ mixin RiderValidator {
       return isBlankMessage;
     }
 
-    if (value.length > Member.nameAndAliasMaxLength) {
+    if (value.length > Rider.nameAndAliasMaxLength) {
       return maxLengthMessage;
     }
 
-    if (value.isNotEmpty && !Member.personNameAndAliasRegex.hasMatch(value)) {
+    if (value.isNotEmpty && !Rider.personNameAndAliasRegex.hasMatch(value)) {
       return illegalCharachterMessage;
     }
 
@@ -39,11 +39,11 @@ mixin RiderValidator {
       return isBlankMessage;
     }
 
-    if (value.length > Member.nameAndAliasMaxLength) {
+    if (value.length > Rider.nameAndAliasMaxLength) {
       return maxLengthMessage;
     }
 
-    if (!Member.personNameAndAliasRegex.hasMatch(value)) {
+    if (!Rider.personNameAndAliasRegex.hasMatch(value)) {
       return illegalCharachterMessage;
     }
 

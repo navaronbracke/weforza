@@ -39,7 +39,7 @@ class MemberListPageState extends ConsumerState<MemberListPage> {
   }
 
   /// Filter the given [list] on the current [searchQuery].
-  List<Member> _filterOnSearchQuery(List<Member> list, String searchQuery) {
+  List<Rider> _filterOnSearchQuery(List<Rider> list, String searchQuery) {
     final query = searchQuery.trim().toLowerCase();
 
     if (query.isEmpty) {

@@ -1,9 +1,9 @@
 import 'package:weforza/extensions/date_extension.dart';
 
 /// This class represents a rider.
-class Member implements Comparable<Member> {
+class Rider implements Comparable<Rider> {
   /// The default constuctor.
-  Member({
+  Rider({
     required this.active,
     required this.alias,
     required this.firstName,
@@ -17,10 +17,10 @@ class Member implements Comparable<Member> {
         );
 
   /// Create a rider from the given [uuid] and [values].
-  factory Member.of(String uuid, Map<String, Object?> values) {
+  factory Rider.of(String uuid, Map<String, Object?> values) {
     assert(uuid.isNotEmpty, 'The uuid of a rider should not be empty');
 
-    return Member(
+    return Rider(
       active: values['active'] as bool? ?? true,
       alias: values['alias'] as String? ?? '',
       firstName: values['firstname'] as String,
@@ -69,7 +69,7 @@ class Member implements Comparable<Member> {
   String get initials => firstName[0] + lastName[0];
 
   @override
-  int compareTo(Member other) {
+  int compareTo(Rider other) {
     final int deltaFirstName = firstName.compareTo(other.firstName);
 
     if (deltaFirstName != 0) {
@@ -112,7 +112,7 @@ class Member implements Comparable<Member> {
 
   @override
   bool operator ==(Object other) {
-    return other is Member &&
+    return other is Rider &&
         uuid == other.uuid &&
         firstName == other.firstName &&
         lastName == other.lastName &&

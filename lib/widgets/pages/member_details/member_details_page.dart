@@ -15,11 +15,11 @@ import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This class represents the detail page for a [Member].
+/// This class represents the detail page for a [Rider].
 class MemberDetailsPage extends StatelessWidget {
   const MemberDetailsPage({super.key});
 
-  void _goToEditMemberPage(BuildContext context, Member rider) {
+  void _goToEditMemberPage(BuildContext context, Rider rider) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => RiderForm(rider: rider)),

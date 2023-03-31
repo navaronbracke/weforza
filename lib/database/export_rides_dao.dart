@@ -18,7 +18,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
   /// A reference to the database.
   final Database _database;
 
-  /// A reference to the [Member] store.
+  /// A reference to the [Rider] store.
   final _memberStore = DatabaseTables.member;
 
   /// A reference to the [RideAttendee] store.
@@ -56,14 +56,14 @@ class ExportRidesDaoImpl implements ExportRidesDao {
     return attendees;
   }
 
-  /// Get all the members, mapped to their [Member.uuid].
-  Future<Map<String, Member>> _getMembers() async {
-    final members = <String, Member>{};
+  /// Get all the members, mapped to their [Rider.uuid].
+  Future<Map<String, Rider>> _getMembers() async {
+    final members = <String, Rider>{};
 
     final records = await _memberStore.find(_database);
 
     for (final record in records) {
-      final member = Member.of(record.key, record.value);
+      final member = Rider.of(record.key, record.value);
       members[member.uuid] = member;
     }
 
@@ -96,7 +96,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
 
   Iterable<ExportableRide> _joinRidesAndAttendees(
     Map<DateTime, Set<RideAttendee>> attendees,
-    Map<String, Member> members,
+    Map<String, Rider> members,
     Map<DateTime, Ride> rides,
   ) {
     final exports = <ExportableRide>[];

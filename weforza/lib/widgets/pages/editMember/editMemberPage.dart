@@ -125,6 +125,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
     final Member member = SelectedItemProvider.of(context).selectedMember.value;
     _bloc = EditMemberBloc(
       repository: InjectionContainer.get<MemberRepository>(),
+      isActiveMember: member.isActiveMember,
       firstName: member.firstname,
       lastName: member.lastname,
       alias: member.alias,

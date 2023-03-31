@@ -4,8 +4,8 @@ import 'dart:collection';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:weforza/blocs/bloc.dart';
-import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
-import 'package:weforza/bluetooth/bluetoothPeripheral.dart';
+import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
+import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/memberFilterOption.dart';

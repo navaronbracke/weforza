@@ -19,6 +19,8 @@ import 'package:weforza/widgets/pages/rideDetails/rideDetailsAttendeesError.dart
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/rideAttendeeProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class RideDetailsPage extends StatefulWidget {
@@ -55,18 +57,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.person_pin),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                //TODO: the scan page should return a future for attendeesFuture and then call set state if its not null
-                      builder: (context) => RideAttendeeScanningPage())
-              );
-            },
+            onPressed: () => goToScanningPage(context),
           ),
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditRidePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditRidePage())
+              );
             },
           ),
           IconButton(
@@ -101,11 +100,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
                     onPressedColor: ApplicationTheme.primaryColor,
                     idleColor: ApplicationTheme.accentColor,
                     icon: Icons.person_pin,
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RideAttendeeScanningPage())
-                      );
-                    }),
+                    onPressed: () => goToScanningPage(context),
+                ),
                 SizedBox(width: 10),
                 CupertinoIconButton(
                     onPressedColor: ApplicationTheme.primaryColor,
@@ -236,6 +232,21 @@ class _RideDetailsPageState extends State<RideDetailsPage> implements DeleteRide
               ),
             ],
     );
+  }
+
+  void goToScanningPage(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => RideAttendeeScanningPage(
+          onRefreshAttendees: () => RideAttendeeFutureProvider.of(context).rideAttendeeFuture.value = bloc.loadRideAttendees(),
+        ))
+    ).then((_){
+      final attendeeProvider = RideAttendeeFutureProvider.of(context).rideAttendeeFuture;
+      if(attendeeProvider.value != null){
+        ReloadDataProvider.of(context).reloadRides.value = true;
+        setState(() => bloc.attendeesFuture = attendeeProvider.value);
+        attendeeProvider.value = null;
+      }
+    });
   }
 
   @override

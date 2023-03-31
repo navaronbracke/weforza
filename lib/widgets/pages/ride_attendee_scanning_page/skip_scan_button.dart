@@ -31,11 +31,13 @@ class SkipScanButton extends StatelessWidget {
   }
 
   Widget _buildSkipScanButton(BuildContext context) {
+    final translator = S.of(context);
+
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ElevatedButton(
-          child: Text(S.of(context).RideAttendeeScanningSkipScan),
+          child: Text(translator.SkipScan),
           onPressed: onSkip,
         ),
       ),
@@ -46,7 +48,7 @@ class SkipScanButton extends StatelessWidget {
           padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
           child: CupertinoButton.filled(
             child: Text(
-              S.of(context).RideAttendeeScanningSkipScan,
+              translator.SkipScan,
               style: const TextStyle(color: Colors.white),
             ),
             onPressed: onSkip,
@@ -57,11 +59,13 @@ class SkipScanButton extends StatelessWidget {
   }
 
   Widget _buildContinueButton(BuildContext context) {
+    final translator = S.of(context);
+
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: ElevatedButton(
-          child: Text(S.of(context).RideAttendeeScanningContinue),
+          child: Text(translator.Continue),
           onPressed: onContinue,
         ),
       ),
@@ -72,7 +76,7 @@ class SkipScanButton extends StatelessWidget {
           padding: EdgeInsets.only(bottom: bottomPadding + 20, top: 10),
           child: CupertinoButton.filled(
             child: Text(
-              S.of(context).RideAttendeeScanningContinue,
+              translator.Continue,
               style: const TextStyle(color: Colors.white),
             ),
             onPressed: onContinue,

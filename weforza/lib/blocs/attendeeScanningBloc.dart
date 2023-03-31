@@ -138,7 +138,7 @@ class AttendeeScanningBloc extends Bloc {
       final Set<BluetoothPeripheral> scannedDevices = HashSet();
       isScanning.value = true;
       _scanStepController.add(ScanProcessStep.SCAN);
-      
+
       scanner.scanForDevices(scanDuration).listen((BluetoothPeripheral device) {
         if(!scannedDevices.contains(device)){
           scannedDevices.add(device);

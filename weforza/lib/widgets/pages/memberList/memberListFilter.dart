@@ -72,19 +72,22 @@ class MemberListFilter extends StatelessWidget {
       );
     }).toList();
 
-    return FlatButton.icon(
+    return TextButton.icon(
       onPressed: () async {
         final option = await showModalBottomSheet<MemberFilterOption>(
-            context: context,
-            builder: (context) => Column(children: options, mainAxisSize: MainAxisSize.min)
+          context: context,
+          builder: (context) => Column(
+            children: options,
+            mainAxisSize: MainAxisSize.min,
+          ),
         );
 
         onFilterChanged(option);
       },
       icon: Icon(Icons.filter_alt, color: ApplicationTheme.primaryColor),
       label: Text(
-          S.of(context).Filter,
-          style: TextStyle(color: ApplicationTheme.primaryColor)
+        S.of(context).Filter,
+        style: TextStyle(color: ApplicationTheme.primaryColor),
       ),
     );
   }

@@ -24,11 +24,8 @@ class GenericScanErrorWidget extends StatelessWidget {
   );
 
   Widget _buildGoBackButton(BuildContext context) => PlatformAwareWidget(
-      android: () => FlatButton(
-        child: Text(
-          S.of(context).RideAttendeeScanningGoBackToDetailPage,
-          style: TextStyle(color: ApplicationTheme.primaryColor),
-        ),
+      android: () => TextButton(
+        child: Text(S.of(context).RideAttendeeScanningGoBackToDetailPage),
         onPressed: () => Navigator.of(context).pop(),
       ),
       ios:  () => CupertinoButton(

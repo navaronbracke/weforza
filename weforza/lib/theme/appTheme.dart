@@ -61,7 +61,10 @@ abstract class ApplicationTheme {
   static final TextStyle memberListItemLastNameTextStyle = TextStyle(fontSize: 14);
 
   //Cupertino Form Input Error Text Style
-  static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14,color: CupertinoColors.destructiveRed);
+  static final TextStyle iosFormErrorStyle = TextStyle(fontSize: 14, color: CupertinoColors.destructiveRed);
+
+  // Cupertino Button TextStyle
+  static final TextStyle iosButtonTextStyle = TextStyle(color: primaryColor);
 
   static final TextStyle androidRideAttendeeListCounterTextStyle = TextStyle(fontSize: 14.0, color: Colors.white);
   static final TextStyle iosRideAttendeeListCounterTextStyle = TextStyle(fontSize: 12.0);
@@ -75,7 +78,6 @@ abstract class ApplicationTheme {
   static final Color memberDevicesListHeaderAddDeviceButtonIdleColor = Colors.blueGrey;
   static final Color memberDevicesListHeaderAddDeviceButtonPressedColor = Colors.blueGrey.shade100;
   static final TextStyle memberDevicesListHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
-  static final TextStyle memberDevicesListAddDeviceButtonTextStyle = TextStyle(color: ApplicationTheme.primaryColor);
 
   ///The member device item edit button color for android.
   static final Color memberDevicesListEditDeviceColor = Colors.blue.shade300;
@@ -125,7 +127,30 @@ abstract class ApplicationTheme {
        accentColor: accentColor,
        splashColor: accentColor.withAlpha(150),
        // We need dark here, so the status bar gets a white text color.
-       appBarTheme: AppBarTheme(brightness: Brightness.dark)
+       appBarTheme: AppBarTheme(brightness: Brightness.dark),
+       // We set button styles explicitly here.
+       // This makes our buttons work with the new themes for buttons.
+       textButtonTheme: TextButtonThemeData(
+         style: TextButton.styleFrom(
+           primary: primaryColor,
+           minimumSize: Size(88, 36),
+           padding: EdgeInsets.symmetric(horizontal: 16.0),
+           shape: const RoundedRectangleBorder(
+             borderRadius: BorderRadius.all(Radius.circular(2.0)),
+           ),
+         )
+       ),
+       elevatedButtonTheme: ElevatedButtonThemeData(
+         style: ElevatedButton.styleFrom(
+           onPrimary: Colors.white,
+           primary: primaryColor,
+           minimumSize: Size(88, 36),
+           padding: EdgeInsets.symmetric(horizontal: 16),
+           shape: const RoundedRectangleBorder(
+             borderRadius: BorderRadius.all(Radius.circular(2)),
+           ),
+         )
+       )
      );
   }
 

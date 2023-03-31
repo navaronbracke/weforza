@@ -20,11 +20,8 @@ class ManualSelectionListEmpty extends StatelessWidget {
           child: Text(S.of(context).RideAttendeeScanningManualSelectionEmptyList),
         ),
         PlatformAwareWidget(
-          android: () => FlatButton(
-            child: Text(
-              S.of(context).GoBack,
-              style: TextStyle(color: ApplicationTheme.primaryColor),
-            ),
+          android: () => TextButton(
+            child: Text(S.of(context).GoBack),
             onPressed: () => Navigator.of(context).pop(),
           ),
           ios: () => CupertinoButton(

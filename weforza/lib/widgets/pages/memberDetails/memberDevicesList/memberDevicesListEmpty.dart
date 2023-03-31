@@ -35,15 +35,15 @@ class MemberDevicesListEmpty extends StatelessWidget {
           child: Text(S.of(context).MemberDetailsNoDevices),
         ),
         PlatformAwareWidget(
-          android: () => FlatButton(
+          android: () => TextButton(
             onPressed: onAddDevicePageButtonPressed,
-            child: Text(S.of(context).AddDeviceTitle, style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle),
+            child: Text(S.of(context).AddDeviceTitle),
           ),
           ios: () => CupertinoButton(
             onPressed: onAddDevicePageButtonPressed,
             child: Text(
                 S.of(context).AddDeviceTitle,
-                style: ApplicationTheme.memberDevicesListAddDeviceButtonTextStyle
+                style: ApplicationTheme.iosButtonTextStyle,
             ),
           ),
         )

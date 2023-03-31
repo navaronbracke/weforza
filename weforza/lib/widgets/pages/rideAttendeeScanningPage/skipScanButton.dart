@@ -31,11 +31,8 @@ class SkipScanButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: FlatButton(
-          child: Text(
-            S.of(context).RideAttendeeScanningSkipScan,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
-          ),
+        child: TextButton(
+          child: Text(S.of(context).RideAttendeeScanningSkipScan),
           onPressed: onSkip,
         ),
       ),
@@ -56,11 +53,8 @@ class SkipScanButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: () => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        child: FlatButton(
-          child: Text(
-            S.of(context).RideAttendeeScanningContinue,
-            style: TextStyle(color: ApplicationTheme.primaryColor),
-          ),
+        child: TextButton(
+          child: Text(S.of(context).RideAttendeeScanningContinue),
           onPressed: onPressed,
         ),
       ),

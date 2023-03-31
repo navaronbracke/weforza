@@ -79,13 +79,15 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           child: ButtonBar(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text(S.of(context).Cancel.toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              FlatButton(
+              TextButton(
                 child: Text(S.of(context).Delete.toUpperCase()),
-                textColor: ApplicationTheme.deleteItemButtonTextColor,
+                style: TextButton.styleFrom(
+                  primary: ApplicationTheme.deleteItemButtonTextColor,
+                ),
                 onPressed: () => _onConfirmDeletion(),
               ),
             ],
@@ -130,7 +132,7 @@ class _DeleteItemDialogState extends State<DeleteItemDialog> {
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
           child: ButtonBar(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text(S.of(context).Ok.toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),

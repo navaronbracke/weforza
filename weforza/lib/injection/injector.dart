@@ -1,72 +1,62 @@
-import 'package:flutter_simple_dependency_injection/injector.dart';
-import 'package:weforza/bluetooth/bluetoothDeviceScanner.dart';
-import 'package:weforza/database/database.dart';
-import 'package:weforza/database/deviceDao.dart';
-import 'package:weforza/database/exportRidesDao.dart';
-import 'package:weforza/database/importMembersDao.dart';
-import 'package:weforza/database/memberDao.dart';
-import 'package:weforza/database/rideDao.dart';
-import 'package:weforza/database/settingsDao.dart';
-import 'package:weforza/file/fileHandler.dart';
-import 'package:weforza/repository/deviceRepository.dart';
-import 'package:weforza/repository/exportMembersRepository.dart';
-import 'package:weforza/repository/exportRidesRepository.dart';
-import 'package:weforza/repository/importMembersRepository.dart';
-import 'package:weforza/repository/memberRepository.dart';
-import 'package:weforza/repository/rideRepository.dart';
-import 'package:weforza/repository/settingsRepository.dart';
+import 'package:weforza/injection/type_factory.dart';
 
-///This class will provide dependencies.
-class InjectionContainer {
-  ///The [Injector] itself.
-  static Injector _injector;
+/// This class will provide a Dependency Injection mechanism.
+///
+/// The internal implementation relies on the use of [runtimeType].
+/// Thus you should not override this getter.
+/// (Overriding this would be weird anyway)
+class Injector {
 
-  ///Initialize an [Injector] for production.
-  ///Note that this is an async function,since we initialize a production database.
-  static Future<void> initProductionInjector() async {
-    //Only now we configure the injector itself.
-    _injector = Injector.getInjector();
-    //database
-    _injector.map<ApplicationDatabase>((i) => ApplicationDatabase(),isSingleton: true);
-    //We need a reference to the database provider for passing the database/stores to the Dao instances.
-    final ApplicationDatabase applicationDatabase = _injector.get<ApplicationDatabase>();
+  /// The collection of types that are mapped to creator functions.
+  ///
+  /// As the map that collects the factories needs to be able to store any type,
+  /// we have to use Object as upper bound.
+  ///
+  /// At runtime we 'can' assume that types will be correct.
+  /// This only fails if the runtime type of the key
+  /// isn't the same as the runtime type of the creator function's generic type.
+  /// This is however a programmer error, if it occurs.
+  final Map<Type, TypeFactory<Object>> _factories = {};
 
-    _injector.map<IMemberDao>((i) => MemberDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.map<IRideDao>((i) => RideDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.map<IDeviceDao>((i)=> DeviceDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.map<ISettingsDao>((i) => SettingsDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.map<IImportMembersDao>((i) => ImportMembersDao.withProvider(applicationDatabase),isSingleton: true);
-    _injector.map<IExportRidesDao>((i) => ExportRidesDao.withProvider(applicationDatabase), isSingleton: true);
-    //repositories
-    _injector.map<MemberRepository>((i) => MemberRepository(i.get<IMemberDao>()),isSingleton: true);
-    _injector.map<RideRepository>((i) => RideRepository(i.get<IRideDao>()),isSingleton: true);
-    _injector.map<DeviceRepository>((i)=> DeviceRepository(i.get<IDeviceDao>()),isSingleton: true);
-    _injector.map<SettingsRepository>((i)=> SettingsRepository(i.get<ISettingsDao>()),isSingleton: true);
-    _injector.map<ImportMembersRepository>((i) => ImportMembersRepository(i.get<IImportMembersDao>()),isSingleton: true);
-    _injector.map<ExportRidesRepository>((i) => ExportRidesRepository(i.get<IExportRidesDao>()),isSingleton: true);
-    _injector.map<ExportMembersRepository>((i) => ExportMembersRepository(i.get<IDeviceDao>(),i.get<IMemberDao>()),isSingleton: true);
+  Injector();
 
-    //file handler
-    _injector.map<IFileHandler>((i) => FileHandler(),isSingleton: true);
-    //bluetooth scanner
-    _injector.map<BluetoothDeviceScanner>((i) => BluetoothDeviceScannerImpl(),isSingleton: true);
+  /// Register a given type creator function.
+  /// Throws an [ArgumentError] if the type has already been registered.
+  Injector register<T>(CreatorFunction<T> creator, {bool isSingleton = false}) {
+    if (_factories.containsKey(T)) {
+      throw ArgumentError(
+        "The type $T already has a registered creator function",
+      );
+    }
 
-    //other
+    _factories[T] = TypeFactory<T>(creator, isSingleton);
 
-    //After setting up the dependency tree, we can initialize the production database.
-    await applicationDatabase.createDatabase();
+    return this;
   }
 
-  ///Initialize an [Injector] for testing.
-  ///This one doesn't add anything, so we can add stuff on demand during tests.
-  static Future<void> initTestInjector() async {
-    _injector = Injector.getInjector();
+  /// Get an instance of [T].
+  /// Throws an [ArgumentError] if [T] has no registered creator function,
+  /// or if the registered creator function does not return an instance of [T].
+  T get<T>() {
+    final factory = _factories[T];
+
+    if(factory == null){
+      throw ArgumentError(
+        "There is no registered creator function for type $T",
+      );
+    }
+
+    try {
+      return factory.creatorFunction(this) as T;
+    }catch (TypeError){
+      throw ArgumentError(
+        "The registered creator function for type $T did not return an instance of $T",
+      );
+    }
   }
 
-  ///Get a dependency of type [T].
-  ///[_injector] shouldn't be null.
-  static T get<T>(){
-    assert(_injector != null);
-    return _injector.get<T>();
+  /// Disposes of the injector singleton.
+  void dispose() {
+    _factories.clear();
   }
 }

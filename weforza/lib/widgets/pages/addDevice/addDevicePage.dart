@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:weforza/blocs/addDeviceBloc.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/injection/injector.dart';
+import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/deviceTypeCarousel/deviceTypeCarousel.dart';

@@ -1,0 +1,10 @@
+# https://docs.flutter.dev/development/accessibility-and-localization/internationalization#configuring-the-l10nyaml-file
+arb-dir: lib/l10n
+template-arb-file: intl_en.arb
+output-localization-file: l10n.dart
+output-class: S
+output-dir: lib/generated
+# We don't use a synthetic package
+# so that the translations have a shorter import path in `/lib/generated/l10n.dart`.
+synthetic-package: false
+nullable-getter: false

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
@@ -14,7 +13,7 @@ class EditDeviceBloc extends Bloc {
     required this.deviceOwnerId,
     required this.deviceCreationDate,
     required this.deviceName,
-  }): assert(deviceOwnerId.isNotEmpty){
+  }) : assert(deviceOwnerId.isNotEmpty) {
     deviceNameController = TextEditingController(text: deviceName);
     pageController = PageController(initialPage: deviceType.index);
     _typeController = BehaviorSubject.seeded(deviceType.index);
@@ -48,7 +47,7 @@ class EditDeviceBloc extends Bloc {
 
   late PageController pageController;
 
-  void onDeviceTypeChanged(int page){
+  void onDeviceTypeChanged(int page) {
     deviceType = DeviceType.values[page];
     _typeController.add(page);
   }
@@ -62,31 +61,33 @@ class EditDeviceBloc extends Bloc {
     pageController.dispose();
   }
 
-  Future<Device> editDevice(String deviceExistsMessage, String genericErrorMessage) async {
+  Future<Device> editDevice(
+      String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
-    _submitErrorController.add("");//remove the previous error.
+    _submitErrorController.add(''); //remove the previous error.
     final editedDevice = Device(
         ownerId: deviceOwnerId,
         name: deviceName,
         type: deviceType,
-        creationDate: deviceCreationDate
-    );
+        creationDate: deviceCreationDate);
 
-    final bool exists = await repository.deviceExists(deviceName, deviceOwnerId, deviceCreationDate).catchError((error){
+    final bool exists = await repository
+        .deviceExists(deviceName, deviceOwnerId, deviceCreationDate)
+        .catchError((error) {
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future<bool>.error(genericErrorMessage);
     });
 
-    if(exists){
+    if (exists) {
       _submitButtonController.add(false);
       _submitErrorController.add(deviceExistsMessage);
       return Future.error(deviceExistsMessage);
-    }else{
-      return await repository.updateDevice(editedDevice).then((_){
+    } else {
+      return await repository.updateDevice(editedDevice).then((_) {
         _submitButtonController.add(false);
         return editedDevice;
-      }).catchError((error){
+      }).catchError((error) {
         _submitButtonController.add(false);
         _submitErrorController.add(genericErrorMessage);
         return Future<Device>.error(genericErrorMessage);
@@ -99,21 +100,20 @@ class EditDeviceBloc extends Bloc {
       String deviceNameIsRequired,
       String deviceNameMaxLengthMessage,
       String commaIsIllegalCharacterMessage,
-      String isWhitespaceMessage)
-  {
-    if(value != deviceName){
+      String isWhitespaceMessage) {
+    if (value != deviceName) {
       //Clear the 'device exists' error when a different input is given
-      _submitErrorController.add("");
+      _submitErrorController.add('');
     }
-    if(value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       editDeviceError = deviceNameIsRequired;
-    }else if(value.trim().isEmpty){
+    } else if (value.trim().isEmpty) {
       editDeviceError = isWhitespaceMessage;
-    }else if(deviceNameMaxLength < value.length){
+    } else if (deviceNameMaxLength < value.length) {
       editDeviceError = deviceNameMaxLengthMessage;
-    }else if(value.contains(",")){
+    } else if (value.contains(',')) {
       editDeviceError = commaIsIllegalCharacterMessage;
-    }else{
+    } else {
       deviceName = value;
       editDeviceError = null;
     }

@@ -98,12 +98,12 @@ class ExportRidesBloc extends Bloc {
     if (extension == FileExtension.CSV.extension()) {
       final buffer = StringBuffer();
 
-      rides.forEach((exportedRide) {
+      for (final exportedRide in rides) {
         buffer.writeln(exportedRide.ride.toCsv());
         for (ExportableRideAttendee attendee in exportedRide.attendees) {
           buffer.writeln(attendee.toCsv());
         }
-      });
+      }
 
       await file.writeAsString(buffer.toString());
     } else if (extension == FileExtension.JSON.extension()) {

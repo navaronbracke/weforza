@@ -58,6 +58,7 @@
 	"FileJsonExtension": "json",
 	"Filename": "Filename",
 	"FilenameMaxLength": "A filename can't be longer than {maxLength} characters",
+	"FilenameRequired": "A filename is required",
 	"FilenameWhitespace": "A filename can't be only whitespace",
 	"Filter": "Filter",
 	"FirstName": "First Name",

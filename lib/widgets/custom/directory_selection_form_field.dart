@@ -173,7 +173,7 @@ class _DirectorySelectionFormFieldWidget extends StatelessWidget {
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4),
-                  child: Text(errorMessage!, style: Theme.of(context).inputDecorationTheme.errorStyle),
+                  child: Text(errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
               ),
             if (directoryPath != null)

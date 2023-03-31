@@ -1,33 +1,48 @@
-
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/widgets/custom/profileImage/iProfileImagePicker.dart';
 import 'package:weforza/widgets/custom/profileImage/profileImage.dart';
+import 'package:weforza/widgets/custom/profileImage/profileImagePickingState.dart';
+import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 
 ///This class represents a [Widget] for selecting a profile picture.
 class ProfileImagePicker extends StatelessWidget {
-  ProfileImagePicker(this.onPressedHandler,this.image,this._size)
-      : assert(onPressedHandler != null && _size != null);
+  ProfileImagePicker({@required this.imageHandler, @required this.errorMessage, @required this.size}):
+        assert(imageHandler != null && size != null && errorMessage != null);
 
-  ///A [VoidCallback] for when this [Widget] is tapped.
-  final IProfileImagePicker onPressedHandler;
-  ///The selected image. When a new image is selected, this widget's parent is rebuilt.
-  final File image;
-
-  final double _size;
+  ///This handler will handle picking an image.
+  final IProfileImagePicker imageHandler;
+  ///The size for a selected image.
+  final double size;
+  ///An error message to display when the image couldn't be loaded.
+  final String errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        child: ProfileImage(
-            image: image,
-            size: _size,
-            icon: Icons.camera_alt,
-        ),
-        onTap: () => onPressedHandler.pickProfileImage()
+    return StreamBuilder<ProfileImagePickingState>(
+      initialData: ProfileImagePickingState.IDLE,
+      stream: imageHandler.stream,
+      builder: (context,snapshot){
+        if(snapshot.hasError){
+          return Center(child: Text(errorMessage,softWrap: true));
+        }else{
+          return snapshot.data == ProfileImagePickingState.LOADING ? SizedBox(
+            width: 80,
+            height: 80,
+            child: Center(
+              child: PlatformAwareLoadingIndicator(),
+            ),
+          ): GestureDetector(
+              child: ProfileImage(
+                image: imageHandler.selectedImage,
+                size: size,
+                icon: Icons.camera_alt,
+              ),
+              onTap: () => imageHandler.pickProfileImage()
+          );
+        }
+      },
     );
   }
 }

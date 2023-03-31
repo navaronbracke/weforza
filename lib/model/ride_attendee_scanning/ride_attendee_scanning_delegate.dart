@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
@@ -5,6 +6,7 @@ import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride.dart';
+import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_device.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
@@ -12,6 +14,8 @@ import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/member_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 
 /// This class represents the delegate
 /// that manages the attendants for a given ride.
@@ -20,11 +24,11 @@ class RideAttendeeScanningDelegate {
     required this.deviceRepository,
     required this.memberRepository,
     required this.onDeviceFound,
-    required this.ride,
+    required this.ref,
     required this.rideRepository,
     required this.scanner,
     required this.settings,
-  });
+  }) : ride = ref.read(selectedRideProvider)!;
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -35,6 +39,10 @@ class RideAttendeeScanningDelegate {
   /// The handler that is called
   /// when the delegate found a new `device` scan result.
   final void Function(BluetoothPeripheral device) onDeviceFound;
+
+  /// The WidgetRef that will be used to refresh the necessary providers
+  /// when the list of attendees has been changed.
+  final WidgetRef ref;
 
   /// The ride for which this delegate will scan attendants.
   final Ride ride;
@@ -273,6 +281,63 @@ class RideAttendeeScanningDelegate {
         : RideAttendeeScanningState.unresolvedOwnersSelection;
 
     _changeState(newState);
+  }
+
+  /// Save the current selection of ride attendees.
+  Future<void> saveRideAttendeeSelection() async {
+    if (_selectionLocked) {
+      return Future.error(
+        StateError('Cannot save the selection when it is locked.'),
+      );
+    }
+
+    _selectionLocked = true;
+
+    try {
+      int scannedAttendees = 0;
+      final rideAttendees = <RideAttendee>[];
+
+      for (final item in _rideAttendeeController.value) {
+        if (item.isScanned) {
+          scannedAttendees++;
+        }
+
+        rideAttendees.add(
+          RideAttendee(
+            rideDate: ride.date,
+            uuid: item.uuid,
+            isScanned: item.isScanned,
+          ),
+        );
+      }
+
+      final updatedRide = Ride(
+        date: ride.date,
+        scannedAttendees: scannedAttendees,
+      );
+
+      await rideRepository.updateRide(updatedRide, rideAttendees);
+
+      // Refresh the ride list so that the attendee counter for this ride
+      // updates in the list of rides.
+      ref.refresh(rideListProvider);
+
+      // Update the selected ride with its new `scannedAttendees` count.
+      ref.read(selectedRideProvider.notifier).setSelectedRide(updatedRide);
+
+      // The ride attendees future provider watches the selected ride for changes,
+      // so that provider does not need to be refreshed.
+    } catch (error) {
+      // Pipe the error to the state machine.
+      if (!_stateMachine.isClosed) {
+        _stateMachine.addError(error);
+      }
+
+      return Future.error(error);
+    } finally {
+      // Finally, unlock the selection.
+      _selectionLocked = false;
+    }
   }
 
   /// Start a new device scan.

@@ -80,7 +80,7 @@ dependencies:
   rxdart: ^0.27.7
 
   # The following dependency provides local persistence.
-  sembast: ^3.3.1
+  sembast: ^3.4.3
 
   # UUID generator for globally unique ids.
   uuid: ^3.0.7

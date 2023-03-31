@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device_type.dart';
 import 'package:weforza/theme/app_theme.dart';
 
 class DeviceIcon extends StatelessWidget {

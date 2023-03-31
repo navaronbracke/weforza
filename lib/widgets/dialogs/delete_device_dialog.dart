@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
 class DeleteDeviceDialog extends ConsumerStatefulWidget {
@@ -29,7 +29,7 @@ class _DeleteDeviceDialogState extends ConsumerState<DeleteDeviceDialog> {
       errorDescription: translator.DeleteDeviceErrorDescription,
       future: future,
       onDeletePressed: () {
-        final notifier = ref.read(selectedMemberDevicesProvider.notifier);
+        final notifier = ref.read(selectedRiderDevicesProvider.notifier);
 
         future = notifier.deleteDevice(widget.index).then((_) {
           if (mounted) {

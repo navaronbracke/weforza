@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
-/// This widget resembles the toggle switch for the 'active' state of a member.
+/// This widget resembles the toggle switch for the 'active' state of a rider.
 class MemberActiveToggle extends StatelessWidget {
   const MemberActiveToggle({super.key});
 
@@ -19,14 +19,14 @@ class MemberActiveToggle extends StatelessWidget {
           child: Consumer(
             builder: (_, ref, child) {
               final isActive = ref.watch(
-                selectedMemberProvider.select((m) => m!.active),
+                selectedRiderProvider.select((r) => r!.active),
               );
 
               return PlatformAwareWidget(
                 android: (_) => Switch(
                   value: isActive,
                   onChanged: (value) {
-                    final notifier = ref.read(selectedMemberProvider.notifier);
+                    final notifier = ref.read(selectedRiderProvider.notifier);
 
                     notifier.setMemberActive(value: value);
                   },
@@ -34,7 +34,7 @@ class MemberActiveToggle extends StatelessWidget {
                 ios: (_) => CupertinoSwitch(
                   value: isActive,
                   onChanged: (value) {
-                    final notifier = ref.read(selectedMemberProvider.notifier);
+                    final notifier = ref.read(selectedRiderProvider.notifier);
 
                     notifier.setMemberActive(value: value);
                   },

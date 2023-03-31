@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 
 class MemberProfileImage extends ConsumerWidget {
@@ -9,13 +9,13 @@ class MemberProfileImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedMember = ref.watch(
-      selectedMemberProvider.select((selectedMember) => selectedMember!),
+    final selectedRider = ref.watch(
+      selectedRiderProvider.select((value) => value!),
     );
 
     return AdaptiveProfileImage.path(
-      imagePath: selectedMember.profileImageFilePath,
-      personInitials: selectedMember.initials,
+      imagePath: selectedRider.profileImageFilePath,
+      personInitials: selectedRider.initials,
       size: 72,
     );
   }

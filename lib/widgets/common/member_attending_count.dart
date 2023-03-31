@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/riverpod/member/selected_member_attending_count_provider.dart';
 import 'package:weforza/riverpod/repository/member_repository_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_attending_count_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
-/// The provider for the attending count of a single member list item
+/// The provider for the attending count of a single rider list item
 /// is an `autoDispose` provider as there might be many items in the list,
 /// that get built nd destroyed.
 final _memberAttendingCount =
@@ -72,7 +72,7 @@ class _MemberAttendingCount extends StatelessWidget {
   }
 }
 
-/// This widget represents the attending count for a member list item.
+/// This widget represents the attending count for a rider list item.
 class MemberListItemAttendingCount extends ConsumerWidget {
   const MemberListItemAttendingCount({
     required this.member,
@@ -89,13 +89,13 @@ class MemberListItemAttendingCount extends ConsumerWidget {
   }
 }
 
-/// This widget represents the attending count for the selected member.
+/// This widget represents the attending count for the selected rider.
 class SelectedMemberAttendingCount extends ConsumerWidget {
   const SelectedMemberAttendingCount({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(selectedMemberAttendingCountProvider);
+    final value = ref.watch(selectedRiderAttendingCountProvider);
 
     return _MemberAttendingCount(value);
   }

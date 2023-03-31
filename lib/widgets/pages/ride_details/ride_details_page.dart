@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_details_page_options.dart';
-import 'package:weforza/riverpod/member/selected_member_attending_count_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_attending_count_provider.dart';
 import 'package:weforza/widgets/dialogs/delete_ride_dialog.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
@@ -44,8 +44,8 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
       // updates in the list of rides.
       ref.invalidate(rideListProvider);
 
-      // Refresh the attending count of the selected member.
-      ref.invalidate(selectedMemberAttendingCountProvider);
+      // Refresh the attending count of the selected rider.
+      ref.invalidate(selectedRiderAttendingCountProvider);
     }
   }
 

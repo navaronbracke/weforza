@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device/device.dart';
-import 'package:weforza/riverpod/member/selected_member_devices_provider.dart';
-import 'package:weforza/riverpod/member/selected_member_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
+import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/delete_device_button.dart';
@@ -32,7 +32,7 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
 
   @override
   Widget build(BuildContext context) {
-    final devicesList = ref.watch(selectedMemberDevicesProvider);
+    final devicesList = ref.watch(selectedRiderDevicesProvider);
 
     return devicesList.when(
       data: (devices) {
@@ -70,17 +70,17 @@ class MemberDevicesListState extends ConsumerState<MemberDevicesList> {
             child: PlatformAwareWidget(
               android: (context) => TextButton(
                 onPressed: () {
-                  final selectedMember = ref.read(selectedMemberProvider);
+                  final selectedRider = ref.read(selectedRiderProvider);
 
-                  onAddDevicePressed(context, selectedMember!.uuid);
+                  onAddDevicePressed(context, selectedRider!.uuid);
                 },
                 child: Text(S.of(context).AddDevice),
               ),
               ios: (context) => CupertinoButton.filled(
                 onPressed: () {
-                  final selectedMember = ref.read(selectedMemberProvider);
+                  final selectedRider = ref.read(selectedRiderProvider);
 
-                  onAddDevicePressed(context, selectedMember!.uuid);
+                  onAddDevicePressed(context, selectedRider!.uuid);
                 },
                 child: Text(S.of(context).AddDevice),
               ),

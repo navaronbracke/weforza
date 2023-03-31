@@ -46,8 +46,6 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
   late final MemberFormDelegate _delegate;
   late final ProfileImagePickerDelegate _profileImageDelegate;
 
-  Future<void>? _future;
-
   /// Validate the iOS form inputs.
   bool _validateCupertinoForm() {
     final firstNameError = _firstNameErrorController.value;
@@ -73,12 +71,10 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
 
     if (memberUuid == null) {
-      _future = _delegate.addMember(model).then((_) => navigator.pop());
+      _delegate.addMember(model, whenComplete: navigator.pop);
     } else {
-      _future = _delegate.editMember(model).then((_) => navigator.pop());
+      _delegate.editMember(model, whenComplete: navigator.pop);
     }
-
-    setState(() {});
   }
 
   @override
@@ -328,7 +324,13 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
   }
 
-  Widget _buildErrorMessage(Object error, S translator) {
+  Widget _buildErrorMessage(BuildContext context, Object? error) {
+    if (error == null) {
+      return const Text('');
+    }
+
+    final translator = S.of(context);
+
     if (error is MemberExistsException) {
       return Text(translator.RiderExists);
     }
@@ -343,10 +345,10 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
         widget.member == null ? translator.AddRider : translator.EditRider;
 
     return PlatformAwareWidget(
-      android: (context) => FormSubmitButton(
-        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+      android: (context) => FormSubmitButton<void>(
+        delegate: _delegate,
+        errorBuilder: _buildErrorMessage,
         label: submitButtonLabel,
-        future: _future,
         onPressed: () {
           final formState = _formKey.currentState;
 
@@ -355,10 +357,10 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
           }
         },
       ),
-      ios: (context) => FormSubmitButton(
-        errorMessageBuilder: (error) => _buildErrorMessage(error, translator),
+      ios: (context) => FormSubmitButton<void>(
+        delegate: _delegate,
+        errorBuilder: _buildErrorMessage,
         label: submitButtonLabel,
-        future: _future,
         onPressed: () {
           if (_validateCupertinoForm()) {
             onFormSubmitted(context);
@@ -368,15 +370,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     );
   }
 
-  void _resetSubmit(String _) {
-    if (_future == null) {
-      return;
-    }
-
-    setState(() {
-      _future = null;
-    });
-  }
+  void _resetSubmit(String _) => _delegate.reset();
 
   @override
   Widget build(BuildContext context) {
@@ -388,6 +382,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
 
   @override
   void dispose() {
+    _delegate.dispose();
     _profileImageDelegate.dispose();
     _firstNameFocusNode.dispose();
     _lastNameFocusNode.dispose();

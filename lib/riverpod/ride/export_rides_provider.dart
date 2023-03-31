@@ -65,7 +65,7 @@ class ExportRidesProvider {
   }) async {
     final rides = await exportRidesRepository.getRides(ride);
 
-    final file = await fileHandler.createFile(fileName, fileExtension);
+    final file = await fileHandler.getFile('$fileName$fileExtension');
 
     if (file.existsSync()) {
       return Future.error(FileExistsException());

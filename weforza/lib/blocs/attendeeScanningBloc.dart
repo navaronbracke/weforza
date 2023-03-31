@@ -230,11 +230,18 @@ class AttendeeScanningBloc extends Bloc {
     });
   }
 
-  Future<void> saveRideAttendees([bool continueToManualAssignment = true]) async {
+  ///Save the current contents of [rideAttendees] to the database.
+  ///[mergeResults] dictates if the contents of [rideAttendees] should be merged in with the existing data.
+  ///This preserves old results.
+  ///[mergeResults] should only be true during the Scan step.
+  ///If [continueToManualAssignment] is true, the manual assignment screen will show up after saving is done.
+  ///[continueToManualAssignment] should only be true during the Scan step.
+  Future<void> saveRideAttendees(bool mergeResults, bool continueToManualAssignment) async {
     isSaving.value = true;
     await ridesRepo.updateAttendeesForRideWithDate(
         rideDate,
-        rideAttendees.map((element) => RideAttendee(rideDate, element))
+        rideAttendees.map((element) => RideAttendee(rideDate, element)),
+        mergeResults
     ).then((_){
         if(continueToManualAssignment){
           isSaving.value = false;

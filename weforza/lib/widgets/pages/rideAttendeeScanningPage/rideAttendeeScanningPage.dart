@@ -138,7 +138,7 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                                 isSaving: bloc.isSaving,
                                 isScanning: bloc.isScanning,
                                 onSkip: () => bloc.skipScan(),
-                                onSave: () async => await bloc.saveRideAttendees().then((_){
+                                onSave: () async => await bloc.saveRideAttendees(true,true).then((_){
                                   widget.onRefreshAttendees();
                                 }, onError: (error){
                                   //do nothing

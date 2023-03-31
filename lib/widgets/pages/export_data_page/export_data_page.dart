@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +36,22 @@ class ExportDataPage<T> extends StatelessWidget {
 
   /// The title for the page.
   final String title;
+
+  String? _validateDirectory(Directory? directory, S translator) {
+    if (directory == null) {
+      return translator.directoryRequired;
+    }
+
+    if (!directory.existsSync()) {
+      return translator.directoryDoesNotExist;
+    }
+
+    if (Platform.isAndroid && directory.path == Platform.pathSeparator) {
+      return translator.directoryIsProtected;
+    }
+
+    return null;
+  }
 
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
@@ -109,9 +127,7 @@ class ExportDataPage<T> extends StatelessWidget {
           data: (_) => doneIndicator,
           error: (error, stackTrace) {
             // Defer to the form for specific file system errors.
-            if (error is FileExistsException ||
-                error is DirectoryNotFoundException ||
-                error is DirectoryRequiredException) {
+            if (error is FileExistsException) {
               return FocusAbsorber(child: builder(context, isExporting: false));
             }
 

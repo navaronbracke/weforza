@@ -2,9 +2,9 @@ import 'package:sembast/sembast.dart';
 
 import 'package:weforza/database/database.dart';
 import 'package:weforza/extensions/date_extension.dart';
-import 'package:weforza/model/RideAttendee.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/member_filter_option.dart';
+import 'package:weforza/model/ride_attendee.dart';
 
 ///This interface defines a contract to manipulate [Member]s in persistent storage.
 abstract class IMemberDao {

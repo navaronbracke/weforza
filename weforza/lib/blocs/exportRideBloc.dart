@@ -100,5 +100,6 @@ class ExportRideBloc extends Bloc {
   void dispose() {
     _streamController.close();
     _fileExistsController.close();
+    fileNameController.dispose();
   }
 }

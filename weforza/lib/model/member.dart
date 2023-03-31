@@ -10,7 +10,7 @@ class Member {
   ///The Regex is language independent.
   ///Allows hyphen,apostrophe and spaces.
   ///Between 1 and 50 characters(inclusive).
-  static final RegExp personNameRegex = RegExp(r"^([\p{Letter}\s]|['-]){1,50}$",unicode: true);
+  static final RegExp personNameAndAliasRegex = RegExp(r"^([\p{Letter}\s]|['-]){1,50}$",unicode: true);
 
   ///The member's GUID.
   final String uuid;

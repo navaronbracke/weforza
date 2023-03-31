@@ -90,7 +90,7 @@ class RideDetailsAttendeesList extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: Text(scannedNumber == null ? "?" : "$scannedNumber", style: TextStyle(color: Colors.white)),
+                    child: Text(scannedNumber == null ? "-" : "$scannedNumber", style: TextStyle(color: Colors.white)),
                   ),
                   const Icon(Icons.bluetooth_searching, color: Colors.white),
                 ],

@@ -5,6 +5,6 @@ extension ToStringNoMillis on DateTime {
     final String s = toString();
 
     // Strip the milliseconds and append a Z.
-    return s.substring(0, s.length - 5) + 'Z';
+    return '${s.substring(0, s.length - 5)}Z';
   }
 }

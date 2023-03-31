@@ -151,9 +151,12 @@ class RideAttendeeScanningPageState
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidLayout,
-      ios: _buildIOSLayout,
+    return WillPopScope(
+      onWillPop: delegate.stopScan,
+      child: PlatformAwareWidget(
+        android: _buildAndroidLayout,
+        ios: _buildIOSLayout,
+      ),
     );
   }
 

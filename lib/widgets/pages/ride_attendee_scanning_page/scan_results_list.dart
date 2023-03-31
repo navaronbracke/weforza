@@ -29,27 +29,24 @@ class ScanResultsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: delegate.stopScan,
-      child: Column(
-        children: [
-          progressBar,
-          Expanded(
-            child: AnimatedList(
-              key: scanResultsListKey,
-              itemBuilder: (context, index, animation) {
-                return SizeTransition(
-                  sizeFactor: animation,
-                  child: _ScanResultsListItem(
-                    device: delegate.getScannedDevice(index),
-                  ),
-                );
-              },
-            ),
+    return Column(
+      children: [
+        progressBar,
+        Expanded(
+          child: AnimatedList(
+            key: scanResultsListKey,
+            itemBuilder: (context, index, animation) {
+              return SizeTransition(
+                sizeFactor: animation,
+                child: _ScanResultsListItem(
+                  device: delegate.getScannedDevice(index),
+                ),
+              );
+            },
           ),
-          StopScanButton(delegate: delegate),
-        ],
-      ),
+        ),
+        StopScanButton(delegate: delegate),
+      ],
     );
   }
 }

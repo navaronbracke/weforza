@@ -22,9 +22,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The controller that manages the selected directory.
-  final BehaviorSubject<AsyncValue<Directory?>> _selectDirectoryController;
-
   /// The file handler that will provide directories.
   final FileHandler fileHandler;
 
@@ -39,12 +36,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
-
-  /// Get the selected export directory.
-  AsyncValue<Directory?> get selectedDirectory => _selectDirectoryController.value;
-
-  /// Get the stream of selected directory changes.
-  Stream<AsyncValue<Directory?>> get selectedDirectoryStream => _selectDirectoryController;
 
   /// Export the currently available data to a file.
   ///
@@ -96,41 +87,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     }
   }
 
-  /// Select a new directory as the parent folder of the export file.
-  void selectDirectory() async {
-    final Directory? oldDirectory = _selectDirectoryController.valueOrNull?.value;
-
-    try {
-      final Directory? directory = await fileHandler.pickDirectory();
-
-      if (!mounted) {
-        return;
-      }
-
-      // Revert to the previous directory if none was selected.
-      if (directory == null) {
-        _selectDirectoryController.add(AsyncData(oldDirectory));
-
-        return;
-      }
-
-      _selectDirectoryController.add(AsyncData(directory));
-
-      // If a new directory was selected,
-      // the `File Exists` message may be outdated.
-      fileNameKey.currentState?.validate();
-    } catch (error, stackTrace) {
-      if (!mounted) {
-        return;
-      }
-
-      // Amend the `AsyncValue.value` so that the old directory path is preserved.
-      _selectDirectoryController.add(
-        AsyncError<Directory?>(error, stackTrace).copyWithPrevious(AsyncData(oldDirectory)),
-      );
-    }
-  }
-
   /// Set the selected file format to [value].
   ///
   /// Does nothing if [value] is null.
@@ -176,7 +132,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    _selectDirectoryController.close();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

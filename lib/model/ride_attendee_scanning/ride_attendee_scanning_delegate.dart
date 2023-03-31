@@ -374,6 +374,9 @@ class RideAttendeeScanningDelegate {
     _scrollToManualSelectionLabel();
   }
 
+  /// Get the amount of scanned peripherals.
+  int get scannedPeripheralsLength => _devicesWithOwners.length;
+
   /// Get the scanned Bluetooth peripheral at the given [index].
   BluetoothPeripheralWithOwners getScannedPeripheral(int index) => _devicesWithOwners[index];
 

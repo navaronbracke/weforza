@@ -111,7 +111,7 @@ abstract class ApplicationTheme {
 
   static final Color deleteItemButtonTextColor = Colors.red;
 
-  static final TextStyle importMembersHeaderRemovalMessageTextStyle = TextStyle(
+  static final TextStyle importMembersHeaderExampleTextStyle = TextStyle(
       fontSize: 12,fontStyle: FontStyle.italic, color: Colors.grey.shade600
   );
 

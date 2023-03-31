@@ -38,7 +38,6 @@ class RideDetailsBloc extends Bloc {
 }
 
 enum RideDetailsPageOptions {
-  EDIT,
   DELETE,
   EXPORT
 }

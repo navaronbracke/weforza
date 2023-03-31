@@ -51,7 +51,12 @@ class RideListItem extends ConsumerWidget {
         ),
       ),
       onTap: () {
-        ref.read(selectedRideProvider.notifier).setSelectedRide(ride);
+        final selectedRide = Ride(
+          date: ride.date,
+          scannedAttendees: ride.scannedAttendees,
+        );
+
+        ref.read(selectedRideProvider.notifier).setSelectedRide(selectedRide);
 
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const RideDetailsPage()),

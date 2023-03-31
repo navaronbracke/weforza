@@ -130,11 +130,6 @@ class RideCalendarTheme {
   /// The color for a day that is in the past, which had a ride scheduled.
   final Color pastRide = const Color(0xFF616161);
 
-  /// The text style for a day that has a ride scheduled,
-  /// regardless if this day is in the past, in the future
-  /// or in the current selection of days.
-  final TextStyle scheduledDayStyle = const TextStyle(color: Colors.white);
-
   /// The color for a day that is currently selected.
   final Color selectedDay = const Color(0xFF90CAF9);
 }

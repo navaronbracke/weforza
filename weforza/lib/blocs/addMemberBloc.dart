@@ -124,11 +124,12 @@ class AddMemberBloc extends Bloc {
     }else{
       final File image = await _selectedImage.catchError((err) => null);
       final Member member = Member(
-          _uuidGenerator.v4(),
-          _firstName,
-          _lastName,
-          _alias,
-          image?.path
+        uuid: _uuidGenerator.v4(),
+        firstname: _firstName,
+        lastname: _lastName,
+        alias: _alias,
+        profileImageFilePath: image?.path,
+        isActiveMember: false
       );
 
       await _repository.addMember(member);

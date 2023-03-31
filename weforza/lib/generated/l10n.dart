@@ -983,6 +983,16 @@ class S {
     );
   }
 
+  /// `Only CSV files are allowed`
+  String get ImportMembersInvalidFileFormat {
+    return Intl.message(
+      'Only CSV files are allowed',
+      name: 'ImportMembersInvalidFileFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Start`
   String get RideStart {
     return Intl.message(

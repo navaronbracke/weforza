@@ -107,6 +107,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Settings"),
     "ImportMembersCsvHeaderRegex" : MessageLookupByLibrary.simpleMessage("(firstname)\\,(surname|familyname|lastname),(cellphone|telephone|phone|phonenumber|mobilephone)\\,(devices)"),
     "ImportMembersImporting" : MessageLookupByLibrary.simpleMessage("Importing Members"),
+    "ImportMembersInvalidFileFormat" : MessageLookupByLibrary.simpleMessage("Only CSV files are allowed"),
     "ImportMembersPageTitle" : MessageLookupByLibrary.simpleMessage("Import Members"),
     "ImportMembersPickFile" : MessageLookupByLibrary.simpleMessage("Choose File"),
     "ImportMembersPickFileWarning" : MessageLookupByLibrary.simpleMessage("Please choose a file to import members"),

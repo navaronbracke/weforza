@@ -10,39 +10,6 @@ abstract class ApplicationTheme {
 
   static const Color secondaryColor = Color(0xFF64B5F6);
 
-  // ==== Scan Theme
-
-  static const Color rideAttendeeScanResultSingleOwnerColor = Colors.blue;
-  static const Color multipleOwnerColor = Colors.orange;
-  static const Color rideAttendeeScanResultOwnerChoiceRequiredBackgroundColor =
-      Colors.red;
-  static const Color rideAttendeeScanResultOwnerChoiceRequiredFontColor =
-      Colors.white;
-  static final Color androidManualSelectionSwitchActiveTrackColor =
-      Colors.lightBlue.shade200;
-
-  static const Color androidManualSelectionSaveButtonPrimaryColor =
-      Color(0xFF1666a5);
-
-  static const multipleOwnersLabelStyle = TextStyle(
-    fontStyle: FontStyle.italic,
-    fontSize: 12,
-    color: multipleOwnerColor,
-  );
-
-  /// The background color for a selected ride attendee.
-  static final Color rideAttendeeSelectedBackgroundColor = Colors.blue.shade700;
-
-  static const rideAttendeeScanResultFirstNameTextStyle = TextStyle(
-    fontWeight: FontWeight.w600,
-    fontSize: 16.0,
-  );
-  static const multipleOwnersListTooltipStyle = TextStyle(
-    fontStyle: FontStyle.italic,
-    fontSize: 12,
-    color: Colors.grey,
-  );
-
   // ==== Miscellaneous stuff
 
   /// This color is used for Icons in lists that show some information

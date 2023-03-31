@@ -75,9 +75,6 @@ class ProfileImage extends StatelessWidget {
       );
     }
 
-    // TODO: handle non existing file (path is null or file does not exist)
-    // - only add clip when image is loaded
-    // TODO: while image is loading, show initials
     return ClipOval(
       child: Image.file(image!, width: size, height: size, fit: BoxFit.cover),
     );

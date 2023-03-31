@@ -61,7 +61,7 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
             itemBuilder: (context,index, animation) => MemberDevicesListItem(
               device: devices[index],
               index: index,
-              onDelete: (deviceName, index) => onDeleteDevice(context,deviceName,index,devices),
+              onDelete: (device, index) => onDeleteDevice(context,device,index,devices),
             ),
           ),
         ),
@@ -81,9 +81,9 @@ class _MemberDevicesListState extends State<MemberDevicesList> {
     );
   }
 
-  Future<void> onDeleteDevice(BuildContext context, String deviceName, int index, List<Device> devices){
+  Future<void> onDeleteDevice(BuildContext context, Device device, int index, List<Device> devices){
     //delete it from the database
-    return widget.bloc.deleteDevice(deviceName).then((_){
+    return widget.bloc.deleteDevice(device).then((_){
       Navigator.of(context).pop();//get rid of the dialog
       if(_listKey.currentState != null){
         final device = devices.removeAt(index);//remove it from memory

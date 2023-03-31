@@ -11,7 +11,7 @@ class DeviceRepository {
 
   Future<void> addDevice(Device device) => _dao.addDevice(device);
 
-  Future<void> removeDevice(String device) => _dao.removeDevice(device);
+  Future<void> removeDevice(Device device) => _dao.removeDevice(device);
 
   Future<void> updateDevice(Device newDevice) => _dao.updateDevice(newDevice);
 

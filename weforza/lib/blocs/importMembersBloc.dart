@@ -1,31 +1,36 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:weforza/blocs/bloc.dart';
 import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
+
+enum ImportMembersState {
+  IDLE, IMPORTING, DONE
+}
 
 class ImportMembersBloc extends Bloc {
   ImportMembersBloc({@required this.fileHandler}): assert(fileHandler != null);
 
   IFileHandler fileHandler;
 
-  File _importFile;
-
-  bool get fileChosen => _importFile != null;
+  final StreamController<ImportMembersState> _importStreamController = BehaviorSubject.seeded(ImportMembersState.IDLE);
+  Stream<ImportMembersState> get importStream => _importStreamController.stream;
 
   //Pick a file through a file picker and save the members that were read from the returned file.
-  Future<void> pickFileAndImportMembers(String headerRegex) async {
-    return fileHandler.chooseImportMemberDatasourceFile(<String>['csv']).then((file) async {
-      if(file == null){
-        return Future.error("No file chosen");
-      }else{
-        final List<Map<String,String>> data = await _readMemberDataFromFile(file, headerRegex);
+  void pickFileAndImportMembers(String headerRegex, ValueNotifier<bool> reloadMembers) async {
+    _importStreamController.add(ImportMembersState.IMPORTING);
 
-        //TODO save the list of maps to the database
-      }
-    });
+    await fileHandler.chooseImportMemberDatasourceFile().then((file) async {
+      final List<Map<String,String>> data = await _readMemberDataFromFile(file, headerRegex);
+
+      await _saveMemberData(data);
+      reloadMembers.value = true;
+      _importStreamController.add(ImportMembersState.DONE);
+    }).catchError((error) => _importStreamController.addError(error));
   }
 
   //TODO mention that the csv needs a header in the UI (we could use a dialog for this, users could tap it)
@@ -71,7 +76,13 @@ class ImportMembersBloc extends Bloc {
     return memberData;
   }
 
+  Future<void> _saveMemberData(List<Map<String,String>> data){
+    //TODO save the list of maps to the database
+  }
+
   @override
-  void dispose(){}
+  void dispose(){
+    _importStreamController.close();
+  }
 
 }

@@ -313,7 +313,6 @@ class _DatePickerHeader extends StatelessWidget {
   const _DatePickerHeader({
     required this.backButton,
     required this.forwardButton,
-    required this.height,
     required this.monthStream,
     this.style,
   });
@@ -324,9 +323,6 @@ class _DatePickerHeader extends StatelessWidget {
   /// The button that navigates forward one month when tapped.
   final Widget forwardButton;
 
-  /// The height for the month header.
-  final double height;
-
   /// The stream that provides updates about the current month.
   final Stream<Jiffy> monthStream;
 
@@ -335,35 +331,29 @@ class _DatePickerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: StreamBuilder<Jiffy>(
-        stream: monthStream,
-        builder: (context, snapshot) {
-          final month = snapshot.data?.dateTime;
+    return StreamBuilder<Jiffy>(
+      stream: monthStream,
+      builder: (context, snapshot) {
+        final month = snapshot.data?.dateTime;
+        final languageCode = Localizations.localeOf(context).languageCode;
 
-          if (month == null) {
-            return SizedBox(height: height);
-          }
-
-          final languageCode = Localizations.localeOf(context).languageCode;
-
-          return Row(
-            children: [
-              backButton,
-              Expanded(
-                child: Center(
-                  child: Text(
-                    DateFormat.MMMM(languageCode).add_y().format(month),
-                    style: style,
-                  ),
+        return Row(
+          children: [
+            backButton,
+            Expanded(
+              child: Center(
+                child: Text(
+                  month == null
+                      ? ''
+                      : DateFormat.MMMM(languageCode).add_y().format(month),
+                  style: style,
                 ),
               ),
-              forwardButton,
-            ],
-          );
-        },
-      ),
+            ),
+            forwardButton,
+          ],
+        );
+      },
     );
   }
 }

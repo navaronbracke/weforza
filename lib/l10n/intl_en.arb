@@ -84,6 +84,7 @@
 	"GoToSettings": "Go to settings",
 	"ImportRiders": "Import riders",
 	"ImportRidersFileRequired": "Please choose a file to import riders from",
+	"ImportRidersGenericErrorMessage": "Something went wrong during the import",
 	"ImportRidersProcessingFile": "Importing riders from file",
 	"Inactive": "Inactive",
 	"LastName": "Last name",

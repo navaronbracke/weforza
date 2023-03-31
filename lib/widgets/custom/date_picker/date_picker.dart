@@ -29,7 +29,7 @@ class DatePicker extends StatelessWidget {
     required this.delegate,
     required this.forwardButton,
     this.headerBottomPadding = 0.0,
-    this.headerHeight = 50,
+    this.headerHeight = 48,
     this.monthStyle,
     this.padding = EdgeInsets.zero,
     this.showWeekdays = false,

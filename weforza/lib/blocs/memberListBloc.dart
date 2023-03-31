@@ -10,6 +10,14 @@ class MemberListBloc extends Bloc {
 
   final MemberRepository _repository;
 
+  Future<List<MemberItem>> membersFuture;
+
+  void loadMembersIfNotLoaded(){
+    if(membersFuture == null){
+      membersFuture = loadMembers();
+    }
+  }
+
   Future<List<MemberItem>> loadMembers() async {
     List<Member> members = await _repository.getMembers();
     List<Future<MemberItem>> items = members.map(

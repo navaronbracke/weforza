@@ -409,7 +409,9 @@ class AttendeeScanningBloc extends Bloc {
     return rideAttendees.contains(item);
   }
 
-  void removeScanResult(RideAttendeeScanResult item) => _removeRideAttendee;
+  void removeScanResult(RideAttendeeScanResult item) {
+    _removeRideAttendee(item);
+  }
 
   void addManualScanResult(String uuid) => _addRideAttendee(uuid, false);
 

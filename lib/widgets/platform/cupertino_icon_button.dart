@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 /// This widget represents a [CupertinoButton] that displays an [Icon] as child.
 class CupertinoIconButton extends StatelessWidget {
   const CupertinoIconButton({
-    super.key,
-    this.color,
     required this.icon,
     required this.onPressed,
+    super.key,
+    this.color,
     this.size = kMinInteractiveDimensionCupertino,
   }) : assert(
           size >= kMinInteractiveDimensionCupertino,

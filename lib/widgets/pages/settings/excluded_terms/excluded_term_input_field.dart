@@ -7,15 +7,15 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents the base input field for an excluded term.
 class ExcludedTermInputField extends StatelessWidget {
   const ExcludedTermInputField({
-    super.key,
     required this.controller,
     required this.focusNode,
     required this.maxLength,
     required this.onEditingComplete,
+    required this.validator,
     this.placeholder,
     this.suffix,
     this.textFieldKey,
-    required this.validator,
+    super.key,
   });
 
   /// The controller for the text field.

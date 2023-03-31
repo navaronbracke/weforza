@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:weforza/blocs/bloc.dart';
+import 'package:weforza/model/memberFilterOption.dart';
 import 'package:weforza/model/settings.dart';
 import 'package:weforza/repository/settingsRepository.dart';
 
@@ -15,7 +16,11 @@ class SettingsBloc extends Bloc {
 
   late double _scanDuration;
 
+  late MemberFilterOption _memberListFilter;
+
   double get scanDuration => _scanDuration.floorToDouble();
+
+  MemberFilterOption get memberListFilter => _memberListFilter;
 
   final double maxScanValue = 60;
 
@@ -25,6 +30,7 @@ class SettingsBloc extends Bloc {
     final settings = await _repository.loadApplicationSettings();
 
     _scanDuration = settings.scanDuration.toDouble();
+    _memberListFilter = settings.memberListFilter;
 
     return settings;
   }
@@ -32,12 +38,17 @@ class SettingsBloc extends Bloc {
   void saveSettings() async {
     saveSettingsFuture = Future.delayed(Duration(milliseconds: 500), () {
       return _repository.writeApplicationSettings(
-        Settings(scanDuration: _scanDuration.floor()),
+        Settings(
+          scanDuration: _scanDuration.floor(),
+          memberListFilter: _memberListFilter,
+        ),
       );
     });
   }
 
   void onScanDurationChanged(double newValue) => _scanDuration = newValue;
+
+  void onMemberListFilterChanged(MemberFilterOption newValue) => _memberListFilter = newValue;
 
   @override
   void dispose() {}

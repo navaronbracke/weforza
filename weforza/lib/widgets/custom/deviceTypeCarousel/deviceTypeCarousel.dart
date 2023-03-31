@@ -34,7 +34,7 @@ class DeviceTypeCarousel extends StatelessWidget {
           child: StreamBuilder<int>(
             stream: currentPageStream,
             builder: (context, snapshot){
-              final children = [];
+              final children = <Widget>[];
               for(int i = 0; i< DeviceType.values.length; i++){
                 children.add(_buildPageDot(i == snapshot.data));
               }
@@ -100,7 +100,7 @@ class DeviceTypeCarousel extends StatelessWidget {
       default: return S.of(context).DeviceUnknown;
     }
   }
-  
+
   IconData _getIcon(int index){
     switch(DeviceType.values[index]){
       case DeviceType.HEADSET: return Icons.headset;

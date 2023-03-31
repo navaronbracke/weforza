@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/profile_image_picker_delegate.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
+import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -26,8 +26,11 @@ class ProfileImagePicker extends StatelessWidget {
       initialData: delegate.current,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(
-            child: Text(S.of(context).GenericError, softWrap: true),
+          return const Center(
+            child: PlatformAwareIcon(
+              androidIcon: Icons.warning,
+              iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+            ),
           );
         }
 

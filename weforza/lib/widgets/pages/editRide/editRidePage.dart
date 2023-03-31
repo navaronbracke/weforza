@@ -11,6 +11,8 @@ import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/editRide/editRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
+import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class EditRidePage extends StatefulWidget {
   @override
@@ -263,8 +265,8 @@ class _EditRidePageState extends State<EditRidePage> {
                     child: EditRideSubmit(_bloc.stream, () async {
                       if (_formKey.currentState.validate()) {
                         await _bloc.editRide((Ride updatedRide) {
-                          RideProvider.reloadRides = true;
-                          RideProvider.selectedRide = updatedRide;
+                          ReloadDataProvider.of(context).reloadRides.value = true;
+                          SelectedItemProvider.of(context).selectedRide.value = updatedRide;
                           Navigator.pop(context);
                         });
                       }
@@ -423,8 +425,8 @@ class _EditRidePageState extends State<EditRidePage> {
                 child: EditRideSubmit(_bloc.stream,() async {
                   if(iosAllFormInputValidator()){
                     await _bloc.editRide((Ride updatedRide) {
-                      RideProvider.reloadRides = true;
-                      RideProvider.selectedRide = updatedRide;
+                      ReloadDataProvider.of(context).reloadRides.value = true;
+                      SelectedItemProvider.of(context).selectedRide.value = updatedRide;
                       Navigator.pop(context);
                     });
                   }

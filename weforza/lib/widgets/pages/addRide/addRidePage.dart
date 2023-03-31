@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/blocs/addRideBloc.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/injection/injector.dart';
-import 'package:weforza/provider/rideProvider.dart';
 import 'package:weforza/repository/rideRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/pages/addRide/addRideColorLegend.dart';
@@ -12,6 +11,7 @@ import 'package:weforza/widgets/pages/addRide/addRideSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
 import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.
 class AddRidePage extends StatefulWidget {
@@ -66,7 +66,7 @@ class _AddRidePageState extends State<AddRidePage> {
                   child: Center(
                     child: AddRideSubmit(_bloc.submitStream,() async {
                       await _bloc.addRides((){
-                        RideProvider.reloadRides = true;
+                        ReloadDataProvider.of(context).reloadRides.value = true;
                         Navigator.pop(context);
                       });
                     }),
@@ -117,7 +117,7 @@ class _AddRidePageState extends State<AddRidePage> {
                       child: Center(
                         child: AddRideSubmit(_bloc.submitStream,() async {
                           await _bloc.addRides((){
-                            RideProvider.reloadRides = true;
+                            ReloadDataProvider.of(context).reloadRides.value = true;
                             Navigator.pop(context);
                           });
                         }),

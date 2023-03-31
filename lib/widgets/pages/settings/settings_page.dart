@@ -157,12 +157,18 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration}) {
+  Widget _buildExcludedTermItem(
+    List<ExcludedTerm> terms,
+    int index, {
+    BoxDecoration? decoration,
+    Widget? divider,
+  }) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
       decoration: decoration,
       delegate: excludedTermsDelegate,
+      divider: divider,
       index: index,
       excludedTerm: term,
       scrollController: scrollController,
@@ -190,22 +196,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               color: CupertinoColors.secondarySystemGroupedBackground,
             ),
-            bottom: Container(
-              color: excludedTermDivider.color,
-              height: excludedTermDivider.width,
-              margin: const EdgeInsetsDirectional.only(start: 15.0),
-            ),
             delegate: excludedTermsDelegate,
             focusNode: addTermFocusNode,
             formKey: addTermFormKey,
           ),
           initialData: excludedTermsDelegate.terms,
           stream: excludedTermsDelegate.stream,
-          separatorBuilder: (context, index) => Container(
-            color: excludedTermDivider.color,
-            height: excludedTermDivider.width,
-            margin: const EdgeInsetsDirectional.only(start: 15.0),
-          ),
           builder: (items, index) {
             BorderRadius borderRadius = BorderRadius.zero;
 
@@ -222,6 +218,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
                 color: CupertinoColors.secondarySystemGroupedBackground,
+              ),
+              divider: Container(
+                color: excludedTermDivider.color,
+                height: excludedTermDivider.width,
+                margin: const EdgeInsetsDirectional.only(start: 15.0),
               ),
             );
           },

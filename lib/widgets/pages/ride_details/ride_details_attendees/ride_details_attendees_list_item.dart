@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/common/member_name_and_alias.dart';
+import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
   RideDetailsAttendeesListItem({
@@ -8,7 +8,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
     required this.firstName,
     required this.lastName,
     required this.alias,
-  })  : assert(firstName.isNotEmpty && lastName.isNotEmpty);
+  }) : assert(firstName.isNotEmpty && lastName.isNotEmpty);
 
   final String firstName;
   final String lastName;
@@ -16,7 +16,8 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const style = ApplicationTheme.memberListItemLastNameTextStyle;
+    const theme = AppTheme.memberListItem;
+    final style = theme.lastNameStyle;
 
     return Padding(
       padding: const EdgeInsets.all(4),

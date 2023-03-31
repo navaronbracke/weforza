@@ -45,14 +45,14 @@ class EditDeviceSubmit extends StatelessWidget {
                 android: () => RaisedButton(
                   color: ApplicationTheme.primaryColor,
                   child: Text(
-                    S.of(context).EditDeviceSubmit,
+                    S.of(context).SaveChanges,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: onSubmit,
                 ),
                 ios: () => CupertinoButton.filled(
                   child: Text(
-                    S.of(context).EditDeviceSubmit,
+                    S.of(context).SaveChanges,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: onSubmit,

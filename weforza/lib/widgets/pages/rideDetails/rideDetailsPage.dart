@@ -76,7 +76,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               PopupMenuItem<RideDetailsPageOptions>(
                 child: ListTile(
                   leading: Icon(Icons.publish),
-                  title: Text(S.of(context).RideDetailsExportOption),
+                  title: Text(S.of(context).Export),
                 ),
                 value: RideDetailsPageOptions.EXPORT,
               ),
@@ -85,7 +85,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 child: ListTile(
                   leading: Icon(Icons.delete, color: Colors.red),
                   title: Text(
-                      S.of(context).RideDetailsDeleteOption,
+                      S.of(context).Delete,
                       style: TextStyle(color: Colors.red)
                   ),
                 ),
@@ -131,17 +131,17 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           return CupertinoActionSheet(
                             actions: [
                               CupertinoActionSheetAction(
-                                child: Text(S.of(context).RideDetailsExportOption),
+                                child: Text(S.of(context).Export),
                                 onPressed: () => Navigator.of(context).pop(RideDetailsPageOptions.EXPORT),
                               ),
                               CupertinoActionSheetAction(
-                                child: Text(S.of(context).RideDetailsDeleteOption),
+                                child: Text(S.of(context).Delete),
                                 isDestructiveAction: true,
                                 onPressed: ()=> Navigator.of(context).pop(RideDetailsPageOptions.DELETE),
                               ),
                             ],
                             cancelButton: CupertinoActionSheetAction(
-                              child: Text(S.of(context).DialogCancel),
+                              child: Text(S.of(context).Cancel),
                               onPressed: () => Navigator.of(context).pop(),
                             ),
                           );
@@ -193,7 +193,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             }
 
             return Text(
-              "${S.of(context).RideDetailsAttendeesListHeader} (${snapshot.data})",
+              "${S.of(context).Attendees} (${snapshot.data})",
               style: textStyle,
             );
           }

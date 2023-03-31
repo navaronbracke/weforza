@@ -7,7 +7,7 @@ import 'package:weforza/file/file_handler.dart';
 class ProfileImagePickerDelegate {
   ProfileImagePickerDelegate({
     required this.fileHandler,
-    required Future<File>? currentImage,
+    required Future<File?> currentImage,
   })  : _image = currentImage,
         _imageController = BehaviorSubject<SelectProfileImageState>.seeded(
           SelectProfileImageState(
@@ -22,10 +22,10 @@ class ProfileImagePickerDelegate {
   final BehaviorSubject<SelectProfileImageState> _imageController;
 
   /// The selected profile image.
-  Future<File>? _image;
+  Future<File?> _image;
 
   /// Get the selected image.
-  Future<File>? get image => _image;
+  Future<File?> get image => _image;
 
   Stream<SelectProfileImageState> get stream => _imageController;
 
@@ -34,9 +34,9 @@ class ProfileImagePickerDelegate {
   /// Clear the selected image.
   void clearImage() {
     _imageController.add(
-      SelectProfileImageState(image: null, selecting: true),
+      SelectProfileImageState(image: Future.value(), selecting: true),
     );
-    _image = null;
+    _image = Future.value();
     _imageController.add(
       SelectProfileImageState(image: _image, selecting: false),
     );
@@ -46,12 +46,12 @@ class ProfileImagePickerDelegate {
   void pickImage() async {
     try {
       _imageController.add(
-        SelectProfileImageState(image: null, selecting: true),
+        SelectProfileImageState(image: Future.value(), selecting: true),
       );
 
       final file = await fileHandler.chooseProfileImageFromGallery();
 
-      _image = file == null ? null : Future.value(file);
+      _image = Future.value(file);
 
       _imageController.add(
         SelectProfileImageState(image: _image, selecting: false),
@@ -64,7 +64,6 @@ class ProfileImagePickerDelegate {
   /// Dispose of this delegate.
   void dispose() {
     _imageController.close();
-    _image = null;
   }
 }
 
@@ -79,5 +78,5 @@ class SelectProfileImageState {
   final bool selecting;
 
   /// The Future that resolves to the selected File.
-  final Future<File>? image;
+  final Future<File?> image;
 }

@@ -7,6 +7,5 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 
-# The flutter_blue dart package generates some Protobuf Java classes.
-# These should be included aswell.
--keep class com.pauldemarco.flutter_blue.** { *; }
+-keepclassmembernames class com.boskokg.flutter_blue_plus.* { *; }
+-keep class com.boskokg.flutter_blue_plus.** { *; }

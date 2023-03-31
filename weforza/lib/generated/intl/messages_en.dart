@@ -21,23 +21,21 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(maxLength) => "An alias can\'t be longer than ${maxLength} characters";
 
-  static m1(buildNumber) => "Build Number: ${buildNumber}";
+  static m1(version) => "Version: ${version}";
 
-  static m2(version) => "Version: ${version}";
+  static m2(maxLength) => "Device name is max. ${maxLength} characters";
 
-  static m3(maxLength) => "Device name is max. ${maxLength} characters";
+  static m3(date) => "ride_${date}";
 
-  static m4(date) => "ride_${date}";
+  static m4(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
 
-  static m5(maxLength) => "A filename can\'t be longer than ${maxLength} characters";
+  static m5(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m6(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m6(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m7(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
+  static m7(amount) => "${amount} riders have a device with this name";
 
-  static m8(amount) => "${amount} riders have a device with this name";
-
-  static m9(value) => "${value} is required";
+  static m8(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function>{

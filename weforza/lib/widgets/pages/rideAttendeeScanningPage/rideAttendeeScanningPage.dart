@@ -83,7 +83,10 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
           isScanStep: bloc.isScanStep,
         ),
       ),
-      child: _buildBody(),
+      child: SafeArea(
+        child: _buildBody(),
+        bottom: false
+      ),
     );
   }
 
@@ -128,20 +131,15 @@ class _RideAttendeeScanningPageState extends State<RideAttendeeScanningPage> {
                               },
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Center(
-                              child: SaveScanOrSkipButton(
-                                isSaving: bloc.isSaving,
-                                isScanning: bloc.isScanning,
-                                onSkip: () => bloc.skipScan(),
-                                onSave: () async => await bloc.saveRideAttendees(true,true).then((_){
-                                  widget.onRefreshAttendees();
-                                }, onError: (error){
-                                  //do nothing
-                                }),
-                              ),
-                            ),
+                          SaveScanOrSkipButton(
+                            isSaving: bloc.isSaving,
+                            isScanning: bloc.isScanning,
+                            onSkip: () => bloc.skipScan(),
+                            onSave: () async => await bloc.saveRideAttendees(true,true).then((_){
+                              widget.onRefreshAttendees();
+                            }, onError: (error){
+                              //do nothing
+                            }),
                           ),
                         ],
                       ),

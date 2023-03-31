@@ -31,7 +31,8 @@ class SaveScanOrSkipButton extends StatelessWidget {
           return ValueListenableBuilder<bool>(
             valueListenable: isScanning,
             builder: (context, isScanning, child){
-              return isScanning ? _buildSkipScanButton(context) : _buildSaveButton(context);
+              return isScanning ? Center(child: _buildSkipScanButton(context)) :
+               Center(child: _buildSaveButton(context));
             },
           );
         }
@@ -41,38 +42,50 @@ class SaveScanOrSkipButton extends StatelessWidget {
 
   Widget _buildSkipScanButton(BuildContext context){
     return PlatformAwareWidget(
-      android: () => FlatButton(
-        child: Text(
+      android: () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: FlatButton(
+          child: Text(
+              S.of(context).RideAttendeeScanningSkipScan,
+              style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: onSkip,
+        ),
+      ),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(bottom: 15, top: 10),
+        child: CupertinoButton(
+          child: Text(
             S.of(context).RideAttendeeScanningSkipScan,
             style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: onSkip,
         ),
-        onPressed: onSkip,
-      ),
-      ios: () => CupertinoButton(
-        child: Text(
-          S.of(context).RideAttendeeScanningSkipScan,
-          style: TextStyle(color: ApplicationTheme.primaryColor),
-        ),
-        onPressed: onSkip,
       ),
     );
   }
 
   Widget _buildSaveButton(BuildContext context){
     return PlatformAwareWidget(
-      android: () => FlatButton(
-        child: Text(
-          S.of(context).RideAttendeeScanningSaveScanResults,
-          style: TextStyle(color: ApplicationTheme.primaryColor),
+      android: () => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: FlatButton(
+          child: Text(
+            S.of(context).RideAttendeeScanningSaveScanResults,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: onSave,
         ),
-        onPressed: onSave,
       ),
-      ios: () => CupertinoButton(
-        child: Text(
-          S.of(context).RideAttendeeScanningSaveScanResults,
-          style: TextStyle(color: ApplicationTheme.primaryColor),
+      ios: () => Padding(
+        padding: const EdgeInsets.only(bottom: 15, top: 10),
+        child: CupertinoButton(
+          child: Text(
+            S.of(context).RideAttendeeScanningSaveScanResults,
+            style: TextStyle(color: ApplicationTheme.primaryColor),
+          ),
+          onPressed: onSave,
         ),
-        onPressed: onSave,
       ),
     );
   }

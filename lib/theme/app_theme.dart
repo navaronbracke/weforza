@@ -23,9 +23,6 @@ abstract class ApplicationTheme {
 
   static const Color importMembersDoneIconColor = Colors.green;
 
-  // TODO: remove an use primary color
-  static const Color rideListItemEvenMonthColor = Colors.blue;
-
   /// The text style for android form errors.
   static const androidFormErrorStyle = TextStyle(
     fontSize: 16,

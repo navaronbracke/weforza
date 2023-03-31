@@ -82,7 +82,7 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
 
                   onAddDevicePressed(context, selectedRider!.uuid);
                 },
-                child: Text(S.of(context).addDevice),
+                child: Text(S.of(context).addDevice, style: const TextStyle(color: CupertinoColors.white)),
               ),
             ),
           ),

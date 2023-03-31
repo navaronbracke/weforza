@@ -60,7 +60,10 @@ class _EditDevicePageState extends State<EditDevicePage> {
         automaticallyImplyLeading: true,
         transitionBetweenRoutes: false,
       ),
-      child: _buildBody(context),
+      child: SafeArea(
+        bottom: false,
+        child: _buildBody(context),
+      ),
     );
   }
 

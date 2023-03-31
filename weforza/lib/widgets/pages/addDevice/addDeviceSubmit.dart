@@ -51,7 +51,10 @@ class AddDeviceSubmit extends StatelessWidget {
                   onPressed: onSubmit,
                 ),
                 ios: () => CupertinoButton.filled(
-                    child: Text(S.of(context).AddDeviceSubmit),
+                    child: Text(
+                      S.of(context).AddDeviceSubmit,
+                      style: TextStyle(color: Colors.white),
+                    ),
                     onPressed: onSubmit,
                 ),
             ),

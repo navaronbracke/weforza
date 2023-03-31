@@ -117,6 +117,10 @@
   "DeviceNameMaxLength": "Naam Toestel is max. {maxLength} tekens",
   "DeviceAlreadyExists": "Dit toestel bestaat al",
 
+  "DeleteDeviceTitle": "Verwijder Toestel",
+  "DeleteDeviceDescription": "Bent u zeker dat u dit toestel wil verwijderen?",
+  "DeleteDeviceErrorDescription": "Kon toestel niet verwijderen",
+
   "SettingsTitle": "Instellingen",
   "SettingsScanSliderHeader": "Duur van een scan (in seconden)",
   "SettingsLoading": "Instellingen Laden",
@@ -143,7 +147,7 @@
   "ValueIsRequired": "{value} is verplicht",
   "DialogCancel": "Annuleren",
   "DialogDelete": "Verwijderen",
-  "DialogOk": "Ok",
+  "DialogDismiss": "Ok",
 
   "DistanceKm": "Km"
 }

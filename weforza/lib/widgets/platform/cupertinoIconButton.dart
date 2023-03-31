@@ -7,9 +7,13 @@ class CupertinoIconButton extends StatefulWidget {
   @required this.onPressed,
   @required this.onPressedColor,
   @required this.idleColor,
+  this.size = 24,
   }): assert(
-    icon != null && onPressed != null
-        && idleColor != null && onPressedColor != null
+    icon != null
+    && onPressed != null 
+    && size != null
+    && idleColor != null
+    && onPressedColor != null
   );
 
   ///A [VoidCallback] that is invoked when this [Widget] is pressed.
@@ -17,6 +21,8 @@ class CupertinoIconButton extends StatefulWidget {
 
   ///The icon to display.
   final IconData icon;
+
+  final double size;
 
   ///The background color when not pressed.
   final Color idleColor;
@@ -54,7 +60,11 @@ class _CupertinoIconButtonState extends State<CupertinoIconButton> {
           _currentColor = widget.onPressedColor;
         });
       },
-      child: Icon(widget.icon,color: _currentColor),
+      child: Icon(
+        widget.icon,
+        color: _currentColor,
+        size: widget.size,
+      ),
     );
   }
 }

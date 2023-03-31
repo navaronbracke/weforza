@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/theme/appTheme.dart';
 
-class MemberDevicesError extends StatelessWidget {
+class MemberDevicesListError extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(

@@ -11,6 +11,14 @@ class ManualSelectionFilterDelegate {
   /// The internal show scanned results controller.
   final _showScannedResultsController = BehaviorSubject.seeded(true);
 
+  /// Get the current filters.
+  ManualSelectionFilterOptions get currentFilters {
+    return ManualSelectionFilterOptions(
+      query: _searchQueryController.currentQuery,
+      showScannedResults: _showScannedResultsController.value,
+    );
+  }
+
   /// Get the stream of combined filter changes.
   Stream<ManualSelectionFilterOptions> get filters {
     // combineLatest2() only emits when both streams have emitted a value.
@@ -25,6 +33,9 @@ class ManualSelectionFilterDelegate {
       ),
     );
   }
+
+  /// Get the filter value for the show scanned results filter.
+  bool get showScannedResults => _showScannedResultsController.value;
 
   /// Get the stream of changes to [ManualSelectionFilterOptions.showScannedResults].
   Stream<bool> get showScannedResultsStream => _showScannedResultsController;

@@ -132,6 +132,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         ),
         Expanded(
           child: StreamBuilder<ManualSelectionFilterOptions>(
+            initialData: _filtersController.currentFilters,
             stream: _filtersController.filters,
             builder: (context, snapshot) {
               final results = _filterActiveMembers(items, snapshot.data!);
@@ -157,6 +158,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             onPressed: () => _onSaveRideAttendeesButtonPressed(context),
           ),
           showScannedResultsToggle: ShowScannedResultsToggle(
+            initialValue: _filtersController.showScannedResults,
             onChanged: _filtersController.onShowScannedResultsChanged,
             stream: _filtersController.showScannedResultsStream,
           ),

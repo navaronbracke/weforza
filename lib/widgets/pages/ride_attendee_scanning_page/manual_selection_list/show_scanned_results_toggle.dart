@@ -8,13 +8,13 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class ShowScannedResultsToggle extends StatelessWidget {
   const ShowScannedResultsToggle({
     super.key,
-    this.initialValue,
+    required this.initialValue,
     required this.onChanged,
     required this.stream,
   });
 
   /// The initial value for the toggle switch.
-  final bool? initialValue;
+  final bool initialValue;
 
   /// The handler for changes to the toggle value.
   final void Function(bool) onChanged;

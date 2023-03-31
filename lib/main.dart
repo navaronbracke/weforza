@@ -34,6 +34,9 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
+  // TODO: remove this workaround for a crash with PageView when upgrading to Flutter 3.3
+  await Future.delayed(const Duration(milliseconds: 500));
+
   runApp(
     ProviderScope(
       overrides: [

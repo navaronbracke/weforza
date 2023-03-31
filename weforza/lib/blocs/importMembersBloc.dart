@@ -45,10 +45,7 @@ class ImportMembersBloc extends Bloc {
       await _saveMemberData(membersAndDevices.first, membersAndDevices.second);
       reloadMembers.value = true;
       _importStreamController.add(ImportMembersState.DONE);
-    }).catchError((error){
-      print(error);
-      _importStreamController.addError(error);
-    });
+    }).catchError(_importStreamController.addError);
   }
 
   Future<Tuple<Set<Member>,Set<Device>>> _readMemberDataFromFile(File file, String csvHeaderRegex) async {

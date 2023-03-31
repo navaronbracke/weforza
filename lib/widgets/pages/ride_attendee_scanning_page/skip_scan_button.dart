@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget provides a button that advances the scan process step.
 /// When the scan is still running it gets skipped.

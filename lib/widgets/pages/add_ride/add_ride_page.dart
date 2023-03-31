@@ -7,9 +7,9 @@ import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_color_legend.dart';
 import 'package:weforza/widgets/pages/add_ride/add_ride_submit.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 
 ///This [Widget] represents a page where one or more rides can be added.

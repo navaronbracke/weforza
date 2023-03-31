@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget resembles the toggle switch for the 'active' state of a member.
 class MemberActiveToggle extends StatelessWidget {

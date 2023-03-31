@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 ///This Widget will show a progress indicator
 ///that shows how much time is left until the scan stops.

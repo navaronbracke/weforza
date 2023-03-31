@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:weforza/theme/app_theme.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 /// This widget asynchronously loads a given profile image.
 /// When the image could not be loaded, the given initials are displayed.

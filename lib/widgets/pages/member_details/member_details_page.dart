@@ -14,8 +14,8 @@ import 'package:weforza/widgets/pages/add_device/add_device_page.dart';
 import 'package:weforza/widgets/pages/edit_member_page.dart';
 import 'package:weforza/widgets/pages/member_details/member_active_toggle.dart';
 import 'package:weforza/widgets/pages/member_details/member_devices_list/member_devices_list.dart';
-import 'package:weforza/widgets/platform/cupertinoIconButton.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 

@@ -5,8 +5,8 @@ import 'package:weforza/model/member.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection/manual_selection_list_empty.dart';
-import 'package:weforza/widgets/platform/platformAwareLoadingIndicator.dart';
-import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
+import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideAttendeeManualSelection extends StatelessWidget {
   const RideAttendeeManualSelection({

@@ -5,9 +5,7 @@ class MockBluetoothDeviceScannerImpl implements BluetoothDeviceScanner {
   @override
   Future<bool> isBluetoothEnabled() {
     //fake impl
-    // TODO: implement isBluetoothEnabled
-    //return Future.value(false);
-    return Future.error("some error");
+    return Future.value(true);
   }
 
   @override

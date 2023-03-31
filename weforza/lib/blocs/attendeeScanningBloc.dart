@@ -198,7 +198,7 @@ class AttendeeScanningBloc extends Bloc {
 
   void addScanResult(ScanResultItem item) => _scanResults.add(item);
 
-  ///Stop a running scan.
+  ///Stop a running bluetooth scan.
   ///Returns a boolean for WillPopScope (the boolean is otherwise ignored).
   Future<bool> stopScan() async {
     if(!isScanning.value) return true;
@@ -206,7 +206,6 @@ class AttendeeScanningBloc extends Bloc {
     bool result = true;
     await scanner.stopScan().then((_){
       isScanning.value = false;
-      rideAttendees.clear();
     }, onError: (error){
       result = false;//if it failed, prevent pop & show error first
       _scanStepController.addError(error);
@@ -218,9 +217,11 @@ class AttendeeScanningBloc extends Bloc {
 
   ///Cancel a running scan and continue to the manual assignment step.
   void skipScan() async {
-    await stopScan().then((_){
-      _scanStepController.add(ScanProcessStep.MANUAL);
-      isScanStep.value = false;
+    await stopScan().then((scanStopped){
+      if(scanStopped){
+        _scanStepController.add(ScanProcessStep.MANUAL);
+        isScanStep.value = false;
+      }
     });
   }
 

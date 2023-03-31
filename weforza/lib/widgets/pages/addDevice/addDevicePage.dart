@@ -141,14 +141,10 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(_formKey.currentState.validate()){
-            FocusScope.of(context).unfocus();
             await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
-              setState(() {
-                bloc.resetInputs();
-              });
+              Navigator.of(context).pop();
             }).catchError((e){
-              print(e);
               //the stream catches the error
             });
           }
@@ -159,12 +155,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
         submitErrorStream: bloc.submitErrorStream,
         onSubmit: () async {
           if(iosValidateAddDevice(context)){
-            FocusScope.of(context).unfocus();
             await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
               ReloadDataProvider.of(context).reloadDevices.value = true;
-              setState(() {
-                bloc.resetInputs();
-              });
+              Navigator.of(context).pop();
             }).catchError((e){
               //the stream catches the error
             });

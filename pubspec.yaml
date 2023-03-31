@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.5
 
   # The following dependency provides local persistence.
-  sembast: ^3.3.0-dev.1
+  sembast: ^3.3.0
 
   # For OS-specific directory paths.
   path_provider: ^2.0.11

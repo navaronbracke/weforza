@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/device.dart';
+import 'package:weforza/model/device_payload.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/riverpod/member/selected_member_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
@@ -42,7 +44,36 @@ class SelectedMemberDevicesNotifier
   /// The repository that manages the devices.
   final DeviceRepository repository;
 
-  Future<Device> deleteDevice(int index) async {
+  /// Add a device to the list of devices.
+  Future<void> addDevice(DevicePayload model) async {
+    if (state is! AsyncData<List<Device>>) {
+      throw StateError('The devices list was not loaded yet');
+    }
+
+    final exists = await repository.deviceExists(model.name, model.ownerId);
+
+    if (exists) {
+      throw DeviceExistsException();
+    }
+
+    final device = Device(
+      creationDate: DateTime.now(),
+      name: model.name,
+      ownerId: model.ownerId,
+      type: model.type,
+    );
+
+    await repository.addDevice(device);
+
+    if (!mounted) {
+      return;
+    }
+
+    state = AsyncData([...state.value!, device]);
+  }
+
+  /// Delete the device at [index].
+  Future<void> deleteDevice(int index) async {
     if (state is! AsyncData<List<Device>>) {
       throw StateError('The devices list was not loaded yet');
     }
@@ -53,10 +84,62 @@ class SelectedMemberDevicesNotifier
 
     await repository.removeDevice(device);
 
+    if (!mounted) {
+      return;
+    }
+
     newDevices.removeAt(index);
 
     state = AsyncData(newDevices);
+  }
 
-    return device;
+  /// Edit the given device.
+  Future<void> editDevice(DevicePayload model) async {
+    if (state is! AsyncData<List<Device>>) {
+      throw StateError('The devices list was not loaded yet');
+    }
+
+    final creationDate = model.creationDate;
+
+    if (creationDate == null) {
+      throw ArgumentError.notNull('creationDate');
+    }
+
+    final exists = await repository.deviceExists(
+      model.name,
+      model.ownerId,
+      creationDate,
+    );
+
+    if (exists) {
+      throw DeviceExistsException();
+    }
+
+    final newDevice = Device(
+      creationDate: creationDate,
+      name: model.name,
+      ownerId: model.ownerId,
+      type: model.type,
+    );
+
+    await repository.updateDevice(newDevice);
+
+    if (!mounted) {
+      return;
+    }
+
+    final newDevices = List.of(state.value!);
+
+    final index = newDevices.indexWhere(
+      (d) => d.creationDate == model.creationDate,
+    );
+
+    if (index == -1) {
+      throw ArgumentError.value(index);
+    }
+
+    newDevices[index] = newDevice;
+
+    state = AsyncData(newDevices);
   }
 }

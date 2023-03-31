@@ -46,6 +46,11 @@
   "AddDeviceGenericError": "Something went wrong",
   "AddDeviceSubmit": "Create Device",
 
+  "EditDeviceTitle": "Edit Device",
+  "EditDeviceError": "Could not edit device",
+  "EditDeviceGenericError": "Something went wrong",
+  "EditDeviceSubmit": "Save Changes",
+
   "EditMemberTitle": "Edit Member",
   "EditMemberError": "Failed to save the changes",
   "EditMemberSubmit": "Save Changes",
@@ -102,7 +107,6 @@
   "RideStart": "Start",
   "RideDestination": "Destination",
 
-  "DeviceTypeLabel": "Device Type",
   "DeviceUnknown": "Unknown",
   "DeviceGPS": "GPS",
   "DevicePhone": "Phone",
@@ -112,10 +116,6 @@
   "DevicePulseMonitor": "Pulse Monitor",
   "DeviceNameMaxLength": "Device name is max. {maxLength} characters",
   "DeviceAlreadyExists": "This device already exists",
-  "DeviceFound": "Found {device}",
-  "EditDeviceSubmit": "Edit Device",
-  "DeleteDeviceDescription": "Delete {device}?",
-  "DeleteDeviceError": "Could not delete {device}",
 
   "SettingsTitle": "Settings",
   "SettingsScanSliderHeader": "Duration of a scan (in seconds)",

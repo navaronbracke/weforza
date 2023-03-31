@@ -19,29 +19,23 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(device) => "Delete ${device}?";
+  static m0(maxLength) => "Device name is max. ${maxLength} characters";
 
-  static m1(device) => "Could not delete ${device}";
+  static m1(maxLength) => "An address can\'t be longer than ${maxLength} characters";
 
-  static m2(device) => "Found ${device}";
+  static m2(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
 
-  static m3(maxLength) => "Device name is max. ${maxLength} characters";
+  static m3(maxLength) => "A title can\'t be longer than ${maxLength} characters";
 
-  static m4(maxLength) => "An address can\'t be longer than ${maxLength} characters";
+  static m4(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
 
-  static m5(maxDistance) => "A ride cannot have a distance that exceeds ${maxDistance} Km";
+  static m5(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
 
-  static m6(maxLength) => "A title can\'t be longer than ${maxLength} characters";
+  static m6(maxLength) => "A phone number is maximum ${maxLength} digits long";
 
-  static m7(maxLength) => "First Name can\'t be longer than ${maxLength} characters";
+  static m7(minLength) => "A phone number is minimum ${minLength} digits long";
 
-  static m8(maxLength) => "Last Name can\'t be longer than ${maxLength} characters";
-
-  static m9(maxLength) => "A phone number is maximum ${maxLength} digits long";
-
-  static m10(minLength) => "A phone number is minimum ${minLength} digits long";
-
-  static m11(value) => "${value} is required";
+  static m8(value) => "${value} is required";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -62,18 +56,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "AddRideSubmit" : MessageLookupByLibrary.simpleMessage("Add Selection"),
     "AddRideTitle" : MessageLookupByLibrary.simpleMessage("New Ride"),
     "AppName" : MessageLookupByLibrary.simpleMessage("WeForza"),
-    "DeleteDeviceDescription" : m0,
-    "DeleteDeviceError" : m1,
     "DeviceAlreadyExists" : MessageLookupByLibrary.simpleMessage("This device already exists"),
-    "DeviceFound" : m2,
     "DeviceGPS" : MessageLookupByLibrary.simpleMessage("GPS"),
     "DeviceHeadset" : MessageLookupByLibrary.simpleMessage("Headset"),
     "DeviceNameLabel" : MessageLookupByLibrary.simpleMessage("Device Name"),
-    "DeviceNameMaxLength" : m3,
+    "DeviceNameMaxLength" : m0,
     "DevicePhone" : MessageLookupByLibrary.simpleMessage("Phone"),
     "DevicePulseMonitor" : MessageLookupByLibrary.simpleMessage("Pulse Monitor"),
     "DeviceTablet" : MessageLookupByLibrary.simpleMessage("Tablet"),
-    "DeviceTypeLabel" : MessageLookupByLibrary.simpleMessage("Device Type"),
     "DeviceUnknown" : MessageLookupByLibrary.simpleMessage("Unknown"),
     "DeviceWatch" : MessageLookupByLibrary.simpleMessage("Watch"),
     "DevicesListHeader" : MessageLookupByLibrary.simpleMessage("Devices"),
@@ -82,35 +72,38 @@ class MessageLookup extends MessageLookupByLibrary {
     "DialogDelete" : MessageLookupByLibrary.simpleMessage("Delete"),
     "DialogOk" : MessageLookupByLibrary.simpleMessage("Ok"),
     "DistanceKm" : MessageLookupByLibrary.simpleMessage("Km"),
-    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Edit Device"),
+    "EditDeviceError" : MessageLookupByLibrary.simpleMessage("Could not edit device"),
+    "EditDeviceGenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong"),
+    "EditDeviceSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
+    "EditDeviceTitle" : MessageLookupByLibrary.simpleMessage("Edit Device"),
     "EditMemberError" : MessageLookupByLibrary.simpleMessage("Failed to save the changes"),
     "EditMemberSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
     "EditMemberTitle" : MessageLookupByLibrary.simpleMessage("Edit Member"),
     "EditRideAddressInvalid" : MessageLookupByLibrary.simpleMessage("An address can only contain letters, numbers, spaces and # , ; : \' & / ° . ( ) -"),
-    "EditRideAddressMaxLength" : m4,
+    "EditRideAddressMaxLength" : m1,
     "EditRideAddressWhitespace" : MessageLookupByLibrary.simpleMessage("An address cannot be only whitespace"),
     "EditRideDepartureLabel" : MessageLookupByLibrary.simpleMessage("Departure"),
     "EditRideDestinationLabel" : MessageLookupByLibrary.simpleMessage("Destination"),
     "EditRideDistanceInvalid" : MessageLookupByLibrary.simpleMessage("Please enter a valid distance"),
     "EditRideDistanceLabel" : MessageLookupByLibrary.simpleMessage("Distance"),
-    "EditRideDistanceMaximum" : m5,
+    "EditRideDistanceMaximum" : m2,
     "EditRideDistancePositive" : MessageLookupByLibrary.simpleMessage("Distance must be greater than zero"),
     "EditRidePageTitle" : MessageLookupByLibrary.simpleMessage("Edit Ride"),
     "EditRideSubmit" : MessageLookupByLibrary.simpleMessage("Save Changes"),
     "EditRideSubmitError" : MessageLookupByLibrary.simpleMessage("Failed to save the changes"),
     "EditRideTitleLabel" : MessageLookupByLibrary.simpleMessage("Title"),
-    "EditRideTitleMaxLength" : m6,
+    "EditRideTitleMaxLength" : m3,
     "EditRideTitleWhitespace" : MessageLookupByLibrary.simpleMessage("A title can\'t be only whitespace"),
     "FirstNameBlank" : MessageLookupByLibrary.simpleMessage("First Name can\'t be just whitespace"),
     "FirstNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("First Name can only contain letters, spaces or \' -"),
-    "FirstNameMaxLength" : m7,
+    "FirstNameMaxLength" : m4,
     "FridayPrefix" : MessageLookupByLibrary.simpleMessage("Fri"),
     "HomePageMembersTab" : MessageLookupByLibrary.simpleMessage("Members"),
     "HomePageRidesTab" : MessageLookupByLibrary.simpleMessage("Rides"),
     "HomePageSettingsTab" : MessageLookupByLibrary.simpleMessage("Settings"),
     "LastNameBlank" : MessageLookupByLibrary.simpleMessage("Last Name can\'t be just whitespace"),
     "LastNameIllegalCharacters" : MessageLookupByLibrary.simpleMessage("Last Name can only contain letters, spaces or \' -"),
-    "LastNameMaxLength" : m8,
+    "LastNameMaxLength" : m5,
     "MemberAlreadyExists" : MessageLookupByLibrary.simpleMessage("This member already exists"),
     "MemberDeleteDialogDescription" : MessageLookupByLibrary.simpleMessage("Are you sure that you want to delete this member?"),
     "MemberDeleteDialogErrorDescription" : MessageLookupByLibrary.simpleMessage("Could not delete member"),
@@ -130,8 +123,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "PersonLastNameLabel" : MessageLookupByLibrary.simpleMessage("Last Name"),
     "PersonTelephoneLabel" : MessageLookupByLibrary.simpleMessage("Telephone"),
     "PhoneIllegalCharacters" : MessageLookupByLibrary.simpleMessage("A phone number can only contain digits"),
-    "PhoneMaxLength" : m9,
-    "PhoneMinLength" : m10,
+    "PhoneMaxLength" : m6,
+    "PhoneMinLength" : m7,
     "RideAttendeeScanningBluetoothDisabled" : MessageLookupByLibrary.simpleMessage("Cannot start scanning, Bluetooth is disabled."),
     "RideAttendeeScanningGenericError" : MessageLookupByLibrary.simpleMessage("Something went wrong."),
     "RideAttendeeScanningGoBack" : MessageLookupByLibrary.simpleMessage("Return to detail page"),
@@ -168,7 +161,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ThursdayPrefix" : MessageLookupByLibrary.simpleMessage("Thu"),
     "TuesdayPrefix" : MessageLookupByLibrary.simpleMessage("Tue"),
     "UnknownDate" : MessageLookupByLibrary.simpleMessage("Unknown Date"),
-    "ValueIsRequired" : m11,
+    "ValueIsRequired" : m8,
     "WednesdayPrefix" : MessageLookupByLibrary.simpleMessage("Wed")
   };
 }

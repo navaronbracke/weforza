@@ -163,12 +163,19 @@ class DatePicker extends StatelessWidget {
           ),
         );
 
-        Widget header = _DatePickerHeader(
-          backButton: backButton,
-          forwardButton: forwardButton,
+        // Center the header within the weeks of the calendar.
+        // Otherwise the forward & back button extend too far out.
+        Widget header = Center(
+          child: SizedBox(
+            width: dayItemSize.width * 7,
+            child: _DatePickerHeader(
+              backButton: backButton,
+              forwardButton: forwardButton,
               initialMonth: delegate.currentCalendarMonth,
-          monthStream: delegate.monthStream,
-          style: monthStyle,
+              monthStream: delegate.monthStream,
+              style: monthStyle,
+            ),
+          ),
         );
 
         if (headerBottomPadding > 0) {

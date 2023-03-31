@@ -18,7 +18,6 @@ class ExportRidersOptions {
 class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
   ExportRidersDelegate({
     required super.fileHandler,
-    required super.initialFileName,
     required this.serializeRidersRepository,
   });
 

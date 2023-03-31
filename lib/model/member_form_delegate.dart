@@ -54,13 +54,13 @@ class MemberFormDelegate {
       );
 
       final member = Member(
-        uuid: _uuidGenerator.v4(),
-        firstname: model.firstName,
-        lastname: model.lastName,
+        active: true,
         alias: model.alias,
-        profileImageFilePath: image?.path,
-        isActiveMember: true,
+        firstName: model.firstName,
+        lastName: model.lastName,
         lastUpdated: DateTime.now(),
+        profileImageFilePath: image?.path,
+        uuid: _uuidGenerator.v4(),
       );
 
       await repository.addMember(member);
@@ -101,13 +101,13 @@ class MemberFormDelegate {
       });
 
       final newMember = Member(
-        uuid: uuid,
-        firstname: model.firstName,
-        lastname: model.lastName,
+        active: model.activeMember,
         alias: model.alias,
-        profileImageFilePath: profileImage?.path,
-        isActiveMember: model.activeMember,
+        firstName: model.firstName,
+        lastName: model.lastName,
         lastUpdated: DateTime.now(),
+        profileImageFilePath: profileImage?.path,
+        uuid: uuid,
       );
 
       await repository.updateMember(newMember);

@@ -34,7 +34,7 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
   void setMemberActive(bool value) async {
     final member = state;
 
-    if (member == null || member.isActiveMember == value) {
+    if (member == null || member.active == value) {
       return;
     }
 
@@ -44,11 +44,11 @@ class SelectedMemberNotifier extends StateNotifier<Member?> {
       await repository.setMemberActive(member.uuid, value);
 
       state = Member(
+        active: value,
         alias: member.alias,
-        firstname: member.firstname,
-        isActiveMember: value,
+        firstName: member.firstName,
+        lastName: member.lastName,
         lastUpdated: DateTime.now(),
-        lastname: member.lastname,
         profileImageFilePath: member.profileImageFilePath,
         uuid: member.uuid,
       );

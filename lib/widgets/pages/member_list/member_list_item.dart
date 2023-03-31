@@ -46,13 +46,13 @@ class MemberListItem extends ConsumerWidget {
             ),
             Expanded(
               child: MemberNameAndAlias(
+                alias: member.alias,
                 firstLineStyle:
                     ApplicationTheme.memberListItemFirstNameTextStyle,
+                firstName: member.firstName,
+                lastName: member.lastName,
                 secondLineStyle:
                     ApplicationTheme.memberListItemLastNameTextStyle,
-                firstName: member.firstname,
-                lastName: member.lastname,
-                alias: member.alias,
               ),
             ),
             Padding(

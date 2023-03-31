@@ -64,7 +64,7 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     final memberUuid = widget.member?.uuid;
 
     final model = MemberPayload(
-      activeMember: widget.member?.isActiveMember ?? true,
+      activeMember: widget.member?.active ?? true,
       alias: _aliasController.text,
       firstName: _firstNameController.text,
       lastName: _lastNameController.text,
@@ -103,10 +103,10 @@ class MemberFormState extends ConsumerState<MemberForm> with MemberValidator {
     _delegate = MemberFormDelegate(ref);
 
     _firstNameController = TextEditingController(
-      text: widget.member?.firstname,
+      text: widget.member?.firstName,
     );
     _lastNameController = TextEditingController(
-      text: widget.member?.lastname,
+      text: widget.member?.lastName,
     );
     _aliasController = TextEditingController(
       text: widget.member?.alias,

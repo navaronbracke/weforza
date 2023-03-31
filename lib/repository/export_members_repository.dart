@@ -18,11 +18,11 @@ class ExportMembersRepository {
 
     return members.map(
       (member) => ExportableMember(
-        firstName: member.firstname,
-        lastName: member.lastname,
+        active: member.active,
         alias: member.alias,
-        active: member.isActiveMember,
         devices: devices[member.uuid] ?? <String>{},
+        firstName: member.firstName,
+        lastName: member.lastName,
         lastUpdated: member.lastUpdated,
       ),
     );

@@ -9,7 +9,7 @@ import 'package:weforza/database/import_members_dao.dart';
 import 'package:weforza/database/member_dao.dart';
 import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
-import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/repository/exportMembersRepository.dart';

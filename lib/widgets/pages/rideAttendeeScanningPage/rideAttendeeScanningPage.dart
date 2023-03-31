@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/blocs/attendee_scanning_bloc.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
-import 'package:weforza/file/fileHandler.dart';
+import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/injection/injectionContainer.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/rideAttendeeScanResult.dart';

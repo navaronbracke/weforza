@@ -6,31 +6,31 @@ import 'package:weforza/model/member_filter_option.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 
-/// This class defines an interface to work with members.
-abstract class MemberDao {
-  /// Add a [member].
-  Future<void> addMember(Rider member);
+/// This class defines an interface to work with riders.
+abstract class RiderDao {
+  /// Add a [rider].
+  Future<void> addRider(Rider rider);
 
-  /// Delete the member with the given [uuid].
-  Future<void> deleteMember(String uuid);
+  /// Delete the rider with the given [uuid].
+  Future<void> deleteRider(String uuid);
 
-  /// Get the amount of rides that a member with the given [uuid] has attended.
+  /// Get the amount of rides that a rider with the given [uuid] has attended.
   Future<int> getAttendingCount(String uuid);
 
-  /// Get the list of members that satisfy the given [filter].
-  Future<List<Rider>> getMembers(MemberFilterOption filter);
+  /// Get the list of riders that satisfy the given [filter].
+  Future<List<Rider>> getRiders(MemberFilterOption filter);
 
-  /// Toggle the active state of the member with the given [uuid].
-  Future<void> setMemberActive(String uuid, {required bool value});
+  /// Toggle the active state of the rider with the given [uuid].
+  Future<void> setRiderActive(String uuid, {required bool value});
 
-  /// Update the given [member].
-  Future<void> updateMember(Rider member);
+  /// Update the given [rider].
+  Future<void> updateRider(Rider rider);
 }
 
-/// This class represents the default implementation of [MemberDao].
-class MemberDaoImpl implements MemberDao {
+/// This class represents the default implementation of [RiderDao].
+class RiderDaoImpl implements RiderDao {
   /// The default constructor.
-  MemberDaoImpl(this._database);
+  RiderDaoImpl(this._database);
 
   /// A reference to the database.
   final Database _database;
@@ -39,20 +39,20 @@ class MemberDaoImpl implements MemberDao {
   final _deviceStore = DatabaseTables.device;
 
   /// A reference to the [Rider] store.
-  final _memberStore = DatabaseTables.rider;
+  final _riderStore = DatabaseTables.rider;
 
   /// A reference to the [RideAttendee] store.
   final _rideAttendeeStore = DatabaseTables.rideAttendee;
 
-  /// Check whether a member exists.
+  /// Check whether a rider exists.
   ///
-  /// If [uuid] is null, this method returns whether a member exists
+  /// If [uuid] is null, this method returns whether a rider exists
   /// with the given [firstName], [lastName] and [alias].
   ///
-  /// If [uuid] is not null, this method returns whether a member exists
+  /// If [uuid] is not null, this method returns whether a rider exists
   /// with the given [firstName], [lastName], [alias] and a uuid
   /// that is *different* from the given uuid.
-  Future<bool> _memberExists(
+  Future<bool> _riderExists(
     String firstName,
     String lastName,
     String alias, [
@@ -70,32 +70,32 @@ class MemberDaoImpl implements MemberDao {
 
     final finder = Finder(filter: Filter.and(filters));
 
-    return await _memberStore.findFirst(_database, finder: finder) != null;
+    return await _riderStore.findFirst(_database, finder: finder) != null;
   }
 
   @override
-  Future<void> addMember(Rider member) async {
-    final recordRef = _memberStore.record(member.uuid);
+  Future<void> addRider(Rider rider) async {
+    final recordRef = _riderStore.record(rider.uuid);
 
     if (await recordRef.exists(_database)) {
-      throw ArgumentError('The uuid ${member.uuid} is already in use');
+      throw ArgumentError('The uuid ${rider.uuid} is already in use');
     }
 
-    final alias = member.alias;
-    final firstName = member.firstName;
-    final lastName = member.lastName;
+    final alias = rider.alias;
+    final firstName = rider.firstName;
+    final lastName = rider.lastName;
 
-    if (await _memberExists(firstName, lastName, alias)) {
+    if (await _riderExists(firstName, lastName, alias)) {
       throw RiderExistsException();
     }
 
-    await recordRef.add(_database, member.toMap());
+    await recordRef.add(_database, rider.toMap());
   }
 
   @override
-  Future<void> deleteMember(String uuid) {
+  Future<void> deleteRider(String uuid) {
     return _database.transaction((txn) async {
-      await _memberStore.record(uuid).delete(txn);
+      await _riderStore.record(uuid).delete(txn);
       await _rideAttendeeStore.delete(
         txn,
         finder: Finder(filter: Filter.equals('attendee', uuid)),
@@ -116,7 +116,7 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<List<Rider>> getMembers(MemberFilterOption filter) async {
+  Future<List<Rider>> getRiders(MemberFilterOption filter) async {
     final finder = Finder(
       sortOrders: [
         SortOrder('firstname'),
@@ -136,14 +136,14 @@ class MemberDaoImpl implements MemberDao {
         break;
     }
 
-    final records = await _memberStore.find(_database, finder: finder);
+    final records = await _riderStore.find(_database, finder: finder);
 
     return records.map((r) => Rider.of(r.key, r.value)).toList();
   }
 
   @override
-  Future<void> setMemberActive(String uuid, {required bool value}) async {
-    final record = _memberStore.record(uuid);
+  Future<void> setRiderActive(String uuid, {required bool value}) async {
+    final record = _riderStore.record(uuid);
 
     if (await record.exists(_database)) {
       await record.update(
@@ -157,16 +157,16 @@ class MemberDaoImpl implements MemberDao {
   }
 
   @override
-  Future<void> updateMember(Rider member) async {
-    final alias = member.alias;
-    final firstName = member.firstName;
-    final lastName = member.lastName;
-    final uuid = member.uuid;
+  Future<void> updateRider(Rider rider) async {
+    final alias = rider.alias;
+    final firstName = rider.firstName;
+    final lastName = rider.lastName;
+    final uuid = rider.uuid;
 
-    if (await _memberExists(firstName, lastName, alias, uuid)) {
+    if (await _riderExists(firstName, lastName, alias, uuid)) {
       throw RiderExistsException();
     }
 
-    await _memberStore.record(member.uuid).update(_database, member.toMap());
+    await _riderStore.record(rider.uuid).update(_database, rider.toMap());
   }
 }

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/add_ride_form_delegate.dart';
-import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
-import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_color_legend.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
@@ -24,11 +22,7 @@ class AddRideFormState extends ConsumerState<AddRideForm> {
   @override
   void initState() {
     super.initState();
-
-    delegate = AddRideFormDelegate(
-      repository: ref.read(rideRepositoryProvider),
-      rideList: ref.read(rideListProvider.notifier),
-    );
+    delegate = AddRideFormDelegate(ref);
   }
 
   Widget _buildAndroidLayout(BuildContext context) {

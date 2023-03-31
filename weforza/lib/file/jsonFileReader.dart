@@ -2,10 +2,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:weforza/file/fileHandler.dart';
 import 'package:weforza/model/device.dart';
 import 'package:weforza/model/member.dart';
 import 'package:weforza/model/tuple.dart';
+
+class JsonFormatException extends ArgumentError {
+  JsonFormatException(): super("The given json is incompatible.");
+}
 
 /// This class will read the contents of JSON files.
 class JsonFileReader {
@@ -41,12 +44,12 @@ class JsonFileReader {
 
     // The required key is not in the map.
     if(json["members"] == null){
-      throw InvalidFileFormatError();
+      throw JsonFormatException();
     }
 
     // The value is not a List<dynamic>.
     if(!json["members"] is List<dynamic>){
-      throw InvalidFileFormatError();
+      throw JsonFormatException();
     }
 
     // The value exists and its a list.

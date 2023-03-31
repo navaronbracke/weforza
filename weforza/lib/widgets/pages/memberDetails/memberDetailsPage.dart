@@ -83,14 +83,14 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody(BuildContext context){
     return Column(
       children: <Widget>[
-        _buildMemberInfoSection(),
+        _buildMemberInfoSection(context),
         Expanded(child: MemberDevicesList(bloc: bloc)),
       ],
     );
@@ -143,12 +143,12 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
       ),
       child: SafeArea(
         bottom: false,
-        child: _buildBody(),
+        child: _buildBody(context),
       ),
     );
   }
 
-  Widget _buildMemberInfoSection(){
+  Widget _buildMemberInfoSection(BuildContext context){
     return Column(
       children: <Widget>[
         Row(
@@ -179,9 +179,17 @@ class _MemberDetailsPageState extends State<MemberDetailsPage> {
                       overflow: TextOverflow.ellipsis
                   ),
                   if(bloc.member.alias.isNotEmpty)
-                    Text(
-                      bloc.member.alias,
-                      style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15, fontStyle: FontStyle.italic),
+                    Text.rich(
+                      TextSpan(
+                          text: S.of(context).MemberDetailsAlias,
+                          style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15),
+                          children: [
+                            TextSpan(
+                              text: " " + bloc.member.alias,
+                              style: ApplicationTheme.memberListItemLastNameTextStyle.copyWith(fontSize: 15, fontStyle: FontStyle.italic),
+                            ),
+                          ]
+                      ),
                       overflow: TextOverflow.ellipsis,
                     )
                 ],

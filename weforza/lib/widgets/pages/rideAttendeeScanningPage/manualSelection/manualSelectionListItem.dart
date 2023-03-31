@@ -137,7 +137,6 @@ class _ManualSelectionListItemState extends State<ManualSelectionListItem> {
             ),
           ]
       ),
-      softWrap: true,
       overflow: TextOverflow.ellipsis,
     );
   }

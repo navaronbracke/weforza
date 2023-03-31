@@ -22,6 +22,8 @@ class AddDeviceBloc extends Bloc {
   ///Device Name max length
   int deviceNameMaxLength = 40;
 
+  TextEditingController deviceNameController = TextEditingController(text: "");
+
   ///Device Name input backing field
   String _newDeviceName = "";
   ///Device type backing field.
@@ -57,18 +59,19 @@ class AddDeviceBloc extends Bloc {
     _submitErrorController.close();
     _typeController.close();
     pageController.dispose();
+    deviceNameController.dispose();
   }
 
-  Future<Device> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
+  Future<void> addDevice(String deviceExistsMessage, String genericErrorMessage) async {
     _submitButtonController.add(true);
-    _submitErrorController.add(" ");//remove the previous error.
+    _submitErrorController.add("");//remove the previous error.
     final device = Device(ownerId: ownerId, name: _newDeviceName,type: type,creationDate: DateTime.now());
     await repository.deviceExists(device).then((exists) async {
       if(!exists){
         await repository.addDevice(device).then((_){
           _submitButtonController.add(false);
-          return device;
         },onError: (error){
+          print(error);
           _submitButtonController.add(false);
           _submitErrorController.add(genericErrorMessage);
           return Future.error(genericErrorMessage);
@@ -79,11 +82,11 @@ class AddDeviceBloc extends Bloc {
         return Future.error(deviceExistsMessage);
       }
     },onError: (error){
+      print(error);
       _submitButtonController.add(false);
       _submitErrorController.add(genericErrorMessage);
       return Future.error(genericErrorMessage);
     });
-    return Future.error(genericErrorMessage);
   }
 
   String validateNewDeviceInput(String value,String deviceNameIsRequired,String deviceNameMaxLengthMessage){
@@ -100,5 +103,13 @@ class AddDeviceBloc extends Bloc {
       addDeviceError = null;
     }
     return addDeviceError;
+  }
+
+  void resetInputs(){
+    autoValidateNewDeviceName = false;
+    _newDeviceName = "";
+    deviceNameController.clear();
+    type = DeviceType.UNKNOWN;
+    pageController.jumpToPage(0);
   }
 }

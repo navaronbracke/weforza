@@ -6,8 +6,10 @@ import 'package:weforza/injection/injector.dart';
 import 'package:weforza/repository/deviceRepository.dart';
 import 'package:weforza/theme/appTheme.dart';
 import 'package:weforza/widgets/custom/deviceTypeCarousel/deviceTypeCarousel.dart';
+import 'package:weforza/widgets/pages/addDevice/addDeviceSubmit.dart';
 import 'package:weforza/widgets/platform/cupertinoFormErrorFormatter.dart';
 import 'package:weforza/widgets/platform/platformAwareWidget.dart';
+import 'package:weforza/widgets/providers/reloadDataProvider.dart';
 import 'package:weforza/widgets/providers/selectedItemProvider.dart';
 
 class AddDevicePage extends StatefulWidget {
@@ -21,8 +23,6 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
   GlobalKey<FormState> _formKey = GlobalKey();
 
-  TextEditingController _deviceNameController = TextEditingController(text: "");
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -30,6 +30,12 @@ class _AddDevicePageState extends State<AddDevicePage> {
       repository: InjectionContainer.get<DeviceRepository>(),
       ownerId: SelectedItemProvider.of(context).selectedMember.value.uuid
     );
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,41 +51,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
         title: Text(S.of(context).AddDeviceTitle),
         automaticallyImplyLeading: true,
       ),
-      body: Column(
-        children: <Widget>[
-          _buildTypeCarousel(),
-          Flexible(
-            flex: 6,
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
-                child: TextFormField(
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  controller: _deviceNameController,
-                  validator: (value) => bloc.validateNewDeviceInput(
-                      value,
-                      S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                      S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
-                  ),
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5),
-                    labelText: S.of(context).DeviceNameLabel,
-                    helperText: " ",
-                  ),
-                  autovalidate: bloc.autoValidateNewDeviceName,
-                  onChanged: (value) => setState((){
-                    bloc.autoValidateNewDeviceName = true;
-                  }),
-                ),
-              ),
-            ),
-          ),
-          //TODO add device button
-        ],
-      ),
+      body: _buildBody(context),
     );
   }
 
@@ -91,63 +63,140 @@ class _AddDevicePageState extends State<AddDevicePage> {
         automaticallyImplyLeading: true,
         transitionBetweenRoutes: false,
       ),
-      child: Column(
-        children: <Widget>[
-          _buildTypeCarousel(),
-          Flexible(
-            flex: 6,
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
-                child: Column(
-                  children: <Widget>[
-                    CupertinoTextField(
-                      textInputAction: TextInputAction.done,
-                      controller: _deviceNameController,
-                      placeholder: S.of(context).DeviceNameLabel,
-                      autocorrect: false,
-                      keyboardType: TextInputType.text,
-                      onChanged: (value) {
-                        setState(() {
-                          bloc.validateNewDeviceInput(
-                              value,
-                              S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
-                              S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
-                          );
-                        });
-                      },
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                            CupertinoFormErrorFormatter.formatErrorMessage(bloc.addDeviceError),
-                            style: ApplicationTheme.iosFormErrorStyle
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          //TODO add device button
-        ],
-      ),
+      child: _buildBody(context),
     );
   }
 
   Widget _buildTypeCarousel(){
-    return Flexible(
-      flex: 3,
+    return DeviceTypeCarousel(
+      controller: bloc.pageController,
+      onPageChanged: bloc.onDeviceTypeChanged,
+      currentPageStream: bloc.currentTypeStream,
+    );
+  }
+
+  Widget _buildDeviceNameInput(){
+    return Form(
+      key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30,vertical: 10),
-        child: DeviceTypeCarousel(
-          controller: bloc.pageController,
-          onPageChanged: bloc.onDeviceTypeChanged,
-          currentPageStream: bloc.currentTypeStream,
+        padding: const EdgeInsets.fromLTRB(20, 5, 20, 20),
+        child: PlatformAwareWidget(
+          android: () => TextFormField(
+            textInputAction: TextInputAction.done,
+            keyboardType: TextInputType.text,
+            autocorrect: false,
+            controller: bloc.deviceNameController,
+            validator: (value) => bloc.validateNewDeviceInput(
+                value,
+                S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
+                S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+            ),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 5),
+              labelText: S.of(context).DeviceNameLabel,
+              helperText: " ",
+            ),
+            autovalidate: bloc.autoValidateNewDeviceName,
+            onChanged: (value) => setState((){
+              bloc.autoValidateNewDeviceName = true;
+            }),
+          ),
+          ios: () => Column(
+            children: <Widget>[
+              CupertinoTextField(
+                textInputAction: TextInputAction.done,
+                controller: bloc.deviceNameController,
+                placeholder: S.of(context).DeviceNameLabel,
+                autocorrect: false,
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  setState(() {
+                    bloc.validateNewDeviceInput(
+                        value,
+                        S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
+                        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")
+                    );
+                  });
+                },
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                      CupertinoFormErrorFormatter.formatErrorMessage(bloc.addDeviceError),
+                      style: ApplicationTheme.iosFormErrorStyle
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildSubmitButton(BuildContext context){
+    return PlatformAwareWidget(
+      android: () => AddDeviceSubmit(
+        isSubmittingStream: bloc.submitStream,
+        submitErrorStream: bloc.submitErrorStream,
+        onSubmit: () async {
+          if(_formKey.currentState.validate()){
+            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
+              ReloadDataProvider.of(context).reloadDevices.value = true;
+              setState(() {
+                bloc.resetInputs();
+              });
+            }).catchError((e){
+              print(e);
+              //the stream catches the error
+            });
+          }
+        },
+      ),
+      ios: () => AddDeviceSubmit(
+        isSubmittingStream: bloc.submitStream,
+        submitErrorStream: bloc.submitErrorStream,
+        onSubmit: () async {
+          if(iosValidateAddDevice(context)){
+            await bloc.addDevice(S.of(context).DeviceAlreadyExists, S.of(context).AddDeviceGenericError).then((_){
+              ReloadDataProvider.of(context).reloadDevices.value = true;
+              setState(() {
+                bloc.resetInputs();
+              });
+            }).catchError((e){
+              //the stream catches the error
+            });
+          }else {
+            setState(() {});
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context){
+    return Column(
+      children: <Widget>[
+        Flexible(
+          flex: 3,
+          child: _buildTypeCarousel(),
+        ),
+        Flexible(
+          flex: 8,
+          child: Column(
+            children: <Widget>[
+              _buildDeviceNameInput(),
+              _buildSubmitButton(context),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  bool iosValidateAddDevice(BuildContext context) {
+    return bloc.validateNewDeviceInput(bloc.deviceNameController.text,
+        S.of(context).ValueIsRequired(S.of(context).DeviceNameLabel),
+        S.of(context).DeviceNameMaxLength("${bloc.deviceNameMaxLength}")) == null;
   }
 }

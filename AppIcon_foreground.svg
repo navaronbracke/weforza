@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="600" viewBox="0 0 600 600">
   <g id="icon-outer-arc-1" transform="translate(18 4.5)">
-    <path id="Path_1" data-name="Path 1" d="M142.1,440.6c-80.133-80.138-80.133-210.062,0-290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
+    <path id="Path_1" data-name="Path 1" d="M152.1,440.6c-80.1-80.1-80.1-210.1,0-290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
   </g>
   <g id="icon-outer-arc-2" transform="translate(-11 4.5)">
-    <path id="Path_2" data-name="Path 2" d="M450.9,150.4c80.133,80.138,80.133,210.062,0,290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
+    <path id="Path_2" data-name="Path 2" d="M440.9,150.4c80.1,80.1,80.1,210.1,0,290.2" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="9.935"/>
   </g>
   <g id="icon-inner-arc-1" transform="translate(8.8 4.4)">
     <path id="Path_3" data-name="Path 3" d="M201.6,381a120.711,120.711,0,0,1,0-170.8" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="7.948"/>

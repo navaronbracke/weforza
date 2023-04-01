@@ -15,7 +15,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
 
   /// The controller that manages the stop scan signal emitter.
   /// This signal emitter will emit a signal when a Bluetooth device scan should be manually aborted.
-  final PublishSubject<void> _stopScanSingalEmitter = PublishSubject();
+  final PublishSubject<void> _stopScanSignalEmitter = PublishSubject();
 
   @override
   Future<bool> get bluetoothIsOn async {
@@ -135,7 +135,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
     _isScanningController.add(true);
 
     final List<Stream> abortScanTriggers = [
-      _stopScanSingalEmitter,
+      _stopScanSignalEmitter,
       Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
     ];
 
@@ -146,7 +146,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
     } catch (error) {
       // If the scan fails to start, rollback the stop trigger and abort.
       if (!_isScanningController.isClosed) {
-        _stopScanSingalEmitter.add(null);
+        _stopScanSignalEmitter.add(null);
         _isScanningController.add(false);
       }
 
@@ -177,7 +177,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
       return;
     }
 
-    _stopScanSingalEmitter.add(null);
+    _stopScanSignalEmitter.add(null);
     _isScanningController.add(false);
   }
 
@@ -194,7 +194,7 @@ class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
     }
 
     _isScanningController.close();
-    _stopScanSingalEmitter.close();
+    _stopScanSignalEmitter.close();
     super.dispose();
   }
 }

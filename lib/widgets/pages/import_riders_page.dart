@@ -98,10 +98,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
             case ImportRidersState.done:
               return AnimatedCircleCheckmark(controller: checkmarkController);
             case ImportRidersState.idle:
-              return _ImportRidersButton(
-                label: buttonLabel,
-                onPressed: _onImportRidersPressed,
-              );
+              return _ImportRidersButton(label: buttonLabel, onPressed: _onImportRidersPressed);
             case ImportRidersState.importing:
               return ProgressIndicatorWithLabel(
                 label: translator.importRidersProcessingFile,

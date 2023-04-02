@@ -176,7 +176,7 @@ class ExportDataPage<T> extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: (context) => Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(title: Text(title)),
         body: _buildBody(
           builder: (context, {bool isExporting = false}) => _buildAndroidForm(
@@ -197,7 +197,6 @@ class ExportDataPage<T> extends StatelessWidget {
 
         return CupertinoPageScaffold(
           backgroundColor: backgroundColor,
-          resizeToAvoidBottomInset: false,
           navigationBar: CupertinoNavigationBar(
             backgroundColor: backgroundColor,
             border: null,

@@ -158,7 +158,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
         key: _formKey,
         child: FocusAbsorber(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: CustomScrollView(
               slivers: [
                 SliverList(

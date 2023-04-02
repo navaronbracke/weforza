@@ -32,42 +32,45 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
   }
 
   Widget _buildBody() {
-    return FutureBuilder<void>(
-      future: _delegate.initializeFuture,
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return Center(
-                child: GenericErrorWithBackButton(
-                  message: S.of(context).addRideCalendarGenericErrorMessage,
-                ),
-              );
-            }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: FutureBuilder<void>(
+        future: _delegate.initializeFuture,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return Center(
+                  child: GenericErrorWithBackButton(
+                    message: S.of(context).addRideCalendarGenericErrorMessage,
+                  ),
+                );
+              }
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AddRideCalendar(delegate: _delegate),
-                const Padding(
-                  padding: EdgeInsets.only(top: 4),
-                  child: AddRideCalendarColorLegend(),
-                ),
-                _AddRideSubmitButton(
-                  initialSelection: _delegate.currentSelection,
-                  initialState: _delegate.currentState,
-                  onPressed: () => onSubmitPressed(context),
-                  selectionStream: _delegate.selectionStream,
-                  stateStream: _delegate.stream,
-                ),
-              ],
-            );
-          case ConnectionState.active:
-          case ConnectionState.none:
-          case ConnectionState.waiting:
-            return const Center(child: PlatformAwareLoadingIndicator());
-        }
-      },
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AddRideCalendar(delegate: _delegate),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: AddRideCalendarColorLegend(),
+                  ),
+                  _AddRideSubmitButton(
+                    initialSelection: _delegate.currentSelection,
+                    initialState: _delegate.currentState,
+                    onPressed: () => onSubmitPressed(context),
+                    selectionStream: _delegate.selectionStream,
+                    stateStream: _delegate.stream,
+                  ),
+                ],
+              );
+            case ConnectionState.active:
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Center(child: PlatformAwareLoadingIndicator());
+          }
+        },
+      ),
     );
   }
 

@@ -93,28 +93,28 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         ),
       ),
       body: FocusAbsorber(
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: DeviceTypeCarousel(
-                    controller: _deviceTypeController,
-                    height: 120,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: DeviceTypeCarousel(
+                      controller: _deviceTypeController,
+                      height: 120,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildDeviceNameInput(context),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 24),
-                  child: Center(child: _buildSubmitButton(context)),
-                ),
-              ]),
-            ),
-          ],
+                  _buildDeviceNameInput(context),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 24),
+                    child: Center(child: _buildSubmitButton(context)),
+                  ),
+                ]),
+              ),
+            ],
+          ),
         ),
       ),
     );

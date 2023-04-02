@@ -171,10 +171,13 @@ class _ImportRidersButton extends StatelessWidget {
               ),
             ),
             Flexible(
-              child: Text(
-                errorMessage ?? '',
-                style: theme.textTheme.labelMedium!.copyWith(
-                  color: theme.colorScheme.error,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  errorMessage ?? '',
+                  style: theme.textTheme.labelMedium!.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
                 ),
               ),
             ),

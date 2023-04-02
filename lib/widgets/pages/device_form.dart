@@ -85,7 +85,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final translator = S.of(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           widget.device == null ? translator.addDevice : translator.editDevice,
@@ -127,7 +127,6 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     return CupertinoPageScaffold(
       backgroundColor: backgroundColor,
-      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: backgroundColor,
         border: null,

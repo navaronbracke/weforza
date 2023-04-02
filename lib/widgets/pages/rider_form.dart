@@ -147,7 +147,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     final strings = S.of(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
           widget.rider == null ? strings.newRider : strings.editRider,
@@ -277,7 +277,6 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
 
     return CupertinoPageScaffold(
       backgroundColor: backgroundColor,
-      resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         backgroundColor: backgroundColor,
         border: null,

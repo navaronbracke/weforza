@@ -78,9 +78,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
         switch (state) {
           case RideAttendeeScanningState.bluetoothDisabled:
-            return Center(
-              child: BluetoothDisabledError(onRetry: delegate.startDeviceScan),
-            );
+            return Center(child: BluetoothDisabledError(onRetry: delegate.startDeviceScan));
           case RideAttendeeScanningState.manualSelection:
             return ManualSelectionList(delegate: delegate);
           case RideAttendeeScanningState.permissionDenied:

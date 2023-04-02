@@ -181,9 +181,11 @@ class ExportDataPage<T> extends StatelessWidget {
         body: _buildBody(
           builder: (context, {bool isExporting = false}) => _buildAndroidForm(
             context,
-            child: isExporting
-                ? const FixedHeightSubmitButton.loading()
-                : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
+            child: Center(
+              child: isExporting
+                  ? const FixedHeightSubmitButton.loading()
+                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
+            ),
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,

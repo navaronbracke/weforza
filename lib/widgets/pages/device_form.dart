@@ -9,6 +9,7 @@ import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/model/device/device_validator.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
+import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/device_type_carousel.dart';
@@ -91,28 +92,30 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
           widget.device == null ? translator.addDevice : translator.editDevice,
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate.fixed([
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: DeviceTypeCarousel(
-                  controller: _deviceTypeController,
-                  height: 120,
+      body: FocusAbsorber(
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: DeviceTypeCarousel(
+                    controller: _deviceTypeController,
+                    height: 120,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _buildDeviceNameInput(context),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 24),
-                child: Center(child: _buildSubmitButton(context)),
-              ),
-            ]),
-          ),
-        ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildDeviceNameInput(context),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 24),
+                  child: Center(child: _buildSubmitButton(context)),
+                ),
+              ]),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -137,30 +140,32 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       ),
       child: SafeArea(
         bottom: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([
-                CupertinoFormSection.insetGrouped(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: DeviceTypeCarousel(
-                        controller: _deviceTypeController,
-                        height: 120,
+        child: FocusAbsorber(
+          child: CustomScrollView(
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  CupertinoFormSection.insetGrouped(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: DeviceTypeCarousel(
+                          controller: _deviceTypeController,
+                          height: 120,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                CupertinoFormSection.insetGrouped(
-                  children: [
-                    _buildDeviceNameInput(context),
-                    _buildSubmitButton(context),
-                  ],
-                ),
-              ]),
-            ),
-          ],
+                    ],
+                  ),
+                  CupertinoFormSection.insetGrouped(
+                    children: [
+                      _buildDeviceNameInput(context),
+                      _buildSubmitButton(context),
+                    ],
+                  ),
+                ]),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -29,7 +29,7 @@ class GenericError extends StatelessWidget {
 
   /// The message to display.
   ///
-  /// Defaults to [S.GenericError].
+  /// Defaults to [S.genericError].
   final String? message;
 
   @override

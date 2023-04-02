@@ -19,8 +19,16 @@ final _riderAttendingCount = FutureProvider.autoDispose.family<int, String>((ref
 /// This widget represents the base attending count widget
 /// that is used by [RiderListItemAttendingCount] and [SelectedRiderAttendingCount].
 class _RiderAttendingCount extends StatelessWidget {
-  const _RiderAttendingCount(this.value);
+  const _RiderAttendingCount(this.value, {required this.labelAlignment})
+      : assert(
+          labelAlignment == AxisDirection.left || labelAlignment == AxisDirection.right,
+          'The label alignment should be AxisDirection.left or AxisDirection.right',
+        );
 
+  /// The alignment for the label.
+  final AxisDirection labelAlignment;
+
+  /// The attending count value to display.
   final AsyncValue<int?> value;
 
   Widget _buildBikeIcon(BuildContext context) {
@@ -39,32 +47,27 @@ class _RiderAttendingCount extends StatelessWidget {
     }
   }
 
+  Widget _buildLabelAndIcon(Widget label, Widget icon) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (labelAlignment == AxisDirection.right) Padding(padding: const EdgeInsets.only(right: 4), child: icon),
+        label,
+        if (labelAlignment == AxisDirection.left) Padding(padding: const EdgeInsets.only(left: 4), child: icon),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final icon = _buildBikeIcon(context);
 
+    const Widget fallbackLabel = Text('?');
+
     return value.when(
-      data: (count) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Text('${count ?? '?'}'),
-            ),
-            icon,
-          ],
-        );
-      },
-      error: (error, stackTrace) => Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Padding(padding: EdgeInsets.only(right: 4), child: Text('?')),
-          icon,
-        ],
-      ),
+      data: (count) => _buildLabelAndIcon(count == null ? fallbackLabel : Text('$count'), icon),
+      error: (error, stackTrace) => _buildLabelAndIcon(fallbackLabel, icon),
       loading: () => const PlatformAwareLoadingIndicator(),
     );
   }
@@ -83,7 +86,7 @@ class RiderListItemAttendingCount extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(_riderAttendingCount(rider.uuid));
 
-    return _RiderAttendingCount(value);
+    return _RiderAttendingCount(value, labelAlignment: AxisDirection.left);
   }
 }
 
@@ -95,6 +98,6 @@ class SelectedRiderAttendingCount extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(selectedRiderAttendingCountProvider);
 
-    return _RiderAttendingCount(value);
+    return _RiderAttendingCount(value, labelAlignment: AxisDirection.right);
   }
 }

@@ -15,7 +15,7 @@ class _GenericScanErrorBase extends StatelessWidget {
 
   /// The error message to display.
   ///
-  /// If this is null, [S.GenericError] is used.
+  /// If this is null, [S.genericError] is used.
   final String? errorMessage;
 
   /// The icon that is shown above the [errorMessage].

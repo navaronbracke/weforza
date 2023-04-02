@@ -98,10 +98,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
             case ImportRidersState.done:
               return AnimatedCircleCheckmark(controller: checkmarkController);
             case ImportRidersState.idle:
-              return _ImportRidersButton(
-                label: buttonLabel,
-                onPressed: _onImportRidersPressed,
-              );
+              return _ImportRidersButton(label: buttonLabel, onPressed: _onImportRidersPressed);
             case ImportRidersState.importing:
               return ProgressIndicatorWithLabel(
                 label: translator.importRidersProcessingFile,
@@ -174,10 +171,13 @@ class _ImportRidersButton extends StatelessWidget {
               ),
             ),
             Flexible(
-              child: Text(
-                errorMessage ?? '',
-                style: theme.textTheme.labelMedium!.copyWith(
-                  color: theme.colorScheme.error,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  errorMessage ?? '',
+                  style: theme.textTheme.labelMedium!.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
                 ),
               ),
             ),
@@ -187,25 +187,23 @@ class _ImportRidersButton extends StatelessWidget {
       ios: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
+          CupertinoFormRow(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CupertinoFormRow(
-              error: errorMessage == null
-                  ? null
-                  : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
-              child: Center(
-                child: CupertinoButton.filled(
-                  onPressed: onPressed,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 8),
-                        child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
-                      ),
-                      Text(label, style: const TextStyle(color: CupertinoColors.white)),
-                    ],
-                  ),
+            error: errorMessage == null
+                ? null
+                : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
+            child: Center(
+              child: CupertinoButton.filled(
+                onPressed: onPressed,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
+                    ),
+                    Text(label, style: const TextStyle(color: CupertinoColors.white)),
+                  ],
                 ),
               ),
             ),

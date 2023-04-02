@@ -29,7 +29,7 @@ class GenericError extends StatelessWidget {
 
   /// The message to display.
   ///
-  /// Defaults to [S.GenericError].
+  /// Defaults to [S.genericError].
   final String? message;
 
   @override
@@ -50,7 +50,7 @@ class GenericError extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-          child: Text(effectiveMessage),
+          child: Text(effectiveMessage, textAlign: TextAlign.center, softWrap: true),
         ),
         if (actionButton != null) actionButton!,
       ],
@@ -86,7 +86,7 @@ class GenericErrorLabel extends StatelessWidget {
             color: Theme.of(context).colorScheme.error,
             fontSize: 14,
           ),
-          child: Text(message),
+          child: Text(message, softWrap: true),
         );
 
         if (androidPadding != EdgeInsets.zero) {

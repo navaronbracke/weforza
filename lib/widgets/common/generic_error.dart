@@ -50,7 +50,7 @@ class GenericError extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-          child: Text(effectiveMessage),
+          child: Text(effectiveMessage, textAlign: TextAlign.center),
         ),
         if (actionButton != null) actionButton!,
       ],

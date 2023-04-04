@@ -1,6 +1,6 @@
 /// This enum defines the different states for the ride attendee scanning page.
 enum RideAttendeeScanningState {
-  /// The bluetooth adapter is currently off or unavailable.
+  /// The Bluetooth adapter is currently off or unavailable.
   bluetoothDisabled,
 
   /// The manual selection is being displayed.

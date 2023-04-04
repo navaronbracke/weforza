@@ -1,11 +1,14 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
+import 'package:weforza/bluetooth/bluetooth_state.dart';
 
 class MockBluetoothScanner implements BluetoothDeviceScanner {
   final _scanningController = BehaviorSubject.seeded(false);
 
-  final PublishSubject _stopScanPill = PublishSubject();
+  final _stateController = BehaviorSubject.seeded(BluetoothState.on);
+
+  final PublishSubject<void> _stopScanPill = PublishSubject();
 
   /// Build a fake scan results stream.
   Stream<BluetoothPeripheral> _buildScanResultsStream() async* {
@@ -51,13 +54,19 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  Future<bool> isBluetoothEnabled() async => true;
+  Future<bool> get bluetoothIsOn async => true;
 
   @override
   bool get isScanning => _scanningController.value;
 
   @override
   Stream<bool> get isScanningStream => _scanningController;
+
+  @override
+  Stream<BluetoothState> get state => _stateController;
+
+  @override
+  Future<bool> requestBluetoothScanPermission() async => true;
 
   @override
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds) {
@@ -87,5 +96,6 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   void dispose() {
     _stopScanPill.close();
     _scanningController.close();
+    _stateController.close();
   }
 }

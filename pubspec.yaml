@@ -42,13 +42,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # This package provides Bluetooth Low Energy functionality.
-  # TODO: remove the fork when we self-own the Bluetooth adapter code.
-  flutter_blue_plus:
-    git:
-      url: git@github.com:navaronbracke/flutter_blue_plus.git
-      ref: patch_ios_bluetooth_state
-
   flutter_localizations:
     sdk: flutter
 

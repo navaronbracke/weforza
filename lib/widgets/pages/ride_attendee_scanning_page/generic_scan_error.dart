@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,8 +147,20 @@ class PermissionDeniedError extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
+    String errorMessage;
+
+    // Android requires both Bluetooth and Location permissions to show scan results.
+    // Without the location permission, the scan cannot find devices.
+    //
+    // On other platforms (i.e. iOS) the location permission is not required.
+    if (Platform.isAndroid) {
+      errorMessage = translator.scanAbortedBluetoothAndLocationPermissionDenied;
+    } else {
+      errorMessage = translator.scanAbortedBluetoothPermissionDenied;
+    }
+
     return _GenericScanErrorBase(
-      errorMessage: translator.scanAbortedPermissionDenied,
+      errorMessage: errorMessage,
       icon: const PlatformAwareIcon(
         androidIcon: Icons.warning,
         iosIcon: CupertinoIcons.exclamationmark_triangle_fill,

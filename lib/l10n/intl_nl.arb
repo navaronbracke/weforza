@@ -53,7 +53,6 @@
 	"directoryRequired": "Een map is verplicht",
 	"disallowedWordExists": "Dit verboden woord bestaat al",
 	"disallowedWordMaxLength": "Een verboden woord mag niet langer zijn dan {maxLength} karakters",
-	"disallowedWordNoWhitespace": "Een verboden woord mag geen spaties bevatten",
 	"disallowedWordRequired": "Een verboden woord mag niet leeg zijn",
 	"disallowedWords": "Verboden woorden",
 	"disallowedWordsDescription": "Toestellen die een verboden woord bevatten worden niet getoond in de scanresultaten.",

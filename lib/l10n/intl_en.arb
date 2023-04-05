@@ -53,7 +53,6 @@
 	"directoryRequired": "A folder is required",
 	"disallowedWordExists": "This disallowed word already exists",
 	"disallowedWordMaxLength": "A disallowed word cannot be longer than {maxLength} characters",
-	"disallowedWordNoWhitespace": "A disallowed word cannot contain spaces",
 	"disallowedWordRequired": "A disallowed word cannot be empty",
 	"disallowedWords": "Disallowed words",
 	"disallowedWordsDescription": "Devices that contain a disallowed word are not shown in the scan results.",

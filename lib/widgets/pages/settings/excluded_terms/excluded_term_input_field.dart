@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show MaxLengthEnforcement;
+import 'package:flutter/services.dart' show FilteringTextInputFormatter, MaxLengthEnforcement;
 
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -57,6 +57,11 @@ class ExcludedTermInputField extends StatelessWidget {
   /// The validator function for the text field.
   final String? Function(String? value) validator;
 
+  /// The excluded terms cannot contain spaces.
+  /// To prevent spaces from getting entered through the IME, (from regular typing or from keyboard suggestions),
+  /// filter out whitespace characters.
+  static final inputFormatters = [FilteringTextInputFormatter.deny(RegExp(r'\s'))];
+
   /// Build the invisible counter. The max length is enforced by the text field.
   Widget? _buildAndroidCounter(
     BuildContext context, {
@@ -101,6 +106,7 @@ class ExcludedTermInputField extends StatelessWidget {
         textAlignVertical: TextAlignVertical.center,
         textInputAction: TextInputAction.done,
         validator: validator,
+        inputFormatters: inputFormatters,
       ),
       ios: (_) {
         final child = CupertinoTextFormFieldRow(
@@ -117,6 +123,7 @@ class ExcludedTermInputField extends StatelessWidget {
           placeholder: placeholder,
           textInputAction: TextInputAction.done,
           validator: validator,
+          inputFormatters: inputFormatters,
         );
 
         if (suffix == null) {

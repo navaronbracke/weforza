@@ -70,7 +70,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     final model = DeviceModel(
       creationDate: widget.device?.creationDate,
-      name: _deviceNameController.text,
+      name: _deviceNameController.text.trim(),
       ownerId: widget.ownerUuid,
       type: DeviceType.values[selectedDeviceType],
     );

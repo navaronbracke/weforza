@@ -58,9 +58,9 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
 
     final model = RiderModel(
       active: widget.rider?.active ?? true,
-      alias: _aliasController.text,
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
+      alias: _aliasController.text.trim(),
+      firstName: _firstNameController.text.trim(),
+      lastName: _lastNameController.text.trim(),
       profileImage: _profileImageDelegate.selectedImage.valueOrNull,
       uuid: riderUuid,
     );

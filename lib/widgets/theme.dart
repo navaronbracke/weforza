@@ -38,7 +38,7 @@ abstract class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: colorScheme.onPrimary,
         ),
       ),
       extensions: <ThemeExtension>[
@@ -55,7 +55,7 @@ abstract class AppTheme {
           }),
           foregroundColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.selected)) {
-              return Colors.white;
+              return colorScheme.onPrimary;
             }
 
             return colorScheme.primary;

@@ -4,7 +4,6 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the bottom bar for the manual selection page.
 ///
@@ -30,7 +29,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
 
   Widget _buildAndroidLayout(BuildContext context, BoxConstraints constraints) {
     final attendeeCounter = _buildAttendeeCounter(
-      Icon(Icons.people, color: AppTheme.colorScheme.primary),
+      Icon(Icons.people, color: Theme.of(context).colorScheme.primary),
     );
 
     final scannedResultsToggle = Row(

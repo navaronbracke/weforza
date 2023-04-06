@@ -82,8 +82,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   Widget _buildAndroidWidget(BuildContext context) {
     final translator = S.of(context);
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return SettingsPageScrollView(
       scrollController: scrollController,

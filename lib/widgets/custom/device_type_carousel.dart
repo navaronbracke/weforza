@@ -105,7 +105,19 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         final theme = Theme.of(context);
-        color = selected ? theme.primaryColor : theme.disabledColor.withOpacity(0.2);
+
+        Color disabledColor;
+
+        switch (theme.brightness) {
+          case Brightness.dark:
+            disabledColor = theme.disabledColor.withOpacity(0.3);
+            break;
+          case Brightness.light:
+            disabledColor = theme.disabledColor.withOpacity(0.2);
+            break;
+        }
+
+        color = selected ? theme.colorScheme.primary : disabledColor;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

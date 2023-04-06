@@ -23,7 +23,7 @@ class ManualSelectionListEmpty extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
           child: Text(
-            translator.manualSelectionEmpty,
+            translator.noActiveRidersToChoose,
             textAlign: TextAlign.center,
           ),
         ),

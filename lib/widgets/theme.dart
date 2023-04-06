@@ -5,53 +5,65 @@ import 'package:flutter/services.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
-  /// The [ThemeData] for the [MaterialApp] light theme.
-  static final androidLightTheme = ThemeData(
-    useMaterial3: true,
-    appBarTheme: const AppBarTheme(
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-    ),
-    extensions: <ThemeExtension>[
-      DestructiveButtons(errorColor: colorScheme.error),
-    ],
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: colorScheme.surface,
-      surfaceTintColor: colorScheme.surfaceTint,
-      indicatorColor: const Color(0xffc2e7ff),
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-    ),
-    segmentedButtonTheme: SegmentedButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+  /// Get the [ThemeData] for the [MaterialApp] when the brightness is set to [brightness].
+  static ThemeData androidTheme({required Brightness brightness}) {
+    final ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue, brightness: brightness);
+
+    SystemUiOverlayStyle systemUiOverlayStyle;
+
+    switch (brightness) {
+      case Brightness.dark:
+        systemUiOverlayStyle = SystemUiOverlayStyle.light;
+        break;
+      case Brightness.light:
+        systemUiOverlayStyle = SystemUiOverlayStyle.dark;
+        break;
+    }
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: colorScheme,
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: systemUiOverlayStyle,
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: colorScheme.surfaceTint,
+        indicatorColor: const Color(0xffc2e7ff),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(foregroundColor: colorScheme.primary),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      extensions: <ThemeExtension>[
+        DestructiveButtons(errorColor: colorScheme.error),
+      ],
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return colorScheme.primary;
+            }
+
+            return null;
+          }),
+          foregroundColor: MaterialStateProperty.resolveWith((states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.white;
+            }
+
             return colorScheme.primary;
-          }
-
-          return null;
-        }),
-        foregroundColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return Colors.white;
-          }
-
-          return colorScheme.primary;
-        }),
+          }),
+        ),
       ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: colorScheme.primary),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: Colors.white,
-      ),
-    ),
-    colorScheme: colorScheme,
-  );
-
-  /// The color scheme for the MaterialApp.
-  static final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
+    );
+  }
 
   /// The [CupertinoThemeData] for the [CupertinoApp].
   static const iosTheme = CupertinoThemeData(

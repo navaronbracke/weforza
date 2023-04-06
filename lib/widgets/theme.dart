@@ -39,11 +39,11 @@ abstract class AppTheme {
       ),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: AppTheme.colorScheme.primary),
+      style: TextButton.styleFrom(foregroundColor: colorScheme.primary),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppTheme.colorScheme.primary,
+        backgroundColor: colorScheme.primary,
         foregroundColor: Colors.white,
       ),
     ),

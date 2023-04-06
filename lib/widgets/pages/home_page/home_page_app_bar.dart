@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/home_page_tab.dart';
+import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/pages/add_ride_page.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
@@ -76,9 +79,16 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
               icon: const Icon(Icons.file_download),
               onPressed: () => _goToImportRidersPage(context),
             ),
-            IconButton(
-              icon: const Icon(Icons.file_upload),
-              onPressed: () => _goToExportRidersPage(context),
+            Consumer(
+              builder: (_, ref, child) {
+                final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
+
+                return amountOfRiders > 0 ? child! : const SizedBox.shrink();
+              },
+              child: IconButton(
+                icon: const Icon(Icons.file_upload),
+                onPressed: () => _goToExportRidersPage(context),
+              ),
             ),
           ],
         );
@@ -90,9 +100,16 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
               icon: const Icon(Icons.add),
               onPressed: () => _goToAddRidePage(context),
             ),
-            IconButton(
-              icon: const Icon(Icons.file_upload),
-              onPressed: () => _goToExportRidePage(context),
+            Consumer(
+              builder: (_, ref, child) {
+                final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
+
+                return amountOfRides > 0 ? child! : const SizedBox.shrink();
+              },
+              child: IconButton(
+                icon: const Icon(Icons.file_upload),
+                onPressed: () => _goToExportRidePage(context),
+              ),
             ),
           ],
         );
@@ -154,9 +171,16 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
                 icon: CupertinoIcons.arrow_down_doc_fill,
                 onPressed: () => _goToImportRidersPage(context),
               ),
-              CupertinoIconButton(
-                icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => _goToExportRidersPage(context),
+              Consumer(
+                builder: (_, ref, child) {
+                  final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
+
+                  return amountOfRiders > 0 ? child! : const SizedBox.shrink();
+                },
+                child: CupertinoIconButton(
+                  icon: CupertinoIcons.arrow_up_doc_fill,
+                  onPressed: () => _goToExportRidersPage(context),
+                ),
               ),
             ],
           ),
@@ -176,9 +200,16 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
                 icon: CupertinoIcons.add,
                 onPressed: () => _goToAddRidePage(context),
               ),
-              CupertinoIconButton(
-                icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => _goToExportRidePage(context),
+              Consumer(
+                builder: (_, ref, child) {
+                  final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
+
+                  return amountOfRides > 0 ? child! : const SizedBox.shrink();
+                },
+                child: CupertinoIconButton(
+                  icon: CupertinoIcons.arrow_up_doc_fill,
+                  onPressed: () => _goToExportRidePage(context),
+                ),
               ),
             ],
           ),

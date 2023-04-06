@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
-  /// The [ThemeData] for the [MaterialApp].
-  static final androidTheme = ThemeData(
+  /// The [ThemeData] for the [MaterialApp] light theme.
+  static final androidLightTheme = ThemeData(
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle.light,

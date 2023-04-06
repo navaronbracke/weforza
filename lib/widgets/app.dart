@@ -26,7 +26,7 @@ class WeForzaApp extends StatelessWidget {
         title: applicationName,
         localizationsDelegates: S.localizationsDelegates,
         supportedLocales: S.supportedLocales,
-        theme: AppTheme.androidTheme,
+        theme: AppTheme.androidLightTheme,
         home: const HomePage(),
       ),
       ios: (_) => const CupertinoApp(

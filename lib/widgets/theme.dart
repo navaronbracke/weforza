@@ -9,6 +9,7 @@ abstract class AppTheme {
   static ThemeData androidTheme({required Brightness brightness}) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue, brightness: brightness);
 
+    Color? navigationBarIndicatorColor;
     SystemUiOverlayStyle systemUiOverlayStyle;
 
     switch (brightness) {
@@ -16,6 +17,7 @@ abstract class AppTheme {
         systemUiOverlayStyle = SystemUiOverlayStyle.light;
         break;
       case Brightness.light:
+        navigationBarIndicatorColor = const Color(0xffc2e7ff);
         systemUiOverlayStyle = SystemUiOverlayStyle.dark;
         break;
     }
@@ -29,7 +31,7 @@ abstract class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: colorScheme.surface,
         surfaceTintColor: colorScheme.surfaceTint,
-        indicatorColor: const Color(0xffc2e7ff),
+        indicatorColor: navigationBarIndicatorColor,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       ),
       textButtonTheme: TextButtonThemeData(

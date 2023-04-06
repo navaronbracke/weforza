@@ -64,7 +64,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
         final confirmButton = PlatformAwareWidget(
           android: (context) => IconButton(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.check),
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),

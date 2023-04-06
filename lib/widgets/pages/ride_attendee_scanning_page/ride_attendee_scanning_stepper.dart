@@ -12,16 +12,12 @@ class RideAttendeeScanningStepper extends StatelessWidget {
   /// The default constructor.
   const RideAttendeeScanningStepper({
     required this.initialData,
-    required this.scrollController,
     required this.stream,
     super.key,
   });
 
   /// The initial value for the stepper.
   final RideAttendeeScanningState initialData;
-
-  /// The controller for the horizontal scrollview that wraps the stepper.
-  final ScrollController scrollController;
 
   /// The stream that indicates the current step in the scanning process.
   final Stream<RideAttendeeScanningState> stream;
@@ -41,38 +37,28 @@ class RideAttendeeScanningStepper extends StatelessWidget {
       ),
     );
 
-    return Scrollbar(
-      thumbVisibility: false,
-      trackVisibility: false,
-      controller: scrollController,
-      child: SingleChildScrollView(
-        controller: scrollController,
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        child: StreamBuilder<RideAttendeeScanningState>(
-          initialData: initialData,
-          stream: stream,
-          builder: (context, snapshot) {
-            // Every step before the manual selection should highlight the `Scan` label.
-            final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
+    return StreamBuilder<RideAttendeeScanningState>(
+      initialData: initialData,
+      stream: stream,
+      builder: (context, snapshot) {
+        // Every step before the manual selection should highlight the `Scan` label.
+        final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
 
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _RideAttendeeScanningStepperLabel(
-                  isSelected: isScanStep,
-                  text: scanLabel,
-                ),
-                separator,
-                _RideAttendeeScanningStepperLabel(
-                  isSelected: !isScanStep,
-                  text: manualLabel,
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _RideAttendeeScanningStepperLabel(
+              isSelected: isScanStep,
+              text: scanLabel,
+            ),
+            separator,
+            _RideAttendeeScanningStepperLabel(
+              isSelected: !isScanStep,
+              text: manualLabel,
+            ),
+          ],
+        );
+      },
     );
   }
 }

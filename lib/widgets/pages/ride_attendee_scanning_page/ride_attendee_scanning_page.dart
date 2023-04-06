@@ -57,7 +57,6 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       appBar: AppBar(
         title: RideAttendeeScanningStepper(
           initialData: delegate.currentState,
-          scrollController: delegate.stepperScrollController,
           stream: delegate.stream,
         ),
       ),
@@ -111,7 +110,6 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
         transitionBetweenRoutes: false,
         middle: RideAttendeeScanningStepper(
           initialData: delegate.currentState,
-          scrollController: delegate.stepperScrollController,
           stream: delegate.stream,
         ),
       ),

@@ -9,7 +9,6 @@ import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_d
 import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesList extends ConsumerWidget {
   const RideDetailsAttendeesList({super.key});
@@ -64,6 +63,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
     int? scannedAttendees,
   }) {
     final translator = S.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return BottomAppBar(
       height: 56,
@@ -77,7 +77,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.people, color: AppTheme.colorScheme.primary),
+                Icon(Icons.people, color: colorScheme.primary),
                 Padding(
                   padding: const EdgeInsets.only(left: 4),
                   child: Text('$total'),
@@ -94,7 +94,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
                 Text('${scannedAttendees ?? '-'}'),
                 Icon(
                   Icons.bluetooth_searching,
-                  color: AppTheme.colorScheme.primary,
+                  color: colorScheme.primary,
                 ),
               ],
             ),

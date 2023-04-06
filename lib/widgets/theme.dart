@@ -42,7 +42,7 @@ abstract class AppTheme {
         ),
       ),
       extensions: <ThemeExtension>[
-        DestructiveButtons(errorColor: colorScheme.error),
+        DestructiveButtons(colorScheme: colorScheme),
       ],
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
@@ -78,24 +78,25 @@ abstract class AppTheme {
 @immutable
 class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
   DestructiveButtons({
-    this.errorColor,
+    required this.colorScheme,
   })  : elevatedButtonStyle = ElevatedButton.styleFrom(
-          backgroundColor: errorColor,
+          backgroundColor: colorScheme.error,
+          foregroundColor: colorScheme.onError,
         ),
-        textButtonStyle = TextButton.styleFrom(foregroundColor: errorColor);
+        textButtonStyle = TextButton.styleFrom(foregroundColor: colorScheme.error);
+
+  /// The color scheme for the button styles.
+  final ColorScheme colorScheme;
 
   /// The style for destructive [ElevatedButton]s.
   final ButtonStyle elevatedButtonStyle;
-
-  /// The color that is used to create the [ButtonStyle]s.
-  final Color? errorColor;
 
   /// The style for destructive [TextButton]s.
   final ButtonStyle textButtonStyle;
 
   @override
-  DestructiveButtons copyWith({Color? errorColor}) {
-    return DestructiveButtons(errorColor: errorColor);
+  DestructiveButtons copyWith({ColorScheme? colorScheme}) {
+    return DestructiveButtons(colorScheme: colorScheme ?? this.colorScheme);
   }
 
   @override
@@ -108,7 +109,7 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
     }
 
     return DestructiveButtons(
-      errorColor: Color.lerp(errorColor, other.errorColor, t),
+      colorScheme: ColorScheme.lerp(colorScheme, other.colorScheme, t),
     );
   }
 }

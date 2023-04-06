@@ -92,9 +92,6 @@ class RideAttendeeScanningDelegate {
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
 
-  /// The scroll controller for the scanning page stepper.
-  final _stepperScrollController = ScrollController();
-
   /// This set will contain all the owners
   /// that could not be resolved automatically.
   ///
@@ -122,9 +119,6 @@ class RideAttendeeScanningDelegate {
 
   /// Get the controller for the scan progress bar.
   AnimationController get progressBarController => _scanProgressBarController;
-
-  /// Get the scroll controller for the scan stepper.
-  ScrollController get stepperScrollController => _stepperScrollController;
 
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stream => _stateMachine.stateStream;
@@ -305,21 +299,9 @@ class RideAttendeeScanningDelegate {
     onDeviceFound(device);
   }
 
-  /// Scroll the manual selection label into view.
-  void _scrollToManualSelectionLabel() {
-    if (_stepperScrollController.hasClients) {
-      _stepperScrollController.animateTo(
-        _stepperScrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.fastOutSlowIn,
-      );
-    }
-  }
-
   /// Go to the manual selection screen.
   void continueToManualSelection() {
     _stateMachine.setState(RideAttendeeScanningState.manualSelection);
-    _scrollToManualSelectionLabel();
   }
 
   /// Get the amount of scanned peripherals.
@@ -366,10 +348,6 @@ class RideAttendeeScanningDelegate {
         : RideAttendeeScanningState.unresolvedOwnersSelection;
 
     _stateMachine.setState(newState);
-
-    if (newState == RideAttendeeScanningState.manualSelection) {
-      _scrollToManualSelectionLabel();
-    }
   }
 
   /// Save the current selection of ride attendees.
@@ -549,6 +527,5 @@ class RideAttendeeScanningDelegate {
     _startScanningSubscription?.cancel();
     _startScanningSubscription = null;
     _scanProgressBarController.dispose();
-    _stepperScrollController.dispose();
   }
 }

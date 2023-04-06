@@ -26,10 +26,19 @@ class RideAttendeeScanningStepper extends StatelessWidget {
       initialData: initialData,
       stream: stream,
       builder: (context, snapshot) {
-        // Every step before the manual selection should show the `Scan` label.
-        final isScanStep = snapshot.data != RideAttendeeScanningState.manualSelection;
-
-        return Text(isScanStep ? translator.scan : translator.manual);
+        switch (snapshot.requireData) {
+          case RideAttendeeScanningState.bluetoothDisabled:
+          case RideAttendeeScanningState.permissionDenied:
+          case RideAttendeeScanningState.requestPermissions:
+          case RideAttendeeScanningState.scanning:
+          case RideAttendeeScanningState.startingScan:
+          case RideAttendeeScanningState.stoppingScan:
+            return Text(translator.scan);
+          case RideAttendeeScanningState.unresolvedOwnersSelection:
+            return Text(translator.conflicts);
+          case RideAttendeeScanningState.manualSelection:
+            return Text(translator.results);
+        }
       },
     );
   }

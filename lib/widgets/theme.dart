@@ -9,14 +9,16 @@ abstract class AppTheme {
   static ThemeData androidTheme({required Brightness brightness}) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue, brightness: brightness);
 
-    Color? navigationBarIndicatorColor;
+    Color navigationBarIndicatorColor;
     SystemUiOverlayStyle systemUiOverlayStyle;
 
     switch (brightness) {
       case Brightness.dark:
+        navigationBarIndicatorColor = colorScheme.primaryContainer;
         systemUiOverlayStyle = SystemUiOverlayStyle.light;
         break;
       case Brightness.light:
+        // The default is not as bright as the default light blue that is commonly seen in Material 3 applications.
         navigationBarIndicatorColor = const Color(0xffc2e7ff);
         systemUiOverlayStyle = SystemUiOverlayStyle.dark;
         break;
@@ -33,6 +35,17 @@ abstract class AppTheme {
         surfaceTintColor: colorScheme.surfaceTint,
         indicatorColor: navigationBarIndicatorColor,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        iconTheme: MaterialStateProperty.resolveWith<IconThemeData>((states) {
+          switch (brightness) {
+            case Brightness.dark:
+              return IconThemeData(
+                size: 24,
+                color: states.contains(MaterialState.selected) ? colorScheme.primary : colorScheme.onSurface,
+              );
+            case Brightness.light:
+              return IconThemeData(size: 24, color: colorScheme.onSurface);
+          }
+        }),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: colorScheme.primary),

@@ -59,7 +59,7 @@ class AddRideCalendarItem extends StatelessWidget {
         if (backgroundColor != null) {
           child = DecoratedBox(
             decoration: BoxDecoration(
-              color: theme.backgroundColor,
+              color: backgroundColor,
               borderRadius: const BorderRadius.all(Radius.circular(4)),
             ),
             child: child,

@@ -234,7 +234,6 @@ class RideCalendarTheme {
               brightness,
               dark: const RideCalendarTheme(
                 backgroundColor: CupertinoColors.systemGrey,
-                textStyle: TextStyle(color: Colors.white),
               ),
               light: const RideCalendarTheme(
                 backgroundColor: CupertinoColors.systemGrey4,
@@ -246,7 +245,6 @@ class RideCalendarTheme {
               brightness,
               dark: RideCalendarTheme(
                 backgroundColor: CupertinoColors.systemGrey4.darkColor,
-                textStyle: const TextStyle(color: Colors.white),
               ),
               light: const RideCalendarTheme(
                 backgroundColor: CupertinoColors.systemGrey,

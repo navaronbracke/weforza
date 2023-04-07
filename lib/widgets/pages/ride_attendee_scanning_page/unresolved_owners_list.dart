@@ -6,6 +6,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_dele
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/widgets/common/rider_name_and_alias.dart';
+import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -95,14 +96,14 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return _UnresolvedOwnersListItem(
-                      delegate: widget.delegate,
-                      item: items[index],
-                    );
-                  },
-                  itemCount: items.length,
+                child: ScrollConfiguration(
+                  // Use a custom scroll behavior that does not build a stretching overscroll indicator.
+                  // Otherwise there are issues with gaps in the selected color of adjacent selected items results.
+                  behavior: const NoOverscrollIndicatorScrollBehavior(),
+                  child: ListView.builder(
+                    itemBuilder: (_, index) => _UnresolvedOwnersListItem(delegate: widget.delegate, item: items[index]),
+                    itemCount: items.length,
+                  ),
                 ),
               ),
               ScanButton(

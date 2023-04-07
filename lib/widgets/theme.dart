@@ -162,7 +162,7 @@ class RideCalendarTheme {
       case TargetPlatform.windows:
         final ThemeData theme = Theme.of(context);
         final Brightness brightness = theme.brightness;
-        final Color primaryColor = theme.colorScheme.primary;
+        final ColorScheme colorScheme = theme.colorScheme;
 
         switch (state) {
           case RideCalendarItemState.currentSelection:
@@ -170,7 +170,7 @@ class RideCalendarTheme {
               brightness,
               dark: RideCalendarTheme(),
               light: RideCalendarTheme(
-                backgroundColor: primaryColor,
+                backgroundColor: colorScheme.primary,
                 textStyle: const TextStyle(color: Colors.white),
               ),
             );
@@ -179,7 +179,7 @@ class RideCalendarTheme {
               brightness,
               dark: RideCalendarTheme(),
               light: RideCalendarTheme(
-                backgroundColor: primaryColor.withOpacity(0.4),
+                backgroundColor: colorScheme.primary.withOpacity(0.4),
                 textStyle: const TextStyle(color: Colors.white),
               ),
             );

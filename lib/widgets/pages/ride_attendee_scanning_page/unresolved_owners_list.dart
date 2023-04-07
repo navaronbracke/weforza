@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/selectable_owner_list_item.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
-import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents the list of unresolved owners
 /// that is shown after a device scan has ended.
@@ -137,64 +135,13 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   @override
   Widget build(BuildContext context) {
-    final selectedAttendee = widget.delegate.getSelectedRideAttendee(
+    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
       widget.item.uuid,
     );
 
-    const textTheme = AppTheme.riderTextTheme;
-
-    Color selectedBackgroundColor;
-
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        final ThemeData theme = Theme.of(context);
-
-        switch (theme.brightness) {
-          case Brightness.dark:
-            selectedBackgroundColor = theme.colorScheme.onPrimary;
-            break;
-          case Brightness.light:
-            selectedBackgroundColor = theme.colorScheme.primary;
-            break;
-        }
-        break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        selectedBackgroundColor = CupertinoTheme.of(context).primaryColor;
-        break;
-    }
-
-    TextStyle firstNameStyle = textTheme.firstNameStyle;
-    TextStyle lastNameStyle = textTheme.lastNameStyle;
-
-    if (selectedAttendee != null) {
-      firstNameStyle = firstNameStyle.copyWith(color: Colors.white);
-      lastNameStyle = lastNameStyle.copyWith(color: Colors.white);
-    }
-
-    Widget child = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: RiderNameAndAlias.twoLines(
-        alias: widget.item.alias,
-        firstLineStyle: firstNameStyle,
-        firstName: widget.item.firstName,
-        lastName: widget.item.lastName,
-        secondLineStyle: lastNameStyle,
-      ),
-    );
-
-    if (selectedAttendee != null) {
-      child = DecoratedBox(
-        decoration: BoxDecoration(color: selectedBackgroundColor),
-        child: child,
-      );
-    }
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return SelectableOwnerListItem(
+      rider: widget.item,
+      selected: selectedRideAttendee != null,
       onTap: () {
         // Unresolved owners are never initially scanned.
         // Thus showing a confirmation dialog before unselecting
@@ -212,7 +159,6 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
 
         setState(() {});
       },
-      child: child,
     );
   }
 }

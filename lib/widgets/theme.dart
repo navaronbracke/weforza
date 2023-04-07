@@ -163,40 +163,54 @@ class RideCalendarTheme {
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        final primaryColor = CupertinoTheme.of(context).primaryColor;
+        final CupertinoThemeData theme = CupertinoTheme.of(context);
+        final Brightness brightness = CupertinoTheme.brightnessOf(context);
+        final Color primaryColor = theme.primaryColor;
 
-        return RideCalendarTheme._(
-          futureRide: primaryColor.withOpacity(0.4),
-          padding: padding,
-          selection: primaryColor,
-          pastDay: const CupertinoDynamicColor.withBrightness(
-            color: CupertinoColors.systemGrey4,
-            darkColor: CupertinoColors.systemGrey,
-          ),
-          pastRide: CupertinoDynamicColor.withBrightness(
-            color: CupertinoColors.systemGrey,
-            darkColor: CupertinoColors.systemGrey4.darkColor,
-          ),
-        );
+        switch (state) {
+          case RideCalendarItemState.currentSelection:
+            return RideCalendarTheme(
+              backgroundColor: primaryColor,
+              textStyle: const TextStyle(color: Colors.white),
+            );
+          case RideCalendarItemState.futureRide:
+            return RideCalendarTheme(
+              backgroundColor: primaryColor.withOpacity(0.4),
+              textStyle: const TextStyle(color: Colors.white),
+            );
+          case RideCalendarItemState.pastDay:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: const RideCalendarTheme(
+                backgroundColor: CupertinoColors.systemGrey,
+                textStyle: TextStyle(color: Colors.white),
+              ),
+              light: const RideCalendarTheme(
+                backgroundColor: CupertinoColors.systemGrey4,
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            );
+          case RideCalendarItemState.pastRide:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(
+                backgroundColor: CupertinoColors.systemGrey4.darkColor,
+                textStyle: const TextStyle(color: Colors.white),
+              ),
+              light: const RideCalendarTheme(
+                backgroundColor: CupertinoColors.systemGrey,
+                textStyle: TextStyle(color: Colors.white),
+              ),
+            );
+        }
     }
   }
 
-  /// The color for a ride that is in the future.
-  final Color futureRide;
+  /// The background color for a ride calendar item.
+  final Color? backgroundColor;
 
-  /// The padding around a single day item.
-  ///
-  /// Defaults to 4.0 on all sides.
-  final EdgeInsets padding;
-
-  /// The color for a day in the past, which did not have a ride planned.
-  final Color pastDay;
-
-  /// The color for a ride that is in the past.
-  final Color pastRide;
-
-  /// The color for currently selected days.
-  final Color selection;
+  /// The text style for a ride calendar item.
+  final TextStyle? textStyle;
 }
 
 /// This class defines the text theme for rider names.

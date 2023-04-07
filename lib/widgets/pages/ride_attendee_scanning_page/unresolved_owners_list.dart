@@ -134,19 +134,6 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 }
 
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
-  Color _getSelectedBackgroundColor(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return Theme.of(context).primaryColorDark;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoTheme.of(context).primaryColor;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedAttendee = widget.delegate.getSelectedRideAttendee(
@@ -154,6 +141,30 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
     );
 
     const textTheme = AppTheme.riderTextTheme;
+
+    Color selectedBackgroundColor;
+
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+      case TargetPlatform.fuchsia:
+      case TargetPlatform.linux:
+      case TargetPlatform.windows:
+        final ThemeData theme = Theme.of(context);
+
+        switch (theme.brightness) {
+          case Brightness.dark:
+            selectedBackgroundColor = theme.colorScheme.onPrimary;
+            break;
+          case Brightness.light:
+            selectedBackgroundColor = theme.colorScheme.primary;
+            break;
+        }
+        break;
+      case TargetPlatform.iOS:
+      case TargetPlatform.macOS:
+        selectedBackgroundColor = CupertinoTheme.of(context).primaryColor;
+        break;
+    }
 
     TextStyle firstNameStyle = textTheme.firstNameStyle;
     TextStyle lastNameStyle = textTheme.lastNameStyle;
@@ -176,7 +187,7 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
 
     if (selectedAttendee != null) {
       child = DecoratedBox(
-        decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)),
+        decoration: BoxDecoration(color: selectedBackgroundColor),
         child: child,
       );
     }

@@ -168,7 +168,9 @@ class RideCalendarTheme {
           case RideCalendarItemState.currentSelection:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme(),
+              dark: const RideCalendarTheme(
+                backgroundColor: Colors.blue,
+              ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.primary,
                 textStyle: const TextStyle(color: Colors.white),
@@ -177,7 +179,9 @@ class RideCalendarTheme {
           case RideCalendarItemState.futureRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme(),
+              dark: RideCalendarTheme(
+                backgroundColor: colorScheme.primaryContainer,
+              ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.primary.withOpacity(0.4),
                 textStyle: const TextStyle(color: Colors.white),
@@ -187,8 +191,8 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               brightness,
               dark: RideCalendarTheme(
-                backgroundColor: colorScheme.onSurface.withOpacity(0.12),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+                backgroundColor: colorScheme.onSurface.withOpacity(0.24),
+                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.8)),
               ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.onSurface.withOpacity(0.12),
@@ -199,11 +203,11 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               brightness,
               dark: RideCalendarTheme(
-                backgroundColor: colorScheme.secondaryContainer,
-                textStyle: TextStyle(color: colorScheme.onSecondaryContainer.withOpacity(0.38)),
+                backgroundColor: colorScheme.primary.withOpacity(0.44),
+                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.84)),
               ),
               light: RideCalendarTheme(
-                backgroundColor: Colors.grey.shade700,
+                backgroundColor: colorScheme.onSurface.withOpacity(0.4),
                 textStyle: const TextStyle(color: Colors.white),
               ),
             );

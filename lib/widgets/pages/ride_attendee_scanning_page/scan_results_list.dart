@@ -112,7 +112,7 @@ class _ScanResultsListItem extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        color = Theme.of(context).primaryColor;
+        color = Theme.of(context).colorScheme.primary;
         icon = Icons.person;
         break;
       case TargetPlatform.iOS:

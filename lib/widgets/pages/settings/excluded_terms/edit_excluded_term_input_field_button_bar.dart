@@ -64,7 +64,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
         final confirmButton = PlatformAwareWidget(
           android: (context) => IconButton(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.check),
             onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
           ),
@@ -76,11 +76,24 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
         // The undo button is disabled if the value is the same.
         final undoButton = PlatformAwareWidget(
-          android: (_) => IconButton(
-            color: Colors.black,
-            icon: const Icon(Icons.undo),
-            onPressed: currentValue == term ? null : onUndoPressed,
-          ),
+          android: (context) {
+            Color color;
+
+            switch (Theme.of(context).brightness) {
+              case Brightness.dark:
+                color = Colors.white;
+                break;
+              case Brightness.light:
+                color = Colors.black;
+                break;
+            }
+
+            return IconButton(
+              color: color,
+              icon: const Icon(Icons.undo),
+              onPressed: currentValue == term ? null : onUndoPressed,
+            );
+          },
           ios: (context) => CupertinoIconButton(
             color: const CupertinoDynamicColor.withBrightness(
               color: CupertinoColors.black,

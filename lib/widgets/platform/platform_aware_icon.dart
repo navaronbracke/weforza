@@ -15,7 +15,7 @@ class PlatformAwareIcon extends StatelessWidget {
 
   /// The color for the [androidIcon].
   ///
-  /// Defaults to [ThemeData.primaryColor] if this is null.
+  /// Defaults to [ColorScheme.primary] if this is null.
   final Color? androidColor;
 
   /// The icon for Android.
@@ -37,7 +37,7 @@ class PlatformAwareIcon extends StatelessWidget {
     return PlatformAwareWidget(
       android: (context) => Icon(
         androidIcon,
-        color: androidColor ?? Theme.of(context).primaryColor,
+        color: androidColor ?? Theme.of(context).colorScheme.primary,
         size: size,
       ),
       ios: (context) => Icon(

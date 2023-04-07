@@ -5,7 +5,6 @@ import 'package:weforza/model/add_ride_page_delegate.dart';
 import 'package:weforza/widgets/custom/add_ride_calendar/add_ride_calendar_item.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
-import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendar extends StatelessWidget {
   const AddRideCalendar({
@@ -19,19 +18,12 @@ class AddRideCalendar extends StatelessWidget {
   Widget build(BuildContext context) {
     final calendarDelegate = delegate.calendarDelegate;
 
-    final theme = RideCalendarTheme.fromPlatform(context);
-
     return DatePicker(
       // Use the smallest size for now.
       computeDaySize: (constraints) => constraints.smallest,
       dayBuilder: (day, size, {bool isCurrentMonth = false}) {
         if (isCurrentMonth) {
-          return AddRideCalendarItem(
-            date: day,
-            delegate: delegate,
-            size: size,
-            theme: theme,
-          );
+          return AddRideCalendarItem(date: day, delegate: delegate, size: size);
         }
 
         return SizedBox.fromSize(size: size);

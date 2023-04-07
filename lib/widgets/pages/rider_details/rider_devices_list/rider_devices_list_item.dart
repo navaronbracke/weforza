@@ -88,7 +88,7 @@ class _EditDeviceButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformAwareWidget(
       android: (context) => IconButton(
-        icon: Icon(Icons.edit, color: Theme.of(context).primaryColor),
+        icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
         onPressed: () => _onEditDevicePressed(context, ref),
       ),
       ios: (context) => CupertinoIconButton(

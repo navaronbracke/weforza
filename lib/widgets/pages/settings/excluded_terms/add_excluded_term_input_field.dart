@@ -112,7 +112,7 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
 
         return PlatformAwareWidget(
           android: (context) => IconButton(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.check),
             onPressed: onTap,
           ),

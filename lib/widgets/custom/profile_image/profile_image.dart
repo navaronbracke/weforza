@@ -111,7 +111,7 @@ class AdaptiveProfileImage extends StatelessWidget {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         backgroundColors = Colors.primaries;
-        placeholderBackgroundColor = Theme.of(context).primaryColor;
+        placeholderBackgroundColor = Theme.of(context).colorScheme.primary;
         placeholderIcon = Icons.person;
         break;
       case TargetPlatform.iOS:

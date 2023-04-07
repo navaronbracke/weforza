@@ -1,15 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/widgets/common/rider_name_and_alias.dart';
-import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/dialogs/unselect_scanned_rider_dialog.dart';
-import 'package:weforza/widgets/theme.dart';
+import 'package:weforza/widgets/pages/ride_attendee_scanning_page/selectable_owner_list_item.dart';
 
 /// This widget represents an item in the manual selection list.
 class ManualSelectionListItem extends ConsumerStatefulWidget {
@@ -27,49 +23,24 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
 }
 
 class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListItem> {
-  BoxDecoration? _getDecoration(BuildContext context, bool isSelected) {
-    if (isSelected) {
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.android:
-        case TargetPlatform.fuchsia:
-        case TargetPlatform.linux:
-        case TargetPlatform.windows:
-          return BoxDecoration(color: Theme.of(context).primaryColor.withOpacity(0.6));
-        case TargetPlatform.iOS:
-        case TargetPlatform.macOS:
-          return BoxDecoration(color: CupertinoTheme.of(context).primaryColor);
-      }
-    }
-
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
       widget.item.uuid,
     );
 
-    bool isSelected = false;
-    bool isScanned = false;
+    final bool isSelected = selectedRideAttendee != null;
+    final bool isScanned = selectedRideAttendee?.isScanned ?? false;
 
-    if (selectedRideAttendee != null) {
-      isSelected = true;
-      isScanned = selectedRideAttendee.isScanned;
-    }
-
-    const textTheme = AppTheme.riderTextTheme;
-
-    TextStyle firstNameStyle = textTheme.firstNameStyle;
-    TextStyle lastNameStyle = textTheme.lastNameStyle;
-
-    if (isSelected) {
-      firstNameStyle = firstNameStyle.copyWith(color: Colors.white);
-      lastNameStyle = lastNameStyle.copyWith(color: Colors.white);
-    }
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return SelectableOwnerListItem(
+      rider: widget.item,
+      selected: isSelected,
+      trailing: isSelected
+          ? Icon(
+              isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded,
+              color: Colors.white,
+            )
+          : null,
       onTap: () async {
         // If the search bar still has focus, unfocus it first.
         FocusScope.of(context).unfocus();
@@ -92,38 +63,6 @@ class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListIte
 
         setState(() {});
       },
-      child: Container(
-        decoration: _getDecoration(context, isSelected),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: AdaptiveProfileImage.path(
-                imagePath: widget.item.profileImageFilePath,
-                personInitials: widget.item.initials,
-              ),
-            ),
-            Expanded(
-              child: RiderNameAndAlias.twoLines(
-                alias: widget.item.alias,
-                firstLineStyle: firstNameStyle,
-                firstName: widget.item.firstName,
-                lastName: widget.item.lastName,
-                secondLineStyle: lastNameStyle,
-              ),
-            ),
-            if (isSelected)
-              Padding(
-                padding: const EdgeInsets.only(left: 4),
-                child: Icon(
-                  isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded,
-                  color: Colors.white,
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -150,6 +150,6 @@
 	"uncheck": "Afvinken",
 	"uncheckScannedRider": "Gescande renner afvinken",
 	"uncheckScannedRiderDescription": "Bent u zeker dat u deze gescande renner wil afvinken?",
-	"unresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars.\nU kan de aanwezige eigenaars hier selecteren.",
+	"unresolvedOwnersDescription": "Sommige gescande apparaten hebben meerdere mogelijke eigenaars. U kan de aanwezige eigenaars hier selecteren.",
 	"version": "Versie"
 }

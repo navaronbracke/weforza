@@ -150,6 +150,6 @@
 	"uncheck": "Uncheck",
 	"uncheckScannedRider": "Uncheck scanned rider",
 	"uncheckScannedRiderDescription": "Are you sure that you want to uncheck this scanned rider?",
-	"unresolvedOwnersDescription": "Some scanned devices have multiple possible owners.\nYou can select the attending owners here.",
+	"unresolvedOwnersDescription": "Some scanned devices have multiple possible owners. You can select the attending owners here.",
 	"version": "Version"
 }

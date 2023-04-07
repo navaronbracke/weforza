@@ -184,18 +184,17 @@ class RideCalendarTheme {
               ),
             );
           case RideCalendarItemState.pastDay:
-            return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: RideCalendarTheme(),
-              light: RideCalendarTheme(
-                backgroundColor: Colors.grey.shade400,
-                textStyle: const TextStyle(color: Colors.white),
-              ),
+            return RideCalendarTheme(
+              backgroundColor: colorScheme.onSurface.withOpacity(0.12),
+              textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.38)),
             );
           case RideCalendarItemState.pastRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme(),
+              dark: RideCalendarTheme(
+                backgroundColor: colorScheme.secondaryContainer,
+                textStyle: TextStyle(color: colorScheme.onSecondaryContainer.withOpacity(0.38)),
+              ),
               light: RideCalendarTheme(
                 backgroundColor: Colors.grey.shade700,
                 textStyle: const TextStyle(color: Colors.white),

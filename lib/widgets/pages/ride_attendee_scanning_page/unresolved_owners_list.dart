@@ -40,14 +40,13 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
   }
 
   TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {
-    Color color;
+    Color? color;
 
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        color = Colors.grey;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
@@ -87,14 +86,12 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Center(
-                  child: Text(
-                    translator.unresolvedOwnersDescription,
-                    style: _getMultipleOwnersListDescriptionStyle(context),
-                    softWrap: true,
-                    textAlign: TextAlign.center,
-                  ),
+                padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
+                child: Text(
+                  translator.unresolvedOwnersDescription,
+                  style: _getMultipleOwnersListDescriptionStyle(context),
+                  softWrap: true,
+                  textAlign: TextAlign.center,
                 ),
               ),
               Expanded(

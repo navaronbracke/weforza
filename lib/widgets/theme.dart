@@ -31,8 +31,6 @@ abstract class AppTheme {
         systemOverlayStyle: systemUiOverlayStyle,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: colorScheme.surface,
-        surfaceTintColor: colorScheme.surfaceTint,
         indicatorColor: navigationBarIndicatorColor,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         iconTheme: MaterialStateProperty.resolveWith<IconThemeData>((states) {

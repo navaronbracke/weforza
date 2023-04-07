@@ -184,9 +184,16 @@ class RideCalendarTheme {
               ),
             );
           case RideCalendarItemState.pastDay:
-            return RideCalendarTheme(
-              backgroundColor: colorScheme.onSurface.withOpacity(0.12),
-              textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.38)),
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(
+                backgroundColor: colorScheme.onSurface.withOpacity(0.12),
+                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+              ),
+              light: RideCalendarTheme(
+                backgroundColor: colorScheme.onSurface.withOpacity(0.12),
+                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.38)),
+              ),
             );
           case RideCalendarItemState.pastRide:
             return RideCalendarTheme.withBrightness(

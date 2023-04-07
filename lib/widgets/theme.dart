@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:weforza/model/ride_calendar_item_state.dart';
 
 /// This class defines the application theme.
 abstract class AppTheme {
@@ -127,23 +128,25 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
   }
 }
 
-/// This class represents the theme for the ride calendar date picker.
+/// This class represents the theme for a ride calendar.
+@immutable
 class RideCalendarTheme {
-  const RideCalendarTheme._({
-    required this.futureRide,
-    required this.pastDay,
-    required this.pastRide,
-    required this.selection,
-    this.padding = const EdgeInsets.all(4),
-  });
+  const RideCalendarTheme({this.backgroundColor, this.textStyle});
 
-  /// Construct a [RideCalendarTheme] for the current [ThemeData.platform].
-  ///
-  /// The given [context] is used to look up the target platform.
-  ///
-  /// Returns a [RideCalendarTheme] with a palette of colors
-  /// adapted to the current platform.
-  factory RideCalendarTheme.fromPlatform(
+  factory RideCalendarTheme.withBrightness(
+    Brightness brightness, {
+    required RideCalendarTheme dark,
+    required RideCalendarTheme light,
+  }) {
+    switch (brightness) {
+      case Brightness.dark:
+        return dark;
+      case Brightness.light:
+        return light;
+    }
+  }
+
+  factory RideCalendarTheme.resolve(
     BuildContext context, {
     EdgeInsets padding = const EdgeInsets.all(4),
   }) {

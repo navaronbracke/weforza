@@ -148,22 +148,60 @@ class RideCalendarTheme {
 
   factory RideCalendarTheme.resolve(
     BuildContext context, {
-    EdgeInsets padding = const EdgeInsets.all(4),
+    required RideCalendarItemState? state,
   }) {
+    // Defer to default text theme for future days. These also do not have a background color.
+    if (state == null) {
+      return const RideCalendarTheme();
+    }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        final theme = Theme.of(context);
+        final ThemeData theme = Theme.of(context);
+        final Brightness brightness = theme.brightness;
+        final Color primaryColor = theme.colorScheme.primary;
 
-        return RideCalendarTheme._(
-          futureRide: theme.primaryColor.withOpacity(0.4),
-          padding: padding,
-          pastDay: Colors.grey.shade400,
-          pastRide: Colors.grey.shade700,
-          selection: theme.colorScheme.primary,
-        );
+        switch (state) {
+          case RideCalendarItemState.currentSelection:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(),
+              light: RideCalendarTheme(
+                backgroundColor: primaryColor,
+                textStyle: const TextStyle(color: Colors.white),
+              ),
+            );
+          case RideCalendarItemState.futureRide:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(),
+              light: RideCalendarTheme(
+                backgroundColor: primaryColor.withOpacity(0.4),
+                textStyle: const TextStyle(color: Colors.white),
+              ),
+            );
+          case RideCalendarItemState.pastDay:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(),
+              light: RideCalendarTheme(
+                backgroundColor: Colors.grey.shade400,
+                textStyle: const TextStyle(color: Colors.white),
+              ),
+            );
+          case RideCalendarItemState.pastRide:
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme(),
+              light: RideCalendarTheme(
+                backgroundColor: Colors.grey.shade700,
+                textStyle: const TextStyle(color: Colors.white),
+              ),
+            );
+        }
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final CupertinoThemeData theme = CupertinoTheme.of(context);

@@ -67,6 +67,7 @@ class AddRideCalendarItem extends StatelessWidget {
         }
 
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => delegate.selectDay(date),
           child: SizedBox.fromSize(size: size, child: Padding(padding: const EdgeInsets.all(4), child: child)),
         );

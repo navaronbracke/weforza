@@ -181,7 +181,8 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               brightness,
               dark: RideCalendarTheme(
-                backgroundColor: colorScheme.primaryContainer,
+                backgroundColor: colorScheme.secondary,
+                textStyle: TextStyle(color: colorScheme.onSecondary),
               ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.primary.withOpacity(0.4),

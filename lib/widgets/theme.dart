@@ -192,7 +192,6 @@ class RideCalendarTheme {
               brightness,
               dark: RideCalendarTheme(
                 backgroundColor: colorScheme.onSurface.withOpacity(0.24),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.8)),
               ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.onSurface.withOpacity(0.12),
@@ -204,7 +203,6 @@ class RideCalendarTheme {
               brightness,
               dark: RideCalendarTheme(
                 backgroundColor: colorScheme.primary.withOpacity(0.44),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.84)),
               ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.onSurface.withOpacity(0.4),

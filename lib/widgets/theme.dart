@@ -168,8 +168,9 @@ class RideCalendarTheme {
           case RideCalendarItemState.currentSelection:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: const RideCalendarTheme(
-                backgroundColor: Colors.blue,
+              dark: RideCalendarTheme(
+                backgroundColor: colorScheme.primary,
+                textStyle: TextStyle(color: colorScheme.onPrimary),
               ),
               light: RideCalendarTheme(
                 backgroundColor: colorScheme.primary,

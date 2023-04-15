@@ -70,7 +70,7 @@ class _AddRideCalendarColorLegendItem extends StatelessWidget {
         );
 
   /// The size of the dot next to a label.
-  static const double dotSize = 12;
+  static const double dotSize = 20;
 
   /// The font size for the legend label.
   static const double labelFontSize = 14;

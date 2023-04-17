@@ -131,7 +131,23 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
 /// This class represents the theme for a ride calendar.
 @immutable
 class RideCalendarTheme {
-  const RideCalendarTheme({this.backgroundColor, this.textStyle});
+  const RideCalendarTheme({required this.textStyle, this.decoration});
+
+  RideCalendarTheme.filled({
+    required Color backgroundColor,
+    required Color labelColor,
+  })  : decoration = BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          color: backgroundColor,
+        ),
+        textStyle = TextStyle(fontSize: 18, color: labelColor);
+
+  RideCalendarTheme.outlined(Color color)
+      : decoration = BoxDecoration(
+          border: Border.all(color: color, width: 2),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        ),
+        textStyle = TextStyle(fontSize: 18, color: color);
 
   factory RideCalendarTheme.withBrightness(
     Brightness brightness, {

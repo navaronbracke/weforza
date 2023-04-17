@@ -168,7 +168,7 @@ class RideCalendarTheme {
   }) {
     // Defer to default text theme for future days. These also do not have a background color.
     if (state == null) {
-      return const RideCalendarTheme();
+      return const RideCalendarTheme(textStyle: TextStyle(fontSize: 18));
     }
 
     switch (defaultTargetPlatform) {

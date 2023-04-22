@@ -223,35 +223,44 @@ class RideCalendarTheme {
 
         switch (state) {
           case RideCalendarItemState.currentSelection:
-            return RideCalendarTheme(
+            return RideCalendarTheme.filled(
               backgroundColor: primaryColor,
-              textStyle: const TextStyle(color: Colors.white),
+              labelColor: Colors.white,
             );
           case RideCalendarItemState.futureRide:
-            return RideCalendarTheme(
-              backgroundColor: primaryColor.withOpacity(0.4),
-              textStyle: const TextStyle(color: Colors.white),
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGreen.darkColor,
+                labelColor: CupertinoColors.black,
+              ),
+              light: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGreen.color,
+                labelColor: CupertinoColors.white,
+              ),
             );
           case RideCalendarItemState.pastDay:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: const RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.inactiveGray.darkColor,
+                labelColor: CupertinoColors.white,
               ),
-              light: const RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey4,
-                textStyle: TextStyle(color: Colors.white),
+              light: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGrey,
+                labelColor: CupertinoColors.white,
               ),
             );
           case RideCalendarItemState.pastRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey4.darkColor,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.lightBackgroundGray,
+                labelColor: CupertinoColors.black,
               ),
-              light: const RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey,
-                textStyle: TextStyle(color: Colors.white),
+              light: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGrey4,
+                labelColor: CupertinoColors.black,
               ),
             );
         }

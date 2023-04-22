@@ -247,8 +247,8 @@ class RideCalendarTheme {
                 labelColor: CupertinoColors.black,
               ),
               light: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGrey,
-                labelColor: CupertinoColors.white,
+                backgroundColor: CupertinoColors.systemGrey5,
+                labelColor: CupertinoColors.black,
               ),
             );
           case RideCalendarItemState.pastRide:
@@ -259,8 +259,8 @@ class RideCalendarTheme {
                 labelColor: CupertinoColors.white,
               ),
               light: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGrey4,
-                labelColor: CupertinoColors.black,
+                backgroundColor: CupertinoColors.systemGrey,
+                labelColor: CupertinoColors.white,
               ),
             );
         }

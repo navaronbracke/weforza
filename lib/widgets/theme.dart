@@ -225,7 +225,7 @@ class RideCalendarTheme {
           case RideCalendarItemState.currentSelection:
             return RideCalendarTheme.filled(
               backgroundColor: primaryColor,
-              labelColor: Colors.white,
+              labelColor: CupertinoColors.white,
             );
           case RideCalendarItemState.futureRide:
             return RideCalendarTheme.withBrightness(

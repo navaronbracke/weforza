@@ -70,7 +70,7 @@ class _AddRideCalendarColorLegendItem extends StatelessWidget {
         );
 
   /// The size of the dot next to a label.
-  static const double dotSize = 12;
+  static const double dotSize = 20;
 
   /// The font size for the legend label.
   static const double labelFontSize = 14;
@@ -110,13 +110,12 @@ class _AddRideCalendarColorLegendItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BoxDecoration? decoration = RideCalendarTheme.resolve(context, state: state).decoration;
+
     final dot = Container(
       height: dotSize,
       width: dotSize,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        color: RideCalendarTheme.resolve(context, state: state).backgroundColor,
-      ),
+      decoration: decoration?.copyWith(borderRadius: const BorderRadius.all(Radius.circular(10))),
     );
 
     return Row(

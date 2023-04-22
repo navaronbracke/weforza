@@ -131,7 +131,16 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
 /// This class represents the theme for a ride calendar.
 @immutable
 class RideCalendarTheme {
-  const RideCalendarTheme({this.backgroundColor, this.textStyle});
+  const RideCalendarTheme({required this.textStyle, this.decoration});
+
+  RideCalendarTheme.filled({
+    required Color backgroundColor,
+    required Color labelColor,
+  })  : decoration = BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          color: backgroundColor,
+        ),
+        textStyle = TextStyle(fontSize: 18, color: labelColor);
 
   factory RideCalendarTheme.withBrightness(
     Brightness brightness, {
@@ -152,7 +161,7 @@ class RideCalendarTheme {
   }) {
     // Defer to default text theme for future days. These also do not have a background color.
     if (state == null) {
-      return const RideCalendarTheme();
+      return const RideCalendarTheme(textStyle: TextStyle(fontSize: 18));
     }
 
     switch (defaultTargetPlatform) {
@@ -161,54 +170,48 @@ class RideCalendarTheme {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         final ThemeData theme = Theme.of(context);
-        final Brightness brightness = theme.brightness;
         final ColorScheme colorScheme = theme.colorScheme;
 
         switch (state) {
           case RideCalendarItemState.currentSelection:
-            return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: const RideCalendarTheme(
-                backgroundColor: Colors.blue,
-              ),
-              light: RideCalendarTheme(
-                backgroundColor: colorScheme.primary,
-                textStyle: const TextStyle(color: Colors.white),
-              ),
+            return RideCalendarTheme.filled(
+              backgroundColor: colorScheme.primary,
+              labelColor: colorScheme.onPrimary,
             );
           case RideCalendarItemState.futureRide:
             return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: RideCalendarTheme(
-                backgroundColor: colorScheme.primaryContainer,
+              theme.brightness,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: Colors.teal.shade300,
+                labelColor: Colors.black,
               ),
-              light: RideCalendarTheme(
-                backgroundColor: colorScheme.primary.withOpacity(0.4),
-                textStyle: const TextStyle(color: Colors.white),
+              light: RideCalendarTheme.filled(
+                backgroundColor: Colors.lightGreen,
+                labelColor: Colors.black,
               ),
             );
           case RideCalendarItemState.pastDay:
             return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: RideCalendarTheme(
-                backgroundColor: colorScheme.onSurface.withOpacity(0.24),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.8)),
+              theme.brightness,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: colorScheme.onSurfaceVariant,
+                labelColor: colorScheme.surfaceVariant,
               ),
-              light: RideCalendarTheme(
-                backgroundColor: colorScheme.onSurface.withOpacity(0.12),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.38)),
+              light: RideCalendarTheme.filled(
+                backgroundColor: colorScheme.surfaceVariant,
+                labelColor: colorScheme.onSurfaceVariant,
               ),
             );
           case RideCalendarItemState.pastRide:
             return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: RideCalendarTheme(
-                backgroundColor: colorScheme.primary.withOpacity(0.44),
-                textStyle: TextStyle(color: colorScheme.onSurface.withOpacity(0.84)),
+              theme.brightness,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: colorScheme.onSurface.withOpacity(0.36),
+                labelColor: colorScheme.onBackground,
               ),
-              light: RideCalendarTheme(
-                backgroundColor: colorScheme.onSurface.withOpacity(0.4),
-                textStyle: const TextStyle(color: Colors.white),
+              light: RideCalendarTheme.filled(
+                backgroundColor: colorScheme.onSurfaceVariant,
+                labelColor: colorScheme.surfaceVariant,
               ),
             );
         }
@@ -220,46 +223,55 @@ class RideCalendarTheme {
 
         switch (state) {
           case RideCalendarItemState.currentSelection:
-            return RideCalendarTheme(
+            return RideCalendarTheme.filled(
               backgroundColor: primaryColor,
-              textStyle: const TextStyle(color: Colors.white),
+              labelColor: CupertinoColors.white,
             );
           case RideCalendarItemState.futureRide:
-            return RideCalendarTheme(
-              backgroundColor: primaryColor.withOpacity(0.4),
-              textStyle: const TextStyle(color: Colors.white),
+            return RideCalendarTheme.withBrightness(
+              brightness,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGreen.darkColor,
+                labelColor: CupertinoColors.black,
+              ),
+              light: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGreen.color,
+                labelColor: CupertinoColors.white,
+              ),
             );
           case RideCalendarItemState.pastDay:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: const RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGrey3,
+                labelColor: CupertinoColors.black,
               ),
-              light: const RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey4,
-                textStyle: TextStyle(color: Colors.white),
+              light: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.systemGrey5,
+                labelColor: CupertinoColors.black,
               ),
             );
           case RideCalendarItemState.pastRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme(
-                backgroundColor: CupertinoColors.systemGrey4.darkColor,
+              dark: RideCalendarTheme.filled(
+                backgroundColor: CupertinoColors.inactiveGray.darkColor,
+                labelColor: CupertinoColors.white,
               ),
-              light: const RideCalendarTheme(
+              light: RideCalendarTheme.filled(
                 backgroundColor: CupertinoColors.systemGrey,
-                textStyle: TextStyle(color: Colors.white),
+                labelColor: CupertinoColors.white,
               ),
             );
         }
     }
   }
 
-  /// The background color for a ride calendar item.
-  final Color? backgroundColor;
+  /// The decoration for a ride calendar item.
+  final BoxDecoration? decoration;
 
   /// The text style for a ride calendar item.
-  final TextStyle? textStyle;
+  final TextStyle textStyle;
 }
 
 /// This class defines the text theme for rider names.

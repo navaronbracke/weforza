@@ -52,18 +52,12 @@ class AddRideCalendarItem extends StatelessWidget {
       stream: delegate.selectionStream,
       builder: (context, _) {
         final theme = RideCalendarTheme.resolve(context, state: _getStateForItem());
-        final backgroundColor = theme.backgroundColor;
+        final decoration = theme.decoration;
 
         Widget child = Center(child: Text('${date.day}', style: theme.textStyle, textAlign: TextAlign.center));
 
-        if (backgroundColor != null) {
-          child = DecoratedBox(
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: const BorderRadius.all(Radius.circular(4)),
-            ),
-            child: child,
-          );
+        if (decoration != null) {
+          child = DecoratedBox(decoration: decoration, child: child);
         }
 
         return GestureDetector(

@@ -60,6 +60,8 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   }
 
   /// Whether [date] is before today.
+  ///
+  /// This method normalizes `today` so that the hour, minute, second, millisecond and microsecond are set to zero.
   bool isBeforeToday(DateTime date) {
     return date.isBefore(DateTime(_today.year, _today.month, _today.day));
   }
@@ -105,7 +107,7 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   void selectDay(DateTime date) {
     // The selection is locked while saving.
     // Abort if the ride was scheduled in another session, or if the date is in the past.
-    if (_savingSelection || _existingRides.contains(date) || date.isBefore(_today)) {
+    if (_savingSelection || _existingRides.contains(date) || isBeforeToday(date)) {
       return;
     }
 

@@ -186,7 +186,7 @@ class RideCalendarTheme {
                 labelColor: Colors.black,
               ),
               light: RideCalendarTheme.filled(
-                backgroundColor: Colors.blue.shade200,
+                backgroundColor: Colors.lightGreen,
                 labelColor: Colors.black,
               ),
             );

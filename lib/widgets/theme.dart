@@ -206,8 +206,8 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               theme.brightness,
               dark: RideCalendarTheme.filled(
-                backgroundColor: const Color(0xffffca9e),
-                labelColor: Colors.black,
+                backgroundColor: colorScheme.onSurface.withOpacity(0.36),
+                labelColor: colorScheme.onBackground,
               ),
               light: RideCalendarTheme.filled(
                 backgroundColor: colorScheme.onSurfaceVariant,

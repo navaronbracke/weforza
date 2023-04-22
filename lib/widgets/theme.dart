@@ -243,8 +243,8 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               brightness,
               dark: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.inactiveGray.darkColor,
-                labelColor: CupertinoColors.white,
+                backgroundColor: CupertinoColors.systemGrey3,
+                labelColor: CupertinoColors.black,
               ),
               light: RideCalendarTheme.filled(
                 backgroundColor: CupertinoColors.systemGrey,
@@ -255,8 +255,8 @@ class RideCalendarTheme {
             return RideCalendarTheme.withBrightness(
               brightness,
               dark: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.lightBackgroundGray,
-                labelColor: CupertinoColors.black,
+                backgroundColor: CupertinoColors.inactiveGray.darkColor,
+                labelColor: CupertinoColors.white,
               ),
               light: RideCalendarTheme.filled(
                 backgroundColor: CupertinoColors.systemGrey4,

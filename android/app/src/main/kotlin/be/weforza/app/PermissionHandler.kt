@@ -104,21 +104,24 @@ class PermissionHandler {
     */
     fun requestBluetoothScanPermission(activity: Activity, callback: PermissionResultCallback) {
         // Without the location permission, the scan does not find devices.
-        // Request both types of permission,
-        // so that the user can choose between precise and approximate location.
-        val locationPermissions = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        )
+        // https://developer.android.com/guide/topics/connectivity/bluetooth/permissions
+        //
+        // On Android Q (API 29) and higher, request the fine location.
+        // On Android Pie (API 28) and lower, request the coarse location instead.
+        val locationPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Manifest.permission.ACCESS_FINE_LOCATION
+        } else {
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        }
 
         val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
-                *locationPermissions,
+                locationPermission,
                 Manifest.permission.BLUETOOTH_SCAN,
                 Manifest.permission.BLUETOOTH_CONNECT, // To access `BluetoothDevice.name`.
             )
         } else {
-            arrayOf(*locationPermissions, Manifest.permission.BLUETOOTH)
+            arrayOf(locationPermission, Manifest.permission.BLUETOOTH)
         }
 
         requestPermissions(activity, permissions, REQUEST_CODE_BLUETOOTH_PERMISSION, callback)

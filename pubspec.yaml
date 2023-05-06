@@ -66,9 +66,6 @@ dependencies:
   # For OS-specific directory paths.
   path_provider: ^2.0.13
 
-  # The permission_handler packages provides utilities for requesting permissions.
-  permission_handler: ^10.2.0
-
   # RxDart provides extensions to Dart Streams.
   rxdart: ^0.27.7
 

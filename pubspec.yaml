@@ -20,7 +20,9 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  app_settings: ^4.2.0
+  # TODO: switch to regular version once the namespace fix is published
+  app_settings:
+    git: https://github.com/spencerccf/app_settings.git
 
   # Collection utilities.
   collection: ^1.17.0
@@ -34,7 +36,7 @@ dependencies:
   file: ^6.1.4
 
   # This package provides platform independent file picking.
-  file_picker: ^5.2.6
+  file_picker: ^5.3.0
 
   flutter:
     sdk: flutter
@@ -55,7 +57,7 @@ dependencies:
   jiffy: ^6.1.0
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^3.0.3
+  package_info_plus: ^3.1.2
 
   # Path utilities for URI's and the like.
   path: ^1.8.1

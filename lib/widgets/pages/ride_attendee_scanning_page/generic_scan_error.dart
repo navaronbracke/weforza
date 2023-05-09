@@ -88,11 +88,11 @@ class BluetoothDisabledError extends StatelessWidget {
       ),
       primaryButton: PlatformAwareWidget(
         android: (_) => ElevatedButton(
-          onPressed: AppSettings.openBluetoothSettings,
+          onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
           child: Text(translator.goToSettings),
         ),
         ios: (_) => CupertinoButton.filled(
-          onPressed: AppSettings.openBluetoothSettings,
+          onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
           child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
         ),
       ),

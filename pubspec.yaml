@@ -48,7 +48,7 @@ dependencies:
   flutter_riverpod: ^2.3.2
 
   # For picking images from the camera / gallery.
-  image_picker: ^0.8.7
+  image_picker: ^0.8.7+4
 
   # The intl package provides translation utilities.
   intl: any

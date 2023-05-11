@@ -11,7 +11,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     const rowHeight = _AddRideCalendarColorLegendItem.labelMaxHeight;
 
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -24,7 +24,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   state: RideCalendarItemState.currentSelection,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _AddRideCalendarColorLegendItem(
                   dotDirection: AxisDirection.left,
@@ -34,7 +34,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4),
         SizedBox(
           height: rowHeight,
           child: Row(
@@ -45,7 +45,7 @@ class AddRideCalendarColorLegend extends StatelessWidget {
                   state: RideCalendarItemState.pastRide,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16),
               Expanded(
                 child: _AddRideCalendarColorLegendItem(
                   dotDirection: AxisDirection.left,

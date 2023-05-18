@@ -108,8 +108,8 @@ class FileHandlerDirectories {
       }
 
       return FileHandlerDirectories(
-        export: documentsDirs.single,
-        photos: photosDirs.single,
+        export: documentsDirs.first,
+        photos: photosDirs.first,
       );
     }
 

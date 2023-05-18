@@ -68,10 +68,10 @@ class IoFileHandler implements FileHandler {
 
     switch (source) {
       case ImageSource.camera:
-        // Get a new file handle
-        // for a file with the same name in the documents directory.
-        final Directory publicDocumentsDirectory = await getPublicDocumentsDirectory();
-        final File destinationFile = File(publicDocumentsDirectory.path + Platform.pathSeparator + file.name);
+        // TODO: register file in Photos app on iOS
+
+        // Save the file into the photos directory.
+        final File destinationFile = File(directories.photos.path + Platform.pathSeparator + file.name);
 
         await file.saveTo(destinationFile.path);
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +8,6 @@ import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
-import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -36,22 +33,6 @@ class ExportDataPage<T> extends StatelessWidget {
   /// The title for the page.
   final String title;
 
-  String? _validateDirectory(Directory? directory, S translator) {
-    if (directory == null) {
-      return translator.directoryRequired;
-    }
-
-    if (!directory.existsSync()) {
-      return translator.directoryDoesNotExist;
-    }
-
-    if (Platform.isAndroid && directory.path == Platform.pathSeparator) {
-      return translator.directoryIsProtected;
-    }
-
-    return null;
-  }
-
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
@@ -63,15 +44,7 @@ class ExportDataPage<T> extends StatelessWidget {
             delegate: SliverChildListDelegate.fixed([
               ExportDataFileNameTextField<T>(delegate: delegate),
               Padding(
-                padding: const EdgeInsets.only(top: 32, bottom: 48),
-                child: DirectorySelectionFormField(
-                  controller: delegate.directoryController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (directory) => _validateDirectory(directory, translator),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40),
+                padding: const EdgeInsets.symmetric(vertical: 32),
                 child: Row(
                   children: [
                     Expanded(
@@ -138,11 +111,6 @@ class ExportDataPage<T> extends StatelessWidget {
             CupertinoFormSection.insetGrouped(
               children: [
                 ExportDataFileNameTextField<T>(delegate: delegate),
-                DirectorySelectionFormField(
-                  controller: delegate.directoryController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (directory) => _validateDirectory(directory, translator),
-                ),
                 CupertinoFormRow(
                   padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 6, 20),
                   prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),

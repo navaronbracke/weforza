@@ -49,10 +49,9 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
       );
     }
 
-    final Directory? directory = delegate.directoryController.directory;
+    final Directory exportDirectory = delegate.fileHandler.directories.export;
 
-    // Since the file needs a directory and a name to be valid, we can only check for its existence if we have both.
-    if (directory != null && File(directory.path + Platform.pathSeparator + fileName).existsSync()) {
+    if (File(exportDirectory.path + Platform.pathSeparator + fileName).existsSync()) {
       return translator.fileNameExists;
     }
 

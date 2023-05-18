@@ -43,7 +43,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
-    final directory = directoryController.directory;
+    final exportDirectory = fileHandler.directories.export;
 
     try {
       // Sanity-check that the file name ends with the correct extension.
@@ -57,11 +57,11 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       }
 
       // Sanity-check that the directory exists.
-      if (!directory.existsSync()) {
-        throw StateError('The given directory $directory does not exist');
+      if (!exportDirectory.existsSync()) {
+        throw StateError('The given directory $exportDirectory does not exist');
       }
 
-      final file = File(directory.path + Platform.pathSeparator + fileName);
+      final file = File(exportDirectory.path + Platform.pathSeparator + fileName);
 
       // Sanity-check that the file does not exist.
       // This should have been validated with the form state as well.

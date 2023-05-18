@@ -6,11 +6,6 @@ import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Choose a directory using a directory picker.
-  ///
-  /// Returns the chosen directory, or null if none was chosen.
-  Future<Directory?> pickDirectory();
-
   /// Choose the file to use as data source
   /// for importing riders and their devices.
   ///
@@ -26,17 +21,6 @@ abstract class FileHandler {
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
   const IoFileHandler();
-
-  @override
-  Future<Directory?> pickDirectory() async {
-    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
-
-    if (directoryPath == null) {
-      return null;
-    }
-
-    return Directory(directoryPath);
-  }
 
   @override
   Future<File?> pickImportRidersDataSource() async {

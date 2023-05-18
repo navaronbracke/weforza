@@ -5,32 +5,22 @@ import 'package:rxdart/subjects.dart';
 import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
-import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
-  ExportDelegate({
-    required this.fileHandler,
-    Directory? initialDirectory,
-  })  : fileNameController = TextEditingController(),
-        directoryController = DirectorySelectionController(fileHandler: fileHandler, initialValue: initialDirectory) {
-    directoryController.addListener(_onDirectoryChanged);
-  }
+  ExportDelegate({required this.fileHandler});
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The directory that manages the selected directory.
-  final DirectorySelectionController directoryController;
-
   /// The file handler that will provide directories.
   final FileHandler fileHandler;
 
   /// The controller that manages the selected file name.
-  final TextEditingController fileNameController;
+  final TextEditingController fileNameController = TextEditingController();
 
   /// The [Key] for the file name input field.
   final GlobalKey<FormFieldState<String>> fileNameKey = GlobalKey();
@@ -40,12 +30,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
-
-  void _onDirectoryChanged() {
-    // If a new directory was selected,
-    // the `File Exists` message may be outdated.
-    fileNameKey.currentState?.validate();
-  }
 
   /// Export the currently available data to a file.
   ///
@@ -72,14 +56,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
-      // Sanity-check that the directory was provided.
-      // This should have been validated with the form state as well.
-      if (directory == null) {
-        throw ArgumentError.notNull('directory');
-      }
-
       // Sanity-check that the directory exists.
-      // This should have been validated with the form state as well.
       if (!directory.existsSync()) {
         throw StateError('The given directory $directory does not exist');
       }
@@ -145,8 +122,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    directoryController.removeListener(_onDirectoryChanged);
-    directoryController.dispose();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

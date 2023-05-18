@@ -20,7 +20,6 @@ class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
   ExportRidesDelegate({
     required super.fileHandler,
     required this.repository,
-    super.initialDirectory,
   });
 
   final ExportRidesRepository repository;

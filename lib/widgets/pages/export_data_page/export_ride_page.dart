@@ -41,7 +41,6 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
     _delegate = ExportRidesDelegate(
       fileHandler: ref.read(fileHandlerProvider),
       repository: ref.read(exportRidesRepositoryProvider),
-      initialDirectory: ref.read(exportDataDefaultDirectoryProvider),
     );
 
     checkmarkController = AnimationController(

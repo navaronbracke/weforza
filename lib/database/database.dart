@@ -23,7 +23,7 @@ class ApplicationDatabase {
   Database getDatabase() => _database;
 
   // TODO remove this method when migrated to new directory.
-  // Also remove the ignore_for_file above.
+  // Also remove the ignore_for_file above and the test which fails.
 
   /// Moves the database from the old Documents directory
   /// to the Application Support directory for the current platform.

@@ -2,14 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
-  /// Get the directory where the application can store publicly accessible files.
-  Future<Directory> getPublicDocumentsDirectory();
-
   /// Choose a directory using a directory picker.
   ///
   /// Returns the chosen directory, or null if none was chosen.
@@ -29,24 +25,7 @@ abstract class FileHandler {
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
-  @override
-  Future<Directory> getPublicDocumentsDirectory() async {
-    Directory? directory;
-
-    if (Platform.isAndroid) {
-      directory = await getExternalStorageDirectory();
-    } else if (Platform.isIOS) {
-      directory = await getApplicationDocumentsDirectory();
-    } else {
-      throw UnsupportedError('Only Android and IOS are supported');
-    }
-
-    if (directory == null) {
-      throw ArgumentError.notNull('directory');
-    }
-
-    return directory;
-  }
+  const IoFileHandler();
 
   @override
   Future<Directory?> pickDirectory() async {

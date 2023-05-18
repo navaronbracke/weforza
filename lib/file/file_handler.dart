@@ -6,6 +6,9 @@ import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
+  /// Get the directories that this file handler can use.
+  FileHandlerDirectories get directories;
+
   /// Choose the file to use as data source
   /// for importing riders and their devices.
   ///
@@ -20,7 +23,10 @@ abstract class FileHandler {
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
-  const IoFileHandler();
+  const IoFileHandler(this.directories);
+
+  @override
+  final FileHandlerDirectories directories;
 
   @override
   Future<File?> pickImportRidersDataSource() async {
@@ -74,4 +80,15 @@ class IoFileHandler implements FileHandler {
         return File(file.path);
     }
   }
+}
+
+/// This class represents the directories that can be used by a [FileHandler].
+class FileHandlerDirectories {
+  const FileHandlerDirectories({required this.export, required this.photos});
+
+  /// The directory for export files.
+  final Directory export;
+
+  /// The directory for photos.
+  final Directory photos;
 }

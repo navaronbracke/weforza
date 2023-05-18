@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
 /// This interface provides methods to work with [File]s.
@@ -91,4 +92,37 @@ class FileHandlerDirectories {
 
   /// The directory for photos.
   final Directory photos;
+
+  /// Get the [FileHandlerDirectories] for the target platform.
+  static Future<FileHandlerDirectories> fromPlatform() async {
+    if (Platform.isAndroid) {
+      final photosDirs = await getExternalStorageDirectories(type: StorageDirectory.pictures) ?? [];
+      final documentsDirs = await getExternalStorageDirectories(type: StorageDirectory.documents) ?? [];
+
+      if (documentsDirs.isEmpty) {
+        throw ArgumentError.value(documentsDirs, 'documentsDirs', 'The documents directory is unavailable.');
+      }
+
+      if (photosDirs.isEmpty) {
+        throw ArgumentError.value(photosDirs, 'photosDirs', 'The photos directory is unavailable.');
+      }
+
+      return FileHandlerDirectories(
+        export: documentsDirs.single,
+        photos: photosDirs.single,
+      );
+    }
+
+    if (Platform.isIOS) {
+      // iOS does not have specific directories.
+      final Directory documents = await getApplicationDocumentsDirectory();
+
+      return FileHandlerDirectories(
+        export: documents,
+        photos: documents,
+      );
+    }
+
+    throw UnsupportedError('Only Android and iOS are supported.');
+  }
 }

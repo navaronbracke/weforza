@@ -6,10 +6,8 @@ import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/database_factory.dart';
 import 'package:weforza/database/settings_dao.dart';
-import 'package:weforza/file/file_handler.dart';
 import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
-import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/app.dart';
@@ -35,16 +33,11 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
-  // Preload the directories.
-  final directories = await FileHandlerDirectories.fromPlatform();
-
   runApp(
     ProviderScope(
       overrides: [
         // Inject the database after it is ready.
         databaseProvider.overrideWithValue(database),
-        // Inject the preloaded directories.
-        fileHandlerDirectoriesProvider.overrideWithValue(directories),
         // Inject the preloaded package info.
         packageInfoProvider.overrideWithValue(packageInfo),
         // Inject the preloaded settings.

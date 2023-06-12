@@ -66,6 +66,7 @@
 	"exportRidersDefaultFileName": "renners.csv",
 	"exportRides": "Ritten exporteren",
 	"exportRidesFileNamePlaceholder": "ritten_kalender.csv",
+	"exportStoragePermissionDenied": "Exporteren naar een bestand vereist toegang tot de externe opslag van uw toestel",
 	"fileFormat": "Bestandsformaat",
 	"fileMalformed": "Het gekozen bestand is incompatibel",
 	"fileName": "Bestandsnaam",

@@ -66,6 +66,7 @@
 	"exportRidersCsvHeader": "firstname,lastname,alias,active,last_updated_on,devices",
 	"exportRides": "Export rides",
 	"exportRidesFileNamePlaceholder": "ride_calendar.csv",
+	"exportStoragePermissionDenied": "Exporting to a file requires access to the external storage of your device",
 	"fileFormat": "File format",
 	"fileMalformed": "The chosen file is incompatible",
 	"fileName": "Filename",

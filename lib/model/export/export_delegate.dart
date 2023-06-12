@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
@@ -66,6 +67,10 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
           throw StateError('The given file $file already exists');
         }
       } else if (Platform.isAndroid) {
+        if (!await fileProvider.requestWriteExternalStoragePermission()) {
+          throw ExternalStoragePermissionDeniedException();
+        }
+
         file = File(fileHandler.tempDirectory.path + Platform.pathSeparator + fileName);
 
         // On Android, set up a handle to a file in the temp directory.

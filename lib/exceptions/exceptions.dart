@@ -20,3 +20,8 @@ class StopScanException implements Exception {}
 /// An exception that is thrown when a [File] was provided,
 /// but the given file format is not supported.
 class UnsupportedFileFormatException implements Exception {}
+
+/// An exception that is thrown when permission to write to external storage is denied.
+///
+/// This permission is typically only used on Android 9 and lower.
+class ExternalStoragePermissionDeniedException implements Exception {}

@@ -55,27 +55,36 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
-      // Sanity-check that the directory was provided.
-      // This should have been validated with the form state as well.
-      if (directory == null) {
-        throw ArgumentError.notNull('directory');
+      final File file;
+
+      if (Platform.isIOS) {
+        file = File(fileHandler.documentsDirectory.path + Platform.pathSeparator + fileName);
+
+        // Sanity-check that the file does not exist.
+        // This should have been validated with the form state as well.
+        if (file.existsSync()) {
+          throw StateError('The given file $file already exists');
+        }
+      } else if (Platform.isAndroid) {
+        file = File(fileHandler.tempDirectory.path + Platform.pathSeparator + fileName);
+
+        // On Android, set up a handle to a file in the temp directory.
+        // Clean up the previous file handle, since it will get overwritten anyway.
+        if (file.existsSync()) {
+          await file.delete();
+        }
+      } else {
+        throw UnsupportedError('Exporting is only supported on Android and iOS.');
       }
 
-      // Sanity-check that the directory exists.
-      // This should have been validated with the form state as well.
-      if (!directory.existsSync()) {
-        throw StateError('The given directory $directory does not exist');
-      }
-
-      final file = File(directory.path + Platform.pathSeparator + fileName);
-
-      // Sanity-check that the file does not exist.
-      // This should have been validated with the form state as well.
-      if (file.existsSync()) {
-        throw StateError('The given file $file already exists');
-      }
-
+      // Write the export document to the target file.
       await writeToFile(file, fileFormat, options);
+
+      // Register the document with the MediaStore on Android.
+      // This will create a new document in the MediaStore and copy the temp file into it.
+      if (Platform.isAndroid) {
+        await registerDocument(file);
+      }
 
       setDone(null);
     } catch (error, stackTrace) {

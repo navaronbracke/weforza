@@ -25,7 +25,6 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
     _delegate = ExportRidersDelegate(
       fileSystem: ref.read(fileSystemProvider),
       serializeRidersRepository: ref.read(serializeRidersRepositoryProvider),
-      initialDirectory: ref.read(exportDataDefaultDirectoryProvider),
     );
 
     checkmarkController = AnimationController(

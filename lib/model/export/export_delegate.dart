@@ -5,32 +5,22 @@ import 'package:rxdart/subjects.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
-import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
-  ExportDelegate({
-    required this.fileSystem,
-    Directory? initialDirectory,
-  })  : fileNameController = TextEditingController(),
-        directoryController = DirectorySelectionController(fileSystem: fileSystem, initialValue: initialDirectory) {
-    directoryController.addListener(_onDirectoryChanged);
-  }
+  ExportDelegate({required this.fileSystem});
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The directory that manages the selected directory.
-  final DirectorySelectionController directoryController;
-
   /// The file system that will provide directories.
   final FileSystem fileSystem;
 
   /// The controller that manages the selected file name.
-  final TextEditingController fileNameController;
+  final TextEditingController fileNameController = TextEditingController();
 
   /// The [Key] for the file name input field.
   final GlobalKey<FormFieldState<String>> fileNameKey = GlobalKey();
@@ -40,12 +30,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
-
-  void _onDirectoryChanged() {
-    // If a new directory was selected,
-    // the `File Exists` message may be outdated.
-    fileNameKey.currentState?.validate();
-  }
 
   /// Export the currently available data to a file.
   ///
@@ -59,7 +43,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
-    final directory = directoryController.directory;
 
     try {
       // Sanity-check that the file name ends with the correct extension.
@@ -145,8 +128,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    directoryController.removeListener(_onDirectoryChanged);
-    directoryController.dispose();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

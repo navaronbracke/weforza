@@ -204,16 +204,4 @@ class IoFileSystem implements FileSystem {
         return file(profileImage.path);
     }
   }
-
-  @Deprecated('Use the file system getter instead')
-  @override
-  Future<fs.Directory?> pickDirectory() async {
-    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
-
-    if (directoryPath == null) {
-      return null;
-    }
-
-    return _fileSystem.directory(directoryPath);
-  }
 }

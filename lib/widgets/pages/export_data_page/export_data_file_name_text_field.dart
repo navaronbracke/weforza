@@ -49,11 +49,20 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
       );
     }
 
-    final Directory? directory = delegate.directoryController.directory;
+    // On Android, the MediaStore API handles duplicate filenames internally by using number suffixes,
+    // so checking if the file exists is redundant.
+    if (Platform.isAndroid) {
+      return null;
+    }
 
-    // Since the file needs a directory and a name to be valid, we can only check for its existence if we have both.
-    if (directory != null && File(directory.path + Platform.pathSeparator + fileName).existsSync()) {
-      return translator.fileNameExists;
+    // On iOS, the exported files are saved to the documents directory.
+    // Ensure that the file does not exist yet.
+    if (Platform.isIOS) {
+      final Directory directory = delegate.fileHandler.documentsDirectory;
+
+      if (File(directory.path + Platform.pathSeparator + fileName).existsSync()) {
+        return translator.fileNameExists;
+      }
     }
 
     return null;

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
@@ -9,6 +10,7 @@ import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_data_storage_permission_denied_error.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
@@ -79,6 +81,7 @@ class ExportDataPage<T> extends StatelessWidget {
     required Widget Function(BuildContext context, {bool isExporting}) builder,
     required Widget doneIndicator,
     required Widget genericErrorIndicator,
+    required Widget permissionDeniedErrorIndicator,
   }) {
     return Form(
       child: StreamBuilder<AsyncValue<void>?>(
@@ -93,7 +96,13 @@ class ExportDataPage<T> extends StatelessWidget {
 
           return value.when(
             data: (_) => doneIndicator,
-            error: (error, stackTrace) => genericErrorIndicator,
+            error: (error, stackTrace) {
+              if (error is ExternalStoragePermissionDeniedException) {
+                return permissionDeniedErrorIndicator;
+              }
+
+              return genericErrorIndicator;
+            },
             loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
           );
         },
@@ -141,6 +150,9 @@ class ExportDataPage<T> extends StatelessWidget {
         message: translator.exportGenericErrorMessage,
       ),
     );
+    const permissionDeniedErrorIndicator = Center(
+      child: ExportDataStoragePermissionDeniedError(),
+    );
 
     return PlatformAwareWidget(
       android: (context) => Scaffold(
@@ -157,6 +169,7 @@ class ExportDataPage<T> extends StatelessWidget {
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
+          permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
         ),
       ),
       ios: (context) {
@@ -182,6 +195,7 @@ class ExportDataPage<T> extends StatelessWidget {
             ),
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,
+            permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
           ),
         );
       },

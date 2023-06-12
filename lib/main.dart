@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/sembast_database.dart';
 import 'package:weforza/file/file_system.dart';
@@ -33,14 +30,6 @@ void main() async {
     hasAndroidScopedStorage: false, // TODO: fix this flag with the native service
   );
 
-  Directory? defaultExportDirectory;
-
-  // On iOS, the Documents directory within the application
-  // is a good default for the export directory.
-  if (Platform.isIOS) {
-    defaultExportDirectory = await getApplicationDocumentsDirectory();
-  }
-
   runApp(
     ProviderScope(
       overrides: [
@@ -57,10 +46,6 @@ void main() async {
         initialSettingsProvider.overrideWithValue(settings),
         // Inject the file system.
         fileSystemProvider.overrideWithValue(fileSystem),
-        // Inject the default directory for file exports.
-        exportDataDefaultDirectoryProvider.overrideWithValue(
-          defaultExportDirectory,
-        ),
       ],
       child: const WeForzaApp(),
     ),

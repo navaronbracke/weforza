@@ -44,8 +44,8 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
 
     if (!fileName.endsWith(fileExtension)) {
       return translator.fileNameInvalidExtension(
-        fileFormat.asUpperCase,
         fileExtension,
+        fileFormat.asUpperCase,
       );
     }
 

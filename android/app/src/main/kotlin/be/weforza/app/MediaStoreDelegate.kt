@@ -116,16 +116,10 @@ class MediaStoreDelegate {
             contentValues.put(MediaStore.Files.FileColumns.DATA, filePath)
         }
 
-        val volumeName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            MediaStore.VOLUME_EXTERNAL
-        } else {
-            "external"
-        }
-
         var documentUri: Uri? = null
 
         try {
-            documentUri = contentResolver.insert(MediaStore.Files.getContentUri(volumeName), contentValues)
+            documentUri = contentResolver.insert(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL), contentValues)
         } catch (exception: Exception) {
             // Fallthrough to handle the null document URI.
         }

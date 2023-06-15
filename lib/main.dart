@@ -46,7 +46,12 @@ void main() async {
     ProviderScope(
       overrides: [
         // Inject the database after it is ready.
-        databaseProvider.overrideWithValue(database),
+        databaseProvider.overrideWith((ref) {
+          // Ensure the database is closed when the provider container is closed.
+          ref.onDispose(database.dispose);
+
+          return database;
+        }),
         // Inject the preloaded package info.
         packageInfoProvider.overrideWithValue(packageInfo),
         // Inject the preloaded settings.

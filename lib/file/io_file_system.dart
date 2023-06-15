@@ -47,7 +47,7 @@ class IoFileSystem implements FileSystem {
   final fs.Directory tempDirectory;
 
   /// Create a new [IoFileSystem] from the directories provided by the current platform.
-  Future<IoFileSystem> fromPlatform({
+  static Future<IoFileSystem> fromPlatform({
     required fs.FileSystem fileSystem,
     required bool hasAndroidScopedStorage,
   }) async {

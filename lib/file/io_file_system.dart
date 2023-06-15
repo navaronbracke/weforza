@@ -189,7 +189,7 @@ class IoFileSystem implements FileSystem {
 
     switch (source) {
       case ImageSource.camera:
-        final fs.Directory? directory = documentsDirectory(applicationDirectory: false);
+        final fs.Directory? directory = imagesDirectory(applicationDirectory: false);
 
         if (directory == null) {
           throw ArgumentError.notNull('directory');

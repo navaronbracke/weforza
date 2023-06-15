@@ -1,14 +1,10 @@
 import 'dart:io';
 
-import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/database/database_factory.dart';
-import 'package:weforza/database/settings_dao.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
@@ -19,17 +15,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Setup the database at startup.
-  final database = ApplicationDatabase();
-  await database.openDatabase(
-    ApplicationDatabaseFactory(
-      factory: databaseFactoryIo,
-      fileSystem: const LocalFileSystem(),
-    ),
-  );
+  final Database database = ApplicationDatabase();
+  await database.open();
 
-  // TODO: use `database.settingsDao` instead
   // Preload the settings.
-  final settings = await SettingsDaoImpl(database.getDatabase()).read();
+  final settings = await database.settingsDao.read();
 
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();

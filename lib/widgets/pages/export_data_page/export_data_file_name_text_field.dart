@@ -1,8 +1,10 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
+import 'package:file/file.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
@@ -49,18 +51,33 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
       );
     }
 
-    // On Android, the MediaStore API handles duplicate filenames internally by using number suffixes,
-    // so checking if the file exists is redundant.
     if (Platform.isAndroid) {
-      return null;
+      // When ScopedStorage is enabled, the MediaStore handles duplicate filenames internally.
+      if (delegate.fileSystem.hasScopedStorage) {
+        return null;
+      }
+
+      // When ScopedStorage is not enabled, the document is written to the external public documents directory.
+      final Directory? directory = delegate.fileSystem.documentsDirectory(applicationDirectory: false);
+
+      if (directory == null) {
+        return null;
+      }
+
+      if (delegate.fileSystem.file(join(directory.path, fileName)).existsSync()) {
+        return translator.fileNameExists;
+      }
     }
 
-    // On iOS, the exported files are saved to the documents directory.
-    // Ensure that the file does not exist yet.
+    // On iOS, the exported files are saved to the application documents directory.
     if (Platform.isIOS) {
-      final Directory directory = delegate.fileHandler.documentsDirectory;
+      final Directory? directory = delegate.fileSystem.documentsDirectory(applicationDirectory: true);
 
-      if (File(directory.path + Platform.pathSeparator + fileName).existsSync()) {
+      if (directory == null) {
+        return null;
+      }
+
+      if (delegate.fileSystem.file(join(directory.path, fileName)).existsSync()) {
         return translator.fileNameExists;
       }
     }

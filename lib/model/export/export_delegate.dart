@@ -46,8 +46,24 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     final fileName = fileNameController.text;
 
     try {
-      // Sanity-check that the file name ends with the correct extension.
+      // Sanity-check that the file name.
       // This should have been validated with the form state as well.
+      if (fileName.isEmpty) {
+        throw ArgumentError.value(
+          fileName,
+          'fileName',
+          'The file name should not be empty.',
+        );
+      }
+
+      if (fileName.startsWith('.')) {
+        throw ArgumentError.value(
+          fileName,
+          'fileName',
+          'The file name should not be start with a dot.',
+        );
+      }
+
       if (!fileName.endsWith(fileFormat.formatExtension)) {
         throw ArgumentError.value(
           fileName,

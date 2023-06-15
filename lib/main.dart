@@ -9,7 +9,6 @@ import 'package:sembast/sembast_io.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/database_factory.dart';
 import 'package:weforza/database/settings_dao.dart';
-import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/riverpod/file_handler_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
@@ -28,11 +27,9 @@ void main() async {
     ),
   );
 
+  // TODO: use `database.settingsDao` instead
   // Preload the settings.
-  final settingsRepository = SettingsRepository(
-    SettingsDaoImpl(database.getDatabase()),
-  );
-  final settings = await settingsRepository.read();
+  final settings = await SettingsDaoImpl(database.getDatabase()).read();
 
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
@@ -53,9 +50,7 @@ void main() async {
         // Inject the preloaded package info.
         packageInfoProvider.overrideWithValue(packageInfo),
         // Inject the preloaded settings.
-        settingsProvider.overrideWith(
-          (ref) => SettingsNotifier(settings, settingsRepository),
-        ),
+        initialSettingsProvider.overrideWithValue(settings),
         // Inject the default directory for file exports.
         exportDataDefaultDirectoryProvider.overrideWithValue(
           defaultExportDirectory,

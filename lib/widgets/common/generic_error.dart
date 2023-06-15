@@ -158,3 +158,65 @@ class GenericErrorWithBackButton extends StatelessWidget {
     );
   }
 }
+
+/// This class represents a generic error widget with an [icon] at the top,
+/// an [errorMessage] below the icon, a [primaryButton] and an optional [secondaryButton].
+class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
+  const GenericErrorWithPrimaryAndSecondaryAction({
+    required this.icon,
+    required this.primaryButton,
+    this.errorMessage,
+    this.secondaryButton,
+    super.key,
+  });
+
+  /// The error message to display.
+  ///
+  /// If this is null, [S.genericError] is used.
+  final String? errorMessage;
+
+  /// The icon that is shown above the [errorMessage].
+  final Widget icon;
+
+  /// The button for the primary action.
+  final Widget primaryButton;
+
+  /// The button for the secondary action.
+  final Widget? secondaryButton;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconTheme(
+          data: IconThemeData(
+            size: MediaQuery.sizeOf(context).shortestSide * .1,
+          ),
+          child: icon,
+        ),
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
+            child: Text(
+              errorMessage ?? S.of(context).genericError,
+              textAlign: TextAlign.center,
+              softWrap: true,
+            ),
+          ),
+        ),
+        OverflowBar(
+          alignment: MainAxisAlignment.center,
+          overflowAlignment: OverflowBarAlignment.center,
+          overflowDirection: VerticalDirection.up,
+          overflowSpacing: 16,
+          spacing: 8,
+          children: [
+            if (secondaryButton != null) secondaryButton!,
+            primaryButton,
+          ],
+        ),
+      ],
+    );
+  }
+}

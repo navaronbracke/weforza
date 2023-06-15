@@ -8,7 +8,7 @@ import 'package:weforza/bluetooth/bluetooth_state.dart';
 import 'package:weforza/native_service/native_service.dart';
 
 /// This class represents a [NativeService] for the Bluetooth adapter on the device.
-class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
+final class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
   /// The controller that manages the value
   /// that indicates whether a Bluetooth device scan is currently in progress.
   final BehaviorSubject<bool> _isScanningController = BehaviorSubject.seeded(false);

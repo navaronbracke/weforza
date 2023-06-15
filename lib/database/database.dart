@@ -1,71 +1,39 @@
-// ignore_for_file: avoid_print
+import 'package:weforza/database/device_dao.dart';
+import 'package:weforza/database/export_rides_dao.dart';
+import 'package:weforza/database/import_riders_dao.dart';
+import 'package:weforza/database/ride_dao.dart';
+import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/settings_dao.dart';
 
-import 'dart:io';
+/// This interface defines the application database definition.
+abstract interface class Database {
+  /// Get the name of the database file.
+  String get databaseName;
 
-import 'package:file/file.dart' show FileSystem;
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sembast/sembast.dart';
+  /// Get the database access object that manages the devices.
+  DeviceDao get deviceDao;
 
-import 'package:weforza/database/database_factory.dart';
+  /// Get the database access object that manages the ride exports.
+  ExportRidesDao get exportRidesDao;
 
-/// This class represents the application database.
-class ApplicationDatabase {
-  ApplicationDatabase({this.databaseName = 'weforza_database.db'});
+  /// Get the database access object that manages the rider imports.
+  ImportRidersDao get importRidersDao;
 
-  /// The name of the database file.
-  final String databaseName;
+  /// Get the database access object that manages the rides.
+  RideDao get rideDao;
 
-  /// The internal instance of the database.
-  late Database _database;
+  /// Get the database access object that manages the riders.
+  RiderDao get riderDao;
 
-  /// Get the database instance.
-  Database getDatabase() => _database;
+  /// Get the database access object that manages the application settings.
+  SettingsDao get settingsDao;
 
-  // TODO remove this method when migrated to new directory.
-  // Also remove the ignore_for_file above.
+  /// Get the version of the database schema.
+  int get version;
 
-  /// Moves the database from the old Documents directory
-  /// to the Application Support directory for the current platform.
-  Future<void> _moveDatabase(
-    String newDatabasePath,
-    FileSystem fileSystem,
-  ) async {
-    final oldDirectory = await getApplicationDocumentsDirectory();
-    final oldDatabasePath = join(oldDirectory.path, databaseName);
-    final file = fileSystem.file(oldDatabasePath);
-
-    if (await file.exists()) {
-      print('Found database on old location: $oldDatabasePath');
-      print('Migrating database to new location: $newDatabasePath');
-
-      try {
-        print('Using migration strategy: RENAME FILE');
-
-        await file.rename(newDatabasePath);
-      } on FileSystemException {
-        print('Migration using migration strategy: RENAME FILE failed.');
-        print('Retrying with migration strategy: MOVE FILE');
-
-        await file.copy(newDatabasePath);
-        await file.delete();
-      }
-
-      print('Done migrating database.');
-    }
-  }
-
-  /// Open the database using the provided [databaseFactory].
-  Future<void> openDatabase(ApplicationDatabaseFactory databaseFactory) async {
-    final databaseDirectory = await getApplicationSupportDirectory();
-    final dbPath = join(databaseDirectory.path, databaseName);
-
-    // Move the database to the new directory if required.
-    await _moveDatabase(dbPath, databaseFactory.fileSystem);
-
-    _database = await databaseFactory.factory.openDatabase(dbPath);
-  }
+  /// Open the database.
+  Future<void> open();
 
   /// Close the database.
-  void dispose() async => await _database.close();
+  void dispose();
 }

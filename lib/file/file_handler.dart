@@ -8,11 +8,13 @@ import 'package:weforza/exceptions/exceptions.dart';
 /// This interface provides methods to work with [File]s.
 abstract class FileHandler {
   /// Get the directory where the application can store publicly accessible files.
+  @Deprecated('Use the file system getter instead')
   Future<Directory> getPublicDocumentsDirectory();
 
   /// Choose a directory using a directory picker.
   ///
   /// Returns the chosen directory, or null if none was chosen.
+  @Deprecated('Use the file system getter instead')
   Future<Directory?> pickDirectory();
 
   /// Choose the file to use as data source
@@ -29,6 +31,7 @@ abstract class FileHandler {
 
 /// The default implementation of [FileHandler].
 class IoFileHandler implements FileHandler {
+  @Deprecated('Use the file system getter instead')
   @override
   Future<Directory> getPublicDocumentsDirectory() async {
     Directory? directory;
@@ -48,6 +51,7 @@ class IoFileHandler implements FileHandler {
     return directory;
   }
 
+  @Deprecated('Use the file system getter instead')
   @override
   Future<Directory?> pickDirectory() async {
     final String? directoryPath = await FilePicker.platform.getDirectoryPath();

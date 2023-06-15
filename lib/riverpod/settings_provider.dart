@@ -2,14 +2,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/settings_repository.dart';
+import 'package:weforza/riverpod/database/database_dao_provider.dart';
+
+/// This provider provides the initial value for the application settings.
+///
+/// This provider should be overridden with the preloaded settings during application startup.
+final initialSettingsProvider = Provider<Settings>(
+  (_) => throw UnsupportedError('The initial settings should be preloaded at startup.'),
+);
 
 /// This provider provides the application settings.
-///
-/// This provider is overridden at startup with the preloaded settings.
 final settingsProvider = StateNotifierProvider<SettingsNotifier, Settings>(
-  (ref) {
-    throw UnsupportedError('The settings should be preloaded at startup.');
-  },
+  (ref) => SettingsNotifier(
+    ref.read(initialSettingsProvider),
+    SettingsRepository(ref.read(settingsDaoProvider)),
+  ),
 );
 
 /// The notifier that manages the settings.

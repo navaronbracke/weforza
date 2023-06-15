@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_rides_delegate.dart';
 import 'package:weforza/model/ride.dart';
-import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/riverpod/repository/export_rides_repository_provider.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
@@ -39,7 +39,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
   void initState() {
     super.initState();
     _delegate = ExportRidesDelegate(
-      fileHandler: ref.read(fileHandlerProvider),
+      fileSystem: ref.read(fileSystemProvider),
       repository: ref.read(exportRidesRepositoryProvider),
       initialDirectory: ref.read(exportDataDefaultDirectoryProvider),
     );

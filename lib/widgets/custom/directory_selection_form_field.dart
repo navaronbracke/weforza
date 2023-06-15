@@ -4,21 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart';
-import 'package:weforza/file/file_handler.dart';
+import 'package:weforza/file/file_system.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/widgets/app.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the controller for a [DirectorySelectionFormField].
 class DirectorySelectionController extends ChangeNotifier {
   DirectorySelectionController({
-    required FileHandler fileHandler,
+    required FileSystem fileSystem,
     Directory? initialValue,
   })  : _directory = initialValue,
-        _fileHandler = fileHandler;
+        _fileSystem = fileSystem;
 
-  final FileHandler _fileHandler;
+  final FileSystem _fileSystem;
 
   Directory? _directory;
 
@@ -33,7 +33,7 @@ class DirectorySelectionController extends ChangeNotifier {
   }
 
   /// Open a directory picker.
-  Future<Directory?> openDirectoryPicker() => _fileHandler.pickDirectory();
+  Future<Directory?> openDirectoryPicker() => _fileSystem.pickDirectory();
 }
 
 /// This class represents a [FormField] for selecting a directory.

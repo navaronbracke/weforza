@@ -18,7 +18,7 @@ class ExportRidesOptions {
 /// This class represents the delegate that handles exporting rides.
 class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
   ExportRidesDelegate({
-    required super.fileHandler,
+    required super.fileSystem,
     required this.repository,
     super.initialDirectory,
   });

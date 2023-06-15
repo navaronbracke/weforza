@@ -33,6 +33,12 @@ abstract interface class FileSystem {
   /// rather than top-level shared storage.
   fs.Directory? imagesDirectory({required bool applicationDirectory});
 
+  /// Choose a directory using a directory picker.
+  ///
+  /// Returns the chosen directory, or null if none was chosen.
+  @Deprecated('Use the file system getter instead')
+  Future<fs.Directory?> pickDirectory();
+
   /// Choose the file to use as data source
   /// for importing riders and their devices.
   ///

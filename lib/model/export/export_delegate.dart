@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:weforza/file/file_handler.dart';
+import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
 import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
@@ -11,10 +11,10 @@ import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
   ExportDelegate({
-    required this.fileHandler,
+    required this.fileSystem,
     Directory? initialDirectory,
   })  : fileNameController = TextEditingController(),
-        directoryController = DirectorySelectionController(fileHandler: fileHandler, initialValue: initialDirectory) {
+        directoryController = DirectorySelectionController(fileSystem: fileSystem, initialValue: initialDirectory) {
     directoryController.addListener(_onDirectoryChanged);
   }
 
@@ -26,8 +26,8 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The directory that manages the selected directory.
   final DirectorySelectionController directoryController;
 
-  /// The file handler that will provide directories.
-  final FileHandler fileHandler;
+  /// The file system that will provide directories.
+  final FileSystem fileSystem;
 
   /// The controller that manages the selected file name.
   final TextEditingController fileNameController;

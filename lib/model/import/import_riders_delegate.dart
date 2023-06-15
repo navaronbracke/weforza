@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/file/file_handler.dart';
+import 'package:weforza/file/file_system.dart';
 import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/file/import_riders_json_reader.dart';
@@ -13,11 +13,11 @@ import 'package:weforza/repository/serialize_riders_repository.dart';
 
 /// This class represents the delegate that handles importing riders.
 class ImportRidersDelegate {
-  ImportRidersDelegate(this.fileHandler, this.repository);
+  ImportRidersDelegate(this.fileSystem, this.repository);
 
   final _controller = BehaviorSubject.seeded(ImportRidersState.idle);
 
-  final FileHandler fileHandler;
+  final FileSystem fileSystem;
 
   final SerializeRidersRepository repository;
 
@@ -82,7 +82,7 @@ class ImportRidersDelegate {
     try {
       _controller.add(ImportRidersState.pickingFile);
 
-      final file = await fileHandler.pickImportRidersDataSource();
+      final file = await fileSystem.pickImportRidersDataSource();
 
       if (_controller.isClosed) {
         return;

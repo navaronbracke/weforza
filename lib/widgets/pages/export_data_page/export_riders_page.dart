@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_riders_delegate.dart';
-import 'package:weforza/riverpod/file_handler_provider.dart';
+import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/riverpod/repository/serialize_riders_repository_provider.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
@@ -23,7 +23,7 @@ class _ExportRidersPageState extends ConsumerState<ExportRidersPage> with Single
   void initState() {
     super.initState();
     _delegate = ExportRidersDelegate(
-      fileHandler: ref.read(fileHandlerProvider),
+      fileSystem: ref.read(fileSystemProvider),
       serializeRidersRepository: ref.read(serializeRidersRepositoryProvider),
       initialDirectory: ref.read(exportDataDefaultDirectoryProvider),
     );

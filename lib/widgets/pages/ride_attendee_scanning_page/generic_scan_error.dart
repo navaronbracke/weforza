@@ -4,67 +4,9 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
-
-class _GenericScanErrorBase extends StatelessWidget {
-  const _GenericScanErrorBase({
-    required this.icon,
-    required this.primaryButton,
-    this.errorMessage,
-    this.secondaryButton,
-  });
-
-  /// The error message to display.
-  ///
-  /// If this is null, [S.genericError] is used.
-  final String? errorMessage;
-
-  /// The icon that is shown above the [errorMessage].
-  final Widget icon;
-
-  /// The button for the primary action.
-  final Widget primaryButton;
-
-  /// The button for the secondary action.
-  final Widget? secondaryButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconTheme(
-          data: IconThemeData(
-            size: MediaQuery.sizeOf(context).shortestSide * .1,
-          ),
-          child: icon,
-        ),
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
-            child: Text(
-              errorMessage ?? S.of(context).genericError,
-              textAlign: TextAlign.center,
-              softWrap: true,
-            ),
-          ),
-        ),
-        OverflowBar(
-          alignment: MainAxisAlignment.center,
-          overflowAlignment: OverflowBarAlignment.center,
-          overflowDirection: VerticalDirection.up,
-          overflowSpacing: 16,
-          spacing: 8,
-          children: [
-            if (secondaryButton != null) secondaryButton!,
-            primaryButton,
-          ],
-        ),
-      ],
-    );
-  }
-}
 
 /// This widget represents a scan error that indicates that Bluetooth is disabled.
 /// It provides a button to open the Bluetooth settings and a button to retry the scan.
@@ -80,7 +22,7 @@ class BluetoothDisabledError extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return _GenericScanErrorBase(
+    return GenericErrorWithPrimaryAndSecondaryAction(
       errorMessage: translator.scanAbortedBluetoothDisabled,
       icon: const PlatformAwareIcon(
         androidIcon: Icons.bluetooth_disabled,
@@ -118,7 +60,7 @@ class GenericScanError extends StatelessWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return _GenericScanErrorBase(
+    return GenericErrorWithPrimaryAndSecondaryAction(
       icon: const PlatformAwareIcon(
         androidIcon: Icons.warning,
         iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
@@ -159,7 +101,7 @@ class PermissionDeniedError extends StatelessWidget {
       errorMessage = translator.scanAbortedBluetoothPermissionDenied;
     }
 
-    return _GenericScanErrorBase(
+    return GenericErrorWithPrimaryAndSecondaryAction(
       errorMessage: errorMessage,
       icon: const PlatformAwareIcon(
         androidIcon: Icons.warning,

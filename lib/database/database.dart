@@ -1,30 +1,39 @@
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sembast/sembast.dart';
+import 'package:weforza/database/device_dao.dart';
+import 'package:weforza/database/export_rides_dao.dart';
+import 'package:weforza/database/import_riders_dao.dart';
+import 'package:weforza/database/ride_dao.dart';
+import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/settings_dao.dart';
 
-import 'package:weforza/database/database_factory.dart';
+/// This interface defines the application database definition.
+abstract interface class Database {
+  /// Get the name of the database file.
+  String get databaseName;
 
-/// This class represents the application database.
-class ApplicationDatabase {
-  ApplicationDatabase({this.databaseName = 'weforza_database.db'});
+  /// Get the database access object that manages the devices.
+  DeviceDao get deviceDao;
 
-  /// The name of the database file.
-  final String databaseName;
+  /// Get the database access object that manages the ride exports.
+  ExportRidesDao get exportRidesDao;
 
-  /// The internal instance of the database.
-  late Database _database;
+  /// Get the database access object that manages the rider imports.
+  ImportRidersDao get importRidersDao;
 
-  /// Get the database instance.
-  Database getDatabase() => _database;
+  /// Get the database access object that manages the rides.
+  RideDao get rideDao;
 
-  /// Open the database using the provided [databaseFactory].
-  Future<void> openDatabase(ApplicationDatabaseFactory databaseFactory) async {
-    final databaseDirectory = await getApplicationSupportDirectory();
-    final dbPath = join(databaseDirectory.path, databaseName);
+  /// Get the database access object that manages the riders.
+  RiderDao get riderDao;
 
-    _database = await databaseFactory.factory.openDatabase(dbPath);
-  }
+  /// Get the database access object that manages the application settings.
+  SettingsDao get settingsDao;
+
+  /// Get the version of the database schema.
+  int get version;
+
+  /// Open the database.
+  Future<void> open();
 
   /// Close the database.
-  void dispose() async => await _database.close();
+  void dispose();
 }

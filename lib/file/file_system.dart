@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 abstract interface class FileSystem {
   /// Whether the file system uses scoped storage.
   ///
-  /// If this is true, not all provided directories are available to the application.
+  /// If this is true, not all provided directories might be available to the application.
   bool get hasScopedStorage;
 
   /// Get the directory where the application can create temporary files.

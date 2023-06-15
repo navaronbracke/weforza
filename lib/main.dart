@@ -6,6 +6,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/database/sembast_database.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/file/io_file_system.dart';
+import 'package:weforza/native_service/file_provider.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
@@ -25,9 +26,11 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
+  final bool hasAndroidScopedStorage = await const FileProvider().hasScopedStorage();
+
   final FileSystem fileSystem = await IoFileSystem.fromPlatform(
     fileSystem: const LocalFileSystem(),
-    hasAndroidScopedStorage: false, // TODO: fix this flag with the native service
+    hasAndroidScopedStorage: hasAndroidScopedStorage,
   );
 
   runApp(

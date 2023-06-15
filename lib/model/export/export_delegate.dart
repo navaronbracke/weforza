@@ -1,11 +1,14 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
+import 'package:file/file.dart' as fs;
 import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
+import 'package:weforza/native_service/file_provider.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
@@ -16,6 +19,9 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
+
+  /// The file provider that will register the document.
+  final FileProvider fileProvider = const FileProvider();
 
   /// The file system that will provide directories.
   final FileSystem fileSystem;
@@ -72,42 +78,64 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
-      final File file;
-
+      // On iOS, the exported files are saved to the application documents directory.
+      // Check if the file does not exist yet, and write to the file.
       if (Platform.isIOS) {
-        file = File(fileHandler.documentsDirectory.path + Platform.pathSeparator + fileName);
+        final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: true);
 
-        // Sanity-check that the file does not exist.
-        // This should have been validated with the form state as well.
+        if (directory == null) {
+          throw ArgumentError.notNull('directory');
+        }
+
+        final fs.File file = fileSystem.file(join(directory.path, fileName));
+
         if (file.existsSync()) {
           throw StateError('The given file $file already exists');
         }
-      } else if (Platform.isAndroid) {
-        if (!await fileProvider.requestWriteExternalStoragePermission()) {
-          throw ExternalStoragePermissionDeniedException();
-        }
 
-        file = File(fileHandler.tempDirectory.path + Platform.pathSeparator + fileName);
+        await writeToFile(file, fileFormat, options);
 
-        // On Android, set up a handle to a file in the temp directory.
-        // Clean up the previous file handle, since it will get overwritten anyway.
-        if (file.existsSync()) {
-          await file.delete();
-        }
-      } else {
-        throw UnsupportedError('Exporting is only supported on Android and iOS.');
+        setDone(null);
+
+        return;
       }
 
-      // Write the export document to the target file.
-      await writeToFile(file, fileFormat, options);
-
-      // Register the document with the MediaStore on Android.
-      // This will create a new document in the MediaStore and copy the temp file into it.
       if (Platform.isAndroid) {
-        await registerDocument(file);
+        final fs.File file;
+
+        if (fileSystem.hasScopedStorage) {
+          // When using ScopedStorage, write to a temp file.
+          // The file provider will copy this file into the MediaStore, using an output stream from the content resolver.
+          file = fileSystem.file(join(fileSystem.tempDirectory.path, fileName));
+        } else {
+          // When not using ScopedStorage, write to the external public documents directory,
+          // but request permission first. Lastly, register the file using the file provider.
+          final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: false);
+
+          if (directory == null) {
+            throw ArgumentError.notNull('directory');
+          }
+
+          file = fileSystem.file(join(directory.path, fileName));
+
+          if (file.existsSync()) {
+            throw StateError('The given file $file already exists');
+          }
+
+          if (!await fileProvider.requestWriteExternalStoragePermission()) {
+            throw ExternalStoragePermissionDeniedException();
+          }
+        }
+
+        await writeToFile(file, fileFormat, options);
+
+        await fileProvider.registerDocument(file);
+
+        setDone(null);
+        return;
       }
 
-      setDone(null);
+      throw UnsupportedError('Exporting is only supported on Android and iOS.');
     } catch (error, stackTrace) {
       setError(error, stackTrace);
     }
@@ -150,7 +178,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Write the export data to the given [file], using the given [fileFormat].
   Future<void> writeToFile(
-    File file,
+    fs.File file,
     ExportFileFormat fileFormat,
     Options options,
   );

@@ -58,6 +58,8 @@
 	"editDisallowedWord": "Verboden woord bewerken",
 	"editRider": "Renner bewerken",
 	"export": "Exporteren",
+	"exportedFileAvailableInDocuments": "Het bestand is te vinden in je documenten",
+	"exportedFileAvailableInDownloads": "Het bestand is te vinden in je downloads",
 	"exportGenericErrorMessage": "Er liep iets fout bij het exporteren",
 	"exportRide": "Rit exporteren",
 	"exportRideFileNamePlaceholder": "rit_{date}.csv",

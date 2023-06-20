@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -140,8 +142,9 @@ class ExportDataPage<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final doneIndicator = AnimatedCircleCheckmark(
-      controller: checkmarkAnimationController,
+    final doneIndicator = _ExportPageDoneIndicator(
+      checkmarkAnimationController: checkmarkAnimationController,
+      hasAndroidScopedStorage: delegate.fileSystem.hasScopedStorage,
     );
     final translator = S.of(context);
     final label = translator.export;
@@ -199,6 +202,48 @@ class ExportDataPage<T> extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _ExportPageDoneIndicator extends StatelessWidget {
+  const _ExportPageDoneIndicator({
+    required this.checkmarkAnimationController,
+    required this.hasAndroidScopedStorage,
+  });
+
+  final AnimationController checkmarkAnimationController;
+
+  final bool hasAndroidScopedStorage;
+
+  @override
+  Widget build(BuildContext context) {
+    final S translator = S.of(context);
+    final String message;
+
+    if (Platform.isAndroid && !hasAndroidScopedStorage) {
+      message = translator.exportedFileAvailableInDownloads;
+    } else {
+      message = translator.exportedFileAvailableInDocuments;
+    }
+
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: AnimatedCircleCheckmark(controller: checkmarkAnimationController),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Text(
+              message,
+              style: const TextStyle(fontSize: 18),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

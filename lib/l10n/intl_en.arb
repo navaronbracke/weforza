@@ -58,6 +58,8 @@
 	"editDisallowedWord": "Edit disallowed word",
 	"editRider": "Edit rider",
 	"export": "Export",
+	"exportedFileAvailableInDocuments": "The file can be found in your documents",
+	"exportedFileAvailableInDownloads": "The file can be found in your downloads",
 	"exportGenericErrorMessage": "Something went wrong during the export",
 	"exportRide": "Export ride",
 	"exportRideFileNamePlaceholder": "ride_{date}.csv",

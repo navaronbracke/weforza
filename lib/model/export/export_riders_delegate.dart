@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:file/file.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
 import 'package:weforza/repository/serialize_riders_repository.dart';
@@ -19,7 +19,6 @@ class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
   ExportRidersDelegate({
     required super.fileSystem,
     required this.serializeRidersRepository,
-    super.initialDirectory,
   });
 
   /// The repository that handles exporting the riders.

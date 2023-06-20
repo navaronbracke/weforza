@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/file/file_system.dart';
 
@@ -9,7 +7,3 @@ import 'package:weforza/file/file_system.dart';
 final fileSystemProvider = Provider<FileSystem>(
   (_) => throw UnsupportedError('The file system should be preloaded at startup.'),
 );
-
-/// This provider provides the default [Directory] for export files.
-@Deprecated('Use the file system instead')
-final exportDataDefaultDirectoryProvider = Provider<Directory?>((_) => null);

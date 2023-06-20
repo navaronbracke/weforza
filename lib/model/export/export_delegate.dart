@@ -1,36 +1,33 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
+import 'package:file/file.dart' as fs;
 import 'package:flutter/widgets.dart';
+import 'package:path/path.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
-import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
+import 'package:weforza/native_service/file_provider.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
-  ExportDelegate({
-    required this.fileSystem,
-    Directory? initialDirectory,
-  })  : fileNameController = TextEditingController(),
-        directoryController = DirectorySelectionController(fileSystem: fileSystem, initialValue: initialDirectory) {
-    directoryController.addListener(_onDirectoryChanged);
-  }
+  ExportDelegate({required this.fileSystem});
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The directory that manages the selected directory.
-  final DirectorySelectionController directoryController;
+  /// The file provider that will register the document.
+  final FileProvider fileProvider = const FileProvider();
 
   /// The file system that will provide directories.
   final FileSystem fileSystem;
 
   /// The controller that manages the selected file name.
-  final TextEditingController fileNameController;
+  final TextEditingController fileNameController = TextEditingController();
 
   /// The [Key] for the file name input field.
   final GlobalKey<FormFieldState<String>> fileNameKey = GlobalKey();
@@ -40,12 +37,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Get the [Stream] of file format selection changes.
   Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
-
-  void _onDirectoryChanged() {
-    // If a new directory was selected,
-    // the `File Exists` message may be outdated.
-    fileNameKey.currentState?.validate();
-  }
 
   /// Export the currently available data to a file.
   ///
@@ -59,11 +50,26 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
     final fileFormat = _fileFormatController.value;
     final fileName = fileNameController.text;
-    final directory = directoryController.directory;
 
     try {
-      // Sanity-check that the file name ends with the correct extension.
+      // Sanity-check that the file name.
       // This should have been validated with the form state as well.
+      if (fileName.isEmpty) {
+        throw ArgumentError.value(
+          fileName,
+          'fileName',
+          'The file name should not be empty.',
+        );
+      }
+
+      if (fileName.startsWith('.')) {
+        throw ArgumentError.value(
+          fileName,
+          'fileName',
+          'The file name should not be start with a dot.',
+        );
+      }
+
       if (!fileName.endsWith(fileFormat.formatExtension)) {
         throw ArgumentError.value(
           fileName,
@@ -72,29 +78,64 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         );
       }
 
-      // Sanity-check that the directory was provided.
-      // This should have been validated with the form state as well.
-      if (directory == null) {
-        throw ArgumentError.notNull('directory');
+      // On iOS, the exported files are saved to the application documents directory.
+      // Check if the file does not exist yet, and write to the file.
+      if (Platform.isIOS) {
+        final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: true);
+
+        if (directory == null) {
+          throw ArgumentError.notNull('directory');
+        }
+
+        final fs.File file = fileSystem.file(join(directory.path, fileName));
+
+        if (file.existsSync()) {
+          throw StateError('The given file $file already exists');
+        }
+
+        await writeToFile(file, fileFormat, options);
+
+        setDone(null);
+
+        return;
       }
 
-      // Sanity-check that the directory exists.
-      // This should have been validated with the form state as well.
-      if (!directory.existsSync()) {
-        throw StateError('The given directory $directory does not exist');
+      if (Platform.isAndroid) {
+        final fs.File file;
+
+        if (fileSystem.hasScopedStorage) {
+          // When using ScopedStorage, write to a temp file.
+          // The file provider will copy this file into the MediaStore, using an output stream from the content resolver.
+          file = fileSystem.file(join(fileSystem.tempDirectory.path, fileName));
+        } else {
+          // When not using ScopedStorage, write to the external public documents directory,
+          // but request permission first. Lastly, register the file using the file provider.
+          final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: false);
+
+          if (directory == null) {
+            throw ArgumentError.notNull('directory');
+          }
+
+          file = fileSystem.file(join(directory.path, fileName));
+
+          if (file.existsSync()) {
+            throw StateError('The given file $file already exists');
+          }
+
+          if (!await fileProvider.requestWriteExternalStoragePermission()) {
+            throw ExternalStoragePermissionDeniedException();
+          }
+        }
+
+        await writeToFile(file, fileFormat, options);
+
+        await fileProvider.registerDocument(file);
+
+        setDone(null);
+        return;
       }
 
-      final file = File(directory.path + Platform.pathSeparator + fileName);
-
-      // Sanity-check that the file does not exist.
-      // This should have been validated with the form state as well.
-      if (file.existsSync()) {
-        throw StateError('The given file $file already exists');
-      }
-
-      await writeToFile(file, fileFormat, options);
-
-      setDone(null);
+      throw UnsupportedError('Exporting is only supported on Android and iOS.');
     } catch (error, stackTrace) {
       setError(error, stackTrace);
     }
@@ -137,7 +178,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
   /// Write the export data to the given [file], using the given [fileFormat].
   Future<void> writeToFile(
-    File file,
+    fs.File file,
     ExportFileFormat fileFormat,
     Options options,
   );
@@ -145,8 +186,6 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    directoryController.removeListener(_onDirectoryChanged);
-    directoryController.dispose();
     _fileFormatController.close();
     fileNameController.dispose();
     super.dispose();

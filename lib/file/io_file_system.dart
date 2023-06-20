@@ -57,6 +57,17 @@ class IoFileSystem implements FileSystem {
     );
 
     if (Platform.isAndroid) {
+      // Don't fetch the external storage directories when they are not available.
+      if (hasAndroidScopedStorage) {
+        return IoFileSystem(
+          applicationDocumentsDirectory: applicationDocumentsDirectory,
+          applicationImagesDirectory: applicationDocumentsDirectory,
+          fileSystem: fileSystem,
+          hasScopedStorage: true,
+          tempDirectory: fileSystem.directory(tempDirectory.path),
+        );
+      }
+
       final documentsDirs = await getExternalStorageDirectories(type: StorageDirectory.documents) ?? [];
       final imagesDirs = await getExternalStorageDirectories(type: StorageDirectory.pictures) ?? [];
 
@@ -203,17 +214,5 @@ class IoFileSystem implements FileSystem {
       case ImageSource.gallery:
         return file(profileImage.path);
     }
-  }
-
-  @Deprecated('Use the file system getter instead')
-  @override
-  Future<fs.Directory?> pickDirectory() async {
-    final String? directoryPath = await FilePicker.platform.getDirectoryPath();
-
-    if (directoryPath == null) {
-      return null;
-    }
-
-    return _fileSystem.directory(directoryPath);
   }
 }

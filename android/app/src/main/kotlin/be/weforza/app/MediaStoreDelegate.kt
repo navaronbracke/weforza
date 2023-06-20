@@ -1,9 +1,9 @@
 package be.weforza.app
 
+import android.app.DownloadManager
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -38,18 +38,31 @@ class MediaStoreDelegate {
     }
 
     /**
-     * Insert a new document in the MediaStore, using a MediaScannerConnection.
-     * The method call arguments should contain a file path and the file MIME-type.
+     * Inform the DownloadManager about a new document file.
+     *
+     * This method should only be used on Android 9 and lower, where ScopedStorage is not in use.
+     *
+     * The method call arguments should contain a file path, file name, file size in bytes
+     * and the file MIME-type.
      *
      * The result returns with an error if:
      *  - any required argument is omitted.
-     *  - the MediaStore failed to insert an entry for the document.
      */
-    fun insertNewDocumentInMediaStore(call: MethodCall, result: Result, context: Context) {
-        val filePath = call.argument<String>("filePath")
-        val fileMimeType = call.argument<String>("fileType")
+    fun informDownloadManagerAboutDocument(call: MethodCall, result: Result, context: Context) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            result.error(
+                INVALID_ARGUMENT_ERROR_CODE,
+                INVALID_ARGUMENT_ERROR_MESSAGE,
+                "informDownloadManagerAboutDocument() was called when ScopedStorage is in use.")
+            return
+        }
 
-        if(filePath == null || fileMimeType == null) {
+        val filePath = call.argument<String>("filePath")
+        val fileName = call.argument<String>("fileName")
+        val fileMimeType = call.argument<String>("fileType")
+        val fileSize = call.argument<Number>("fileSize")?.toLong()
+
+        if(filePath == null || fileName == null || fileMimeType == null || fileSize == null) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
@@ -61,17 +74,19 @@ class MediaStoreDelegate {
             return
         }
 
-        MediaScannerConnection.scanFile(
-            context,
-            arrayOf(documentFile.absolutePath),
-            arrayOf(fileMimeType)
-        ) { _, uri ->
-            if(uri == null) {
-                result.error(INSERT_FILE_FAILED_ERROR_CODE, INSERT_FILE_FAILED_ERROR_MESSAGE, null)
-            } else {
-                result.success(null)
-            }
-        }
+        val downloadManager: DownloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        @Suppress("DEPRECATION")
+        downloadManager.addCompletedDownload(
+            fileName,
+            fileName,
+            true,
+            fileMimeType,
+            filePath,
+            fileSize,
+            true)
+
+        result.success(null)
     }
 
     /**

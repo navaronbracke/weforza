@@ -44,7 +44,8 @@ class MainActivity: FlutterActivity() {
                     if(mediaStoreDelegate.hasScopedStorage()) {
                         mediaStoreDelegate.insertNewDocumentInMediaStore(call, result, contentResolver)
                     } else {
-                        mediaStoreDelegate.insertNewDocumentInMediaStore(call, result, context)
+                        // Fallback to notifying the DownloadManager.
+                        mediaStoreDelegate.informDownloadManagerAboutDocument(call, result, context)
                     }
                 }
                 "requestBluetoothScanPermission" -> permissionDelegate.requestBluetoothScanPermission(

@@ -1,8 +1,9 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';
@@ -10,8 +11,8 @@ import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
-import 'package:weforza/widgets/custom/directory_selection_form_field.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_file_name_text_field.dart';
+import 'package:weforza/widgets/pages/export_data_page/export_data_storage_permission_denied_error.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
@@ -36,22 +37,6 @@ class ExportDataPage<T> extends StatelessWidget {
   /// The title for the page.
   final String title;
 
-  String? _validateDirectory(Directory? directory, S translator) {
-    if (directory == null) {
-      return translator.directoryRequired;
-    }
-
-    if (!directory.existsSync()) {
-      return translator.directoryDoesNotExist;
-    }
-
-    if (Platform.isAndroid && directory.path == Platform.pathSeparator) {
-      return translator.directoryIsProtected;
-    }
-
-    return null;
-  }
-
   Widget _buildAndroidForm(BuildContext context, {required Widget child}) {
     final translator = S.of(context);
 
@@ -63,15 +48,7 @@ class ExportDataPage<T> extends StatelessWidget {
             delegate: SliverChildListDelegate.fixed([
               ExportDataFileNameTextField<T>(delegate: delegate),
               Padding(
-                padding: const EdgeInsets.only(top: 32, bottom: 48),
-                child: DirectorySelectionFormField(
-                  controller: delegate.directoryController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (directory) => _validateDirectory(directory, translator),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 40),
+                padding: const EdgeInsets.symmetric(vertical: 32),
                 child: Row(
                   children: [
                     Expanded(
@@ -106,6 +83,7 @@ class ExportDataPage<T> extends StatelessWidget {
     required Widget Function(BuildContext context, {bool isExporting}) builder,
     required Widget doneIndicator,
     required Widget genericErrorIndicator,
+    required Widget permissionDeniedErrorIndicator,
   }) {
     return Form(
       child: StreamBuilder<AsyncValue<void>?>(
@@ -120,7 +98,13 @@ class ExportDataPage<T> extends StatelessWidget {
 
           return value.when(
             data: (_) => doneIndicator,
-            error: (error, stackTrace) => genericErrorIndicator,
+            error: (error, stackTrace) {
+              if (error is ExternalStoragePermissionDeniedException) {
+                return permissionDeniedErrorIndicator;
+              }
+
+              return genericErrorIndicator;
+            },
             loading: () => FocusAbsorber(child: builder(context, isExporting: true)),
           );
         },
@@ -138,11 +122,6 @@ class ExportDataPage<T> extends StatelessWidget {
             CupertinoFormSection.insetGrouped(
               children: [
                 ExportDataFileNameTextField<T>(delegate: delegate),
-                DirectorySelectionFormField(
-                  controller: delegate.directoryController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (directory) => _validateDirectory(directory, translator),
-                ),
                 CupertinoFormRow(
                   padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 6, 20),
                   prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
@@ -163,8 +142,9 @@ class ExportDataPage<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final doneIndicator = AnimatedCircleCheckmark(
-      controller: checkmarkAnimationController,
+    final doneIndicator = _ExportPageDoneIndicator(
+      checkmarkAnimationController: checkmarkAnimationController,
+      hasAndroidScopedStorage: delegate.fileSystem.hasScopedStorage,
     );
     final translator = S.of(context);
     final label = translator.export;
@@ -172,6 +152,9 @@ class ExportDataPage<T> extends StatelessWidget {
       child: GenericErrorWithBackButton(
         message: translator.exportGenericErrorMessage,
       ),
+    );
+    const permissionDeniedErrorIndicator = Center(
+      child: ExportDataStoragePermissionDeniedError(),
     );
 
     return PlatformAwareWidget(
@@ -189,6 +172,7 @@ class ExportDataPage<T> extends StatelessWidget {
           ),
           doneIndicator: doneIndicator,
           genericErrorIndicator: genericErrorIndicator,
+          permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
         ),
       ),
       ios: (context) {
@@ -214,9 +198,52 @@ class ExportDataPage<T> extends StatelessWidget {
             ),
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,
+            permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
           ),
         );
       },
+    );
+  }
+}
+
+class _ExportPageDoneIndicator extends StatelessWidget {
+  const _ExportPageDoneIndicator({
+    required this.checkmarkAnimationController,
+    required this.hasAndroidScopedStorage,
+  });
+
+  final AnimationController checkmarkAnimationController;
+
+  final bool hasAndroidScopedStorage;
+
+  @override
+  Widget build(BuildContext context) {
+    final S translator = S.of(context);
+    final String message;
+
+    if (Platform.isAndroid && !hasAndroidScopedStorage) {
+      message = translator.exportedFileAvailableInDownloads;
+    } else {
+      message = translator.exportedFileAvailableInDocuments;
+    }
+
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: AnimatedCircleCheckmark(controller: checkmarkAnimationController),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Text(
+              message,
+              style: const TextStyle(fontSize: 18),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,14 +1,12 @@
-import 'dart:io';
-
 import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/sembast_database.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/file/io_file_system.dart';
+import 'package:weforza/native_service/file_provider.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
@@ -28,18 +26,12 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
+  final bool hasAndroidScopedStorage = await const FileProvider().hasScopedStorage();
+
   final FileSystem fileSystem = await IoFileSystem.fromPlatform(
     fileSystem: const LocalFileSystem(),
-    hasAndroidScopedStorage: false, // TODO: fix this flag with the native service
+    hasAndroidScopedStorage: hasAndroidScopedStorage,
   );
-
-  Directory? defaultExportDirectory;
-
-  // On iOS, the Documents directory within the application
-  // is a good default for the export directory.
-  if (Platform.isIOS) {
-    defaultExportDirectory = await getApplicationDocumentsDirectory();
-  }
 
   runApp(
     ProviderScope(
@@ -57,10 +49,6 @@ void main() async {
         initialSettingsProvider.overrideWithValue(settings),
         // Inject the file system.
         fileSystemProvider.overrideWithValue(fileSystem),
-        // Inject the default directory for file exports.
-        exportDataDefaultDirectoryProvider.overrideWithValue(
-          defaultExportDirectory,
-        ),
       ],
       child: const WeForzaApp(),
     ),

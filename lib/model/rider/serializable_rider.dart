@@ -1,7 +1,7 @@
 import 'package:weforza/extensions/date_extension.dart';
 
 /// This class represents a single rider that can be (de)serialized.
-class SerializableRider {
+class SerializableRider implements Comparable<SerializableRider> {
   /// The default constructor.
   SerializableRider({
     required this.active,
@@ -63,6 +63,54 @@ class SerializableRider {
       'lastName': lastName,
       'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
     };
+  }
+
+  @override
+  int compareTo(SerializableRider other) {
+    final firstNameComparison = firstName.compareTo(other.firstName);
+
+    if (firstNameComparison != 0) {
+      return firstNameComparison;
+    }
+
+    final lastNameComparison = lastName.compareTo(other.lastName);
+
+    if (lastNameComparison != 0) {
+      return lastNameComparison;
+    }
+
+    // Both aliases are empty, thus both are equal.
+    if (alias.isEmpty && other.alias.isEmpty) {
+      return 0;
+    }
+
+    // This object has more priority based on its alias.
+    if (alias.isNotEmpty && other.alias.isEmpty) {
+      return -1;
+    }
+
+    // This object has less priority based on its alias.
+    if (alias.isEmpty && other.alias.isNotEmpty) {
+      return 1;
+    }
+
+    // Both have non-empty aliases, compare them.
+    final aliasComparison = alias.compareTo(other.alias);
+
+    if (aliasComparison != 0) {
+      return aliasComparison;
+    }
+
+    // As a last resort, compare the active states.
+    if (active && !other.active) {
+      return -1;
+    }
+
+    if (!active && other.active) {
+      return 1;
+    }
+
+    return 0;
   }
 }
 

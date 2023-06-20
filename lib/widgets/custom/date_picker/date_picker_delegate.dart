@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart' show Curve, Curves, DragEndDetails, PageController;
 
-import 'package:jiffy/jiffy.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:weforza/extensions/date_extension.dart';
 
 /// This class defines the delegate for a `DatePicker`.
 class DatePickerDelegate {
@@ -31,7 +31,7 @@ class DatePickerDelegate {
       calendarPageCount: calendarPagesCount,
       curve: curve,
       duration: duration,
-      initialDate: Jiffy.parseFromDateTime(DateTime(today.year, today.month)),
+      initialDate: DateTime(today.year, today.month),
       pageController: PageController(initialPage: currentPage),
     );
   }
@@ -41,7 +41,7 @@ class DatePickerDelegate {
     required this.calendarPageCount,
     required this.curve,
     required this.duration,
-    required Jiffy initialDate,
+    required DateTime initialDate,
     required this.pageController,
   }) : _monthController = BehaviorSubject.seeded(initialDate);
 
@@ -59,13 +59,13 @@ class DatePickerDelegate {
   final PageController pageController;
 
   /// The controller that manages the selected month.
-  final BehaviorSubject<Jiffy> _monthController;
+  final BehaviorSubject<DateTime> _monthController;
 
   /// Get the current calendar month.
-  Jiffy get currentCalendarMonth => _monthController.value;
+  DateTime get currentCalendarMonth => _monthController.value;
 
   /// Get the stream for the currently selected month.
-  Stream<Jiffy> get monthStream => _monthController;
+  Stream<DateTime> get monthStream => _monthController;
 
   /// Compute the days for the currently selected month.
   /// The first week of the current month is prepended
@@ -78,11 +78,11 @@ class DatePickerDelegate {
     final daysInCurrentMonth = currentMonth.daysInMonth;
     final days = <DateTime>[];
 
-    final firstDayWeekday = currentMonth.dateTime.weekday;
+    final firstDayWeekday = currentMonth.weekday;
 
     // The first day of this month is not a monday.
     if (firstDayWeekday != 1) {
-      final previousMonth = currentMonth.subtract(months: 1);
+      final previousMonth = currentMonth.subtractMonth();
 
       final daysInPreviousMonth = previousMonth.daysInMonth;
       final start = daysInPreviousMonth - firstDayWeekday + 2;
@@ -108,7 +108,7 @@ class DatePickerDelegate {
 
     // The last day of the current month is not a sunday.
     if (lastDayWeekDay != 7) {
-      final nextMonth = currentMonth.add(months: 1);
+      final nextMonth = currentMonth.addMonth();
 
       // Get the offset for the last day of this month.
       // If the last day of this month is a sunday,
@@ -139,7 +139,7 @@ class DatePickerDelegate {
 
   /// Go back one month in the calendar.
   void goBackOneMonth() {
-    final newDate = _monthController.value.subtract(months: 1);
+    final newDate = _monthController.value.subtractMonth();
 
     _monthController.add(newDate);
     pageController.previousPage(duration: duration, curve: curve);
@@ -147,7 +147,7 @@ class DatePickerDelegate {
 
   /// Go forward one month in the calendar.
   void goForwardOneMonth() {
-    final newDate = _monthController.value.add(months: 1);
+    final newDate = _monthController.value.addMonth();
 
     _monthController.add(newDate);
     pageController.nextPage(duration: duration, curve: curve);

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:jiffy/jiffy.dart';
 
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
@@ -308,7 +307,7 @@ class _DatePickerBody extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: delegate.calendarPageCount,
               itemBuilder: (context, index) {
-                final currentMonth = delegate.currentCalendarMonth.dateTime;
+                final currentMonth = delegate.currentCalendarMonth;
                 final days = delegate.computeDaysForMonth();
 
                 return _DatePickerMonth(
@@ -344,21 +343,21 @@ class _DatePickerHeader extends StatelessWidget {
   final Widget forwardButton;
 
   /// The initial month for the header.
-  final Jiffy initialMonth;
+  final DateTime initialMonth;
 
   /// The stream that provides updates about the current month.
-  final Stream<Jiffy> monthStream;
+  final Stream<DateTime> monthStream;
 
   /// The style for the month text.
   final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Jiffy>(
+    return StreamBuilder<DateTime>(
       initialData: initialMonth,
       stream: monthStream,
       builder: (context, snapshot) {
-        final month = snapshot.data?.dateTime;
+        final month = snapshot.data;
         final languageCode = Localizations.localeOf(context).languageCode;
 
         return Row(

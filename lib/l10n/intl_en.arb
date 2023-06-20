@@ -128,7 +128,7 @@
 	"saveChanges": "Save changes",
 	"scan": "Scan",
 	"scanAbortedBluetoothDisabled": "Bluetooth should be enabled to start scanning",
-	"scanAbortedNoRiders": "The scan was aborted because the list of riders is empty. Add some riders and try again later.",
+	"scanAbortedNoRiders": "Cannot start scanning because the rider list is empty. Add some riders and try again later.",
 	"scanAbortedBluetoothAndLocationPermissionDenied": "Scanning requires access to Bluetooth and your current location",
 	"scanAbortedBluetoothPermissionDenied": "Scanning requires access to Bluetooth",
 	"scanDuration": "Scan duration",

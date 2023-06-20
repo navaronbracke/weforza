@@ -128,7 +128,7 @@
 	"saveChanges": "Aanpassingen opslaan",
 	"scan": "Scannen",
 	"scanAbortedBluetoothDisabled": "Bluetooth moet worden ingeschakeld om te kunnen scannen",
-	"scanAbortedNoRiders": "De scan werd geannuleerd omdat de lijst van renners leeg is. Voeg een paar renners toe en probeer het later opnieuw.",
+	"scanAbortedNoRiders": "Kan niet beginnen scannen omdat de rennerslijst leeg is. Voeg een paar renners toe en probeer het later opnieuw.",
 	"scanAbortedBluetoothAndLocationPermissionDenied": "Scannen vereist toegang tot Bluetooth en je huidige locatie",
 	"scanAbortedBluetoothPermissionDenied": "Scannen vereist toegang tot Bluetooth",
 	"scanDuration": "Duur van een scan",

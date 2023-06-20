@@ -120,23 +120,21 @@ class ExportRidesDaoImpl implements ExportRidesDao {
         }
       }
 
+      // Sort the attendees per ride, based on name and alias.
+      exportableRideAttendees.sort((a1, a2) => a1.compareTo(a2));
+
       exports.add(
         ExportableRide(ride: ride.value, attendees: exportableRideAttendees),
       );
     }
 
-    return exports;
+    // Sort the exportable rides on their dates, with the most recent date first.
+    return exports..sort((e1, e2) => e1.ride.date.compareTo(e2.ride.date));
   }
 
   @override
   Future<Iterable<ExportableRide>> getRides(DateTime? ride) async {
-    final attendeesFuture = _getAttendees(ride);
-    final ridersFuture = _getRiders();
-    final ridesFuture = _getRides(ride);
-
-    final attendees = await attendeesFuture;
-    final riders = await ridersFuture;
-    final rides = await ridesFuture;
+    final (attendees, riders, rides) = await (_getAttendees(ride), _getRiders(), _getRides(ride)).wait;
 
     return _joinRidesAndAttendees(attendees, riders, rides);
   }

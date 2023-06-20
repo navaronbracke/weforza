@@ -19,25 +19,30 @@ class SerializeRidersRepository {
   final RiderDao riderDao;
 
   /// Get the collection of serializable riders.
+  ///
+  /// The returned list is sorted on the rider name, alias and active state.
   Future<Iterable<SerializableRider>> getSerializableRiders() async {
-    // Since Future.wait() expects the same datatypes from all Futures,
-    // it cannot be used here. Instead, start (but not await) each computation.
-    final devicesFuture = deviceDao.getAllDevicesGroupedByOwnerId();
-    final ridersFuture = riderDao.getRiders(RiderFilterOption.all);
+    final (devices, riders) = await (
+      deviceDao.getAllDevicesGroupedByOwnerId(),
+      riderDao.getRiders(RiderFilterOption.all),
+    ).wait;
 
-    final devices = await devicesFuture;
-    final riders = await ridersFuture;
+    final output = riders
+        .map(
+          (rider) => SerializableRider(
+            active: rider.active,
+            alias: rider.alias,
+            devices: devices[rider.uuid] ?? <String>{},
+            firstName: rider.firstName,
+            lastName: rider.lastName,
+            lastUpdated: rider.lastUpdated,
+          ),
+        )
+        .toList();
 
-    return riders.map(
-      (rider) => SerializableRider(
-        active: rider.active,
-        alias: rider.alias,
-        devices: devices[rider.uuid] ?? <String>{},
-        firstName: rider.firstName,
-        lastName: rider.lastName,
-        lastUpdated: rider.lastUpdated,
-      ),
-    );
+    output.sort((s1, s2) => s1.compareTo(s2));
+
+    return output;
   }
 
   /// Save the given serializable [riders] to disk.

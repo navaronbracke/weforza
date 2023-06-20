@@ -70,13 +70,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
   Future<void> saveSerializableRiders(
     Iterable<SerializableRider> riders,
   ) async {
-    // Since Future.wait() expects the same datatypes from all Futures,
-    // it cannot be used here. Instead, start (but not await) each computation.
-    final existingDevicesFuture = _getExistingDevices();
-    final existingRidersFuture = _getExistingRiders();
-
-    final existingDevices = await existingDevicesFuture;
-    final existingRiders = await existingRidersFuture;
+    final (existingDevices, existingRiders) = await (_getExistingDevices(), _getExistingRiders()).wait;
 
     // The existing riders that should be updated.
     final ridersToUpdate = <SerializableRiderUpdateTimestamp>{};

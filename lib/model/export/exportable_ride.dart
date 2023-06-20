@@ -23,7 +23,7 @@ class ExportableRide {
 
 /// This class represents a RideAttendee in a format that is suitable
 /// for exporting inside a [ExportableRide].
-class ExportableRideAttendee {
+class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
   ExportableRideAttendee({
     required this.firstName,
     required this.lastName,
@@ -43,5 +43,38 @@ class ExportableRideAttendee {
 
   String toCsv() {
     return '$firstName,$lastName${alias.isEmpty ? '' : ',$alias'}';
+  }
+
+  @override
+  int compareTo(ExportableRideAttendee other) {
+    final firstNameComparison = firstName.compareTo(other.firstName);
+
+    if (firstNameComparison != 0) {
+      return firstNameComparison;
+    }
+
+    final lastNameComparison = lastName.compareTo(other.lastName);
+
+    if (lastNameComparison != 0) {
+      return lastNameComparison;
+    }
+
+    // Both aliases are empty, thus both are equal.
+    if (alias.isEmpty && other.alias.isEmpty) {
+      return 0;
+    }
+
+    // This object has more priority based on its alias.
+    if (alias.isNotEmpty && other.alias.isEmpty) {
+      return -1;
+    }
+
+    // This object has less priority based on its alias.
+    if (alias.isEmpty && other.alias.isNotEmpty) {
+      return 1;
+    }
+
+    // Both have non-empty aliases, compare them.
+    return alias.compareTo(other.alias);
   }
 }

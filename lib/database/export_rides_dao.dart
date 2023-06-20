@@ -130,13 +130,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
 
   @override
   Future<Iterable<ExportableRide>> getRides(DateTime? ride) async {
-    final attendeesFuture = _getAttendees(ride);
-    final ridersFuture = _getRiders();
-    final ridesFuture = _getRides(ride);
-
-    final attendees = await attendeesFuture;
-    final riders = await ridersFuture;
-    final rides = await ridesFuture;
+    final (attendees, riders, rides) = await (_getAttendees(ride), _getRiders(), _getRides(ride)).wait;
 
     return _joinRidesAndAttendees(attendees, riders, rides);
   }

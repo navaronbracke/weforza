@@ -22,13 +22,10 @@ class SerializeRidersRepository {
   ///
   /// The returned list is sorted on the rider name, alias and active state.
   Future<Iterable<SerializableRider>> getSerializableRiders() async {
-    // Since Future.wait() expects the same datatypes from all Futures,
-    // it cannot be used here. Instead, start (but not await) each computation.
-    final devicesFuture = deviceDao.getAllDevicesGroupedByOwnerId();
-    final ridersFuture = riderDao.getRiders(RiderFilterOption.all);
-
-    final devices = await devicesFuture;
-    final riders = await ridersFuture;
+    final (devices, riders) = await (
+      deviceDao.getAllDevicesGroupedByOwnerId(),
+      riderDao.getRiders(RiderFilterOption.all),
+    ).wait;
 
     final output = riders
         .map(

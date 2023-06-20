@@ -53,8 +53,6 @@ dependencies:
   # The intl package provides translation utilities.
   intl: any
 
-  # Jiffy provides better support for manipulating dates than the current Dart spec.
-  jiffy: ^6.1.0
 
   # This package provies MIME-type lookup utilities.
   mime: ^1.0.4

@@ -26,7 +26,8 @@ class PermissionHandler {
         const val PERMISSION_REQUEST_ONGOING_MESSAGE = "Another permission request is ongoing."
 
         const val REQUEST_CODE_BLUETOOTH_PERMISSION = 2000
-        const val REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION = 2001
+        const val REQUEST_CODE_CAMERA_PERMISSION = 2001
+        const val REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION = 2002
     }
 
     // The permission listener that will listen for the permission result.
@@ -126,6 +127,13 @@ class PermissionHandler {
         }
 
         requestPermissions(activity, permissions, REQUEST_CODE_BLUETOOTH_PERMISSION, callback)
+    }
+
+    /**
+     * Request permission to access the camera.
+     */
+    fun requestCameraPermission(activity: Activity, callback: PermissionResultCallback) {
+        requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), REQUEST_CODE_CAMERA_PERMISSION, callback)
     }
 
     /**

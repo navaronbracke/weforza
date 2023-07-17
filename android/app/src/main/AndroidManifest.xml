@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <!-- Location permission is required for scanning devices. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -12,6 +13,8 @@
     <!-- Android R and lower Bluetooth permissions. -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- These permissions are required when ScopedStorage is not available. -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />

@@ -63,6 +63,21 @@ class MainActivity: FlutterActivity() {
                             }
                         }
                 )
+                "requestCameraPermission" -> permissionDelegate.requestCameraPermission(
+                    this,
+                    object: PermissionResultCallback {
+                        override fun onPermissionResult(
+                            errorCode: String?,
+                            errorDescription: String?
+                        ) {
+                            if(errorCode == null) {
+                                result.success(true)
+                            } else {
+                                result.success(false)
+                            }
+                        }
+                    }
+                )
                 "requestExternalStoragePermission" -> {
                     // Abort with success when ScopedStorage is in use,
                     // since the permission is ignored when ScopedStorage is used.

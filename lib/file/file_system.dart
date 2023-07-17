@@ -33,13 +33,6 @@ abstract interface class FileSystem {
   /// rather than top-level shared storage.
   fs.Directory? imagesDirectory({required bool applicationDirectory});
 
-  /// Choose the file to use as data source
-  /// for importing riders and their devices.
-  ///
-  /// Returns the chosen file or null if no file was chosen.
-  /// Throws an [UnsupportedFileFormatException] if a file with an unsupported file type was chosen.
-  Future<fs.File?> pickImportRidersDataSource();
-
   /// Pick a profile image from the given [source].
   /// Returns the [fs.File] that was chosen.
   Future<fs.File?> pickProfileImage(ImageSource source);

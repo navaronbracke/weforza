@@ -1,11 +1,9 @@
 import 'dart:io' show Platform;
 
 import 'package:file/file.dart' as fs;
-import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 
 /// This class represents a [FileSystem] that uses the real file system.
@@ -145,33 +143,6 @@ class IoFileSystem implements FileSystem {
     }
 
     return null;
-  }
-
-  @override
-  Future<fs.File?> pickImportRidersDataSource() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: <String>['csv', 'json'],
-    );
-
-    if (result == null || result.files.isEmpty) {
-      return null;
-    }
-
-    final chosenFile = result.files.first;
-    final ext = chosenFile.extension;
-
-    if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
-      throw UnsupportedFileFormatException();
-    }
-
-    final filePath = chosenFile.path;
-
-    if (filePath == null) {
-      throw UnsupportedFileFormatException();
-    }
-
-    return file(filePath);
   }
 
   @override

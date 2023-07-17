@@ -5,7 +5,7 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/import/import_riders_delegate.dart';
 import 'package:weforza/model/import/import_riders_state.dart';
-import 'package:weforza/riverpod/file_system_provider.dart';
+import 'package:weforza/riverpod/import_file_delegate_provider.dart';
 import 'package:weforza/riverpod/repository/serialize_riders_repository_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -40,7 +40,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
   void initState() {
     super.initState();
     delegate = ImportRidersDelegate(
-      ref.read(fileSystemProvider),
+      ref.read(importFileDelegateProvider),
       ref.read(serializeRidersRepositoryProvider),
     );
 

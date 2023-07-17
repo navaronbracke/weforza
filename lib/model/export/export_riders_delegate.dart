@@ -17,6 +17,7 @@ class ExportRidersOptions {
 /// This class represents the delegate that handles exporting riders.
 class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
   ExportRidersDelegate({
+    required super.fileStorageDelegate,
     required super.fileSystem,
     required this.serializeRidersRepository,
   });

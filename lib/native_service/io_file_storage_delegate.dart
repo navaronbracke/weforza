@@ -2,15 +2,12 @@ import 'dart:io';
 
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
-import 'package:weforza/native_service/native_service.dart';
+import 'package:weforza/native_service/file_storage_delegate.dart';
 
-/// This class represents a service that provides a mechanism
-/// to register new files in the underlying file provider.
-final class FileProvider extends NativeService {
-  const FileProvider();
+final class IoFileStorageDelegate extends FileStorageDelegate {
+  const IoFileStorageDelegate();
 
-  /// Whether the application uses Scoped Storage.
-  /// This only has an effect on Android.
+  @override
   Future<bool> hasScopedStorage() async {
     if (Platform.isAndroid) {
       return await methodChannel.invokeMethod<bool>('hasScopedStorage') ?? false;
@@ -19,9 +16,7 @@ final class FileProvider extends NativeService {
     return false;
   }
 
-  /// Register the given [file] as a new document.
-  ///
-  /// Throws if the file is empty or an invalid format.
+  @override
   Future<void> registerDocument(File file) async {
     final String? mimeType = lookupMimeType(file.path);
     final int fileSize = file.lengthSync();
@@ -51,9 +46,7 @@ final class FileProvider extends NativeService {
     }
   }
 
-  /// Request permission to write to external storage.
-  ///
-  /// This permission only has an effect on Android 9 and lower, where Scoped Storage is not in effect.
+  @override
   Future<bool> requestWriteExternalStoragePermission() async {
     final bool? result = await methodChannel.invokeMethod<bool>(
       'requestWriteExternalStoragePermission',

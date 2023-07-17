@@ -9,7 +9,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/database/sembast_database.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/file/io_file_system.dart';
-import 'package:weforza/native_service/file_provider.dart';
+import 'package:weforza/native_service/io_file_storage_delegate.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 import 'package:weforza/riverpod/file_system_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
@@ -29,7 +29,9 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
-  final bool hasAndroidScopedStorage = await const FileProvider().hasScopedStorage();
+  // The delegate that looks up whether the storage is scoped is a constant.
+  // Therefor the delegate here and in the respective provider, evaluates to the same object.
+  final bool hasAndroidScopedStorage = await const IoFileStorageDelegate().hasScopedStorage();
 
   final Directory applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
   final Directory tempDirectory = await getTemporaryDirectory();

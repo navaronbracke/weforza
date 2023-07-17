@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/profile_image_picker_delegate.dart';
+import 'package:weforza/model/image/profile_image_picker_delegate.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image_picker_placeholder.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';

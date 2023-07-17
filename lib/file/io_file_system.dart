@@ -1,8 +1,6 @@
 import 'dart:io' show Platform;
 
 import 'package:file/file.dart' as fs;
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/file/file_system.dart';
 
@@ -143,47 +141,5 @@ class IoFileSystem implements FileSystem {
     }
 
     return null;
-  }
-
-  @override
-  Future<fs.File?> pickProfileImage(ImageSource source) async {
-    // TODO: refactor this flow
-    // - if scoped storage on Android, register the photo (the registration should return a readable path)
-    // - if not scoped storage on Android
-    //   - request write external storage permission first
-    //   - then save the image to the top-level pictures dir
-    //   - then register the photo
-    // - on iOS
-    //   - request permission for the photo gallery (add only)
-    //   - save the image to the application documents dir
-    //   - register the photo
-
-    final profileImage = await ImagePicker().pickImage(
-      maxHeight: 320,
-      maxWidth: 320,
-      requestFullMetadata: false,
-      source: source,
-    );
-
-    if (profileImage == null) {
-      return null;
-    }
-
-    switch (source) {
-      case ImageSource.camera:
-        final fs.Directory? directory = imagesDirectory(applicationDirectory: false);
-
-        if (directory == null) {
-          throw ArgumentError.notNull('directory');
-        }
-
-        final fs.File destinationFile = file(join(directory.path, profileImage.name));
-
-        await profileImage.saveTo(destinationFile.path);
-
-        return destinationFile;
-      case ImageSource.gallery:
-        return file(profileImage.path);
-    }
   }
 }

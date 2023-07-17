@@ -1,5 +1,4 @@
 import 'package:file/file.dart' as fs;
-import 'package:image_picker/image_picker.dart';
 
 /// This interface defines the application's file system.
 abstract interface class FileSystem {
@@ -32,8 +31,4 @@ abstract interface class FileSystem {
   /// If [applicationDirectory] is true, the returned directory will be specific to the application,
   /// rather than top-level shared storage.
   fs.Directory? imagesDirectory({required bool applicationDirectory});
-
-  /// Pick a profile image from the given [source].
-  /// Returns the [fs.File] that was chosen.
-  Future<fs.File?> pickProfileImage(ImageSource source);
 }

@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/file/file_system.dart';
+import 'package:weforza/model/image/pick_image_delegate.dart';
 
 /// This delegate provides an interface for selecting profile images.
 class ProfileImagePickerDelegate {
   ProfileImagePickerDelegate({
-    required this.fileSystem,
+    required this.imagePickerDelegate,
     required File? initialValue,
   }) : _controller = BehaviorSubject.seeded(AsyncValue.data(initialValue));
 
-  /// The file system for this delegate.
-  final FileSystem fileSystem;
+  /// The delegate that will handle picking images.
+  final PickImageDelegate imagePickerDelegate;
 
   /// The controller that manages the selected file.
   final BehaviorSubject<AsyncValue<File?>> _controller;
@@ -44,7 +44,7 @@ class ProfileImagePickerDelegate {
 
       _controller.add(const AsyncLoading());
 
-      final file = await fileSystem.pickProfileImage(source);
+      final file = await imagePickerDelegate.pickProfileImage(source);
 
       if (_controller.isClosed) {
         return;

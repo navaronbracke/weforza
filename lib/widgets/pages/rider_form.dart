@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/profile_image_picker_delegate.dart';
+import 'package:weforza/model/image/profile_image_picker_delegate.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_form_delegate.dart';
 import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/model/rider/rider_validator.dart';
-import 'package:weforza/riverpod/file_system_provider.dart';
+import 'package:weforza/riverpod/image_picker_delegate_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
@@ -117,7 +117,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     final profileImageFile = profileImagePath == null ? null : File(profileImagePath);
 
     _profileImageDelegate = ProfileImagePickerDelegate(
-      fileSystem: ref.read(fileSystemProvider),
+      imagePickerDelegate: ref.read(imagePickerDelegateProvider),
       initialValue: profileImageFile?.existsSync() ?? false ? profileImageFile : null,
     );
 

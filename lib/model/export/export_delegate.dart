@@ -81,11 +81,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       // On iOS, the exported files are saved to the application documents directory.
       // Check if the file does not exist yet, and write to the file.
       if (Platform.isIOS) {
-        final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: true);
-
-        if (directory == null) {
-          throw ArgumentError.notNull('directory');
-        }
+        final fs.Directory directory = fileSystem.documentsDirectory;
 
         final fs.File file = fileSystem.file(join(directory.path, fileName));
 
@@ -110,7 +106,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         } else {
           // When not using ScopedStorage, write to the external public documents directory,
           // but request permission first. Lastly, register the file using the file provider.
-          final fs.Directory? directory = fileSystem.documentsDirectory(applicationDirectory: false);
+          final fs.Directory? directory = fileSystem.topLevelDocumentsDirectory;
 
           if (directory == null) {
             throw ArgumentError.notNull('directory');

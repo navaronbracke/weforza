@@ -2,33 +2,37 @@ import 'package:file/file.dart' as fs;
 
 /// This interface defines the application's file system.
 abstract interface class FileSystem {
+  /// Get the directory where the application can store documents.
+  ///
+  /// Files in this directory are removed when the application is uninstalled.
+  fs.Directory get documentsDirectory;
+
   /// Whether the file system uses scoped storage.
   ///
   /// If this is true, not all provided directories might be available to the application.
   bool get hasScopedStorage;
 
+  /// Get the directory where the application can store images.
+  ///
+  /// Files in this directory are removed when the application is uninstalled.
+  fs.Directory get imagesDirectory;
+
   /// Get the directory where the application can create temporary files.
   /// This directory is always available.
   fs.Directory get tempDirectory;
 
-  /// Get the directory where the application can store document files.
+  /// Get the directory where the application can store documents,
+  /// that are not removed when the application is uninstalled.
   ///
-  /// If this directory is not available, for instance if it is limited by [hasScopedStorage],
-  /// then this is null.
+  /// Returns null if no such directory is available.
+  fs.Directory? get topLevelDocumentsDirectory;
+
+  /// Get the directory where the application can store images,
+  /// that are not removed when the application is uninstalled.
   ///
-  /// If [applicationDirectory] is true, the returned directory will be specific to the application,
-  /// rather than top-level shared storage.
-  fs.Directory? documentsDirectory({required bool applicationDirectory});
+  /// Returns null if no such directory is available.
+  fs.Directory? get topLevelImagesDirectory;
 
   /// Get a reference to a [fs.File] at the given [path].
   fs.File file(String path);
-
-  /// Get the directory where the application can store images.
-  ///
-  /// If this directory is not available, for instance if it is limited by [hasScopedStorage],
-  /// then this is null.
-  ///
-  /// If [applicationDirectory] is true, the returned directory will be specific to the application,
-  /// rather than top-level shared storage.
-  fs.Directory? imagesDirectory({required bool applicationDirectory});
 }

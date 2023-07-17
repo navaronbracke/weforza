@@ -58,7 +58,7 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
       }
 
       // When ScopedStorage is not enabled, the document is written to the external public documents directory.
-      final Directory? directory = delegate.fileSystem.documentsDirectory(applicationDirectory: false);
+      final Directory? directory = delegate.fileSystem.topLevelDocumentsDirectory;
 
       if (directory == null) {
         return null;
@@ -71,11 +71,7 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
 
     // On iOS, the exported files are saved to the application documents directory.
     if (Platform.isIOS) {
-      final Directory? directory = delegate.fileSystem.documentsDirectory(applicationDirectory: true);
-
-      if (directory == null) {
-        return null;
-      }
+      final Directory directory = delegate.fileSystem.documentsDirectory;
 
       if (delegate.fileSystem.file(join(directory.path, fileName)).existsSync()) {
         return translator.fileNameExists;

@@ -36,7 +36,7 @@ class IoPickImageDelegate implements PickImageDelegate {
 
     switch (source) {
       case ImageSource.camera:
-        final fs.Directory? directory = fileSystem.imagesDirectory(applicationDirectory: false);
+        final fs.Directory? directory = fileSystem.topLevelImagesDirectory;
 
         if (directory == null) {
           throw ArgumentError.notNull('directory');

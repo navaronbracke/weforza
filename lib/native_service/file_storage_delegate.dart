@@ -15,9 +15,9 @@ abstract base class FileStorageDelegate extends NativeService {
   /// Throws if the file is empty or an invalid format.
   Future<void> registerDocument(File file);
 
-  /// Request permission to write to external storage.
+  /// Request permission to read from and/or write to external storage.
   ///
   /// This permission only has an effect on Android 9 and lower,
   /// where Scoped Storage is not in effect.
-  Future<bool> requestWriteExternalStoragePermission();
+  Future<bool> requestExternalStoragePermission({bool read = false, bool write = false});
 }

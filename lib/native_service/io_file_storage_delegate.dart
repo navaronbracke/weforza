@@ -47,9 +47,13 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<bool> requestWriteExternalStoragePermission() async {
+  Future<bool> requestExternalStoragePermission({bool read = false, bool write = false}) async {
     final bool? result = await methodChannel.invokeMethod<bool>(
-      'requestWriteExternalStoragePermission',
+      'requestExternalStoragePermission',
+      <String, Object?>{
+        'read': read,
+        'write': write,
+      },
     );
 
     return result ?? false;

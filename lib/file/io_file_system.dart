@@ -1,3 +1,4 @@
+import 'dart:io' as io show Directory;
 import 'package:file/file.dart' as fs;
 import 'package:weforza/file/file_system.dart';
 
@@ -5,15 +6,21 @@ import 'package:weforza/file/file_system.dart';
 class IoFileSystem implements FileSystem {
   /// Create a new [IoFileSystem] with the given directories.
   IoFileSystem({
-    required this.documentsDirectory,
-    required this.imagesDirectory,
+    required io.Directory documentsDirectory,
+    required io.Directory imagesDirectory,
     required fs.FileSystem fileSystem,
     required this.hasScopedStorage,
-    required this.tempDirectory,
-    fs.Directory? topLevelDocumentsDirectory,
-    fs.Directory? topLevelImagesDirectory,
-  })  : topLevelDocumentsDirectory = hasScopedStorage ? null : topLevelDocumentsDirectory,
-        topLevelImagesDirectory = hasScopedStorage ? null : topLevelImagesDirectory,
+    required io.Directory tempDirectory,
+    io.Directory? topLevelDocumentsDirectory,
+    io.Directory? topLevelImagesDirectory,
+  })  : documentsDirectory = fileSystem.directory(documentsDirectory),
+        imagesDirectory = fileSystem.directory(imagesDirectory),
+        tempDirectory = fileSystem.directory(tempDirectory),
+        topLevelDocumentsDirectory = hasScopedStorage || topLevelDocumentsDirectory == null
+            ? null
+            : fileSystem.directory(topLevelDocumentsDirectory),
+        topLevelImagesDirectory =
+            hasScopedStorage || topLevelImagesDirectory == null ? null : fileSystem.directory(topLevelImagesDirectory),
         _fileSystem = fileSystem;
 
   @override

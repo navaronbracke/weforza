@@ -1,7 +1,10 @@
+import 'dart:io' show Directory, Platform;
+
 import 'package:file/local.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/sembast_database.dart';
 import 'package:weforza/file/file_system.dart';
@@ -28,9 +31,30 @@ void main() async {
 
   final bool hasAndroidScopedStorage = await const FileProvider().hasScopedStorage();
 
-  final FileSystem fileSystem = await IoFileSystem.fromPlatform(
+  final Directory applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+  final Directory tempDirectory = await getTemporaryDirectory();
+
+  // Android only has top level directories when Scoped Storage is not being used,
+  // while iOS does not have accessible top level directories.
+  Directory? topLevelDocumentsDir;
+  Directory? topLevelImagesDir;
+
+  if (Platform.isAndroid && !hasAndroidScopedStorage) {
+    final List<Directory> documentsDirs = await getExternalStorageDirectories(type: StorageDirectory.documents) ?? [];
+    final List<Directory> imagesDirs = await getExternalStorageDirectories(type: StorageDirectory.pictures) ?? [];
+
+    topLevelDocumentsDir = documentsDirs.firstOrNull;
+    topLevelImagesDir = imagesDirs.firstOrNull;
+  }
+
+  final FileSystem fileSystem = IoFileSystem(
+    documentsDirectory: applicationDocumentsDirectory,
     fileSystem: const LocalFileSystem(),
-    hasAndroidScopedStorage: hasAndroidScopedStorage,
+    hasScopedStorage: hasAndroidScopedStorage,
+    imagesDirectory: applicationDocumentsDirectory,
+    tempDirectory: tempDirectory,
+    topLevelDocumentsDirectory: topLevelDocumentsDir,
+    topLevelImagesDirectory: topLevelImagesDir,
   );
 
   runApp(

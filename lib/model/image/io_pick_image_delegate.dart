@@ -50,7 +50,11 @@ class IoPickImageDelegate implements PickImageDelegate {
     }
 
     if (Platform.isIOS) {
-      await mediaPermissionsDelegate.requestAddToPhotoLibraryPermission();
+      final bool hasPhotosPermission = await mediaPermissionsDelegate.requestPhotoLibraryPermission();
+
+      if (!hasPhotosPermission) {
+        throw PhotoLibraryPermissionDeniedException();
+      }
     }
   }
 

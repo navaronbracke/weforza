@@ -63,14 +63,16 @@ class MainActivity: FlutterActivity() {
                             }
                         }
                 )
-                "requestWriteExternalStoragePermission" -> {
+                "requestExternalStoragePermission" -> {
                     // Abort with success when ScopedStorage is in use,
                     // since the permission is ignored when ScopedStorage is used.
                     if(mediaStoreDelegate.hasScopedStorage()) {
                         result.success(true)
                     } else {
-                        permissionDelegate.requestWriteExternalStoragePermission(
+                        permissionDelegate.requestExternalStoragePermission(
                             this,
+                            call.argument<Boolean>("read") ?: false,
+                            call.argument<Boolean>("write") ?: false,
                             object: PermissionResultCallback {
                                 override fun onPermissionResult(
                                     errorCode: String?,

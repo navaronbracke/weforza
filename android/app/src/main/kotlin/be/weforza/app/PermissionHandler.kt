@@ -26,7 +26,7 @@ class PermissionHandler {
         const val PERMISSION_REQUEST_ONGOING_MESSAGE = "Another permission request is ongoing."
 
         const val REQUEST_CODE_BLUETOOTH_PERMISSION = 2000
-        const val REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION = 2001
+        const val REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION = 2001
     }
 
     // The permission listener that will listen for the permission result.
@@ -129,15 +129,30 @@ class PermissionHandler {
     }
 
     /**
-     * Request permission to write to external storage.
+     * Request permission to read from and write to external storage.
      *
      * This permission has no effect on Android 10 and higher.
      */
-    fun requestWriteExternalStoragePermission(activity: Activity, callback: PermissionResultCallback) {
+    fun requestExternalStoragePermission(
+        activity: Activity,
+        read: Boolean,
+        write: Boolean,
+        callback: PermissionResultCallback) {
+
+        var permissions = emptyArray<String>()
+
+        if(read) {
+            permissions = permissions.plus(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if(write) {
+            permissions = permissions.plus(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
         requestPermissions(
             activity,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION,
+            permissions,
+            REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION,
             callback,
         )
     }
@@ -148,7 +163,7 @@ class PermissionHandler {
     fun shouldHandleRequestCode(requestCode: Int): Boolean {
         return when(requestCode) {
             REQUEST_CODE_BLUETOOTH_PERMISSION,
-            REQUEST_CODE_WRITE_EXTERNAL_STORAGE_PERMISSION -> true
+            REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION -> true
             else -> false
         }
     }

@@ -8,20 +8,20 @@ import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';
-import 'package:weforza/native_service/file_provider.dart';
+import 'package:weforza/native_service/file_storage_delegate.dart';
 
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
-  ExportDelegate({required this.fileSystem});
+  ExportDelegate({required this.fileStorageDelegate, required this.fileSystem});
 
   /// The controller that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
   final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
 
-  /// The file provider that will register the document.
-  final FileProvider fileProvider = const FileProvider();
+  /// The file storage delegate that will register the document.
+  final FileStorageDelegate fileStorageDelegate;
 
   /// The file system that will provide directories.
   final FileSystem fileSystem;
@@ -118,14 +118,14 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
             throw StateError('The given file $file already exists');
           }
 
-          if (!await fileProvider.requestWriteExternalStoragePermission()) {
+          if (!await fileStorageDelegate.requestWriteExternalStoragePermission()) {
             throw ExternalStoragePermissionDeniedException();
           }
         }
 
         await writeToFile(file, fileFormat, options);
 
-        await fileProvider.registerDocument(file);
+        await fileStorageDelegate.registerDocument(file);
 
         setDone(null);
         return;

@@ -29,6 +29,8 @@ void main() async {
   // Preload the package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
+  // The delegate that looks up whether the storage is scoped is a constant.
+  // Therefor the delegate here and in the respective provider, evaluates to the same object.
   final bool hasAndroidScopedStorage = await const IoFileStorageDelegate().hasScopedStorage();
 
   final Directory applicationDocumentsDirectory = await getApplicationDocumentsDirectory();

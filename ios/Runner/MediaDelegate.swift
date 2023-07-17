@@ -8,8 +8,32 @@
 
 import AVFoundation
 import Foundation
+import Photos
 
 class MediaDelegate : NSObject {
+    /// Request permission to access the Photo library.
+    func requestPhotosLibraryPermission(result: @escaping FlutterResult) {
+        let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        
+        switch(photosAuthorizationStatus) {
+        case .authorized:
+            result(true)
+        case .denied, .limited, .restricted:
+            result(false)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                switch(status) {
+                case .authorized:
+                    result(true)
+                case .denied, .limited, .restricted:
+                    result(false)
+                case .notDetermined:
+                    result(nil)
+                }
+            }
+        }
+    }
+    
     /// Request permission to use the camera.
     func requestCameraPermission(result: @escaping FlutterResult) {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)

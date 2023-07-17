@@ -34,6 +34,8 @@ import Flutter
                 bluetoothAdapterDelegate.requestBluetoothPermission(result: result)
             case "requestCameraPermission":
                 mediaDelegate.requestCameraPermission(result: result)
+            case "requestPhotoLibraryPermission":
+                mediaDelegate.requestPhotosLibraryPermission(result: result)
             case "startBluetoothScan":
                 bluetoothAdapterDelegate.startBluetoothScan(result: result)
             case "stopBluetoothScan":

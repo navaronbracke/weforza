@@ -42,7 +42,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Allow access to your camera to take new profile pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow access to Photos to select profile pictures from your photo library.</string>	
+	<string>Allow access to Photos to display profile pictures from your photo library.</string>	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

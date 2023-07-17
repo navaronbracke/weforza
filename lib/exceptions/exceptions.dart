@@ -25,3 +25,6 @@ class UnsupportedFileFormatException implements Exception {}
 ///
 /// This permission is typically only used on Android 9 and lower.
 class ExternalStoragePermissionDeniedException implements Exception {}
+
+/// An exception that is thrown when access to the Photo library is denied.
+class PhotoLibraryPermissionDeniedException implements Exception {}

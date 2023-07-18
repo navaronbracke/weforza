@@ -32,7 +32,11 @@ class IoPickImageDelegate implements PickImageDelegate {
   /// If any permission is not granted, this returns a [Future.error].
   Future<void> _requestCameraAndPhotoLibraryPermissions() async {
     if (Platform.isAndroid || Platform.isIOS) {
-      await mediaPermissionsDelegate.requestCameraPermission();
+      final bool hasCameraPermission = await mediaPermissionsDelegate.requestCameraPermission();
+
+      if (!hasCameraPermission) {
+        throw CameraPermissionDeniedException();
+      }
     }
 
     if (Platform.isAndroid && !fileSystem.hasScopedStorage) {
@@ -50,7 +54,7 @@ class IoPickImageDelegate implements PickImageDelegate {
     }
 
     if (Platform.isIOS) {
-      final bool hasPhotosPermission = await mediaPermissionsDelegate.requestPhotoLibraryPermission();
+      final bool hasPhotosPermission = await mediaPermissionsDelegate.requestAddToPhotoLibraryPermission();
 
       if (!hasPhotosPermission) {
         throw PhotoLibraryPermissionDeniedException();

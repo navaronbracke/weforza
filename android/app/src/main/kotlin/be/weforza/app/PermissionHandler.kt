@@ -147,14 +147,23 @@ class PermissionHandler {
         write: Boolean,
         callback: PermissionResultCallback) {
 
-        var permissions = emptyArray<String>()
+        val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
+        val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
 
-        if(read) {
-            permissions = permissions.plus(Manifest.permission.READ_EXTERNAL_STORAGE)
+        var permissions: Array<String> = emptyArray()
+
+        if(read && !hasPermissions(activity, arrayOf(readPermission))) {
+            permissions += readPermission
         }
 
-        if(write) {
-            permissions = permissions.plus(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if(write && !hasPermissions(activity, arrayOf(writePermission))) {
+            permissions += writePermission
+        }
+
+        // If the permissions to request are empty, they were granted before.
+        if(permissions.isEmpty()) {
+            callback.onPermissionResult(null, null)
+            return
         }
 
         requestPermissions(
@@ -171,6 +180,7 @@ class PermissionHandler {
     fun shouldHandleRequestCode(requestCode: Int): Boolean {
         return when(requestCode) {
             REQUEST_CODE_BLUETOOTH_PERMISSION,
+            REQUEST_CODE_CAMERA_PERMISSION,
             REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION -> true
             else -> false
         }

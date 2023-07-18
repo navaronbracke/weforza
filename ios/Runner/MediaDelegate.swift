@@ -27,8 +27,8 @@ class MediaDelegate : NSObject {
         }
     }
     
-    /// Request permission to write to the Photo library.
-    func requestPhotosLibraryPermission(result: @escaping FlutterResult) {
+    /// Request permission to add photos to the Photo library.
+    func requestAddToPhotoLibraryPermission(result: @escaping FlutterResult) {
         if #available(iOS 14.0, *) {
             let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
             

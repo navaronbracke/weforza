@@ -35,4 +35,7 @@ abstract interface class FileSystem {
 
   /// Get a reference to a [fs.File] at the given [path].
   fs.File file(String path);
+
+  /// Get a reference to a [fs.File] from the given [uri].
+  fs.File fileFromUri(Uri uri);
 }

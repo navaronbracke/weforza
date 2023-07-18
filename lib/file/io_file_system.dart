@@ -46,4 +46,7 @@ class IoFileSystem implements FileSystem {
 
   @override
   fs.File file(String path) => _fileSystem.file(path);
+
+  @override
+  fs.File fileFromUri(Uri uri) => _fileSystem.file(uri);
 }

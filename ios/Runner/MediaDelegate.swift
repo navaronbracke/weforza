@@ -27,10 +27,10 @@ class MediaDelegate : NSObject {
         }
     }
     
-    /// Request permission to access the Photo library.
+    /// Request permission to write to the Photo library.
     func requestPhotosLibraryPermission(result: @escaping FlutterResult) {
         if #available(iOS 14.0, *) {
-            let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
             
             switch(photosAuthorizationStatus) {
             case .authorized:
@@ -38,7 +38,7 @@ class MediaDelegate : NSObject {
             case .denied, .limited, .restricted:
                 result(false)
             case .notDetermined:
-                PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
                     switch(status) {
                     case .authorized:
                         result(true)

@@ -7,4 +7,5 @@
 NSBluetoothAlwaysUsageDescription = "De app gebruikt Bluetooth om te scannen naar Bluetooth-apparaten in je directe omgeving.";
 NSBluetoothPeripheralUsageDescription = "De app gebruikt Bluetooth om te scannen naar Bluetooth-apparaten in je directe omgeving.";
 NSCameraUsageDescription = "Geef toegang tot je camera om nieuwe profielfoto's te maken.";
+NSPhotoLibraryAddUsageDescription = "Geef toegang tot Foto's om nieuwe profielfoto's aan je fotogalerij toe te voegen.";
 NSPhotoLibraryUsageDescription = "Geef toegang tot Foto's om profielfoto's uit je fotogalerij weer te geven.";

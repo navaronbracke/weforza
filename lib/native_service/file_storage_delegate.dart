@@ -15,6 +15,11 @@ abstract base class FileStorageDelegate extends NativeService {
   /// Throws if the file is empty or an invalid format.
   Future<void> registerDocument(File file);
 
+  /// Register the given [file] as a new image.
+  ///
+  /// Throws if the file is empty or an invalid format.
+  Future<Uri> registerImage(File file);
+
   /// Request permission to read from and/or write to external storage.
   ///
   /// This permission only has an effect on Android 9 and lower,

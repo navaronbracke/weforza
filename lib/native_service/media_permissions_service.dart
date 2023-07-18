@@ -4,14 +4,14 @@ import 'package:weforza/native_service/native_service.dart';
 abstract base class MediaPermissionsService extends NativeService {
   const MediaPermissionsService();
 
-  /// Request permission to access the photo gallery of the device.
+  /// Request permission to add photos to the photo gallery of the device.
   /// This permission only has an effect on iOS.
   ///
-  /// Returns a [Future.error] if the permission is denied.
-  Future<bool> requestPhotoLibraryPermission();
+  /// Returns whether the permission is granted.
+  Future<bool> requestAddToPhotoLibraryPermission();
 
   /// Request permission to use the device camera.
   ///
-  /// Returns a [Future.error] if the permission is denied.
-  Future<void> requestCameraPermission();
+  /// Returns whether the permission is granted.
+  Future<bool> requestCameraPermission();
 }

@@ -11,6 +11,25 @@ import Foundation
 import Photos
 
 class MediaDelegate : NSObject {
+    func registerImage(args: Dictionary<String, Any?>, result: @escaping FlutterResult) {
+        guard let fileUrl = URL(string: args["filePath"] as? String ?? "") else {
+            result(FlutterError(code: "PHOTOS_ADD_IMAGE_FAILED", message: "The file path is required.", details: nil))
+            
+            return
+        }
+        
+        PHPhotoLibrary.shared().performChanges {
+            // Request creating an asset from the image.
+            let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileUrl)
+        } completionHandler: { success, error in
+            if !success, let error = error {
+                result(FlutterError(code: "PHOTOS_ADD_IMAGE_FAILED", message: error.localizedDescription, details: nil))
+            } else {
+                result(nil)
+            }
+        }
+    }
+    
     /// Request permission to use the camera.
     func requestCameraPermission(result: @escaping FlutterResult) {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)

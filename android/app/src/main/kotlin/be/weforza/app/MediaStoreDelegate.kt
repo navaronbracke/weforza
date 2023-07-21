@@ -28,6 +28,8 @@ class MediaStoreDelegate {
         const val INVALID_ARGUMENT_ERROR_CODE = "MEDIA_STORE_INVALID_ARGUMENT"
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
         const val MEDIA_SUB_DIRECTORY_NAME = "WeForza"
+        const val UNSUPPORTED_OPERATION_ERROR_CODE = "MEDIA_STORE_UNSUPPORTED_OPERATION"
+        const val UNSUPPORTED_OPERATION_ERROR_MESSAGE = "This operation requires Scoped Storage."
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
         const val WRITE_FILE_FAILED_ERROR_MESSAGE = "Could not write to the output file."
     }
@@ -179,12 +181,16 @@ class MediaStoreDelegate {
      *
      *  The result completes with the Uri of the image that was inserted into the MediaStore.
      */
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     fun insertNewImageInMediaStore(
         call: MethodCall,
         result: Result,
         contentResolver: ContentResolver,
     ) {
+        if(!hasScopedStorage()) {
+            result.error(UNSUPPORTED_OPERATION_ERROR_CODE, UNSUPPORTED_OPERATION_ERROR_MESSAGE, null)
+            return
+        }
+
         val filePath = call.argument<String>("filePath")
         val fileName = call.argument<String>("fileName")
         val fileMimeType = call.argument<String>("fileType")

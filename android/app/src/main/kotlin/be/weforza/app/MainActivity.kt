@@ -48,6 +48,7 @@ class MainActivity: FlutterActivity() {
                         mediaStoreDelegate.informDownloadManagerAboutDocument(call, result, context)
                     }
                 }
+                "registerImage" -> mediaStoreDelegate.insertNewImageInMediaStore(call, result, contentResolver)
                 "requestBluetoothScanPermission" -> permissionDelegate.requestBluetoothScanPermission(
                         this,
                         object: PermissionResultCallback {

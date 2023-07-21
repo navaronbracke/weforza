@@ -13,6 +13,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileReader
 
 /**
@@ -26,6 +27,7 @@ class MediaStoreDelegate {
         const val INSERT_FILE_FAILED_ERROR_MESSAGE = "Could not insert a record for the file."
         const val INVALID_ARGUMENT_ERROR_CODE = "MEDIA_STORE_INVALID_ARGUMENT"
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
+        const val MEDIA_SUB_DIRECTORY_NAME = "WeForza"
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
         const val WRITE_FILE_FAILED_ERROR_MESSAGE = "Could not write to the output file."
     }
@@ -114,13 +116,15 @@ class MediaStoreDelegate {
             return
         }
 
+        val subDirectory = File.pathSeparator + MEDIA_SUB_DIRECTORY_NAME
+
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)
         contentValues.put(MediaStore.Files.FileColumns.TITLE, fileName)
         contentValues.put(MediaStore.Files.FileColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Files.FileColumns.SIZE, fileSize)
         contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, System.currentTimeMillis())
-        contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/WeForza")
+        contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + subDirectory)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             contentValues.put(MediaStore.Files.FileColumns.MEDIA_TYPE, MediaStore.Files.FileColumns.MEDIA_TYPE_DOCUMENT)

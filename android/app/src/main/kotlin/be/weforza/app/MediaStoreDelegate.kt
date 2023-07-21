@@ -120,15 +120,10 @@ class MediaStoreDelegate {
         contentValues.put(MediaStore.Files.FileColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Files.FileColumns.SIZE, fileSize)
         contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, System.currentTimeMillis())
+        contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/WeForza")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             contentValues.put(MediaStore.Files.FileColumns.MEDIA_TYPE, MediaStore.Files.FileColumns.MEDIA_TYPE_DOCUMENT)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/WeForza")
-        } else {
-            contentValues.put(MediaStore.Files.FileColumns.DATA, filePath)
         }
 
         var documentUri: Uri? = null

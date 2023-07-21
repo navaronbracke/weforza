@@ -27,7 +27,6 @@ class MediaStoreDelegate {
         const val INSERT_FILE_FAILED_ERROR_MESSAGE = "Could not insert a record for the file."
         const val INVALID_ARGUMENT_ERROR_CODE = "MEDIA_STORE_INVALID_ARGUMENT"
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
-        const val MEDIA_SUB_DIRECTORY_NAME = "WeForza"
         const val UNSUPPORTED_OPERATION_ERROR_CODE = "MEDIA_STORE_UNSUPPORTED_OPERATION"
         const val UNSUPPORTED_OPERATION_ERROR_MESSAGE = "This operation requires Scoped Storage."
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
@@ -118,7 +117,7 @@ class MediaStoreDelegate {
             return
         }
 
-        val subDirectory = File.pathSeparator + MEDIA_SUB_DIRECTORY_NAME
+        val subDirectory = File.pathSeparator + "WeForza"
 
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)
@@ -206,22 +205,21 @@ class MediaStoreDelegate {
             return
         }
 
-        val subDirectory = File.pathSeparator + MEDIA_SUB_DIRECTORY_NAME
-
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
         contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
         contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Images.ImageColumns.SIZE, fileSize)
         contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, System.currentTimeMillis())
-        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + subDirectory)
+        // The Images table does not support subdirectories.
+        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
 
         var imageUri: Uri? = null
 
         try {
             imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
         } catch (exception: Exception) {
-            // Fallthrough to handle the null document URI.
+            // Fallthrough to handle the null image URI.
         }
 
         if(imageUri == null) {

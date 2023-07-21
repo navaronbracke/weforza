@@ -167,4 +167,84 @@ class MediaStoreDelegate {
             }
         }
     }
+
+    /**
+     * Insert a new image in the MediaStore, using ScopedStorage.
+     * The method call arguments should contain a file path, file name, file MIME-type and the file size.
+     *
+     * The result returns with an error if:
+     *  - any required argument is omitted.
+     *  - the MediaStore failed to insert an entry for the document.
+     *  - the MediaStore failed to write the contents to the output file.
+     *
+     *  The result completes with the Uri of the image that was inserted into the MediaStore.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    fun insertNewImageInMediaStore(
+        call: MethodCall,
+        result: Result,
+        contentResolver: ContentResolver,
+    ) {
+        val filePath = call.argument<String>("filePath")
+        val fileName = call.argument<String>("fileName")
+        val fileMimeType = call.argument<String>("fileType")
+        val fileSize = call.argument<Number>("fileSize")?.toInt()
+
+        if(filePath == null || fileName == null || fileSize == null) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        if(fileMimeType == null || !fileMimeType.startsWith("image/")) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        val subDirectory = File.pathSeparator + MEDIA_SUB_DIRECTORY_NAME
+
+        val contentValues = ContentValues()
+        contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
+        contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
+        contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, fileMimeType)
+        contentValues.put(MediaStore.Images.ImageColumns.SIZE, fileSize)
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, System.currentTimeMillis())
+        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + subDirectory)
+
+        var imageUri: Uri? = null
+
+        try {
+            imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        } catch (exception: Exception) {
+            // Fallthrough to handle the null document URI.
+        }
+
+        if(imageUri == null) {
+            result.error(INSERT_FILE_FAILED_ERROR_CODE, INSERT_FILE_FAILED_ERROR_MESSAGE, null)
+            return
+        }
+
+        contentResolver.openOutputStream(imageUri)?.use { outputStream ->
+            FileInputStream(File(filePath)).use { fileReader ->
+                try {
+                    val buffer = ByteArray(4096)
+                    var bytesRead: Int
+
+                    while(fileReader.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+
+                    result.success(imageUri.toString())
+                } catch (exception: Exception) {
+                    // Delete the orphaned MediaStore record.
+                    contentResolver.delete(imageUri, null, null)
+
+                    result.error(
+                        WRITE_FILE_FAILED_ERROR_CODE,
+                        WRITE_FILE_FAILED_ERROR_MESSAGE,
+                        exception.message
+                    )
+                }
+            }
+        }
+    }
 }

@@ -1,4 +1,3 @@
-import 'package:file/file.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// This interface defines a delegate for picking a file that is used as a profile image.
@@ -10,8 +9,8 @@ abstract interface class PickImageDelegate {
   /// Before taking a new picture,
   /// the necessary permissions for accessing the camera and writing to disk are requested.
   ///
-  /// Returns the [File] that was chosen.
+  /// Returns a [Uri] to the file that was chosen. The returned [Uri] _can_ be a content Uri.
   /// Returns a [Future.error] if the permissions have been denied.
   /// Returns a [Future.error] if the device does not have a camera.
-  Future<File?> pickProfileImage(ImageSource source);
+  Future<Uri?> pickProfileImage(ImageSource source);
 }

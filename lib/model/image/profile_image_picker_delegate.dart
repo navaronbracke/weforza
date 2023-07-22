@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,20 +7,20 @@ import 'package:weforza/model/image/pick_image_delegate.dart';
 class ProfileImagePickerDelegate {
   ProfileImagePickerDelegate({
     required this.imagePickerDelegate,
-    required File? initialValue,
+    required Uri? initialValue,
   }) : _controller = BehaviorSubject.seeded(AsyncValue.data(initialValue));
 
   /// The delegate that will handle picking images.
   final PickImageDelegate imagePickerDelegate;
 
-  /// The controller that manages the selected file.
-  final BehaviorSubject<AsyncValue<File?>> _controller;
+  /// The controller that manages the selected [Uri].
+  final BehaviorSubject<AsyncValue<Uri?>> _controller;
 
-  /// Get the selected image.
-  AsyncValue<File?> get selectedImage => _controller.value;
+  /// Get the selected image [Uri].
+  AsyncValue<Uri?> get selectedImage => _controller.value;
 
-  /// Get the [Stream] of file selection changes.
-  Stream<AsyncValue<File?>> get stream => _controller;
+  /// Get the [Stream] of selection changes.
+  Stream<AsyncValue<Uri?>> get stream => _controller;
 
   /// Clear the selected image.
   void clear() {
@@ -40,25 +38,25 @@ class ProfileImagePickerDelegate {
   /// Select a new profile image from the given [source].
   void _selectProfileImage(ImageSource source) async {
     try {
-      final previousFile = _controller.value.valueOrNull;
+      final previousUri = _controller.value.valueOrNull;
 
       _controller.add(const AsyncLoading());
 
-      final file = await imagePickerDelegate.pickProfileImage(source);
+      final Uri? uri = await imagePickerDelegate.pickProfileImage(source);
 
       if (_controller.isClosed) {
         return;
       }
 
-      // If the result is null, but there was a previous file,
-      // use the previous file as result.
-      if (previousFile != null && file == null) {
-        _controller.add(AsyncValue.data(previousFile));
+      // If the result is null, but there was a previous uri,
+      // use the previous uri as result.
+      if (previousUri != null && uri == null) {
+        _controller.add(AsyncValue.data(previousUri));
 
         return;
       }
 
-      _controller.add(AsyncValue.data(file));
+      _controller.add(AsyncValue.data(uri));
     } catch (error, stackTrace) {
       if (!_controller.isClosed) {
         _controller.add(AsyncValue.error(error, stackTrace));

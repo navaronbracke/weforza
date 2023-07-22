@@ -17,6 +17,8 @@ abstract base class FileStorageDelegate extends NativeService {
 
   /// Register the given [file] as a new image.
   ///
+  /// Returns the [Uri] to the registered image.
+  ///
   /// Throws if the file is empty or an invalid format.
   Future<Uri> registerImage(File file);
 

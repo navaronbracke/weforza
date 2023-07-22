@@ -60,7 +60,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<Uri> registerImage(File file) async {
+  Future<Uri?> registerImage(File file) async {
     final String mimeType = lookupMimeType(file.path) ?? '';
     final int fileSize = file.lengthSync();
 
@@ -72,7 +72,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
       throw ArgumentError.value(mimeType, 'mimeType', 'Only images can be registered in the image provider.');
     }
 
-    final String? uri = await methodChannel.invokeMethod<String>(
+    final String? result = await methodChannel.invokeMethod<String>(
       'registerImage',
       {
         'filePath': file.path,
@@ -82,6 +82,6 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
       },
     );
 
-    return Uri.parse(uri ?? '');
+    return Uri.tryParse(result ?? '');
   }
 }

@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
@@ -17,7 +18,7 @@ abstract class RideDao {
   Future<void> deleteRideCalendar();
 
   /// Get the attendees of the ride with the given [date].
-  Future<List<Rider>> getRideAttendees(DateTime date);
+  Future<List<Rider>> getRideAttendees(DateTime date, {required FileUriParser fileUriParser});
 
   /// Get the dates of the rides in the calendar.
   Future<List<DateTime>> getRideDates();
@@ -86,7 +87,7 @@ class RideDaoImpl implements RideDao {
   }
 
   @override
-  Future<List<Rider>> getRideAttendees(DateTime date) async {
+  Future<List<Rider>> getRideAttendees(DateTime date, {required FileUriParser fileUriParser}) async {
     final rideAttendees = await _rideAttendeeStore.find(
       _database,
       finder: Finder(filter: Filter.equals('date', date.toIso8601String())),
@@ -106,7 +107,7 @@ class RideDaoImpl implements RideDao {
       ),
     );
 
-    return riderRecords.map((r) => Rider.of(r.key, r.value)).toList();
+    return riderRecords.map((r) => Rider.of(r.key, r.value, fileUriParser: fileUriParser)).toList();
   }
 
   @override

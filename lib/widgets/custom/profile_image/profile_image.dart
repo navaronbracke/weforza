@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/file/content_uri_image_provider.dart';
+import 'package:weforza/riverpod/file_storage_delegate_provider.dart';
 
 /// This widget represents a profile image.
 class ProfileImage extends StatelessWidget {
@@ -16,7 +19,7 @@ class ProfileImage extends StatelessWidget {
   });
 
   /// The profile image to show.
-  final File? image;
+  final Uri? image;
 
   /// The widget that is displayed when the image is loading.
   ///
@@ -33,20 +36,44 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (image == null) {
+    final Uri? imageUri = image;
+
+    if (imageUri == null) {
       return placeholder;
     }
 
-    return Image.file(
-      image!,
-      width: size,
-      height: size,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) => placeholder,
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        return frame == null ? loading ?? placeholder : ClipOval(child: child);
-      },
-    );
+    if (imageUri.isScheme('content')) {
+      return Consumer(
+        builder: (context, ref, child) => Image(
+          image: ContentUriImage(
+            uri: imageUri,
+            fileStorageDelegate: ref.read(fileStorageDelegateProvider),
+          ),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => placeholder,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            return frame == null ? loading ?? placeholder : ClipOval(child: child);
+          },
+        ),
+      );
+    }
+
+    if (imageUri.isScheme('file')) {
+      return Image.file(
+        File.fromUri(imageUri),
+        width: size,
+        height: size,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => placeholder,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+          return frame == null ? loading ?? placeholder : ClipOval(child: child);
+        },
+      );
+    }
+
+    return placeholder;
   }
 }
 
@@ -63,23 +90,8 @@ class AdaptiveProfileImage extends StatelessWidget {
     this.size = 40,
   });
 
-  /// Create an [AdaptiveProfileImage] from an [imagePath] instead of a file.
-  factory AdaptiveProfileImage.path({
-    Key? key,
-    String? imagePath,
-    String? personInitials,
-    double size = 40,
-  }) {
-    return AdaptiveProfileImage(
-      key: key,
-      image: imagePath == null || imagePath.isEmpty ? null : File(imagePath),
-      personInitials: personInitials,
-      size: size,
-    );
-  }
-
   /// The image to display.
-  final File? image;
+  final Uri? image;
 
   /// The initials of the person to use as placeholder.
   final String? personInitials;

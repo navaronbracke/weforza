@@ -11,7 +11,7 @@ import 'package:weforza/file/file_system.dart';
 import 'package:weforza/file/io_file_system.dart';
 import 'package:weforza/native_service/io_file_storage_delegate.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
-import 'package:weforza/riverpod/file_system_provider.dart';
+import 'package:weforza/riverpod/file/file_system_provider.dart';
 import 'package:weforza/riverpod/package_info_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 import 'package:weforza/widgets/app.dart';

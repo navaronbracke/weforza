@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/file/content_uri_image_provider.dart';
-import 'package:weforza/riverpod/file_storage_delegate_provider.dart';
+import 'package:weforza/riverpod/file/file_storage_delegate_provider.dart';
 
 /// This widget represents a profile image.
 class ProfileImage extends StatelessWidget {

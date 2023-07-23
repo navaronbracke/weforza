@@ -1,4 +1,5 @@
 import 'package:weforza/database/ride_dao.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
@@ -6,9 +7,11 @@ import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents the repository that manages the rides.
 class RideRepository {
-  RideRepository(this._dao);
+  RideRepository(this._dao, this._fileUriParser);
 
   final RideDao _dao;
+
+  final FileUriParser _fileUriParser;
 
   Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
 
@@ -17,7 +20,7 @@ class RideRepository {
   Future<void> deleteRideCalendar() => _dao.deleteRideCalendar();
 
   Future<List<Rider>> getRideAttendees(DateTime date) {
-    return _dao.getRideAttendees(date);
+    return _dao.getRideAttendees(date, fileUriParser: _fileUriParser);
   }
 
   Future<List<DateTime>> getRideDates() => _dao.getRideDates();

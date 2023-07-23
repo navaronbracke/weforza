@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
@@ -83,5 +84,26 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
     );
 
     return Uri.tryParse(result ?? '');
+  }
+
+  @override
+  Future<Uint8List> getBytesFromContentUri(Uri uri) async {
+    if (!Platform.isAndroid) {
+      throw UnsupportedError('Loading a content uri is only supported on Android');
+    }
+
+    if (!uri.isScheme('content')) {
+      throw ArgumentError.value(uri, 'uri', 'Only "content://" Uris are supported.');
+    }
+
+    try {
+      final Uint8List? bytes = await methodChannel.invokeMethod<Uint8List>('getBytesFromContentUri', {
+        'contentUri': uri,
+      });
+
+      return bytes ?? Uint8List.fromList(const <int>[]);
+    } catch (error) {
+      return Uint8List.fromList(const <int>[]);
+    }
   }
 }

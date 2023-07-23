@@ -38,6 +38,7 @@ class MainActivity: FlutterActivity() {
                 call, result ->
             when(call.method) {
                 "getBluetoothAdapterState" -> bluetoothAdapterDelegate.getState(result)
+                "getBytesFromContentUri" -> mediaStoreDelegate.getBytesFromContentUri(call, result, contentResolver)
                 "hasScopedStorage" -> result.success(mediaStoreDelegate.hasScopedStorage())
                 "isBluetoothOn" -> bluetoothAdapterDelegate.isBluetoothOn(result)
                 "registerDocument" -> {

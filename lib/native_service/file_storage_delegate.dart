@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:weforza/native_service/native_service.dart';
 
 /// This class defines an interface that allows working with the underlying file provider.
 abstract base class FileStorageDelegate extends NativeService {
   const FileStorageDelegate();
+
+  /// Get the bytes of the content of the given `content://` Uri.
+  Future<Uint8List> getBytesFromContentUri(Uri uri);
 
   /// Whether the application uses scoped storage,
   /// which limits the access to top-level directories.

@@ -12,9 +12,11 @@ import androidx.annotation.RequiresApi
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileReader
+import java.io.InputStream
 
 /**
  * This class provides a delegate to interact with the MediaStore.
@@ -27,10 +29,58 @@ class MediaStoreDelegate {
         const val INSERT_FILE_FAILED_ERROR_MESSAGE = "Could not insert a record for the file."
         const val INVALID_ARGUMENT_ERROR_CODE = "MEDIA_STORE_INVALID_ARGUMENT"
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
+        const val READ_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_READ_FILE_FAILED"
+        const val READ_FILE_FAILED_ERROR_MESSAGE = "Could not read the given file."
         const val UNSUPPORTED_OPERATION_ERROR_CODE = "MEDIA_STORE_UNSUPPORTED_OPERATION"
         const val UNSUPPORTED_OPERATION_ERROR_MESSAGE = "This operation requires Scoped Storage."
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
         const val WRITE_FILE_FAILED_ERROR_MESSAGE = "Could not write to the output file."
+    }
+
+    /**
+     * Get the bytes corresponding to the content of a given content Uri.
+     *
+     * The result resolves with the ByteArray containing the bytes of the content.
+     */
+    fun getBytesFromContentUri(
+        call: MethodCall,
+        result: Result,
+        contentResolver: ContentResolver,
+    ) {
+        val contentUri = Uri.parse(call.argument<String>("contentUri") ?: "")
+
+        if(!contentUri.scheme.equals("content")) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        var inputStream: InputStream? = null
+
+        try {
+            inputStream = contentResolver.openInputStream(contentUri)
+
+            if(inputStream == null) {
+                result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
+                return
+            }
+
+            val buffer = ByteArrayOutputStream()
+            val data = ByteArray(4096)
+
+            var bytesRead: Int
+
+            while (inputStream.read(data, 0, data.size).also { bytesRead = it } != -1) {
+                buffer.write(data, 0, bytesRead)
+            }
+
+            buffer.flush()
+
+            return result.success(buffer.toByteArray())
+        } catch (exception: Exception) {
+            result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
+        } finally {
+            inputStream?.close()
+        }
     }
 
     /**

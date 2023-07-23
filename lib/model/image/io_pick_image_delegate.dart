@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:file/file.dart' as fs;
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/image/pick_image_delegate.dart';
@@ -65,12 +66,82 @@ class IoPickImageDelegate implements PickImageDelegate {
   /// Take a new photo with the camera of the device.
   ///
   /// If permissions are denied, this returns a [Future.error].
-  Future<fs.File?> _takePhotoWithCamera() async {
-    return null; // TODO: testing permissions first
+  ///
+  /// Returns a [Uri] that points to the file.
+  Future<Uri?> _takePhotoWithCamera() async {
+    // Images from the camera get scaled down,
+    // to increase the amount of thumbnails that fit in the image cache,
+    // and to reduce load times of thumbnails.
+    final XFile? profileImage = await imagePicker.pickImage(
+      source: ImageSource.camera,
+      requestFullMetadata: false,
+      maxHeight: 160,
+      maxWidth: 160,
+    );
+
+    if (profileImage == null) {
+      return null;
+    }
+
+    if (Platform.isAndroid) {
+      // On Android, when using Scoped Storage, let the MediaStore save the image.
+      // Once it is saved, use the Uri to get a file handle.
+      if (fileSystem.hasScopedStorage) {
+        final Uri? mediaStoreUri = await fileStorageDelegate.registerImage(fileSystem.file(profileImage.path));
+
+        if (mediaStoreUri == null) {
+          throw ArgumentError.notNull('mediaStoreUri');
+        }
+
+        return mediaStoreUri;
+      }
+
+      // If Scoped Storage is not available, save the file into the external pictures directory,
+      // and return a handle to that file.
+      final fs.Directory? directory = fileSystem.topLevelImagesDirectory;
+
+      if (directory == null) {
+        throw ArgumentError.notNull('directory');
+      }
+
+      final fs.File destinationFile = fileSystem.file(join(directory.path, profileImage.name));
+
+      await profileImage.saveTo(destinationFile.path);
+
+      return destinationFile.uri;
+    }
+
+    // On iOS save the image to the application documents directory.
+    // This directory is accessible for the application, so no extra permissions are required.
+    // After the image is saved, register it with the Photos app,
+    // so that it is retained when the application is uninstalled.
+    if (Platform.isIOS) {
+      final fs.Directory directory = fileSystem.imagesDirectory;
+
+      final fs.File destinationFile = fileSystem.file(join(directory.path, profileImage.name));
+
+      await profileImage.saveTo(destinationFile.path);
+
+      try {
+        // Register the image with the Photo library.
+        // On iOS, the Uri is ignored at this point, since the path to the file is known in advance.
+        await fileStorageDelegate.registerImage(destinationFile);
+      } catch (error) {
+        // Delete the source file if registration fails.
+        await destinationFile.delete();
+
+        rethrow;
+      }
+
+      return destinationFile.uri;
+    }
+
+    // Just return the file directly as a last resort.
+    return fileSystem.file(profileImage.path).uri;
   }
 
   @override
-  Future<fs.File?> pickProfileImage(ImageSource source) async {
+  Future<Uri?> pickProfileImage(ImageSource source) async {
     switch (source) {
       case ImageSource.camera:
         // When taking a photo, request permission to use the camera,
@@ -87,7 +158,7 @@ class IoPickImageDelegate implements PickImageDelegate {
           return null;
         }
 
-        return fileSystem.file(profileImage.path);
+        return fileSystem.file(profileImage.path).uri;
     }
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,13 +110,10 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   @override
   void initState() {
     super.initState();
-    final profileImagePath = widget.rider?.profileImageFilePath;
-
-    final profileImageFile = profileImagePath == null ? null : File(profileImagePath);
 
     _profileImageDelegate = ProfileImagePickerDelegate(
       imagePickerDelegate: ref.read(imagePickerDelegateProvider),
-      initialValue: profileImageFile?.existsSync() ?? false ? profileImageFile : null,
+      initialValue: widget.rider?.profileImage,
     );
 
     _delegate = RiderFormDelegate(

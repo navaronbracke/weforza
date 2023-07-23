@@ -98,7 +98,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
             firstName: rider.firstName,
             lastName: rider.lastName,
             lastUpdated: rider.lastUpdated,
-            profileImageFilePath: null,
+            profileImage: null,
             uuid: uuid,
           ),
         );

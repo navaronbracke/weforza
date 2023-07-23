@@ -1,5 +1,3 @@
-import 'dart:io';
-
 /// This class represents the model to add or edit a rider.
 class RiderModel {
   /// The default constructor.
@@ -24,8 +22,8 @@ class RiderModel {
   /// The last name for the rider.
   final String lastName;
 
-  /// The file that represents the rider's profile image.
-  final File? profileImage;
+  /// The [Uri] that represents the rider's profile image.
+  final Uri? profileImage;
 
   /// The uuid of the rider, or null if the rider should be created.
   final String? uuid;

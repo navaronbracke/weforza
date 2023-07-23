@@ -13,8 +13,8 @@ class RiderProfileImage extends ConsumerWidget {
       selectedRiderProvider.select((value) => value!),
     );
 
-    return AdaptiveProfileImage.path(
-      imagePath: selectedRider.profileImageFilePath,
+    return AdaptiveProfileImage(
+      image: selectedRider.profileImage,
       personInitials: selectedRider.initials,
       size: 72,
     );

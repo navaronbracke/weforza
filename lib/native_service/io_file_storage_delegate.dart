@@ -96,14 +96,14 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
       throw ArgumentError.value(uri, 'uri', 'Only "content://" Uris are supported.');
     }
 
-    try {
-      final Uint8List? bytes = await methodChannel.invokeMethod<Uint8List>('getBytesFromContentUri', {
-        'contentUri': uri,
-      });
+    final Uint8List? bytes = await methodChannel.invokeMethod<Uint8List>('getBytesFromContentUri', {
+      'contentUri': uri.toString(),
+    });
 
-      return bytes ?? Uint8List.fromList(const <int>[]);
-    } catch (error) {
-      return Uint8List.fromList(const <int>[]);
+    if (bytes == null) {
+      throw ArgumentError.notNull('bytes');
     }
+
+    return bytes;
   }
 }

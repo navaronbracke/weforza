@@ -27,15 +27,19 @@ final class ContentUriImage extends ImageProvider<ContentUriImage> {
   Future<Codec> _loadAsync(ContentUriImage key, {required ImageDecoderCallback decode}) async {
     assert(key == this, 'ContentUriImage key is not equal to the caller object.');
 
-    final Uint8List bytes = await fileStorageDelegate.getBytesFromContentUri(key.uri);
+    try {
+      final Uint8List bytes = await fileStorageDelegate.getBytesFromContentUri(key.uri);
 
-    if (bytes.isEmpty) {
+      if (bytes.isEmpty) {
+        throw StateError('The image at the given Uri "$uri" is empty and cannot be loaded as an image.');
+      }
+
+      return decode(await ImmutableBuffer.fromUint8List(bytes));
+    } catch (exception) {
       PaintingBinding.instance.imageCache.evict(key);
 
-      throw StateError('The image at the given Uri "$uri" is empty and cannot be loaded as an image.');
+      rethrow;
     }
-
-    return decode(await ImmutableBuffer.fromUint8List(bytes));
   }
 
   @override

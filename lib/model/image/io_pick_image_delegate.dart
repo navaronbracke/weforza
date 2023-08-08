@@ -84,31 +84,13 @@ class IoPickImageDelegate implements PickImageDelegate {
     }
 
     if (Platform.isAndroid) {
-      // On Android, when using Scoped Storage, let the MediaStore save the image.
-      // Once it is saved, use the Uri to get a file handle.
-      if (fileSystem.hasScopedStorage) {
-        final Uri? mediaStoreUri = await fileStorageDelegate.registerImage(fileSystem.file(profileImage.path));
+      final Uri? mediaStoreUri = await fileStorageDelegate.registerImage(fileSystem.file(profileImage.path));
 
-        if (mediaStoreUri == null) {
-          throw ArgumentError.notNull('mediaStoreUri');
-        }
-
-        return mediaStoreUri;
+      if (mediaStoreUri == null) {
+        throw ArgumentError.notNull('mediaStoreUri');
       }
 
-      // If Scoped Storage is not available, save the file into the external pictures directory,
-      // and return a handle to that file.
-      final fs.Directory? directory = fileSystem.topLevelImagesDirectory;
-
-      if (directory == null) {
-        throw ArgumentError.notNull('directory');
-      }
-
-      final fs.File destinationFile = fileSystem.file(join(directory.path, profileImage.name));
-
-      await profileImage.saveTo(destinationFile.path);
-
-      return destinationFile.uri;
+      return mediaStoreUri;
     }
 
     // On iOS save the image to the application documents directory.

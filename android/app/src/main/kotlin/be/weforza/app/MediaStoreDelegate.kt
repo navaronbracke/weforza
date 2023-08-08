@@ -31,8 +31,6 @@ class MediaStoreDelegate {
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
         const val READ_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_READ_FILE_FAILED"
         const val READ_FILE_FAILED_ERROR_MESSAGE = "Could not read the given file."
-        const val UNSUPPORTED_OPERATION_ERROR_CODE = "MEDIA_STORE_UNSUPPORTED_OPERATION"
-        const val UNSUPPORTED_OPERATION_ERROR_MESSAGE = "This operation requires Scoped Storage."
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
         const val WRITE_FILE_FAILED_ERROR_MESSAGE = "Could not write to the output file."
     }
@@ -220,12 +218,14 @@ class MediaStoreDelegate {
     }
 
     /**
-     * Insert a new image in the MediaStore, using ScopedStorage.
-     * The method call arguments should contain a file path, file name, file MIME-type and the file size.
+     * Insert a new image in the MediaStore.
+     *
+     * The method call arguments should contain the file path, the file MIME-type,
+     * the file name and the file size.
      *
      * The result returns with an error if:
      *  - any required argument is omitted.
-     *  - the MediaStore failed to insert an entry for the document.
+     *  - the MediaStore failed to insert an entry for the image.
      *  - the MediaStore failed to write the contents to the output file.
      *
      *  The result completes with the Uri of the image that was inserted into the MediaStore.
@@ -235,11 +235,6 @@ class MediaStoreDelegate {
         result: Result,
         contentResolver: ContentResolver,
     ) {
-        if(!hasScopedStorage()) {
-            result.error(UNSUPPORTED_OPERATION_ERROR_CODE, UNSUPPORTED_OPERATION_ERROR_MESSAGE, null)
-            return
-        }
-
         val filePath = call.argument<String>("filePath")
         val fileName = call.argument<String>("fileName")
         val fileMimeType = call.argument<String>("fileType")
@@ -261,8 +256,11 @@ class MediaStoreDelegate {
         contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Images.ImageColumns.SIZE, fileSize)
         contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, System.currentTimeMillis())
-        // The Images table does not support subdirectories.
-        contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // The Images table does not support subdirectories.
+            contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
 
         var imageUri: Uri? = null
 

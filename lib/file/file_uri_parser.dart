@@ -12,36 +12,36 @@ final class FileUriParser {
 
   /// Parse the given [path] into a valid [Uri].
   ///
+  /// The [path] can be a content Uri, a file Uri or an absolute path to a file.
+  ///
   /// Returns the parsed [Uri] or null if the path does not point to a valid [Uri].
   Uri? parse(String? path) {
     if (path == null) {
       return null;
     }
 
-    // The path could be a valid `content` or `file` Uri.
-    // It could also be an actual path on disk.
+    // In case the path is an absolute file path, the Uri might have a scheme.
+    // Regardless, aboslute paths are valid Uris.
     final Uri? uri = Uri.tryParse(path);
 
-    // When Scoped Storage is in use on Android, only `content://` Uris are valid.
-    if (Platform.isAndroid && fileSystem.hasScopedStorage) {
-      if (uri == null || !uri.isScheme('content')) {
-        return null;
-      }
+    if (uri == null) {
+      return null;
+    }
 
+    // Allow content Uri's on Android when using Scoped Storage.
+    if (Platform.isAndroid && fileSystem.hasScopedStorage && uri.isScheme('content')) {
       return uri;
     }
 
-    // The path does not point to a valid uri, try using it as a file path.
-    if (uri == null) {
-      final fs.File file = fileSystem.file(path);
-
-      return file.existsSync() ? file.uri : null;
-    }
-
+    // File Uri's are always valid.
     if (uri.isScheme('file')) {
       return uri;
     }
 
-    return null;
+    // If it's neither a content Uri or a file Uri,
+    // it might be an absolute file path.
+    final fs.File file = fileSystem.file(path);
+
+    return file.existsSync() ? file.uri : null;
   }
 }

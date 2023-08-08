@@ -165,7 +165,7 @@ class MediaStoreDelegate {
             return
         }
 
-        val subDirectory = File.pathSeparator + "WeForza"
+        val subDirectory = File.separator + "WeForza"
 
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)

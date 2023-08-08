@@ -28,8 +28,8 @@ final class FileUriParser {
       return null;
     }
 
-    // Allow content Uri's on Android when using Scoped Storage.
-    if (Platform.isAndroid && fileSystem.hasScopedStorage && uri.isScheme('content')) {
+    // Only Android supports `content://` Uris.
+    if (Platform.isAndroid && uri.isScheme('content')) {
       return uri;
     }
 

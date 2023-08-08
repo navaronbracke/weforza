@@ -41,13 +41,10 @@ class IoPickImageDelegate implements PickImageDelegate {
     }
 
     if (Platform.isAndroid && !fileSystem.hasScopedStorage) {
-      // Request both read and write permission of the external storage.
-      // The write permission is required to save the image, while the read permission is required
-      // to view the image later, after it was saved.
-      final bool hasExternalStoragePermission = await fileStorageDelegate.requestExternalStoragePermission(
-        read: true,
-        write: true,
-      );
+      // Request only write permission for external storage.
+      // This permission is required to save the image.
+      // The read permission is not required, since reading a content Uri happens through the MediaStore.
+      final bool hasExternalStoragePermission = await fileStorageDelegate.requestExternalStoragePermission(write: true);
 
       if (!hasExternalStoragePermission) {
         throw ExternalStoragePermissionDeniedException();

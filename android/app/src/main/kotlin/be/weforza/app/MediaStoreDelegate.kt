@@ -166,13 +166,15 @@ class MediaStoreDelegate {
         }
 
         val subDirectory = File.separator + "WeForza"
+        val timestamp = System.currentTimeMillis()
 
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)
         contentValues.put(MediaStore.Files.FileColumns.TITLE, fileName)
         contentValues.put(MediaStore.Files.FileColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Files.FileColumns.SIZE, fileSize)
-        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, System.currentTimeMillis())
+        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, timestamp)
+        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, timestamp)
         contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + subDirectory)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -250,12 +252,15 @@ class MediaStoreDelegate {
             return
         }
 
+        val timestamp = System.currentTimeMillis()
+
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
         contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
         contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Images.ImageColumns.SIZE, fileSize)
-        contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, System.currentTimeMillis())
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, timestamp)
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, timestamp)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // The Images table does not support subdirectories.
@@ -284,6 +289,8 @@ class MediaStoreDelegate {
                     while(fileReader.read(buffer).also { bytesRead = it } != -1) {
                         outputStream.write(buffer, 0, bytesRead)
                     }
+
+                    outputStream.flush()
 
                     result.success(imageUri.toString())
                 } catch (exception: Exception) {

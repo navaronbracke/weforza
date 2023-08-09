@@ -4,22 +4,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:weforza/native_service/file_storage_delegate.dart';
 
-/// Decodes the given `content://` [Uri] as an image,
-/// associating it with the given scale.
+/// Decodes the given `content://` [Uri] as an image.
 @immutable
 final class ContentUriImage extends ImageProvider<ContentUriImage> {
   /// Creates a new [ContentUriImage] from the given [uri].
   ContentUriImage({
     required this.fileStorageDelegate,
     required this.uri,
-    this.scale = 1.0,
   }) : assert(uri.isScheme('content'), "Only 'content://' Uris are supported.");
 
   /// The delegate that will load the image.
   final FileStorageDelegate fileStorageDelegate;
 
   /// The scale to place in the [ImageInfo] object of the image.
-  final double scale;
+  ///
+  /// A `ContentUriImage` does not support rescaling the content.
+  final double scale = 1.0;
 
   /// The content [Uri] to load.
   final Uri uri;

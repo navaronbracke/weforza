@@ -3,7 +3,6 @@
 //  Runner
 //
 //  Created by Navaron Bracke on 17/07/2023.
-//  Copyright © 2023 The Chromium Authors. All rights reserved.
 //
 
 import AVFoundation
@@ -11,7 +10,7 @@ import Foundation
 import Photos
 
 class MediaDelegate : NSObject {
-    func registerImage(args: Dictionary<String, Any?>, result: @escaping FlutterResult) {
+    func registerImage(args: Dictionary<String, Any>, result: @escaping FlutterResult) {
         guard let fileUrl = URL(string: args["filePath"] as? String ?? "") else {
             result(FlutterError(code: "PHOTOS_ADD_IMAGE_FAILED", message: "The file path is required.", details: nil))
             

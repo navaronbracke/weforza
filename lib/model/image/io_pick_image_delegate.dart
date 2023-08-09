@@ -27,7 +27,7 @@ class IoPickImageDelegate implements PickImageDelegate {
 
   /// Request permission to use the camera and the relevant photo library related permissions.
   ///
-  /// On Android 9 and lower this requests permission to read/write to external storage.
+  /// On Android 9 and lower this requests permission to write to external storage.
   /// On iOS this requests permission to add a photo to the Photo library.
   ///
   /// If any permission is not granted, this returns a [Future.error].

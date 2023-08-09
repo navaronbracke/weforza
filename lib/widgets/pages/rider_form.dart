@@ -113,6 +113,8 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
 
     _profileImageDelegate = ProfileImagePickerDelegate(
       imagePickerDelegate: ref.read(imagePickerDelegateProvider),
+      // TODO: check if file exists
+      // see https://github.com/navaronbracke/weforza/issues/423
       initialValue: widget.rider?.profileImage,
     );
 

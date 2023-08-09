@@ -49,6 +49,10 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
 
   @override
   Future<bool> requestExternalStoragePermission({bool read = false, bool write = false}) async {
+    if (!Platform.isAndroid) {
+      throw UnsupportedError('External storage is only supported on Android.');
+    }
+
     final bool? result = await methodChannel.invokeMethod<bool>(
       'requestExternalStoragePermission',
       <String, Object?>{
@@ -89,7 +93,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   @override
   Future<Uint8List> getBytesFromContentUri(Uri uri) async {
     if (!Platform.isAndroid) {
-      throw UnsupportedError('Loading a content uri is only supported on Android');
+      throw UnsupportedError('Loading a "content://" Uri is only supported on Android.');
     }
 
     if (!uri.isScheme('content')) {

@@ -12,15 +12,12 @@ class IoFileSystem implements FileSystem {
     required this.hasScopedStorage,
     required io.Directory tempDirectory,
     io.Directory? topLevelDocumentsDirectory,
-    io.Directory? topLevelImagesDirectory,
   })  : documentsDirectory = fileSystem.directory(documentsDirectory),
         imagesDirectory = fileSystem.directory(imagesDirectory),
         tempDirectory = fileSystem.directory(tempDirectory),
         topLevelDocumentsDirectory = hasScopedStorage || topLevelDocumentsDirectory == null
             ? null
             : fileSystem.directory(topLevelDocumentsDirectory),
-        topLevelImagesDirectory =
-            hasScopedStorage || topLevelImagesDirectory == null ? null : fileSystem.directory(topLevelImagesDirectory),
         _fileSystem = fileSystem;
 
   @override
@@ -31,9 +28,6 @@ class IoFileSystem implements FileSystem {
 
   @override
   final fs.Directory? topLevelDocumentsDirectory;
-
-  @override
-  final fs.Directory? topLevelImagesDirectory;
 
   /// The underlying file system.
   final fs.FileSystem _fileSystem;

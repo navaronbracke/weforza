@@ -39,14 +39,11 @@ void main() async {
   // Android only has top level directories when Scoped Storage is not being used,
   // while iOS does not have accessible top level directories.
   Directory? topLevelDocumentsDir;
-  Directory? topLevelImagesDir;
 
   if (Platform.isAndroid && !hasAndroidScopedStorage) {
     final List<Directory> documentsDirs = await getExternalStorageDirectories(type: StorageDirectory.documents) ?? [];
-    final List<Directory> imagesDirs = await getExternalStorageDirectories(type: StorageDirectory.pictures) ?? [];
 
     topLevelDocumentsDir = documentsDirs.firstOrNull;
-    topLevelImagesDir = imagesDirs.firstOrNull;
   }
 
   final FileSystem fileSystem = IoFileSystem(
@@ -56,7 +53,6 @@ void main() async {
     imagesDirectory: applicationDocumentsDirectory,
     tempDirectory: tempDirectory,
     topLevelDocumentsDirectory: topLevelDocumentsDir,
-    topLevelImagesDirectory: topLevelImagesDir,
   );
 
   runApp(

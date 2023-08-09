@@ -137,38 +137,21 @@ class PermissionHandler {
     }
 
     /**
-     * Request permission to read from and write to external storage.
+     * Request permission to write to external storage.
      *
      * This permission has no effect on Android 10 and higher.
      */
-    fun requestExternalStoragePermission(
-        activity: Activity,
-        read: Boolean,
-        write: Boolean,
-        callback: PermissionResultCallback) {
+    fun requestWriteExternalStoragePermission(activity: Activity, callback: PermissionResultCallback) {
+        val writePermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-        val readPermission = Manifest.permission.READ_EXTERNAL_STORAGE
-        val writePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-        var permissions: Array<String> = emptyArray()
-
-        if(read && !hasPermissions(activity, arrayOf(readPermission))) {
-            permissions += readPermission
-        }
-
-        if(write && !hasPermissions(activity, arrayOf(writePermission))) {
-            permissions += writePermission
-        }
-
-        // If the permissions to request are empty, they were granted before.
-        if(permissions.isEmpty()) {
+        if(hasPermissions(activity, writePermission)) {
             callback.onPermissionResult(null, null)
             return
         }
 
         requestPermissions(
             activity,
-            permissions,
+            writePermission,
             REQUEST_CODE_EXTERNAL_STORAGE_PERMISSION,
             callback,
         )

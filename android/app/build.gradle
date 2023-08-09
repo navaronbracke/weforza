@@ -68,4 +68,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-splashscreen:$splash_screen_version"
+    implementation "androidx.core:core-ktx:$androidx_core_version"
 }

@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -144,7 +145,7 @@ class MainActivity: FlutterActivity() {
         bluetoothStateBroadcastReceiver = BluetoothAdapterStateBroadcastReceiver(
             bluetoothStateStreamHandler::onStateChanged
         )
-        registerReceiver(bluetoothStateBroadcastReceiver, filter)
+        ContextCompat.registerReceiver(this, bluetoothStateBroadcastReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {

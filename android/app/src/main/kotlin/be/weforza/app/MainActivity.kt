@@ -38,6 +38,7 @@ class MainActivity: FlutterActivity() {
                 call, result ->
             when(call.method) {
                 "getBluetoothAdapterState" -> bluetoothAdapterDelegate.getState(result)
+                "getBytesFromContentUri" -> mediaStoreDelegate.getBytesFromContentUri(call, result, contentResolver)
                 "hasScopedStorage" -> result.success(mediaStoreDelegate.hasScopedStorage())
                 "isBluetoothOn" -> bluetoothAdapterDelegate.isBluetoothOn(result)
                 "registerDocument" -> {
@@ -48,6 +49,7 @@ class MainActivity: FlutterActivity() {
                         mediaStoreDelegate.informDownloadManagerAboutDocument(call, result, context)
                     }
                 }
+                "registerImage" -> mediaStoreDelegate.insertNewImageInMediaStore(call, result, contentResolver)
                 "requestBluetoothScanPermission" -> permissionDelegate.requestBluetoothScanPermission(
                         this,
                         object: PermissionResultCallback {
@@ -63,14 +65,31 @@ class MainActivity: FlutterActivity() {
                             }
                         }
                 )
-                "requestWriteExternalStoragePermission" -> {
+                "requestCameraPermission" -> permissionDelegate.requestCameraPermission(
+                    this,
+                    object: PermissionResultCallback {
+                        override fun onPermissionResult(
+                            errorCode: String?,
+                            errorDescription: String?
+                        ) {
+                            if(errorCode == null) {
+                                result.success(true)
+                            } else {
+                                result.success(false)
+                            }
+                        }
+                    }
+                )
+                "requestExternalStoragePermission" -> {
                     // Abort with success when ScopedStorage is in use,
                     // since the permission is ignored when ScopedStorage is used.
                     if(mediaStoreDelegate.hasScopedStorage()) {
                         result.success(true)
                     } else {
-                        permissionDelegate.requestWriteExternalStoragePermission(
+                        permissionDelegate.requestExternalStoragePermission(
                             this,
+                            call.argument<Boolean>("read") ?: false,
+                            call.argument<Boolean>("write") ?: false,
                             object: PermissionResultCallback {
                                 override fun onPermissionResult(
                                     errorCode: String?,

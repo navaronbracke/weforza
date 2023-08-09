@@ -12,8 +12,11 @@ import androidx.annotation.RequiresApi
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel.Result
 import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileReader
+import java.io.InputStream
 
 /**
  * This class provides a delegate to interact with the MediaStore.
@@ -26,8 +29,56 @@ class MediaStoreDelegate {
         const val INSERT_FILE_FAILED_ERROR_MESSAGE = "Could not insert a record for the file."
         const val INVALID_ARGUMENT_ERROR_CODE = "MEDIA_STORE_INVALID_ARGUMENT"
         const val INVALID_ARGUMENT_ERROR_MESSAGE = "Missing required argument."
+        const val READ_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_READ_FILE_FAILED"
+        const val READ_FILE_FAILED_ERROR_MESSAGE = "Could not read the given file."
         const val WRITE_FILE_FAILED_ERROR_CODE = "MEDIA_STORE_WRITE_FILE_FAILED"
         const val WRITE_FILE_FAILED_ERROR_MESSAGE = "Could not write to the output file."
+    }
+
+    /**
+     * Get the bytes corresponding to the content of a given content Uri.
+     *
+     * The result resolves with the ByteArray containing the bytes of the content.
+     */
+    fun getBytesFromContentUri(
+        call: MethodCall,
+        result: Result,
+        contentResolver: ContentResolver,
+    ) {
+        val contentUri = Uri.parse(call.argument<String>("contentUri") ?: "")
+
+        if(!contentUri.scheme.equals("content")) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        var inputStream: InputStream? = null
+
+        try {
+            inputStream = contentResolver.openInputStream(contentUri)
+
+            if(inputStream == null) {
+                result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
+                return
+            }
+
+            val buffer = ByteArrayOutputStream()
+            val data = ByteArray(4096)
+
+            var bytesRead: Int
+
+            while (inputStream.read(data, 0, data.size).also { bytesRead = it } != -1) {
+                buffer.write(data, 0, bytesRead)
+            }
+
+            buffer.flush()
+
+            return result.success(buffer.toByteArray())
+        } catch (exception: Exception) {
+            result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
+        } finally {
+            inputStream?.close()
+        }
     }
 
     /**
@@ -114,21 +165,20 @@ class MediaStoreDelegate {
             return
         }
 
+        val subDirectory = File.separator + "WeForza"
+        val timestamp = System.currentTimeMillis()
+
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Files.FileColumns.DISPLAY_NAME, fileName)
         contentValues.put(MediaStore.Files.FileColumns.TITLE, fileName)
         contentValues.put(MediaStore.Files.FileColumns.MIME_TYPE, fileMimeType)
         contentValues.put(MediaStore.Files.FileColumns.SIZE, fileSize)
-        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, System.currentTimeMillis())
+        contentValues.put(MediaStore.Files.FileColumns.DATE_ADDED, timestamp)
+        contentValues.put(MediaStore.Files.FileColumns.DATE_MODIFIED, timestamp)
+        contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + subDirectory)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             contentValues.put(MediaStore.Files.FileColumns.MEDIA_TYPE, MediaStore.Files.FileColumns.MEDIA_TYPE_DOCUMENT)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            contentValues.put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS + "/WeForza")
-        } else {
-            contentValues.put(MediaStore.Files.FileColumns.DATA, filePath)
         }
 
         var documentUri: Uri? = null
@@ -158,6 +208,94 @@ class MediaStoreDelegate {
                 } catch (exception: Exception) {
                     // Delete the orphaned MediaStore record.
                     contentResolver.delete(documentUri, null, null)
+
+                    result.error(
+                        WRITE_FILE_FAILED_ERROR_CODE,
+                        WRITE_FILE_FAILED_ERROR_MESSAGE,
+                        exception.message
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Insert a new image in the MediaStore.
+     *
+     * The method call arguments should contain the file path, the file MIME-type,
+     * the file name and the file size.
+     *
+     * The result returns with an error if:
+     *  - any required argument is omitted.
+     *  - the MediaStore failed to insert an entry for the image.
+     *  - the MediaStore failed to write the contents to the output file.
+     *
+     *  The result completes with the Uri of the image that was inserted into the MediaStore.
+     */
+    fun insertNewImageInMediaStore(
+        call: MethodCall,
+        result: Result,
+        contentResolver: ContentResolver,
+    ) {
+        val filePath = call.argument<String>("filePath")
+        val fileName = call.argument<String>("fileName")
+        val fileMimeType = call.argument<String>("fileType")
+        val fileSize = call.argument<Number>("fileSize")?.toInt()
+
+        if(filePath == null || fileName == null || fileSize == null) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        if(fileMimeType == null || !fileMimeType.startsWith("image/")) {
+            result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
+            return
+        }
+
+        val timestamp = System.currentTimeMillis()
+
+        val contentValues = ContentValues()
+        contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME, fileName)
+        contentValues.put(MediaStore.Images.ImageColumns.TITLE, fileName)
+        contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE, fileMimeType)
+        contentValues.put(MediaStore.Images.ImageColumns.SIZE, fileSize)
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, timestamp)
+        contentValues.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, timestamp)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // The Images table does not support subdirectories.
+            contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        }
+
+        var imageUri: Uri? = null
+
+        try {
+            imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        } catch (exception: Exception) {
+            // Fallthrough to handle the null image URI.
+        }
+
+        if(imageUri == null) {
+            result.error(INSERT_FILE_FAILED_ERROR_CODE, INSERT_FILE_FAILED_ERROR_MESSAGE, null)
+            return
+        }
+
+        contentResolver.openOutputStream(imageUri)?.use { outputStream ->
+            FileInputStream(File(filePath)).use { fileReader ->
+                try {
+                    val buffer = ByteArray(4096)
+                    var bytesRead: Int
+
+                    while(fileReader.read(buffer).also { bytesRead = it } != -1) {
+                        outputStream.write(buffer, 0, bytesRead)
+                    }
+
+                    outputStream.flush()
+
+                    result.success(imageUri.toString())
+                } catch (exception: Exception) {
+                    // Delete the orphaned MediaStore record.
+                    contentResolver.delete(imageUri, null, null)
 
                     result.error(
                         WRITE_FILE_FAILED_ERROR_CODE,

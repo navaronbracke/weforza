@@ -7,4 +7,5 @@
 NSBluetoothAlwaysUsageDescription = "The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.";
 NSBluetoothPeripheralUsageDescription = "The app uses Bluetooth to scan for Bluetooth-peripherals in your immediate area.";
 NSCameraUsageDescription = "Allow access to your camera to take new profile pictures.";
-NSPhotoLibraryUsageDescription = "Allow access to Photos to select profile pictures from your photo library.";
+NSPhotoLibraryAddUsageDescription = "Allow access to Photos to add new profile pictures to your photo library.";
+NSPhotoLibraryUsageDescription = "Allow access to Photos to display profile pictures from your photo library.";

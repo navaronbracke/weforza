@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
@@ -47,11 +48,66 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<bool> requestWriteExternalStoragePermission() async {
+  Future<bool> requestExternalStoragePermission({bool read = false, bool write = false}) async {
+    if (!Platform.isAndroid) {
+      throw UnsupportedError('External storage is only supported on Android.');
+    }
+
     final bool? result = await methodChannel.invokeMethod<bool>(
-      'requestWriteExternalStoragePermission',
+      'requestExternalStoragePermission',
+      <String, Object?>{
+        'read': read,
+        'write': write,
+      },
     );
 
     return result ?? false;
+  }
+
+  @override
+  Future<Uri?> registerImage(File file) async {
+    final String mimeType = lookupMimeType(file.path) ?? '';
+    final int fileSize = file.lengthSync();
+
+    if (fileSize == 0) {
+      throw ArgumentError.value(fileSize, 'fileSize', 'An empty file cannot be registered as an image.');
+    }
+
+    if (!mimeType.startsWith('image/')) {
+      throw ArgumentError.value(mimeType, 'mimeType', 'Only images can be registered in the image provider.');
+    }
+
+    final String? result = await methodChannel.invokeMethod<String>(
+      'registerImage',
+      {
+        'filePath': file.path,
+        'fileName': basename(file.path),
+        'fileSize': fileSize,
+        'fileType': mimeType,
+      },
+    );
+
+    return Uri.tryParse(result ?? '');
+  }
+
+  @override
+  Future<Uint8List> getBytesFromContentUri(Uri uri) async {
+    if (!Platform.isAndroid) {
+      throw UnsupportedError('Loading a "content://" Uri is only supported on Android.');
+    }
+
+    if (!uri.isScheme('content')) {
+      throw ArgumentError.value(uri, 'uri', 'Only "content://" Uris are supported.');
+    }
+
+    final Uint8List? bytes = await methodChannel.invokeMethod<Uint8List>('getBytesFromContentUri', {
+      'contentUri': uri.toString(),
+    });
+
+    if (bytes == null) {
+      throw ArgumentError.notNull('bytes');
+    }
+
+    return bytes;
   }
 }

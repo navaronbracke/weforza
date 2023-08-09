@@ -1,6 +1,7 @@
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/import_riders_dao.dart';
 import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
 
@@ -8,11 +9,14 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 class SerializeRidersRepository {
   SerializeRidersRepository(
     this.deviceDao,
+    this.fileUriParser,
     this.importRidersDao,
     this.riderDao,
   );
 
   final DeviceDao deviceDao;
+
+  final FileUriParser fileUriParser;
 
   final ImportRidersDao importRidersDao;
 
@@ -24,7 +28,7 @@ class SerializeRidersRepository {
   Future<Iterable<SerializableRider>> getSerializableRiders() async {
     final (devices, riders) = await (
       deviceDao.getAllDevicesGroupedByOwnerId(),
-      riderDao.getRiders(RiderFilterOption.all),
+      riderDao.getRiders(RiderFilterOption.all, fileUriParser: fileUriParser),
     ).wait;
 
     final output = riders
@@ -47,6 +51,6 @@ class SerializeRidersRepository {
 
   /// Save the given serializable [riders] to disk.
   Future<void> saveSerializableRiders(Iterable<SerializableRider> riders) {
-    return importRidersDao.saveSerializableRiders(riders);
+    return importRidersDao.saveSerializableRiders(riders, fileUriParser: fileUriParser);
   }
 }

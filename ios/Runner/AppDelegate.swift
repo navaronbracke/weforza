@@ -9,6 +9,7 @@ import Flutter
   ) -> Bool {      
     let controller =  window?.rootViewController as! FlutterViewController
     let bluetoothAdapterDelegate = BluetoothAdapterDelegate()
+    let mediaDelegate = MediaDelegate()
       
     let methodChannel = FlutterMethodChannel(
         name: "be.weforza.app/methods", binaryMessenger: controller.binaryMessenger
@@ -29,8 +30,14 @@ import Flutter
                 bluetoothAdapterDelegate.getBluetoothAdapterState(result: result)
             case "isBluetoothOn":
                 bluetoothAdapterDelegate.isBluetoothOn(result: result)
+            case "registerImage":
+                mediaDelegate.registerImage(args: call.arguments as? Dictionary<String, Any> ?? [:], result: result)
+            case "requestAddToPhotoLibraryPermission":
+                mediaDelegate.requestAddToPhotoLibraryPermission(result: result)                
             case "requestBluetoothScanPermission":
                 bluetoothAdapterDelegate.requestBluetoothPermission(result: result)
+            case "requestCameraPermission":
+                mediaDelegate.requestCameraPermission(result: result)
             case "startBluetoothScan":
                 bluetoothAdapterDelegate.startBluetoothScan(result: result)
             case "stopBluetoothScan":

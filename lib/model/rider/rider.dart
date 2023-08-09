@@ -1,4 +1,5 @@
 import 'package:weforza/extensions/date_extension.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 
 /// This class represents a rider.
 class Rider implements Comparable<Rider> {
@@ -9,7 +10,7 @@ class Rider implements Comparable<Rider> {
     required this.firstName,
     required this.lastName,
     required this.lastUpdated,
-    required this.profileImageFilePath,
+    required this.profileImage,
     required this.uuid,
   }) : assert(
           uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty,
@@ -17,7 +18,11 @@ class Rider implements Comparable<Rider> {
         );
 
   /// Create a rider from the given [uuid] and [values].
-  factory Rider.of(String uuid, Map<String, Object?> values) {
+  factory Rider.of(
+    String uuid,
+    Map<String, Object?> values, {
+    required FileUriParser fileUriParser,
+  }) {
     assert(uuid.isNotEmpty, 'The uuid of a rider should not be empty');
 
     return Rider(
@@ -26,7 +31,7 @@ class Rider implements Comparable<Rider> {
       firstName: values['firstname'] as String,
       lastName: values['lastname'] as String,
       lastUpdated: DateTime.parse(values['lastUpdated'] as String),
-      profileImageFilePath: values['profile'] as String?,
+      profileImage: fileUriParser.parse(values['profile'] as String?),
       uuid: uuid,
     );
   }
@@ -59,8 +64,10 @@ class Rider implements Comparable<Rider> {
   /// The last time that this rider was updated.
   final DateTime lastUpdated;
 
-  /// The path to the rider's profile image on disk.
-  final String? profileImageFilePath;
+  /// The [Uri] to the rider's profile image.
+  ///
+  /// This can be a `file` or `content` Uri.
+  final Uri? profileImage;
 
   /// The rider's UUID.
   final String uuid;
@@ -93,7 +100,7 @@ class Rider implements Comparable<Rider> {
       'firstname': firstName,
       'lastname': lastName,
       'lastUpdated': lastUpdated.toStringWithoutMilliseconds(),
-      'profile': profileImageFilePath,
+      'profile': profileImage?.toString(),
     };
   }
 
@@ -106,7 +113,7 @@ class Rider implements Comparable<Rider> {
       alias,
       active,
       lastUpdated,
-      profileImageFilePath,
+      profileImage,
     );
   }
 
@@ -119,6 +126,6 @@ class Rider implements Comparable<Rider> {
         alias == other.alias &&
         active == other.active &&
         lastUpdated == other.lastUpdated &&
-        profileImageFilePath == other.profileImageFilePath;
+        profileImage == other.profileImage;
   }
 }

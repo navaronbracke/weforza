@@ -48,7 +48,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
         firstName: rider.firstName,
         lastName: rider.lastName,
         lastUpdated: DateTime.now(),
-        profileImageFilePath: rider.profileImageFilePath,
+        profileImage: rider.profileImage,
         uuid: rider.uuid,
       );
 

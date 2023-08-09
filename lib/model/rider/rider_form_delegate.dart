@@ -30,7 +30,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
       firstName: model.firstName,
       lastName: model.lastName,
       lastUpdated: DateTime.now(),
-      profileImageFilePath: model.profileImage?.path,
+      profileImage: model.profileImage,
       uuid: _uuidGenerator.v4(),
     );
 
@@ -70,7 +70,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
         firstName: model.firstName,
         lastName: model.lastName,
         lastUpdated: DateTime.now(),
-        profileImageFilePath: model.profileImage?.path,
+        profileImage: model.profileImage,
         uuid: uuid,
       );
 

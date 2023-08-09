@@ -1,6 +1,7 @@
 import 'package:sembast/sembast.dart';
 import 'package:uuid/uuid.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';
@@ -8,7 +9,7 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 /// This class defines an interface for importing [SerializableRider]s.
 abstract class ImportRidersDao {
   /// Save the given [riders].
-  Future<void> saveSerializableRiders(Iterable<SerializableRider> riders);
+  Future<void> saveSerializableRiders(Iterable<SerializableRider> riders, {required FileUriParser fileUriParser});
 }
 
 /// The default implementation of [ImportRidersDao].
@@ -46,7 +47,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
 
   /// Get the existing riders.
   /// Returns a map of [Rider]s mapped to their respective [SerializableRiderKey]s.
-  Future<Map<SerializableRiderKey, Rider>> _getExistingRiders() async {
+  Future<Map<SerializableRiderKey, Rider>> _getExistingRiders(FileUriParser fileUriParser) async {
     final collection = <SerializableRiderKey, Rider>{};
 
     final records = await _riderStore.find(_database);
@@ -59,7 +60,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
       );
 
       if (collection[key] == null) {
-        collection[key] = Rider.of(record.key, record.value);
+        collection[key] = Rider.of(record.key, record.value, fileUriParser: fileUriParser);
       }
     }
 
@@ -68,9 +69,10 @@ class ImportRidersDaoImpl implements ImportRidersDao {
 
   @override
   Future<void> saveSerializableRiders(
-    Iterable<SerializableRider> riders,
-  ) async {
-    final (existingDevices, existingRiders) = await (_getExistingDevices(), _getExistingRiders()).wait;
+    Iterable<SerializableRider> riders, {
+    required FileUriParser fileUriParser,
+  }) async {
+    final (existingDevices, existingRiders) = await (_getExistingDevices(), _getExistingRiders(fileUriParser)).wait;
 
     // The existing riders that should be updated.
     final ridersToUpdate = <SerializableRiderUpdateTimestamp>{};
@@ -98,7 +100,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
             firstName: rider.firstName,
             lastName: rider.lastName,
             lastUpdated: rider.lastUpdated,
-            profileImageFilePath: null,
+            profileImage: null,
             uuid: uuid,
           ),
         );

@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/export/exportable_ride.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
@@ -9,7 +10,7 @@ abstract class ExportRidesDao {
   /// Get the exportable rides with their attendees.
   ///
   /// If a specific [ride] date is given, only that ride is returned.
-  Future<Iterable<ExportableRide>> getRides(DateTime? ride);
+  Future<Iterable<ExportableRide>> getRides(DateTime? ride, {required FileUriParser fileUriParser});
 }
 
 class ExportRidesDaoImpl implements ExportRidesDao {
@@ -57,13 +58,13 @@ class ExportRidesDaoImpl implements ExportRidesDao {
   }
 
   /// Get all the riders, mapped to their [Rider.uuid].
-  Future<Map<String, Rider>> _getRiders() async {
+  Future<Map<String, Rider>> _getRiders(FileUriParser fileUriParser) async {
     final riders = <String, Rider>{};
 
     final records = await _riderStore.find(_database);
 
     for (final record in records) {
-      final rider = Rider.of(record.key, record.value);
+      final rider = Rider.of(record.key, record.value, fileUriParser: fileUriParser);
       riders[rider.uuid] = rider;
     }
 
@@ -133,8 +134,8 @@ class ExportRidesDaoImpl implements ExportRidesDao {
   }
 
   @override
-  Future<Iterable<ExportableRide>> getRides(DateTime? ride) async {
-    final (attendees, riders, rides) = await (_getAttendees(ride), _getRiders(), _getRides(ride)).wait;
+  Future<Iterable<ExportableRide>> getRides(DateTime? ride, {required FileUriParser fileUriParser}) async {
+    final (attendees, riders, rides) = await (_getAttendees(ride), _getRiders(fileUriParser), _getRides(ride)).wait;
 
     return _joinRidesAndAttendees(attendees, riders, rides);
   }

@@ -2,6 +2,7 @@ import 'package:sembast/sembast.dart';
 import 'package:weforza/database/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
@@ -18,7 +19,7 @@ abstract class RiderDao {
   Future<int> getAttendingCount(String uuid);
 
   /// Get the list of riders that satisfy the given [filter].
-  Future<List<Rider>> getRiders(RiderFilterOption filter);
+  Future<List<Rider>> getRiders(RiderFilterOption filter, {required FileUriParser fileUriParser});
 
   /// Toggle the active state of the rider with the given [uuid].
   Future<void> setRiderActive(String uuid, {required bool value});
@@ -116,7 +117,7 @@ class RiderDaoImpl implements RiderDao {
   }
 
   @override
-  Future<List<Rider>> getRiders(RiderFilterOption filter) async {
+  Future<List<Rider>> getRiders(RiderFilterOption filter, {required FileUriParser fileUriParser}) async {
     final finder = Finder(
       sortOrders: [
         SortOrder('firstname'),
@@ -138,7 +139,7 @@ class RiderDaoImpl implements RiderDao {
 
     final records = await _riderStore.find(_database, finder: finder);
 
-    return records.map((r) => Rider.of(r.key, r.value)).toList();
+    return records.map((r) => Rider.of(r.key, r.value, fileUriParser: fileUriParser)).toList();
   }
 
   @override

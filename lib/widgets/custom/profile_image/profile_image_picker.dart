@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,7 +100,7 @@ class ProfileImagePicker extends StatelessWidget {
       isDestructive: true,
     );
 
-    return StreamBuilder<AsyncValue<File?>>(
+    return StreamBuilder<AsyncValue<Uri?>>(
       initialData: delegate.selectedImage,
       stream: delegate.stream,
       builder: (context, snapshot) {

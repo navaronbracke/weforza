@@ -65,8 +65,8 @@ class SelectableOwnerListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 4),
-            child: AdaptiveProfileImage.path(
-              imagePath: rider.profileImageFilePath,
+            child: AdaptiveProfileImage(
+              image: rider.profileImage,
               personInitials: rider.initials,
             ),
           ),

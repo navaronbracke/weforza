@@ -48,18 +48,12 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<bool> requestExternalStoragePermission({bool read = false, bool write = false}) async {
+  Future<bool> requestWriteExternalStoragePermission() async {
     if (!Platform.isAndroid) {
       throw UnsupportedError('External storage is only supported on Android.');
     }
 
-    final bool? result = await methodChannel.invokeMethod<bool>(
-      'requestExternalStoragePermission',
-      <String, Object?>{
-        'read': read,
-        'write': write,
-      },
-    );
+    final bool? result = await methodChannel.invokeMethod<bool>('requestWriteExternalStoragePermission');
 
     return result ?? false;
   }

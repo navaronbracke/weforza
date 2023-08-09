@@ -118,7 +118,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
             throw StateError('The given file $file already exists');
           }
 
-          if (!await fileStorageDelegate.requestExternalStoragePermission(write: true)) {
+          if (!await fileStorageDelegate.requestWriteExternalStoragePermission()) {
             throw ExternalStoragePermissionDeniedException();
           }
         }

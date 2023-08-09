@@ -16,8 +16,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- These permissions are required when ScopedStorage is not available. -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <!-- This permission is required when ScopedStorage is not available. -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that

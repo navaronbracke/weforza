@@ -12,11 +12,6 @@ abstract interface class FileSystem {
   /// If this is true, not all provided directories might be available to the application.
   bool get hasScopedStorage;
 
-  /// Get the directory where the application can store images.
-  ///
-  /// Files in this directory are removed when the application is uninstalled.
-  fs.Directory get imagesDirectory;
-
   /// Get the directory where the application can create temporary files.
   /// This directory is always available.
   fs.Directory get tempDirectory;
@@ -26,12 +21,6 @@ abstract interface class FileSystem {
   ///
   /// Returns null if no such directory is available.
   fs.Directory? get topLevelDocumentsDirectory;
-
-  /// Get the directory where the application can store images,
-  /// that are not removed when the application is uninstalled.
-  ///
-  /// Returns null if no such directory is available.
-  fs.Directory? get topLevelImagesDirectory;
 
   /// Get a reference to a [fs.File] at the given [path].
   fs.File file(String path);

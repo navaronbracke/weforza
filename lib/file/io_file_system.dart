@@ -1,43 +1,60 @@
-import 'dart:io' as io show Directory;
+import 'dart:io' as io show Directory, Platform;
 import 'package:file/file.dart' as fs;
+import 'package:file/local.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:weforza/file/file_system.dart';
+import 'package:weforza/native_service/file_storage_delegate.dart';
 
 /// This class represents a [FileSystem] that uses the real file system.
 class IoFileSystem implements FileSystem {
-  /// Create a new [IoFileSystem] with the given directories.
-  IoFileSystem({
-    required io.Directory documentsDirectory,
-    required io.Directory imagesDirectory,
-    required fs.FileSystem fileSystem,
-    required this.hasScopedStorage,
-    required io.Directory tempDirectory,
-    io.Directory? topLevelDocumentsDirectory,
-  })  : documentsDirectory = fileSystem.directory(documentsDirectory),
-        imagesDirectory = fileSystem.directory(imagesDirectory),
-        tempDirectory = fileSystem.directory(tempDirectory),
-        topLevelDocumentsDirectory = hasScopedStorage || topLevelDocumentsDirectory == null
-            ? null
-            : fileSystem.directory(topLevelDocumentsDirectory),
-        _fileSystem = fileSystem;
+  /// Create a new [IoFileSystem].
+  factory IoFileSystem({
+    required FileStorageDelegate fileStorageDelegate,
+  }) {
+    final IoFileSystem delegate = IoFileSystem._(const LocalFileSystem());
 
-  @override
-  final fs.Directory documentsDirectory;
+    delegate._initialize(fileStorageDelegate);
 
-  @override
-  final fs.Directory imagesDirectory;
+    return delegate;
+  }
 
-  @override
-  final fs.Directory? topLevelDocumentsDirectory;
+  /// The private constructor.
+  IoFileSystem._(this._fileSystem);
 
   /// The underlying file system.
   final fs.FileSystem _fileSystem;
 
   @override
-  final bool hasScopedStorage;
+  late final fs.Directory documentsDirectory;
 
   @override
-  final fs.Directory tempDirectory;
+  late final fs.Directory? topLevelDocumentsDirectory;
+
+  @override
+  late final bool hasScopedStorage;
+
+  @override
+  late final fs.Directory tempDirectory;
 
   @override
   fs.File file(String path) => _fileSystem.file(path);
+
+  /// Set up the file system by loading the necessary directory information.
+  void _initialize(FileStorageDelegate fileStorageDelegate) async {
+    documentsDirectory = await getApplicationDocumentsDirectory().then(_fileSystem.directory);
+    tempDirectory = await getTemporaryDirectory().then(_fileSystem.directory);
+    hasScopedStorage = await fileStorageDelegate.hasScopedStorage();
+
+    List<io.Directory>? topLevelDocumentDirectories;
+
+    // Android only has top level directories when Scoped Storage is not being used,
+    // while iOS does not have accessible top level directories.
+    if (io.Platform.isAndroid && !hasScopedStorage) {
+      topLevelDocumentDirectories = await getExternalStorageDirectories(type: StorageDirectory.documents);
+    }
+
+    topLevelDocumentsDirectory = topLevelDocumentDirectories != null && topLevelDocumentDirectories.isNotEmpty
+        ? _fileSystem.directory(topLevelDocumentDirectories.first)
+        : null;
+  }
 }

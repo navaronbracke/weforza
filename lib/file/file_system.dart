@@ -12,11 +12,6 @@ abstract interface class FileSystem {
   /// If this is true, not all provided directories might be available to the application.
   bool get hasScopedStorage;
 
-  /// Get the directory where the application can store images.
-  ///
-  /// Files in this directory are removed when the application is uninstalled.
-  fs.Directory get imagesDirectory;
-
   /// Get the directory where the application can create temporary files.
   /// This directory is always available.
   fs.Directory get tempDirectory;

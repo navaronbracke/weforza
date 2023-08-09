@@ -90,12 +90,13 @@ class IoPickImageDelegate implements PickImageDelegate {
       return mediaStoreUri;
     }
 
-    // On iOS save the image to the application documents directory.
+    // On iOS save the image to the application documents directory,
+    // as there is no specific images directory.
     // This directory is accessible for the application, so no extra permissions are required.
     // After the image is saved, register it with the Photos app,
     // so that it is retained when the application is uninstalled.
     if (Platform.isIOS) {
-      final fs.Directory directory = fileSystem.imagesDirectory;
+      final fs.Directory directory = fileSystem.documentsDirectory;
 
       final fs.File destinationFile = fileSystem.file(join(directory.path, profileImage.name));
 

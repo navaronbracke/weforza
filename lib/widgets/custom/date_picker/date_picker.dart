@@ -262,41 +262,43 @@ class _DatePickerBody extends StatelessWidget {
 
   final double weekSpacing;
 
-  Widget _buildWeekdaysHeader(DateFormat dateFormat) {
-    // This list contains the first monday - sunday of the year 1970.
-    final weekDays = [
-      DateTime(1970, 1, 5),
-      DateTime(1970, 1, 6),
-      DateTime(1970, 1, 7),
-      DateTime(1970, 1, 8),
-      DateTime(1970, 1, 9),
-      DateTime(1970, 1, 10),
-      DateTime(1970, 1, 11),
-    ];
+  Widget _buildWeekdaysHeader(MaterialLocalizations localizations) {
+    final List<Widget> children = <Widget>[];
+
+    // Start at the localized first day of the week, loop around the days,
+    // and stop once we came back to it.
+    for (int i = localizations.firstDayOfWeekIndex; true; i = (i + 1) % 7) {
+      final String weekday = localizations.narrowWeekdays[i];
+
+      children.add(
+        ExcludeSemantics(
+          child: SizedBox(
+            width: dayItemSize.width,
+            child: Center(
+              child: Text(weekday, style: weekDayStyle),
+            ),
+          ),
+        ),
+      );
+
+      if (i == (localizations.firstDayOfWeekIndex - 1) % 7) {
+        break;
+      }
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: weekDays.map((DateTime date) {
-        return SizedBox(
-          width: dayItemSize.width,
-          child: Center(
-            child: Text(dateFormat.format(date), style: weekDayStyle),
-          ),
-        );
-      }).toList(),
+      children: children,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat(
-      'EEE',
-      Localizations.localeOf(context).languageCode,
-    );
+    final localizations = MaterialLocalizations.of(context);
 
     return Column(
       children: <Widget>[
-        if (showWeekdays) _buildWeekdaysHeader(dateFormat),
+        if (showWeekdays) _buildWeekdaysHeader(localizations),
         Expanded(
           child: GestureDetector(
             // The drag gesture is intercepted
@@ -308,7 +310,7 @@ class _DatePickerBody extends StatelessWidget {
               itemCount: delegate.calendarPageCount,
               itemBuilder: (context, index) {
                 final currentMonth = delegate.currentCalendarMonth;
-                final days = delegate.computeDaysForMonth();
+                final days = delegate.computeDaysForMonth(localizations);
 
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),

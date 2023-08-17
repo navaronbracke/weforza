@@ -74,21 +74,27 @@ class DatePickerDelegate {
   List<DateTime> computeDaysForMonth(MaterialLocalizations localizations) {
     final DateTime currentMonth = _monthController.value;
 
-    final int daysInMonth = DateUtils.getDaysInMonth(currentMonth.year, currentMonth.month);
-    final int dayOffset = DateUtils.firstDayOffset(currentMonth.year, currentMonth.month, localizations);
+    final int daysInCurrentMonth = DateUtils.getDaysInMonth(currentMonth.year, currentMonth.month);
+    final int firstDayOffset = DateUtils.firstDayOffset(currentMonth.year, currentMonth.month, localizations);
     final List<DateTime> days = <DateTime>[];
 
     final DateTime previousMonth = DateUtils.addMonthsToMonthDate(currentMonth, -1);
     final int daysInPreviousMonth = DateUtils.getDaysInMonth(previousMonth.year, previousMonth.month);
 
-    // Add enough days from the previous month to fill the offset from this month's first day.
-    for (int i = dayOffset - (dayOffset - 1); i <= dayOffset; i++) {
-      final int day = daysInPreviousMonth - (dayOffset - i);
+    // Add enough days from the previous month to fill the offset up to this month's first day.
+    // The start index is the first day of the last month that is within the offset range.
+    // In other words, this is the day on which the offset would have been equal to 1.
+    final int start = firstDayOffset - (firstDayOffset - 1);
+
+    for (int i = start; i <= firstDayOffset; i++) {
+      // Walk towards the firstDayOffset,
+      // so that the last day that is added is the last day of the previous month.
+      final int day = daysInPreviousMonth - (firstDayOffset - i);
 
       days.add(DateTime(previousMonth.year, previousMonth.month, day));
     }
 
-    for (int i = 1; i <= daysInMonth; i++) {
+    for (int i = 1; i <= daysInCurrentMonth; i++) {
       days.add(DateTime(currentMonth.year, currentMonth.month, i));
     }
 

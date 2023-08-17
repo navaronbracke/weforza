@@ -1,7 +1,6 @@
-import 'package:flutter/widgets.dart' show Curve, Curves, DragEndDetails, PageController;
+import 'package:flutter/material.dart';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:weforza/extensions/date_extension.dart';
 
 /// This class defines the delegate for a `DatePicker`.
 class DatePickerDelegate {
@@ -72,52 +71,45 @@ class DatePickerDelegate {
   /// with the last days of the previous month.
   /// The last week of the current month
   /// is filled with the first days of the next month.
-  List<DateTime> computeDaysForMonth() {
-    final currentMonth = _monthController.value;
+  List<DateTime> computeDaysForMonth(MaterialLocalizations localizations) {
+    final DateTime currentMonth = _monthController.value;
 
-    final daysInCurrentMonth = currentMonth.daysInMonth;
-    final days = <DateTime>[];
+    final int daysInCurrentMonth = DateUtils.getDaysInMonth(currentMonth.year, currentMonth.month);
+    final int firstDayOffset = DateUtils.firstDayOffset(currentMonth.year, currentMonth.month, localizations);
+    final List<DateTime> days = <DateTime>[];
 
-    final firstDayWeekday = currentMonth.weekday;
+    final DateTime previousMonth = DateUtils.addMonthsToMonthDate(currentMonth, -1);
+    final int daysInPreviousMonth = DateUtils.getDaysInMonth(previousMonth.year, previousMonth.month);
 
-    // The first day of this month is not a monday.
-    if (firstDayWeekday != 1) {
-      final previousMonth = currentMonth.subtractMonth();
+    // Add enough days from the previous month to fill the offset up to this month's first day.
+    // The start index is the first day of the last month that is within the offset range.
+    // In other words, this is the day on which the offset would have been equal to 1.
+    final int start = firstDayOffset - (firstDayOffset - 1);
 
-      final daysInPreviousMonth = previousMonth.daysInMonth;
-      final start = daysInPreviousMonth - firstDayWeekday + 2;
+    for (int i = start; i <= firstDayOffset; i++) {
+      // Walk towards the firstDayOffset,
+      // so that the last day that is added is the last day of the previous month.
+      final int day = daysInPreviousMonth - (firstDayOffset - i);
 
-      // Pad the first week of this month with days of the previous month.
-      for (int i = start; i <= daysInPreviousMonth; i++) {
-        days.add(DateTime(previousMonth.year, previousMonth.month, i));
-      }
+      days.add(DateTime(previousMonth.year, previousMonth.month, day));
     }
 
-    // Add the days of this month.
-    for (int i = 0; i < daysInCurrentMonth; i++) {
-      days.add(DateTime(currentMonth.year, currentMonth.month, i + 1));
+    for (int i = 1; i <= daysInCurrentMonth; i++) {
+      days.add(DateTime(currentMonth.year, currentMonth.month, i));
     }
 
-    final lastDayOfCurrentMonth = DateTime(
-      currentMonth.year,
-      currentMonth.month,
-      daysInCurrentMonth,
-    );
+    // Once the days of this month have been filled,
+    // there is now a set of items that might not fully fill the last week.
+    // The calendar should always have a total amount of days that is a multiple of `DateTime.daysPerWeek`.
+    final int amountOfDaysInLastWeek = days.length % DateTime.daysPerWeek;
 
-    final lastDayWeekDay = lastDayOfCurrentMonth.weekday;
+    if (amountOfDaysInLastWeek != 0) {
+      final int remainingDaysInWeek = DateTime.daysPerWeek - amountOfDaysInLastWeek;
 
-    // The last day of the current month is not a sunday.
-    if (lastDayWeekDay != 7) {
-      final nextMonth = currentMonth.addMonth();
+      final nextMonth = DateUtils.addMonthsToMonthDate(currentMonth, 1);
 
-      // Get the offset for the last day of this month.
-      // If the last day of this month is a sunday,
-      // the week is filled with days of this month.
-      // Otherwise, fill the week with days of the next month.
-      final endOffset = 7 - lastDayWeekDay;
-
-      for (int i = 0; i < endOffset; i++) {
-        days.add(DateTime(nextMonth.year, nextMonth.month, i + 1));
+      for (int i = 1; i <= remainingDaysInWeek; i++) {
+        days.add(DateTime(nextMonth.year, nextMonth.month, i));
       }
     }
 
@@ -139,17 +131,19 @@ class DatePickerDelegate {
 
   /// Go back one month in the calendar.
   void goBackOneMonth() {
-    final newDate = _monthController.value.subtractMonth();
+    final currentMonth = _monthController.value;
+    final previousMonth = DateUtils.addMonthsToMonthDate(currentMonth, -1);
 
-    _monthController.add(newDate);
+    _monthController.add(previousMonth);
     pageController.previousPage(duration: duration, curve: curve);
   }
 
   /// Go forward one month in the calendar.
   void goForwardOneMonth() {
-    final newDate = _monthController.value.addMonth();
+    final currentMonth = _monthController.value;
+    final nextMonth = DateUtils.addMonthsToMonthDate(currentMonth, 1);
 
-    _monthController.add(newDate);
+    _monthController.add(nextMonth);
     pageController.nextPage(duration: duration, curve: curve);
   }
 

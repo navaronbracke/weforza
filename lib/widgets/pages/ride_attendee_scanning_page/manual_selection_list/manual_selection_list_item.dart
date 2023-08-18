@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/dialogs/unselect_scanned_rider_dialog.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/selectable_owner_list_item.dart';
 
@@ -48,8 +47,8 @@ class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListIte
         final accepted = await widget.delegate.toggleSelectionForActiveRider(
           ScannedRideAttendee(uuid: widget.item.uuid, isScanned: isScanned),
           () async {
-            final result = await showWeforzaDialog<bool>(
-              context,
+            final result = await showAdaptiveDialog<bool>(
+              context: context,
               builder: (_) => const UnselectScannedRiderDialog(),
             );
 

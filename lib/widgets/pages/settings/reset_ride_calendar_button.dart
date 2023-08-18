@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/dialogs/reset_ride_calendar_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
@@ -12,8 +11,8 @@ class ResetRideCalendarButton extends ConsumerWidget {
   const ResetRideCalendarButton({super.key});
 
   void _showResetCalendarDialog(BuildContext context) {
-    showWeforzaDialog<void>(
-      context,
+    showAdaptiveDialog<void>(
+      context: context,
       builder: (_) => const ResetRideCalendarDialog(),
     );
   }

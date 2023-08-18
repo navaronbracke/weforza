@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:file/file.dart' as fs;
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/rider/rider.dart';
@@ -133,7 +133,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   }
 
   @override
-  Future<List<String>> readFile(File file) async {
+  Future<List<String>> readFile(fs.File file) async {
     final lines = await file.openRead().transform(utf8.decoder).transform(const LineSplitter()).toList();
 
     if (lines.isEmpty) {

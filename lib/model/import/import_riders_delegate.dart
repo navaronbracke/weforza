@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:file/file.dart' as fs;
 import 'package:rxdart/rxdart.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/import_riders_csv_reader.dart';
@@ -26,7 +25,7 @@ class ImportRidersDelegate {
   Stream<ImportRidersState> get stream => _controller;
 
   Future<Iterable<SerializableRider>> _readFileWithReader<T>(
-    File file, {
+    fs.File file, {
     required ImportRidersFileReader<T> reader,
   }) async {
     final items = <SerializableRider>[];
@@ -50,7 +49,7 @@ class ImportRidersDelegate {
   /// Returns the collection of [SerializableRider]s.
   ///
   /// Throws a [FormatException] if the file is malformed.
-  Future<Iterable<SerializableRider>> _readRidersFromFile(File file) async {
+  Future<Iterable<SerializableRider>> _readRidersFromFile(fs.File file) async {
     if (file.path.endsWith(ExportFileFormat.csv.formatExtension)) {
       return _readFileWithReader<String>(
         file,

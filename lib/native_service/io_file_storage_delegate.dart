@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file/file.dart' as fs;
+
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 import 'package:weforza/native_service/file_storage_delegate.dart';
@@ -18,7 +20,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<void> registerDocument(File file) async {
+  Future<void> registerDocument(fs.File file) async {
     final String? mimeType = lookupMimeType(file.path);
     final int fileSize = file.lengthSync();
 
@@ -59,7 +61,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
   }
 
   @override
-  Future<Uri?> registerImage(File file) async {
+  Future<Uri?> registerImage(fs.File file) async {
     final String mimeType = lookupMimeType(file.path) ?? '';
     final int fileSize = file.lengthSync();
 

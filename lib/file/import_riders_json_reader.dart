@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
-
+import 'package:file/file.dart' as fs;
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/rider/rider.dart';
@@ -49,7 +48,7 @@ class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynam
   }
 
   @override
-  Future<List<Map<String, dynamic>>> readFile(File file) async {
+  Future<List<Map<String, dynamic>>> readFile(fs.File file) async {
     final fileContent = await file.readAsString();
 
     try {

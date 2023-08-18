@@ -54,6 +54,9 @@ dependencies:
   # This package provies MIME-type lookup utilities.
   mime: ^1.0.4
 
+  # This package provides a platform independent way to access the current platform.
+  os_detect: ^2.0.1
+
   # package_info_plus provides access to app specific information such as build number & version.
   package_info_plus: ^4.0.0
 

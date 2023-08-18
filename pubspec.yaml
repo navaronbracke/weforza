@@ -20,9 +20,7 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  # TODO: switch to regular version once the namespace fix is published
-  app_settings:
-    git: https://github.com/spencerccf/app_settings.git
+  app_settings: ^5.0.0
 
   # Collection utilities.
   collection: ^1.17.0

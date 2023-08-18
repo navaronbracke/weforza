@@ -1,6 +1,8 @@
-import 'dart:io' as io show Directory, Platform;
+import 'dart:io' as io show Directory;
+
 import 'package:file/file.dart' as fs;
 import 'package:file/local.dart';
+import 'package:os_detect/os_detect.dart' as platform;
 import 'package:path_provider/path_provider.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/native_service/file_storage_delegate.dart';
@@ -58,7 +60,7 @@ class IoFileSystem implements FileSystem {
 
     // Android only has top level directories when Scoped Storage is not being used,
     // while iOS does not have accessible top level directories.
-    if (io.Platform.isAndroid && !hasScopedStorage) {
+    if (platform.isAndroid && !hasScopedStorage) {
       topLevelDocumentDirectories = await getExternalStorageDirectories(type: StorageDirectory.documents);
     }
 

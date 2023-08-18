@@ -1,7 +1,6 @@
-import 'dart:io' show Platform;
-
 import 'package:file/file.dart' as fs;
 import 'package:image_picker/image_picker.dart';
+import 'package:os_detect/os_detect.dart' as platform;
 import 'package:path/path.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
@@ -32,7 +31,7 @@ class IoPickImageDelegate implements PickImageDelegate {
   ///
   /// If any permission is not granted, this returns a [Future.error].
   Future<void> _requestCameraAndPhotoLibraryPermissions() async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (platform.isAndroid || platform.isIOS) {
       final bool hasCameraPermission = await mediaPermissionsDelegate.requestCameraPermission();
 
       if (!hasCameraPermission) {
@@ -40,7 +39,7 @@ class IoPickImageDelegate implements PickImageDelegate {
       }
     }
 
-    if (Platform.isAndroid && !fileSystem.hasScopedStorage) {
+    if (platform.isAndroid && !fileSystem.hasScopedStorage) {
       // Request only write permission for external storage.
       // This permission is required to save the image.
       // The read permission is not required, since reading a content Uri happens through the MediaStore.
@@ -51,7 +50,7 @@ class IoPickImageDelegate implements PickImageDelegate {
       }
     }
 
-    if (Platform.isIOS) {
+    if (platform.isIOS) {
       final bool hasPhotosPermission = await mediaPermissionsDelegate.requestAddToPhotoLibraryPermission();
 
       if (!hasPhotosPermission) {
@@ -80,7 +79,7 @@ class IoPickImageDelegate implements PickImageDelegate {
       return null;
     }
 
-    if (Platform.isAndroid) {
+    if (platform.isAndroid) {
       final Uri? mediaStoreUri = await fileStorageDelegate.registerImage(fileSystem.file(profileImage.path));
 
       if (mediaStoreUri == null) {
@@ -95,7 +94,7 @@ class IoPickImageDelegate implements PickImageDelegate {
     // This directory is accessible for the application, so no extra permissions are required.
     // After the image is saved, register it with the Photos app,
     // so that it is retained when the application is uninstalled.
-    if (Platform.isIOS) {
+    if (platform.isIOS) {
       final fs.Directory directory = fileSystem.documentsDirectory;
 
       final fs.File destinationFile = fileSystem.file(join(directory.path, profileImage.name));

@@ -8,7 +8,6 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_attending_count_provider.dart';
 import 'package:weforza/widgets/dialogs/delete_ride_dialog.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_page.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_details_attendees_list.dart';
@@ -135,7 +134,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   }
 
   void _onDeleteRideOptionSelected(BuildContext context) {
-    showWeforzaDialog(context, builder: (_) => const DeleteRideDialog());
+    showAdaptiveDialog<void>(context: context, builder: (_) => const DeleteRideDialog());
   }
 
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {

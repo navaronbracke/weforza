@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/dialogs/delete_device_dialog.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -14,9 +13,9 @@ class DeleteDeviceButton extends StatelessWidget {
   /// The index of the device to delete.
   final int index;
 
-  void _onDeletePressed(BuildContext context) async {
-    await showWeforzaDialog<void>(
-      context,
+  void _onDeletePressed(BuildContext context) {
+    showAdaptiveDialog<void>(
+      context: context,
       builder: (_) => DeleteDeviceDialog(index: index),
     );
   }

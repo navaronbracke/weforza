@@ -4,41 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/theme.dart';
 
-/// Show a dialog widget that adapts itself to the current platform.
-///
-/// If [barrierDismissible] is false, tapping the barrier
-/// does not dismiss the dialog.
-/// [barrierDismissible] defaults to true.
-///
-/// The [builder] function builds the widget that is used as the dialog.
-/// This widget typically adapts itself to [ThemeData.platform].
-///
-/// Returns a future that resolves with the result that the dialog returned.
-Future<T?> showWeforzaDialog<T>(
-  BuildContext context, {
-  required WidgetBuilder builder,
-  bool barrierDismissible = true,
-}) {
-  switch (defaultTargetPlatform) {
-    case TargetPlatform.android:
-    case TargetPlatform.fuchsia:
-    case TargetPlatform.linux:
-    case TargetPlatform.windows:
-      return showDialog<T>(
-        barrierDismissible: barrierDismissible,
-        builder: builder,
-        context: context,
-      );
-    case TargetPlatform.iOS:
-    case TargetPlatform.macOS:
-      return showCupertinoDialog<T>(
-        barrierDismissible: barrierDismissible,
-        builder: builder,
-        context: context,
-      );
-  }
-}
-
 /// This widget represents an alert dialog
 /// that adapts itself to the current platform.
 class WeforzaAlertDialog extends StatelessWidget {

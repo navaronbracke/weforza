@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field_button_bar.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 
@@ -129,8 +127,8 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       return;
     }
 
-    final result = await showWeforzaDialog<bool>(
-      context,
+    final result = await showAdaptiveDialog<bool>(
+      context: context,
       builder: (_) => DeleteExcludedTermDialog(term: widget.excludedTerm.term),
     );
 

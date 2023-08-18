@@ -6,7 +6,6 @@ import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
-import 'package:weforza/widgets/dialogs/dialogs.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_active_toggle.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_devices_list/rider_devices_list.dart';
 import 'package:weforza/widgets/pages/rider_details/rider_name.dart';
@@ -27,8 +26,8 @@ class RiderDetailsPage extends StatelessWidget {
   }
 
   void _showDeleteDialog(BuildContext context) {
-    showWeforzaDialog(
-      context,
+    showAdaptiveDialog<void>(
+      context: context,
       builder: (_) => const DeleteRiderDialog(),
     );
   }

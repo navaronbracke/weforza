@@ -60,8 +60,8 @@ class ProfileImagePicker extends StatelessWidget {
   void _showDeleteProfileImageDialog(BuildContext context) {
     final translator = S.of(context);
 
-    showWeforzaDialog<void>(
-      context,
+    showAdaptiveDialog<void>(
+      context: context,
       builder: (context) => WeforzaAlertDialog.defaultButtons(
         confirmButtonLabel: translator.delete,
         description: Text(translator.removePhotoDescription, softWrap: true),

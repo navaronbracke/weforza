@@ -1,8 +1,7 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:os_detect/os_detect.dart' as platform;
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
@@ -221,7 +220,7 @@ class _ExportPageDoneIndicator extends StatelessWidget {
     final S translator = S.of(context);
     final String message;
 
-    if (Platform.isAndroid && !hasAndroidScopedStorage) {
+    if (platform.isAndroid && !hasAndroidScopedStorage) {
       message = translator.exportedFileAvailableInDownloads;
     } else {
       message = translator.exportedFileAvailableInDocuments;

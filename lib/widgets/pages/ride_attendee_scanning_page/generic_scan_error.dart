@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:os_detect/os_detect.dart' as platform;
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
@@ -95,7 +94,7 @@ class PermissionDeniedError extends StatelessWidget {
     // Without the location permission, the scan cannot find devices.
     //
     // On other platforms (i.e. iOS) the location permission is not required.
-    if (Platform.isAndroid) {
+    if (platform.isAndroid) {
       errorMessage = translator.scanAbortedBluetoothAndLocationPermissionDenied;
     } else {
       errorMessage = translator.scanAbortedBluetoothPermissionDenied;

@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:file/file.dart' as fs;
 import 'package:weforza/native_service/native_service.dart';
 
 /// This class defines an interface that allows working with the underlying file provider.
@@ -17,14 +17,14 @@ abstract base class FileStorageDelegate extends NativeService {
   /// Register the given [file] as a new document.
   ///
   /// Throws if the file is empty or an invalid format.
-  Future<void> registerDocument(File file);
+  Future<void> registerDocument(fs.File file);
 
   /// Register the given [file] as a new image.
   ///
   /// Returns the [Uri] to the registered image or null if no Uri is available.
   ///
   /// Throws if the file is empty or an invalid format.
-  Future<Uri?> registerImage(File file);
+  Future<Uri?> registerImage(fs.File file);
 
   /// Request permission to write to external storage.
   ///

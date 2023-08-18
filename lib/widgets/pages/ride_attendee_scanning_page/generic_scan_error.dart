@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show Platform;
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';

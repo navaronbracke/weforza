@@ -87,7 +87,7 @@ class RiderDetailsPage extends StatelessWidget {
           child: Row(
             children: [
               SelectedRiderAttendingCount(),
-              Expanded(child: Center()),
+              Spacer(),
               RiderActiveToggle(),
             ],
           ),

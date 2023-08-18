@@ -122,7 +122,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 4),
               child: Text('$total'),
             ),
-            const Expanded(child: Center()),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(right: 4),
               child: Text('${scannedAttendees ?? '-'}'),

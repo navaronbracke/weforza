@@ -29,6 +29,10 @@ class CupertinoBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // As the keyboard pushes the CupertinoBottomBar up,
+    // there is no need for applying the bottom padding of the notch.
+    // Therefor, use the padding value instead of viewInsets, which decreases as the keyboard is shown.
+    // The viewInsets on the otherhand, increases as the keyboard is shown.
     final double bottomPadding = MediaQuery.paddingOf(context).bottom;
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
 
@@ -66,7 +70,13 @@ class CupertinoBottomBar extends StatelessWidget {
         ),
         color: backgroundColor,
       ),
-      child: content,
+      child: Builder(
+        builder: (context) => MediaQuery.removePadding(
+          context: context,
+          removeBottom: true,
+          child: content,
+        ),
+      ),
     );
   }
 }

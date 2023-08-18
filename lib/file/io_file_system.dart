@@ -39,6 +39,15 @@ class IoFileSystem implements FileSystem {
   @override
   fs.File file(String path) => _fileSystem.file(path);
 
+  @override
+  fs.File fileFromUri(Uri uri) {
+    if (!uri.isScheme('file')) {
+      throw ArgumentError.value(uri, 'uri', 'The given Uri is not a "file://" Uri.');
+    }
+
+    return _fileSystem.file(uri);
+  }
+
   /// Set up the file system by loading the necessary directory information.
   void _initialize(FileStorageDelegate fileStorageDelegate) async {
     documentsDirectory = await getApplicationDocumentsDirectory().then(_fileSystem.directory);

@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/file/content_uri_image_provider.dart';
+import 'package:weforza/file/file_system.dart';
 import 'package:weforza/riverpod/file/file_storage_delegate_provider.dart';
+import 'package:weforza/riverpod/file/file_system_provider.dart';
 
 /// This widget represents a profile image.
 class ProfileImage extends StatelessWidget {
@@ -61,14 +61,20 @@ class ProfileImage extends StatelessWidget {
     }
 
     if (imageUri.isScheme('file')) {
-      return Image.file(
-        File.fromUri(imageUri),
-        width: size,
-        height: size,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => placeholder,
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          return frame == null ? loading ?? placeholder : ClipOval(child: child);
+      return Consumer(
+        builder: (context, ref, child) {
+          final FileSystem fileSystem = ref.read(fileSystemProvider);
+
+          return Image.file(
+            fileSystem.fileFromUri(imageUri),
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => placeholder,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              return frame == null ? loading ?? placeholder : ClipOval(child: child);
+            },
+          );
         },
       );
     }

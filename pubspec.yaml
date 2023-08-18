@@ -20,9 +20,7 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  # TODO: switch to regular version once the namespace fix is published
-  app_settings:
-    git: https://github.com/spencerccf/app_settings.git
+  app_settings: ^5.0.0
 
   # Collection utilities.
   collection: ^1.17.0
@@ -48,7 +46,7 @@ dependencies:
   flutter_riverpod: ^2.3.6
 
   # For picking images from the camera / gallery.
-  image_picker: ^0.8.7+4
+  image_picker: ^1.0.2
 
   # The intl package provides translation utilities.
   intl: any

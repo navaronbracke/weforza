@@ -1,6 +1,7 @@
+import 'dart:io' show Platform;
+
 import 'package:file/file.dart' as fs;
 import 'package:flutter/widgets.dart';
-import 'package:os_detect/os_detect.dart' as platform;
 import 'package:path/path.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
@@ -79,7 +80,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
 
       // On iOS, the exported files are saved to the application documents directory.
       // Check if the file does not exist yet, and write to the file.
-      if (platform.isIOS) {
+      if (Platform.isIOS) {
         final fs.Directory directory = fileSystem.documentsDirectory;
 
         final fs.File file = fileSystem.file(join(directory.path, fileName));
@@ -95,7 +96,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
         return;
       }
 
-      if (platform.isAndroid) {
+      if (Platform.isAndroid) {
         final fs.File file;
 
         if (fileSystem.hasScopedStorage) {

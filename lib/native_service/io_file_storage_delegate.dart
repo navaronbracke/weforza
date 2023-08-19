@@ -1,8 +1,8 @@
+import 'dart:io' show Platform;
 import 'dart:typed_data';
 
 import 'package:file/file.dart' as fs;
 import 'package:mime/mime.dart';
-import 'package:os_detect/os_detect.dart' as platform;
 import 'package:path/path.dart';
 import 'package:weforza/native_service/file_storage_delegate.dart';
 
@@ -11,7 +11,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
 
   @override
   Future<bool> hasScopedStorage() async {
-    if (platform.isAndroid) {
+    if (Platform.isAndroid) {
       return await methodChannel.invokeMethod<bool>('hasScopedStorage') ?? false;
     }
 
@@ -50,7 +50,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
 
   @override
   Future<bool> requestWriteExternalStoragePermission() async {
-    if (!platform.isAndroid) {
+    if (!Platform.isAndroid) {
       throw UnsupportedError('External storage is only supported on Android.');
     }
 
@@ -87,7 +87,7 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
 
   @override
   Future<Uint8List> getBytesFromContentUri(Uri uri) async {
-    if (!platform.isAndroid) {
+    if (!Platform.isAndroid) {
       throw UnsupportedError('Loading a "content://" Uri is only supported on Android.');
     }
 

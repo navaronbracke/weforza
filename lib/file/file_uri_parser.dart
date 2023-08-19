@@ -1,5 +1,6 @@
+import 'dart:io' show Platform;
+
 import 'package:file/file.dart' as fs;
-import 'package:os_detect/os_detect.dart' as platform;
 import 'package:weforza/file/file_system.dart';
 
 /// This class parses a path to a file into a valid [Uri].
@@ -28,7 +29,7 @@ final class FileUriParser {
     }
 
     // Only Android supports `content://` Uris.
-    if (platform.isAndroid && uri.isScheme('content')) {
+    if (Platform.isAndroid && uri.isScheme('content')) {
       return uri;
     }
 

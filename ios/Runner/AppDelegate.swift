@@ -7,19 +7,15 @@ import Flutter
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let controller = window?.rootViewController as? FlutterViewController
-        
-        self.setUpMethodChannels(controller)
+        if let controller = window?.rootViewController as? FlutterViewController {
+            self.setUpMethodChannels(controller: controller)
+        }
         
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
     private func setUpMethodChannels(controller: FlutterViewController) {
-        if (controller == nil) {
-            return
-        }
-        
         let bluetoothAdapterDelegate = BluetoothAdapterDelegate()
         let mediaDelegate = MediaDelegate()
         

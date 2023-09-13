@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'be.weforza.app'
+    namespace "be.weforza.app"
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
@@ -61,9 +61,6 @@ android {
             // We use our own proguard file that keeps Flutter sources intact.
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    lint {
-        disable 'InvalidPackage'
     }
 }
 

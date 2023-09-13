@@ -58,7 +58,6 @@ android {
 
             minifyEnabled true
             shrinkResources true
-            // We use our own proguard file that keeps Flutter sources intact.
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

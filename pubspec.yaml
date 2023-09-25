@@ -22,7 +22,7 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  app_settings: ^5.0.0
+  app_settings: ^5.1.1
 
   # Collection utilities.
   collection: ^1.17.0
@@ -72,7 +72,7 @@ dependencies:
   sembast: ^3.4.4
 
   # UUID generator for globally unique ids.
-  uuid: ^3.0.7
+  uuid: ^4.0.0
 
 dev_dependencies:
   file_testing: 3.0.0

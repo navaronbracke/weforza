@@ -1,5 +1,5 @@
 PODS:
-  - app_settings (4.3.0):
+  - app_settings (5.1.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
@@ -83,7 +83,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
 
 SPEC CHECKSUMS:
-  app_settings: ee4ae4d1c9a907a23b81c40e5c56a5ca8a20a62b
+  app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
@@ -97,4 +97,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9d8d1770d47a428fcb57a5d5f228a34e6d072ae7
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

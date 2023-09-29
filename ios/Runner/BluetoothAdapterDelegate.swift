@@ -42,34 +42,16 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Check whether Bluetooth permission is granted or denied.
     private func checkBluetoothPermissionStatus(bluetoothManager: CBCentralManager) -> Bool? {
-        if #available(iOS 13.1, *) {
-            switch(CBCentralManager.authorization) {
-            case .notDetermined:
-                return nil
-            case .restricted:
-                return false
-            case .denied:
-                return false
-            case .allowedAlways:
-                return true
-            }
-        } else if #available(iOS 13.0, *) {
-            switch(bluetoothManager.authorization) {
-            case .notDetermined:
-                return nil
-            case .restricted:
-                return false
-            case .denied:
-                return false
-            case .allowedAlways:
-                return true
-            }
-        } else {
-            // Below iOS 13.0, Bluetooh permissions do not exist.
+        switch(CBCentralManager.authorization) {
+        case .notDetermined:
+            return nil
+        case .restricted:
+            return false
+        case .denied:
+            return false
+        case .allowedAlways:
             return true
         }
-    }
-    
     /// Handle changes in the state of the ``CBCentralManager``.
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // Check if the permission result was pending and resolve it now.
@@ -205,17 +187,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     }
     
     /// Start a new Bluetooth scan.
-    ///
-    /// This method assumes that permission was granted before,
-    /// since checking the authorization status might show a permission dialog.
     func startBluetoothScan(result: @escaping FlutterResult) {
-        guard let bluetoothManager = _bluetoothManager else {
-            result(FlutterError(
-                code: BLUETOOTH_UNAVAILABLE_ERROR_CODE,
-                message: BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE,
-                details: nil))
-            return
-        }
+        guard let bluetoothManager = _bluetoothManager
         
         if(!bluetoothManager.isScanning) {
             bluetoothManager.scanForPeripherals(withServices: [], options: [:])
@@ -225,18 +198,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     }
     
     /// Stop a running Bluetooth scan.
-    ///
-    /// This method assumes that permission was granted before,
-    /// since checking the authorization status might show a permission dialog.
     func stopBluetoothScan(result: @escaping FlutterResult) {
-        guard let bluetoothManager = _bluetoothManager else {
-            result(FlutterError(
-                code: BLUETOOTH_UNAVAILABLE_ERROR_CODE,
-                message: BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE,
-                details: nil))
-            return
-        }
-        
+        guard let bluetoothManager = _bluetoothManager  
         if(bluetoothManager.isScanning) {
             bluetoothManager.stopScan()
         }

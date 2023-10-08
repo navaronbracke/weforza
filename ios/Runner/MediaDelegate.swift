@@ -42,6 +42,8 @@ class MediaDelegate : NSObject {
             result(true)
         case .denied, .restricted:
             result(false)
+        @unknown default:
+            result(false)
         }
     }
     

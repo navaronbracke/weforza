@@ -114,6 +114,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
             case .poweredOn:
                 self._pendingBluetoothIsOnOrOffResult?(true)
                 self._pendingBluetoothIsOnOrOffResult = nil
+            @unknown default:
+                break
             }
         }
     }
@@ -170,6 +172,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
             result(false)
         case .poweredOn:
             result(true)
+        @unknown default:
+            break
         }
     }
     
@@ -264,6 +268,8 @@ extension CBManagerState {
             return "off"
         case .poweredOn:
             return "on"
+        @unknown default:
+            return "unknown"
         }
     }
 }

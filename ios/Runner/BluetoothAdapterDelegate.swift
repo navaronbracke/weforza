@@ -52,6 +52,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
                 return false
             case .allowedAlways:
                 return true
+            @unknown default:
+                return false
             }
         } else if #available(iOS 13.0, *) {
             switch(bluetoothManager.authorization) {
@@ -63,6 +65,8 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
                 return false
             case .allowedAlways:
                 return true
+            @unknown default:
+                return false
             }
         } else {
             // Below iOS 13.0, Bluetooh permissions do not exist.

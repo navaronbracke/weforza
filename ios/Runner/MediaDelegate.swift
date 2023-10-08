@@ -64,8 +64,12 @@ class MediaDelegate : NSObject {
                         result(false)
                     case .notDetermined:
                         result(nil)
+                    @unknown default:
+                        result(false)
                     }
                 }
+            @unknown default:
+                result(false)
             }
         } else {
             result(true)

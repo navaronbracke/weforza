@@ -224,7 +224,10 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
       ),
       excludedTermsListFooter: const Padding(
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+        // Both the CupertinoFormSection and CupertinoListSection (which is used by the latter)
+        // add 20 default horizontal padding to the fotter, so account for 40 total in the footer,
+        // since it is not inserted using a `CupertinoFormSection.insetGrouped`.
+        padding: EdgeInsetsDirectional.fromSTEB(40.0, 10.0, 40.0, 0.0),
         child: ExcludedTermsListFooter(),
       ),
       riderListFilter: CupertinoFormSection.insetGrouped(

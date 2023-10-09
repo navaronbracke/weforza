@@ -20,8 +20,6 @@ final class FileUriParser {
       return null;
     }
 
-    // In case the path is an absolute file path, the Uri might have a scheme.
-    // Regardless, aboslute paths are valid Uris.
     final Uri? uri = Uri.tryParse(path);
 
     if (uri == null) {

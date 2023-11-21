@@ -32,5 +32,7 @@ abstract class BluetoothDeviceScanner {
   Future<void> stopScan();
 
   /// Dispose of this scanner.
-  void dispose();
+  ///
+  /// After this scanner was disposed, it cannot be used anymore.
+  Future<void> dispose();
 }

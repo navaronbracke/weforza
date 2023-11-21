@@ -86,6 +86,9 @@ class RideAttendeeScanningDelegate {
   /// When this flag is true, the selection should not be modified.
   bool _selectionLocked = false;
 
+  /// The subscription for the scan results.
+  StreamSubscription<Object?>? _scanSubscription;
+
   /// The subscription that listens to the start of the Bluetooth scan.
   StreamSubscription<bool>? _startScanningSubscription;
 
@@ -421,7 +424,7 @@ class RideAttendeeScanningDelegate {
 
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
-      scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
+      _scanSubscription = scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
         _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
         // Don't stop scanning even if an event was an error.
         cancelOnError: false,
@@ -521,11 +524,15 @@ class RideAttendeeScanningDelegate {
   }
 
   /// Dispose of this delegate.
-  void dispose() {
+  ///
+  /// The [scanner] is not disposed of, as it outlives this delegate.
+  Future<void> dispose() async {
     _stateMachine.dispose();
-    _rideAttendeeController.close();
-    _startScanningSubscription?.cancel();
-    _startScanningSubscription = null;
     _scanProgressBarController.dispose();
+    await _rideAttendeeController.close();
+    await _startScanningSubscription?.cancel();
+    _startScanningSubscription = null;
+    await _scanSubscription?.cancel();
+    _scanSubscription = null;
   }
 }

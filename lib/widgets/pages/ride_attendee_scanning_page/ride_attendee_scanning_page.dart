@@ -134,8 +134,8 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   }
 
   @override
-  void dispose() {
-    delegate.dispose();
+  Future<void> dispose() async {
+    await delegate.dispose();
     super.dispose();
   }
 }

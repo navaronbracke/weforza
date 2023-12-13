@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
@@ -12,6 +11,7 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/native_service/bluetooth_adapter.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
@@ -25,16 +25,8 @@ class RideAttendeeScanningDelegate {
     required this.onDeviceFound,
     required this.ride,
     required this.rideRepository,
-    required this.scanner,
     required this.settings,
-    required TickerProvider vsync,
-  }) : _scanProgressBarController = AnimationController(
-          duration: Duration(seconds: settings.scanDuration),
-          vsync: vsync,
-          value: 1.0,
-        ) {
-    _startScanningSubscription = scanner.isScanningStream.listen(_listenToScanStart);
-  }
+  }) : scanner = BluetoothAdapter();
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -78,16 +70,13 @@ class RideAttendeeScanningDelegate {
   /// The set of scanned Bluetooth peripherals.
   final Set<BluetoothPeripheral> _scannedDevices = {};
 
-  /// The controller for the scanning progress bar.
-  final AnimationController _scanProgressBarController;
-
   /// This flag is a mutex that locks the ride attendee selection
   /// when the selection is being saved.
   /// When this flag is true, the selection should not be modified.
   bool _selectionLocked = false;
 
-  /// The subscription that listens to the start of the Bluetooth scan.
-  StreamSubscription<bool>? _startScanningSubscription;
+  /// The subscription for the scan results.
+  StreamSubscription<Object?>? _scanSubscription;
 
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
@@ -117,8 +106,8 @@ class RideAttendeeScanningDelegate {
   /// Returns whether there are active riders.
   bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
-  /// Get the controller for the scan progress bar.
-  AnimationController get progressBarController => _scanProgressBarController;
+  /// Whether this delegate has been disposed.
+  bool get isDisposed => _stateMachine.isClosed;
 
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stream => _stateMachine.stateStream;
@@ -194,19 +183,6 @@ class RideAttendeeScanningDelegate {
     return !_rideAttendeeController.value.contains(
       ScannedRideAttendee(uuid: owners.first, isScanned: false),
     );
-  }
-
-  /// Listen to the start signal of the Bluetooth scan
-  /// and start decreasing the progress in the progress bar.
-  void _listenToScanStart(bool isScanning) {
-    if (_stateMachine.isClosed || !isScanning) {
-      return;
-    }
-
-    // Start decreasing the progress when the scan starts.
-    if (_scanProgressBarController.status == AnimationStatus.completed) {
-      _scanProgressBarController.reverse();
-    }
   }
 
   /// Load the active riders and their devices.
@@ -421,7 +397,7 @@ class RideAttendeeScanningDelegate {
 
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
-      scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
+      _scanSubscription = scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
         _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
         // Don't stop scanning even if an event was an error.
         cancelOnError: false,
@@ -447,7 +423,12 @@ class RideAttendeeScanningDelegate {
     _stateMachine.setState(RideAttendeeScanningState.stoppingScan);
 
     try {
+      // Stop the scan first.
       await scanner.stopScan();
+
+      // Then cancel the subscription to clean up the event stream.
+      await _scanSubscription?.cancel();
+      _scanSubscription = null;
 
       return true;
     } catch (error) {
@@ -521,11 +502,15 @@ class RideAttendeeScanningDelegate {
   }
 
   /// Dispose of this delegate.
-  void dispose() {
-    _stateMachine.dispose();
-    _rideAttendeeController.close();
-    _startScanningSubscription?.cancel();
-    _startScanningSubscription = null;
-    _scanProgressBarController.dispose();
+  Future<void> dispose() async {
+    if (_stateMachine.isClosed) {
+      return;
+    }
+
+    await _stateMachine.dispose();
+    await scanner.dispose();
+    await _rideAttendeeController.close();
+    await _scanSubscription?.cancel();
+    _scanSubscription = null;
   }
 }

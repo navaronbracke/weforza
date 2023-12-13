@@ -93,9 +93,9 @@ class MockBluetoothScanner implements BluetoothDeviceScanner {
   }
 
   @override
-  void dispose() {
-    _stopScanPill.close();
-    _scanningController.close();
-    _stateController.close();
+  Future<void> dispose() async {
+    await _stopScanPill.close();
+    await _scanningController.close();
+    await _stateController.close();
   }
 }

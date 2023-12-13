@@ -82,7 +82,7 @@ class RideAttendeeScanningDelegateStateMachine {
   void setStopScanError() => _setError(StopScanException());
 
   /// Dispose of this state machine.
-  void dispose() {
-    _controller.close();
+  Future<void> dispose() async {
+    await _controller.close();
   }
 }

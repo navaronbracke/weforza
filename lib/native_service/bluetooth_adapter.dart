@@ -109,20 +109,22 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
     _isScanningController.add(false);
   }
 
+  /// Dispose of this Bluetooth adapter.
+  ///
+  /// If a scan is currently running, it is stopped.
   @override
-  void dispose() {
+  Future<void> dispose() async {
     if (_isScanningController.isClosed) {
       return;
     }
 
-    // Try to stop any running scan. If the scan could not be stopped,
-    // there is no proper way to handle the error at this point.
+    // Try to stop any running scan.
     if (isScanning) {
-      unawaited(stopScan().catchError((_) {}));
+      await stopScan();
     }
 
-    _isScanningController.close();
-    _stopScanSignalEmitter.close();
+    await _isScanningController.close();
+    await _stopScanSignalEmitter.close();
     super.dispose();
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
-import 'package:weforza/riverpod/bluetooth_provider.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
@@ -40,7 +39,6 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       riderRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
-      scanner: ref.read(bluetoothProvider),
       settings: ref.read(settingsProvider),
       vsync: this,
       // The delegate will have added the device to the scan results,

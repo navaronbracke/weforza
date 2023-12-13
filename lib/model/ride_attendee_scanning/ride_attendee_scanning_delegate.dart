@@ -12,6 +12,7 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/native_service/bluetooth_adapter.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
@@ -25,10 +26,10 @@ class RideAttendeeScanningDelegate {
     required this.onDeviceFound,
     required this.ride,
     required this.rideRepository,
-    required this.scanner,
     required this.settings,
     required TickerProvider vsync,
-  }) : _scanProgressBarController = AnimationController(
+  })  : scanner = BluetoothAdapter(),
+        _scanProgressBarController = AnimationController(
           duration: Duration(seconds: settings.scanDuration),
           vsync: vsync,
           value: 1.0,
@@ -524,10 +525,13 @@ class RideAttendeeScanningDelegate {
   }
 
   /// Dispose of this delegate.
-  ///
-  /// The [scanner] is not disposed of, as it outlives this delegate.
   Future<void> dispose() async {
-    _stateMachine.dispose();
+    if (_stateMachine.isClosed) {
+      return;
+    }
+
+    await _stateMachine.dispose();
+    await scanner.dispose();
     _scanProgressBarController.dispose();
     await _rideAttendeeController.close();
     await _startScanningSubscription?.cancel();

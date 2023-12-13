@@ -106,8 +106,8 @@ class RideAttendeeScanningDelegate {
   /// Returns whether there are active riders.
   bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
-  /// Get the controller for the scan progress bar.
-  AnimationController get progressBarController => _scanProgressBarController;
+  /// Whether this delegate has been disposed.
+  bool get isDisposed => _stateMachine.isClosed;
 
   /// Get the stream of state changes for the scan process.
   Stream<RideAttendeeScanningState> get stream => _stateMachine.stateStream;

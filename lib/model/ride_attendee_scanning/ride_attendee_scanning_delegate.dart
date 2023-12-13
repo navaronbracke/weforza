@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
@@ -27,15 +26,7 @@ class RideAttendeeScanningDelegate {
     required this.ride,
     required this.rideRepository,
     required this.settings,
-    required TickerProvider vsync,
-  })  : scanner = BluetoothAdapter(),
-        _scanProgressBarController = AnimationController(
-          duration: Duration(seconds: settings.scanDuration),
-          vsync: vsync,
-          value: 1.0,
-        ) {
-    _startScanningSubscription = scanner.isScanningStream.listen(_listenToScanStart);
-  }
+  }) : scanner = BluetoothAdapter();
 
   /// The repository that loads all the devices.
   final DeviceRepository deviceRepository;
@@ -79,9 +70,6 @@ class RideAttendeeScanningDelegate {
   /// The set of scanned Bluetooth peripherals.
   final Set<BluetoothPeripheral> _scannedDevices = {};
 
-  /// The controller for the scanning progress bar.
-  final AnimationController _scanProgressBarController;
-
   /// This flag is a mutex that locks the ride attendee selection
   /// when the selection is being saved.
   /// When this flag is true, the selection should not be modified.
@@ -89,9 +77,6 @@ class RideAttendeeScanningDelegate {
 
   /// The subscription for the scan results.
   StreamSubscription<Object?>? _scanSubscription;
-
-  /// The subscription that listens to the start of the Bluetooth scan.
-  StreamSubscription<bool>? _startScanningSubscription;
 
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
@@ -198,19 +183,6 @@ class RideAttendeeScanningDelegate {
     return !_rideAttendeeController.value.contains(
       ScannedRideAttendee(uuid: owners.first, isScanned: false),
     );
-  }
-
-  /// Listen to the start signal of the Bluetooth scan
-  /// and start decreasing the progress in the progress bar.
-  void _listenToScanStart(bool isScanning) {
-    if (_stateMachine.isClosed || !isScanning) {
-      return;
-    }
-
-    // Start decreasing the progress when the scan starts.
-    if (_scanProgressBarController.status == AnimationStatus.completed) {
-      _scanProgressBarController.reverse();
-    }
   }
 
   /// Load the active riders and their devices.
@@ -532,10 +504,7 @@ class RideAttendeeScanningDelegate {
 
     await _stateMachine.dispose();
     await scanner.dispose();
-    _scanProgressBarController.dispose();
     await _rideAttendeeController.close();
-    await _startScanningSubscription?.cancel();
-    _startScanningSubscription = null;
     await _scanSubscription?.cancel();
     _scanSubscription = null;
   }

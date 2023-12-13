@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,21 +32,50 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   final GlobalKey<AnimatedListState> _scanResultsKey = GlobalKey();
 
+  late final AnimationController _scanProgressBarController;
+
+  /// The subscription that listens to the start of the Bluetooth scan.
+  StreamSubscription<bool>? _startScanningSubscription;
+
+  /// Listen to the start signal of the Bluetooth scan
+  /// and start decreasing the progress in the progress bar.
+  void _listenToScanStart(bool isScanning) {
+    if (delegate.isDisposed || !isScanning) {
+      return;
+    }
+
+    // Start decreasing the progress when the scan starts.
+    if (_scanProgressBarController.status == AnimationStatus.completed) {
+      _scanProgressBarController.reverse();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    final settings = ref.read(settingsProvider);
+
+    _scanProgressBarController = AnimationController(
+      duration: Duration(seconds: settings.scanDuration),
+      vsync: this,
+      value: 1.0,
+    );
 
     delegate = RideAttendeeScanningDelegate(
       deviceRepository: ref.read(deviceRepositoryProvider),
       riderRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
-      settings: ref.read(settingsProvider),
-      vsync: this,
+      settings: settings,
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to insert it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
+
+    // Listen to the start signal of the Bluetooth scan,
+    // so that the progress bar decrease in progress.
+    _startScanningSubscription = delegate.scanner.isScanningStream.listen(_listenToScanStart);
 
     delegate.startDeviceScan();
   }
@@ -88,7 +119,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
             return ScanResultsList(
               delegate: delegate,
               progressBar: ScanProgressIndicator(
-                animationController: delegate.progressBarController,
+                animationController: _scanProgressBarController,
                 isScanning: delegate.scanner.isScanning,
                 isScanningStream: delegate.scanner.isScanningStream,
               ),
@@ -141,7 +172,12 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   @override
   Future<void> dispose() async {
-    await delegate.dispose();
+    // Dispose the animation controller, and the widget first.
+    // Only then dispose the delegate.
+    _scanProgressBarController.dispose();
     super.dispose();
+
+    await _startScanningSubscription?.cancel();
+    await delegate.dispose();
   }
 }

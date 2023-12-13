@@ -423,7 +423,12 @@ class RideAttendeeScanningDelegate {
     _stateMachine.setState(RideAttendeeScanningState.stoppingScan);
 
     try {
+      // Stop the scan first.
       await scanner.stopScan();
+
+      // Then cancel the subscription to clean up the event stream.
+      await _scanSubscription?.cancel();
+      _scanSubscription = null;
 
       return true;
     } catch (error) {

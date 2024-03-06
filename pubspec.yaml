@@ -57,7 +57,7 @@ dependencies:
   mime: ^1.0.5
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^4.0.0
+  package_info_plus: ^5.0.1
 
   # Path utilities for URI's and the like.
   path: ^1.8.1
@@ -69,10 +69,10 @@ dependencies:
   rxdart: ^0.27.7
 
   # The following dependency provides local persistence.
-  sembast: ^3.4.4
+  sembast: ^3.6.0
 
   # UUID generator for globally unique ids.
-  uuid: ^4.0.0
+  uuid: ^4.3.3
 
 dev_dependencies:
   file_testing: 3.0.0

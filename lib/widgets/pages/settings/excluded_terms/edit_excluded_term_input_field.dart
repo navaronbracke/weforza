@@ -123,7 +123,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       }
     }
 
-    if (!mounted) {
+    if (!context.mounted) {
       return;
     }
 

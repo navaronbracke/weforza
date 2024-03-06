@@ -33,7 +33,7 @@ dependencies:
 
   # Provides an injectable file system abstraction.
   # Used by tests.
-  file: ^6.1.4
+  file: ^7.0.0
 
   # This package provides platform independent file picking.
   file_picker: ^5.3.0
@@ -48,13 +48,13 @@ dependencies:
   flutter_riverpod: ^2.3.6
 
   # For picking images from the camera / gallery.
-  image_picker: ^1.0.2
+  image_picker: ^1.0.7
 
   # The intl package provides translation utilities.
   intl: any
 
   # This package provies MIME-type lookup utilities.
-  mime: ^1.0.4
+  mime: ^1.0.5
 
   # package_info_plus provides access to app specific information such as build number & version.
   package_info_plus: ^4.0.0
@@ -63,7 +63,7 @@ dependencies:
   path: ^1.8.1
 
   # For OS-specific directory paths.
-  path_provider: ^2.0.13
+  path_provider: ^2.1.2
 
   # RxDart provides extensions to Dart Streams.
   rxdart: ^0.27.7

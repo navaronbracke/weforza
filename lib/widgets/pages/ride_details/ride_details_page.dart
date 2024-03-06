@@ -188,7 +188,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
       },
     );
 
-    if (!mounted || option == null) {
+    if (!context.mounted || option == null) {
       return;
     }
 

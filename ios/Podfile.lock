@@ -86,15 +86,15 @@ SPEC CHECKSUMS:
   app_settings: 017320c6a680cdc94c799949d95b84cb69389ebc
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
+  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   SDWebImage: c0de394d7cf7f9838aed1fd6bb6037654a4572e4
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
 
 PODFILE CHECKSUM: 9d8d1770d47a428fcb57a5d5f228a34e6d072ae7
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2

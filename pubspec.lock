@@ -312,13 +312,13 @@ packages:
     source: hosted
     version: "3.0.1"
   image_picker_ios:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker_ios
-      sha256: c5538cacefacac733c724be7484377923b476216ad1ead35a0d2eadcdc0fc497
+      sha256: f74064bc548b5164a033ec05638e23c91be1a249c255e0f56319dddffd759794
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.8+2"
+    version: "0.8.10+1"
   image_picker_linux:
     dependency: transitive
     description:

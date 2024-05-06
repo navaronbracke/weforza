@@ -49,6 +49,7 @@ dependencies:
 
   # For picking images from the camera / gallery.
   image_picker: ^1.1.1
+  image_picker_ios: ^0.8.9+1 # TODO: remove dependency when bumping image_picker
 
   # The intl package provides translation utilities.
   intl: any

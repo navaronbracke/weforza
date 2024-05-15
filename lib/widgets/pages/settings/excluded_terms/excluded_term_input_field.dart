@@ -85,9 +85,9 @@ class ExcludedTermInputField extends StatelessWidget {
               final ColorScheme colorScheme = Theme.of(context).colorScheme;
               Color color = const Color(0xFFD5D5D5);
 
-              if (states.contains(MaterialState.error)) {
+              if (states.contains(WidgetState.error)) {
                 color = colorScheme.error;
-              } else if (states.contains(MaterialState.focused)) {
+              } else if (states.contains(WidgetState.focused)) {
                 color = colorScheme.primary;
               }
 

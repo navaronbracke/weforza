@@ -34,12 +34,12 @@ abstract class AppTheme {
       navigationBarTheme: NavigationBarThemeData(
         indicatorColor: navigationBarIndicatorColor,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        iconTheme: MaterialStateProperty.resolveWith<IconThemeData>((states) {
+        iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((states) {
           switch (brightness) {
             case Brightness.dark:
               return IconThemeData(
                 size: 24,
-                color: states.contains(MaterialState.selected) ? colorScheme.primary : colorScheme.onSurface,
+                color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurface,
               );
             case Brightness.light:
               return IconThemeData(size: 24, color: colorScheme.onSurface);
@@ -60,15 +60,15 @@ abstract class AppTheme {
       ],
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) {
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
               return colorScheme.primary;
             }
 
             return null;
           }),
-          foregroundColor: MaterialStateProperty.resolveWith((states) {
-            if (states.contains(MaterialState.selected)) {
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
               return colorScheme.onPrimary;
             }
 
@@ -195,10 +195,10 @@ class RideCalendarTheme {
               theme.brightness,
               dark: RideCalendarTheme.filled(
                 backgroundColor: colorScheme.onSurfaceVariant,
-                labelColor: colorScheme.surfaceVariant,
+                labelColor: colorScheme.surfaceContainerHighest,
               ),
               light: RideCalendarTheme.filled(
-                backgroundColor: colorScheme.surfaceVariant,
+                backgroundColor: colorScheme.surfaceContainerHighest,
                 labelColor: colorScheme.onSurfaceVariant,
               ),
             );
@@ -207,11 +207,11 @@ class RideCalendarTheme {
               theme.brightness,
               dark: RideCalendarTheme.filled(
                 backgroundColor: colorScheme.onSurface.withOpacity(0.36),
-                labelColor: colorScheme.onBackground,
+                labelColor: colorScheme.onSurface,
               ),
               light: RideCalendarTheme.filled(
                 backgroundColor: colorScheme.onSurfaceVariant,
-                labelColor: colorScheme.surfaceVariant,
+                labelColor: colorScheme.surfaceContainerHighest,
               ),
             );
         }

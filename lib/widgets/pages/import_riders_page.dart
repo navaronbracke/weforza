@@ -142,8 +142,6 @@ class _ImportRidersButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: (context) {
-        final theme = Theme.of(context);
-
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -161,7 +159,7 @@ class _ImportRidersButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   errorMessage ?? '',
-                  style: theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.error),
+                  style: TextTheme.of(context).labelMedium!.copyWith(color: ColorScheme.of(context).error),
                 ),
               ),
             ),

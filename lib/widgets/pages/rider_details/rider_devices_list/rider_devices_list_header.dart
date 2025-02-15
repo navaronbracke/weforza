@@ -12,11 +12,9 @@ class RiderDevicesListHeader extends StatelessWidget {
 
     return PlatformAwareWidget(
       android: (context) {
-        final textTheme = Theme.of(context).textTheme;
-
         return Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(title, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          child: Text(title, style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         );
       },
       ios: (context) {

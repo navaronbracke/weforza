@@ -15,7 +15,7 @@ class ExcludedTermsListEmpty extends StatelessWidget {
       android: (context) {
         return Padding(
           padding: const EdgeInsets.all(4),
-          child: Text(text, style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+          child: Text(text, style: TextTheme.of(context).bodySmall, textAlign: TextAlign.center),
         );
       },
       ios: (context) {

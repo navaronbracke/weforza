@@ -16,7 +16,7 @@ class ExcludedTermsListHeader extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Text(title, style: Theme.of(context).textTheme.titleMedium);
+        return Text(title, style: TextTheme.of(context).titleMedium);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Text(

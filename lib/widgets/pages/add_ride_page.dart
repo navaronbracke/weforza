@@ -26,9 +26,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
   @override
   void initState() {
     super.initState();
-    _delegate = AddRidePageDelegate(
-      repository: ref.read(rideRepositoryProvider),
-    );
+    _delegate = AddRidePageDelegate(repository: ref.read(rideRepositoryProvider));
   }
 
   Widget _buildBody() {
@@ -41,9 +39,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
             case ConnectionState.done:
               if (snapshot.hasError) {
                 return Center(
-                  child: GenericErrorWithBackButton(
-                    message: S.of(context).addRideCalendarGenericErrorMessage,
-                  ),
+                  child: GenericErrorWithBackButton(message: S.of(context).addRideCalendarGenericErrorMessage),
                 );
               }
 
@@ -51,10 +47,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AddRideCalendar(delegate: _delegate),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: AddRideCalendarColorLegend(),
-                  ),
+                  const Padding(padding: EdgeInsets.only(top: 4), child: AddRideCalendarColorLegend()),
                   _AddRideSubmitButton(
                     initialSelection: _delegate.currentSelection,
                     initialState: _delegate.currentState,
@@ -104,34 +97,35 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (_) => Scaffold(
-        appBar: AppBar(
-          title: Text(S.of(context).newRide),
-          actions: [
-            _buildClearSelectionButton(
-              button: IconButton(
-                icon: const Icon(Icons.delete_sweep),
+      android: (_) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(S.of(context).newRide),
+            actions: [
+              _buildClearSelectionButton(
+                button: IconButton(icon: const Icon(Icons.delete_sweep), onPressed: _delegate.clearSelection),
+              ),
+            ],
+          ),
+          body: _buildBody(),
+        );
+      },
+      ios: (_) {
+        return CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            middle: Text(S.of(context).newRide),
+            transitionBetweenRoutes: false,
+            trailing: _buildClearSelectionButton(
+              button: CupertinoIconButton(
+                color: CupertinoColors.systemRed,
+                icon: CupertinoIcons.xmark_rectangle_fill,
                 onPressed: _delegate.clearSelection,
               ),
             ),
-          ],
-        ),
-        body: _buildBody(),
-      ),
-      ios: (_) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).newRide),
-          transitionBetweenRoutes: false,
-          trailing: _buildClearSelectionButton(
-            button: CupertinoIconButton(
-              color: CupertinoColors.systemRed,
-              icon: CupertinoIcons.xmark_rectangle_fill,
-              onPressed: _delegate.clearSelection,
-            ),
           ),
-        ),
-        child: SafeArea(child: _buildBody()),
-      ),
+          child: SafeArea(child: _buildBody()),
+        );
+      },
     );
   }
 
@@ -178,37 +172,32 @@ class _AddRideSubmitButton extends StatelessWidget {
           final translator = S.of(context);
 
           return PlatformAwareWidget(
-            android: (_) => ElevatedButton(
-              onPressed: hasSelection ? onPressed : null,
-              child: Text(translator.addSelection),
-            ),
-            ios: (_) => CupertinoButton.filled(
-              onPressed: hasSelection ? onPressed : null,
-              child: Text(
-                translator.addSelection,
-                style: TextStyle(color: hasSelection ? CupertinoColors.white : CupertinoColors.inactiveGray),
-              ),
-            ),
+            android: (_) {
+              return ElevatedButton(onPressed: hasSelection ? onPressed : null, child: Text(translator.addSelection));
+            },
+            ios: (_) {
+              return CupertinoButton.filled(
+                onPressed: hasSelection ? onPressed : null,
+                child: Text(
+                  translator.addSelection,
+                  style: TextStyle(color: hasSelection ? CupertinoColors.white : CupertinoColors.inactiveGray),
+                ),
+              );
+            },
           );
         },
       );
     } else {
       button = PlatformAwareWidget(
         android: (_) => const CircularProgressIndicator(),
-        ios: (_) => const SizedBox(
-          height: 48,
-          child: Center(child: CupertinoActivityIndicator()),
-        ),
+        ios: (_) => const SizedBox(height: 48, child: Center(child: CupertinoActivityIndicator())),
       );
     }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 4),
-          child: GenericErrorLabel(message: errorMessage),
-        ),
+        Padding(padding: const EdgeInsets.only(top: 12, bottom: 4), child: GenericErrorLabel(message: errorMessage)),
         button,
       ],
     );
@@ -229,10 +218,7 @@ class _AddRideSubmitButton extends StatelessWidget {
         return future.when(
           // The submit button does not have a done state.
           data: (_) => _buildButton(showButton: false),
-          error: (error, stackTrace) => _buildButton(
-            showButton: true,
-            errorMessage: S.of(context).genericError,
-          ),
+          error: (error, stackTrace) => _buildButton(showButton: true, errorMessage: S.of(context).genericError),
           loading: () => _buildButton(showButton: false),
         );
       },

@@ -28,19 +28,10 @@ class FormSubmitButton<T> extends StatelessWidget {
   /// The onTap handler for the button.
   final void Function() onPressed;
 
-  Widget _wrapWithErrorMessage({
-    required Widget child,
-    required Widget errorMessage,
-  }) {
+  Widget _wrapWithErrorMessage({required Widget child, required Widget errorMessage}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: errorMessage,
-        ),
-        child,
-      ],
+      children: [Padding(padding: const EdgeInsets.only(bottom: 4), child: errorMessage), child],
     );
   }
 
@@ -59,19 +50,15 @@ class FormSubmitButton<T> extends StatelessWidget {
         final value = snapshot.data;
 
         if (value == null) {
-          return _wrapWithErrorMessage(
-            child: button,
-            errorMessage: errorBuilder(context, null),
-          );
+          return _wrapWithErrorMessage(child: button, errorMessage: errorBuilder(context, null));
         }
 
         return value.when(
           // The submit button does not have a done state.
           data: (value) => loadingIndicator,
-          error: (error, stackTrace) => _wrapWithErrorMessage(
-            child: button,
-            errorMessage: errorBuilder(context, error),
-          ),
+          error: (error, stackTrace) {
+            return _wrapWithErrorMessage(child: button, errorMessage: errorBuilder(context, error));
+          },
           loading: () => loadingIndicator,
         );
       },
@@ -85,17 +72,10 @@ class FixedHeightSubmitButton extends StatelessWidget {
   /// Construct a [FixedHeightSubmitButton] in the idle state.
   ///
   /// If [onPressed] is null, the button will be disabled.
-  const FixedHeightSubmitButton({
-    required this.label,
-    super.key,
-    this.onPressed,
-  }) : loading = false;
+  const FixedHeightSubmitButton({required this.label, super.key, this.onPressed}) : loading = false;
 
   /// Construct a [FixedHeightSubmitButton] in the loading state.
-  const FixedHeightSubmitButton.loading({super.key})
-      : label = '',
-        loading = true,
-        onPressed = null;
+  const FixedHeightSubmitButton.loading({super.key}) : label = '', loading = true, onPressed = null;
 
   /// The label for the submit button.
   final String label;
@@ -122,12 +102,12 @@ class FixedHeightSubmitButton extends StatelessWidget {
       case TargetPlatform.macOS:
         return loading
             ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: SizedBox(
-                  height: kMinInteractiveDimensionCupertino,
-                  child: Center(child: CupertinoActivityIndicator()),
-                ),
-              )
+              padding: EdgeInsets.symmetric(vertical: 4),
+              child: SizedBox(
+                height: kMinInteractiveDimensionCupertino,
+                child: Center(child: CupertinoActivityIndicator()),
+              ),
+            )
             : CupertinoButton(onPressed: onPressed, child: Text(label));
     }
   }

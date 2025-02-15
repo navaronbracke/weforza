@@ -12,13 +12,11 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the text field for the file name input on the export data page.
 class ExportDataFileNameTextField<T> extends StatelessWidget {
-  ExportDataFileNameTextField({
-    required this.delegate,
-    super.key,
-  }) : inputFormatters = [
-          FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
-          LengthLimitingTextInputFormatter(maxLength),
-        ];
+  ExportDataFileNameTextField({required this.delegate, super.key})
+    : inputFormatters = [
+        FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
+        LengthLimitingTextInputFormatter(maxLength),
+      ];
 
   /// The maximum length for the file name input field.
   static const int maxLength = 80;
@@ -45,10 +43,7 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
     final String fileExtension = fileFormat.formatExtension;
 
     if (!fileName.endsWith(fileExtension)) {
-      return translator.fileNameInvalidExtension(
-        fileExtension,
-        fileFormat.asUpperCase,
-      );
+      return translator.fileNameInvalidExtension(fileExtension, fileFormat.asUpperCase);
     }
 
     if (Platform.isAndroid) {
@@ -86,34 +81,38 @@ class ExportDataFileNameTextField<T> extends StatelessWidget {
     final translator = S.of(context);
 
     return PlatformAwareWidget(
-      android: (_) => TextFormField(
-        autocorrect: false,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        controller: delegate.fileNameController,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-          labelText: translator.fileName,
-          errorMaxLines: 3,
-        ),
-        inputFormatters: inputFormatters,
-        key: delegate.fileNameKey,
-        keyboardType: TextInputType.text,
-        maxLength: maxLength,
-        textInputAction: TextInputAction.done,
-        validator: (fileName) => _validateFileName(fileName, translator),
-      ),
-      ios: (_) => CupertinoTextFormFieldRow(
-        autocorrect: false,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        controller: delegate.fileNameController,
-        inputFormatters: inputFormatters,
-        key: delegate.fileNameKey,
-        keyboardType: TextInputType.text,
-        maxLength: maxLength,
-        placeholder: translator.fileName,
-        textInputAction: TextInputAction.done,
-        validator: (fileName) => _validateFileName(fileName, translator),
-      ),
+      android: (_) {
+        return TextFormField(
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: delegate.fileNameController,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+            labelText: translator.fileName,
+            errorMaxLines: 3,
+          ),
+          inputFormatters: inputFormatters,
+          key: delegate.fileNameKey,
+          keyboardType: TextInputType.text,
+          maxLength: maxLength,
+          textInputAction: TextInputAction.done,
+          validator: (fileName) => _validateFileName(fileName, translator),
+        );
+      },
+      ios: (_) {
+        return CupertinoTextFormFieldRow(
+          autocorrect: false,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: delegate.fileNameController,
+          inputFormatters: inputFormatters,
+          key: delegate.fileNameKey,
+          keyboardType: TextInputType.text,
+          maxLength: maxLength,
+          placeholder: translator.fileName,
+          textInputAction: TextInputAction.done,
+          validator: (fileName) => _validateFileName(fileName, translator),
+        );
+      },
     );
   }
 }

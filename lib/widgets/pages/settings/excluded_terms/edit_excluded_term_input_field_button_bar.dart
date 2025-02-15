@@ -46,16 +46,20 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       animation: controller,
       // The delete button is always shown.
       child: PlatformAwareWidget(
-        android: (context) => IconButton(
-          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
-          onPressed: () => onDeletePressed(context),
-          padding: EdgeInsets.zero,
-        ),
-        ios: (context) => CupertinoIconButton(
-          color: CupertinoColors.systemRed,
-          icon: CupertinoIcons.delete,
-          onPressed: () => onDeletePressed(context),
-        ),
+        android: (context) {
+          return IconButton(
+            icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+            onPressed: () => onDeletePressed(context),
+            padding: EdgeInsets.zero,
+          );
+        },
+        ios: (context) {
+          return CupertinoIconButton(
+            color: CupertinoColors.systemRed,
+            icon: CupertinoIcons.delete,
+            onPressed: () => onDeletePressed(context),
+          );
+        },
       ),
       builder: (context, child) {
         final currentValue = controller.value.text;
@@ -63,15 +67,19 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         final isValid = validator(context, currentValue) == null;
 
         final confirmButton = PlatformAwareWidget(
-          android: (context) => IconButton(
-            color: Theme.of(context).colorScheme.primary,
-            icon: const Icon(Icons.check),
-            onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
-          ),
-          ios: (context) => CupertinoIconButton(
-            icon: CupertinoIcons.checkmark_alt,
-            onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
-          ),
+          android: (context) {
+            return IconButton(
+              color: Theme.of(context).colorScheme.primary,
+              icon: const Icon(Icons.check),
+              onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
+            );
+          },
+          ios: (context) {
+            return CupertinoIconButton(
+              icon: CupertinoIcons.checkmark_alt,
+              onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
+            );
+          },
         );
 
         // The undo button is disabled if the value is the same.
@@ -94,24 +102,25 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
               onPressed: currentValue == term ? null : onUndoPressed,
             );
           },
-          ios: (context) => CupertinoIconButton(
-            color: const CupertinoDynamicColor.withBrightness(
+          ios: (context) {
+            final color = const CupertinoDynamicColor.withBrightness(
               color: CupertinoColors.black,
               darkColor: CupertinoColors.white,
-            ).resolveFrom(context),
-            icon: CupertinoIcons.arrow_counterclockwise,
-            onPressed: currentValue == term ? null : onUndoPressed,
-          ),
+            ).resolveFrom(context);
+
+            return CupertinoIconButton(
+              color: color,
+              icon: CupertinoIcons.arrow_counterclockwise,
+              onPressed: currentValue == term ? null : onUndoPressed,
+            );
+          },
         );
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             undoButton,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: confirmButton,
-            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: confirmButton),
             child!,
           ],
         );

@@ -6,11 +6,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_stat
 /// This widget represents the stepper at the top of the scanning page.
 class RideAttendeeScanningStepper extends StatelessWidget {
   /// The default constructor.
-  const RideAttendeeScanningStepper({
-    required this.initialData,
-    required this.stream,
-    super.key,
-  });
+  const RideAttendeeScanningStepper({required this.initialData, required this.stream, super.key});
 
   /// The initial value for the stepper.
   final RideAttendeeScanningState initialData;

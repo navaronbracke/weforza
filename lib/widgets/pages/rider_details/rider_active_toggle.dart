@@ -9,6 +9,12 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 class RiderActiveToggle extends StatelessWidget {
   const RiderActiveToggle({super.key});
 
+  void _onToggleChanged(WidgetRef ref, bool value) {
+    final notifier = ref.read(selectedRiderProvider.notifier);
+
+    notifier.setRiderActive(value: value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -18,27 +24,11 @@ class RiderActiveToggle extends StatelessWidget {
           padding: const EdgeInsets.only(left: 4),
           child: Consumer(
             builder: (_, ref, child) {
-              final isActive = ref.watch(
-                selectedRiderProvider.select((r) => r!.active),
-              );
+              final isActive = ref.watch(selectedRiderProvider.select((r) => r!.active));
 
               return PlatformAwareWidget(
-                android: (_) => Switch(
-                  value: isActive,
-                  onChanged: (value) {
-                    final notifier = ref.read(selectedRiderProvider.notifier);
-
-                    notifier.setRiderActive(value: value);
-                  },
-                ),
-                ios: (_) => CupertinoSwitch(
-                  value: isActive,
-                  onChanged: (value) {
-                    final notifier = ref.read(selectedRiderProvider.notifier);
-
-                    notifier.setRiderActive(value: value);
-                  },
-                ),
+                android: (_) => Switch(value: isActive, onChanged: (value) => _onToggleChanged(ref, value)),
+                ios: (_) => CupertinoSwitch(value: isActive, onChanged: (value) => _onToggleChanged(ref, value)),
               );
             },
           ),

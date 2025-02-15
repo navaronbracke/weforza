@@ -149,37 +149,37 @@ class ExportDataPage<T> extends StatelessWidget {
     final translator = S.of(context);
     final label = translator.export;
     final genericErrorIndicator = Center(
-      child: GenericErrorWithBackButton(
-        message: translator.exportGenericErrorMessage,
-      ),
+      child: GenericErrorWithBackButton(message: translator.exportGenericErrorMessage),
     );
-    const permissionDeniedErrorIndicator = Center(
-      child: ExportDataStoragePermissionDeniedError(),
-    );
+    const permissionDeniedErrorIndicator = Center(child: ExportDataStoragePermissionDeniedError());
 
     return PlatformAwareWidget(
-      android: (context) => Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(title: Text(title)),
-        body: _buildBody(
-          builder: (context, {bool isExporting = false}) => _buildAndroidForm(
-            context,
-            child: Center(
-              child: isExporting
-                  ? const FixedHeightSubmitButton.loading()
-                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
-            ),
+      android: (context) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(title: Text(title)),
+          body: _buildBody(
+            builder: (context, {bool isExporting = false}) {
+              final Widget child = Center(
+                child:
+                    isExporting
+                        ? const FixedHeightSubmitButton.loading()
+                        : FixedHeightSubmitButton(
+                          label: label,
+                          onPressed: () => delegate.exportDataToFile(context, options),
+                        ),
+              );
+
+              return _buildAndroidForm(context, child: child);
+            },
+            doneIndicator: doneIndicator,
+            genericErrorIndicator: genericErrorIndicator,
+            permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
           ),
-          doneIndicator: doneIndicator,
-          genericErrorIndicator: genericErrorIndicator,
-          permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
-        ),
-      ),
-      ios: (context) {
-        final backgroundColor = CupertinoDynamicColor.resolve(
-          CupertinoColors.systemGroupedBackground,
-          context,
         );
+      },
+      ios: (context) {
+        final backgroundColor = CupertinoDynamicColor.resolve(CupertinoColors.systemGroupedBackground, context);
 
         return CupertinoPageScaffold(
           backgroundColor: backgroundColor,
@@ -190,12 +190,17 @@ class ExportDataPage<T> extends StatelessWidget {
             transitionBetweenRoutes: false,
           ),
           child: _buildBody(
-            builder: (context, {bool isExporting = false}) => _buildIosForm(
-              context,
-              child: isExporting
-                  ? const FixedHeightSubmitButton.loading()
-                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options)),
-            ),
+            builder: (context, {bool isExporting = false}) {
+              final Widget child =
+                  isExporting
+                      ? const FixedHeightSubmitButton.loading()
+                      : FixedHeightSubmitButton(
+                        label: label,
+                        onPressed: () => delegate.exportDataToFile(context, options),
+                      );
+
+              return _buildIosForm(context, child: child);
+            },
             doneIndicator: doneIndicator,
             genericErrorIndicator: genericErrorIndicator,
             permissionDeniedErrorIndicator: permissionDeniedErrorIndicator,
@@ -207,10 +212,7 @@ class ExportDataPage<T> extends StatelessWidget {
 }
 
 class _ExportPageDoneIndicator extends StatelessWidget {
-  const _ExportPageDoneIndicator({
-    required this.checkmarkAnimationController,
-    required this.hasAndroidScopedStorage,
-  });
+  const _ExportPageDoneIndicator({required this.checkmarkAnimationController, required this.hasAndroidScopedStorage});
 
   final AnimationController checkmarkAnimationController;
 
@@ -230,17 +232,10 @@ class _ExportPageDoneIndicator extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          Expanded(
-            child: AnimatedCircleCheckmark(controller: checkmarkAnimationController),
-          ),
+          Expanded(child: AnimatedCircleCheckmark(controller: checkmarkAnimationController)),
           Padding(
             padding: const EdgeInsets.all(32),
-            child: Text(
-              message,
-              style: const TextStyle(fontSize: 18),
-              maxLines: 2,
-              textAlign: TextAlign.center,
-            ),
+            child: Text(message, style: const TextStyle(fontSize: 18), maxLines: 2, textAlign: TextAlign.center),
           ),
         ],
       ),

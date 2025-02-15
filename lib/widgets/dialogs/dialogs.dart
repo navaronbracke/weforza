@@ -25,13 +25,9 @@ class WeforzaAlertDialog extends StatelessWidget {
   }) {
     return WeforzaAlertDialog._(
       cancelButtonBuilder: _buildDefaultCancelButton,
-      confirmButtonBuilder: (context, platform) => _buildDefaultConfirmButton(
-        context,
-        isDestructive,
-        confirmButtonLabel,
-        onConfirmPressed,
-        platform,
-      ),
+      confirmButtonBuilder: (context, platform) {
+        return _buildDefaultConfirmButton(context, isDestructive, confirmButtonLabel, onConfirmPressed, platform);
+      },
       description: description,
       title: title,
     );
@@ -69,10 +65,7 @@ class WeforzaAlertDialog extends StatelessWidget {
   ///
   /// Returns a button with the default `Cancel` label
   /// that closes the dialog when pressed.
-  static Widget _buildDefaultCancelButton(
-    BuildContext context,
-    TargetPlatform platform,
-  ) {
+  static Widget _buildDefaultCancelButton(BuildContext context, TargetPlatform platform) {
     final label = S.of(context).cancel;
 
     switch (platform) {
@@ -80,10 +73,7 @@ class WeforzaAlertDialog extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(label),
-        );
+        return TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label));
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return CupertinoDialogAction(
@@ -115,11 +105,7 @@ class WeforzaAlertDialog extends StatelessWidget {
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return CupertinoDialogAction(
-          isDestructiveAction: isDestructive,
-          onPressed: onPressed,
-          child: Text(label),
-        );
+        return CupertinoDialogAction(isDestructiveAction: isDestructive, onPressed: onPressed, child: Text(label));
     }
   }
 
@@ -129,10 +115,7 @@ class WeforzaAlertDialog extends StatelessWidget {
     final Widget confirmButton = confirmButtonBuilder(context, platform);
     final Widget? cancelButton = cancelButtonBuilder?.call(context, platform);
 
-    final actions = <Widget>[
-      if (cancelButton != null) cancelButton,
-      confirmButton,
-    ];
+    final actions = <Widget>[if (cancelButton != null) cancelButton, confirmButton];
 
     switch (platform) {
       case TargetPlatform.android:
@@ -147,11 +130,7 @@ class WeforzaAlertDialog extends StatelessWidget {
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return CupertinoAlertDialog(
-          actions: actions,
-          content: description,
-          title: Text(title, softWrap: true),
-        );
+        return CupertinoAlertDialog(actions: actions, content: description, title: Text(title, softWrap: true));
     }
   }
 }
@@ -201,10 +180,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
   /// The title for the dialog.
   final String title;
 
-  Widget _buildDismissErrorAction(
-    BuildContext context,
-    TargetPlatform platform,
-  ) {
+  Widget _buildDismissErrorAction(BuildContext context, TargetPlatform platform) {
     final label = S.of(context).ok;
 
     switch (platform) {
@@ -212,10 +188,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(label),
-        );
+        return TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label));
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return CupertinoDialogAction(
@@ -234,16 +207,11 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
       case TargetPlatform.windows:
         return const Padding(
           padding: EdgeInsets.only(bottom: 4),
-          child: SizedBox.square(
-            dimension: 24,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
+          child: SizedBox.square(dimension: 24, child: CircularProgressIndicator(strokeWidth: 2)),
         );
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return const CupertinoDialogAction(
-          child: CupertinoActivityIndicator(),
-        );
+        return const CupertinoDialogAction(child: CupertinoActivityIndicator());
     }
   }
 

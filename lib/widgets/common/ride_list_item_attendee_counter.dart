@@ -8,12 +8,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the attendee counter for a ride list item.
 class RideListItemAttendeeCounter extends ConsumerStatefulWidget {
-  const RideListItemAttendeeCounter({
-    required this.rideDate,
-    super.key,
-    this.counterStyle,
-    this.iconSize = 24,
-  });
+  const RideListItemAttendeeCounter({required this.rideDate, super.key, this.counterStyle, this.iconSize = 24});
 
   /// The style for the counter.
   final TextStyle? counterStyle;
@@ -74,16 +69,10 @@ class RideListItemAttendeeCounterState extends ConsumerState<RideListItemAttende
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: PlatformAwareWidget(
-                  android: (_) => Icon(
-                    Icons.people,
-                    size: widget.iconSize,
-                    color: widget.counterStyle?.color,
-                  ),
-                  ios: (_) => Icon(
-                    CupertinoIcons.person_2_fill,
-                    size: widget.iconSize,
-                    color: widget.counterStyle?.color,
-                  ),
+                  android: (_) => Icon(Icons.people, size: widget.iconSize, color: widget.counterStyle?.color),
+                  ios: (_) {
+                    return Icon(CupertinoIcons.person_2_fill, size: widget.iconSize, color: widget.counterStyle?.color);
+                  },
                 ),
               ),
             ],
@@ -94,12 +83,12 @@ class RideListItemAttendeeCounterState extends ConsumerState<RideListItemAttende
           dimension: widget.iconSize,
           child: Center(
             child: PlatformAwareWidget(
-              android: (_) => SizedBox.square(
-                dimension: widget.iconSize * .8,
-                child: const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-              ),
+              android: (_) {
+                return SizedBox.square(
+                  dimension: widget.iconSize * .8,
+                  child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                );
+              },
               ios: (_) => const CupertinoActivityIndicator(radius: 8),
             ),
           ),

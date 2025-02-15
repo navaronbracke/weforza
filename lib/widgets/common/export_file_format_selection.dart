@@ -35,14 +35,8 @@ class ExportFileFormatSelection extends StatelessWidget {
             return SegmentedButton<ExportFileFormat>(
               showSelectedIcon: false,
               segments: <ButtonSegment<ExportFileFormat>>[
-                ButtonSegment(
-                  label: Text(ExportFileFormat.csv.asUpperCase),
-                  value: ExportFileFormat.csv,
-                ),
-                ButtonSegment(
-                  label: Text(ExportFileFormat.json.asUpperCase),
-                  value: ExportFileFormat.json,
-                ),
+                ButtonSegment(label: Text(ExportFileFormat.csv.asUpperCase), value: ExportFileFormat.csv),
+                ButtonSegment(label: Text(ExportFileFormat.json.asUpperCase), value: ExportFileFormat.json),
               ],
               selected: <ExportFileFormat>{currentValue},
               onSelectionChanged: (selectedSegments) {
@@ -54,14 +48,16 @@ class ExportFileFormatSelection extends StatelessWidget {
               },
             );
           },
-          ios: (_) => CupertinoSlidingSegmentedControl<ExportFileFormat>(
-            groupValue: currentValue,
-            onValueChanged: onFormatSelected,
-            children: {
-              ExportFileFormat.csv: Text(ExportFileFormat.csv.asUpperCase),
-              ExportFileFormat.json: Text(ExportFileFormat.json.asUpperCase),
-            },
-          ),
+          ios: (_) {
+            return CupertinoSlidingSegmentedControl<ExportFileFormat>(
+              groupValue: currentValue,
+              onValueChanged: onFormatSelected,
+              children: {
+                ExportFileFormat.csv: Text(ExportFileFormat.csv.asUpperCase),
+                ExportFileFormat.json: Text(ExportFileFormat.json.asUpperCase),
+              },
+            );
+          },
         );
       },
     );

@@ -57,11 +57,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
   final int total;
 
-  Widget _buildAndroidLayout(
-    BuildContext context, {
-    required int total,
-    int? scannedAttendees,
-  }) {
+  Widget _buildAndroidLayout(BuildContext context, {required int total, int? scannedAttendees}) {
     final translator = S.of(context);
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -78,10 +74,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.people, color: colorScheme.primary),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: Text('$total'),
-                ),
+                Padding(padding: const EdgeInsets.only(left: 4), child: Text('$total')),
               ],
             ),
           ),
@@ -92,10 +85,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('${scannedAttendees ?? '-'}'),
-                Icon(
-                  Icons.bluetooth_searching,
-                  color: colorScheme.primary,
-                ),
+                Icon(Icons.bluetooth_searching, color: colorScheme.primary),
               ],
             ),
           ),
@@ -104,33 +94,17 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
     );
   }
 
-  Widget _buildIosLayout(
-    BuildContext context, {
-    required int total,
-    int? scannedAttendees,
-  }) {
+  Widget _buildIosLayout(BuildContext context, {required int total, int? scannedAttendees}) {
     return CupertinoBottomBar.constrained(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
-            const Icon(
-              CupertinoIcons.person_2_fill,
-              color: CupertinoColors.activeBlue,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: Text('$total'),
-            ),
+            const Icon(CupertinoIcons.person_2_fill, color: CupertinoColors.activeBlue),
+            Padding(padding: const EdgeInsets.only(left: 4), child: Text('$total')),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Text('${scannedAttendees ?? '-'}'),
-            ),
-            const Icon(
-              Icons.bluetooth_searching,
-              color: CupertinoColors.activeBlue,
-            ),
+            Padding(padding: const EdgeInsets.only(right: 4), child: Text('${scannedAttendees ?? '-'}')),
+            const Icon(Icons.bluetooth_searching, color: CupertinoColors.activeBlue),
           ],
         ),
       ),
@@ -139,21 +113,11 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scannedAttendees = ref.watch(
-      selectedRideProvider.select((value) => value?.scannedAttendees),
-    );
+    final scannedAttendees = ref.watch(selectedRideProvider.select((value) => value?.scannedAttendees));
 
     return PlatformAwareWidget(
-      android: (context) => _buildAndroidLayout(
-        context,
-        scannedAttendees: scannedAttendees,
-        total: total,
-      ),
-      ios: (context) => _buildIosLayout(
-        context,
-        scannedAttendees: scannedAttendees,
-        total: total,
-      ),
+      android: (context) => _buildAndroidLayout(context, scannedAttendees: scannedAttendees, total: total),
+      ios: (context) => _buildIosLayout(context, scannedAttendees: scannedAttendees, total: total),
     );
   }
 }

@@ -25,21 +25,15 @@ class _ResetRideCalendarDialogState extends ConsumerState<ResetRideCalendarDialo
 
     return WeforzaAsyncActionDialog(
       confirmButtonLabel: translator.reset,
-      description: Text(
-        translator.resetRideCalendarDescription,
-        softWrap: true,
-      ),
+      description: Text(translator.resetRideCalendarDescription, softWrap: true),
       isDestructive: true,
-      errorDescription: Text(
-        translator.resetRideCalendarErrorDescription,
-        softWrap: true,
-      ),
+      errorDescription: Text(translator.resetRideCalendarErrorDescription, softWrap: true),
       future: future,
       onConfirmPressed: () {
         final repository = ref.read(rideRepositoryProvider);
 
         future = repository.deleteRideCalendar().then((_) {
-          if (!mounted) {
+          if (!context.mounted) {
             return;
           }
 
@@ -54,10 +48,7 @@ class _ResetRideCalendarDialogState extends ConsumerState<ResetRideCalendarDialo
 
         setState(() {});
       },
-      pendingDescription: Text(
-        translator.resetRideCalendarPendingDescription,
-        softWrap: true,
-      ),
+      pendingDescription: Text(translator.resetRideCalendarPendingDescription, softWrap: true),
       title: translator.resetRideCalendar,
     );
   }

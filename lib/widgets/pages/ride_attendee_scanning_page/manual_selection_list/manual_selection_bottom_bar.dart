@@ -28,9 +28,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
   final Widget showScannedResultsToggle;
 
   Widget _buildAndroidLayout(BuildContext context, BoxConstraints constraints) {
-    final attendeeCounter = _buildAttendeeCounter(
-      Icon(Icons.people, color: Theme.of(context).colorScheme.primary),
-    );
+    final attendeeCounter = _buildAttendeeCounter(Icon(Icons.people, color: Theme.of(context).colorScheme.primary));
 
     final scannedResultsToggle = Row(
       mainAxisSize: MainAxisSize.min,
@@ -47,13 +45,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
     );
 
     Widget child = BottomAppBar(
-      child: Row(
-        children: [
-          attendeeCounter,
-          Expanded(child: Center(child: saveButton)),
-          scannedResultsToggle,
-        ],
-      ),
+      child: Row(children: [attendeeCounter, Expanded(child: Center(child: saveButton)), scannedResultsToggle]),
     );
 
     if (constraints.biggest.width < 400) {
@@ -64,10 +56,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             saveButton,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [attendeeCounter, scannedResultsToggle],
-            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
           ],
         ),
       );
@@ -80,10 +69,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: icon,
-        ),
+        Padding(padding: const EdgeInsets.only(right: 4), child: icon),
         StreamBuilder<int>(
           initialData: delegate.attendeeCount,
           stream: delegate.attendeeCountStream,
@@ -115,10 +101,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
     );
 
     final attendeeCounter = _buildAttendeeCounter(
-      const Icon(
-        CupertinoIcons.person_2_fill,
-        color: CupertinoColors.activeBlue,
-      ),
+      const Icon(CupertinoIcons.person_2_fill, color: CupertinoColors.activeBlue),
       textStyle: labelTextStyle,
     );
 
@@ -137,42 +120,32 @@ class ManualSelectionBottomBar extends StatelessWidget {
       ],
     );
 
-    Widget child = Row(
-      children: [
-        attendeeCounter,
-        Expanded(child: Center(child: saveButton)),
-        scannedResultsToggle,
-      ],
-    );
+    Widget child = Row(children: [attendeeCounter, Expanded(child: Center(child: saveButton)), scannedResultsToggle]);
 
     if (constraints.biggest.width < 400) {
       child = Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           saveButton,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [attendeeCounter, scannedResultsToggle],
-          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
         ],
       );
     }
 
     return CupertinoBottomBar(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), child: child),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (_, constraints) => PlatformAwareWidget(
-        android: (ctx) => _buildAndroidLayout(ctx, constraints),
-        ios: (ctx) => _buildIosLayout(ctx, constraints),
-      ),
+      builder: (_, constraints) {
+        return PlatformAwareWidget(
+          android: (ctx) => _buildAndroidLayout(ctx, constraints),
+          ios: (ctx) => _buildIosLayout(ctx, constraints),
+        );
+      },
     );
   }
 }

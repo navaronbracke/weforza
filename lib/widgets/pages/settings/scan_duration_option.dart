@@ -10,10 +10,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// and a centered label under the slider
 /// to indicate the current value in seconds.
 class ScanDurationOption extends StatelessWidget {
-  const ScanDurationOption({
-    required this.delegate,
-    super.key,
-  });
+  const ScanDurationOption({required this.delegate, super.key});
 
   /// The delegate that handles changes to the value.
   final ScanDurationDelegate delegate;
@@ -37,65 +34,62 @@ class ScanDurationOption extends StatelessWidget {
     final translator = S.of(context);
 
     return PlatformAwareWidget(
-      android: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Text(
-              translator.scanDuration,
-              style: Theme.of(context).textTheme.titleMedium,
+      android: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(translator.scanDuration, style: Theme.of(context).textTheme.titleMedium),
+            ),
+            StreamBuilder<double>(
+              initialData: delegate.currentValue,
+              stream: delegate.stream,
+              builder: (context, snapshot) {
+                return Slider(
+                  value: snapshot.data!,
+                  onChanged: delegate.onValueChanged,
+                  min: minScanDuration,
+                  max: maxScanDuration,
+                  divisions: 5,
+                );
+              },
+            ),
+            Center(child: _buildCurrentDurationLabel()),
+          ],
+        );
+      },
+      ios: (_) {
+        return CupertinoFormRow(
+          helper: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Row(
+              children: [
+                Expanded(child: Padding(padding: const EdgeInsets.only(left: 6), child: Text(translator.scanDuration))),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 6), child: _buildCurrentDurationLabel()),
+              ],
             ),
           ),
-          StreamBuilder<double>(
+          padding: const EdgeInsets.all(6),
+          child: StreamBuilder<double>(
             initialData: delegate.currentValue,
             stream: delegate.stream,
-            builder: (context, snapshot) => Slider(
-              value: snapshot.data!,
-              onChanged: delegate.onValueChanged,
-              min: minScanDuration,
-              max: maxScanDuration,
-              divisions: 5,
-            ),
-          ),
-          Center(child: _buildCurrentDurationLabel()),
-        ],
-      ),
-      ios: (_) => CupertinoFormRow(
-        helper: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 6),
-                  child: Text(translator.scanDuration),
+            builder: (context, snapshot) {
+              return SizedBox(
+                width: double.infinity,
+                child: CupertinoSlider(
+                  value: snapshot.data!,
+                  onChanged: delegate.onValueChanged,
+                  min: minScanDuration,
+                  max: maxScanDuration,
+                  divisions: 5,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: _buildCurrentDurationLabel(),
-              ),
-            ],
+              );
+            },
           ),
-        ),
-        padding: const EdgeInsets.all(6),
-        child: StreamBuilder<double>(
-          initialData: delegate.currentValue,
-          stream: delegate.stream,
-          builder: (context, snapshot) => SizedBox(
-            width: double.infinity,
-            child: CupertinoSlider(
-              value: snapshot.data!,
-              onChanged: delegate.onValueChanged,
-              min: minScanDuration,
-              max: maxScanDuration,
-              divisions: 5,
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

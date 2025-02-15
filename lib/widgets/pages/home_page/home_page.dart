@@ -42,11 +42,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPage(BuildContext context) {
-    const List<Widget> pages = [
-      RideList(),
-      RiderList(),
-      SettingsPage(),
-    ];
+    const List<Widget> pages = [RideList(), RiderList(), SettingsPage()];
 
     return pages[_selectedTab.tabIndex];
   }
@@ -62,18 +58,9 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: _selectedTab.tabIndex,
         onDestinationSelected: (index) => _onNavigationDestinationSelected(context, index),
         destinations: <NavigationDestination>[
-          NavigationDestination(
-            icon: const Icon(Icons.directions_bike),
-            label: translator.rides,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.people),
-            label: translator.riders,
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings),
-            label: translator.settings,
-          ),
+          NavigationDestination(icon: const Icon(Icons.directions_bike), label: translator.rides),
+          NavigationDestination(icon: const Icon(Icons.people), label: translator.riders),
+          NavigationDestination(icon: const Icon(Icons.settings), label: translator.settings),
         ],
       ),
     );
@@ -108,18 +95,9 @@ class _HomePageState extends State<HomePage> {
             currentIndex: _selectedTab.tabIndex,
             onTap: (index) => _onNavigationDestinationSelected(context, index),
             items: [
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.directions_bike),
-                label: translator.rides,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.person_2_fill),
-                label: translator.riders,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(CupertinoIcons.settings),
-                label: translator.settings,
-              ),
+              BottomNavigationBarItem(icon: const Icon(Icons.directions_bike), label: translator.rides),
+              BottomNavigationBarItem(icon: const Icon(CupertinoIcons.person_2_fill), label: translator.riders),
+              BottomNavigationBarItem(icon: const Icon(CupertinoIcons.settings), label: translator.settings),
             ],
           ),
         ],
@@ -129,9 +107,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidWidget,
-      ios: _buildIosWidget,
-    );
+    return PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget);
   }
 }

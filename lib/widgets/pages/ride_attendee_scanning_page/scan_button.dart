@@ -6,11 +6,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a button for the ride attendee scanning page.
 class ScanButton extends StatelessWidget {
-  const ScanButton({
-    required this.onPressed,
-    required this.text,
-    super.key,
-  });
+  const ScanButton({required this.onPressed, required this.text, super.key});
 
   final void Function() onPressed;
 
@@ -20,20 +16,21 @@ class ScanButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: PlatformAwareWidget(
-        android: (_) => Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 32),
-          child: ElevatedButton(
-            onPressed: onPressed,
-            child: Text(text),
-          ),
-        ),
-        ios: (_) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: CupertinoButton.filled(
-            onPressed: onPressed,
-            child: Text(text, style: const TextStyle(color: CupertinoColors.white)),
-          ),
-        ),
+        android: (_) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 32),
+            child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+          );
+        },
+        ios: (_) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: CupertinoButton.filled(
+              onPressed: onPressed,
+              child: Text(text, style: const TextStyle(color: CupertinoColors.white)),
+            ),
+          );
+        },
       ),
     );
   }
@@ -41,10 +38,7 @@ class ScanButton extends StatelessWidget {
 
 /// This widget represents a button that stops a scan.
 class StopScanButton extends StatelessWidget {
-  const StopScanButton({
-    required this.delegate,
-    super.key,
-  });
+  const StopScanButton({required this.delegate, super.key});
 
   /// The delegate that manages the running scan.
   final RideAttendeeScanningDelegate delegate;

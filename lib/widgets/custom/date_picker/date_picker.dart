@@ -12,11 +12,7 @@ import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 /// The `isCurrentMonth` flag indicates if the `date`
 /// is in the currently selected month.
 /// The `size` is the computed layout [Size] for the day item.
-typedef DatePickerDayBuilder = Widget Function(
-  DateTime date,
-  Size size, {
-  bool isCurrentMonth,
-});
+typedef DatePickerDayBuilder = Widget Function(DateTime date, Size size, {bool isCurrentMonth});
 
 /// This typedef defines the signature
 /// for the [DatePicker]'s forward and back button builder.
@@ -24,11 +20,8 @@ typedef DatePickerDayBuilder = Widget Function(
 /// The `onPressed` callback is the handler for the button's onPressed function.
 /// The `buttonSize` is the size for the button.
 /// The `axis` will be either [AxisDirection.left] or [AxisDirection.right].
-typedef DatePickerHeaderButtonBuilder = Widget Function(
-  void Function() onPressed,
-  double buttonSize,
-  AxisDirection axis,
-);
+typedef DatePickerHeaderButtonBuilder =
+    Widget Function(void Function() onPressed, double buttonSize, AxisDirection axis);
 
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
@@ -163,12 +156,7 @@ class DatePicker extends StatelessWidget {
         final minSize = constraintWidth < minInteractiveDimension * 7 ? maxSize : minInteractiveDimension;
 
         final Size dayItemSize = computeDaySize(
-          BoxConstraints(
-            maxHeight: maxSize,
-            maxWidth: maxSize,
-            minHeight: minSize,
-            minWidth: minSize,
-          ),
+          BoxConstraints(maxHeight: maxSize, maxWidth: maxSize, minHeight: minSize, minWidth: minSize),
         );
 
         // Center the header within the weeks of the calendar.
@@ -177,11 +165,7 @@ class DatePicker extends StatelessWidget {
           child: SizedBox(
             width: dayItemSize.width * 7,
             child: _DatePickerHeader(
-              backButton: headerButtonBuilder(
-                delegate.goBackOneMonth,
-                minInteractiveDimension,
-                AxisDirection.left,
-              ),
+              backButton: headerButtonBuilder(delegate.goBackOneMonth, minInteractiveDimension, AxisDirection.left),
               forwardButton: headerButtonBuilder(
                 delegate.goForwardOneMonth,
                 minInteractiveDimension,
@@ -195,10 +179,7 @@ class DatePicker extends StatelessWidget {
         );
 
         if (headerBottomPadding > 0) {
-          header = Padding(
-            padding: EdgeInsets.only(bottom: headerBottomPadding),
-            child: header,
-          );
+          header = Padding(padding: EdgeInsets.only(bottom: headerBottomPadding), child: header);
         }
 
         Widget calendar = Column(
@@ -218,10 +199,7 @@ class DatePicker extends StatelessWidget {
         );
 
         if (padding != EdgeInsets.zero) {
-          calendar = Padding(
-            padding: padding,
-            child: calendar,
-          );
+          calendar = Padding(padding: padding, child: calendar);
         }
 
         return ConstrainedBox(
@@ -272,12 +250,7 @@ class _DatePickerBody extends StatelessWidget {
 
       children.add(
         ExcludeSemantics(
-          child: SizedBox(
-            width: dayItemSize.width,
-            child: Center(
-              child: Text(weekday, style: weekDayStyle),
-            ),
-          ),
+          child: SizedBox(width: dayItemSize.width, child: Center(child: Text(weekday, style: weekDayStyle))),
         ),
       );
 
@@ -286,10 +259,7 @@ class _DatePickerBody extends StatelessWidget {
       }
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: children);
   }
 
   @override
@@ -314,9 +284,10 @@ class _DatePickerBody extends StatelessWidget {
 
                 return _DatePickerMonth(
                   key: ValueKey<DateTime>(currentMonth),
-                  days: days.map((day) {
-                    return dayBuilder(day, dayItemSize, isCurrentMonth: day.month == currentMonth.month);
-                  }).toList(),
+                  days: [
+                    for (final DateTime day in days)
+                      dayBuilder(day, dayItemSize, isCurrentMonth: day.month == currentMonth.month),
+                  ],
                   weekSpacing: weekSpacing,
                 );
               },
@@ -367,10 +338,7 @@ class _DatePickerHeader extends StatelessWidget {
             backButton,
             Expanded(
               child: Center(
-                child: Text(
-                  month == null ? '' : DateFormat.MMMM(languageCode).add_y().format(month),
-                  style: style,
-                ),
+                child: Text(month == null ? '' : DateFormat.MMMM(languageCode).add_y().format(month), style: style),
               ),
             ),
             forwardButton,
@@ -383,11 +351,7 @@ class _DatePickerHeader extends StatelessWidget {
 
 /// This widget represents the days of a single month in a [DatePicker].
 class _DatePickerMonth extends StatelessWidget {
-  const _DatePickerMonth({
-    required super.key,
-    required this.days,
-    required this.weekSpacing,
-  });
+  const _DatePickerMonth({required super.key, required this.days, required this.weekSpacing});
 
   /// The days for this month.
   final List<Widget> days;
@@ -411,17 +375,11 @@ class _DatePickerMonth extends StatelessWidget {
         children.add(days.removeAt(0));
       }
 
-      Widget week = Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children,
-      );
+      Widget week = Row(mainAxisAlignment: MainAxisAlignment.center, children: children);
 
       // Only the last week does not get bottom spacing.
       if (weekSpacing > 0 && weekCounter < 6) {
-        week = Padding(
-          padding: EdgeInsets.only(bottom: weekSpacing),
-          child: week,
-        );
+        week = Padding(padding: EdgeInsets.only(bottom: weekSpacing), child: week);
       }
 
       weeks.add(week);
@@ -433,9 +391,6 @@ class _DatePickerMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: _buildCalendarRows(),
-    );
+    return Column(mainAxisSize: MainAxisSize.min, children: _buildCalendarRows());
   }
 }

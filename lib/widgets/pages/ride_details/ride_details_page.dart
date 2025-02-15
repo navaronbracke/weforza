@@ -25,7 +25,11 @@ class RideDetailsPage extends ConsumerStatefulWidget {
 class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
   void _goToScanningPage(BuildContext context) async {
     final updatedRide = await Navigator.of(context).push<Ride>(
-      MaterialPageRoute(builder: (_) => const RideAttendeeScanningPage()),
+      MaterialPageRoute(
+        builder: (_) {
+          return const RideAttendeeScanningPage();
+        },
+      ),
     );
 
     if (mounted && updatedRide != null) {
@@ -50,10 +54,7 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidLayout,
-      ios: _buildIOSLayout,
-    );
+    return PlatformAwareWidget(android: _buildAndroidLayout, ios: _buildIOSLayout);
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -65,32 +66,25 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
       appBar: AppBar(
         title: const RideDetailsTitle(),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.bluetooth_searching),
-            onPressed: () => _goToScanningPage(context),
-          ),
+          IconButton(icon: const Icon(Icons.bluetooth_searching), onPressed: () => _goToScanningPage(context)),
           PopupMenuButton<RideDetailsPageOptions>(
             icon: const Icon(Icons.more_vert),
-            itemBuilder: (context) => <PopupMenuEntry<RideDetailsPageOptions>>[
-              PopupMenuItem<RideDetailsPageOptions>(
-                value: RideDetailsPageOptions.export,
-                child: ListTile(
-                  leading: const Icon(Icons.publish),
-                  title: Text(translator.export),
+            itemBuilder: (context) {
+              return <PopupMenuEntry<RideDetailsPageOptions>>[
+                PopupMenuItem<RideDetailsPageOptions>(
+                  value: RideDetailsPageOptions.export,
+                  child: ListTile(leading: const Icon(Icons.publish), title: Text(translator.export)),
                 ),
-              ),
-              const PopupMenuDivider(),
-              PopupMenuItem<RideDetailsPageOptions>(
-                value: RideDetailsPageOptions.delete,
-                child: ListTile(
-                  leading: Icon(Icons.delete, color: errorColor),
-                  title: Text(
-                    translator.delete,
-                    style: TextStyle(color: errorColor),
+                const PopupMenuDivider(),
+                PopupMenuItem<RideDetailsPageOptions>(
+                  value: RideDetailsPageOptions.delete,
+                  child: ListTile(
+                    leading: Icon(Icons.delete, color: errorColor),
+                    title: Text(translator.delete, style: TextStyle(color: errorColor)),
                   ),
                 ),
-              ),
-            ],
+              ];
+            },
             onSelected: (RideDetailsPageOptions option) {
               onSelectMenuOption(context, option);
             },
@@ -107,19 +101,11 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            const Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: RideDetailsTitle(),
-              ),
-            ),
+            const Expanded(child: Padding(padding: EdgeInsets.only(left: 8), child: RideDetailsTitle())),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CupertinoIconButton(
-                  icon: Icons.bluetooth_searching,
-                  onPressed: () => _goToScanningPage(context),
-                ),
+                CupertinoIconButton(icon: Icons.bluetooth_searching, onPressed: () => _goToScanningPage(context)),
                 CupertinoIconButton(
                   icon: CupertinoIcons.ellipsis_vertical,
                   onPressed: () => _showCupertinoModalBottomPopup(context),
@@ -144,16 +130,10 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
         assert(selectedRide != null, 'The selected ride was null.');
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => ExportRidePage(selectedRide: selectedRide!),
-          ),
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ExportRidePage(selectedRide: selectedRide!)));
         break;
       case RideDetailsPageOptions.delete:
         _onDeleteRideOptionSelected(context);
-        break;
-      default:
         break;
     }
   }

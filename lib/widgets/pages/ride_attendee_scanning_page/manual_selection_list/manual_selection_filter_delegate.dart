@@ -27,10 +27,7 @@ class ManualSelectionFilterDelegate {
     return Rx.combineLatest2<String, bool, ManualSelectionFilterOptions>(
       _searchQueryController.searchQuery,
       _showScannedResultsController,
-      (query, showScannedResults) => ManualSelectionFilterOptions(
-        query: query,
-        showScannedResults: showScannedResults,
-      ),
+      (query, showScannedResults) => ManualSelectionFilterOptions(query: query, showScannedResults: showScannedResults),
     );
   }
 

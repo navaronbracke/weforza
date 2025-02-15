@@ -8,10 +8,7 @@ import 'package:weforza/widgets/pages/ride_attendee_scanning_page/selectable_own
 
 /// This widget represents an item in the manual selection list.
 class ManualSelectionListItem extends ConsumerStatefulWidget {
-  ManualSelectionListItem({
-    required this.delegate,
-    required this.item,
-  }) : super(key: ValueKey(item.uuid));
+  ManualSelectionListItem({required this.delegate, required this.item}) : super(key: ValueKey(item.uuid));
 
   final RideAttendeeScanningDelegate delegate;
 
@@ -24,9 +21,7 @@ class ManualSelectionListItem extends ConsumerStatefulWidget {
 class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListItem> {
   @override
   Widget build(BuildContext context) {
-    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
-      widget.item.uuid,
-    );
+    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(widget.item.uuid);
 
     final bool isSelected = selectedRideAttendee != null;
     final bool isScanned = selectedRideAttendee?.isScanned ?? false;
@@ -34,12 +29,8 @@ class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListIte
     return SelectableOwnerListItem(
       rider: widget.item,
       selected: isSelected,
-      trailing: isSelected
-          ? Icon(
-              isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded,
-              color: Colors.white,
-            )
-          : null,
+      trailing:
+          isSelected ? Icon(isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded, color: Colors.white) : null,
       onTap: () async {
         // If the search bar still has focus, unfocus it first.
         FocusScope.of(context).unfocus();

@@ -10,13 +10,7 @@ import 'package:weforza/riverpod/file/file_system_provider.dart';
 /// This widget represents a profile image.
 class ProfileImage extends StatelessWidget {
   /// The default constructor.
-  const ProfileImage({
-    required this.image,
-    required this.placeholder,
-    this.loading,
-    this.size = 40,
-    super.key,
-  });
+  const ProfileImage({required this.image, required this.placeholder, this.loading, this.size = 40, super.key});
 
   /// The profile image to show.
   final Uri? image;
@@ -44,19 +38,18 @@ class ProfileImage extends StatelessWidget {
 
     if (imageUri.isScheme('content')) {
       return Consumer(
-        builder: (context, ref, child) => Image(
-          image: ContentUriImage(
-            uri: imageUri,
-            fileStorageDelegate: ref.read(fileStorageDelegateProvider),
-          ),
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => placeholder,
-          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-            return frame == null ? loading ?? placeholder : ClipOval(child: child);
-          },
-        ),
+        builder: (context, ref, child) {
+          return Image(
+            image: ContentUriImage(uri: imageUri, fileStorageDelegate: ref.read(fileStorageDelegateProvider)),
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => placeholder,
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              return frame == null ? loading ?? placeholder : ClipOval(child: child);
+            },
+          );
+        },
       );
     }
 
@@ -89,12 +82,7 @@ class ProfileImage extends StatelessWidget {
 /// an adaptive placeholder icon is used instead.
 class AdaptiveProfileImage extends StatelessWidget {
   /// The default constructor.
-  const AdaptiveProfileImage({
-    super.key,
-    this.image,
-    this.personInitials,
-    this.size = 40,
-  });
+  const AdaptiveProfileImage({super.key, this.image, this.personInitials, this.size = 40});
 
   /// The image to display.
   final Uri? image;
@@ -161,9 +149,7 @@ class AdaptiveProfileImage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(size / 2)),
           color: placeholderBackgroundColor,
         ),
-        child: Center(
-          child: Icon(placeholderIcon, color: Colors.white, size: .7 * size),
-        ),
+        child: Center(child: Icon(placeholderIcon, color: Colors.white, size: .7 * size)),
       );
     }
 
@@ -177,10 +163,7 @@ class AdaptiveProfileImage extends StatelessWidget {
           color: _getBackgroundColor(initials, backgroundColors),
         ),
         child: Center(
-          child: Text(
-            personInitials!.toUpperCase(),
-            style: TextStyle(color: Colors.white, fontSize: size / 2),
-          ),
+          child: Text(personInitials!.toUpperCase(), style: TextStyle(color: Colors.white, fontSize: size / 2)),
         ),
       ),
       size: size,

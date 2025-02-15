@@ -9,11 +9,7 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderDevicesListItem extends StatelessWidget {
-  const RiderDevicesListItem({
-    required this.deleteDeviceButton,
-    required this.device,
-    super.key,
-  });
+  const RiderDevicesListItem({required this.deleteDeviceButton, required this.device, super.key});
 
   /// The button that deletes [device] from the list of devices when pressed.
   final Widget deleteDeviceButton;
@@ -24,10 +20,7 @@ class RiderDevicesListItem extends StatelessWidget {
   Widget _buildItem(BuildContext context) {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: DeviceIcon(type: device.type),
-        ),
+        Padding(padding: const EdgeInsets.only(right: 4), child: DeviceIcon(type: device.type)),
         Expanded(
           child: Text(
             device.name,
@@ -39,10 +32,7 @@ class RiderDevicesListItem extends StatelessWidget {
         ),
         Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: _EditDeviceButton(device: device),
-            ),
+            Padding(padding: const EdgeInsets.only(left: 4), child: _EditDeviceButton(device: device)),
             deleteDeviceButton,
           ],
         ),
@@ -53,14 +43,10 @@ class RiderDevicesListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (context) => Padding(
-        padding: const EdgeInsets.only(left: 8, right: 4, bottom: 4),
-        child: _buildItem(context),
-      ),
-      ios: (context) => Padding(
-        padding: const EdgeInsets.only(left: 4, right: 16),
-        child: _buildItem(context),
-      ),
+      android: (context) {
+        return Padding(padding: const EdgeInsets.only(left: 8, right: 4, bottom: 4), child: _buildItem(context));
+      },
+      ios: (context) => Padding(padding: const EdgeInsets.only(left: 4, right: 16), child: _buildItem(context)),
     );
   }
 }
@@ -76,10 +62,9 @@ class _EditDeviceButton extends ConsumerWidget {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => DeviceForm(
-          device: device,
-          ownerUuid: selectedRider!.uuid,
-        ),
+        builder: (context) {
+          return DeviceForm(device: device, ownerUuid: selectedRider!.uuid);
+        },
       ),
     );
   }
@@ -87,14 +72,15 @@ class _EditDeviceButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformAwareWidget(
-      android: (context) => IconButton(
-        icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
-        onPressed: () => _onEditDevicePressed(context, ref),
-      ),
-      ios: (context) => CupertinoIconButton(
-        icon: CupertinoIcons.pencil,
-        onPressed: () => _onEditDevicePressed(context, ref),
-      ),
+      android: (context) {
+        return IconButton(
+          icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
+          onPressed: () => _onEditDevicePressed(context, ref),
+        );
+      },
+      ios: (context) {
+        return CupertinoIconButton(icon: CupertinoIcons.pencil, onPressed: () => _onEditDevicePressed(context, ref));
+      },
     );
   }
 }

@@ -115,7 +115,7 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
     final Color backgroundColor =
         CupertinoDynamicColor.maybeResolve(color, context) ?? CupertinoTheme.of(context).barBackgroundColor;
 
-    return backgroundColor.alpha == 0xFF;
+    return backgroundColor.a == 1.0;
   }
 
   @override

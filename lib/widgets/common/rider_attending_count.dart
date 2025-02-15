@@ -37,7 +37,7 @@ class _RiderAttendingCount extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Icon(Icons.directions_bike, color: Theme.of(context).colorScheme.primary);
+        return Icon(Icons.directions_bike, color: ColorScheme.of(context).primary);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Icon(Icons.directions_bike, color: CupertinoTheme.of(context).primaryColor);

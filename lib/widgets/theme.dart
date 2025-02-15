@@ -145,7 +145,7 @@ class RideCalendarTheme {
       case TargetPlatform.linux:
       case TargetPlatform.windows:
         final ThemeData theme = Theme.of(context);
-        final ColorScheme colorScheme = theme.colorScheme;
+        final ColorScheme colorScheme = ColorScheme.of(context);
 
         switch (state) {
           case RideCalendarItemState.currentSelection:

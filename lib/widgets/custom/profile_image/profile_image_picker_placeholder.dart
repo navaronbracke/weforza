@@ -59,7 +59,7 @@ class MaterialProfileImagePickerPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final ColorScheme colorScheme = ColorScheme.of(context);
 
     return Container(
       height: size,

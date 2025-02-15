@@ -21,7 +21,7 @@ class RideListItem extends ConsumerWidget {
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          return Theme.of(context).colorScheme.primary;
+          return ColorScheme.of(context).primary;
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
           return CupertinoTheme.of(context).primaryColor;

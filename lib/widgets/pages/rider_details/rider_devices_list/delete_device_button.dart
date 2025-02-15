@@ -19,7 +19,7 @@ class DeleteDeviceButton extends StatelessWidget {
     return PlatformAwareWidget(
       android: (context) {
         return IconButton(
-          icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+          icon: Icon(Icons.delete, color: ColorScheme.of(context).error),
           onPressed: () => _onDeletePressed(context),
         );
       },

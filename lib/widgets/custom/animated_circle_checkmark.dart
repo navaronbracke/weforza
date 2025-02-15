@@ -63,7 +63,7 @@ class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        backgroundColor = Theme.of(context).colorScheme.primary;
+        backgroundColor = ColorScheme.of(context).primary;
         checkmarkIcon = Icons.check_rounded;
         break;
       case TargetPlatform.iOS:

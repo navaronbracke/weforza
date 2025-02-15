@@ -105,11 +105,7 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
 
         return PlatformAwareWidget(
           android: (context) {
-            return IconButton(
-              color: Theme.of(context).colorScheme.primary,
-              icon: const Icon(Icons.check),
-              onPressed: onTap,
-            );
+            return IconButton(color: ColorScheme.of(context).primary, icon: const Icon(Icons.check), onPressed: onTap);
           },
           ios: (context) => CupertinoIconButton(icon: CupertinoIcons.checkmark_alt, onPressed: onTap),
         );

@@ -83,12 +83,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: RideAttendeeScanningStepper(
-          initialData: delegate.currentState,
-          stream: delegate.stream,
-        ),
-      ),
+      appBar: AppBar(title: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream)),
       body: _buildBody(),
     );
   }
@@ -137,10 +132,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: RideAttendeeScanningStepper(
-          initialData: delegate.currentState,
-          stream: delegate.stream,
-        ),
+        middle: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream),
       ),
       child: SafeArea(
         // The bottom view padding should be preserved
@@ -163,10 +155,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
           await delegate.stopScan();
         }
       },
-      child: PlatformAwareWidget(
-        android: _buildAndroidLayout,
-        ios: _buildIOSLayout,
-      ),
+      child: PlatformAwareWidget(android: _buildAndroidLayout, ios: _buildIOSLayout),
     );
   }
 

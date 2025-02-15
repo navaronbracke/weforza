@@ -38,19 +38,12 @@ class ProfileImagePicker extends StatelessWidget {
   }) {
     return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: imagePreview,
-        ),
+        Padding(padding: const EdgeInsets.only(right: 8), child: imagePreview),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              openGalleryButton,
-              openCameraButton,
-              if (deleteButton != null) deleteButton,
-            ],
+            children: [openGalleryButton, openCameraButton, if (deleteButton != null) deleteButton],
           ),
         ),
       ],
@@ -62,16 +55,18 @@ class ProfileImagePicker extends StatelessWidget {
 
     showAdaptiveDialog<void>(
       context: context,
-      builder: (context) => WeforzaAlertDialog.defaultButtons(
-        confirmButtonLabel: translator.delete,
-        description: Text(translator.removePhotoDescription, softWrap: true),
-        isDestructive: true,
-        onConfirmPressed: () {
-          delegate.clear();
-          Navigator.of(context).pop();
-        },
-        title: translator.removePhoto,
-      ),
+      builder: (context) {
+        return WeforzaAlertDialog.defaultButtons(
+          confirmButtonLabel: translator.delete,
+          description: Text(translator.removePhotoDescription, softWrap: true),
+          isDestructive: true,
+          onConfirmPressed: () {
+            delegate.clear();
+            Navigator.of(context).pop();
+          },
+          title: translator.removePhoto,
+        );
+      },
     );
   }
 
@@ -89,10 +84,7 @@ class ProfileImagePicker extends StatelessWidget {
       onPressed: delegate.selectProfileImageFromGallery,
     );
 
-    final openCameraButton = _ProfileImagePickerButton(
-      label: translator.takePhoto,
-      onPressed: delegate.takePhoto,
-    );
+    final openCameraButton = _ProfileImagePickerButton(label: translator.takePhoto, onPressed: delegate.takePhoto);
 
     final deleteImageButton = _ProfileImagePickerButton(
       label: translator.removePhoto,
@@ -105,41 +97,45 @@ class ProfileImagePicker extends StatelessWidget {
       stream: delegate.stream,
       builder: (context, snapshot) {
         return snapshot.data!.when(
-          data: (image) => _buildPickerWithOptions(
-            imagePreview: PlatformAwareWidget(
-              android: (_) => ProfileImage(
-                image: image,
-                loading: imageLoadingIndicator,
-                placeholder: MaterialProfileImagePickerPlaceholder(
-                  size: imagePreviewSize,
+          data: (image) {
+            return _buildPickerWithOptions(
+              imagePreview: PlatformAwareWidget(
+                android: (_) {
+                  return ProfileImage(
+                    image: image,
+                    loading: imageLoadingIndicator,
+                    placeholder: MaterialProfileImagePickerPlaceholder(size: imagePreviewSize),
+                    size: imagePreviewSize,
+                  );
+                },
+                ios: (_) {
+                  return ProfileImage(
+                    image: image,
+                    loading: imageLoadingIndicator,
+                    placeholder: CupertinoProfileImagePickerPlaceholder(size: imagePreviewSize),
+                    size: imagePreviewSize,
+                  );
+                },
+              ),
+              openCameraButton: openCameraButton,
+              openGalleryButton: openGalleryButton,
+              deleteButton: image == null ? null : deleteImageButton,
+            );
+          },
+          error: (error, stackTrace) {
+            return _buildPickerWithOptions(
+              imagePreview: SizedBox.square(
+                dimension: imagePreviewSize,
+                child: PlatformAwareIcon(
+                  androidIcon: Icons.warning,
+                  iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
+                  size: imagePreviewSize / 2,
                 ),
-                size: imagePreviewSize,
               ),
-              ios: (_) => ProfileImage(
-                image: image,
-                loading: imageLoadingIndicator,
-                placeholder: CupertinoProfileImagePickerPlaceholder(
-                  size: imagePreviewSize,
-                ),
-                size: imagePreviewSize,
-              ),
-            ),
-            openCameraButton: openCameraButton,
-            openGalleryButton: openGalleryButton,
-            deleteButton: image == null ? null : deleteImageButton,
-          ),
-          error: (error, stackTrace) => _buildPickerWithOptions(
-            imagePreview: SizedBox.square(
-              dimension: imagePreviewSize,
-              child: PlatformAwareIcon(
-                androidIcon: Icons.warning,
-                iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
-                size: imagePreviewSize / 2,
-              ),
-            ),
-            openCameraButton: openCameraButton,
-            openGalleryButton: openGalleryButton,
-          ),
+              openCameraButton: openCameraButton,
+              openGalleryButton: openGalleryButton,
+            );
+          },
           loading: () => pickingIndicator,
         );
       },
@@ -148,11 +144,7 @@ class ProfileImagePicker extends StatelessWidget {
 }
 
 class _ProfileImagePickerButton extends StatelessWidget {
-  const _ProfileImagePickerButton({
-    required this.label,
-    required this.onPressed,
-    this.isDestructive = false,
-  });
+  const _ProfileImagePickerButton({required this.label, required this.onPressed, this.isDestructive = false});
 
   /// Whether this button performs a destructive action.
   final bool isDestructive;
@@ -178,15 +170,14 @@ class _ProfileImagePickerButton extends StatelessWidget {
           ),
         );
       },
-      ios: (_) => CupertinoButton(
-        padding: EdgeInsets.zero,
-        borderRadius: BorderRadius.zero,
-        onPressed: onPressed,
-        child: Text(
-          label,
-          style: isDestructive ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
-        ),
-      ),
+      ios: (_) {
+        return CupertinoButton(
+          padding: EdgeInsets.zero,
+          borderRadius: BorderRadius.zero,
+          onPressed: onPressed,
+          child: Text(label, style: isDestructive ? const TextStyle(color: CupertinoColors.destructiveRed) : null),
+        );
+      },
     );
   }
 }

@@ -72,12 +72,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FocusAbsorber(
-      child: PlatformAwareWidget(
-        android: _buildAndroidWidget,
-        ios: _buildIosWidget,
-      ),
-    );
+    return FocusAbsorber(child: PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget));
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -114,16 +109,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              translator.ridersListFilter,
-              style: textTheme.titleMedium,
-            ),
+            Text(translator.ridersListFilter, style: textTheme.titleMedium),
             RiderListFilter(delegate: riderFilterDelegate),
             Text(
               translator.ridersListFilterDescription,
-              style: textTheme.bodySmall?.copyWith(
-                fontStyle: FontStyle.italic,
-              ),
+              style: textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
             ),
           ],
         ),
@@ -143,12 +133,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: AppVersion(
-              builder: (version) => Text(
-                '${translator.version} $version',
-                style: textTheme.bodySmall?.copyWith(
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
+              builder: (version) {
+                return Text(
+                  '${translator.version} $version',
+                  style: textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
+                );
+              },
             ),
           ),
         ),
@@ -156,12 +146,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildExcludedTermItem(
-    List<ExcludedTerm> terms,
-    int index, {
-    BoxDecoration? decoration,
-    Widget? divider,
-  }) {
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration, Widget? divider}) {
     final term = terms[index];
 
     return EditExcludedTermInputField(
@@ -204,10 +189,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             BorderRadius borderRadius = BorderRadius.zero;
 
             if (index == items.length - 1) {
-              borderRadius = const BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              );
+              borderRadius = const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10));
             }
 
             return _buildExcludedTermItem(
@@ -236,9 +218,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(6),
-            child: Center(
-              child: RiderListFilter(delegate: riderFilterDelegate),
-            ),
+            child: Center(child: RiderListFilter(delegate: riderFilterDelegate)),
           ),
         ],
       ),
@@ -254,10 +234,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           header: Text(translator.rideCalendar.toUpperCase()),
           children: const [
             CupertinoFormRow(
-              padding: EdgeInsetsDirectional.only(
-                start: 20,
-                end: 6,
-              ),
+              padding: EdgeInsetsDirectional.only(start: 20, end: 6),
               prefix: ResetRideCalendarButton(),
               child: SizedBox.shrink(),
             ),
@@ -270,12 +247,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       ),
       version: SliverToBoxAdapter(
         child: CupertinoFormSection.insetGrouped(
-          children: [
-            CupertinoFormRow(
-              prefix: Text(translator.version),
-              child: const AppVersion(builder: Text.new),
-            ),
-          ],
+          children: [CupertinoFormRow(prefix: Text(translator.version), child: const AppVersion(builder: Text.new))],
         ),
       ),
     );

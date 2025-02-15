@@ -18,29 +18,19 @@ class ExportDataStoragePermissionDeniedError extends StatelessWidget {
 
     return GenericErrorWithPrimaryAndSecondaryAction(
       errorMessage: translator.exportStoragePermissionDenied,
-      icon: const PlatformAwareIcon(
-        androidIcon: Icons.folder_off,
-        iosIcon: CupertinoIcons.folder_solid,
-      ),
+      icon: const PlatformAwareIcon(androidIcon: Icons.folder_off, iosIcon: CupertinoIcons.folder_solid),
       primaryButton: PlatformAwareWidget(
-        android: (_) => ElevatedButton(
-          onPressed: AppSettings.openAppSettings,
-          child: Text(translator.goToSettings),
-        ),
-        ios: (_) => CupertinoButton.filled(
-          onPressed: AppSettings.openAppSettings,
-          child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
-        ),
+        android: (_) => ElevatedButton(onPressed: AppSettings.openAppSettings, child: Text(translator.goToSettings)),
+        ios: (_) {
+          return CupertinoButton.filled(
+            onPressed: AppSettings.openAppSettings,
+            child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
+          );
+        },
       ),
       secondaryButton: PlatformAwareWidget(
-        android: (context) => TextButton(
-          child: Text(translator.goBack),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        ios: (context) => CupertinoButton(
-          child: Text(translator.goBack),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        android: (context) => TextButton(child: Text(translator.goBack), onPressed: () => Navigator.of(context).pop()),
+        ios: (context) => CupertinoButton(child: Text(translator.goBack), onPressed: () => Navigator.of(context).pop()),
       ),
     );
   }

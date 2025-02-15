@@ -14,10 +14,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// that is shown after a device scan has ended.
 class UnresolvedOwnersList extends StatefulWidget {
   /// The default constructor.
-  const UnresolvedOwnersList({
-    required this.delegate,
-    super.key,
-  });
+  const UnresolvedOwnersList({required this.delegate, super.key});
 
   final RideAttendeeScanningDelegate delegate;
 
@@ -104,10 +101,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
                   ),
                 ),
               ),
-              ScanButton(
-                onPressed: widget.delegate.continueToManualSelection,
-                text: translator.continueLabel,
-              ),
+              ScanButton(onPressed: widget.delegate.continueToManualSelection, text: translator.continueLabel),
             ],
           );
         }
@@ -119,10 +113,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
 }
 
 class _UnresolvedOwnersListItem extends StatefulWidget {
-  _UnresolvedOwnersListItem({
-    required this.delegate,
-    required this.item,
-  }) : super(key: ValueKey(item.uuid));
+  _UnresolvedOwnersListItem({required this.delegate, required this.item}) : super(key: ValueKey(item.uuid));
 
   final RideAttendeeScanningDelegate delegate;
 
@@ -135,9 +126,7 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   @override
   Widget build(BuildContext context) {
-    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
-      widget.item.uuid,
-    );
+    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(widget.item.uuid);
 
     return SelectableOwnerListItem(
       rider: widget.item,
@@ -146,10 +135,7 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
         // Unresolved owners are never initially scanned.
         // Thus showing a confirmation dialog before unselecting
         // an item in the list is redundant.
-        final scanResultEntry = ScannedRideAttendee(
-          uuid: widget.item.uuid,
-          isScanned: false,
-        );
+        final scanResultEntry = ScannedRideAttendee(uuid: widget.item.uuid, isScanned: false);
 
         widget.delegate.toggleSelectionForUnresolvedOwner(scanResultEntry);
 

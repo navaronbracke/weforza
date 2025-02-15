@@ -16,27 +16,28 @@ class WeForzaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Only portrait is supported at the moment.
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return PlatformAwareWidget(
-      android: (_) => MaterialApp(
-        title: applicationName,
-        localizationsDelegates: S.localizationsDelegates,
-        supportedLocales: S.supportedLocales,
-        theme: AppTheme.androidTheme(brightness: Brightness.light),
-        darkTheme: AppTheme.androidTheme(brightness: Brightness.dark),
-        home: const HomePage(),
-      ),
-      ios: (_) => const CupertinoApp(
-        title: applicationName,
-        localizationsDelegates: S.localizationsDelegates,
-        supportedLocales: S.supportedLocales,
-        theme: AppTheme.iosTheme,
-        home: HomePage(),
-      ),
+      android: (_) {
+        return MaterialApp(
+          title: applicationName,
+          localizationsDelegates: S.localizationsDelegates,
+          supportedLocales: S.supportedLocales,
+          theme: AppTheme.androidTheme(brightness: Brightness.light),
+          darkTheme: AppTheme.androidTheme(brightness: Brightness.dark),
+          home: const HomePage(),
+        );
+      },
+      ios: (_) {
+        return const CupertinoApp(
+          title: applicationName,
+          localizationsDelegates: S.localizationsDelegates,
+          supportedLocales: S.supportedLocales,
+          theme: AppTheme.iosTheme,
+          home: HomePage(),
+        );
+      },
     );
   }
 }

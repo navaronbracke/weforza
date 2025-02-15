@@ -73,10 +73,7 @@ class AddExcludedTermInputField extends StatelessWidget {
       suffix: _AddExcludedTermSuffixIcon(
         controller: controller,
         onTap: _onEditingComplete,
-        validator: (context, value) => delegate.validateTerm(
-          value,
-          S.of(context),
-        ),
+        validator: (context, value) => delegate.validateTerm(value, S.of(context)),
       ),
       textFieldKey: formKey,
       validator: (value) => delegate.validateTerm(value, translator),
@@ -86,11 +83,7 @@ class AddExcludedTermInputField extends StatelessWidget {
 }
 
 class _AddExcludedTermSuffixIcon extends StatelessWidget {
-  const _AddExcludedTermSuffixIcon({
-    required this.controller,
-    required this.onTap,
-    required this.validator,
-  });
+  const _AddExcludedTermSuffixIcon({required this.controller, required this.onTap, required this.validator});
 
   /// The controller that provides updates about the current text editing value.
   final ValueNotifier<TextEditingValue> controller;
@@ -111,15 +104,14 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
         }
 
         return PlatformAwareWidget(
-          android: (context) => IconButton(
-            color: Theme.of(context).colorScheme.primary,
-            icon: const Icon(Icons.check),
-            onPressed: onTap,
-          ),
-          ios: (context) => CupertinoIconButton(
-            icon: CupertinoIcons.checkmark_alt,
-            onPressed: onTap,
-          ),
+          android: (context) {
+            return IconButton(
+              color: Theme.of(context).colorScheme.primary,
+              icon: const Icon(Icons.check),
+              onPressed: onTap,
+            );
+          },
+          ios: (context) => CupertinoIconButton(icon: CupertinoIcons.checkmark_alt, onPressed: onTap),
         );
       },
     );

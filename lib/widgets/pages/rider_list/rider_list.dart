@@ -34,9 +34,7 @@ class _RiderListState extends State<RiderList> {
     // Unfocus the search field before exiting this page.
     FocusScope.of(context).unfocus();
 
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const RiderDetailsPage()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RiderDetailsPage()));
   }
 
   /// Filter the given [list] on the current [searchQuery].
@@ -103,10 +101,9 @@ class _RiderListState extends State<RiderList> {
 
                         return ListView.builder(
                           itemCount: results.length,
-                          itemBuilder: (_, index) => RiderListItem(
-                            rider: results[index],
-                            onPressed: () => _onRiderSelected(context),
-                          ),
+                          itemBuilder: (_, index) {
+                            return RiderListItem(rider: results[index], onPressed: () => _onRiderSelected(context));
+                          },
                         );
                       },
                     ),
@@ -122,10 +119,7 @@ class _RiderListState extends State<RiderList> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: _buildRiderList(context),
-    );
+    return SafeArea(bottom: false, child: _buildRiderList(context));
   }
 
   @override

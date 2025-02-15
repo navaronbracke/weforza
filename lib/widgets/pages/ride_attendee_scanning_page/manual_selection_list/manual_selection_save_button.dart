@@ -5,11 +5,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the save button for the manual selection page.
 class ManualSelectionSaveButton extends StatefulWidget {
-  const ManualSelectionSaveButton({
-    required this.onPressed,
-    super.key,
-    this.future,
-  });
+  const ManualSelectionSaveButton({required this.onPressed, super.key, this.future});
 
   /// The Future that represents the save attendees computation.
   final Future<void>? future;
@@ -36,29 +32,22 @@ class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
         final translator = S.of(context);
 
         if (snapshot.connectionState == ConnectionState.none) {
-          return _SaveButton(
-            onPressed: _onSaveButtonPressed,
-            text: translator.save,
-          );
+          return _SaveButton(onPressed: _onSaveButtonPressed, text: translator.save);
         }
 
         final loadingIndicator = PlatformAwareWidget(
-          android: (_) => const SizedBox.square(
-            dimension: 30,
-            child: CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 3,
-            ),
-          ),
+          android: (_) {
+            return const SizedBox.square(
+              dimension: 30,
+              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
+            );
+          },
           ios: (_) => const CupertinoActivityIndicator(),
         );
 
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return _SaveButton(
-              onPressed: _onSaveButtonPressed,
-              text: translator.tryAgain,
-            );
+            return _SaveButton(onPressed: _onSaveButtonPressed, text: translator.tryAgain);
           }
 
           return loadingIndicator;

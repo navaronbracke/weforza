@@ -43,11 +43,13 @@ class ScanProgressIndicator extends StatelessWidget {
                 final progress = animationController.value;
 
                 return PlatformAwareWidget(
-                  android: (_) => _BrightnessAwareProgressIndicator(
-                    progress: progress,
-                    color: Colors.green,
-                    backgroundColor: Colors.green.withOpacity(0.4),
-                  ),
+                  android: (_) {
+                    return _BrightnessAwareProgressIndicator(
+                      progress: progress,
+                      color: Colors.green,
+                      backgroundColor: Colors.green.withOpacity(0.4),
+                    );
+                  },
                   ios: (context) {
                     final theme = CupertinoTheme.of(context);
 

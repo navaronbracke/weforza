@@ -39,10 +39,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
   @override
   void initState() {
     super.initState();
-    delegate = ImportRidersDelegate(
-      ref.read(importFileDelegateProvider),
-      ref.read(serializeRidersRepositoryProvider),
-    );
+    delegate = ImportRidersDelegate(ref.read(importFileDelegateProvider), ref.read(serializeRidersRepositoryProvider));
 
     checkmarkController = AnimationController(
       vsync: this,
@@ -87,11 +84,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
           final data = snapshot.data;
 
           if (error != null || data == null) {
-            return Center(
-              child: GenericErrorWithBackButton(
-                message: translator.importRidersGenericErrorMessage,
-              ),
-            );
+            return Center(child: GenericErrorWithBackButton(message: translator.importRidersGenericErrorMessage));
           }
 
           switch (data) {
@@ -100,9 +93,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
             case ImportRidersState.idle:
               return _ImportRidersButton(label: buttonLabel, onPressed: _onImportRidersPressed);
             case ImportRidersState.importing:
-              return ProgressIndicatorWithLabel(
-                label: translator.importRidersProcessingFile,
-              );
+              return ProgressIndicatorWithLabel(label: translator.importRidersProcessingFile);
             case ImportRidersState.pickingFile:
               return const PlatformAwareLoadingIndicator();
           }
@@ -113,18 +104,17 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
 
   @override
   Widget build(BuildContext context) {
+    final Widget body = _buildBody();
+    final Widget title = Text(S.of(context).importRiders);
+
     return PlatformAwareWidget(
-      android: (context) => Scaffold(
-        appBar: AppBar(title: Text(S.of(context).importRiders)),
-        body: _buildBody(),
-      ),
-      ios: (context) => CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(S.of(context).importRiders),
-          transitionBetweenRoutes: false,
-        ),
-        child: _buildBody(),
-      ),
+      android: (context) => Scaffold(appBar: AppBar(title: title), body: body),
+      ios: (context) {
+        return CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(middle: title, transitionBetweenRoutes: false),
+          child: body,
+        );
+      },
     );
   }
 
@@ -137,11 +127,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
 }
 
 class _ImportRidersButton extends StatelessWidget {
-  const _ImportRidersButton({
-    required this.label,
-    required this.onPressed,
-    this.errorMessage,
-  });
+  const _ImportRidersButton({required this.label, required this.onPressed, this.errorMessage});
 
   /// The error message that is displayed below the button.
   final String? errorMessage;
@@ -175,41 +161,42 @@ class _ImportRidersButton extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   errorMessage ?? '',
-                  style: theme.textTheme.labelMedium!.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
+                  style: theme.textTheme.labelMedium!.copyWith(color: theme.colorScheme.error),
                 ),
               ),
             ),
           ],
         );
       },
-      ios: (_) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CupertinoFormRow(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            error: errorMessage == null
-                ? null
-                : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
-            child: Center(
-              child: CupertinoButton.filled(
-                onPressed: onPressed,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
-                    ),
-                    Text(label, style: const TextStyle(color: CupertinoColors.white)),
-                  ],
-                ),
+      ios: (_) {
+        final Widget button = CupertinoButton.filled(
+          onPressed: onPressed,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
               ),
-            ),
+              Text(label, style: const TextStyle(color: CupertinoColors.white)),
+            ],
           ),
-        ],
-      ),
+        );
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CupertinoFormRow(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              error:
+                  errorMessage == null
+                      ? null
+                      : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
+              child: Center(child: button),
+            ),
+          ],
+        );
+      },
     );
   }
 }

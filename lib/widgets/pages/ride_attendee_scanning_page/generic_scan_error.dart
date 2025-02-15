@@ -11,10 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a scan error that indicates that Bluetooth is disabled.
 /// It provides a button to open the Bluetooth settings and a button to retry the scan.
 class BluetoothDisabledError extends StatelessWidget {
-  const BluetoothDisabledError({
-    required this.onRetry,
-    super.key,
-  });
+  const BluetoothDisabledError({required this.onRetry, super.key});
 
   final void Function() onRetry;
 
@@ -24,29 +21,24 @@ class BluetoothDisabledError extends StatelessWidget {
 
     return GenericErrorWithPrimaryAndSecondaryAction(
       errorMessage: translator.scanAbortedBluetoothDisabled,
-      icon: const PlatformAwareIcon(
-        androidIcon: Icons.bluetooth_disabled,
-        iosIcon: Icons.bluetooth_disabled,
-      ),
+      icon: const PlatformAwareIcon(androidIcon: Icons.bluetooth_disabled, iosIcon: Icons.bluetooth_disabled),
       primaryButton: PlatformAwareWidget(
-        android: (_) => ElevatedButton(
-          onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
-          child: Text(translator.goToSettings),
-        ),
-        ios: (_) => CupertinoButton.filled(
-          onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
-          child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
-        ),
+        android: (_) {
+          return ElevatedButton(
+            onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
+            child: Text(translator.goToSettings),
+          );
+        },
+        ios: (_) {
+          return CupertinoButton.filled(
+            onPressed: () => AppSettings.openAppSettings(type: AppSettingsType.bluetooth),
+            child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
+          );
+        },
       ),
       secondaryButton: PlatformAwareWidget(
-        android: (_) => TextButton(
-          onPressed: onRetry,
-          child: Text(translator.retryScan),
-        ),
-        ios: (_) => CupertinoButton(
-          onPressed: onRetry,
-          child: Text(translator.retryScan),
-        ),
+        android: (_) => TextButton(onPressed: onRetry, child: Text(translator.retryScan)),
+        ios: (_) => CupertinoButton(onPressed: onRetry, child: Text(translator.retryScan)),
       ),
     );
   }
@@ -61,19 +53,20 @@ class GenericScanError extends StatelessWidget {
     final translator = S.of(context);
 
     return GenericErrorWithPrimaryAndSecondaryAction(
-      icon: const PlatformAwareIcon(
-        androidIcon: Icons.warning,
-        iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
-      ),
+      icon: const PlatformAwareIcon(androidIcon: Icons.warning, iosIcon: CupertinoIcons.exclamationmark_triangle_fill),
       primaryButton: PlatformAwareWidget(
-        android: (context) => ElevatedButton(
-          child: Text(translator.goBackToDetailPage),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        ios: (context) => CupertinoButton.filled(
-          child: Text(translator.goBackToDetailPage, style: const TextStyle(color: CupertinoColors.white)),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        android: (context) {
+          return ElevatedButton(
+            child: Text(translator.goBackToDetailPage),
+            onPressed: () => Navigator.of(context).pop(),
+          );
+        },
+        ios: (context) {
+          return CupertinoButton.filled(
+            child: Text(translator.goBackToDetailPage, style: const TextStyle(color: CupertinoColors.white)),
+            onPressed: () => Navigator.of(context).pop(),
+          );
+        },
       ),
     );
   }
@@ -103,29 +96,26 @@ class PermissionDeniedError extends StatelessWidget {
 
     return GenericErrorWithPrimaryAndSecondaryAction(
       errorMessage: errorMessage,
-      icon: const PlatformAwareIcon(
-        androidIcon: Icons.warning,
-        iosIcon: CupertinoIcons.exclamationmark_triangle_fill,
-      ),
+      icon: const PlatformAwareIcon(androidIcon: Icons.warning, iosIcon: CupertinoIcons.exclamationmark_triangle_fill),
       primaryButton: PlatformAwareWidget(
-        android: (_) => ElevatedButton(
-          onPressed: AppSettings.openAppSettings,
-          child: Text(translator.goToSettings),
-        ),
-        ios: (_) => CupertinoButton.filled(
-          onPressed: AppSettings.openAppSettings,
-          child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
-        ),
+        android: (_) => ElevatedButton(onPressed: AppSettings.openAppSettings, child: Text(translator.goToSettings)),
+        ios: (_) {
+          return CupertinoButton.filled(
+            onPressed: AppSettings.openAppSettings,
+            child: Text(translator.goToSettings, style: const TextStyle(color: CupertinoColors.white)),
+          );
+        },
       ),
       secondaryButton: PlatformAwareWidget(
-        android: (context) => TextButton(
-          child: Text(translator.goBackToDetailPage),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        ios: (context) => CupertinoButton(
-          child: Text(translator.goBackToDetailPage),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        android: (context) {
+          return TextButton(child: Text(translator.goBackToDetailPage), onPressed: () => Navigator.of(context).pop());
+        },
+        ios: (context) {
+          return CupertinoButton(
+            child: Text(translator.goBackToDetailPage),
+            onPressed: () => Navigator.of(context).pop(),
+          );
+        },
       ),
     );
   }

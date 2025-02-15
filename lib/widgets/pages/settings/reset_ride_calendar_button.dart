@@ -11,10 +11,7 @@ class ResetRideCalendarButton extends ConsumerWidget {
   const ResetRideCalendarButton({super.key});
 
   void _showResetCalendarDialog(BuildContext context) {
-    showAdaptiveDialog<void>(
-      context: context,
-      builder: (_) => const ResetRideCalendarDialog(),
-    );
+    showAdaptiveDialog<void>(context: context, builder: (_) => const ResetRideCalendarDialog());
   }
 
   Widget _buildButton(BuildContext context, {bool enabled = true}) {
@@ -28,15 +25,17 @@ class ResetRideCalendarButton extends ConsumerWidget {
           child: Text(S.of(context).resetRideCalendar),
         );
       },
-      ios: (context) => CupertinoButton(
-        borderRadius: BorderRadius.zero,
-        padding: EdgeInsets.zero,
-        onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
-        child: Text(
-          S.of(context).resetRideCalendar,
-          style: enabled ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
-        ),
-      ),
+      ios: (context) {
+        return CupertinoButton(
+          borderRadius: BorderRadius.zero,
+          padding: EdgeInsets.zero,
+          onPressed: enabled ? () => _showResetCalendarDialog(context) : null,
+          child: Text(
+            S.of(context).resetRideCalendar,
+            style: enabled ? const TextStyle(color: CupertinoColors.destructiveRed) : null,
+          ),
+        );
+      },
     );
   }
 

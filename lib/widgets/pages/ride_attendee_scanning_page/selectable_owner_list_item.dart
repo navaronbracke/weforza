@@ -65,10 +65,7 @@ class SelectableOwnerListItem extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 4),
-            child: AdaptiveProfileImage(
-              image: rider.profileImage,
-              personInitials: rider.initials,
-            ),
+            child: AdaptiveProfileImage(image: rider.profileImage, personInitials: rider.initials),
           ),
           Expanded(
             child: RiderNameAndAlias.twoLines(
@@ -79,26 +76,15 @@ class SelectableOwnerListItem extends StatelessWidget {
               secondLineStyle: lastNameStyle,
             ),
           ),
-          if (trailing != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: trailing!,
-            ),
+          if (trailing != null) Padding(padding: const EdgeInsets.only(left: 4), child: trailing!),
         ],
       ),
     );
 
     if (selected) {
-      child = DecoratedBox(
-        decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)),
-        child: child,
-      );
+      child = DecoratedBox(decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)), child: child);
     }
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: child,
-    );
+    return GestureDetector(behavior: HitTestBehavior.opaque, onTap: onTap, child: child);
   }
 }

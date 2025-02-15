@@ -17,10 +17,7 @@ class RideDetailsAttendeesListEmpty extends StatelessWidget {
             iosIcon: CupertinoIcons.person_2_fill,
             size: MediaQuery.sizeOf(context).shortestSide * .1,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(S.of(context).rideDetailsNoAttendees),
-          ),
+          Padding(padding: const EdgeInsets.only(top: 4), child: Text(S.of(context).rideDetailsNoAttendees)),
         ],
       ),
     );

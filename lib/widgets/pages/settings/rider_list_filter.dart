@@ -8,10 +8,7 @@ import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderListFilter extends StatelessWidget {
-  const RiderListFilter({
-    required this.delegate,
-    super.key,
-  });
+  const RiderListFilter({required this.delegate, super.key});
 
   /// The delegate that manages the value.
   final RiderFilterDelegate delegate;
@@ -60,14 +57,16 @@ class RiderListFilter extends StatelessWidget {
               ),
             );
           },
-          ios: (_) => _CupertinoRiderFilter(
-            groupValue: currentFilter,
-            onValueChanged: (RiderFilterOption? value) {
-              if (value != null) {
-                delegate.onValueChanged(value);
-              }
-            },
-          ),
+          ios: (_) {
+            return _CupertinoRiderFilter(
+              groupValue: currentFilter,
+              onValueChanged: (RiderFilterOption? value) {
+                if (value != null) {
+                  delegate.onValueChanged(value);
+                }
+              },
+            );
+          },
         );
       },
     );
@@ -75,10 +74,7 @@ class RiderListFilter extends StatelessWidget {
 }
 
 class _CupertinoRiderFilter extends StatefulWidget {
-  const _CupertinoRiderFilter({
-    required this.groupValue,
-    required this.onValueChanged,
-  });
+  const _CupertinoRiderFilter({required this.groupValue, required this.onValueChanged});
 
   final RiderFilterOption groupValue;
 
@@ -95,10 +91,7 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
   LinkedHashMap<RiderFilterOption, String> _labels = LinkedHashMap();
 
   /// The text painter that will measure the width of the widest label.
-  final TextPainter _textPainter = TextPainter(
-    maxLines: 1,
-    textDirection: TextDirection.ltr,
-  );
+  final TextPainter _textPainter = TextPainter(maxLines: 1, textDirection: TextDirection.ltr);
 
   /// The width of the widest label.
   double _widestLabelWidth = 0.0;
@@ -147,10 +140,7 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
       onValueChanged: widget.onValueChanged,
       children: <RiderFilterOption, Widget>{
         for (final entry in _labels.entries)
-          entry.key: SizedBox(
-            width: _widestLabelWidth,
-            child: Center(child: Text(entry.value)),
-          ),
+          entry.key: SizedBox(width: _widestLabelWidth, child: Center(child: Text(entry.value))),
       },
     );
   }

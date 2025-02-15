@@ -12,9 +12,7 @@ class RiderDevicesListEmpty extends StatelessWidget {
   const RiderDevicesListEmpty({super.key});
 
   void onAddDevicePressed(BuildContext context, String ownerUuid) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => DeviceForm(ownerUuid: ownerUuid)),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceForm(ownerUuid: ownerUuid)));
   }
 
   @override
@@ -34,30 +32,31 @@ class RiderDevicesListEmpty extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-                child: Text(
-                  translator.riderNoDevices,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(translator.riderNoDevices, textAlign: TextAlign.center),
               ),
               Consumer(
                 builder: (context, ref, child) {
                   return PlatformAwareWidget(
-                    android: (context) => ElevatedButton(
-                      onPressed: () {
-                        final selectedRider = ref.read(selectedRiderProvider);
+                    android: (context) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          final selectedRider = ref.read(selectedRiderProvider);
 
-                        onAddDevicePressed(context, selectedRider!.uuid);
-                      },
-                      child: Text(translator.addDevice),
-                    ),
-                    ios: (context) => CupertinoButton.filled(
-                      onPressed: () {
-                        final selectedRider = ref.read(selectedRiderProvider);
+                          onAddDevicePressed(context, selectedRider!.uuid);
+                        },
+                        child: Text(translator.addDevice),
+                      );
+                    },
+                    ios: (context) {
+                      return CupertinoButton.filled(
+                        onPressed: () {
+                          final selectedRider = ref.read(selectedRiderProvider);
 
-                        onAddDevicePressed(context, selectedRider!.uuid);
-                      },
-                      child: Text(translator.addDevice, style: const TextStyle(color: CupertinoColors.white)),
-                    ),
+                          onAddDevicePressed(context, selectedRider!.uuid);
+                        },
+                        child: Text(translator.addDevice, style: const TextStyle(color: CupertinoColors.white)),
+                      );
+                    },
                   );
                 },
               ),

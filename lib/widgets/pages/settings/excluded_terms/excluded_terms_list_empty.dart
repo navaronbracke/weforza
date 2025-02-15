@@ -12,31 +12,22 @@ class ExcludedTermsListEmpty extends StatelessWidget {
     final text = S.of(context).noDisallowedWords;
 
     return PlatformAwareWidget(
-      android: (context) => Padding(
-        padding: const EdgeInsets.all(4),
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.bodySmall,
-          textAlign: TextAlign.center,
-        ),
-      ),
+      android: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(4),
+          child: Text(text, style: Theme.of(context).textTheme.bodySmall, textAlign: TextAlign.center),
+        );
+      },
       ios: (context) {
         final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
 
         return Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
+            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
             color: CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context),
           ),
           padding: const EdgeInsets.all(4),
-          child: Text(
-            text,
-            style: textStyle.copyWith(fontSize: 13),
-            textAlign: TextAlign.center,
-          ),
+          child: Text(text, style: textStyle.copyWith(fontSize: 13), textAlign: TextAlign.center),
         );
       },
     );

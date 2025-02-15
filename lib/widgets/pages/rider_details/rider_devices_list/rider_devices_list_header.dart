@@ -16,19 +16,15 @@ class RiderDevicesListHeader extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            title,
-            style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
+          child: Text(title, style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
         );
       },
-      ios: (context) => Padding(
-        padding: const EdgeInsets.only(top: 12),
-        child: Text(
-          title,
-          style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-        ),
-      ),
+      ios: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 12),
+          child: Text(title, style: CupertinoTheme.of(context).textTheme.navTitleTextStyle),
+        );
+      },
     );
   }
 }

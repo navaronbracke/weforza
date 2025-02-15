@@ -74,14 +74,14 @@ class ExcludedTermInputField extends StatelessWidget {
 
   Widget _buildTextField() {
     return PlatformAwareWidget(
-      android: (context) => TextFormField(
-        key: textFieldKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        buildCounter: _buildAndroidCounter,
-        controller: controller,
-        decoration: InputDecoration(
-          border: MaterialStateUnderlineInputBorder.resolveWith(
-            (states) {
+      android: (context) {
+        return TextFormField(
+          key: textFieldKey,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          buildCounter: _buildAndroidCounter,
+          controller: controller,
+          decoration: InputDecoration(
+            border: MaterialStateUnderlineInputBorder.resolveWith((states) {
               final ColorScheme colorScheme = Theme.of(context).colorScheme;
               Color color = const Color(0xFFD5D5D5);
 
@@ -92,22 +92,22 @@ class ExcludedTermInputField extends StatelessWidget {
               }
 
               return UnderlineInputBorder(borderSide: BorderSide(width: 2, color: color));
-            },
+            }),
+            hintText: placeholder,
+            isDense: true,
+            suffixIcon: suffix,
           ),
-          hintText: placeholder,
-          isDense: true,
-          suffixIcon: suffix,
-        ),
-        focusNode: focusNode,
-        keyboardType: TextInputType.text,
-        maxLength: maxLength,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        onEditingComplete: onEditingComplete,
-        textAlignVertical: TextAlignVertical.center,
-        textInputAction: TextInputAction.done,
-        validator: validator,
-        inputFormatters: inputFormatters,
-      ),
+          focusNode: focusNode,
+          keyboardType: TextInputType.text,
+          maxLength: maxLength,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          onEditingComplete: onEditingComplete,
+          textAlignVertical: TextAlignVertical.center,
+          textInputAction: TextInputAction.done,
+          validator: validator,
+          inputFormatters: inputFormatters,
+        );
+      },
       ios: (_) {
         final child = CupertinoTextFormFieldRow(
           key: textFieldKey,
@@ -135,21 +135,12 @@ class ExcludedTermInputField extends StatelessWidget {
     );
   }
 
-  Widget _wrapWithDecoration(
-    Widget child, {
-    Widget? contextMenu,
-    BoxDecoration? decoration,
-    Widget? divider,
-  }) {
+  Widget _wrapWithDecoration(Widget child, {Widget? contextMenu, BoxDecoration? decoration, Widget? divider}) {
     if (contextMenu != null || divider != null) {
       child = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (divider != null) divider,
-          child,
-          if (contextMenu != null) contextMenu,
-        ],
+        children: <Widget>[if (divider != null) divider, child, if (contextMenu != null) contextMenu],
       );
     }
 
@@ -175,12 +166,7 @@ class ExcludedTermInputField extends StatelessWidget {
         // Consume gestures so that they are not handled by the focus absorber.
         // Otherwise the context menu would be closed when tapping on its blank areas.
       },
-      child: _wrapWithDecoration(
-        textField,
-        contextMenu: contextMenu,
-        decoration: decoration,
-        divider: divider,
-      ),
+      child: _wrapWithDecoration(textField, contextMenu: contextMenu, decoration: decoration, divider: divider),
     );
   }
 }

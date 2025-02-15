@@ -27,38 +27,42 @@ class SearchFieldWithClearButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (context) => TextField(
-        focusNode: focusNode,
-        controller: controller,
-        onChanged: onChanged,
-        textInputAction: TextInputAction.search,
-        keyboardType: TextInputType.text,
-        autocorrect: false,
-        decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-          labelText: placeholder,
-          suffixIcon: ValueListenableBuilder<TextEditingValue>(
-            valueListenable: controller,
-            builder: (_, value, child) {
-              return value.text.isEmpty
-                  ? const Icon(Icons.search)
-                  : IconButton(onPressed: controller.clear, icon: const Icon(Icons.clear));
-            },
-          ),
-        ),
-      ),
-      ios: (context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CupertinoSearchTextField(
+      android: (context) {
+        return TextField(
           focusNode: focusNode,
           controller: controller,
           onChanged: onChanged,
+          textInputAction: TextInputAction.search,
+          keyboardType: TextInputType.text,
           autocorrect: false,
-          placeholder: placeholder,
-        ),
-      ),
+          decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+            labelText: placeholder,
+            suffixIcon: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: controller,
+              builder: (_, value, child) {
+                return value.text.isEmpty
+                    ? const Icon(Icons.search)
+                    : IconButton(onPressed: controller.clear, icon: const Icon(Icons.clear));
+              },
+            ),
+          ),
+        );
+      },
+      ios: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CupertinoSearchTextField(
+            focusNode: focusNode,
+            controller: controller,
+            onChanged: onChanged,
+            autocorrect: false,
+            placeholder: placeholder,
+          ),
+        );
+      },
     );
   }
 }

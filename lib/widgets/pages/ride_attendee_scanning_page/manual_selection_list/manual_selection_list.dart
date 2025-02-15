@@ -21,10 +21,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// after the device scan has ended,
 /// and any conflicts with unresolved owners have been corrected.
 class ManualSelectionList extends StatefulWidget {
-  const ManualSelectionList({
-    required this.delegate,
-    super.key,
-  });
+  const ManualSelectionList({required this.delegate, super.key});
 
   /// The delegate that manages the list of active riders.
   final RideAttendeeScanningDelegate delegate;
@@ -42,15 +39,10 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
 
   Future<void>? _saveFuture;
 
-  List<Rider> _filterActiveRiders(
-    List<Rider> items,
-    ManualSelectionFilterOptions filters,
-  ) {
+  List<Rider> _filterActiveRiders(List<Rider> items, ManualSelectionFilterOptions filters) {
     return items.where((item) {
       if (!filters.showScannedResults) {
-        final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(
-          item.uuid,
-        );
+        final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(item.uuid);
 
         // The scanned results are excluded.
         if (selectedRideAttendee?.isScanned ?? false) {
@@ -80,14 +72,12 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   }
 
   void _onSaveRideAttendeesButtonPressed(BuildContext context) {
-    _saveFuture = widget.delegate.saveRideAttendeeSelection().then(
-      (updatedRide) {
-        if (mounted) {
-          // Return back to the ride detail page.
-          Navigator.of(context).pop(updatedRide);
-        }
-      },
-    );
+    _saveFuture = widget.delegate.saveRideAttendeeSelection().then((updatedRide) {
+      if (context.mounted) {
+        // Return back to the ride detail page.
+        Navigator.of(context).pop(updatedRide);
+      }
+    });
   }
 
   /// Sort the active riders on their name and alias.
@@ -134,10 +124,9 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
                   // Otherwise there are issues with gaps in the selected color of adjacent selected scan results.
                   behavior: const NoOverscrollIndicatorScrollBehavior(),
                   child: ListView.builder(
-                    itemBuilder: (context, index) => ManualSelectionListItem(
-                      delegate: widget.delegate,
-                      item: results[index],
-                    ),
+                    itemBuilder: (context, index) {
+                      return ManualSelectionListItem(delegate: widget.delegate, item: results[index]);
+                    },
                     itemCount: results.length,
                   ),
                 );

@@ -30,15 +30,12 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
     switch (mimeType) {
       case 'application/json':
       case 'text/csv':
-        await methodChannel.invokeMethod<void>(
-          'registerDocument',
-          {
-            'filePath': file.path,
-            'fileName': basename(file.path),
-            'fileSize': fileSize,
-            'fileType': mimeType,
-          },
-        );
+        await methodChannel.invokeMethod<void>('registerDocument', {
+          'filePath': file.path,
+          'fileName': basename(file.path),
+          'fileSize': fileSize,
+          'fileType': mimeType,
+        });
       default:
         throw ArgumentError.value(
           mimeType,
@@ -72,15 +69,12 @@ final class IoFileStorageDelegate extends FileStorageDelegate {
       throw ArgumentError.value(mimeType, 'mimeType', 'Only images can be registered in the image provider.');
     }
 
-    final String? result = await methodChannel.invokeMethod<String>(
-      'registerImage',
-      {
-        'filePath': file.path,
-        'fileName': basename(file.path),
-        'fileSize': fileSize,
-        'fileType': mimeType,
-      },
-    );
+    final String? result = await methodChannel.invokeMethod<String>('registerImage', {
+      'filePath': file.path,
+      'fileName': basename(file.path),
+      'fileSize': fileSize,
+      'fileType': mimeType,
+    });
 
     return Uri.tryParse(result ?? '');
   }

@@ -4,15 +4,8 @@ import 'package:weforza/model/device/device_type.dart';
 /// Each device has a [creationDate], a [name], an [ownerId] and a [type].
 class Device {
   /// The default constructor.
-  Device({
-    required this.creationDate,
-    required this.name,
-    required this.ownerId,
-    this.type = DeviceType.unknown,
-  }) : assert(
-          ownerId.isNotEmpty && name.isNotEmpty,
-          'The owner id and device name of a device should not be empty',
-        );
+  Device({required this.creationDate, required this.name, required this.ownerId, this.type = DeviceType.unknown})
+    : assert(ownerId.isNotEmpty && name.isNotEmpty, 'The owner id and device name of a device should not be empty');
 
   /// Create a device from the given [key] and [values].
   factory Device.of(String key, Map<String, dynamic> values) {

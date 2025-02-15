@@ -31,9 +31,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     // Everything after the last cell is ignored.
     regexBuilder.write(r'(.*)$');
 
-    return ImportRidersCsvReader._(
-      headerRegex: RegExp(regexBuilder.toString(), unicode: true),
-    );
+    return ImportRidersCsvReader._(headerRegex: RegExp(regexBuilder.toString(), unicode: true));
   }
 
   /// The private constructor.
@@ -65,10 +63,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   final RegExp headerRegex;
 
   @override
-  Future<void> processChunk(
-    String chunk,
-    List<SerializableRider> serializedRiders,
-  ) async {
+  Future<void> processChunk(String chunk, List<SerializableRider> serializedRiders) async {
     final List<String> cells = chunk.split(',');
 
     // Skip this line if it does not have enough cells.

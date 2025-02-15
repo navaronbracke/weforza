@@ -55,27 +55,15 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       // Sanity-check that the file name.
       // This should have been validated with the form state as well.
       if (fileName.isEmpty) {
-        throw ArgumentError.value(
-          fileName,
-          'fileName',
-          'The file name should not be empty.',
-        );
+        throw ArgumentError.value(fileName, 'fileName', 'The file name should not be empty.');
       }
 
       if (fileName.startsWith('.')) {
-        throw ArgumentError.value(
-          fileName,
-          'fileName',
-          'The file name should not be start with a dot.',
-        );
+        throw ArgumentError.value(fileName, 'fileName', 'The file name should not be start with a dot.');
       }
 
       if (!fileName.endsWith(fileFormat.formatExtension)) {
-        throw ArgumentError.value(
-          fileName,
-          'fileName',
-          'The file name should end with the correct file extension',
-        );
+        throw ArgumentError.value(fileName, 'fileName', 'The file name should end with the correct file extension');
       }
 
       // On iOS, the exported files are saved to the application documents directory.
@@ -152,10 +140,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
     // and the current filename ends with the old file extension,
     // then replace the old file extension in the file name with the new one.
     if (fileName.endsWith(oldFileExtension)) {
-      final fileNameWithNoExtension = fileName.substring(
-        0,
-        fileName.length - oldFileExtension.length,
-      );
+      final fileNameWithNoExtension = fileName.substring(0, fileName.length - oldFileExtension.length);
 
       final newFileName = fileNameWithNoExtension + value.formatExtension;
 
@@ -173,11 +158,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   }
 
   /// Write the export data to the given [file], using the given [fileFormat].
-  Future<void> writeToFile(
-    fs.File file,
-    ExportFileFormat fileFormat,
-    Options options,
-  );
+  Future<void> writeToFile(fs.File file, ExportFileFormat fileFormat, Options options);
 
   @mustCallSuper
   @override

@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/model/device/device_type.dart';
 
 class DeviceIcon extends StatelessWidget {
-  const DeviceIcon({
-    required this.type,
-    super.key,
-    this.size,
-  });
+  const DeviceIcon({required this.type, super.key, this.size});
 
   final double? size;
 
@@ -24,11 +20,7 @@ class DeviceIcon extends StatelessWidget {
         return Icon(type.icon, color: Theme.of(context).colorScheme.primary, size: size);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return Icon(
-          type.icon,
-          color: CupertinoTheme.of(context).primaryColor,
-          size: size,
-        );
+        return Icon(type.icon, color: CupertinoTheme.of(context).primaryColor, size: size);
     }
   }
 }

@@ -106,13 +106,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
         );
 
         for (final device in rider.devices) {
-          newDevices.add(
-            Device(
-              creationDate: DateTime.now(),
-              name: device,
-              ownerId: uuid,
-            ),
-          );
+          newDevices.add(Device(creationDate: DateTime.now(), name: device, ownerId: uuid));
         }
 
         continue;
@@ -124,12 +118,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
       // Update the timestamp of the last update,
       // and add any new devices for this rider.
       if (rider.lastUpdated.isAfter(existingRider.lastUpdated)) {
-        ridersToUpdate.add(
-          SerializableRiderUpdateTimestamp(
-            uuid: uuid,
-            lastUpdatedOn: rider.lastUpdated,
-          ),
-        );
+        ridersToUpdate.add(SerializableRiderUpdateTimestamp(uuid: uuid, lastUpdatedOn: rider.lastUpdated));
 
         final riderExistingDevices = existingDevices[uuid] ?? {};
 
@@ -139,9 +128,7 @@ class ImportRidersDaoImpl implements ImportRidersDao {
             continue;
           }
 
-          newDevices.add(
-            Device(creationDate: DateTime.now(), name: device, ownerId: uuid),
-          );
+          newDevices.add(Device(creationDate: DateTime.now(), name: device, ownerId: uuid));
         }
       }
     }

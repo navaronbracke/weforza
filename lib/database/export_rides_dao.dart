@@ -112,11 +112,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
         // If a rider no longer exists, don't add it.
         if (rider != null) {
           exportableRideAttendees.add(
-            ExportableRideAttendee(
-              alias: rider.alias,
-              firstName: rider.firstName,
-              lastName: rider.lastName,
-            ),
+            ExportableRideAttendee(alias: rider.alias, firstName: rider.firstName, lastName: rider.lastName),
           );
         }
       }
@@ -124,9 +120,7 @@ class ExportRidesDaoImpl implements ExportRidesDao {
       // Sort the attendees per ride, based on name and alias.
       exportableRideAttendees.sort((a1, a2) => a1.compareTo(a2));
 
-      exports.add(
-        ExportableRide(ride: ride.value, attendees: exportableRideAttendees),
-      );
+      exports.add(ExportableRide(ride: ride.value, attendees: exportableRideAttendees));
     }
 
     // Sort the exportable rides on their dates, with the most recent date first.

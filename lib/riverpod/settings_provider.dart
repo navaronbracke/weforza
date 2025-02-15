@@ -13,18 +13,12 @@ final initialSettingsProvider = Provider<Settings>(
 
 /// This provider provides the application settings.
 final settingsProvider = StateNotifierProvider<SettingsNotifier, Settings>(
-  (ref) => SettingsNotifier(
-    ref.read(initialSettingsProvider),
-    SettingsRepository(ref.read(settingsDaoProvider)),
-  ),
+  (ref) => SettingsNotifier(ref.read(initialSettingsProvider), SettingsRepository(ref.read(settingsDaoProvider))),
 );
 
 /// The notifier that manages the settings.
 class SettingsNotifier extends StateNotifier<Settings> {
-  SettingsNotifier(
-    super.initialValue,
-    this._settingsRepository,
-  );
+  SettingsNotifier(super.initialValue, this._settingsRepository);
 
   /// The repository that manages the settings.
   final SettingsRepository _settingsRepository;
@@ -43,18 +37,14 @@ class SettingsNotifier extends StateNotifier<Settings> {
 
   /// Save the list of [excludedTerms].
   Future<void> saveExcludedTerms(Set<String> excludedTerms) {
-    final Settings newSettings = state.copyWith(
-      excludedTermsFilter: excludedTerms,
-    );
+    final Settings newSettings = state.copyWith(excludedTermsFilter: excludedTerms);
 
     return _saveSettings(newSettings);
   }
 
   /// Save the [riderListFilter] value.
   Future<void> saveRiderListFilter(RiderFilterOption riderListFilter) {
-    final Settings newSettings = state.copyWith(
-      riderListFilter: riderListFilter,
-    );
+    final Settings newSettings = state.copyWith(riderListFilter: riderListFilter);
 
     return _saveSettings(newSettings);
   }

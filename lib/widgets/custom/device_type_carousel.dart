@@ -7,11 +7,7 @@ import 'package:weforza/widgets/common/device_icon.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
-  const DeviceTypeCarousel({
-    required this.controller,
-    required this.height,
-    super.key,
-  });
+  const DeviceTypeCarousel({required this.controller, required this.height, super.key});
 
   /// The controller that manages the currently selected device type index.
   final PageController controller;
@@ -26,22 +22,14 @@ class DeviceTypeCarousel extends StatelessWidget {
           child: Center(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return DeviceIcon(
-                  size: constraints.biggest.shortestSide,
-                  type: deviceType,
-                );
+                return DeviceIcon(size: constraints.biggest.shortestSide, type: deviceType);
               },
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Center(
-            child: Text(
-              deviceType.getLabel(translator),
-              style: const TextStyle(fontSize: 14.0),
-            ),
-          ),
+          child: Center(child: Text(deviceType.getLabel(translator), style: const TextStyle(fontSize: 14.0))),
         ),
       ],
     );
@@ -58,10 +46,7 @@ class DeviceTypeCarousel extends StatelessWidget {
           Expanded(
             child: PageView.builder(
               itemCount: DeviceType.values.length,
-              itemBuilder: (_, index) => _buildIcon(
-                DeviceType.values[index],
-                translator,
-              ),
+              itemBuilder: (_, index) => _buildIcon(DeviceType.values[index], translator),
               controller: controller,
             ),
           ),
@@ -131,10 +116,7 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
       child: Container(
         width: 12,
         height: 12,
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(6)),
-          color: color,
-        ),
+        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(6)), color: color),
       ),
     );
   }

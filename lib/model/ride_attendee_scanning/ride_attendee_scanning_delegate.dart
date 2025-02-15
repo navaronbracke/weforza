@@ -180,16 +180,12 @@ class RideAttendeeScanningDelegate {
     // Only include it if the owner wasn't scanned yet.
     // The value of `isScanned` is irrelevant,
     // since it is excluded from the `operator==` implementation.
-    return !_rideAttendeeController.value.contains(
-      ScannedRideAttendee(uuid: owners.first, isScanned: false),
-    );
+    return !_rideAttendeeController.value.contains(ScannedRideAttendee(uuid: owners.first, isScanned: false));
   }
 
   /// Load the active riders and their devices.
   Future<void> _loadActiveRidersWithDevices() async {
-    final activeRiders = await riderRepository.getRiders(
-      RiderFilterOption.active,
-    );
+    final activeRiders = await riderRepository.getRiders(RiderFilterOption.active);
 
     for (final activeRider in activeRiders) {
       _activeRiders[activeRider.uuid] = activeRider;
@@ -293,9 +289,7 @@ class RideAttendeeScanningDelegate {
   ScannedRideAttendee? getSelectedRideAttendee(String uuid) {
     // Lookup if an attendee with the given uuid is selected.
     // The isScanned value is irrelevant, as it is merely presentational.
-    return _rideAttendeeController.value.lookup(
-      ScannedRideAttendee(uuid: uuid, isScanned: false),
-    );
+    return _rideAttendeeController.value.lookup(ScannedRideAttendee(uuid: uuid, isScanned: false));
   }
 
   /// Get the list of unresolved device owners
@@ -304,9 +298,7 @@ class RideAttendeeScanningDelegate {
     final rideAttendees = _rideAttendeeController.value;
 
     return _unresolvedOwners.where((Rider rider) {
-      return !rideAttendees.contains(
-        ScannedRideAttendee(uuid: rider.uuid, isScanned: false),
-      );
+      return !rideAttendees.contains(ScannedRideAttendee(uuid: rider.uuid, isScanned: false));
     }).toList();
   }
 
@@ -319,9 +311,10 @@ class RideAttendeeScanningDelegate {
       return;
     }
 
-    final newState = _unresolvedOwners.isEmpty
-        ? RideAttendeeScanningState.manualSelection
-        : RideAttendeeScanningState.unresolvedOwnersSelection;
+    final newState =
+        _unresolvedOwners.isEmpty
+            ? RideAttendeeScanningState.manualSelection
+            : RideAttendeeScanningState.unresolvedOwnersSelection;
 
     _stateMachine.setState(newState);
   }
@@ -345,13 +338,7 @@ class RideAttendeeScanningDelegate {
           scannedAttendees++;
         }
 
-        rideAttendees.add(
-          RideAttendee(
-            rideDate: ride.date,
-            uuid: item.uuid,
-            isScanned: item.isScanned,
-          ),
-        );
+        rideAttendees.add(RideAttendee(rideDate: ride.date, uuid: item.uuid, isScanned: item.isScanned));
       }
 
       final updatedRide = ride.copyWith(scannedAttendees: scannedAttendees);
@@ -397,15 +384,18 @@ class RideAttendeeScanningDelegate {
 
       _stateMachine.setState(RideAttendeeScanningState.scanning);
 
-      _scanSubscription = scanner.scanForDevices(settings.scanDuration).where(_includeScanResult).listen(
-        _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
-        // Don't stop scanning even if an event was an error.
-        cancelOnError: false,
-        onError: (error) {
-          // Ignore errors from individual events.
-          // Otherwise the next scan results might be dropped.
-        },
-      );
+      _scanSubscription = scanner
+          .scanForDevices(settings.scanDuration)
+          .where(_includeScanResult)
+          .listen(
+            _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
+            // Don't stop scanning even if an event was an error.
+            cancelOnError: false,
+            onError: (error) {
+              // Ignore errors from individual events.
+              // Otherwise the next scan results might be dropped.
+            },
+          );
     } catch (_) {
       _stateMachine.setStartScanError();
     }

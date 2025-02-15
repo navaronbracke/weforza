@@ -21,10 +21,7 @@ class ExcludedTermsListHeader extends StatelessWidget {
       case TargetPlatform.macOS:
         return Text(
           title.toUpperCase(),
-          style: TextStyle(
-            fontSize: 13.0,
-            color: CupertinoColors.secondaryLabel.resolveFrom(context),
-          ),
+          style: TextStyle(fontSize: 13.0, color: CupertinoColors.secondaryLabel.resolveFrom(context)),
         );
     }
   }

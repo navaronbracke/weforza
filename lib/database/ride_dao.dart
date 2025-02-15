@@ -57,9 +57,7 @@ class RideDaoImpl implements RideDao {
 
   @override
   Future<void> addRides(List<Ride> rides) async {
-    final records = _rideStore.records(
-      rides.map((r) => r.date.toIso8601String()).toList(),
-    );
+    final records = _rideStore.records(rides.map((r) => r.date.toIso8601String()).toList());
 
     await records.put(_database, rides.map((r) => r.toMap()).toList());
   }
@@ -69,10 +67,7 @@ class RideDaoImpl implements RideDao {
     final isoDate = date.toIso8601String();
 
     return _database.transaction((txn) async {
-      await _rideAttendeeStore.delete(
-        txn,
-        finder: Finder(filter: Filter.equals('date', isoDate)),
-      );
+      await _rideAttendeeStore.delete(txn, finder: Finder(filter: Filter.equals('date', isoDate)));
 
       await _rideStore.record(isoDate).delete(txn);
     });
@@ -99,11 +94,7 @@ class RideDaoImpl implements RideDao {
       _database,
       finder: Finder(
         filter: Filter.custom((record) => attendeeIds.contains(record.key)),
-        sortOrders: [
-          SortOrder('firstname'),
-          SortOrder('lastname'),
-          SortOrder('alias'),
-        ],
+        sortOrders: [SortOrder('firstname'), SortOrder('lastname'), SortOrder('alias')],
       ),
     );
 
@@ -119,10 +110,7 @@ class RideDaoImpl implements RideDao {
 
   @override
   Future<List<Ride>> getRides() async {
-    final records = await _rideStore.find(
-      _database,
-      finder: Finder(sortOrders: [SortOrder(Field.key, false)]),
-    );
+    final records = await _rideStore.find(_database, finder: Finder(sortOrders: [SortOrder(Field.key, false)]));
 
     return records.map((r) => Ride.of(DateTime.parse(r.key), r.value)).toList();
   }
@@ -146,9 +134,7 @@ class RideDaoImpl implements RideDao {
     final rideRecordKey = ride.date.toIso8601String();
 
     // Find the attendees for the ride.
-    final rideAttendeeFinder = Finder(
-      filter: Filter.equals('date', rideRecordKey),
-    );
+    final rideAttendeeFinder = Finder(filter: Filter.equals('date', rideRecordKey));
 
     return _database.transaction((txn) async {
       // Update the ride scanned attendees counter in the record.

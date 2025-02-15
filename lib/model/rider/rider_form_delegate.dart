@@ -6,9 +6,7 @@ import 'package:weforza/repository/rider_repository.dart';
 
 /// This class represents the delegate for the rider form.
 class RiderFormDelegate extends AsyncComputationDelegate<void> {
-  RiderFormDelegate({
-    required this.repository,
-  });
+  RiderFormDelegate({required this.repository});
 
   final RiderRepository repository;
 
@@ -16,10 +14,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
 
   /// Add a new rider.
   /// The [whenComplete] function is called if the operation was successful.
-  void addRider(
-    RiderModel model, {
-    required void Function() whenComplete,
-  }) async {
+  void addRider(RiderModel model, {required void Function() whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }
@@ -49,10 +44,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
   /// Edit an existing rider.
   /// When the rider was updated successfully,
   /// the [whenComplete] function is called with the updated rider.
-  void editRider(
-    RiderModel model, {
-    required void Function(Rider updatedRider) whenComplete,
-  }) async {
+  void editRider(RiderModel model, {required void Function(Rider updatedRider) whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }

@@ -51,17 +51,11 @@ class ImportRidersDelegate {
   /// Throws a [FormatException] if the file is malformed.
   Future<Iterable<SerializableRider>> _readRidersFromFile(fs.File file) async {
     if (file.path.endsWith(ExportFileFormat.csv.formatExtension)) {
-      return _readFileWithReader<String>(
-        file,
-        reader: ImportRidersCsvReader(),
-      );
+      return _readFileWithReader<String>(file, reader: ImportRidersCsvReader());
     }
 
     if (file.path.endsWith(ExportFileFormat.json.formatExtension)) {
-      return _readFileWithReader<Map<String, dynamic>>(
-        file,
-        reader: ImportRidersJsonReader(),
-      );
+      return _readFileWithReader<Map<String, dynamic>>(file, reader: ImportRidersJsonReader());
     }
 
     throw UnsupportedFileFormatException();

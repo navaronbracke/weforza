@@ -50,16 +50,12 @@ class DeviceDaoImpl implements DeviceDao {
   /// If [creationDate] is not null, this method returns whether a device exists
   /// with the given [deviceName], [ownerUuid] and a creation date
   /// that is *different* from the given creation date.
-  Future<bool> _deviceExists(
-    String deviceName,
-    String ownerUuid, [
-    DateTime? creationDate,
-  ]) async {
+  Future<bool> _deviceExists(String deviceName, String ownerUuid, [DateTime? creationDate]) async {
     final finder = Finder(
       filter: Filter.and([
         Filter.equals('deviceName', deviceName),
         Filter.equals('owner', ownerUuid),
-        if (creationDate != null) Filter.notEquals(Field.key, creationDate.toIso8601String())
+        if (creationDate != null) Filter.notEquals(Field.key, creationDate.toIso8601String()),
       ]),
     );
 
@@ -68,10 +64,7 @@ class DeviceDaoImpl implements DeviceDao {
 
   /// Update the `lastUpdated` field of the owner of a given device.
   Future<void> _updateOwnerLastUpdated(String ownerId, DatabaseClient txn) {
-    return _riderStore.record(ownerId).update(
-      txn,
-      {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
-    );
+    return _riderStore.record(ownerId).update(txn, {'lastUpdated': DateTime.now().toStringWithoutMilliseconds()});
   }
 
   @override
@@ -116,10 +109,7 @@ class DeviceDaoImpl implements DeviceDao {
 
   @override
   Future<List<Device>> getOwnerDevices(String ownerId) async {
-    final records = await _deviceStore.find(
-      _database,
-      finder: Finder(filter: Filter.equals('owner', ownerId)),
-    );
+    final records = await _deviceStore.find(_database, finder: Finder(filter: Filter.equals('owner', ownerId)));
 
     return records.map((r) => Device.of(r.key, r.value)).toList();
   }
@@ -130,10 +120,7 @@ class DeviceDaoImpl implements DeviceDao {
       await _deviceStore.delete(
         txn,
         finder: Finder(
-          filter: Filter.and([
-            Filter.equals('deviceName', device.name),
-            Filter.equals('owner', device.ownerId),
-          ]),
+          filter: Filter.and([Filter.equals('deviceName', device.name), Filter.equals('owner', device.ownerId)]),
         ),
       );
 

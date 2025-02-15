@@ -10,10 +10,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a single item for the ride list page.
 class RideListItem extends ConsumerWidget {
-  const RideListItem({
-    required this.ride,
-    super.key,
-  });
+  const RideListItem({required this.ride, super.key});
 
   final Ride ride;
 
@@ -40,17 +37,8 @@ class RideListItem extends ConsumerWidget {
 
     final content = Row(
       children: <Widget>[
-        Expanded(
-          child: Text(
-            ride.getFormattedDate(context, shortForm: false),
-            style: style,
-          ),
-        ),
-        RideListItemAttendeeCounter(
-          key: ValueKey(ride.date),
-          counterStyle: style,
-          rideDate: ride.date,
-        ),
+        Expanded(child: Text(ride.getFormattedDate(context, shortForm: false), style: style)),
+        RideListItemAttendeeCounter(key: ValueKey(ride.date), counterStyle: style, rideDate: ride.date),
       ],
     );
 
@@ -58,17 +46,12 @@ class RideListItem extends ConsumerWidget {
       behavior: HitTestBehavior.opaque,
       child: PlatformAwareWidget(
         android: (_) => ListTile(title: content),
-        ios: (_) => Padding(
-          padding: const EdgeInsets.all(12),
-          child: content,
-        ),
+        ios: (_) => Padding(padding: const EdgeInsets.all(12), child: content),
       ),
       onTap: () {
         ref.read(selectedRideProvider.notifier).setSelectedRide(ride);
 
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const RideDetailsPage()),
-        );
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RideDetailsPage()));
       },
     );
   }

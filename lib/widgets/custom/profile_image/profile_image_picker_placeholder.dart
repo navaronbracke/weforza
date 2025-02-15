@@ -5,10 +5,7 @@ import 'package:flutter/material.dart';
 /// that displays an iOS-style grey circular shape
 /// with a clipped person icon in the middle.
 class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
-  const CupertinoProfileImagePickerPlaceholder({
-    required this.size,
-    super.key,
-  });
+  const CupertinoProfileImagePickerPlaceholder({required this.size, super.key});
 
   /// The size for the placeholder.
   final double size;
@@ -26,33 +23,22 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
               height: size,
               decoration: BoxDecoration(
                 color: CupertinoColors.systemGrey2,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(size / 2),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(size / 2)),
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Transform.translate(
                 offset: Offset(0, size / 10),
-                child: Icon(
-                  CupertinoIcons.person_solid,
-                  color: CupertinoColors.white,
-                  size: size,
-                ),
+                child: Icon(CupertinoIcons.person_solid, color: CupertinoColors.white, size: size),
               ),
             ),
             Container(
               width: size,
               height: size,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: CupertinoColors.systemGrey2,
-                  width: 3.0,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(size / 2),
-                ),
+                border: Border.all(color: CupertinoColors.systemGrey2, width: 3.0),
+                borderRadius: BorderRadius.all(Radius.circular(size / 2)),
               ),
             ),
           ],
@@ -66,10 +52,7 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
 /// that displays a Material-style circular shape
 /// with a person icon in the middle.
 class MaterialProfileImagePickerPlaceholder extends StatelessWidget {
-  const MaterialProfileImagePickerPlaceholder({
-    required this.size,
-    super.key,
-  });
+  const MaterialProfileImagePickerPlaceholder({required this.size, super.key});
 
   /// The size of the placeholder.
   final double size;
@@ -81,13 +64,8 @@ class MaterialProfileImagePickerPlaceholder extends StatelessWidget {
     return Container(
       height: size,
       width: size,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(size / 2)),
-        color: colorScheme.primary,
-      ),
-      child: Center(
-        child: Icon(Icons.person, color: colorScheme.onPrimary, size: .7 * size),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(size / 2)), color: colorScheme.primary),
+      child: Center(child: Icon(Icons.person, color: colorScheme.onPrimary, size: .7 * size)),
     );
   }
 }

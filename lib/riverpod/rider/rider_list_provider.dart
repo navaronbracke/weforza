@@ -9,9 +9,7 @@ final riderListProvider = FutureProvider<List<Rider>>((ref) {
   final repository = ref.read(riderRepositoryProvider);
 
   // Watch the rider list filter for changes.
-  final filter = ref.watch(
-    settingsProvider.select((settings) => settings.riderListFilter),
-  );
+  final filter = ref.watch(settingsProvider.select((settings) => settings.riderListFilter));
 
   return repository.getRiders(filter);
 });

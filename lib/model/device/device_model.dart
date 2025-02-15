@@ -3,12 +3,7 @@ import 'package:weforza/model/device/device_type.dart';
 /// This class represents the model to add or edit a device.
 class DeviceModel {
   /// The default constructor.
-  const DeviceModel({
-    required this.creationDate,
-    required this.name,
-    required this.ownerId,
-    required this.type,
-  });
+  const DeviceModel({required this.creationDate, required this.name, required this.ownerId, required this.type});
 
   /// The local creation date of this device,
   /// or null if the device should be created.

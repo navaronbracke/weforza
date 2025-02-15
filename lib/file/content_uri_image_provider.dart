@@ -8,10 +8,8 @@ import 'package:weforza/native_service/file_storage_delegate.dart';
 @immutable
 final class ContentUriImage extends ImageProvider<ContentUriImage> {
   /// Creates a new [ContentUriImage] from the given [uri].
-  ContentUriImage({
-    required this.fileStorageDelegate,
-    required this.uri,
-  }) : assert(uri.isScheme('content'), "Only 'content://' Uris are supported.");
+  ContentUriImage({required this.fileStorageDelegate, required this.uri})
+    : assert(uri.isScheme('content'), "Only 'content://' Uris are supported.");
 
   /// The delegate that will load the image.
   final FileStorageDelegate fileStorageDelegate;
@@ -48,9 +46,7 @@ final class ContentUriImage extends ImageProvider<ContentUriImage> {
       codec: _loadAsync(key, decode: decode),
       scale: key.scale,
       debugLabel: key.uri.toString(),
-      informationCollector: () => <DiagnosticsNode>[
-        ErrorDescription('Uri: ${key.uri}'),
-      ],
+      informationCollector: () => <DiagnosticsNode>[ErrorDescription('Uri: ${key.uri}')],
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:weforza/extensions/date_extension.dart';
+import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents a single rider that can be (de)serialized.
 class SerializableRider implements Comparable<SerializableRider> {
@@ -11,9 +12,21 @@ class SerializableRider implements Comparable<SerializableRider> {
     required this.lastName,
     required this.lastUpdated,
   }) : assert(
-          firstName.isNotEmpty && lastName.isNotEmpty,
-          'The first name and last name of a serializable rider cannot be empty',
-        );
+         firstName.isNotEmpty && lastName.isNotEmpty,
+         'The first name and last name of a serializable rider cannot be empty',
+       );
+
+  /// Create a [SerializableRider] from a [Rider] and a collection of [devices] per rider.
+  factory SerializableRider.fromRider(Rider rider, Map<String, Set<String>> devices) {
+    return SerializableRider(
+      active: rider.active,
+      alias: rider.alias,
+      devices: devices[rider.uuid] ?? <String>{},
+      firstName: rider.firstName,
+      lastName: rider.lastName,
+      lastUpdated: rider.lastUpdated,
+    );
+  }
 
   /// Whether this rider is active.
   final bool active;
@@ -35,11 +48,7 @@ class SerializableRider implements Comparable<SerializableRider> {
 
   /// Get the identifying serialization key for this rider.
   SerializableRiderKey get key {
-    return SerializableRiderKey(
-      alias: alias,
-      firstName: firstName,
-      lastName: lastName,
-    );
+    return SerializableRiderKey(alias: alias, firstName: firstName, lastName: lastName);
   }
 
   /// Serialize this rider to a comma separated string.
@@ -119,14 +128,11 @@ class SerializableRider implements Comparable<SerializableRider> {
 ///
 /// This class is typically used as a key in a [Map].
 class SerializableRiderKey {
-  SerializableRiderKey({
-    required this.alias,
-    required this.firstName,
-    required this.lastName,
-  }) : assert(
-          firstName.isNotEmpty && lastName.isNotEmpty,
-          'The first name and last name of a serializable rider key cannot be empty',
-        );
+  SerializableRiderKey({required this.alias, required this.firstName, required this.lastName})
+    : assert(
+        firstName.isNotEmpty && lastName.isNotEmpty,
+        'The first name and last name of a serializable rider key cannot be empty',
+      );
 
   /// The alias of the [SerializableRider].
   final String alias;
@@ -153,10 +159,7 @@ class SerializableRiderKey {
 /// of the last update of a [SerializableRider].
 class SerializableRiderUpdateTimestamp {
   /// The default constructor.
-  const SerializableRiderUpdateTimestamp({
-    required this.lastUpdatedOn,
-    required this.uuid,
-  });
+  const SerializableRiderUpdateTimestamp({required this.lastUpdatedOn, required this.uuid});
 
   /// The timestamp of the last update
   /// of the [SerializableRider] with the given [uuid].

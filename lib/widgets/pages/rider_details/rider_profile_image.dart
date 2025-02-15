@@ -9,14 +9,8 @@ class RiderProfileImage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedRider = ref.watch(
-      selectedRiderProvider.select((value) => value!),
-    );
+    final selectedRider = ref.watch(selectedRiderProvider.select((value) => value!));
 
-    return AdaptiveProfileImage(
-      image: selectedRider.profileImage,
-      personInitials: selectedRider.initials,
-      size: 72,
-    );
+    return AdaptiveProfileImage(image: selectedRider.profileImage, personInitials: selectedRider.initials, size: 72);
   }
 }

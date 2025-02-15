@@ -53,12 +53,7 @@ class RiderDaoImpl implements RiderDao {
   /// If [uuid] is not null, this method returns whether a rider exists
   /// with the given [firstName], [lastName], [alias] and a uuid
   /// that is *different* from the given uuid.
-  Future<bool> _riderExists(
-    String firstName,
-    String lastName,
-    String alias, [
-    String? uuid,
-  ]) async {
+  Future<bool> _riderExists(String firstName, String lastName, String alias, [String? uuid]) async {
     final filters = [
       Filter.equals('firstname', firstName),
       Filter.equals('lastname', lastName),
@@ -97,34 +92,19 @@ class RiderDaoImpl implements RiderDao {
   Future<void> deleteRider(String uuid) {
     return _database.transaction((txn) async {
       await _riderStore.record(uuid).delete(txn);
-      await _rideAttendeeStore.delete(
-        txn,
-        finder: Finder(filter: Filter.equals('attendee', uuid)),
-      );
-      await _deviceStore.delete(
-        txn,
-        finder: Finder(filter: Filter.equals('owner', uuid)),
-      );
+      await _rideAttendeeStore.delete(txn, finder: Finder(filter: Filter.equals('attendee', uuid)));
+      await _deviceStore.delete(txn, finder: Finder(filter: Filter.equals('owner', uuid)));
     });
   }
 
   @override
   Future<int> getAttendingCount(String uuid) {
-    return _rideAttendeeStore.count(
-      _database,
-      filter: Filter.equals('attendee', uuid),
-    );
+    return _rideAttendeeStore.count(_database, filter: Filter.equals('attendee', uuid));
   }
 
   @override
   Future<List<Rider>> getRiders(RiderFilterOption filter, {required FileUriParser fileUriParser}) async {
-    final finder = Finder(
-      sortOrders: [
-        SortOrder('firstname'),
-        SortOrder('lastname'),
-        SortOrder('alias'),
-      ],
-    );
+    final finder = Finder(sortOrders: [SortOrder('firstname'), SortOrder('lastname'), SortOrder('alias')]);
 
     switch (filter) {
       case RiderFilterOption.active:
@@ -147,10 +127,7 @@ class RiderDaoImpl implements RiderDao {
     final record = _riderStore.record(uuid);
 
     if (await record.exists(_database)) {
-      await record.update(
-        _database,
-        {'active': value, 'lastUpdated': DateTime.now().toStringWithoutMilliseconds()},
-      );
+      await record.update(_database, {'active': value, 'lastUpdated': DateTime.now().toStringWithoutMilliseconds()});
     }
   }
 

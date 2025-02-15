@@ -9,9 +9,6 @@ class RideDetailsTitle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ride = ref.watch(selectedRideProvider);
 
-    return Text(
-      ride!.getFormattedDate(context),
-      style: const TextStyle(fontSize: 16),
-    );
+    return Text(ride!.getFormattedDate(context), style: const TextStyle(fontSize: 16));
   }
 }

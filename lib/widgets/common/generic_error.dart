@@ -6,13 +6,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents a generic error widget.
 class GenericError extends StatelessWidget {
-  const GenericError({
-    this.actionButton,
-    this.androidIcon,
-    this.iosIcon,
-    this.message,
-    super.key,
-  });
+  const GenericError({this.actionButton, this.androidIcon, this.iosIcon, this.message, super.key});
 
   /// The action button that is displayed below the [message].
   final Widget? actionButton;
@@ -82,10 +76,7 @@ class GenericErrorLabel extends StatelessWidget {
     return PlatformAwareWidget(
       android: (context) {
         final child = DefaultTextStyle(
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.error,
-            fontSize: 14,
-          ),
+          style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 14),
           child: Text(message, softWrap: true),
         );
 
@@ -97,10 +88,7 @@ class GenericErrorLabel extends StatelessWidget {
       },
       ios: (_) {
         final child = DefaultTextStyle(
-          style: const TextStyle(
-            color: CupertinoColors.destructiveRed,
-            fontWeight: FontWeight.w500,
-          ),
+          style: const TextStyle(color: CupertinoColors.destructiveRed, fontWeight: FontWeight.w500),
           child: Text(message),
         );
 
@@ -117,12 +105,7 @@ class GenericErrorLabel extends StatelessWidget {
 /// This class represents a [GenericError] with a default back button
 /// as the [GenericError.actionButton].
 class GenericErrorWithBackButton extends StatelessWidget {
-  const GenericErrorWithBackButton({
-    required this.message,
-    this.androidIcon,
-    this.iosIcon,
-    super.key,
-  });
+  const GenericErrorWithBackButton({required this.message, this.androidIcon, this.iosIcon, super.key});
 
   /// The icon that is used for [TargetPlatform.android].
   ///
@@ -143,14 +126,8 @@ class GenericErrorWithBackButton extends StatelessWidget {
 
     return GenericError(
       actionButton: PlatformAwareWidget(
-        android: (_) => FilledButton.tonal(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(goBackLabel),
-        ),
-        ios: (_) => CupertinoButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(goBackLabel),
-        ),
+        android: (_) => FilledButton.tonal(onPressed: () => Navigator.of(context).pop(), child: Text(goBackLabel)),
+        ios: (_) => CupertinoButton(onPressed: () => Navigator.of(context).pop(), child: Text(goBackLabel)),
       ),
       androidIcon: androidIcon,
       iosIcon: iosIcon,
@@ -189,20 +166,11 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconTheme(
-          data: IconThemeData(
-            size: MediaQuery.sizeOf(context).shortestSide * .1,
-          ),
-          child: icon,
-        ),
+        IconTheme(data: IconThemeData(size: MediaQuery.sizeOf(context).shortestSide * .1), child: icon),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
-            child: Text(
-              errorMessage ?? S.of(context).genericError,
-              textAlign: TextAlign.center,
-              softWrap: true,
-            ),
+            child: Text(errorMessage ?? S.of(context).genericError, textAlign: TextAlign.center, softWrap: true),
           ),
         ),
         OverflowBar(
@@ -211,10 +179,7 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
           overflowDirection: VerticalDirection.up,
           overflowSpacing: 16,
           spacing: 8,
-          children: [
-            if (secondaryButton != null) secondaryButton!,
-            primaryButton,
-          ],
+          children: [if (secondaryButton != null) secondaryButton!, primaryButton],
         ),
       ],
     );

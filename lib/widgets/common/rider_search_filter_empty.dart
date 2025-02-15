@@ -18,10 +18,7 @@ class RiderSearchFilterEmpty extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4, left: 16, right: 16),
-          child: Text(
-            S.of(context).searchRidersEmpty,
-            textAlign: TextAlign.center,
-          ),
+          child: Text(S.of(context).searchRidersEmpty, textAlign: TextAlign.center),
         ),
       ],
     );

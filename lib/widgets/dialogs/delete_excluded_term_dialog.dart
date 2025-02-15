@@ -6,10 +6,7 @@ import 'package:weforza/widgets/dialogs/dialogs.dart';
 /// This widget represents the dialog
 /// for confirming the deletion of an excluded term.
 class DeleteExcludedTermDialog extends StatelessWidget {
-  const DeleteExcludedTermDialog({
-    required this.term,
-    super.key,
-  });
+  const DeleteExcludedTermDialog({required this.term, super.key});
 
   /// The term that should be deleted.
   final String term;
@@ -23,14 +20,9 @@ class DeleteExcludedTermDialog extends StatelessWidget {
     // The translated value has one delimiter,
     // which is used to split off the value for the term.
     // That value is put in bold text, while the rest is not.
-    final description = translator.deleteDisallowedWordDescription.split(
-      splitDelimiter,
-    );
+    final description = translator.deleteDisallowedWordDescription.split(splitDelimiter);
 
-    assert(
-      description.length == 2,
-      'The description requires at most one delimiter.',
-    );
+    assert(description.length == 2, 'The description requires at most one delimiter.');
 
     return WeforzaAlertDialog.defaultButtons(
       confirmButtonLabel: translator.delete,
@@ -40,10 +32,7 @@ class DeleteExcludedTermDialog extends StatelessWidget {
         TextSpan(
           text: description.first,
           children: [
-            TextSpan(
-              text: term,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            TextSpan(text: term, style: const TextStyle(fontWeight: FontWeight.bold)),
             TextSpan(text: description.last),
           ],
         ),

@@ -10,10 +10,7 @@ import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class RiderListItem extends ConsumerWidget {
-  RiderListItem({
-    required this.rider,
-    required this.onPressed,
-  }) : super(key: ValueKey(rider.uuid));
+  RiderListItem({required this.rider, required this.onPressed}) : super(key: ValueKey(rider.uuid));
 
   /// The rider that is displayed in this item.
   final Rider rider;
@@ -44,10 +41,7 @@ class RiderListItem extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
-              child: AdaptiveProfileImage(
-                image: rider.profileImage,
-                personInitials: rider.initials,
-              ),
+              child: AdaptiveProfileImage(image: rider.profileImage, personInitials: rider.initials),
             ),
             Expanded(
               child: RiderNameAndAlias.twoLines(
@@ -58,10 +52,7 @@ class RiderListItem extends ConsumerWidget {
                 secondLineStyle: textTheme.lastNameStyle,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: RiderListItemAttendingCount(rider: rider),
-            ),
+            Padding(padding: const EdgeInsets.only(left: 4), child: RiderListItemAttendingCount(rider: rider)),
           ],
         ),
       ),

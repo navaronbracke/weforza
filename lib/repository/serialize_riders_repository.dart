@@ -7,12 +7,7 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 
 /// This class represents the repository that handles (de)serializing riders.
 class SerializeRidersRepository {
-  SerializeRidersRepository(
-    this.deviceDao,
-    this.fileUriParser,
-    this.importRidersDao,
-    this.riderDao,
-  );
+  SerializeRidersRepository(this.deviceDao, this.fileUriParser, this.importRidersDao, this.riderDao);
 
   final DeviceDao deviceDao;
 
@@ -26,23 +21,13 @@ class SerializeRidersRepository {
   ///
   /// The returned list is sorted on the rider name, alias and active state.
   Future<Iterable<SerializableRider>> getSerializableRiders() async {
-    final (devices, riders) = await (
-      deviceDao.getAllDevicesGroupedByOwnerId(),
-      riderDao.getRiders(RiderFilterOption.all, fileUriParser: fileUriParser),
-    ).wait;
+    final (devices, riders) =
+        await (
+          deviceDao.getAllDevicesGroupedByOwnerId(),
+          riderDao.getRiders(RiderFilterOption.all, fileUriParser: fileUriParser),
+        ).wait;
 
-    final output = riders
-        .map(
-          (rider) => SerializableRider(
-            active: rider.active,
-            alias: rider.alias,
-            devices: devices[rider.uuid] ?? <String>{},
-            firstName: rider.firstName,
-            lastName: rider.lastName,
-            lastUpdated: rider.lastUpdated,
-          ),
-        )
-        .toList();
+    final output = riders.map((rider) => SerializableRider.fromRider(rider, devices)).toList();
 
     output.sort((s1, s2) => s1.compareTo(s2));
 

@@ -5,19 +5,15 @@ import 'package:rxdart/rxdart.dart';
 /// This class represents a delegate that handles deferred saving of a value.
 abstract class DeferredSaveDelegate<T> {
   /// The default constructor.
-  DeferredSaveDelegate({
-    required T initialValue,
-    Duration debounce = const Duration(seconds: 1),
-  }) : _controller = BehaviorSubject.seeded(initialValue) {
-    _subscription = _controller.debounceTime(debounce).listen(
-      (T value) {
-        if (_controller.isClosed) {
-          return;
-        }
+  DeferredSaveDelegate({required T initialValue, Duration debounce = const Duration(seconds: 1)})
+    : _controller = BehaviorSubject.seeded(initialValue) {
+    _subscription = _controller.debounceTime(debounce).listen((T value) {
+      if (_controller.isClosed) {
+        return;
+      }
 
-        saveValue(value);
-      },
-    );
+      saveValue(value);
+    });
   }
 
   /// The controller that manages the value that should be saved.

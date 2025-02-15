@@ -102,7 +102,7 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
             break;
         }
 
-        color = selected ? theme.colorScheme.primary : disabledColor;
+        color = selected ? ColorScheme.of(context).primary : disabledColor;
         break;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

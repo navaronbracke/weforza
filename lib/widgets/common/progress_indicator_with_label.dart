@@ -19,7 +19,7 @@ class ProgressIndicatorWithLabel extends StatelessWidget {
             const CircularProgressIndicator(),
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(label, style: Theme.of(context).textTheme.labelMedium),
+              child: Text(label, style: TextTheme.of(context).labelMedium),
             ),
           ],
         );

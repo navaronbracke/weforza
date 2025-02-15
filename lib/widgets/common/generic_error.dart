@@ -76,7 +76,7 @@ class GenericErrorLabel extends StatelessWidget {
     return PlatformAwareWidget(
       android: (context) {
         final child = DefaultTextStyle(
-          style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 14),
+          style: TextStyle(color: ColorScheme.of(context).error, fontSize: 14),
           child: Text(message, softWrap: true),
         );
 

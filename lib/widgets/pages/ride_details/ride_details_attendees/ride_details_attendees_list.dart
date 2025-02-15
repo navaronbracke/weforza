@@ -59,7 +59,7 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
   Widget _buildAndroidLayout(BuildContext context, {required int total, int? scannedAttendees}) {
     final translator = S.of(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = ColorScheme.of(context);
 
     return BottomAppBar(
       height: 56,

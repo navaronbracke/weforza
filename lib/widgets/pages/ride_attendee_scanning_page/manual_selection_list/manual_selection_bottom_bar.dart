@@ -28,7 +28,7 @@ class ManualSelectionBottomBar extends StatelessWidget {
   final Widget showScannedResultsToggle;
 
   Widget _buildAndroidLayout(BuildContext context, BoxConstraints constraints) {
-    final attendeeCounter = _buildAttendeeCounter(Icon(Icons.people, color: Theme.of(context).colorScheme.primary));
+    final attendeeCounter = _buildAttendeeCounter(Icon(Icons.people, color: ColorScheme.of(context).primary));
 
     final scannedResultsToggle = Row(
       mainAxisSize: MainAxisSize.min,

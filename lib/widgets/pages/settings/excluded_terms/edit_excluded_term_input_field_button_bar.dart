@@ -48,7 +48,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
       child: PlatformAwareWidget(
         android: (context) {
           return IconButton(
-            icon: Icon(Icons.delete, color: Theme.of(context).colorScheme.error),
+            icon: Icon(Icons.delete, color: ColorScheme.of(context).error),
             onPressed: () => onDeletePressed(context),
             padding: EdgeInsets.zero,
           );
@@ -69,7 +69,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         final confirmButton = PlatformAwareWidget(
           android: (context) {
             return IconButton(
-              color: Theme.of(context).colorScheme.primary,
+              color: ColorScheme.of(context).primary,
               icon: const Icon(Icons.check),
               onPressed: isValid ? () => onCommitValidTerm(currentValue) : null,
             );

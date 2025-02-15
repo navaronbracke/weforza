@@ -17,7 +17,7 @@ class DeviceIcon extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Icon(type.icon, color: Theme.of(context).colorScheme.primary, size: size);
+        return Icon(type.icon, color: ColorScheme.of(context).primary, size: size);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Icon(type.icon, color: CupertinoTheme.of(context).primaryColor, size: size);

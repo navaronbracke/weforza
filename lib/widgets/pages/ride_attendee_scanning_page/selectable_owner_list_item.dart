@@ -34,13 +34,13 @@ class SelectableOwnerListItem extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        final ThemeData theme = Theme.of(context);
+        final ColorScheme colorScheme = ColorScheme.of(context);
 
-        switch (theme.brightness) {
+        switch (Theme.of(context).brightness) {
           case Brightness.dark:
-            return theme.colorScheme.onPrimary;
+            return colorScheme.onPrimary;
           case Brightness.light:
-            return theme.colorScheme.primary;
+            return colorScheme.primary;
         }
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

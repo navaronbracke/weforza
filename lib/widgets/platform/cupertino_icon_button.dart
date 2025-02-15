@@ -9,9 +9,9 @@ class CupertinoIconButton extends StatelessWidget {
     this.color,
     this.size = kMinInteractiveDimensionCupertino,
   }) : assert(
-          size >= kMinInteractiveDimensionCupertino,
-          'The size of a CupertinoIconButton should be at least `kMinInteractiveDimensionCupertino`',
-        );
+         size >= kMinInteractiveDimensionCupertino,
+         'The size of a CupertinoIconButton should be at least `kMinInteractiveDimensionCupertino`',
+       );
 
   /// The color for the icon.
   ///
@@ -38,9 +38,10 @@ class CupertinoIconButton extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Icon(
         icon,
-        color: onPressed == null
-            ? CupertinoColors.placeholderText.resolveFrom(context)
-            : color ?? CupertinoTheme.of(context).primaryColor,
+        color:
+            onPressed == null
+                ? CupertinoColors.placeholderText.resolveFrom(context)
+                : color ?? CupertinoTheme.of(context).primaryColor,
       ),
     );
   }

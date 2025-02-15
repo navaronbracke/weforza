@@ -6,9 +6,7 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 
 /// This provider manages the selected ride.
-final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(
-  SelectedRideNotifier.new,
-);
+final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(SelectedRideNotifier.new);
 
 /// This provider provides the list of attendees for the currently selected ride.
 final selectedRideAttendeesProvider = FutureProvider<List<Rider>>((ref) async {

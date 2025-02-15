@@ -5,9 +5,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_stat
 /// This class represents a state machine for the [RideAttendeeScanningDelegate].
 class RideAttendeeScanningDelegateStateMachine {
   /// The internal state machine.
-  final _controller = BehaviorSubject.seeded(
-    RideAttendeeScanningState.requestPermissions,
-  );
+  final _controller = BehaviorSubject.seeded(RideAttendeeScanningState.requestPermissions);
 
   /// Get the current state of the state machine.
   RideAttendeeScanningState get currentState => _controller.value;

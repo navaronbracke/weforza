@@ -8,39 +8,20 @@ class RiderName extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firstName = ref.watch(
-      selectedRiderProvider.select((value) => value!.firstName),
-    );
+    final firstName = ref.watch(selectedRiderProvider.select((value) => value!.firstName));
 
-    final lastName = ref.watch(
-      selectedRiderProvider.select((value) => value!.lastName),
-    );
+    final lastName = ref.watch(selectedRiderProvider.select((value) => value!.lastName));
 
-    final alias = ref.watch(
-      selectedRiderProvider.select((value) => value!.alias),
-    );
+    final alias = ref.watch(selectedRiderProvider.select((value) => value!.alias));
 
     const textTheme = AppTheme.riderTextTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          firstName,
-          style: textTheme.firstNameLargeStyle,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          lastName,
-          style: textTheme.lastNameLargeStyle,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (alias.isNotEmpty)
-          Text(
-            "'$alias'",
-            style: textTheme.aliasStyle,
-            overflow: TextOverflow.ellipsis,
-          ),
+        Text(firstName, style: textTheme.firstNameLargeStyle, overflow: TextOverflow.ellipsis),
+        Text(lastName, style: textTheme.lastNameLargeStyle, overflow: TextOverflow.ellipsis),
+        if (alias.isNotEmpty) Text("'$alias'", style: textTheme.aliasStyle, overflow: TextOverflow.ellipsis),
       ],
     );
   }

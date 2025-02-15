@@ -4,18 +4,12 @@ import 'package:flutter/cupertino.dart';
 /// with theming similar to a [CupertinoTabBar].
 class CupertinoBottomBar extends StatelessWidget {
   /// The default constructor.
-  const CupertinoBottomBar({
-    required this.child,
-    super.key,
-    this.height,
-  });
+  const CupertinoBottomBar({required this.child, super.key, this.height});
 
   /// Create a [CupertinoBottomBar] with a height
   /// equal to that of a [CupertinoTabBar].
-  const CupertinoBottomBar.constrained({
-    required Widget child,
-    Key? key,
-  }) : this(key: key, child: child, height: _kTabBarHeight);
+  const CupertinoBottomBar.constrained({required Widget child, Key? key})
+    : this(key: key, child: child, height: _kTabBarHeight);
 
   /// The child for this widget.
   final Widget child;
@@ -39,10 +33,7 @@ class CupertinoBottomBar extends StatelessWidget {
     const border = Border(
       top: BorderSide(
         // Color resolution is the same as in CupertinoTabBar.
-        color: CupertinoDynamicColor.withBrightness(
-          color: Color(0x4C000000),
-          darkColor: Color(0x29000000),
-        ),
+        color: CupertinoDynamicColor.withBrightness(color: Color(0x4C000000), darkColor: Color(0x29000000)),
         width: 0.0, // One physical pixel.
       ),
     );
@@ -51,10 +42,7 @@ class CupertinoBottomBar extends StatelessWidget {
     // It also gets bottom padding to avoid the bottom notch.
     Widget content = DefaultTextStyle(
       style: CupertinoTheme.of(context).textTheme.textStyle,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: child,
-      ),
+      child: Padding(padding: EdgeInsets.only(bottom: bottomPadding), child: child),
     );
 
     if (height != null) {
@@ -63,19 +51,11 @@ class CupertinoBottomBar extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border(
-          top: border.top.copyWith(
-            color: CupertinoDynamicColor.resolve(border.top.color, context),
-          ),
-        ),
+        border: Border(top: border.top.copyWith(color: CupertinoDynamicColor.resolve(border.top.color, context))),
         color: backgroundColor,
       ),
       child: Builder(
-        builder: (context) => MediaQuery.removePadding(
-          context: context,
-          removeBottom: true,
-          child: content,
-        ),
+        builder: (context) => MediaQuery.removePadding(context: context, removeBottom: true, child: content),
       ),
     );
   }

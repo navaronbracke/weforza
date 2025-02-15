@@ -14,24 +14,18 @@ class ExportableRide {
   }
 
   Map<String, Object?> toJson() {
-    return {
-      'ride': ride.toJson(),
-      'attendees': attendees.map((attendee) => attendee.toJson()).toList(),
-    };
+    return {'ride': ride.toJson(), 'attendees': attendees.map((attendee) => attendee.toJson()).toList()};
   }
 }
 
 /// This class represents a RideAttendee in a format that is suitable
 /// for exporting inside a [ExportableRide].
 class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
-  ExportableRideAttendee({
-    required this.firstName,
-    required this.lastName,
-    this.alias = '',
-  }) : assert(
-          firstName.isNotEmpty && lastName.isNotEmpty,
-          'The first name and last name of an exportable ride attendee should not be empty',
-        );
+  ExportableRideAttendee({required this.firstName, required this.lastName, this.alias = ''})
+    : assert(
+        firstName.isNotEmpty && lastName.isNotEmpty,
+        'The first name and last name of an exportable ride attendee should not be empty',
+      );
 
   final String firstName;
   final String lastName;

@@ -16,18 +16,12 @@ class ExcludedTermsListFooter extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        return Text(
-          description,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
-        );
+        return Text(description, style: Theme.of(context).textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic));
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         return Text(
           description,
-          style: TextStyle(
-            fontSize: 13.0,
-            color: CupertinoColors.secondaryLabel.resolveFrom(context),
-          ),
+          style: TextStyle(fontSize: 13.0, color: CupertinoColors.secondaryLabel.resolveFrom(context)),
         );
     }
   }

@@ -1,13 +1,7 @@
 /// This class represents a [Rider] that attends a given [Ride].
 class RideAttendee {
-  RideAttendee({
-    required this.isScanned,
-    required this.rideDate,
-    required this.uuid,
-  }) : assert(
-          uuid.isNotEmpty,
-          'The uuid of a ride attendee should not be empty',
-        );
+  RideAttendee({required this.isScanned, required this.rideDate, required this.uuid})
+    : assert(uuid.isNotEmpty, 'The uuid of a ride attendee should not be empty');
 
   /// Create a new ride attendee from the given [values].
   factory RideAttendee.of(Map<String, dynamic> values) {
@@ -32,11 +26,7 @@ class RideAttendee {
   final String uuid;
 
   Map<String, dynamic> toMap() {
-    return {
-      'attendee': uuid,
-      'date': rideDate.toIso8601String(),
-      'isScanned': isScanned,
-    };
+    return {'attendee': uuid, 'date': rideDate.toIso8601String(), 'isScanned': isScanned};
   }
 
   @override

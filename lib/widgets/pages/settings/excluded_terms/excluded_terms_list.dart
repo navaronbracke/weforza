@@ -49,10 +49,7 @@ class ExcludedTermsList extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                addTermInputField,
-                const ExcludedTermsListEmpty(),
-              ],
+              children: [addTermInputField, const ExcludedTermsListEmpty()],
             ),
           );
         }
@@ -68,7 +65,8 @@ class ExcludedTermsList extends StatelessWidget {
               // Remove the initial offset from the add term input field.
               return builder(terms, index - 1);
             },
-            childCount: terms.length + 1, // The add term input is the first item.
+            // The add term input is the first item.
+            childCount: terms.length + 1,
             semanticIndexCallback: _computeSemanticIndex,
           ),
         );

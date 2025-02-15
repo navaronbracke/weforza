@@ -6,37 +6,35 @@ import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 
 /// This provider provides the devices of the selected rider.
-final selectedRiderDevicesProvider =
-    StateNotifierProvider<SelectedRiderDevicesNotifier, AsyncValue<List<Device>>>((ref) {
+final selectedRiderDevicesProvider = StateNotifierProvider<SelectedRiderDevicesNotifier, AsyncValue<List<Device>>>((
+  ref,
+) {
   final uuid = ref.watch(selectedRiderProvider.select((r) => r?.uuid));
   final repository = ref.read(deviceRepositoryProvider);
 
-  return SelectedRiderDevicesNotifier(
-    repository: repository,
-    uuid: uuid,
-  );
+  return SelectedRiderDevicesNotifier(repository: repository, uuid: uuid);
 });
 
 class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>>> {
-  SelectedRiderDevicesNotifier({
-    required this.repository,
-    String? uuid,
-  }) : super(const AsyncLoading()) {
+  SelectedRiderDevicesNotifier({required this.repository, String? uuid}) : super(const AsyncLoading()) {
     if (uuid == null) {
       state = AsyncError(ArgumentError.notNull('uuid'), StackTrace.current);
 
       return;
     }
 
-    repository.getOwnerDevices(uuid).then((devices) {
-      if (mounted) {
-        state = AsyncData(devices);
-      }
-    }).catchError((error) {
-      if (mounted) {
-        state = AsyncError(error, StackTrace.current);
-      }
-    });
+    repository
+        .getOwnerDevices(uuid)
+        .then((devices) {
+          if (mounted) {
+            state = AsyncData(devices);
+          }
+        })
+        .catchError((error) {
+          if (mounted) {
+            state = AsyncError(error, StackTrace.current);
+          }
+        });
   }
 
   /// The repository that manages the devices.
@@ -48,12 +46,7 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
       throw StateError('The devices list was not loaded yet');
     }
 
-    final device = Device(
-      creationDate: DateTime.now(),
-      name: model.name,
-      ownerId: model.ownerId,
-      type: model.type,
-    );
+    final device = Device(creationDate: DateTime.now(), name: model.name, ownerId: model.ownerId, type: model.type);
 
     await repository.addDevice(device);
 
@@ -97,12 +90,7 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
       throw ArgumentError.notNull('creationDate');
     }
 
-    final newDevice = Device(
-      creationDate: creationDate,
-      name: model.name,
-      ownerId: model.ownerId,
-      type: model.type,
-    );
+    final newDevice = Device(creationDate: creationDate, name: model.name, ownerId: model.ownerId, type: model.type);
 
     await repository.updateDevice(newDevice);
 
@@ -112,9 +100,7 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
 
     final newDevices = List.of(state.value!);
 
-    final index = newDevices.indexWhere(
-      (d) => d.creationDate == model.creationDate,
-    );
+    final index = newDevices.indexWhere((d) => d.creationDate == model.creationDate);
 
     if (index == -1) {
       throw ArgumentError.value(index);

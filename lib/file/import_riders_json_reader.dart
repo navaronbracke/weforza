@@ -9,10 +9,7 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 /// that handles the JSON format.
 class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynamic>> {
   @override
-  Future<void> processChunk(
-    Map<String, dynamic> chunk,
-    List<SerializableRider> serializedRiders,
-  ) async {
+  Future<void> processChunk(Map<String, dynamic> chunk, List<SerializableRider> serializedRiders) async {
     try {
       final alias = chunk['alias'] as String? ?? '';
       final firstName = chunk['firstName'] as String;
@@ -25,9 +22,7 @@ class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynam
         return;
       }
 
-      final lastUpdated = DateTime.tryParse(
-        chunk['lastUpdated'] as String? ?? '',
-      );
+      final lastUpdated = DateTime.tryParse(chunk['lastUpdated'] as String? ?? '');
 
       final devices = (chunk['devices'] as List?)?.cast<String>() ?? [];
 

@@ -6,9 +6,7 @@ import 'package:rxdart/rxdart.dart';
 /// This delegate applies a [debounceTime] to the incoming events.
 class DebounceSearchDelegate {
   /// The default constructor.
-  DebounceSearchDelegate({
-    this.debounceTime = const Duration(milliseconds: 500),
-  });
+  DebounceSearchDelegate({this.debounceTime = const Duration(milliseconds: 500)});
 
   /// The internal controller.
   final _controller = BehaviorSubject.seeded('');

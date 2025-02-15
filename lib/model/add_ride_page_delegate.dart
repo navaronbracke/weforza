@@ -6,9 +6,7 @@ import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
 /// This class represents the delegate for the add ride page.
 class AddRidePageDelegate extends AsyncComputationDelegate<void> {
-  AddRidePageDelegate({
-    required this.repository,
-  }) {
+  AddRidePageDelegate({required this.repository}) {
     _initializeFuture = repository.getRideDates().then(_existingRides.addAll);
   }
 
@@ -80,9 +78,7 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   /// Save the selected rides.
   ///
   /// The [whenComplete] handler is invoked after the rides have been added.
-  void saveRides({
-    required void Function() whenComplete,
-  }) async {
+  void saveRides({required void Function() whenComplete}) async {
     final rides = _selectionController.value;
 
     if (!canStartComputation() || _savingSelection || rides.isEmpty) {

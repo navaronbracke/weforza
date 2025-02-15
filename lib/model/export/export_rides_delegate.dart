@@ -17,20 +17,12 @@ class ExportRidesOptions {
 
 /// This class represents the delegate that handles exporting rides.
 class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
-  ExportRidesDelegate({
-    required super.fileStorageDelegate,
-    required super.fileSystem,
-    required this.repository,
-  });
+  ExportRidesDelegate({required super.fileStorageDelegate, required super.fileSystem, required this.repository});
 
   final ExportRidesRepository repository;
 
   @override
-  Future<void> writeToFile(
-    File file,
-    ExportFileFormat fileFormat,
-    ExportRidesOptions options,
-  ) async {
+  Future<void> writeToFile(File file, ExportFileFormat fileFormat, ExportRidesOptions options) async {
     final rides = await repository.getRides(options.ride);
 
     switch (fileFormat) {

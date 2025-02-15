@@ -19,25 +19,16 @@ class RiderDetailsPage extends StatelessWidget {
   const RiderDetailsPage({super.key});
 
   void _goToEditRiderPage(BuildContext context, Rider rider) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => RiderForm(rider: rider)),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (context) => RiderForm(rider: rider)));
   }
 
   void _showDeleteDialog(BuildContext context) {
-    showAdaptiveDialog<void>(
-      context: context,
-      builder: (_) => const DeleteRiderDialog(),
-    );
+    showAdaptiveDialog<void>(context: context, builder: (_) => const DeleteRiderDialog());
   }
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAwareWidget(
-      android: _buildAndroidLayout,
-      ios: _buildIOSLayout,
-    );
+    return PlatformAwareWidget(android: _buildAndroidLayout, ios: _buildIOSLayout);
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -59,10 +50,7 @@ class RiderDetailsPage extends StatelessWidget {
               );
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => _showDeleteDialog(context),
-          ),
+          IconButton(icon: const Icon(Icons.delete), onPressed: () => _showDeleteDialog(context)),
         ],
       ),
       body: _buildBody(context),
@@ -72,24 +60,10 @@ class RiderDetailsPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return const Column(
       children: <Widget>[
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: RiderProfileImage(),
-            ),
-            Expanded(child: RiderName()),
-          ],
-        ),
+        Row(children: [Padding(padding: EdgeInsets.all(8), child: RiderProfileImage()), Expanded(child: RiderName())]),
         Padding(
           padding: EdgeInsets.only(top: 4, left: 8, right: 8),
-          child: Row(
-            children: [
-              SelectedRiderAttendingCount(),
-              Spacer(),
-              RiderActiveToggle(),
-            ],
-          ),
+          child: Row(children: [SelectedRiderAttendingCount(), Spacer(), RiderActiveToggle()]),
         ),
         Expanded(child: RiderDevicesList()),
       ],
@@ -103,12 +77,7 @@ class RiderDetailsPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Row(
           children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Text(translator.details),
-              ),
-            ),
+            Expanded(child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.details))),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -135,10 +104,7 @@ class RiderDetailsPage extends StatelessWidget {
         ),
         transitionBetweenRoutes: false,
       ),
-      child: SafeArea(
-        bottom: false,
-        child: _buildBody(context),
-      ),
+      child: SafeArea(bottom: false, child: _buildBody(context)),
     );
   }
 }

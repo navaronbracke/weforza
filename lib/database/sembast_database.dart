@@ -15,14 +15,10 @@ import 'package:weforza/database/settings_dao.dart';
 /// This class represents a [Database] implementation that uses a Sembast database under the hood.
 class SembastDatabase implements Database {
   /// Create an on-disk database.
-  SembastDatabase()
-      : _factory = databaseFactoryIo,
-        databaseName = 'weforza_database.db';
+  SembastDatabase() : _factory = databaseFactoryIo, databaseName = 'weforza_database.db';
 
   /// Create an in-memory database.
-  SembastDatabase.memory()
-      : _factory = databaseFactoryMemory,
-        databaseName = 'test_database.db';
+  SembastDatabase.memory() : _factory = databaseFactoryMemory, databaseName = 'test_database.db';
 
   /// The internal instance of the database.
   late sembast.Database _database;

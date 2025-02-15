@@ -20,10 +20,10 @@ final _riderAttendingCount = FutureProvider.autoDispose.family<int, String>((ref
 /// that is used by [RiderListItemAttendingCount] and [SelectedRiderAttendingCount].
 class _RiderAttendingCount extends StatelessWidget {
   const _RiderAttendingCount(this.value, {required this.labelAlignment})
-      : assert(
-          labelAlignment == AxisDirection.left || labelAlignment == AxisDirection.right,
-          'The label alignment should be AxisDirection.left or AxisDirection.right',
-        );
+    : assert(
+        labelAlignment == AxisDirection.left || labelAlignment == AxisDirection.right,
+        'The label alignment should be AxisDirection.left or AxisDirection.right',
+      );
 
   /// The alignment for the label.
   final AxisDirection labelAlignment;
@@ -40,10 +40,7 @@ class _RiderAttendingCount extends StatelessWidget {
         return Icon(Icons.directions_bike, color: Theme.of(context).colorScheme.primary);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
-        return Icon(
-          Icons.directions_bike,
-          color: CupertinoTheme.of(context).primaryColor,
-        );
+        return Icon(Icons.directions_bike, color: CupertinoTheme.of(context).primaryColor);
     }
   }
 
@@ -75,10 +72,7 @@ class _RiderAttendingCount extends StatelessWidget {
 
 /// This widget represents the attending count for a rider list item.
 class RiderListItemAttendingCount extends ConsumerWidget {
-  const RiderListItemAttendingCount({
-    required this.rider,
-    super.key,
-  });
+  const RiderListItemAttendingCount({required this.rider, super.key});
 
   final Rider rider;
 

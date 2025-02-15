@@ -68,10 +68,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
     final RenderObject? renderObject = context.findRenderObject();
 
     if (renderObject != null) {
-      widget.scrollController.position.ensureVisible(
-        renderObject,
-        duration: const Duration(milliseconds: 300),
-      );
+      widget.scrollController.position.ensureVisible(renderObject, duration: const Duration(milliseconds: 300));
     }
   }
 
@@ -179,18 +176,12 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
     // and keep the cursor at the end of the text.
     widget.excludedTerm.controller.value = TextEditingValue(
       text: widget.excludedTerm.term,
-      selection: TextSelection.collapsed(
-        offset: widget.excludedTerm.term.length,
-      ),
+      selection: TextSelection.collapsed(offset: widget.excludedTerm.term.length),
     );
   }
 
   String? _validateTerm(BuildContext context, String? value) {
-    return widget.delegate.validateTerm(
-      value,
-      S.of(context),
-      originalValue: widget.excludedTerm.term,
-    );
+    return widget.delegate.validateTerm(value, S.of(context), originalValue: widget.excludedTerm.term);
   }
 
   @override

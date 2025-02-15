@@ -21,37 +21,23 @@ abstract class _HomePageAppBar extends StatelessWidget {
   final HomePageTab selectedTab;
 
   void _goToAddRidePage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const AddRidePage()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddRidePage()));
   }
 
   void _goToAddRiderPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const RiderForm()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RiderForm()));
   }
 
   void _goToExportRidePage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const ExportRidePage()),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExportRidePage()));
   }
 
   void _goToExportRidersPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ExportRidersPage(),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ExportRidersPage()));
   }
 
   void _goToImportRidersPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ImportRidersPage(),
-      ),
-    );
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ImportRidersPage()));
   }
 }
 
@@ -71,24 +57,15 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
         return AppBar(
           title: const RiderListTitle(),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.person_add),
-              onPressed: () => _goToAddRiderPage(context),
-            ),
-            IconButton(
-              icon: const Icon(Icons.file_download),
-              onPressed: () => _goToImportRidersPage(context),
-            ),
+            IconButton(icon: const Icon(Icons.person_add), onPressed: () => _goToAddRiderPage(context)),
+            IconButton(icon: const Icon(Icons.file_download), onPressed: () => _goToImportRidersPage(context)),
             Consumer(
               builder: (_, ref, child) {
                 final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
 
                 return amountOfRiders > 0 ? child! : const SizedBox.shrink();
               },
-              child: IconButton(
-                icon: const Icon(Icons.file_upload),
-                onPressed: () => _goToExportRidersPage(context),
-              ),
+              child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidersPage(context)),
             ),
           ],
         );
@@ -96,20 +73,14 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
         return AppBar(
           title: Text(translator.rides),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.add),
-              onPressed: () => _goToAddRidePage(context),
-            ),
+            IconButton(icon: const Icon(Icons.add), onPressed: () => _goToAddRidePage(context)),
             Consumer(
               builder: (_, ref, child) {
                 final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
 
                 return amountOfRides > 0 ? child! : const SizedBox.shrink();
               },
-              child: IconButton(
-                icon: const Icon(Icons.file_upload),
-                onPressed: () => _goToExportRidePage(context),
-              ),
+              child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidePage(context)),
             ),
           ],
         );
@@ -157,12 +128,7 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
           transitionBetweenRoutes: false,
           middle: Row(
             children: <Widget>[
-              const Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 8),
-                  child: RiderListTitle(),
-                ),
-              ),
+              const Expanded(child: Padding(padding: EdgeInsets.only(left: 8), child: RiderListTitle())),
               CupertinoIconButton(
                 icon: CupertinoIcons.person_badge_plus_fill,
                 onPressed: () => _goToAddRiderPage(context),
@@ -190,16 +156,8 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
           transitionBetweenRoutes: false,
           middle: Row(
             children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(translator.rides),
-                ),
-              ),
-              CupertinoIconButton(
-                icon: CupertinoIcons.add,
-                onPressed: () => _goToAddRidePage(context),
-              ),
+              Expanded(child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.rides))),
+              CupertinoIconButton(icon: CupertinoIcons.add, onPressed: () => _goToAddRidePage(context)),
               Consumer(
                 builder: (_, ref, child) {
                   final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;

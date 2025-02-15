@@ -26,11 +26,7 @@ class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
   final SerializeRidersRepository serializeRidersRepository;
 
   @override
-  Future<void> writeToFile(
-    File file,
-    ExportFileFormat fileFormat,
-    ExportRidersOptions options,
-  ) async {
+  Future<void> writeToFile(File file, ExportFileFormat fileFormat, ExportRidersOptions options) async {
     final riders = await serializeRidersRepository.getSerializableRiders();
 
     switch (fileFormat) {
@@ -46,9 +42,7 @@ class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
         await file.writeAsString(buffer.toString());
         break;
       case ExportFileFormat.json:
-        final data = <String, Object?>{
-          'riders': riders.map((r) => r.toJson()).toList(),
-        };
+        final data = <String, Object?>{'riders': riders.map((r) => r.toJson()).toList()};
 
         await file.writeAsString(jsonEncode(data));
         break;

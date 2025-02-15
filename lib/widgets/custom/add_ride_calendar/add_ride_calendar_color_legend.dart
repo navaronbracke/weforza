@@ -61,13 +61,11 @@ class AddRideCalendarColorLegend extends StatelessWidget {
 }
 
 class _AddRideCalendarColorLegendItem extends StatelessWidget {
-  const _AddRideCalendarColorLegendItem({
-    required this.dotDirection,
-    required this.state,
-  }) : assert(
-          dotDirection == AxisDirection.left || dotDirection == AxisDirection.right,
-          'The dot direction of a legend item should be AxisDirection.left or AxisDirection.right',
-        );
+  const _AddRideCalendarColorLegendItem({required this.dotDirection, required this.state})
+    : assert(
+        dotDirection == AxisDirection.left || dotDirection == AxisDirection.right,
+        'The dot direction of a legend item should be AxisDirection.left or AxisDirection.right',
+      );
 
   /// The size of the dot next to a label.
   static const double dotSize = 20;

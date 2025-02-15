@@ -9,10 +9,7 @@ class Ride {
 
   /// Create a ride from the given [date] and [values].
   factory Ride.of(DateTime date, Map<String, dynamic> values) {
-    return Ride(
-      date: date,
-      scannedAttendees: values['scannedAttendees'] as int?,
-    );
+    return Ride(date: date, scannedAttendees: values['scannedAttendees'] as int?);
   }
 
   /// The date on which this ride occurs in the calendar.
@@ -34,10 +31,7 @@ class Ride {
 
   /// Create a copy of this object, replacing any non-null values.
   Ride copyWith({int? scannedAttendees}) {
-    return Ride(
-      date: date,
-      scannedAttendees: scannedAttendees ?? this.scannedAttendees,
-    );
+    return Ride(date: date, scannedAttendees: scannedAttendees ?? this.scannedAttendees);
   }
 
   /// Format the [date] to a given pattern.

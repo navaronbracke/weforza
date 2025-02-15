@@ -3,14 +3,8 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines the persistent application settings.
 class Settings {
-  Settings({
-    this.excludedTermsFilter = const {},
-    this.riderListFilter = RiderFilterOption.all,
-    this.scanDuration = 20,
-  }) : assert(
-          scanDuration > 0,
-          'A scan duration should be greater than zero',
-        );
+  Settings({this.excludedTermsFilter = const {}, this.riderListFilter = RiderFilterOption.all, this.scanDuration = 20})
+    : assert(scanDuration > 0, 'A scan duration should be greater than zero');
 
   factory Settings.of(Map<String, Object?> values) {
     final excludedTermsFilter = values['excludedTermsFilter'] as List?;
@@ -35,11 +29,7 @@ class Settings {
   final int scanDuration;
 
   /// Create a copy of this object, replacing any non-null values.
-  Settings copyWith({
-    Set<String>? excludedTermsFilter,
-    RiderFilterOption? riderListFilter,
-    int? scanDuration,
-  }) {
+  Settings copyWith({Set<String>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration}) {
     return Settings(
       excludedTermsFilter: excludedTermsFilter ?? this.excludedTermsFilter,
       riderListFilter: riderListFilter ?? this.riderListFilter,
@@ -58,11 +48,7 @@ class Settings {
 
   @override
   int get hashCode {
-    return Object.hash(
-      scanDuration,
-      riderListFilter,
-      Object.hashAll(excludedTermsFilter),
-    );
+    return Object.hash(scanDuration, riderListFilter, Object.hashAll(excludedTermsFilter));
   }
 
   @override
@@ -70,9 +56,6 @@ class Settings {
     return other is Settings &&
         scanDuration == other.scanDuration &&
         riderListFilter == other.riderListFilter &&
-        const SetEquality<String>().equals(
-          excludedTermsFilter,
-          other.excludedTermsFilter,
-        );
+        const SetEquality<String>().equals(excludedTermsFilter, other.excludedTermsFilter);
   }
 }

@@ -11,10 +11,7 @@ class DeviceFormDelegate extends AsyncComputationDelegate<void> {
 
   /// Add a new device.
   /// The [whenComplete] function is called if the operation was successful.
-  void addDevice(
-    DeviceModel model, {
-    required void Function() whenComplete,
-  }) async {
+  void addDevice(DeviceModel model, {required void Function() whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }
@@ -30,10 +27,7 @@ class DeviceFormDelegate extends AsyncComputationDelegate<void> {
 
   /// Edit an existing device.
   /// The [whenComplete] function is called if the operation was successful.
-  void editDevice(
-    DeviceModel model, {
-    required void Function() whenComplete,
-  }) async {
+  void editDevice(DeviceModel model, {required void Function() whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }

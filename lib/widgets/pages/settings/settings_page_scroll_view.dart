@@ -57,12 +57,7 @@ class SettingsPageScrollView extends StatelessWidget {
           ]),
         ),
         excludedTermsList,
-        SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            excludedTermsListFooter,
-            resetRideCalendarButton,
-          ]),
-        ),
+        SliverList(delegate: SliverChildListDelegate.fixed([excludedTermsListFooter, resetRideCalendarButton])),
         version,
       ],
     );

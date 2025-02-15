@@ -1,17 +1,13 @@
 /// This class represents the scan options for a Bluetooth device scan.
 class BluetoothDeviceScanOptions {
-  const BluetoothDeviceScanOptions({
-    this.scanMode = BluetoothScanMode.lowLatency,
-  });
+  const BluetoothDeviceScanOptions({this.scanMode = BluetoothScanMode.lowLatency});
 
   /// The scan mode for the scan.
   final BluetoothScanMode scanMode;
 
   /// Convert this object to a map.
   Map<String, Object?> toMap() {
-    return {
-      'androidScanMode': scanMode.androidScanMode,
-    };
+    return {'androidScanMode': scanMode.androidScanMode};
   }
 }
 

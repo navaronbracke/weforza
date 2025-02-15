@@ -11,9 +11,7 @@ import 'package:weforza/riverpod/settings_provider.dart';
 /// Two excluded terms are only equal if their [term]s are equal.
 class ExcludedTerm implements Comparable<ExcludedTerm> {
   /// Construct a new excluded term.
-  ExcludedTerm({
-    required this.term,
-  }) : controller = TextEditingController(text: term);
+  ExcludedTerm({required this.term}) : controller = TextEditingController(text: term);
 
   /// The controller that manages the [TextEditingValue] which represents the
   /// term that is being composed.
@@ -48,11 +46,9 @@ class ExcludedTerm implements Comparable<ExcludedTerm> {
 /// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {
   /// The default constructor.
-  ExcludedTermsDelegate({
-    required SettingsNotifier settingsDelegate,
-    List<ExcludedTerm> initialValue = const [],
-  })  : _settingsDelegate = settingsDelegate,
-        _termsController = BehaviorSubject.seeded(initialValue);
+  ExcludedTermsDelegate({required SettingsNotifier settingsDelegate, List<ExcludedTerm> initialValue = const []})
+    : _settingsDelegate = settingsDelegate,
+      _termsController = BehaviorSubject.seeded(initialValue);
 
   final BehaviorSubject<List<ExcludedTerm>> _termsController;
 
@@ -72,9 +68,11 @@ class ExcludedTermsDelegate {
     // Grab the committed term values.
     final values = terms.map((t) => t.term).toSet();
 
-    unawaited(_settingsDelegate.saveExcludedTerms(values).catchError((_) {
-      // If the terms could not be saved, do nothing.
-    }));
+    unawaited(
+      _settingsDelegate.saveExcludedTerms(values).catchError((_) {
+        // If the terms could not be saved, do nothing.
+      }),
+    );
   }
 
   /// Add the given [value] to the list of terms.

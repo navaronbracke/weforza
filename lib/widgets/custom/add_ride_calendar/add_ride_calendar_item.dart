@@ -4,12 +4,7 @@ import 'package:weforza/model/ride_calendar_item_state.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 class AddRideCalendarItem extends StatelessWidget {
-  const AddRideCalendarItem({
-    required this.date,
-    required this.delegate,
-    required this.size,
-    super.key,
-  });
+  const AddRideCalendarItem({required this.date, required this.delegate, required this.size, super.key});
 
   /// The date for the calendar item.
   final DateTime date;

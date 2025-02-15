@@ -5,8 +5,5 @@ import 'package:weforza/riverpod/file/file_uri_parser_provider.dart';
 
 /// This provider provides the [ExportRidesRepository].
 final exportRidesRepositoryProvider = Provider<ExportRidesRepository>((ref) {
-  return ExportRidesRepository(
-    ref.read(exportRidesDaoProvider),
-    ref.read(fileUriParserProvider),
-  );
+  return ExportRidesRepository(ref.read(exportRidesDaoProvider), ref.read(fileUriParserProvider));
 });

@@ -13,16 +13,12 @@ class Rider implements Comparable<Rider> {
     required this.profileImage,
     required this.uuid,
   }) : assert(
-          uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty,
-          'The uuid, first name and last name of a rider should not be empty',
-        );
+         uuid.isNotEmpty && firstName.isNotEmpty && lastName.isNotEmpty,
+         'The uuid, first name and last name of a rider should not be empty',
+       );
 
   /// Create a rider from the given [uuid] and [values].
-  factory Rider.of(
-    String uuid,
-    Map<String, Object?> values, {
-    required FileUriParser fileUriParser,
-  }) {
+  factory Rider.of(String uuid, Map<String, Object?> values, {required FileUriParser fileUriParser}) {
     assert(uuid.isNotEmpty, 'The uuid of a rider should not be empty');
 
     return Rider(
@@ -41,10 +37,7 @@ class Rider implements Comparable<Rider> {
   /// The regex is language independent,
   /// allows hyphens, left and right single quotation marks and spaces,
   /// and requires a length between 1 and 50.
-  static final personNameAndAliasRegex = RegExp(
-    r'^([\p{L}\s]|[\u2018\u2019-]){1,50}$',
-    unicode: true,
-  );
+  static final personNameAndAliasRegex = RegExp(r'^([\p{L}\s]|[\u2018\u2019-]){1,50}$', unicode: true);
 
   /// The maximum length for the first name, last name and alias.
   static const int nameAndAliasMaxLength = 50;
@@ -106,15 +99,7 @@ class Rider implements Comparable<Rider> {
 
   @override
   int get hashCode {
-    return Object.hash(
-      uuid,
-      firstName,
-      lastName,
-      alias,
-      active,
-      lastUpdated,
-      profileImage,
-    );
+    return Object.hash(uuid, firstName, lastName, alias, active, lastUpdated, profileImage);
   }
 
   @override

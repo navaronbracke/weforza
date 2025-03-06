@@ -95,10 +95,10 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
 
         switch (theme.brightness) {
           case Brightness.dark:
-            disabledColor = theme.disabledColor.withOpacity(0.3);
+            disabledColor = theme.disabledColor.withValues(alpha: 0.3);
             break;
           case Brightness.light:
-            disabledColor = theme.disabledColor.withOpacity(0.2);
+            disabledColor = theme.disabledColor.withValues(alpha: 0.2);
             break;
         }
 

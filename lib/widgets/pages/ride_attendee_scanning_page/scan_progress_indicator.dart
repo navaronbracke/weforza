@@ -47,7 +47,7 @@ class ScanProgressIndicator extends StatelessWidget {
                     return _BrightnessAwareProgressIndicator(
                       progress: progress,
                       color: Colors.green,
-                      backgroundColor: Colors.green.withOpacity(0.4),
+                      backgroundColor: Colors.green.withValues(alpha: 0.4),
                     );
                   },
                   ios: (context) {

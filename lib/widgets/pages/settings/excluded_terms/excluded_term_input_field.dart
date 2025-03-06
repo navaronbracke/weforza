@@ -81,7 +81,7 @@ class ExcludedTermInputField extends StatelessWidget {
           buildCounter: _buildAndroidCounter,
           controller: controller,
           decoration: InputDecoration(
-            border: MaterialStateUnderlineInputBorder.resolveWith((states) {
+            border: WidgetStateInputBorder.resolveWith((states) {
               final ColorScheme colorScheme = ColorScheme.of(context);
               Color color = const Color(0xFFD5D5D5);
 

@@ -145,10 +145,10 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return PopScope<Object?>(
       // The `canPop` parameter is always true,
       // since leaving the page should just stop a running scan.
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         // The page was left by popping the route,
         // stop the scan if it's still running.
         if (didPop) {

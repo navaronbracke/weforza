@@ -29,6 +29,9 @@ linter:
     noop_primitive_operations: true
     only_throw_errors: true
     prefer_asserts_with_message: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_const_literals_to_create_immutables: true
     prefer_constructors_over_static_methods: true
     prefer_final_in_for_each: true
     prefer_final_locals: true

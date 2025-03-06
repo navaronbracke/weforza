@@ -42,35 +42,17 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Check whether Bluetooth permission is granted or denied.
     private func checkBluetoothPermissionStatus(bluetoothManager: CBCentralManager) -> Bool? {
-        if #available(iOS 13.1, *) {
-            switch(CBCentralManager.authorization) {
-            case .notDetermined:
-                return nil
-            case .restricted:
-                return false
-            case .denied:
-                return false
-            case .allowedAlways:
-                return true
-            @unknown default:
-                return false
-            }
-        } else if #available(iOS 13.0, *) {
-            switch(bluetoothManager.authorization) {
-            case .notDetermined:
-                return nil
-            case .restricted:
-                return false
-            case .denied:
-                return false
-            case .allowedAlways:
-                return true
-            @unknown default:
-                return false
-            }
-        } else {
-            // Below iOS 13.0, Bluetooh permissions do not exist.
+        switch(CBCentralManager.authorization) {
+        case .notDetermined:
+            return nil
+        case .restricted:
+            return false
+        case .denied:
+            return false
+        case .allowedAlways:
             return true
+        @unknown default:
+            return false
         }
     }
     

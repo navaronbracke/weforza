@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/database/sembast/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';
 import 'package:weforza/file/file_uri_parser.dart';

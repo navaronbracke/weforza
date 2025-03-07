@@ -1,6 +1,9 @@
+/// @docImport 'package:weforza/database/database.dart';
+library;
+
 import 'package:weforza/model/device/device.dart';
 
-/// This class represents the interface for working with devices from the data store.
+/// This class represents the interface for working with devices from the [Database].
 abstract class DeviceDao {
   /// Add the given [device].
   Future<void> addDevice(Device device);

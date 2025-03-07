@@ -1,11 +1,16 @@
+/// @docImport 'package:weforza/database/database.dart';
+library;
+
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/database_tables.dart';
+import 'package:weforza/database/sembast/database_tables.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/export/exportable_ride.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 
+/// This class represents the interface for working with rides from the [Database],
+/// for the purpose of exporting.
 abstract class ExportRidesDao {
   /// Get the exportable rides with their attendees.
   ///

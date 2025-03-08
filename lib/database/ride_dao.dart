@@ -7,7 +7,7 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents an interface for working with rides.
-abstract class RideDao {
+abstract interface class RideDao {
   /// Add the given [rides].
   Future<void> addRides(List<Ride> rides);
 

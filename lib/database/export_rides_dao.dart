@@ -6,7 +6,7 @@ import 'package:weforza/model/export/exportable_ride.dart';
 
 /// This class represents the interface for working with rides from the [Database],
 /// for the purpose of exporting.
-abstract class ExportRidesDao {
+abstract interface class ExportRidesDao {
   /// Get the exportable rides with their attendees.
   ///
   /// If a specific [ride] date is given, only that ride is returned.

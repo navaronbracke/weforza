@@ -4,7 +4,7 @@ import 'package:weforza/model/settings/settings.dart';
 
 /// This class represents an interface
 /// to read and write the application settings.
-abstract class SettingsDao {
+abstract interface class SettingsDao {
   /// Read the current application settings.
   Future<Settings> read();
 

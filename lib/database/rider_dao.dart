@@ -8,7 +8,7 @@ import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines an interface to work with riders.
-abstract class RiderDao {
+abstract interface class RiderDao {
   /// Add a [rider].
   Future<void> addRider(Rider rider);
 

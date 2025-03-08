@@ -8,7 +8,7 @@ class Ride {
   const Ride({required this.date, this.scannedAttendees});
 
   /// Create a ride from the given [date] and [values].
-  factory Ride.of(DateTime date, Map<String, dynamic> values) {
+  factory Ride.of(DateTime date, Map<String, Object?> values) {
     return Ride(date: date, scannedAttendees: values['scannedAttendees'] as int?);
   }
 
@@ -53,7 +53,7 @@ class Ride {
 
   /// Convert this ride into a map.
   /// The date is excluded, as that is the key of the record.
-  Map<String, dynamic> toMap() => {'scannedAttendees': scannedAttendees};
+  Map<String, Object?> toMap() => {'scannedAttendees': scannedAttendees};
 
   @override
   bool operator ==(Object other) {

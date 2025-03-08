@@ -85,7 +85,7 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
         .receiveBroadcastStream()
         .takeUntil(Rx.merge(abortScanTriggers))
         .map((event) {
-          // The binary messenger sends things back as `dynamic`.
+          // The binary messenger sends things back as `Object?`.
           // If the event is a `Map`,
           // it does not have type information and comes back as `Map<Object?, Object?>`.
           // Cast it using `Map.cast()` to at least recover the type of the key.

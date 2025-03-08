@@ -4,13 +4,13 @@ class RideAttendee {
     : assert(uuid.isNotEmpty, 'The uuid of a ride attendee should not be empty');
 
   /// Create a new ride attendee from the given [values].
-  factory RideAttendee.of(Map<String, dynamic> values) {
+  factory RideAttendee.of(Map<String, Object?> values) {
     return RideAttendee(
       // The rate of automatic scanning is bigger than manual selection.
       // Thus we use an 'optimistic' true as default.
-      isScanned: values['isScanned'] ?? true,
-      rideDate: DateTime.parse(values['date']),
-      uuid: values['attendee'],
+      isScanned: values['isScanned'] as bool? ?? true,
+      rideDate: DateTime.parse(values['date'] as String),
+      uuid: values['attendee'] as String,
     );
   }
 
@@ -25,7 +25,7 @@ class RideAttendee {
   /// The UUID of the attendee that belongs to this record.
   final String uuid;
 
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toMap() {
     return {'attendee': uuid, 'date': rideDate.toIso8601String(), 'isScanned': isScanned};
   }
 

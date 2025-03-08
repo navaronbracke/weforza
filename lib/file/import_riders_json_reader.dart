@@ -7,9 +7,9 @@ import 'package:weforza/model/rider/serializable_rider.dart';
 
 /// This class represents an [ImportRidersFileReader]
 /// that handles the JSON format.
-class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynamic>> {
+class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, Object?>> {
   @override
-  Future<void> processChunk(Map<String, dynamic> chunk, List<SerializableRider> serializedRiders) async {
+  Future<void> processChunk(Map<String, Object?> chunk, List<SerializableRider> serializedRiders) async {
     try {
       final alias = chunk['alias'] as String? ?? '';
       final firstName = chunk['firstName'] as String;
@@ -24,7 +24,7 @@ class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynam
 
       final lastUpdated = DateTime.tryParse(chunk['lastUpdated'] as String? ?? '');
 
-      final devices = (chunk['devices'] as List?)?.cast<String>() ?? [];
+      final List<String> devices = (chunk['devices'] as List<Object?>?)?.cast<String>() ?? <String>[];
 
       serializedRiders.add(
         SerializableRider(
@@ -43,20 +43,19 @@ class ImportRidersJsonReader implements ImportRidersFileReader<Map<String, dynam
   }
 
   @override
-  Future<List<Map<String, dynamic>>> readFile(fs.File file) async {
+  Future<List<Map<String, Object?>>> readFile(fs.File file) async {
     final fileContent = await file.readAsString();
 
     try {
-      // The supported formats are Map<String, dynamic> & List<dynamic>.
       final Object json = jsonDecode(fileContent);
 
-      if (json is Map<String, dynamic>) {
-        return (json['riders'] as List).cast<Map<String, dynamic>>();
+      if (json is Map<String, Object?>) {
+        return (json['riders'] as List<Object?>).cast<Map<String, Object?>>();
       }
 
       // If the JSON format is a list instead of a map, try to cast it.
-      if (json is List<dynamic>) {
-        return json.cast<Map<String, dynamic>>();
+      if (json is List<Object?>) {
+        return json.cast<Map<String, Object?>>();
       }
 
       throw const FormatException('Unexpected JSON format');

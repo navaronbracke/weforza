@@ -8,7 +8,7 @@ class Device {
     : assert(ownerId.isNotEmpty && name.isNotEmpty, 'The owner id and device name of a device should not be empty');
 
   /// Create a device from the given [key] and [values].
-  factory Device.of(String key, Map<String, dynamic> values) {
+  factory Device.of(String key, Map<String, Object?> values) {
     assert(key.isNotEmpty, 'The creation date of a device cannot be empty');
 
     return Device(
@@ -39,7 +39,7 @@ class Device {
   static const int nameMaxLength = 40;
 
   /// Convert this object to a Map.
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toMap() {
     return {'deviceName': name, 'owner': ownerId, 'type': type.typeIndex};
   }
 

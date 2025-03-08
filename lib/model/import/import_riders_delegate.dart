@@ -55,7 +55,7 @@ class ImportRidersDelegate {
     }
 
     if (file.path.endsWith(ExportFileFormat.json.formatExtension)) {
-      return _readFileWithReader<Map<String, dynamic>>(file, reader: ImportRidersJsonReader());
+      return _readFileWithReader<Map<String, Object?>>(file, reader: ImportRidersJsonReader());
     }
 
     throw UnsupportedFileFormatException();

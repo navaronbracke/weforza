@@ -8,12 +8,12 @@
 class ScannedRideAttendee {
   const ScannedRideAttendee({required this.uuid, required this.isScanned});
 
-  factory ScannedRideAttendee.of(Map<String, dynamic> values) {
+  factory ScannedRideAttendee.of(Map<String, Object?> values) {
     return ScannedRideAttendee(
-      uuid: values['attendee'],
+      uuid: values['attendee'] as String,
       // The rate of automatic scanning is bigger than manual selection.
       // Thus we use an 'optimistic' true as default.
-      isScanned: values['isScanned'] ?? true,
+      isScanned: values['isScanned'] as bool? ?? true,
     );
   }
 

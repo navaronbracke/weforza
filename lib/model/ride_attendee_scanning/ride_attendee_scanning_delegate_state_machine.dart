@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
+library;
+
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';

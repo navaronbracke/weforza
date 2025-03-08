@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
+library;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';

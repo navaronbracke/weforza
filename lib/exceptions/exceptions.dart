@@ -1,3 +1,6 @@
+/// @docImport 'dart:io';
+library;
+
 /// An exception that is thrown when access to the camera is denied.
 class CameraPermissionDeniedException implements Exception {}
 

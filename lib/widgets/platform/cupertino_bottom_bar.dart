@@ -1,3 +1,6 @@
+/// @docImport 'package:flutter/material.dart';
+library;
+
 import 'package:flutter/cupertino.dart';
 
 /// A Cupertino equivalent of the Material [BottomAppBar]

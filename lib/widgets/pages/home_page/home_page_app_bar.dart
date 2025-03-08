@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/widgets/pages/home_page/home_page.dart';
+library;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +16,7 @@ import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/pages/rider_list/rider_list_title.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 
-/// This widget represents the app bar / navigation bar at the top of the home page.
+/// This widget represents the app bar / navigation bar at the top of the [HomePage].
 abstract class _HomePageAppBar extends StatelessWidget {
   const _HomePageAppBar({required this.selectedTab, super.key});
 

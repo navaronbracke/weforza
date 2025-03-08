@@ -1,3 +1,7 @@
+/// @docImport 'package:weforza/model/ride.dart';
+/// @docImport 'package:weforza/model/rider/rider.dart';
+library;
+
 /// This class represents a [Rider] that attends a given [Ride].
 class RideAttendee {
   RideAttendee({required this.isScanned, required this.rideDate, required this.uuid})

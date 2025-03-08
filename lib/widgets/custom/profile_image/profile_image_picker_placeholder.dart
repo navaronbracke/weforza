@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
+library;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

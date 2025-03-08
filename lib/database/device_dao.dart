@@ -3,7 +3,7 @@ library;
 
 import 'package:weforza/model/device/device.dart';
 
-/// This class represents the interface for working with devices from the [Database].
+/// This class represents the interface for working with [Device]s from the [Database].
 abstract interface class DeviceDao {
   /// Add the given [device].
   Future<void> addDevice(Device device);

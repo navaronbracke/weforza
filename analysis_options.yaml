@@ -23,6 +23,7 @@ linter:
     avoid_unused_constructor_parameters: true
     cancel_subscriptions: true
     close_sinks: true
+    comment_references: true
     conditional_uri_does_not_exist: true
     directives_ordering: true
     join_return_with_assignment: true

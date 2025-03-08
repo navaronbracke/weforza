@@ -10,6 +10,12 @@ import 'package:weforza/database/export_rides_dao.dart';
 import 'package:weforza/database/import_riders_dao.dart';
 import 'package:weforza/database/ride_dao.dart';
 import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/sembast/sembast_device_dao.dart';
+import 'package:weforza/database/sembast/sembast_export_rides_dao.dart';
+import 'package:weforza/database/sembast/sembast_import_riders_dao.dart';
+import 'package:weforza/database/sembast/sembast_ride_dao.dart';
+import 'package:weforza/database/sembast/sembast_rider_dao.dart';
+import 'package:weforza/database/sembast/sembast_settings_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
 
 /// This class represents a [Database] implementation that uses a Sembast database under the hood.
@@ -30,22 +36,22 @@ class SembastDatabase implements Database {
   final String databaseName;
 
   @override
-  DeviceDao get deviceDao => DeviceDaoImpl(_database);
+  DeviceDao get deviceDao => SembastDeviceDao(_database);
 
   @override
-  ExportRidesDao get exportRidesDao => ExportRidesDaoImpl(_database);
+  ExportRidesDao get exportRidesDao => SembastExportRidesDao(_database);
 
   @override
-  ImportRidersDao get importRidersDao => ImportRidersDaoImpl(_database);
+  ImportRidersDao get importRidersDao => SembastImportRidersDao(_database);
 
   @override
-  RideDao get rideDao => RideDaoImpl(_database);
+  RideDao get rideDao => SembastRideDao(_database);
 
   @override
-  RiderDao get riderDao => RiderDaoImpl(_database);
+  RiderDao get riderDao => SembastRiderDao(_database);
 
   @override
-  SettingsDao get settingsDao => SettingsDaoImpl(_database);
+  SettingsDao get settingsDao => SembastSettingsDao(_database);
 
   @override
   int get version => 1; // No schema migrations are currently in use.

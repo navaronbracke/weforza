@@ -1,6 +1,7 @@
 import 'package:sembast/sembast.dart';
 
 /// This class represents the different database table references.
+@Deprecated('This class should be removed when moving to the new database.')
 class DatabaseTables {
   /// The device database table.
   static final device = stringMapStoreFactory.store('device');

@@ -7,7 +7,7 @@ class Settings {
     : assert(scanDuration > 0, 'A scan duration should be greater than zero');
 
   factory Settings.of(Map<String, Object?> values) {
-    final excludedTermsFilter = values['excludedTermsFilter'] as List?;
+    final excludedTermsFilter = values['excludedTermsFilter'] as List<Object?>?;
     final riderListFilter = values['memberListFilter'] as int?;
     final scanDuration = values['scanDuration'] as int?;
 
@@ -38,7 +38,7 @@ class Settings {
   }
 
   /// Convert this object to a Map.
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toMap() {
     return {
       'excludedTermsFilter': excludedTermsFilter.toList(),
       'memberListFilter': riderListFilter.index,

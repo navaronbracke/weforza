@@ -11,7 +11,7 @@ class SembastSettingsDao implements SettingsDao {
   final Database _database;
 
   /// The record reference for the settings record.
-  final RecordRef<String, Map<String, dynamic>> _settingsRecordRef;
+  final RecordRef<String, Map<String, Object?>> _settingsRecordRef;
 
   /// The key for the settings record.
   static const _settingsKey = 'APPLICATION_SETTINGS';

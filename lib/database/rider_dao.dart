@@ -1,4 +1,6 @@
-import 'package:sembast/sembast.dart';
+/// @docImport 'package:weforza/database/database.dart';
+library;
+
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';

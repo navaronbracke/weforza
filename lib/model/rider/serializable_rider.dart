@@ -169,6 +169,7 @@ class SerializableRiderUpdateTimestamp {
   final String uuid;
 
   /// Convert this object to a map.
+  @Deprecated('Insert this object directly into the database using an insert or update query')
   Map<String, Object?> toMap() {
     return {'lastUpdated': lastUpdatedOn.toStringWithoutMilliseconds()};
   }

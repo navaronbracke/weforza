@@ -1,3 +1,4 @@
+@Deprecated('Dates should be written with zeor milliseconds during export')
 extension DateTimeExtensions on DateTime {
   /// Convert the given date to a 'YYYY-MM-DD HH:MM:SS' string.
   /// E.g. 1969-07-20 20:18:04

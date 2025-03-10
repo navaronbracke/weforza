@@ -8,6 +8,7 @@ class RideAttendee {
     : assert(uuid.isNotEmpty, 'The uuid of a ride attendee should not be empty');
 
   /// Create a new ride attendee from the given [values].
+  @Deprecated('Construct this object directly from database results')
   factory RideAttendee.of(Map<String, Object?> values) {
     return RideAttendee(
       // The rate of automatic scanning is bigger than manual selection.
@@ -29,6 +30,7 @@ class RideAttendee {
   /// The UUID of the attendee that belongs to this record.
   final String uuid;
 
+  @Deprecated('Insert this object directly into the database using an insert or update query')
   Map<String, Object?> toMap() {
     return {'attendee': uuid, 'date': rideDate.toIso8601String(), 'isScanned': isScanned};
   }

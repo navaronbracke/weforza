@@ -6,6 +6,7 @@ class Settings {
   Settings({this.excludedTermsFilter = const {}, this.riderListFilter = RiderFilterOption.all, this.scanDuration = 20})
     : assert(scanDuration > 0, 'A scan duration should be greater than zero');
 
+  @Deprecated('Construct this object directly from database results')
   factory Settings.of(Map<String, Object?> values) {
     final excludedTermsFilter = values['excludedTermsFilter'] as List<Object?>?;
     final riderListFilter = values['memberListFilter'] as int?;
@@ -38,6 +39,7 @@ class Settings {
   }
 
   /// Convert this object to a Map.
+  @Deprecated('Insert this object directly into the database using an insert or update query')
   Map<String, Object?> toMap() {
     return {
       'excludedTermsFilter': excludedTermsFilter.toList(),

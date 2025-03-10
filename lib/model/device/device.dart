@@ -8,6 +8,7 @@ class Device {
     : assert(ownerId.isNotEmpty && name.isNotEmpty, 'The owner id and device name of a device should not be empty');
 
   /// Create a device from the given [key] and [values].
+  @Deprecated('Construct this object directly from database results')
   factory Device.of(String key, Map<String, Object?> values) {
     assert(key.isNotEmpty, 'The creation date of a device cannot be empty');
 
@@ -23,6 +24,7 @@ class Device {
   /// This creation date is not indicative of the actual creation date
   /// of the physical hardware item.
   /// It is only used internally as the key for the device record.
+  @Deprecated('The new database uses auto increment ids')
   final DateTime creationDate;
 
   /// The human-readable name of the device.
@@ -39,6 +41,7 @@ class Device {
   static const int nameMaxLength = 40;
 
   /// Convert this object to a Map.
+  @Deprecated('Insert this object directly into the database using an insert or update query')
   Map<String, Object?> toMap() {
     return {'deviceName': name, 'owner': ownerId, 'type': type.typeIndex};
   }

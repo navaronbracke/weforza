@@ -18,6 +18,7 @@ class Rider implements Comparable<Rider> {
        );
 
   /// Create a rider from the given [uuid] and [values].
+  @Deprecated('Construct this object directly from database results')
   factory Rider.of(String uuid, Map<String, Object?> values, {required FileUriParser fileUriParser}) {
     assert(uuid.isNotEmpty, 'The uuid of a rider should not be empty');
 
@@ -86,6 +87,7 @@ class Rider implements Comparable<Rider> {
   }
 
   /// Convert this rider into a map.
+  @Deprecated('Insert this object directly into the database using an insert or update query')
   Map<String, Object?> toMap() {
     return {
       'active': active,

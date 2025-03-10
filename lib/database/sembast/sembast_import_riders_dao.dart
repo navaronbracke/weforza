@@ -78,15 +78,13 @@ class SembastImportRidersDao implements ImportRidersDao {
     // The new devices that should be added.
     final newDevices = <Device>{};
 
-    const uuidGenerator = Uuid();
-
     for (final rider in riders) {
       final existingRider = existingRiders[rider.key];
 
       // The rider does not yet exist.
       // Add a new rider along with its devices.
       if (existingRider == null) {
-        final uuid = uuidGenerator.v4();
+        final uuid = const Uuid().v4();
 
         newRiders.add(
           Rider(

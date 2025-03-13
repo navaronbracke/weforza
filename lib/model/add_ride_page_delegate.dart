@@ -101,9 +101,10 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
 
   /// Handle (de)selecting of a day in the calendar.
   void selectDay(DateTime date) {
+    // TODO: should selecting days in the past be locked behind a toggle?
     // The selection is locked while saving.
-    // Abort if the ride was scheduled in another session, or if the date is in the past.
-    if (_savingSelection || _existingRides.contains(date) || isBeforeToday(date)) {
+    // Abort if the ride was scheduled in another session.
+    if (_savingSelection || _existingRides.contains(date)) {
       return;
     }
 

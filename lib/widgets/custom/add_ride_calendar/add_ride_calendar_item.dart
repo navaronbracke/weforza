@@ -17,7 +17,12 @@ class AddRideCalendarItem extends StatelessWidget {
 
   RideCalendarItemState? _getStateForItem() {
     if (delegate.isBeforeToday(date)) {
-      // A day in the past that had a ride.
+      // The ride was scheduled in the current session.
+      if (delegate.isScheduled(date, inCurrentSession: true)) {
+        return RideCalendarItemState.currentSelection;
+      }
+
+      // A day in the past that had a ride, which was scheduled in an earlier session.
       if (delegate.isScheduled(date)) {
         return RideCalendarItemState.pastRide;
       }
@@ -33,6 +38,7 @@ class AddRideCalendarItem extends StatelessWidget {
         return RideCalendarItemState.currentSelection;
       }
 
+      // A day in the future that has a ride, which was scheduled in an earlier session.
       return RideCalendarItemState.futureRide;
     }
 

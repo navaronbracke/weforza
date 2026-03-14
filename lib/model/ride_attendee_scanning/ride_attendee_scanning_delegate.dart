@@ -311,10 +311,9 @@ class RideAttendeeScanningDelegate {
       return;
     }
 
-    final newState =
-        _unresolvedOwners.isEmpty
-            ? RideAttendeeScanningState.manualSelection
-            : RideAttendeeScanningState.unresolvedOwnersSelection;
+    final newState = _unresolvedOwners.isEmpty
+        ? RideAttendeeScanningState.manualSelection
+        : RideAttendeeScanningState.unresolvedOwnersSelection;
 
     _stateMachine.setState(newState);
   }

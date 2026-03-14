@@ -101,7 +101,9 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         transitionBetweenRoutes: false,
         middle: Row(
           children: <Widget>[
-            const Expanded(child: Padding(padding: EdgeInsets.only(left: 8), child: RideDetailsTitle())),
+            const Expanded(
+              child: Padding(padding: EdgeInsets.only(left: 8), child: RideDetailsTitle()),
+            ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

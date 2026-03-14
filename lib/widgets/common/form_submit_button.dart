@@ -31,7 +31,10 @@ class FormSubmitButton<T> extends StatelessWidget {
   Widget _wrapWithErrorMessage({required Widget child, required Widget errorMessage}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [Padding(padding: const EdgeInsets.only(bottom: 4), child: errorMessage), child],
+      children: [
+        Padding(padding: const EdgeInsets.only(bottom: 4), child: errorMessage),
+        child,
+      ],
     );
   }
 
@@ -102,12 +105,12 @@ class FixedHeightSubmitButton extends StatelessWidget {
       case TargetPlatform.macOS:
         return loading
             ? const Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: SizedBox(
-                height: kMinInteractiveDimensionCupertino,
-                child: Center(child: CupertinoActivityIndicator()),
-              ),
-            )
+                padding: EdgeInsets.symmetric(vertical: 4),
+                child: SizedBox(
+                  height: kMinInteractiveDimensionCupertino,
+                  child: Center(child: CupertinoActivityIndicator()),
+                ),
+              )
             : CupertinoButton(onPressed: onPressed, child: Text(label));
     }
   }

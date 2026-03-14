@@ -179,7 +179,10 @@ class DatePicker extends StatelessWidget {
         );
 
         if (headerBottomPadding > 0) {
-          header = Padding(padding: EdgeInsets.only(bottom: headerBottomPadding), child: header);
+          header = Padding(
+            padding: EdgeInsets.only(bottom: headerBottomPadding),
+            child: header,
+          );
         }
 
         Widget calendar = Column(
@@ -250,7 +253,10 @@ class _DatePickerBody extends StatelessWidget {
 
       children.add(
         ExcludeSemantics(
-          child: SizedBox(width: dayItemSize.width, child: Center(child: Text(weekday, style: weekDayStyle))),
+          child: SizedBox(
+            width: dayItemSize.width,
+            child: Center(child: Text(weekday, style: weekDayStyle)),
+          ),
         ),
       );
 
@@ -379,7 +385,10 @@ class _DatePickerMonth extends StatelessWidget {
 
       // Only the last week does not get bottom spacing.
       if (weekSpacing > 0 && weekCounter < 6) {
-        week = Padding(padding: EdgeInsets.only(bottom: weekSpacing), child: week);
+        week = Padding(
+          padding: EdgeInsets.only(bottom: weekSpacing),
+          child: week,
+        );
       }
 
       weeks.add(week);

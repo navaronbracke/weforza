@@ -161,13 +161,12 @@ class ExportDataPage<T> extends StatelessWidget {
           body: _buildBody(
             builder: (context, {bool isExporting = false}) {
               final Widget child = Center(
-                child:
-                    isExporting
-                        ? const FixedHeightSubmitButton.loading()
-                        : FixedHeightSubmitButton(
-                          label: label,
-                          onPressed: () => delegate.exportDataToFile(context, options),
-                        ),
+                child: isExporting
+                    ? const FixedHeightSubmitButton.loading()
+                    : FixedHeightSubmitButton(
+                        label: label,
+                        onPressed: () => delegate.exportDataToFile(context, options),
+                      ),
               );
 
               return _buildAndroidForm(context, child: child);
@@ -191,13 +190,9 @@ class ExportDataPage<T> extends StatelessWidget {
           ),
           child: _buildBody(
             builder: (context, {bool isExporting = false}) {
-              final Widget child =
-                  isExporting
-                      ? const FixedHeightSubmitButton.loading()
-                      : FixedHeightSubmitButton(
-                        label: label,
-                        onPressed: () => delegate.exportDataToFile(context, options),
-                      );
+              final Widget child = isExporting
+                  ? const FixedHeightSubmitButton.loading()
+                  : FixedHeightSubmitButton(label: label, onPressed: () => delegate.exportDataToFile(context, options));
 
               return _buildIosForm(context, child: child);
             },

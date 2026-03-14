@@ -66,7 +66,9 @@ class ScanDurationOption extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8),
             child: Row(
               children: [
-                Expanded(child: Padding(padding: const EdgeInsets.only(left: 6), child: Text(translator.scanDuration))),
+                Expanded(
+                  child: Padding(padding: const EdgeInsets.only(left: 6), child: Text(translator.scanDuration)),
+                ),
                 Padding(padding: const EdgeInsets.symmetric(horizontal: 6), child: _buildCurrentDurationLabel()),
               ],
             ),

@@ -85,7 +85,10 @@ class _ScanResultsListItem extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 4),
             child: Row(
               children: [
-                Padding(padding: const EdgeInsets.only(right: 4), child: Icon(icon, color: color)),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: Icon(icon, color: color),
+                ),
                 SelectableText(peripheral.device.deviceName, scrollPhysics: const ClampingScrollPhysics()),
               ],
             ),
@@ -129,7 +132,10 @@ class _ScanResultsListItem extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       child: Row(
         children: [
-          Padding(padding: const EdgeInsets.only(right: 4), child: Icon(icon, color: textStyle.color)),
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: Icon(icon, color: textStyle.color),
+          ),
           RiderNameAndAlias.singleLine(
             alias: deviceOwner.alias,
             firstName: deviceOwner.firstName,

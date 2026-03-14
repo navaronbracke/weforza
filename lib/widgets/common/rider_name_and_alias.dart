@@ -77,7 +77,10 @@ class RiderNameAndAlias extends StatelessWidget {
                 style: effectiveFirstLineStyle,
                 children: [
                   if (alias.isNotEmpty)
-                    TextSpan(text: " '$alias' ", style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic)),
+                    TextSpan(
+                      text: " '$alias' ",
+                      style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
+                    ),
                 ],
               ),
             ),
@@ -90,17 +93,19 @@ class RiderNameAndAlias extends StatelessWidget {
     return RichText(
       maxLines: 1,
       overflow: overflow,
-      text:
-          alias.isEmpty
-              ? TextSpan(text: '$firstName $lastName', style: effectiveFirstLineStyle)
-              : TextSpan(
-                text: firstName,
-                style: effectiveFirstLineStyle,
-                children: [
-                  TextSpan(text: " '$alias' ", style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic)),
-                  TextSpan(text: lastName, style: effectiveFirstLineStyle),
-                ],
-              ),
+      text: alias.isEmpty
+          ? TextSpan(text: '$firstName $lastName', style: effectiveFirstLineStyle)
+          : TextSpan(
+              text: firstName,
+              style: effectiveFirstLineStyle,
+              children: [
+                TextSpan(
+                  text: " '$alias' ",
+                  style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
+                ),
+                TextSpan(text: lastName, style: effectiveFirstLineStyle),
+              ],
+            ),
     );
   }
 }

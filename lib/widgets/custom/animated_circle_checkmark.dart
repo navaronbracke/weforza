@@ -37,7 +37,9 @@ class _AnimatedCircleCheckmarkState extends State<AnimatedCircleCheckmark> {
               borderRadius: BorderRadius.all(Radius.circular(checkmarkCircleSize / 2)),
               color: backgroundColor,
             ),
-            child: Center(child: Icon(checkmarkIcon, color: Colors.white, size: checkmarkCircleSize * 0.7)),
+            child: Center(
+              child: Icon(checkmarkIcon, color: Colors.white, size: checkmarkCircleSize * 0.7),
+            ),
           ),
         );
       },

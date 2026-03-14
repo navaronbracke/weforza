@@ -11,7 +11,10 @@ class DeleteDeviceButton extends StatelessWidget {
   final int index;
 
   void _onDeletePressed(BuildContext context) {
-    showAdaptiveDialog<void>(context: context, builder: (_) => DeleteDeviceDialog(index: index));
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (_) => DeleteDeviceDialog(index: index),
+    );
   }
 
   @override

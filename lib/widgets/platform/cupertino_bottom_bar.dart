@@ -45,7 +45,10 @@ class CupertinoBottomBar extends StatelessWidget {
     // It also gets bottom padding to avoid the bottom notch.
     Widget content = DefaultTextStyle(
       style: CupertinoTheme.of(context).textTheme.textStyle,
-      child: Padding(padding: EdgeInsets.only(bottom: bottomPadding), child: child),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: child,
+      ),
     );
 
     if (height != null) {

@@ -33,15 +33,14 @@ class CupertinoIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       borderRadius: BorderRadius.zero,
-      minSize: size,
+      minimumSize: Size(size, size),
       onPressed: onPressed,
       padding: EdgeInsets.zero,
       child: Icon(
         icon,
-        color:
-            onPressed == null
-                ? CupertinoColors.placeholderText.resolveFrom(context)
-                : color ?? CupertinoTheme.of(context).primaryColor,
+        color: onPressed == null
+            ? CupertinoColors.placeholderText.resolveFrom(context)
+            : color ?? CupertinoTheme.of(context).primaryColor,
       ),
     );
   }

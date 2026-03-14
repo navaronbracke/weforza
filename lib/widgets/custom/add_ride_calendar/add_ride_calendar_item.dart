@@ -55,7 +55,9 @@ class AddRideCalendarItem extends StatelessWidget {
         final theme = RideCalendarTheme.resolve(context, state: _getStateForItem());
         final decoration = theme.decoration;
 
-        Widget child = Center(child: Text('${date.day}', style: theme.textStyle, textAlign: TextAlign.center));
+        Widget child = Center(
+          child: Text('${date.day}', style: theme.textStyle, textAlign: TextAlign.center),
+        );
 
         if (decoration != null) {
           child = DecoratedBox(decoration: decoration, child: child);
@@ -64,7 +66,10 @@ class AddRideCalendarItem extends StatelessWidget {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => delegate.selectDay(date),
-          child: SizedBox.fromSize(size: size, child: Padding(padding: const EdgeInsets.all(4), child: child)),
+          child: SizedBox.fromSize(
+            size: size,
+            child: Padding(padding: const EdgeInsets.all(4), child: child),
+          ),
         );
       },
     );

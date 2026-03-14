@@ -83,7 +83,9 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream)),
+      appBar: AppBar(
+        title: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream),
+      ),
       body: _buildBody(),
     );
   }

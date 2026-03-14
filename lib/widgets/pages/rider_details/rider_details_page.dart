@@ -60,7 +60,12 @@ class RiderDetailsPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return const Column(
       children: <Widget>[
-        Row(children: [Padding(padding: EdgeInsets.all(8), child: RiderProfileImage()), Expanded(child: RiderName())]),
+        Row(
+          children: [
+            Padding(padding: EdgeInsets.all(8), child: RiderProfileImage()),
+            Expanded(child: RiderName()),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.only(top: 4, left: 8, right: 8),
           child: Row(children: [SelectedRiderAttendingCount(), Spacer(), RiderActiveToggle()]),
@@ -77,7 +82,9 @@ class RiderDetailsPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         middle: Row(
           children: <Widget>[
-            Expanded(child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.details))),
+            Expanded(
+              child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.details)),
+            ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

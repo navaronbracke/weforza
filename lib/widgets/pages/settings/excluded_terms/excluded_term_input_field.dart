@@ -130,7 +130,12 @@ class ExcludedTermInputField extends StatelessWidget {
           return child;
         }
 
-        return Row(children: [Expanded(child: child), suffix!]);
+        return Row(
+          children: [
+            Expanded(child: child),
+            suffix!,
+          ],
+        );
       },
     );
   }

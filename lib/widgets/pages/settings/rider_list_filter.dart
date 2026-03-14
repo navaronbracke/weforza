@@ -140,7 +140,10 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
       onValueChanged: widget.onValueChanged,
       children: <RiderFilterOption, Widget>{
         for (final entry in _labels.entries)
-          entry.key: SizedBox(width: _widestLabelWidth, child: Center(child: Text(entry.value))),
+          entry.key: SizedBox(
+            width: _widestLabelWidth,
+            child: Center(child: Text(entry.value)),
+          ),
       },
     );
   }

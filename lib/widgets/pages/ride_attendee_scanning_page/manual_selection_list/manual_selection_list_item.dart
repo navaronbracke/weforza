@@ -29,8 +29,9 @@ class _ManualSelectionListItemState extends ConsumerState<ManualSelectionListIte
     return SelectableOwnerListItem(
       rider: widget.item,
       selected: isSelected,
-      trailing:
-          isSelected ? Icon(isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded, color: Colors.white) : null,
+      trailing: isSelected
+          ? Icon(isScanned ? Icons.bluetooth_searching : Icons.pan_tool_rounded, color: Colors.white)
+          : null,
       onTap: () async {
         // If the search bar still has focus, unfocus it first.
         FocusScope.of(context).unfocus();

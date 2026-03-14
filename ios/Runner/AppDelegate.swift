@@ -2,33 +2,27 @@ import UIKit
 import Flutter
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    if let controller = window?.rootViewController as? FlutterViewController {
-        self.setUpMethodChannels(controller: controller)
-    }
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
 
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+    self.setUpMethodChannels(engineBridge: engineBridge)
   }
 
-  private func setUpMethodChannels(controller: FlutterViewController) {
+  private func setUpMethodChannels(engineBridge: FlutterImplicitEngineBridge) {
     let bluetoothAdapterDelegate = BluetoothAdapterDelegate()
     let mediaDelegate = MediaDelegate()
 
     let methodChannel = FlutterMethodChannel(
-        name: "be.weforza.app/methods", binaryMessenger: controller.binaryMessenger
+        name: "be.weforza.app/methods", binaryMessenger: engineBridge.applicationRegistrar.messenger()
     )
 
     let bluetoothDeviceDiscoveryChannel = FlutterEventChannel(
-        name: "be.weforza.app/bluetooth_device_discovery", binaryMessenger: controller.binaryMessenger
+        name: "be.weforza.app/bluetooth_device_discovery", binaryMessenger: engineBridge.applicationRegistrar.messenger()
     )
 
     let bluetoothStateChannel = FlutterEventChannel(
-        name: "be.weforza.app/bluetooth_state", binaryMessenger: controller.binaryMessenger
+        name: "be.weforza.app/bluetooth_state", binaryMessenger: engineBridge.applicationRegistrar.messenger()
     )
 
     methodChannel.setMethodCallHandler({

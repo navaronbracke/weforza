@@ -43,7 +43,7 @@ class ProfileImagePicker extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [openGalleryButton, openCameraButton, if (deleteButton != null) deleteButton],
+            children: [openGalleryButton, openCameraButton, ?deleteButton],
           ),
         ),
       ],

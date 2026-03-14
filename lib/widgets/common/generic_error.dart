@@ -46,7 +46,7 @@ class GenericError extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
           child: Text(effectiveMessage, textAlign: TextAlign.center, softWrap: true),
         ),
-        if (actionButton != null) actionButton!,
+        ?actionButton,
       ],
     );
   }
@@ -182,7 +182,7 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
           overflowDirection: VerticalDirection.up,
           overflowSpacing: 16,
           spacing: 8,
-          children: [if (secondaryButton != null) secondaryButton!, primaryButton],
+          children: [?secondaryButton, primaryButton],
         ),
       ],
     );

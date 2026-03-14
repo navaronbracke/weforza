@@ -1,3 +1,7 @@
+/// @docImport 'package:weforza/model/device/device.dart';
+/// @docImport 'package:weforza/model/ride_attendee.dart';
+library;
+
 import 'package:sembast/sembast.dart';
 import 'package:weforza/database/rider_dao.dart';
 import 'package:weforza/database/sembast/database_tables.dart';

@@ -48,12 +48,12 @@ class SettingsPageScrollView extends StatelessWidget {
     return CustomScrollView(
       controller: scrollController,
       slivers: [
-        if (navigationBar != null) navigationBar!,
+        ?navigationBar,
         SliverList(
           delegate: SliverChildListDelegate.fixed([
             riderListFilter,
             scanDurationOption,
-            if (excludedTermsListHeader != null) excludedTermsListHeader!,
+            ?excludedTermsListHeader,
           ]),
         ),
         excludedTermsList,

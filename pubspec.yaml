@@ -22,7 +22,7 @@ environment:
 
 dependencies:
   # This package provides easy access to app settings.
-  app_settings: ^5.2.0
+  app_settings: ^7.0.0
 
   # Collection utilities.
   collection: ^1.17.0
@@ -36,7 +36,7 @@ dependencies:
   file: ^7.0.0
 
   # This package provides platform independent file picking.
-  file_picker: ^9.0.2
+  file_picker: ^10.3.10
 
   flutter:
     sdk: flutter
@@ -59,7 +59,7 @@ dependencies:
   mime: ^2.0.0
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^8.3.0
+  package_info_plus: ^9.0.0
 
   # Path utilities for URI's and the like.
   path: ^1.8.1

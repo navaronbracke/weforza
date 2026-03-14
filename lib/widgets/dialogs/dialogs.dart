@@ -115,7 +115,7 @@ class WeforzaAlertDialog extends StatelessWidget {
     final Widget confirmButton = confirmButtonBuilder(context, platform);
     final Widget? cancelButton = cancelButtonBuilder?.call(context, platform);
 
-    final actions = <Widget>[if (cancelButton != null) cancelButton, confirmButton];
+    final actions = <Widget>[?cancelButton, confirmButton];
 
     switch (platform) {
       case TargetPlatform.android:

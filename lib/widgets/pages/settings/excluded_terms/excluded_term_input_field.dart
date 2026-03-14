@@ -145,7 +145,7 @@ class ExcludedTermInputField extends StatelessWidget {
       child = Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[if (divider != null) divider, child, if (contextMenu != null) contextMenu],
+        children: <Widget>[?divider, child, ?contextMenu],
       );
     }
 

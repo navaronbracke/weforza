@@ -4,7 +4,7 @@ import 'package:sembast/sembast.dart' as sembast;
 import 'package:sembast/sembast_io.dart';
 import 'package:sembast/sembast_memory.dart';
 
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/database.dart' as weforza;
 import 'package:weforza/database/device_dao.dart';
 import 'package:weforza/database/export_rides_dao.dart';
 import 'package:weforza/database/import_riders_dao.dart';
@@ -18,8 +18,8 @@ import 'package:weforza/database/sembast/sembast_rider_dao.dart';
 import 'package:weforza/database/sembast/sembast_settings_dao.dart';
 import 'package:weforza/database/settings_dao.dart';
 
-/// This class represents a [Database] implementation that uses a Sembast database under the hood.
-class SembastDatabase implements Database {
+/// This class represents a [weforza.Database] implementation that uses a Sembast database under the hood.
+class SembastDatabase implements weforza.Database {
   /// Create an on-disk database.
   SembastDatabase() : _factory = databaseFactoryIo, databaseName = 'weforza_database.db';
 

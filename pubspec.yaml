@@ -36,7 +36,7 @@ dependencies:
   file: ^7.0.0
 
   # This package provides platform independent file picking.
-  file_picker: ^9.0.2
+  file_picker: ^10.3.10
 
   flutter:
     sdk: flutter

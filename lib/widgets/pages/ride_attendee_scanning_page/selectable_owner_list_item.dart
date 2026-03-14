@@ -82,7 +82,10 @@ class SelectableOwnerListItem extends StatelessWidget {
     );
 
     if (selected) {
-      child = DecoratedBox(decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)), child: child);
+      child = DecoratedBox(
+        decoration: BoxDecoration(color: _getSelectedBackgroundColor(context)),
+        child: child,
+      );
     }
 
     return GestureDetector(behavior: HitTestBehavior.opaque, onTap: onTap, child: child);

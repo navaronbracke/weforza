@@ -197,7 +197,10 @@ class _AddRideSubmitButton extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(padding: const EdgeInsets.only(top: 12, bottom: 4), child: GenericErrorLabel(message: errorMessage)),
+        Padding(
+          padding: const EdgeInsets.only(top: 12, bottom: 4),
+          child: GenericErrorLabel(message: errorMessage),
+        ),
         button,
       ],
     );

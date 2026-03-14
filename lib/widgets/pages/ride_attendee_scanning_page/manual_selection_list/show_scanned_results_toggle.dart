@@ -31,9 +31,15 @@ class ShowScannedResultsToggle extends StatelessWidget {
 
         return PlatformAwareWidget(
           android: (_) {
-            return Switch(onChanged: (value) => onChanged(value: value), value: showScannedResults);
+            return Switch(
+              onChanged: (value) => onChanged(value: value),
+              value: showScannedResults,
+            );
           },
-          ios: (_) => CupertinoSwitch(onChanged: (value) => onChanged(value: value), value: showScannedResults),
+          ios: (_) => CupertinoSwitch(
+            onChanged: (value) => onChanged(value: value),
+            value: showScannedResults,
+          ),
         );
       },
     );

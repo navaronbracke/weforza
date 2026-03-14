@@ -52,7 +52,10 @@ class RiderListItem extends ConsumerWidget {
                 secondLineStyle: textTheme.lastNameStyle,
               ),
             ),
-            Padding(padding: const EdgeInsets.only(left: 4), child: RiderListItemAttendingCount(rider: rider)),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: RiderListItemAttendingCount(rider: rider),
+            ),
           ],
         ),
       ),

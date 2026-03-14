@@ -166,7 +166,10 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconTheme(data: IconThemeData(size: MediaQuery.sizeOf(context).shortestSide * .1), child: icon),
+        IconTheme(
+          data: IconThemeData(size: MediaQuery.sizeOf(context).shortestSide * .1),
+          child: icon,
+        ),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),

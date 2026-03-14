@@ -20,7 +20,10 @@ class RiderDevicesListItem extends StatelessWidget {
   Widget _buildItem(BuildContext context) {
     return Row(
       children: [
-        Padding(padding: const EdgeInsets.only(right: 4), child: DeviceIcon(type: device.type)),
+        Padding(
+          padding: const EdgeInsets.only(right: 4),
+          child: DeviceIcon(type: device.type),
+        ),
         Expanded(
           child: Text(
             device.name,
@@ -32,7 +35,10 @@ class RiderDevicesListItem extends StatelessWidget {
         ),
         Row(
           children: [
-            Padding(padding: const EdgeInsets.only(left: 4), child: _EditDeviceButton(device: device)),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: _EditDeviceButton(device: device),
+            ),
             deleteDeviceButton,
           ],
         ),

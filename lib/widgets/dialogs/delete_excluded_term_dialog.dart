@@ -32,7 +32,10 @@ class DeleteExcludedTermDialog extends StatelessWidget {
         TextSpan(
           text: description.first,
           children: [
-            TextSpan(text: term, style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(
+              text: term,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             TextSpan(text: description.last),
           ],
         ),

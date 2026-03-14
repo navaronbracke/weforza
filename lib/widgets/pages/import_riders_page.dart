@@ -108,7 +108,10 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
     final Widget title = Text(S.of(context).importRiders);
 
     return PlatformAwareWidget(
-      android: (context) => Scaffold(appBar: AppBar(title: title), body: body),
+      android: (context) => Scaffold(
+        appBar: AppBar(title: title),
+        body: body,
+      ),
       ios: (context) {
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(middle: title, transitionBetweenRoutes: false),
@@ -186,10 +189,11 @@ class _ImportRidersButton extends StatelessWidget {
           children: [
             CupertinoFormRow(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              error:
-                  errorMessage == null
-                      ? null
-                      : Center(child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!))),
+              error: errorMessage == null
+                  ? null
+                  : Center(
+                      child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!)),
+                    ),
               child: Center(child: button),
             ),
           ],

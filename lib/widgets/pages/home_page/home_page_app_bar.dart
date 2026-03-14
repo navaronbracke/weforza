@@ -131,7 +131,9 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
           transitionBetweenRoutes: false,
           middle: Row(
             children: <Widget>[
-              const Expanded(child: Padding(padding: EdgeInsets.only(left: 8), child: RiderListTitle())),
+              const Expanded(
+                child: Padding(padding: EdgeInsets.only(left: 8), child: RiderListTitle()),
+              ),
               CupertinoIconButton(
                 icon: CupertinoIcons.person_badge_plus_fill,
                 onPressed: () => _goToAddRiderPage(context),
@@ -159,7 +161,9 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
           transitionBetweenRoutes: false,
           middle: Row(
             children: <Widget>[
-              Expanded(child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.rides))),
+              Expanded(
+                child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.rides)),
+              ),
               CupertinoIconButton(icon: CupertinoIcons.add, onPressed: () => _goToAddRidePage(context)),
               Consumer(
                 builder: (_, ref, child) {

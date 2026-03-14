@@ -72,7 +72,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FocusAbsorber(child: PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget));
+    return FocusAbsorber(
+      child: PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget),
+    );
   }
 
   Widget _buildAndroidWidget(BuildContext context) {
@@ -247,7 +249,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       ),
       version: SliverToBoxAdapter(
         child: CupertinoFormSection.insetGrouped(
-          children: [CupertinoFormRow(prefix: Text(translator.version), child: const AppVersion(builder: Text.new))],
+          children: [
+            CupertinoFormRow(
+              prefix: Text(translator.version),
+              child: const AppVersion(builder: Text.new),
+            ),
+          ],
         ),
       ),
     );

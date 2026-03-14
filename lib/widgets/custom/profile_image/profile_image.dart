@@ -149,7 +149,9 @@ class AdaptiveProfileImage extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(size / 2)),
           color: placeholderBackgroundColor,
         ),
-        child: Center(child: Icon(placeholderIcon, color: Colors.white, size: .7 * size)),
+        child: Center(
+          child: Icon(placeholderIcon, color: Colors.white, size: .7 * size),
+        ),
       );
     }
 
@@ -163,7 +165,10 @@ class AdaptiveProfileImage extends StatelessWidget {
           color: _getBackgroundColor(initials, backgroundColors),
         ),
         child: Center(
-          child: Text(personInitials!.toUpperCase(), style: TextStyle(color: Colors.white, fontSize: size / 2)),
+          child: Text(
+            personInitials!.toUpperCase(),
+            style: TextStyle(color: Colors.white, fontSize: size / 2),
+          ),
         ),
       ),
       size: size,

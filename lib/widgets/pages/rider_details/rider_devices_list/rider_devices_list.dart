@@ -53,7 +53,10 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
               itemBuilder: (context, index) {
                 final device = devices[index];
 
-                return RiderDevicesListItem(device: device, deleteDeviceButton: DeleteDeviceButton(index: index));
+                return RiderDevicesListItem(
+                  device: device,
+                  deleteDeviceButton: DeleteDeviceButton(index: index),
+                );
               },
               itemCount: devices.length,
             ),

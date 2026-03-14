@@ -61,9 +61,8 @@ class IoFileSystem implements FileSystem {
       topLevelDocumentDirectories = await getExternalStorageDirectories(type: StorageDirectory.documents);
     }
 
-    topLevelDocumentsDirectory =
-        topLevelDocumentDirectories != null && topLevelDocumentDirectories.isNotEmpty
-            ? _fileSystem.directory(topLevelDocumentDirectories.first)
-            : null;
+    topLevelDocumentsDirectory = topLevelDocumentDirectories != null && topLevelDocumentDirectories.isNotEmpty
+        ? _fileSystem.directory(topLevelDocumentDirectories.first)
+        : null;
   }
 }

@@ -21,11 +21,10 @@ class SerializeRidersRepository {
   ///
   /// The returned list is sorted on the rider name, alias and active state.
   Future<Iterable<SerializableRider>> getSerializableRiders() async {
-    final (devices, riders) =
-        await (
-          deviceDao.getAllDevicesGroupedByOwnerId(),
-          riderDao.getRiders(RiderFilterOption.all, fileUriParser: fileUriParser),
-        ).wait;
+    final (devices, riders) = await (
+      deviceDao.getAllDevicesGroupedByOwnerId(),
+      riderDao.getRiders(RiderFilterOption.all, fileUriParser: fileUriParser),
+    ).wait;
 
     final output = riders.map((rider) => SerializableRider.fromRider(rider, devices)).toList();
 

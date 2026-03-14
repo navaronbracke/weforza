@@ -45,7 +45,13 @@ class ManualSelectionBottomBar extends StatelessWidget {
     );
 
     Widget child = BottomAppBar(
-      child: Row(children: [attendeeCounter, Expanded(child: Center(child: saveButton)), scannedResultsToggle]),
+      child: Row(
+        children: [
+          attendeeCounter,
+          Expanded(child: Center(child: saveButton)),
+          scannedResultsToggle,
+        ],
+      ),
     );
 
     if (constraints.biggest.width < 400) {
@@ -120,7 +126,13 @@ class ManualSelectionBottomBar extends StatelessWidget {
       ],
     );
 
-    Widget child = Row(children: [attendeeCounter, Expanded(child: Center(child: saveButton)), scannedResultsToggle]);
+    Widget child = Row(
+      children: [
+        attendeeCounter,
+        Expanded(child: Center(child: saveButton)),
+        scannedResultsToggle,
+      ],
+    );
 
     if (constraints.biggest.width < 400) {
       child = Column(

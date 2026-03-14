@@ -68,7 +68,9 @@ class MaterialProfileImagePickerPlaceholder extends StatelessWidget {
       height: size,
       width: size,
       decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(size / 2)), color: colorScheme.primary),
-      child: Center(child: Icon(Icons.person, color: colorScheme.onPrimary, size: .7 * size)),
+      child: Center(
+        child: Icon(Icons.person, color: colorScheme.onPrimary, size: .7 * size),
+      ),
     );
   }
 }

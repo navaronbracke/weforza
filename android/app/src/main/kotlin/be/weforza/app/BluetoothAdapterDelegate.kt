@@ -48,11 +48,8 @@ class BluetoothAdapterDelegate(
             ScanSettings.SCAN_MODE_BALANCED,
             ScanSettings.SCAN_MODE_LOW_LATENCY,
             ScanSettings.SCAN_MODE_LOW_POWER,
+            ScanSettings.SCAN_MODE_OPPORTUNISTIC
         )
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            scanModes.add(ScanSettings.SCAN_MODE_OPPORTUNISTIC)
-        }
 
         val scanMode = if(scanModes.contains(options.scanMode)) {
             options.scanMode
@@ -87,7 +84,7 @@ class BluetoothAdapterDelegate(
                 BluetoothAdapter.STATE_TURNING_ON -> result.success("turningOn")
                 else -> result.success("unknown")
             }
-        } catch (exception: SecurityException) {
+        } catch (_: SecurityException) {
             result.success("unauthorized")
         }
     }
@@ -113,7 +110,7 @@ class BluetoothAdapterDelegate(
                 BluetoothAdapter.STATE_TURNING_OFF -> stateStreamHandler.setPendingBluetoothStateResult(result)
                 BluetoothAdapter.STATE_TURNING_ON -> stateStreamHandler.setPendingBluetoothStateResult(result)
             }
-        } catch (exception: SecurityException) {
+        } catch (_: SecurityException) {
             result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
         }
     }
@@ -203,7 +200,7 @@ class BluetoothAdapterStateStreamHandler : StreamHandler {
      *
      * It will be resolved with a boolean once [BluetoothAdapter.STATE_ON]
      * or [BluetoothAdapter.STATE_OFF] is the current state.
-     * Only one pending Bluetooth state result result can be active at once.
+     * Only one pending Bluetooth state result can be active at once.
      */
     private var pendingBluetoothIsOnOrOffResult : MethodChannel.Result? = null
 

@@ -17,6 +17,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileReader
 import java.io.InputStream
+import androidx.core.net.toUri
 
 /**
  * This class provides a delegate to interact with the MediaStore.
@@ -45,7 +46,7 @@ class MediaStoreDelegate {
         result: Result,
         contentResolver: ContentResolver,
     ) {
-        val contentUri = Uri.parse(call.argument<String>("contentUri") ?: "")
+        val contentUri = (call.argument<String>("contentUri") ?: "").toUri()
 
         if(!contentUri.scheme.equals("content")) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
@@ -74,7 +75,7 @@ class MediaStoreDelegate {
             buffer.flush()
 
             return result.success(buffer.toByteArray())
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
         } finally {
             inputStream?.close()
@@ -185,7 +186,7 @@ class MediaStoreDelegate {
 
         try {
             documentUri = contentResolver.insert(MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL), contentValues)
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             // Fallthrough to handle the null document URI.
         }
 
@@ -271,7 +272,7 @@ class MediaStoreDelegate {
 
         try {
             imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             // Fallthrough to handle the null image URI.
         }
 

@@ -3,20 +3,11 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines the persistent application settings.
 class Settings {
-  Settings({this.excludedTermsFilter = const {}, this.riderListFilter = RiderFilterOption.all, this.scanDuration = 20})
-    : assert(scanDuration > 0, 'A scan duration should be greater than zero');
-
-  factory Settings.of(Map<String, Object?> values) {
-    final excludedTermsFilter = values['excludedTermsFilter'] as List<Object?>?;
-    final riderListFilter = values['memberListFilter'] as int?;
-    final scanDuration = values['scanDuration'] as int?;
-
-    return Settings(
-      excludedTermsFilter: Set.of(excludedTermsFilter?.cast<String>() ?? []),
-      riderListFilter: riderListFilter == null ? RiderFilterOption.all : RiderFilterOption.values[riderListFilter],
-      scanDuration: scanDuration ?? 20,
-    );
-  }
+  const Settings({
+    this.excludedTermsFilter = const {},
+    this.riderListFilter = RiderFilterOption.all,
+    this.scanDuration = 20,
+  }) : assert(scanDuration > 0, 'A scan duration should be greater than zero');
 
   /// The set of excluded terms that are ignored during a device scan.
   final Set<String> excludedTermsFilter;
@@ -35,15 +26,6 @@ class Settings {
       riderListFilter: riderListFilter ?? this.riderListFilter,
       scanDuration: scanDuration ?? this.scanDuration,
     );
-  }
-
-  /// Convert this object to a Map.
-  Map<String, Object?> toMap() {
-    return {
-      'excludedTermsFilter': excludedTermsFilter.toList(),
-      'memberListFilter': riderListFilter.index,
-      'scanDuration': scanDuration,
-    };
   }
 
   @override

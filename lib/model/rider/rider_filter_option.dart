@@ -3,9 +3,9 @@
 /// [RiderFilterOption.active] Only active riders.
 /// [RiderFilterOption.inactive] Only inactive riders.
 enum RiderFilterOption {
-  all(1),
-  active(2),
-  inactive(3);
+  all(0),
+  active(1),
+  inactive(2);
 
   const RiderFilterOption(this.value);
 

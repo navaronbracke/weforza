@@ -52,15 +52,23 @@ class SembastSettingsDao implements SettingsDao {
       return settings;
     }
 
-    // TODO: read from shared prefs
+    final List<String>? excludedTermsFilter = await _sharedPreferences.getStringList(_scanExcludedTermsFilterKey);
+    final int? scanDuration = await _sharedPreferences.getInt(_scanDurationKey);
+    final int? riderListDisplayMode = await _sharedPreferences.getInt(_riderListDisplayModeKey);
+
+    return Settings(
+      excludedTermsFilter: Set.of(excludedTermsFilter ?? const Iterable.empty()),
+      riderListFilter: RiderFilterOption.fromInt(riderListDisplayMode),
+      scanDuration: scanDuration,
+    );
   }
 
   @override
   Future<void> write(Settings settings) async {
-    if (await _settingsRecordRef.exists(_database)) {
-      await _settingsRecordRef.update(_database, settings.toMap());
-    } else {
-      await _settingsRecordRef.add(_database, settings.toMap());
-    }
+    await Future.wait([
+      _sharedPreferences.setStringList(_scanExcludedTermsFilterKey, settings.excludedTermsFilter.toList()),
+      _sharedPreferences.setInt(_riderListDisplayModeKey, settings.riderListFilter.value),
+      _sharedPreferences.setInt(_scanDurationKey, settings.scanDuration),
+    ]);
   }
 }

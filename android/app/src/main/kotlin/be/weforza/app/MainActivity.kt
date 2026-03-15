@@ -3,7 +3,6 @@ package be.weforza.app
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanSettings
-import android.content.Context
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
@@ -29,7 +28,7 @@ class MainActivity: FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothAdapterDelegate = BluetoothAdapterDelegate(
             bluetoothManager.adapter,
             bluetoothStateStreamHandler
@@ -131,7 +130,7 @@ class MainActivity: FlutterActivity() {
         grantResults: IntArray
     ) {
         // If the permission delegate can handle the request code, handle it.
-        // Otherwise pass it through.
+        // Otherwise, pass it through.
         when(permissionDelegate.shouldHandleRequestCode(requestCode)) {
             true -> permissionDelegate.onRequestPermissionsResult(requestCode, grantResults)
             false -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)

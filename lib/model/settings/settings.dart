@@ -3,11 +3,11 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines the persistent application settings.
 class Settings {
-  const Settings({
-    this.excludedTermsFilter = const {},
-    this.riderListFilter = RiderFilterOption.all,
-    this.scanDuration = 20,
-  }) : assert(scanDuration > 0, 'A scan duration should be greater than zero');
+  const Settings({Set<String>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration})
+    : excludedTermsFilter = excludedTermsFilter ?? const {},
+      riderListFilter = riderListFilter ?? RiderFilterOption.all,
+      scanDuration = scanDuration ?? 20,
+      assert(scanDuration == null || scanDuration > 0, 'A scan duration should be greater than zero');
 
   /// The set of excluded terms that are ignored during a device scan.
   final Set<String> excludedTermsFilter;

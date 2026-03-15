@@ -43,7 +43,7 @@ class SembastSettingsDao implements SettingsDao {
       final settings = Settings(
         excludedTermsFilter: Set.of(excludedTermsFilter?.whereType<String>() ?? const Iterable.empty()),
         riderListFilter: RiderFilterOption.fromInt(riderListFilter),
-        scanDuration: scanDuration ?? 20,
+        scanDuration: scanDuration,
       );
 
       await write(settings);

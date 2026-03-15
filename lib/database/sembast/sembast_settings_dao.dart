@@ -20,6 +20,15 @@ class SembastSettingsDao implements SettingsDao {
   /// The key for the settings record in Sembast.
   static const _sembastSettingsKey = 'APPLICATION_SETTINGS';
 
+  /// The key for the scan session excluded terms filter in shared preferences.
+  static const String _scanExcludedTermsFilterKey = 'scanExcludedTermsFilter';
+
+  /// The key for the rider list display mode in shared preferences.
+  static const String _riderListDisplayModeKey = 'riderListDisplayMode';
+
+  /// The key for the scan duration in shared preferences.
+  static const String _scanDurationKey = 'scanDuration';
+
   @override
   Future<Settings> read() async {
     final Map<String, Object?>? sembastRecord = await _settingsRecordRef.get(_database);
@@ -33,7 +42,7 @@ class SembastSettingsDao implements SettingsDao {
     }) {
       final settings = Settings(
         excludedTermsFilter: Set.of(excludedTermsFilter?.whereType<String>() ?? const Iterable.empty()),
-        riderListFilter: riderListFilter == null ? RiderFilterOption.all : RiderFilterOption.values[riderListFilter],
+        riderListFilter: RiderFilterOption.fromInt(riderListFilter),
         scanDuration: scanDuration ?? 20,
       );
 

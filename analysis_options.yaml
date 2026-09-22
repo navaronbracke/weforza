@@ -8,6 +8,9 @@ formatter:
 analyzer:
   exclude:
     - lib/generated/*
+    - build/**
+    - android/**
+    - ios/**
 
 linter:
   rules:
@@ -45,7 +48,6 @@ linter:
     sort_unnamed_constructors_first: true
     type_annotate_public_apis: true
     unawaited_futures: true
-    unnecessary_await_in_return: true
     unnecessary_lambdas: true
     unnecessary_to_list_in_spreads: true
     use_colored_box: true # Flutter rule to avoid Container with only a color.

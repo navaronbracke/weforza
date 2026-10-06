@@ -49,32 +49,28 @@ class MediaDelegate : NSObject {
     
     /// Request permission to add photos to the Photo library.
     func requestAddToPhotoLibraryPermission(result: @escaping FlutterResult) {
-        if #available(iOS 14.0, *) {
-            let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
-            
-            switch(photosAuthorizationStatus) {
-            case .authorized:
-                result(true)
-            case .denied, .limited, .restricted:
-                result(false)
-            case .notDetermined:
-                PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
-                    switch(status) {
-                    case .authorized:
-                        result(true)
-                    case .denied, .limited, .restricted:
-                        result(false)
-                    case .notDetermined:
-                        result(nil)
-                    @unknown default:
-                        result(false)
-                    }
-                }
-            @unknown default:
-                result(false)
-            }
-        } else {
+        let photosAuthorizationStatus = PHPhotoLibrary.authorizationStatus(for: .addOnly)
+        
+        switch(photosAuthorizationStatus) {
+        case .authorized:
             result(true)
+        case .denied, .limited, .restricted:
+            result(false)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                switch(status) {
+                case .authorized:
+                    result(true)
+                case .denied, .limited, .restricted:
+                    result(false)
+                case .notDetermined:
+                    result(nil)
+                @unknown default:
+                    result(false)
+                }
+            }
+        @unknown default:
+            result(false)
         }
     }
 }

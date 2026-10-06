@@ -11,23 +11,19 @@ class IoImportFileDelegate implements ImportFileDelegate {
 
   @override
   Future<fs.File?> pickImportRidersDataSource() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: <String>['csv', 'json'],
-    );
+    final result = await FilePicker.pickFile(type: FileType.custom, allowedExtensions: <String>['csv', 'json']);
 
-    if (result == null || result.files.isEmpty) {
+    if (result == null) {
       return null;
     }
 
-    final chosenFile = result.files.first;
-    final ext = chosenFile.extension;
+    final extension = result.extension;
 
-    if (ext == null || (!ext.endsWith('csv') && !ext.endsWith('json'))) {
+    if (extension == null || (!extension.endsWith('csv') && !extension.endsWith('json'))) {
       throw UnsupportedFileFormatException();
     }
 
-    final filePath = chosenFile.path;
+    final filePath = result.path;
 
     if (filePath == null) {
       throw UnsupportedFileFormatException();

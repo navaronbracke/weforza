@@ -48,24 +48,22 @@ dependencies:
   flutter_riverpod: ^2.6.1
 
   # For picking images from the camera / gallery.
-  image_picker: ^1.1.2
-  image_picker_android: ^0.8.12+21 # TODO: remove dependency when bumping image_picker
-  image_picker_ios: ^0.8.12+2 # TODO: remove dependency when bumping image_picker
+  image_picker: ^1.2.4
 
   # The intl package provides translation utilities.
   intl: any
 
   # This package provies MIME-type lookup utilities.
-  mime: ^2.0.0
+  mime: ^2.1.0
 
   # package_info_plus provides access to app specific information such as build number & version.
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.2.2
 
   # Path utilities for URI's and the like.
   path: ^1.8.1
 
   # For OS-specific directory paths.
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
 
   # RxDart provides extensions to Dart Streams.
   rxdart: ^0.28.0
@@ -75,13 +73,13 @@ dependencies:
 
   # The following dependency provides local persistence for the app settings,
   # which are not saved in the database directly.
-  shared_preferences: ^2.5.4
+  shared_preferences: ^2.5.6
 
   # UUID generator for globally unique ids.
-  uuid: ^4.5.1
+  uuid: ^4.6.0
 
 dev_dependencies:
-  file_testing: 3.0.2
+  file_testing: 3.1.0
 
   flutter_driver:
     sdk: flutter

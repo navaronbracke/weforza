@@ -6,8 +6,7 @@ import 'package:weforza/riverpod/settings_provider.dart';
 /// This class represents the delegate that manages
 /// the scan duration option for the settings page.
 class ScanDurationDelegate extends DeferredSaveDelegate<double> {
-  ScanDurationDelegate({required SettingsNotifier settingsDelegate, required super.initialValue})
-    : _settingsDelegate = settingsDelegate;
+  ScanDurationDelegate({required this._settingsDelegate, required super.initialValue});
 
   final SettingsNotifier _settingsDelegate;
 

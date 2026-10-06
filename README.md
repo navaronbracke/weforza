@@ -98,28 +98,6 @@ Before runing the app on a real IOS device, this checklist should be performed.
   * iOS 16 and higher: On iOS 16 and higher Developer mode should be enabled on the device.
   See https://developer.apple.com/documentation/xcode/enabling-developer-mode-on-a-device
 
-- If required, run `pods install` in the terminal. (preferably from the flutter project dir)
-  Usually the Flutter tool does this automatically when building.
-
-### IOS Deployment target version
-
-To bump the minimum iOS version for a project do the following:
-- Open the project in XCode
-- Set the iOS version under `Runner > General > Minimum Deployments > iOS`
-- In `ios/Flutter/AppFrameworkInfo.plist` set `MinimumOSVersion`
-- Update the `platform :ios, <version number>` section in the Podfile.
-- Ensure that the `flutter_additional_ios_build_settings(target)` section in ios/Podfile has set `IPHONEOS_DEPLOYMENT_TARGET`
-```
-    post_install do |installer|
-      installer.pods_project.targets.each do |target|
-        flutter_additional_ios_build_settings(target)
-        target.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '<version number>'
-        end
-      end
-    end
-```
-
 #### Note
 
 If the iOS compilation fails, even after incrementing the supported iOS version, try running `flutter clean` and restarting your IDE.

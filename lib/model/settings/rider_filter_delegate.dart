@@ -7,8 +7,7 @@ import 'package:weforza/riverpod/settings_provider.dart';
 /// This class represents the delegate that manages
 /// the rider list filter option for the settings page.
 class RiderFilterDelegate extends DeferredSaveDelegate<RiderFilterOption> {
-  RiderFilterDelegate({required SettingsNotifier settingsDelegate, required super.initialValue})
-    : _settingsDelegate = settingsDelegate;
+  RiderFilterDelegate({required this._settingsDelegate, required super.initialValue});
 
   final SettingsNotifier _settingsDelegate;
 

@@ -32,7 +32,7 @@ final class ContentUriImage extends ImageProvider<ContentUriImage> {
         throw StateError('The image at the given Uri "$uri" is empty and cannot be loaded as an image.');
       }
 
-      return decode(await ImmutableBuffer.fromUint8List(bytes));
+      return await decode(await ImmutableBuffer.fromUint8List(bytes));
     } catch (exception) {
       PaintingBinding.instance.imageCache.evict(key);
 

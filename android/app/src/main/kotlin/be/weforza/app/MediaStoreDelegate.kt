@@ -48,7 +48,7 @@ class MediaStoreDelegate {
     ) {
         val contentUri = (call.argument<String>("contentUri") ?: "").toUri()
 
-        if(!contentUri.scheme.equals("content")) {
+        if (!contentUri.scheme.equals("content")) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
@@ -58,7 +58,7 @@ class MediaStoreDelegate {
         try {
             inputStream = contentResolver.openInputStream(contentUri)
 
-            if(inputStream == null) {
+            if (inputStream == null) {
                 result.error(READ_FILE_FAILED_ERROR_CODE, READ_FILE_FAILED_ERROR_MESSAGE, null)
                 return
             }
@@ -101,7 +101,7 @@ class MediaStoreDelegate {
      *  - any required argument is omitted.
      */
     fun informDownloadManagerAboutDocument(call: MethodCall, result: Result, context: Context) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             result.error(
                 INVALID_ARGUMENT_ERROR_CODE,
                 INVALID_ARGUMENT_ERROR_MESSAGE,
@@ -114,14 +114,14 @@ class MediaStoreDelegate {
         val fileMimeType = call.argument<String>("fileType")
         val fileSize = call.argument<Number>("fileSize")?.toLong()
 
-        if(filePath == null || fileName == null || fileMimeType == null || fileSize == null) {
+        if (filePath == null || fileName == null || fileMimeType == null || fileSize == null) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
 
         val documentFile = File(filePath)
 
-        if(!documentFile.exists()) {
+        if (!documentFile.exists()) {
             result.error(FILE_DOES_NOT_EXIST_ERROR_CODE, FILE_DOES_NOT_EXIST_ERROR_MESSAGE, null)
             return
         }
@@ -161,7 +161,7 @@ class MediaStoreDelegate {
         val fileMimeType = call.argument<String>("fileType")
         val fileSize = call.argument<Number>("fileSize")?.toInt()
 
-        if(filePath == null || fileName == null || fileMimeType == null || fileSize == null) {
+        if (filePath == null || fileName == null || fileMimeType == null || fileSize == null) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
@@ -190,7 +190,7 @@ class MediaStoreDelegate {
             // Fallthrough to handle the null document URI.
         }
 
-        if(documentUri == null) {
+        if (documentUri == null) {
             result.error(INSERT_FILE_FAILED_ERROR_CODE, INSERT_FILE_FAILED_ERROR_MESSAGE, null)
             return
         }
@@ -243,12 +243,12 @@ class MediaStoreDelegate {
         val fileMimeType = call.argument<String>("fileType")
         val fileSize = call.argument<Number>("fileSize")?.toInt()
 
-        if(filePath == null || fileName == null || fileSize == null) {
+        if (filePath == null || fileName == null || fileSize == null) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
 
-        if(fileMimeType == null || !fileMimeType.startsWith("image/")) {
+        if (fileMimeType == null || !fileMimeType.startsWith("image/")) {
             result.error(INVALID_ARGUMENT_ERROR_CODE, INVALID_ARGUMENT_ERROR_MESSAGE, null)
             return
         }
@@ -263,7 +263,7 @@ class MediaStoreDelegate {
         contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED, timestamp)
         contentValues.put(MediaStore.Images.ImageColumns.DATE_MODIFIED, timestamp)
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // The Images table does not support subdirectories.
             contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         }
@@ -276,7 +276,7 @@ class MediaStoreDelegate {
             // Fallthrough to handle the null image URI.
         }
 
-        if(imageUri == null) {
+        if (imageUri == null) {
             result.error(INSERT_FILE_FAILED_ERROR_CODE, INSERT_FILE_FAILED_ERROR_MESSAGE, null)
             return
         }

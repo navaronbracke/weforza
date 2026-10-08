@@ -59,7 +59,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     /// Handle changes in the state of the ``CBCentralManager``.
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         // Check if the permission result was pending and resolve it now.
-        if(self._pendingPermissionResult != nil) {
+        if (self._pendingPermissionResult != nil) {
             let permissionStatus = checkBluetoothPermissionStatus(bluetoothManager: central)
             
             // If the permission state is still undetermined, return false.
@@ -72,7 +72,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
         self.bluetoothStateStreamHandler.onBluetoothStateChanged(state: bluetoothAdapterState)
         
         // Check if the Bluetooth on/off result was pending and resolve it now.
-        if(self._pendingBluetoothIsOnOrOffResult != nil) {
+        if (self._pendingBluetoothIsOnOrOffResult != nil) {
             switch(bluetoothAdapterState) {
             case .unknown:
                 break
@@ -116,7 +116,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Initialize the ``CBCentralManager`` without showing a permission dialog.
     private func initializeBluetoothManager() {
-        if(_bluetoothManager == nil) {
+        if (_bluetoothManager == nil) {
             // Allocating the `CBCentralManager` requests Bluetooth permissions.
             _bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: false])
             self.bluetoothStateStreamHandler.setCachedState(state: _bluetoothManager?.state)
@@ -161,7 +161,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
     
     /// Set up the ``CBCentralManager`` and request Bluetooth permissions.
     func requestBluetoothPermission(result: @escaping FlutterResult) {
-        if(_pendingPermissionResult != nil) {
+        if (_pendingPermissionResult != nil) {
             result(FlutterError(
                 code: BLUETOOTH_PERMISSION_REQUEST_ONGOING_ERROR_CODE,
                 message: BLUETOOTH_PERMISSION_REQUEST_ONGOING_ERROR_MESSAGE,
@@ -188,7 +188,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
         // Reset the pending result if the permission was granted or denied before.
         // Finally, resolve the permission if it is known.
         // If the permission is not known, it is resolved in `centralManagerDidUpdateState`.
-        if(hasBluetoothPermision != nil) {
+        if (hasBluetoothPermision != nil) {
             result(hasBluetoothPermision)
             _pendingPermissionResult = nil
         }
@@ -207,7 +207,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
             return
         }
         
-        if(!bluetoothManager.isScanning) {
+        if (!bluetoothManager.isScanning) {
             bluetoothManager.scanForPeripherals(withServices: [], options: [:])
         }
         
@@ -227,7 +227,7 @@ class BluetoothAdapterDelegate : NSObject, CBCentralManagerDelegate {
             return
         }
         
-        if(bluetoothManager.isScanning) {
+        if (bluetoothManager.isScanning) {
             bluetoothManager.stopScan()
         }
 
@@ -290,7 +290,7 @@ class BluetoothStateStreamHandler : NSObject, FlutterStreamHandler {
     private var cachedBluetoothState: CBManagerState?
     
     func onBluetoothStateChanged(state: CBManagerState) {
-        if(sink == nil) {
+        if (sink == nil) {
             cachedBluetoothState = state
         } else {
             sink?(state.toSerializedString())
@@ -306,7 +306,7 @@ class BluetoothStateStreamHandler : NSObject, FlutterStreamHandler {
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         sink = events
         
-        if(cachedBluetoothState != nil) {
+        if (cachedBluetoothState != nil) {
             sink?(cachedBluetoothState?.toSerializedString())
         }
         

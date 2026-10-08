@@ -42,7 +42,7 @@ class PermissionHandler {
     private fun hasPermissions(activity: Activity, permissions: Array<String>): Boolean {
         for(permission in permissions) {
             // Abort with false if a permission was denied.
-            if(ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) {
+            if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED) {
                 return false
             }
         }
@@ -78,7 +78,7 @@ class PermissionHandler {
             return
         }
 
-        if(hasPermissions(activity, permissions)) {
+        if (hasPermissions(activity, permissions)) {
             // Permissions already exist. Call the callback with success.
             callback.onPermissionResult(null, null)
             return
@@ -110,13 +110,13 @@ class PermissionHandler {
         //
         // On Android Q (API 29) and higher, request the fine location.
         // On Android Pie (API 28) and lower, request the coarse location instead.
-        val locationPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val locationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Manifest.permission.ACCESS_FINE_LOCATION
         } else {
             Manifest.permission.ACCESS_COARSE_LOCATION
         }
 
-        val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             arrayOf(
                 locationPermission,
                 Manifest.permission.BLUETOOTH_SCAN,
@@ -144,7 +144,7 @@ class PermissionHandler {
     fun requestWriteExternalStoragePermission(activity: Activity, callback: PermissionResultCallback) {
         val writePermission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-        if(hasPermissions(activity, writePermission)) {
+        if (hasPermissions(activity, writePermission)) {
             callback.onPermissionResult(null, null)
             return
         }
@@ -190,14 +190,14 @@ internal class PermissionResultListener(
 
         // grantResults could be empty if the permissions request with the user is interrupted
         // https://developer.android.com/reference/android/app/Activity#onRequestPermissionsResult(int,%20java.lang.String[],%20int[])
-        if(grantResults.isEmpty()) {
+        if (grantResults.isEmpty()) {
             resultHandler.onPermissionResult(
                 PermissionHandler.PERMISSION_DENIED, PermissionHandler.PERMISSION_DENIED_MESSAGE)
             return
         }
 
         for (grantResult in grantResults) {
-            if(grantResult != PackageManager.PERMISSION_GRANTED) {
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
                 resultHandler.onPermissionResult(
                     PermissionHandler.PERMISSION_DENIED, PermissionHandler.PERMISSION_DENIED_MESSAGE)
                 return

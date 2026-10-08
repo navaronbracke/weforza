@@ -21,9 +21,6 @@ environment:
   flutter: ">=3.47.2"
 
 dependencies:
-  # This package provides easy access to app settings.
-  app_settings: ^7.0.0
-
   # Collection utilities.
   collection: ^1.17.0
 

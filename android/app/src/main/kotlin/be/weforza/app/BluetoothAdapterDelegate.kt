@@ -51,7 +51,7 @@ class BluetoothAdapterDelegate(
             ScanSettings.SCAN_MODE_OPPORTUNISTIC
         )
 
-        val scanMode = if(scanModes.contains(options.scanMode)) {
+        val scanMode = if (scanModes.contains(options.scanMode)) {
             options.scanMode
         } else {
             ScanSettings.SCAN_MODE_BALANCED
@@ -71,7 +71,7 @@ class BluetoothAdapterDelegate(
      * Get the current state of the Bluetooth adapter.
      */
     fun getState(result: MethodChannel.Result) {
-        if(bluetoothAdapter == null) {
+        if (bluetoothAdapter == null) {
             result.success("unavailable")
             return
         }
@@ -97,7 +97,7 @@ class BluetoothAdapterDelegate(
      * Returns null otherwise.
      */
     fun isBluetoothOn(result: MethodChannel.Result) {
-        if(bluetoothAdapter == null) {
+        if (bluetoothAdapter == null) {
             result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
             return
         }
@@ -119,17 +119,17 @@ class BluetoothAdapterDelegate(
      * Start a new Bluetooth scan.
      */
     fun startBluetoothScan(options: BluetoothScanOptions, result: MethodChannel.Result, context: Context) {
-        if(bluetoothAdapter == null) {
+        if (bluetoothAdapter == null) {
             result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
             return
         }
 
-        if(bluetoothScanCallback != null) {
+        if (bluetoothScanCallback != null) {
             result.success(null)
             return
         }
 
-        val hasScanPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val hasScanPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.BLUETOOTH_SCAN
@@ -138,7 +138,7 @@ class BluetoothAdapterDelegate(
             true
         }
 
-        if(hasScanPermission) {
+        if (hasScanPermission) {
             bluetoothScanCallback = BluetoothScanCallback(deviceDiscoveryStreamHandler::onDeviceFound)
 
             val filters = listOf<ScanFilter>()
@@ -154,21 +154,21 @@ class BluetoothAdapterDelegate(
      * Stop a running Bluetooth device scan.
      */
     fun stopBluetoothScan(result: MethodChannel.Result, context: Context) {
-        if(bluetoothAdapter == null) {
+        if (bluetoothAdapter == null) {
             result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
             return
         }
 
         val bluetoothScanner = bluetoothAdapter.bluetoothLeScanner
 
-        if(bluetoothScanCallback == null) {
+        if (bluetoothScanCallback == null) {
             result.success(null)
             return
         }
 
         // Permission should be granted at this point, since the scan already started.
         // This is just a sanity check to silence the hint for bluetoothScanner.stopScan().
-        val hasScanPermission = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val hasScanPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.BLUETOOTH_SCAN
@@ -214,14 +214,14 @@ class BluetoothAdapterStateStreamHandler : StreamHandler {
             // Resolve the pending state result if needed.
             BluetoothAdapter.STATE_OFF -> {
                 sink?.success("off")
-                if(pendingBluetoothIsOnOrOffResult != null) {
+                if (pendingBluetoothIsOnOrOffResult != null) {
                     pendingBluetoothIsOnOrOffResult?.success(false)
                     pendingBluetoothIsOnOrOffResult = null
                 }
             }
             BluetoothAdapter.STATE_ON -> {
                 sink?.success("on")
-                if(pendingBluetoothIsOnOrOffResult != null) {
+                if (pendingBluetoothIsOnOrOffResult != null) {
                     pendingBluetoothIsOnOrOffResult?.success(true)
                     pendingBluetoothIsOnOrOffResult = null
                 }
@@ -244,7 +244,7 @@ class BluetoothAdapterStateStreamHandler : StreamHandler {
      * Set the pending Bluetooth state result.
      */
     fun setPendingBluetoothStateResult(result: MethodChannel.Result) {
-        if(pendingBluetoothIsOnOrOffResult == null) {
+        if (pendingBluetoothIsOnOrOffResult == null) {
             pendingBluetoothIsOnOrOffResult = result
         }
     }
@@ -255,7 +255,7 @@ class BluetoothAdapterStateStreamHandler : StreamHandler {
  */
 class BluetoothAdapterStateBroadcastReceiver(private val onStateChanged: (state: Int) -> Unit) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        if(intent == null || !intent.action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+        if (intent == null || !intent.action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
             return
         }
 

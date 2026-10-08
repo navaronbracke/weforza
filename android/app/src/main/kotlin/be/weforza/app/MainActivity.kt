@@ -17,6 +17,8 @@ class MainActivity: FlutterActivity() {
 
     private lateinit var bluetoothAdapterDelegate: BluetoothAdapterDelegate
     private val bluetoothStateStreamHandler = BluetoothAdapterStateStreamHandler()
+
+    private val appSettingsDelegate = AppSettingsDelegate()
     private val mediaStoreDelegate = MediaStoreDelegate()
     private val permissionDelegate = PermissionHandler()
 
@@ -41,8 +43,16 @@ class MainActivity: FlutterActivity() {
                 "getBytesFromContentUri" -> mediaStoreDelegate.getBytesFromContentUri(call, result, contentResolver)
                 "hasScopedStorage" -> result.success(mediaStoreDelegate.hasScopedStorage())
                 "isBluetoothOn" -> bluetoothAdapterDelegate.isBluetoothOn(result)
+                "openAppSettings" -> {
+                    appSettingsDelegate.openAppSettings(this)
+                    result.success(null)
+                }
+                "openBluetoothSettings" -> {
+                    appSettingsDelegate.openBluetoothSettings(this)
+                    result.success(null)
+                }
                 "registerDocument" -> {
-                    if(mediaStoreDelegate.hasScopedStorage()) {
+                    if (mediaStoreDelegate.hasScopedStorage()) {
                         mediaStoreDelegate.insertNewDocumentInMediaStore(call, result, contentResolver)
                     } else {
                         // Fallback to notifying the DownloadManager.
@@ -57,7 +67,7 @@ class MainActivity: FlutterActivity() {
                                 errorCode: String?,
                                 errorDescription: String?
                             ) {
-                                if(errorCode == null) {
+                                if (errorCode == null) {
                                     result.success(true)
                                 } else {
                                     result.success(false)
@@ -72,7 +82,7 @@ class MainActivity: FlutterActivity() {
                             errorCode: String?,
                             errorDescription: String?
                         ) {
-                            if(errorCode == null) {
+                            if (errorCode == null) {
                                 result.success(true)
                             } else {
                                 result.success(false)
@@ -83,7 +93,7 @@ class MainActivity: FlutterActivity() {
                 "requestWriteExternalStoragePermission" -> {
                     // Abort with success when ScopedStorage is in use,
                     // since the permission is ignored when ScopedStorage is used.
-                    if(mediaStoreDelegate.hasScopedStorage()) {
+                    if (mediaStoreDelegate.hasScopedStorage()) {
                         result.success(true)
                     } else {
                         permissionDelegate.requestWriteExternalStoragePermission(
@@ -93,7 +103,7 @@ class MainActivity: FlutterActivity() {
                                     errorCode: String?,
                                     errorDescription: String?
                                 ) {
-                                    if(errorCode == null) {
+                                    if (errorCode == null) {
                                         result.success(true)
                                     } else {
                                         result.success(false)
@@ -148,7 +158,7 @@ class MainActivity: FlutterActivity() {
     }
 
     override fun onPause() {
-        if(bluetoothStateBroadcastReceiver != null) {
+        if (bluetoothStateBroadcastReceiver != null) {
             unregisterReceiver(bluetoothStateBroadcastReceiver)
         }
 

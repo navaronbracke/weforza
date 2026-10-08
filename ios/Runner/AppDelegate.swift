@@ -10,6 +10,7 @@ import Flutter
   }
 
   private func setUpMethodChannels(engineBridge: FlutterImplicitEngineBridge) {
+    let appSettingsDelegate = AppSettingsDelegate()
     let bluetoothAdapterDelegate = BluetoothAdapterDelegate()
     let mediaDelegate = MediaDelegate()
 
@@ -32,6 +33,11 @@ import Flutter
                 bluetoothAdapterDelegate.getBluetoothAdapterState(result: result)
             case "isBluetoothOn":
                 bluetoothAdapterDelegate.isBluetoothOn(result: result)
+            case "openAppSettings":
+            case "openBluetoothSettings":
+                Task {
+                    await appSettingsDelegate.openAppSettings(result: result)
+                }
             case "registerImage":
                 mediaDelegate.registerImage(args: call.arguments as? Dictionary<String, Any> ?? [:], result: result)
             case "requestAddToPhotoLibraryPermission":

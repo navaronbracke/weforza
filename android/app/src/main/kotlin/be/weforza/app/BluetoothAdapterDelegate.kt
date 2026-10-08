@@ -142,8 +142,14 @@ class BluetoothAdapterDelegate(
             bluetoothScanCallback = BluetoothScanCallback(deviceDiscoveryStreamHandler::onDeviceFound)
 
             val filters = listOf<ScanFilter>()
+            val scanner = bluetoothAdapter.bluetoothLeScanner
 
-            bluetoothAdapter.bluetoothLeScanner.startScan(filters, buildBluetoothScanSettings(options), bluetoothScanCallback)
+            if (scanner == null) {
+                result.error(BLUETOOTH_UNAVAILABLE_ERROR_CODE, BLUETOOTH_UNAVAILABLE_ERROR_MESSAGE, null)
+                return
+            }
+
+            scanner.startScan(filters, buildBluetoothScanSettings(options), bluetoothScanCallback)
             result.success(null)
         } else {
             result.error(BLUETOOTH_UNAUTHORIZED_ERROR_CODE, BLUETOOTH_UNAUTHORIZED_ERROR_MESSAGE, null)
@@ -161,7 +167,8 @@ class BluetoothAdapterDelegate(
 
         val bluetoothScanner = bluetoothAdapter.bluetoothLeScanner
 
-        if (bluetoothScanCallback == null) {
+        if (bluetoothScanCallback == null || bluetoothScanner == null) {
+            bluetoothScanCallback = null // Clean up the old scan callback along with its settings.
             result.success(null)
             return
         }
@@ -177,7 +184,7 @@ class BluetoothAdapterDelegate(
             true
         }
 
-        if(hasScanPermission) {
+        if (hasScanPermission) {
             bluetoothScanner.stopScan(bluetoothScanCallback)
             bluetoothScanCallback = null // Clean up the old scan callback along with its settings.
             result.success(null)

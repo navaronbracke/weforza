@@ -17,6 +17,8 @@ class MainActivity: FlutterActivity() {
 
     private lateinit var bluetoothAdapterDelegate: BluetoothAdapterDelegate
     private val bluetoothStateStreamHandler = BluetoothAdapterStateStreamHandler()
+
+    private val appSettingsDelegate = AppSettingsDelegate()
     private val mediaStoreDelegate = MediaStoreDelegate()
     private val permissionDelegate = PermissionHandler()
 
@@ -41,6 +43,14 @@ class MainActivity: FlutterActivity() {
                 "getBytesFromContentUri" -> mediaStoreDelegate.getBytesFromContentUri(call, result, contentResolver)
                 "hasScopedStorage" -> result.success(mediaStoreDelegate.hasScopedStorage())
                 "isBluetoothOn" -> bluetoothAdapterDelegate.isBluetoothOn(result)
+                "openAppSettings" -> {
+                    appSettingsDelegate.openAppSettings(this)
+                    result.success(null)
+                }
+                "openBluetoothSettings" -> {
+                    appSettingsDelegate.openBluetoothSettings(this)
+                    result.success(null)
+                }
                 "registerDocument" -> {
                     if(mediaStoreDelegate.hasScopedStorage()) {
                         mediaStoreDelegate.insertNewDocumentInMediaStore(call, result, contentResolver)

@@ -11,7 +11,7 @@ For example, an asset that has a view box of 600x600 will only show its inner 40
 
 #### Split the foreground and background layer
 
-Given the SG asset, create two copies of it.
+Given the SVG asset, create two copies of it.
 In a text editor of your choice, remove the background layer from the first copy. This file is now your foreground asset.
 In a text editor of your choice, remove the foreground layer from the second copy. This file is now your background asset.
 

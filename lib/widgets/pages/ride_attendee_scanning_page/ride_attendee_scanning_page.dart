@@ -74,7 +74,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
     );
 
     // Listen to the start signal of the Bluetooth scan,
-    // so that the progress bar decrease in progress.
+    // so that the progress bar decreases in progress.
     _startScanningSubscription = delegate.scanner.isScanningStream.listen(_listenToScanStart);
 
     delegate.startDeviceScan();
@@ -91,29 +91,18 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   }
 
   Widget _buildBody() {
-    return StreamBuilder<RideAttendeeScanningState>(
-      initialData: delegate.currentState,
-      stream: delegate.stream,
-      builder: (context, snapshot) {
-        final state = snapshot.data;
-
-        if (snapshot.hasError || state == null) {
-          return const Center(child: GenericScanError());
-        }
-
-        switch (state) {
-          case RideAttendeeScanningState.bluetoothDisabled:
-            return Center(child: BluetoothDisabledError(onRetry: delegate.startDeviceScan));
-          case RideAttendeeScanningState.manualSelection:
-            return ManualSelectionList(delegate: delegate);
-          case RideAttendeeScanningState.permissionDenied:
-            return const Center(child: PermissionDeniedError());
-          case RideAttendeeScanningState.requestPermissions:
-          case RideAttendeeScanningState.startingScan:
-          case RideAttendeeScanningState.stoppingScan:
-            return const Center(child: PlatformAwareLoadingIndicator());
-          case RideAttendeeScanningState.scanning:
-            return ScanResultsList(
+    return ValueListenableBuilder<AsyncValue<RideAttendeeScanningState>>(
+      valueListenable: delegate.listenable,
+      builder: (context, currentValue, _) {
+        if (currentValue case AsyncData(:final value)) {
+          return switch (value) {
+            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: delegate.startDeviceScan)),
+            .manualSelection => ManualSelectionList(delegate: delegate),
+            .permissionDenied => const Center(child: PermissionDeniedError()),
+            .requestPermissions ||
+            .startingScan ||
+            .stoppingScan => const Center(child: PlatformAwareLoadingIndicator()),
+            .scanning => ScanResultsList(
               delegate: delegate,
               progressBar: ScanProgressIndicator(
                 animationController: _scanProgressBarController,
@@ -121,10 +110,12 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
                 isScanningStream: delegate.scanner.isScanningStream,
               ),
               scanResultsListKey: _scanResultsKey,
-            );
-          case RideAttendeeScanningState.unresolvedOwnersSelection:
-            return UnresolvedOwnersList(delegate: delegate);
+            ),
+            .unresolvedOwnersSelection => UnresolvedOwnersList(delegate: delegate),
+          };
         }
+
+        return const Center(child: GenericScanError());
       },
     );
   }

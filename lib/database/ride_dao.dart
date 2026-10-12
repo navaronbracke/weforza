@@ -36,6 +36,6 @@ abstract interface class RideDao {
   /// Update the given [ride] and its [attendees].
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees);
 
-  /// Get a stream of changes to the amount of rides.
+  /// Get a [Stream] of changes to the amount of rides.
   Stream<int> watchRidesCount();
 }

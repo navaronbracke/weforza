@@ -13,8 +13,6 @@ class AddRideCalendar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final calendarDelegate = delegate.calendarDelegate;
-
     return DatePicker(
       // Use the smallest size for now.
       computeDaySize: (constraints) => constraints.smallest,
@@ -25,7 +23,7 @@ class AddRideCalendar extends StatelessWidget {
 
         return SizedBox.fromSize(size: size);
       },
-      delegate: calendarDelegate,
+      delegate: delegate.calendarDelegate,
       headerButtonBuilder: _AddRideCalendarHeaderButton.new,
       showWeekdays: true,
     );

@@ -16,7 +16,7 @@ abstract class AsyncComputationDelegate<T> {
 
   bool get mounted => !_isDisposed;
 
-  ValueListenable<AsyncValue<T>?> get listenable => _notifier;
+  ValueListenable<AsyncValue<T>?> get stateListenable => _notifier;
 
   /// Check whether a new computation can be started,
   /// and transition to the [AsyncLoading] state.

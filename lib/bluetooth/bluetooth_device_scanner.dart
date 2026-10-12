@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
 
@@ -11,11 +12,11 @@ abstract class BluetoothDeviceScanner {
   /// Get the current scanning state.
   bool get isScanning;
 
-  /// Get the stream of changes to the scanning state.
-  Stream<bool> get isScanningStream;
+  /// Get the value of [isScanning] as a [ValueListenable].
+  ValueListenable<bool> get isScanningListenable;
 
-  /// Get the stream of changes to the Bluetooth adapter's state.
-  Stream<BluetoothState> get state;
+  /// Get a [ValueListenable] for the Bluetooth adapter's state changes.
+  ValueListenable<BluetoothState> get state;
 
   /// Request permission to use the Bluetooth adapter.
   ///
@@ -23,9 +24,10 @@ abstract class BluetoothDeviceScanner {
   Future<bool> requestBluetoothScanPermission();
 
   /// Scan for Bluetooth devices.
+  ///
   /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
   ///
-  /// Returns a stream of scan results.
+  /// Returns a [Stream] of scan results.
   Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds);
 
   /// Stop a running scan.

@@ -20,8 +20,11 @@ typedef DatePickerDayBuilder = Widget Function(DateTime date, Size size, {bool i
 /// The `onPressed` callback is the handler for the button's onPressed function.
 /// The `buttonSize` is the size for the button.
 /// The `axis` will be either [AxisDirection.left] or [AxisDirection.right].
-typedef DatePickerHeaderButtonBuilder =
-    Widget Function(void Function() onPressed, double buttonSize, AxisDirection axis);
+typedef DatePickerHeaderButtonBuilder = Widget Function(
+  void Function() onPressed,
+  double buttonSize,
+  AxisDirection axis,
+);
 
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
@@ -165,15 +168,14 @@ class DatePicker extends StatelessWidget {
           child: SizedBox(
             width: dayItemSize.width * 7,
             child: _DatePickerHeader(
+              style: monthStyle,
+              monthListenable: delegate.monthListenable,
               backButton: headerButtonBuilder(delegate.goBackOneMonth, minInteractiveDimension, AxisDirection.left),
               forwardButton: headerButtonBuilder(
                 delegate.goForwardOneMonth,
                 minInteractiveDimension,
                 AxisDirection.right,
               ),
-              initialMonth: delegate.currentCalendarMonth,
-              monthStream: delegate.monthStream,
-              style: monthStyle,
             ),
           ),
         );
@@ -310,8 +312,7 @@ class _DatePickerHeader extends StatelessWidget {
   const _DatePickerHeader({
     required this.backButton,
     required this.forwardButton,
-    required this.initialMonth,
-    required this.monthStream,
+    required this.monthListenable,
     this.style,
   });
 
@@ -321,36 +322,31 @@ class _DatePickerHeader extends StatelessWidget {
   /// The button that navigates forward one month when tapped.
   final Widget forwardButton;
 
-  /// The initial month for the header.
-  final DateTime initialMonth;
-
-  /// The stream that provides updates about the current month.
-  final Stream<DateTime> monthStream;
+  /// The listenable that provides updates about the current month.
+  final ValueListenable<DateTime> monthListenable;
 
   /// The style for the month text.
   final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DateTime>(
-      initialData: initialMonth,
-      stream: monthStream,
-      builder: (context, snapshot) {
-        final month = snapshot.data;
-        final languageCode = Localizations.localeOf(context).languageCode;
+    return Row(
+      children: [
+        backButton,
+        Expanded(
+          child: Center(
+            child: ValueListenableBuilder<DateTime>(
+              valueListenable: monthListenable,
+              builder: (context, month, _) {
+                final languageCode = Localizations.localeOf(context).languageCode;
 
-        return Row(
-          children: [
-            backButton,
-            Expanded(
-              child: Center(
-                child: Text(month == null ? '' : DateFormat.MMMM(languageCode).add_y().format(month), style: style),
-              ),
+                return Text(DateFormat.MMMM(languageCode).add_y().format(month), style: style);
+              },
             ),
-            forwardButton,
-          ],
-        );
-      },
+          ),
+        ),
+        forwardButton,
+      ],
     );
   }
 }

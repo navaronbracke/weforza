@@ -1,38 +1,42 @@
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
+import 'package:weforza/utils/debounce_timer.dart';
 
-/// This class represents a delegate that manages
-/// a stream of search query changes.
-///
-/// This delegate applies a [debounceTime] to the incoming events.
-class DebounceSearchDelegate {
+/// This class represents a delegate that manages a changeable query string,
+/// that is debounced for updates.
+class DebounceSearchDelegate with DebounceTimer {
   /// The default constructor.
-  DebounceSearchDelegate({this.debounceTime = const Duration(milliseconds: 500)});
+  DebounceSearchDelegate({this._debounceTime = const Duration(milliseconds: 500)});
 
-  /// The internal controller.
-  final _controller = BehaviorSubject.seeded('');
+  final Duration _debounceTime;
+  final _notifier = ValueNotifier('');
 
-  /// The debounce time for the stream events.
-  final Duration debounceTime;
+  bool _isDisposed = false;
 
-  /// Get the current query.
-  String get currentQuery => _controller.value;
-
-  /// Add a new [value] to the search query stream.
-  void onQueryChanged(String value) {
-    if (_controller.isClosed || _controller.value == value) {
+  void _handleOnValueChanged(String value) {
+    if (_isDisposed || _notifier.value == value) {
       return;
     }
 
-    _controller.add(value);
+    _notifier.value = value;
   }
 
-  /// Get the stream of search query changes.
-  Stream<String> get searchQuery {
-    return _controller.debounceTime(debounceTime);
+  /// Update the search query.
+  void onQueryChanged(String value) {
+    debounce(_debounceTime, () => _handleOnValueChanged(value));
   }
+
+  /// Get the [ValueListenable] of search query changes.
+  ValueListenable<String> get searchQueryListenable => _notifier;
 
   /// Dispose of this delegate.
   void dispose() {
-    _controller.close();
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+
+    cancelDebounce();
+    _notifier.dispose();
   }
 }

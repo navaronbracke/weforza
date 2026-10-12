@@ -144,31 +144,29 @@ class _ImportRidersButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
-      android: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.insert_drive_file_outlined),
-                onPressed: onPressed,
-                label: Text(label),
+      android: (context) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.insert_drive_file_outlined),
+              onPressed: onPressed,
+              label: Text(label),
+            ),
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                errorMessage ?? '',
+                style: TextTheme.of(context).labelMedium!.copyWith(color: ColorScheme.of(context).error),
               ),
             ),
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  errorMessage ?? '',
-                  style: TextTheme.of(context).labelMedium!.copyWith(color: ColorScheme.of(context).error),
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
       ios: (_) {
         final Widget button = CupertinoButton.filled(
           onPressed: onPressed,

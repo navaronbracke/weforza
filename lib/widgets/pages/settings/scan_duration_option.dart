@@ -22,10 +22,9 @@ class ScanDurationOption extends StatelessWidget {
   final double minScanDuration = 10;
 
   Widget _buildCurrentDurationLabel() {
-    return StreamBuilder<double>(
-      initialData: delegate.currentValue,
-      stream: delegate.stream,
-      builder: (context, snapshot) => Text('${snapshot.data!.floor()}s'),
+    return ValueListenableBuilder<double>(
+      valueListenable: delegate.scanDurationListenable,
+      builder: (context, value, _) => Text('${value.floor()}s'),
     );
   }
 
@@ -43,12 +42,11 @@ class ScanDurationOption extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(translator.scanDuration, style: TextTheme.of(context).titleMedium),
             ),
-            StreamBuilder<double>(
-              initialData: delegate.currentValue,
-              stream: delegate.stream,
-              builder: (context, snapshot) {
+            ValueListenableBuilder<double>(
+              valueListenable: delegate.scanDurationListenable,
+              builder: (context, value, _) {
                 return Slider(
-                  value: snapshot.data!,
+                  value: value,
                   onChanged: delegate.onValueChanged,
                   min: minScanDuration,
                   max: maxScanDuration,
@@ -74,14 +72,13 @@ class ScanDurationOption extends StatelessWidget {
             ),
           ),
           padding: const EdgeInsets.all(6),
-          child: StreamBuilder<double>(
-            initialData: delegate.currentValue,
-            stream: delegate.stream,
-            builder: (context, snapshot) {
+          child: ValueListenableBuilder<double>(
+            valueListenable: delegate.scanDurationListenable,
+            builder: (context, value, _) {
               return SizedBox(
                 width: double.infinity,
                 child: CupertinoSlider(
-                  value: snapshot.data!,
+                  value: value,
                   onChanged: delegate.onValueChanged,
                   min: minScanDuration,
                   max: maxScanDuration,

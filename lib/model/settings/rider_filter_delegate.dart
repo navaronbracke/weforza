@@ -12,7 +12,7 @@ class RiderFilterDelegate extends DeferredSaveDelegate<RiderFilterOption> {
   final SettingsNotifier _settingsDelegate;
 
   @override
-  void saveValue(RiderFilterOption value) {
+  void onValueCommitted(RiderFilterOption value) {
     unawaited(
       _settingsDelegate.saveRiderListFilter(value).catchError((_) {
         // If the rider list filter could not be saved, do nothing.

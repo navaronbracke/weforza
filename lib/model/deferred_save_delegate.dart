@@ -1,51 +1,48 @@
-import 'dart:async';
-
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
+import 'package:weforza/utils/debounce_timer.dart';
 
 /// This class represents a delegate that handles deferred saving of a value.
-abstract class DeferredSaveDelegate<T> {
+abstract class DeferredSaveDelegate<T> with DebounceTimer {
   /// The default constructor.
-  DeferredSaveDelegate({required T initialValue, Duration debounce = const Duration(seconds: 1)})
-    : _controller = BehaviorSubject.seeded(initialValue) {
-    _subscription = _controller.debounceTime(debounce).listen((T value) {
-      if (_controller.isClosed) {
-        return;
-      }
+  DeferredSaveDelegate({required T initialValue, this._debounceDuration = const Duration(seconds: 1)})
+    : _notifier = ValueNotifier(initialValue);
 
-      saveValue(value);
-    });
-  }
+  /// The notifier that manages the value that should be saved.
+  final ValueNotifier<T> _notifier;
 
-  /// The controller that manages the value that should be saved.
-  final BehaviorSubject<T> _controller;
+  final Duration _debounceDuration;
 
-  /// The debounce subscription.
-  StreamSubscription<T>? _subscription;
+  bool _isDisposed = false;
 
-  /// Get the current value.
-  T get currentValue => _controller.value;
+  /// Get the [ValueListenable] of changes to the current value.
+  ValueListenable<T> get listenable => _notifier;
 
-  /// Get the stream of changes to the current value.
-  Stream<T> get stream => _controller;
-
-  /// Set the current value to [value].
-  void onValueChanged(T value) {
-    if (!_controller.isClosed && _controller.value != value) {
-      _controller.add(value);
-    }
-  }
-
-  /// Save the given value.
-  void saveValue(T value);
-
-  /// Dispose of this delegate.
-  void dispose() {
-    if (_controller.isClosed) {
+  void _handleOnValueChanged(T value) {
+    if (_isDisposed || _notifier.value == value) {
       return;
     }
 
-    _subscription?.cancel();
-    _subscription = null;
-    _controller.close();
+    _notifier.value = value;
+
+    onValueCommitted(value);
+  }
+
+  /// Save the underlying value, which has now been comitted.
+  void onValueCommitted(T value);
+
+  /// Set the current value to [value].
+  void onValueChanged(T value) {
+    debounce(_debounceDuration, () => _handleOnValueChanged(value));
+  }
+
+  /// Dispose of this delegate.
+  void dispose() {
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+    cancelDebounce();
+    _notifier.dispose();
   }
 }

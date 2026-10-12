@@ -52,8 +52,6 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
                   AddRideCalendar(delegate: _delegate),
                   const Padding(padding: EdgeInsets.only(top: 4), child: AddRideCalendarColorLegend()),
                   _AddRideSubmitButton(
-                    initialSelection: _delegate.currentSelection,
-                    initialState: _delegate.currentState,
                     onPressed: () => onSubmitPressed(context),
                     selectionListenable: _delegate.selectionListenable,
                     stateListenable: _delegate.stateListenable,
@@ -132,18 +130,10 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
 
 class _AddRideSubmitButton extends StatelessWidget {
   const _AddRideSubmitButton({
-    required this.initialSelection,
-    required this.initialState,
     required this.onPressed,
     required this.selectionListenable,
     required this.stateListenable,
   });
-
-  /// The initial selection of the rides that should be added.
-  final Set<DateTime> initialSelection;
-
-  /// The initial state for the button.
-  final AsyncValue<void>? initialState;
 
   /// The onPressed handler for the button.
   final void Function() onPressed;
@@ -168,15 +158,13 @@ class _AddRideSubmitButton extends StatelessWidget {
             android: (_) {
               return ElevatedButton(onPressed: hasSelection ? onPressed : null, child: Text(translator.addSelection));
             },
-            ios: (_) {
-              return CupertinoButton.filled(
-                onPressed: hasSelection ? onPressed : null,
-                child: Text(
-                  translator.addSelection,
-                  style: TextStyle(color: hasSelection ? CupertinoColors.white : CupertinoColors.inactiveGray),
-                ),
-              );
-            },
+            ios: (_) => CupertinoButton.filled(
+              onPressed: hasSelection ? onPressed : null,
+              child: Text(
+                translator.addSelection,
+                style: TextStyle(color: hasSelection ? CupertinoColors.white : CupertinoColors.inactiveGray),
+              ),
+            ),
           );
         },
       );

@@ -6,9 +6,9 @@ import 'package:weforza/repository/rider_repository.dart';
 
 /// This class represents the delegate for the rider form.
 class RiderFormDelegate extends AsyncComputationDelegate<void> {
-  RiderFormDelegate({required this.repository});
+  RiderFormDelegate({required this._repository});
 
-  final RiderRepository repository;
+  final RiderRepository _repository;
 
   final _uuidGenerator = const Uuid();
 
@@ -30,7 +30,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
     );
 
     try {
-      await repository.addRider(rider);
+      await _repository.addRider(rider);
 
       if (mounted) {
         setDone(null);
@@ -66,7 +66,7 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
         uuid: uuid,
       );
 
-      await repository.updateRider(updatedRider);
+      await _repository.updateRider(updatedRider);
 
       if (mounted) {
         setDone(null);

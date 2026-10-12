@@ -1,4 +1,4 @@
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/ride_repository.dart';
@@ -6,15 +6,15 @@ import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
 /// This class represents the delegate for the add ride page.
 class AddRidePageDelegate extends AsyncComputationDelegate<void> {
-  AddRidePageDelegate({required this.repository}) {
-    _initializeFuture = repository.getRideDates().then(_existingRides.addAll);
+  AddRidePageDelegate({required this._repository}) {
+    _initializeFuture = _repository.getRideDates().then(_existingRides.addAll);
   }
 
   /// The delegate that manages the calendar.
   final calendarDelegate = DatePickerDelegate();
 
   /// The repository that manages the rides.
-  final RideRepository repository;
+  final RideRepository _repository;
 
   /// The rides that already exist.
   final _existingRides = <DateTime>{};
@@ -25,27 +25,26 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   /// A mutex flag that locks the selection while saving.
   bool _savingSelection = false;
 
-  /// The controller that manages the current selection of rides.
-  final _selectionController = BehaviorSubject.seeded(<DateTime>{});
+  /// The notifier that manages the current selection of rides.
+  final ValueNotifier<Set<DateTime>> _selectionNotifier = ValueNotifier(<DateTime>{});
 
   /// The date of today.
   /// This date is used to determine if a ride is before today.
   final _today = DateTime.now();
 
-  /// Get the current selection.
-  Set<DateTime> get currentSelection => _selectionController.value;
-
   /// Get the initialization computation.
   Future<void>? get initializeFuture => _initializeFuture;
 
-  /// Get the [Stream] of selection changes.
-  Stream<Set<DateTime>> get selectionStream => _selectionController;
+  /// Get the [ValueListenable] of selection changes.
+  ValueListenable<Set<DateTime>> get selectionListenable => _selectionNotifier;
 
   /// Clear the current selection.
   void clearSelection() {
-    if (_selectionController.isClosed) {
+    if (!mounted) {
       return;
     }
+
+    final currentSelection = _selectionNotifier.value;
 
     // The selection is locked while saving.
     if (_savingSelection || currentSelection.isEmpty) {
@@ -54,7 +53,7 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
 
     // Clear any submit errors from the last attempt.
     reset();
-    _selectionController.add(const {});
+    _selectionNotifier.value = const {};
   }
 
   /// Whether [date] is before today.
@@ -68,6 +67,8 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   /// If [inCurrentSession] is true,
   /// this method also checks if the ride was scheduled in the current session.
   bool isScheduled(DateTime date, {bool inCurrentSession = false}) {
+    final currentSelection = _selectionNotifier.value;
+
     if (inCurrentSession) {
       return !_existingRides.contains(date) && currentSelection.contains(date);
     }
@@ -79,16 +80,16 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
   ///
   /// The [whenComplete] handler is invoked after the rides have been added.
   void saveRides({required void Function() whenComplete}) async {
-    final rides = _selectionController.value;
+    final currentSelection = _selectionNotifier.value;
 
-    if (!canStartComputation() || _savingSelection || rides.isEmpty) {
+    if (!canStartComputation() || _savingSelection || currentSelection.isEmpty) {
       return;
     }
 
     _savingSelection = true;
 
     try {
-      await repository.addRides(rides.map((date) => Ride(date: date)).toList());
+      await _repository.addRides(currentSelection.map((date) => Ride(date: date)).toList());
 
       setDone(null);
       whenComplete();
@@ -108,7 +109,7 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
       return;
     }
 
-    final newSelection = Set.of(currentSelection);
+    final newSelection = Set.of(_selectionNotifier.value);
 
     if (newSelection.contains(date)) {
       newSelection.remove(date);
@@ -118,13 +119,13 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
 
     // Clear any submit errors from the last attempt.
     reset();
-    _selectionController.add(newSelection);
+    _selectionNotifier.value = newSelection;
   }
 
   @override
   void dispose() {
     calendarDelegate.dispose();
-    _selectionController.close();
+    _selectionNotifier.dispose();
     super.dispose();
   }
 }

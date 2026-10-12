@@ -11,7 +11,7 @@ class ScanDurationDelegate extends DeferredSaveDelegate<double> {
   final SettingsNotifier _settingsDelegate;
 
   @override
-  void saveValue(double value) {
+  void onValueCommitted(double value) {
     unawaited(
       _settingsDelegate.saveScanDuration(value.floor()).catchError((_) {
         // If the scan duration value could not be saved, do nothing.

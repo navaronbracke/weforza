@@ -57,7 +57,7 @@ class AddRideCalendarItem extends StatelessWidget {
           padding: const EdgeInsets.all(4),
           child: ValueListenableBuilder<Set<DateTime>>(
             valueListenable: delegate.listenable,
-            builder: (context, value, _) {
+            builder: (context, _, _) {
               // Each time the selection changes in the listenable, query the current state for the given date.
               final theme = RideCalendarTheme.resolve(context, state: _getStateForItem());
               final decoration = theme.decoration;

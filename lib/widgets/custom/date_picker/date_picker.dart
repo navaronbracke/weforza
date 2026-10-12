@@ -322,7 +322,7 @@ class _DatePickerHeader extends StatelessWidget {
   /// The button that navigates forward one month when tapped.
   final Widget forwardButton;
 
-  /// The listenable that provides updates about the current month.
+  /// The [ValueListenable] that provides updates about the current month.
   final ValueListenable<DateTime> monthListenable;
 
   /// The style for the month text.

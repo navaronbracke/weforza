@@ -32,6 +32,9 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The [Key] for the file name input field.
   final GlobalKey<FormFieldState<String>> fileNameKey = GlobalKey();
 
+  /// Get the currently selected file format.
+  ExportFileFormat get currentFileFormat => _fileFormatNotifier.value;
+
   /// Get the [ValueListenable] of file format selection changes.
   ValueListenable<ExportFileFormat> get fileFormatListenable => _fileFormatNotifier;
 

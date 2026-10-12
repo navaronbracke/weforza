@@ -15,12 +15,9 @@ class RiderListFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<RiderFilterOption>(
-      initialData: delegate.currentValue,
-      stream: delegate.stream,
-      builder: (context, snapshot) {
-        final currentFilter = snapshot.data!;
-
+    return ValueListenableBuilder<RiderFilterOption>(
+      valueListenable: delegate.riderFilterOptionListenable,
+      builder: (context, currentFilter, _) {
         return PlatformAwareWidget(
           android: (context) {
             final translator = S.of(context);

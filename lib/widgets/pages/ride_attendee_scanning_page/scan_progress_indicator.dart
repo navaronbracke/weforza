@@ -1,71 +1,56 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a progress indicator for a device scan.
 class ScanProgressIndicator extends StatelessWidget {
   /// The default constructor.
-  const ScanProgressIndicator({
-    required this.animationController,
-    required this.isScanning,
-    required this.isScanningStream,
-    super.key,
-  });
+  const ScanProgressIndicator({required this.animationController, required this.isScanningListenable, super.key});
 
   /// The controller that drives the progress bar animation.
   final AnimationController animationController;
 
-  /// Whether a device scan is currently in progress.
-  final bool isScanning;
-
-  /// The stream of changes to the scanning state.
-  final Stream<bool> isScanningStream;
+  /// The [ValueListenable] that provides updates to the scanning state.
+  final ValueListenable<bool> isScanningListenable;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: isScanning,
-      stream: isScanningStream,
-      builder: (context, snapshot) {
-        final value = snapshot.data;
+    final progressIndicator = PreferredSize(
+      preferredSize: const Size(double.infinity, 1.0),
+      child: Material(
+        child: AnimatedBuilder(
+          animation: animationController,
+          builder: (context, _) {
+            final progress = animationController.value;
 
-        if (value == null || !value) {
-          // If there is no running scan, do not reserve space for the progress bar.
-          return const SizedBox.shrink();
-        }
-
-        return PreferredSize(
-          preferredSize: const Size(double.infinity, 1.0),
-          child: Material(
-            child: AnimatedBuilder(
-              animation: animationController,
-              builder: (context, child) {
-                final progress = animationController.value;
-
-                return PlatformAwareWidget(
-                  android: (_) {
-                    return _BrightnessAwareProgressIndicator(
-                      progress: progress,
-                      color: Colors.green,
-                      backgroundColor: Colors.green.withValues(alpha: 0.4),
-                    );
-                  },
-                  ios: (context) {
-                    final theme = CupertinoTheme.of(context);
-
-                    return _BrightnessAwareProgressIndicator(
-                      progress: progress,
-                      color: theme.primaryColor,
-                      backgroundColor: CupertinoColors.white,
-                      darkBackgroundColor: CupertinoColors.inactiveGray,
-                    );
-                  },
+            return PlatformAwareWidget(
+              android: (_) {
+                return _BrightnessAwareProgressIndicator(
+                  progress: progress,
+                  color: Colors.green,
+                  backgroundColor: Colors.green.withValues(alpha: 0.4),
                 );
               },
-            ),
-          ),
-        );
-      },
+              ios: (context) {
+                final theme = CupertinoTheme.of(context);
+
+                return _BrightnessAwareProgressIndicator(
+                  progress: progress,
+                  color: theme.primaryColor,
+                  backgroundColor: CupertinoColors.white,
+                  darkBackgroundColor: CupertinoColors.inactiveGray,
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: isScanningListenable,
+      builder: (context, isScanning, _) => isScanning ? progressIndicator : const SizedBox.shrink(),
     );
   }
 }
@@ -93,19 +78,11 @@ class _BrightnessAwareProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color effectiveBackgroundColor;
-
-    switch (MediaQuery.platformBrightnessOf(context)) {
-      case Brightness.dark:
-        effectiveBackgroundColor = darkBackgroundColor ?? backgroundColor;
-        break;
-      case Brightness.light:
-        effectiveBackgroundColor = backgroundColor;
-        break;
-    }
-
     return LinearProgressIndicator(
-      backgroundColor: effectiveBackgroundColor,
+      backgroundColor: switch (MediaQuery.platformBrightnessOf(context)) {
+        Brightness.dark => darkBackgroundColor ?? backgroundColor,
+        Brightness.light => backgroundColor,
+      },
       value: progress,
       valueColor: AlwaysStoppedAnimation<Color>(color),
     );

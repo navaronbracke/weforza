@@ -16,21 +16,17 @@ class ScanButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: PlatformAwareWidget(
-        android: (_) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 32),
-            child: ElevatedButton(onPressed: onPressed, child: Text(text)),
-          );
-        },
-        ios: (_) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: CupertinoButton.filled(
-              onPressed: onPressed,
-              child: Text(text, style: const TextStyle(color: CupertinoColors.white)),
-            ),
-          );
-        },
+        android: (_) => Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 32),
+          child: ElevatedButton(onPressed: onPressed, child: Text(text)),
+        ),
+        ios: (_) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: CupertinoButton.filled(
+            onPressed: onPressed,
+            child: Text(text, style: const TextStyle(color: CupertinoColors.white)),
+          ),
+        ),
       ),
     );
   }
@@ -45,16 +41,10 @@ class StopScanButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      initialData: delegate.scanner.isScanning,
-      stream: delegate.scanner.isScanningStream,
-      builder: (context, snapshot) {
-        final isScanning = snapshot.data;
+    return ValueListenableBuilder<bool>(
+      valueListenable: delegate.scanner.isScanningListenable,
+      builder: (context, isScanning, _) {
         final translator = S.of(context);
-
-        if (isScanning == null) {
-          return const SizedBox.shrink();
-        }
 
         return ScanButton(
           onPressed: () => delegate.maybeSkipScan(isScanning: isScanning),

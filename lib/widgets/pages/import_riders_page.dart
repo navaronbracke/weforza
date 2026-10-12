@@ -49,54 +49,50 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
 
   Widget _buildBody() {
     return Center(
-      child: StreamBuilder<ImportRidersState>(
-        initialData: delegate.currentState,
-        stream: delegate.stream,
-        builder: (context, snapshot) {
+      child: ValueListenableBuilder<AsyncValue<ImportRidersState>>(
+        valueListenable: delegate.importRidersStateListenable,
+        builder: (context, value, _) {
           final translator = S.of(context);
           final buttonLabel = translator.pickFile;
-          final error = snapshot.error;
 
-          if (error is UnsupportedFileFormatException) {
-            return _ImportRidersButton(
-              errorMessage: translator.onlyCsvOrJsonAllowed,
-              label: buttonLabel,
-              onPressed: _onImportRidersPressed,
-            );
-          }
+          if (value case AsyncError(:final error)) {
+            if (error is UnsupportedFileFormatException) {
+              return _ImportRidersButton(
+                errorMessage: translator.onlyCsvOrJsonAllowed,
+                label: buttonLabel,
+                onPressed: _onImportRidersPressed,
+              );
+            }
 
-          if (error is FileRequiredException) {
-            return _ImportRidersButton(
-              errorMessage: translator.importRidersFileRequired,
-              label: buttonLabel,
-              onPressed: _onImportRidersPressed,
-            );
-          }
+            if (error is FileRequiredException) {
+              return _ImportRidersButton(
+                errorMessage: translator.importRidersFileRequired,
+                label: buttonLabel,
+                onPressed: _onImportRidersPressed,
+              );
+            }
 
-          if (error is FormatException) {
-            return _ImportRidersButton(
-              errorMessage: translator.fileMalformed,
-              label: buttonLabel,
-              onPressed: _onImportRidersPressed,
-            );
-          }
+            if (error is FormatException) {
+              return _ImportRidersButton(
+                errorMessage: translator.fileMalformed,
+                label: buttonLabel,
+                onPressed: _onImportRidersPressed,
+              );
+            }
 
-          final data = snapshot.data;
-
-          if (error != null || data == null) {
             return Center(child: GenericErrorWithBackButton(message: translator.importRidersGenericErrorMessage));
           }
 
-          switch (data) {
-            case ImportRidersState.done:
-              return AnimatedCircleCheckmark(controller: checkmarkController);
-            case ImportRidersState.idle:
-              return _ImportRidersButton(label: buttonLabel, onPressed: _onImportRidersPressed);
-            case ImportRidersState.importing:
-              return ProgressIndicatorWithLabel(label: translator.importRidersProcessingFile);
-            case ImportRidersState.pickingFile:
-              return const PlatformAwareLoadingIndicator();
+          if (value case AsyncData(:final value)) {
+            return switch (value) {
+              .done => AnimatedCircleCheckmark(controller: checkmarkController),
+              .idle => _ImportRidersButton(label: buttonLabel, onPressed: _onImportRidersPressed),
+              .importing => ProgressIndicatorWithLabel(label: translator.importRidersProcessingFile),
+              .pickingFile => const PlatformAwareLoadingIndicator(),
+            };
           }
+
+          return Center(child: GenericErrorWithBackButton(message: translator.importRidersGenericErrorMessage));
         },
       ),
     );
@@ -112,12 +108,10 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
         appBar: AppBar(title: title),
         body: body,
       ),
-      ios: (context) {
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(middle: title, transitionBetweenRoutes: false),
-          child: body,
-        );
-      },
+      ios: (context) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(middle: title, transitionBetweenRoutes: false),
+        child: body,
+      ),
     );
   }
 

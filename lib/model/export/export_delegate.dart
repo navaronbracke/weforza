@@ -1,9 +1,9 @@
 import 'dart:io' show Platform;
 
 import 'package:file/file.dart' as fs;
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
@@ -15,10 +15,10 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
   ExportDelegate({required this.fileStorageDelegate, required this.fileSystem});
 
-  /// The controller that keeps track of the selected file format.
+  /// The notifier that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
-  final _fileFormatController = BehaviorSubject.seeded(ExportFileFormat.csv);
+  final ValueNotifier<ExportFileFormat> _fileFormatNotifier = ValueNotifier<ExportFileFormat>(ExportFileFormat.csv);
 
   /// The file storage delegate that will register the document.
   final FileStorageDelegate fileStorageDelegate;
@@ -32,11 +32,8 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The [Key] for the file name input field.
   final GlobalKey<FormFieldState<String>> fileNameKey = GlobalKey();
 
-  /// Get the currently selected file format.
-  ExportFileFormat get currentFileFormat => _fileFormatController.value;
-
-  /// Get the [Stream] of file format selection changes.
-  Stream<ExportFileFormat> get fileFormatStream => _fileFormatController;
+  /// Get the [ValueListenable] of file format selection changes.
+  ValueListenable<ExportFileFormat> get fileFormatListenable => _fileFormatNotifier;
 
   /// Export the currently available data to a file.
   ///
@@ -48,7 +45,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       return;
     }
 
-    final fileFormat = _fileFormatController.value;
+    final fileFormat = _fileFormatNotifier.value;
     final fileName = fileNameController.text;
 
     try {
@@ -129,11 +126,13 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   ///
   /// Does nothing if [value] is null.
   void setFileFormat(ExportFileFormat? value) {
-    if (value == null || _fileFormatController.value == value) {
+    final currentValue = _fileFormatNotifier.value;
+
+    if (value == null || currentValue == value) {
       return;
     }
 
-    final oldFileExtension = _fileFormatController.value.formatExtension;
+    final oldFileExtension = currentValue.formatExtension;
     final fileName = fileNameController.text;
 
     // If a new file format is selected,
@@ -150,7 +149,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
       );
     }
 
-    _fileFormatController.add(value);
+    _fileFormatNotifier.value = value;
 
     // If a new file format was selected,
     // the `File Exists` message may be outdated.
@@ -163,7 +162,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   @mustCallSuper
   @override
   void dispose() {
-    _fileFormatController.close();
+    _fileFormatNotifier.dispose();
     fileNameController.dispose();
     super.dispose();
   }

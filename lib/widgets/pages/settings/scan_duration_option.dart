@@ -23,7 +23,7 @@ class ScanDurationOption extends StatelessWidget {
 
   Widget _buildCurrentDurationLabel() {
     return ValueListenableBuilder<double>(
-      valueListenable: delegate.scanDurationListenable,
+      valueListenable: delegate.listenable,
       builder: (context, value, _) => Text('${value.floor()}s'),
     );
   }
@@ -43,7 +43,7 @@ class ScanDurationOption extends StatelessWidget {
               child: Text(translator.scanDuration, style: TextTheme.of(context).titleMedium),
             ),
             ValueListenableBuilder<double>(
-              valueListenable: delegate.scanDurationListenable,
+              valueListenable: delegate.listenable,
               builder: (context, value, _) {
                 return Slider(
                   value: value,
@@ -73,7 +73,7 @@ class ScanDurationOption extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(6),
           child: ValueListenableBuilder<double>(
-            valueListenable: delegate.scanDurationListenable,
+            valueListenable: delegate.listenable,
             builder: (context, value, _) {
               return SizedBox(
                 width: double.infinity,

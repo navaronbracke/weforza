@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
@@ -9,8 +10,7 @@ class ExcludedTermsList extends StatelessWidget {
   const ExcludedTermsList({
     required this.addTermInputField,
     required this.builder,
-    required this.initialData,
-    required this.stream,
+    required this.listenable,
     super.key,
   });
 
@@ -20,11 +20,8 @@ class ExcludedTermsList extends StatelessWidget {
   /// The builder function that builds the individual terms.
   final Widget Function(List<ExcludedTerm> items, int index) builder;
 
-  /// The initial list of terms.
-  final List<ExcludedTerm> initialData;
-
-  /// The stream that provides updates to the list of terms.
-  final Stream<List<ExcludedTerm>> stream;
+  /// The [ValueListenable] that provides updates to the list of terms.
+  final ValueListenable<List<ExcludedTerm>> listenable;
 
   int? _computeSemanticIndex(Widget widget, int index) {
     // The add term input field does not need a semantic index.
@@ -38,12 +35,9 @@ class ExcludedTermsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<ExcludedTerm>>(
-      initialData: initialData,
-      stream: stream,
-      builder: (context, snapshot) {
-        final terms = snapshot.data ?? [];
-
+    return ValueListenableBuilder<List<ExcludedTerm>>(
+      valueListenable: listenable,
+      builder: (context, terms, _) {
         if (terms.isEmpty) {
           return SliverToBoxAdapter(
             child: Column(

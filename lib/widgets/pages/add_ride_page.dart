@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/add_ride_page_delegate.dart';
@@ -52,8 +55,8 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
                     initialSelection: _delegate.currentSelection,
                     initialState: _delegate.currentState,
                     onPressed: () => onSubmitPressed(context),
-                    selectionStream: _delegate.selectionStream,
-                    stateStream: _delegate.stream,
+                    selectionListenable: _delegate.selectionListenable,
+                    stateListenable: _delegate.stateListenable,
                   ),
                 ],
               );
@@ -68,18 +71,9 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
   }
 
   Widget _buildClearSelectionButton({required Widget button}) {
-    return StreamBuilder<Set<DateTime>>(
-      initialData: _delegate.currentSelection,
-      stream: _delegate.selectionStream,
-      builder: (context, snapshot) {
-        final selection = snapshot.data!;
-
-        if (selection.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return button;
-      },
+    return ValueListenableBuilder<Set<DateTime>>(
+      valueListenable: _delegate.selectionListenable,
+      builder: (context, selection, _) => selection.isEmpty ? const SizedBox.shrink() : button,
     );
   }
 
@@ -141,8 +135,8 @@ class _AddRideSubmitButton extends StatelessWidget {
     required this.initialSelection,
     required this.initialState,
     required this.onPressed,
-    required this.selectionStream,
-    required this.stateStream,
+    required this.selectionListenable,
+    required this.stateListenable,
   });
 
   /// The initial selection of the rides that should be added.
@@ -154,21 +148,20 @@ class _AddRideSubmitButton extends StatelessWidget {
   /// The onPressed handler for the button.
   final void Function() onPressed;
 
-  /// The stream of ride selection changes.
-  final Stream<Set<DateTime>> selectionStream;
+  /// The [ValueListenable] that provides the selection changes.
+  final ValueListenable<Set<DateTime>> selectionListenable;
 
-  /// The stream of state changes for the button.
-  final Stream<AsyncValue<void>?> stateStream;
+  /// The [ValueListenable] that provides the state changes for the button.
+  final ValueListenable<AsyncValue<void>?> stateListenable;
 
   Widget _buildButton({required bool showButton, String errorMessage = ''}) {
     Widget button;
 
     if (showButton) {
-      button = StreamBuilder<Set<DateTime>>(
-        initialData: initialSelection,
-        stream: selectionStream,
-        builder: (context, snapshot) {
-          final hasSelection = snapshot.data?.isNotEmpty ?? false;
+      button = ValueListenableBuilder<Set<DateTime>>(
+        valueListenable: selectionListenable,
+        builder: (context, selectionValue, _) {
+          final hasSelection = selectionValue.isNotEmpty;
           final translator = S.of(context);
 
           return PlatformAwareWidget(
@@ -208,17 +201,14 @@ class _AddRideSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<AsyncValue<void>?>(
-      initialData: initialState,
-      stream: stateStream,
-      builder: (context, snapshot) {
-        final future = snapshot.data;
-
-        if (future == null) {
+    return ValueListenableBuilder<AsyncValue<void>?>(
+      valueListenable: stateListenable,
+      builder: (context, value, _) {
+        if (value == null) {
           return _buildButton(showButton: true);
         }
 
-        return future.when(
+        return value.when(
           // The submit button does not have a done state.
           data: (_) => _buildButton(showButton: false),
           error: (error, stackTrace) => _buildButton(showButton: true, errorMessage: S.of(context).genericError),

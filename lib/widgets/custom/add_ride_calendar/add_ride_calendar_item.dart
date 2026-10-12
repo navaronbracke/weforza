@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weforza/model/add_ride_page_delegate.dart';
 import 'package:weforza/model/ride_calendar_item_state.dart';
 import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
@@ -48,30 +48,33 @@ class AddRideCalendarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Set<DateTime>>(
-      initialData: delegate.currentSelection,
-      stream: delegate.selectionStream,
-      builder: (context, _) {
-        final theme = RideCalendarTheme.resolve(context, state: _getStateForItem());
-        final decoration = theme.decoration;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => delegate.selectDay(date),
+      child: SizedBox.fromSize(
+        size: size,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: ValueListenableBuilder<Set<DateTime>>(
+            valueListenable: delegate.listenable,
+            builder: (context, _, _) {
+              // Each time the selection changes in the listenable, query the current state for the given date.
+              final theme = RideCalendarTheme.resolve(context, state: _getStateForItem());
+              final decoration = theme.decoration;
 
-        Widget child = Center(
-          child: Text('${date.day}', style: theme.textStyle, textAlign: TextAlign.center),
-        );
+              Widget child = Center(
+                child: Text('${date.day}', style: theme.textStyle, textAlign: TextAlign.center),
+              );
 
-        if (decoration != null) {
-          child = DecoratedBox(decoration: decoration, child: child);
-        }
+              if (decoration != null) {
+                child = DecoratedBox(decoration: decoration, child: child);
+              }
 
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => delegate.selectDay(date),
-          child: SizedBox.fromSize(
-            size: size,
-            child: Padding(padding: const EdgeInsets.all(4), child: child),
+              return child;
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rxdart/rxdart.dart';
 
 /// This class provides an [AsyncValue] that wraps an underlying computation.
 ///
@@ -11,13 +10,13 @@ import 'package:rxdart/rxdart.dart';
 /// If the value is an [AsyncError], the computation has failed with an error.
 /// If the value is an [AsyncValue], the computation has completed successfully.
 abstract class AsyncComputationDelegate<T> {
-  final _controller = BehaviorSubject<AsyncValue<T>?>();
+  final _notifier = ValueNotifier<AsyncValue<T>?>(null);
 
-  AsyncValue<T>? get currentState => _controller.valueOrNull;
+  bool _isDisposed = false;
 
-  bool get mounted => !_controller.isClosed;
+  bool get mounted => !_isDisposed;
 
-  Stream<AsyncValue<T>?> get stream => _controller;
+  ValueListenable<AsyncValue<T>?> get listenable => _notifier;
 
   /// Check whether a new computation can be started,
   /// and transition to the [AsyncLoading] state.
@@ -25,27 +24,27 @@ abstract class AsyncComputationDelegate<T> {
   /// Returns whether the computation can be started.
   @protected
   bool canStartComputation() {
-    final state = _controller.valueOrNull;
+    final state = _notifier.value;
 
     if (state != null && state is! AsyncError) {
       return false;
     }
 
-    _controller.add(const AsyncLoading());
+    _notifier.value = const AsyncLoading();
 
     return true;
   }
 
   /// Reset the computation state back to the idle state.
   void reset() {
-    _controller.add(null);
+    _notifier.value = null;
   }
 
   /// Set the current state to the done state, using the given [data] as value.
   @protected
   void setDone(T data) {
     if (mounted) {
-      _controller.add(AsyncData(data));
+      _notifier.value = AsyncData(data);
     }
   }
 
@@ -54,13 +53,18 @@ abstract class AsyncComputationDelegate<T> {
   @protected
   void setError(Object error, StackTrace stackTrace) {
     if (mounted) {
-      _controller.add(AsyncError(error, stackTrace));
+      _notifier.value = AsyncError(error, stackTrace);
     }
   }
 
   /// Dispose of this delegate.
   @mustCallSuper
   void dispose() {
-    _controller.close();
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+    _notifier.dispose();
   }
 }

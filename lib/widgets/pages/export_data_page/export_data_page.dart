@@ -58,9 +58,8 @@ class ExportDataPage<T> extends StatelessWidget {
                       ),
                     ),
                     ExportFileFormatSelection(
-                      initialValue: delegate.currentFileFormat,
                       onFormatSelected: delegate.setFileFormat,
-                      stream: delegate.fileFormatStream,
+                      listenable: delegate.fileFormatListenable,
                     ),
                   ],
                 ),
@@ -86,12 +85,9 @@ class ExportDataPage<T> extends StatelessWidget {
     required Widget permissionDeniedErrorIndicator,
   }) {
     return Form(
-      child: StreamBuilder<AsyncValue<void>?>(
-        initialData: delegate.currentState,
-        stream: delegate.stream,
-        builder: (context, snapshot) {
-          final value = snapshot.data;
-
+      child: ValueListenableBuilder<AsyncValue<void>?>(
+        valueListenable: delegate.stateListenable,
+        builder: (context, value, _) {
           if (value == null) {
             return FocusAbsorber(child: builder(context, isExporting: false));
           }
@@ -126,9 +122,8 @@ class ExportDataPage<T> extends StatelessWidget {
                   padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 6, 20),
                   prefix: Flexible(child: Text(translator.fileFormat, maxLines: 2)),
                   child: ExportFileFormatSelection(
-                    initialValue: delegate.currentFileFormat,
                     onFormatSelected: delegate.setFileFormat,
-                    stream: delegate.fileFormatStream,
+                    listenable: delegate.fileFormatListenable,
                   ),
                 ),
                 child,

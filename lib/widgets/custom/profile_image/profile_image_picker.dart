@@ -91,7 +91,7 @@ class ProfileImagePicker extends StatelessWidget {
     );
 
     return ValueListenableBuilder<AsyncValue<Uri?>>(
-      valueListenable: delegate.selectedImageListenable,
+      valueListenable: delegate.listenable,
       builder: (context, value, _) => value.when(
         data: (image) => _buildPickerWithOptions(
           imagePreview: PlatformAwareWidget(

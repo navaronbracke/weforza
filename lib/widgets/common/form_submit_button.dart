@@ -46,12 +46,9 @@ class FormSubmitButton<T> extends StatelessWidget {
       errorMessage: errorBuilder(context, null),
     );
 
-    return StreamBuilder<AsyncValue<T>?>(
-      initialData: delegate.currentState,
-      stream: delegate.stream,
-      builder: (context, snapshot) {
-        final value = snapshot.data;
-
+    return ValueListenableBuilder<AsyncValue<T>?>(
+      valueListenable: delegate.stateListenable,
+      builder: (context, value, _) {
         if (value == null) {
           return _wrapWithErrorMessage(child: button, errorMessage: errorBuilder(context, null));
         }
@@ -59,9 +56,7 @@ class FormSubmitButton<T> extends StatelessWidget {
         return value.when(
           // The submit button does not have a done state.
           data: (value) => loadingIndicator,
-          error: (error, stackTrace) {
-            return _wrapWithErrorMessage(child: button, errorMessage: errorBuilder(context, error));
-          },
+          error: (error, _) => _wrapWithErrorMessage(child: button, errorMessage: errorBuilder(context, error)),
           loading: () => loadingIndicator,
         );
       },
@@ -95,15 +90,11 @@ class FixedHeightSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return loading ? const CircularProgressIndicator() : ElevatedButton(onPressed: onPressed, child: Text(label));
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return loading
+    return switch (defaultTargetPlatform) {
+      .android || .fuchsia || .linux || .windows =>
+        loading ? const CircularProgressIndicator() : ElevatedButton(onPressed: onPressed, child: Text(label)),
+      .iOS || .macOS =>
+        loading
             ? const Padding(
                 padding: EdgeInsets.symmetric(vertical: 4),
                 child: SizedBox(
@@ -111,7 +102,7 @@ class FixedHeightSubmitButton extends StatelessWidget {
                   child: Center(child: CupertinoActivityIndicator()),
                 ),
               )
-            : CupertinoButton(onPressed: onPressed, child: Text(label));
-    }
+            : CupertinoButton(onPressed: onPressed, child: Text(label)),
+    };
   }
 }

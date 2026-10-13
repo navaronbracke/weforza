@@ -109,11 +109,13 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
             placeholder: S.of(context).searchRiders,
           ),
           Expanded(
-            child: StreamBuilder<ManualSelectionFilterOptions>(
-              initialData: _filtersController.currentFilters,
-              stream: _filtersController.filters,
-              builder: (context, snapshot) {
-                final results = _filterActiveRiders(items, snapshot.data!);
+            child: ValueListenableBuilder<(String, bool)>(
+              valueListenable: _filtersController.currentFiltersListenable,
+              builder: (context, value, _) {
+                final results = _filterActiveRiders(
+                  items,
+                  ManualSelectionFilterOptions(query: value.$1, showScannedResults: value.$2),
+                );
 
                 if (results.isEmpty) {
                   return const RiderSearchFilterEmpty();
@@ -140,9 +142,8 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
               onPressed: () => _onSaveRideAttendeesButtonPressed(context),
             ),
             showScannedResultsToggle: ShowScannedResultsToggle(
-              initialValue: _filtersController.showScannedResults,
               onChanged: _filtersController.onShowScannedResultsChanged,
-              stream: _filtersController.showScannedResultsStream,
+              listenable: _filtersController.showScannedResultsListenable,
             ),
           ),
         ],

@@ -13,14 +13,6 @@ class ManualSelectionFilterDelegate {
   /// The internal show scanned results notifier.
   final _showScannedResultsNotifier = ValueNotifier(true);
 
-  /// Get the current filters.
-  ManualSelectionFilterOptions get currentFilters {
-    return ManualSelectionFilterOptions(
-      query: _searchQueryDelegate.currentSearchQuery,
-      showScannedResults: _showScannedResultsNotifier.value,
-    );
-  }
-
   /// Get the [ValueListenable] of the current combined filter values as a record of `(String, bool)`.
   ValueListenable<(String, bool)> get currentFiltersListenable {
     return MergingValueListenable(_searchQueryDelegate.searchQueryListenable, _showScannedResultsNotifier);

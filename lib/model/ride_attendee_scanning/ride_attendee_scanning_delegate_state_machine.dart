@@ -1,20 +1,17 @@
 /// @docImport 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 library;
 
-import 'package:rxdart/subjects.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 
 /// This class represents a state machine for the [RideAttendeeScanningDelegate].
 class RideAttendeeScanningDelegateStateMachine {
   /// The internal state machine.
-  final _controller = BehaviorSubject.seeded(RideAttendeeScanningState.requestPermissions);
+  final _notifier = ValueNotifier<AsyncValue<RideAttendeeScanningState>>(const AsyncData(.requestPermissions));
 
-  /// Get the current state of the state machine.
-  RideAttendeeScanningState get currentState => _controller.value;
-
-  /// Returns whether the state machine is closed and cannot be used anymore.
-  bool get isClosed => _controller.isClosed;
+  bool _isDisposed = false;
 
   /// Determine whether the scanner should be stopped.
   ///
@@ -24,53 +21,55 @@ class RideAttendeeScanningDelegateStateMachine {
   /// Returns true otherwise.
   bool get shouldStopScanner {
     // These states happen before the scan is running.
-    final beforeScanStates = <RideAttendeeScanningState>{
-      RideAttendeeScanningState.bluetoothDisabled,
-      RideAttendeeScanningState.permissionDenied,
-      RideAttendeeScanningState.requestPermissions,
-      RideAttendeeScanningState.startingScan,
+    const beforeScanStates = <RideAttendeeScanningState>{
+      .bluetoothDisabled,
+      .permissionDenied,
+      .requestPermissions,
+      .startingScan,
     };
 
-    final state = _controller.valueOrNull;
-    final stateError = _controller.errorOrNull;
+    final currentState = _notifier.value;
 
     // The scanner never started.
-    if (stateError == null && beforeScanStates.contains(state)) {
+    if (currentState case AsyncData(:final value) when beforeScanStates.contains(value)) {
       return false;
     }
 
     // The scanner failed to start because of a startup failure,
-    // i.e. Bluetooth was off, or the permission were denied.
-    if (stateError is StartScanException) {
-      return false;
-    }
-
-    // By the time a `SaveScanResultsException` occurs,
-    // the scanner has already stopped.
-    if (stateError is SaveScanResultsException) {
+    // i.e. Bluetooth was off, or the permission was denied.
+    //
+    // If a `SaveScanResultsException` happened, the scanner has already stopped.
+    if (currentState case AsyncError(:final error)
+        when error is StartScanException || error is SaveScanResultsException) {
       return false;
     }
 
     return true;
   }
 
-  /// Get a [Stream] of changes to the state of the state machine.
-  Stream<RideAttendeeScanningState> get stateStream => _controller;
+  /// Get a [ValueListenable] of changes to the state of the state machine.
+  ValueListenable<AsyncValue<RideAttendeeScanningState>> get listenable => _notifier;
 
   /// Switch to the new [state].
   void setState(RideAttendeeScanningState state) {
-    if (isClosed || _controller.value == state) {
+    if (_isDisposed) {
       return;
     }
 
-    _controller.add(state);
+    if (_notifier.value case AsyncData(:final value) when value == state) {
+      return;
+    }
+
+    _notifier.value = AsyncData(state);
   }
 
   /// Add [error] to the state machine.
   void _setError(Object error) {
-    if (!isClosed) {
-      _controller.addError(error);
+    if (_isDisposed) {
+      return;
     }
+
+    _notifier.value = AsyncError(error, StackTrace.current);
   }
 
   /// Add a [SaveScanResultsException] to the state machine.
@@ -83,7 +82,12 @@ class RideAttendeeScanningDelegateStateMachine {
   void setStopScanError() => _setError(StopScanException());
 
   /// Dispose of this state machine.
-  Future<void> dispose() async {
-    await _controller.close();
+  void dispose() {
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+    _notifier.dispose();
   }
 }

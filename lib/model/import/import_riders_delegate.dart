@@ -1,5 +1,6 @@
 import 'package:file/file.dart' as fs;
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
@@ -12,17 +13,17 @@ import 'package:weforza/repository/serialize_riders_repository.dart';
 
 /// This class represents the delegate that handles importing riders.
 class ImportRidersDelegate {
-  ImportRidersDelegate(this.importFileDelegate, this.repository);
+  ImportRidersDelegate(this._importFileDelegate, this._repository);
 
-  final _controller = BehaviorSubject.seeded(ImportRidersState.idle);
+  final _notifier = ValueNotifier<AsyncValue<ImportRidersState>>(const AsyncData(ImportRidersState.idle));
 
-  final ImportFileDelegate importFileDelegate;
+  final ImportFileDelegate _importFileDelegate;
 
-  final SerializeRidersRepository repository;
+  final SerializeRidersRepository _repository;
 
-  ImportRidersState get currentState => _controller.value;
+  bool _isDisposed = false;
 
-  Stream<ImportRidersState> get stream => _controller;
+  ValueListenable<AsyncValue<ImportRidersState>> get listenable => _notifier;
 
   Future<Iterable<SerializableRider>> _readFileWithReader<T>(
     fs.File file, {
@@ -66,57 +67,62 @@ class ImportRidersDelegate {
   /// The [whenComplete] handler is called
   /// when the riders are imported successfully.
   ///
-  /// If no file was chosen a [FileRequiredException] is emitted through [stream].
+  /// A [FileRequiredException] is emitted through [listenable] if no file was chosen.
   /// If the chosen file is of an unsupported format,
-  /// an [UnsupportedFileFormatException] is emitted through the [stream].
+  /// an [UnsupportedFileFormatException] is emitted through the [listenable].
   ///
-  /// If the chosen file is malformed, a [FormatException] is emitted through the [stream].
+  /// If the chosen file is malformed, a [FormatException] is emitted through the [listenable].
   void importRiders({required void Function() whenComplete}) async {
     try {
-      _controller.add(ImportRidersState.pickingFile);
+      _notifier.value = const AsyncData(ImportRidersState.pickingFile);
 
-      final file = await importFileDelegate.pickImportRidersDataSource();
+      final file = await _importFileDelegate.pickImportRidersDataSource();
 
-      if (_controller.isClosed) {
+      if (_isDisposed) {
         return;
       }
 
       if (file == null) {
-        _controller.addError(FileRequiredException());
+        _notifier.value = AsyncError(FileRequiredException(), StackTrace.current);
 
         return;
       }
 
-      _controller.add(ImportRidersState.importing);
+      _notifier.value = const AsyncData(ImportRidersState.importing);
 
       final items = await _readRidersFromFile(file);
 
-      if (_controller.isClosed) {
+      if (_isDisposed) {
         return;
       }
 
       if (items.isEmpty) {
-        _controller.add(ImportRidersState.done);
+        _notifier.value = const AsyncData(ImportRidersState.done);
 
         return;
       }
 
-      await repository.saveSerializableRiders(items);
+      await _repository.saveSerializableRiders(items);
 
-      if (!_controller.isClosed) {
-        _controller.add(ImportRidersState.done);
+      if (!_isDisposed) {
+        _notifier.value = const AsyncData(ImportRidersState.done);
       }
 
       whenComplete();
     } catch (error) {
-      if (!_controller.isClosed) {
-        _controller.addError(error);
+      if (!_isDisposed) {
+        _notifier.value = AsyncError(error, StackTrace.current);
       }
     }
   }
 
   /// Dispose of this delegate.
   void dispose() {
-    _controller.close();
+    if (_isDisposed) {
+      return;
+    }
+
+    _isDisposed = true;
+    _notifier.dispose();
   }
 }

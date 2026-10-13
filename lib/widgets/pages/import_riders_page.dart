@@ -50,7 +50,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
   Widget _buildBody() {
     return Center(
       child: ValueListenableBuilder<AsyncValue<ImportRidersState>>(
-        valueListenable: delegate.importRidersStateListenable,
+        valueListenable: delegate.listenable,
         builder: (context, value, _) {
           final translator = S.of(context);
           final buttonLabel = translator.pickFile;

@@ -1,21 +1,22 @@
-import 'package:rxdart/rxdart.dart';
+import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
+
 import 'package:weforza/model/debounce_search_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
 
 /// This class represents the delegate
 /// for the filters on the manual selection page.
 class ManualSelectionFilterDelegate {
-  /// The internal search query controller.
-  final _searchQueryController = DebounceSearchDelegate();
+  /// The internal search query delegate.
+  final _searchQueryDelegate = DebounceSearchDelegate();
 
-  /// The internal show scanned results controller.
-  final _showScannedResultsController = BehaviorSubject.seeded(true);
+  /// The internal show scanned results notifier.
+  final _showScannedResultsNotifier = ValueNotifier(true);
 
   /// Get the current filters.
   ManualSelectionFilterOptions get currentFilters {
     return ManualSelectionFilterOptions(
       query: _searchQueryController.currentQuery,
-      showScannedResults: _showScannedResultsController.value,
+      showScannedResults: _showScannedResultsNotifier.value,
     );
   }
 
@@ -31,25 +32,22 @@ class ManualSelectionFilterDelegate {
     );
   }
 
-  /// Get the filter value for the show scanned results filter.
-  bool get showScannedResults => _showScannedResultsController.value;
-
-  /// Get the stream of changes to [ManualSelectionFilterOptions.showScannedResults].
-  Stream<bool> get showScannedResultsStream => _showScannedResultsController;
+  /// Get the [ValueListenable] of changes to [ManualSelectionFilterOptions.showScannedResults].
+  ValueNotifier<bool> get showScannedResultsListenable => _showScannedResultsNotifier;
 
   /// Change the value for the search query filter.
   void onSearchQueryChanged(String value) {
-    _searchQueryController.onQueryChanged(value);
+    _searchQueryDelegate.onQueryChanged(value);
   }
 
   /// Change the value for the show scanned results filter.
   void onShowScannedResultsChanged({required bool value}) {
-    _showScannedResultsController.add(value);
+    _showScannedResultsNotifier.value = value;
   }
 
   /// Dispose of this delegate.
   void dispose() {
-    _searchQueryController.dispose();
-    _showScannedResultsController.close();
+    _searchQueryDelegate.dispose();
+    _showScannedResultsNotifier.dispose();
   }
 }

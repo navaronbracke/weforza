@@ -89,11 +89,10 @@ class _RiderListState extends State<RiderList> {
                 children: [
                   searchField,
                   Expanded(
-                    child: StreamBuilder<String>(
-                      initialData: _searchController.currentQuery,
-                      stream: _searchController.searchQuery,
-                      builder: (context, snapshot) {
-                        final results = _filterOnSearchQuery(items, snapshot.data ?? '');
+                    child: ValueListenableBuilder<String>(
+                      valueListenable: _searchController.searchQueryListenable,
+                      builder: (context, value, _) {
+                        final results = _filterOnSearchQuery(items, value);
 
                         if (results.isEmpty) {
                           return const RiderSearchFilterEmpty();

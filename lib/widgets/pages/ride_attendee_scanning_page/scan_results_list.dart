@@ -36,11 +36,11 @@ class ScanResultsList extends StatelessWidget {
         Expanded(
           child: AnimatedList(
             key: scanResultsListKey,
-            initialItemCount: delegate.scannedPeripheralsLength,
+            initialItemCount: delegate.scannedDevicesLength,
             itemBuilder: (context, index, animation) {
               return SizeTransition(
                 sizeFactor: animation,
-                child: _ScanResultsListItem(peripheral: delegate.getScannedPeripheral(index)),
+                child: _ScanResultsListItem(peripheral: delegate.getScannedDevice(index)),
               );
             },
           ),

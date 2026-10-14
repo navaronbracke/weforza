@@ -25,9 +25,6 @@ class DebounceSearchDelegate with DebounceTimer {
     debounce(_debounceTime, () => _handleOnValueChanged(value));
   }
 
-  /// Get the current search query value.
-  String get currentSearchQuery => _notifier.value;
-
   /// Get the [ValueListenable] of search query changes.
   ValueListenable<String> get searchQueryListenable => _notifier;
 

@@ -34,18 +34,17 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   late final AnimationController _scanProgressBarController;
 
-  /// The subscription that listens to the start of the Bluetooth scan.
-  StreamSubscription<bool>? _startScanningSubscription;
-
   /// Listen to the start signal of the Bluetooth scan
   /// and start decreasing the progress in the progress bar.
-  void _listenToScanStart(bool isScanning) {
-    if (delegate.isDisposed || !isScanning) {
+  void _listenToScanStart() {
+    if (delegate.isDisposed) {
       return;
     }
 
+    final bool isScanning = delegate.isScanningListenable.value;
+
     // Start decreasing the progress when the scan starts.
-    if (_scanProgressBarController.status == AnimationStatus.completed) {
+    if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
       _scanProgressBarController.reverse();
     }
   }
@@ -75,9 +74,9 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
     // Listen to the start signal of the Bluetooth scan,
     // so that the progress bar decreases in progress.
-    _startScanningSubscription = delegate.scanner.isScanningStream.listen(_listenToScanStart);
+    delegate.isScanningListenable.addListener(_listenToScanStart);
 
-    delegate.startDeviceScan();
+    unawaited(delegate.startDeviceScan());
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -104,8 +103,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
               delegate: delegate,
               progressBar: ScanProgressIndicator(
                 animationController: _scanProgressBarController,
-                isScanning: delegate.scanner.isScanning,
-                isScanningStream: delegate.scanner.isScanningStream,
+                isScanningListenable: delegate.isScanningListenable,
               ),
               scanResultsListKey: _scanResultsKey,
             ),
@@ -151,13 +149,10 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   }
 
   @override
-  Future<void> dispose() async {
-    // Dispose the animation controller, and the widget first.
-    // Only then dispose the delegate.
+  void dispose() {
+    delegate.isScanningListenable.removeListener(_listenToScanStart);
+    unawaited(delegate.dispose());
     _scanProgressBarController.dispose();
     super.dispose();
-
-    await _startScanningSubscription?.cancel();
-    await delegate.dispose();
   }
 }

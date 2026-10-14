@@ -95,14 +95,17 @@ class RideAttendeeScanningDelegate {
   /// Get the list of active riders.
   List<Rider> get activeRiders => _activeRiders.values.toList();
 
-  /// Get a [ValueListenable] for the set of selected [RideAttendee]s.
-  ValueListenable<Set<RideAttendee>> get attendeesListenable => _rideAttendeeNotifier;
+  /// Get a [ValueListenable] for the set of selected [RideAttendee]s, that were scanned or selected manually.
+  ValueListenable<Set<ScannedRideAttendee>> get attendeesListenable => _rideAttendeeNotifier;
 
   /// Returns whether there are active riders.
   bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
   /// Whether this delegate has been disposed.
   bool get isDisposed => _stateMachine.isDisposed;
+
+  /// The [ValueListenable] that indicates whether the scanner is currently scanning.
+  ValueListenable<bool> get isScanningListenable => _scanner.isScanningListenable;
 
   /// Get the amount of scanned devices.
   int get scannedDevicesLength => _devicesWithOwners.length;
@@ -270,8 +273,8 @@ class RideAttendeeScanningDelegate {
   /// Go to the manual selection screen.
   void continueToManualSelection() => _stateMachine.setState(.manualSelection);
 
-  /// Get the scanned Bluetooth peripheral at the given [index].
-  BluetoothPeripheralWithOwners getScannedPeripheral(int index) => _devicesWithOwners[index];
+  /// Get the scanned Bluetooth device at the given [index].
+  BluetoothPeripheralWithOwners getScannedDevice(int index) => _devicesWithOwners[index];
 
   /// Get the selected ride attendee for the rider with the given [uuid].
   ///

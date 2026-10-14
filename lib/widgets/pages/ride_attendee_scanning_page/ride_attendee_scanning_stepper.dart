@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 
@@ -9,23 +11,40 @@ class RideAttendeeScanningStepper extends StatelessWidget {
   const RideAttendeeScanningStepper({required this.listenable, super.key});
 
   /// The [ValueListenable] that indicates the current step in the scanning process.
-  final ValueListenable<RideAttendeeScanningState> listenable;
+  final ValueListenable<AsyncValue<RideAttendeeScanningState>> listenable;
 
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    return ValueListenableBuilder<RideAttendeeScanningState>(
+    return ValueListenableBuilder<AsyncValue<RideAttendeeScanningState>>(
       valueListenable: listenable,
-      builder: (context, value, _) => switch (value) {
-        RideAttendeeScanningState.bluetoothDisabled ||
-        RideAttendeeScanningState.permissionDenied ||
-        RideAttendeeScanningState.requestPermissions ||
-        RideAttendeeScanningState.scanning ||
-        RideAttendeeScanningState.startingScan ||
-        RideAttendeeScanningState.stoppingScan => Text(translator.scan),
-        RideAttendeeScanningState.unresolvedOwnersSelection => Text(translator.conflicts),
-        RideAttendeeScanningState.manualSelection => Text(translator.results),
+      builder: (context, state, _) {
+        if (state case AsyncError(:final error)) {
+          if (error is SaveScanResultsException) {
+            return Text(translator.results);
+          }
+
+          if (error is StartScanException || error is StopScanException) {
+            return Text(translator.scan);
+          }
+        }
+
+        if (state case AsyncData(:final value)) {
+          return switch (value) {
+            .bluetoothDisabled ||
+            .permissionDenied ||
+            .requestPermissions ||
+            .scanning ||
+            .startingScan ||
+            .stoppingScan => Text(translator.scan),
+            .unresolvedOwnersSelection => Text(translator.conflicts),
+            .manualSelection => Text(translator.results),
+          };
+        }
+
+        // This is a fallback, but should not happen otherwise.
+        return Text(translator.scan);
       },
     );
   }

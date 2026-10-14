@@ -83,16 +83,14 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream),
-      ),
+      appBar: AppBar(title: RideAttendeeScanningStepper(listenable: delegate.scanningStateListenable)),
       body: _buildBody(),
     );
   }
 
   Widget _buildBody() {
     return ValueListenableBuilder<AsyncValue<RideAttendeeScanningState>>(
-      valueListenable: delegate.listenable,
+      valueListenable: delegate.scanningStateListenable,
       builder: (context, currentValue, _) {
         if (currentValue case AsyncData(:final value)) {
           return switch (value) {
@@ -125,7 +123,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: RideAttendeeScanningStepper(initialData: delegate.currentState, stream: delegate.stream),
+        middle: RideAttendeeScanningStepper(listenable: delegate.scanningStateListenable),
       ),
       child: SafeArea(
         // The bottom view padding should be preserved

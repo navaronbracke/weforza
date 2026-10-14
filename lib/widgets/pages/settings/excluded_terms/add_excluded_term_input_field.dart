@@ -68,7 +68,7 @@ class AddExcludedTermInputField extends StatelessWidget {
       controller: controller,
       decoration: decoration,
       focusNode: focusNode,
-      maxLength: delegate.maxLength,
+      maxLength: ExcludedTermsDelegate.maxLength,
       onEditingComplete: _onEditingComplete,
       suffix: _AddExcludedTermSuffixIcon(
         controller: controller,

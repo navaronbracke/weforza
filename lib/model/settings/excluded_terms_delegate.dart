@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
-import 'package:rxdart/subjects.dart';
+import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
@@ -10,73 +8,62 @@ import 'package:weforza/riverpod/settings_provider.dart';
 /// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {
   /// The default constructor.
-  ExcludedTermsDelegate({required this._settingsDelegate, List<ExcludedTerm> initialValue = const []})
-    : _termsController = BehaviorSubject.seeded(initialValue);
-
-  final BehaviorSubject<List<ExcludedTerm>> _termsController;
-
-  /// The max length for an excluded term.
-  final int maxLength = 16;
+  ExcludedTermsDelegate({required this._settingsDelegate, Set<ExcludedTerm> initialValue = const {}})
+    : _termsNotifier = ValueNotifier(initialValue);
 
   final SettingsNotifier _settingsDelegate;
+  final ValueNotifier<Set<ExcludedTerm>> _termsNotifier;
 
-  /// Get the stream of excluded terms.
-  Stream<List<ExcludedTerm>> get stream => _termsController;
+  /// The max length for an [ExcludedTerm].
+  static const int maxLength = 16;
 
-  /// Get the current list of terms.
-  List<ExcludedTerm> get terms => _termsController.value;
+  /// Get the [ValueListenable] of [ExcludedTerm]s.
+  ValueListenable<Set<ExcludedTerm>> get listenable => _termsNotifier;
 
   /// Save the given [terms].
-  void _saveTerms(List<ExcludedTerm> terms) {
-    // Grab the committed term values.
-    final values = terms.map((t) => t.term).toSet();
-
+  void _saveTerms(Set<ExcludedTerm> terms) {
     unawaited(
-      _settingsDelegate.saveExcludedTerms(values).catchError((_) {
+      _settingsDelegate.saveExcludedTerms({for (final ExcludedTerm value in terms) value.term}).catchError((_) {
         // If the terms could not be saved, do nothing.
       }),
     );
   }
 
   /// Add the given [value] to the list of terms.
-  ///
-  /// This method does not validate
-  /// whether an [ExcludedTerm] with the given [value] already exists.
   void addTerm(String value) {
-    final terms = _termsController.value;
+    final List<ExcludedTerm> newTermsList = [
+      for (final ExcludedTerm term in _termsNotifier.value) term,
+      ExcludedTerm(value),
+    ]..sort((a, b) => a.compareTo(b));
 
-    terms.add(ExcludedTerm(term: value));
-    terms.sort((a, b) => a.compareTo(b));
+    // A Set cannot be sorted so use insertion order.
+    final Set<ExcludedTerm> newTerms = Set.of(newTermsList);
 
-    _termsController.add(terms);
-    _saveTerms(terms);
+    _termsNotifier.value = newTerms;
+    _saveTerms(newTerms);
   }
 
   /// Delete the given [value] from the list of terms.
   void deleteTerm(ExcludedTerm value) {
-    final terms = _termsController.value;
+    final terms = Set.of(_termsNotifier.value);
 
     if (terms.remove(value)) {
-      _termsController.add(terms);
+      _termsNotifier.value = terms;
       _saveTerms(terms);
-
-      // Dispose the underlying controller by the end of the current frame,
-      // so that a consumer has time to detach from it.
-      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        value.dispose();
-      });
     }
   }
 
   /// Replace the item at [index] with [newValue].
   void editTerm(String newValue, int index) {
-    final terms = _termsController.value;
+    final oldTerms = List.of(_termsNotifier.value);
 
-    terms[index].setValue(newValue);
-    terms.sort((a, b) => a.compareTo(b));
+    oldTerms[index] = ExcludedTerm(newValue);
+    oldTerms.sort((a, b) => a.compareTo(b));
 
-    _termsController.add(terms);
-    _saveTerms(terms);
+    final newTerms = Set.of(oldTerms);
+
+    _termsNotifier.value = newTerms;
+    _saveTerms(newTerms);
   }
 
   /// Validates the given [term].
@@ -100,11 +87,9 @@ class ExcludedTermsDelegate {
     }
 
     // Create a temporary value to use when checking existence.
-    final ExcludedTerm valueForText = ExcludedTerm(term: term);
+    final ExcludedTerm valueForText = ExcludedTerm(term);
 
-    final bool exists = _termsController.value.contains(valueForText);
-
-    valueForText.dispose(); // Clean up the temporary value.
+    final bool exists = _termsNotifier.value.contains(valueForText);
 
     // If the term is equal to the original value,
     // then the term is equal to itself, which is allowed.
@@ -117,14 +102,6 @@ class ExcludedTermsDelegate {
 
   /// Dispose of this delegate.
   void dispose() {
-    if (_termsController.isClosed) {
-      return;
-    }
-
-    for (final excludedTerm in _termsController.value) {
-      excludedTerm.dispose();
-    }
-
-    unawaited(_termsController.close());
+    _termsNotifier.dispose();
   }
 }

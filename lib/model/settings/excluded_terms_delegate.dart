@@ -4,44 +4,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
-
-/// This class represents a single excluded term.
-///
-/// Two excluded terms are only equal if their [term]s are equal.
-class ExcludedTerm implements Comparable<ExcludedTerm> {
-  /// Construct a new excluded term.
-  ExcludedTerm({required this.term}) : controller = TextEditingController(text: term);
-
-  /// The controller that manages the [TextEditingValue] which represents the
-  /// term that is being composed.
-  final TextEditingController controller;
-
-  /// The current value of the excluded term.
-  ///
-  /// When the [controller]'s text was committed,
-  /// then this value is updated to the current [TextEditingController.text].
-  String term;
-
-  @override
-  int compareTo(ExcludedTerm other) => term.compareTo(other.term);
-
-  void setValue(String value) {
-    if (term != value) {
-      term = value;
-      controller.text = term;
-    }
-  }
-
-  /// Dispose of this excluded term.
-  void dispose() => controller.dispose();
-
-  @override
-  int get hashCode => term.hashCode;
-
-  @override
-  bool operator ==(Object other) => other is ExcludedTerm && term == other.term;
-}
 
 /// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {

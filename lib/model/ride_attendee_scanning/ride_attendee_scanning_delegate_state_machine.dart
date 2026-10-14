@@ -13,6 +13,8 @@ class RideAttendeeScanningDelegateStateMachine {
 
   bool _isDisposed = false;
 
+  bool get isDisposed => _isDisposed;
+
   /// Determine whether the scanner should be stopped.
   ///
   /// Returns false if the scanner never started,

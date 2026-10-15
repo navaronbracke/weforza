@@ -45,6 +45,9 @@ class EditExcludedTermInputField extends StatefulWidget {
 }
 
 class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField> {
+  /// The text editing controller for the text field.
+  late final TextEditingController _controller;
+
   /// The focus node for the text field.
   final _focusNode = FocusNode();
 
@@ -174,7 +177,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   void _onUndoPressed() {
     // Reset the text editing value back to the original,
     // and keep the cursor at the end of the text.
-    widget.excludedTerm.controller.value = TextEditingValue(
+    _controller.value = TextEditingValue(
       text: widget.excludedTerm.term,
       selection: TextSelection.collapsed(offset: widget.excludedTerm.term.length),
     );
@@ -187,6 +190,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   @override
   void initState() {
     super.initState();
+    _controller = TextEditingController(text: widget.excludedTerm.term);
     _focusNode.addListener(_handleFocusChange);
   }
 
@@ -206,9 +210,18 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   }
 
   @override
+  void didUpdateWidget(covariant EditExcludedTermInputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.excludedTerm != oldWidget.excludedTerm) {
+      _controller.text = widget.excludedTerm.term;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Widget contextMenuButtonBar = EditExcludedTermInputFieldButtonBar(
-      controller: widget.excludedTerm.controller,
+      textEditingValueListenable: _controller,
       onCommitValidTerm: (value) => _onCommitValidTerm(value, context),
       onDeletePressed: _onDeletePressed,
       onUndoPressed: _onUndoPressed,
@@ -221,7 +234,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       // or if the delete dialog is visible after pressing the delete button.
       // When pressing the delete button focus moves to the delete dialog.
       contextMenuButtonBar: _deleteDialogVisible || _focusNode.hasFocus ? contextMenuButtonBar : null,
-      controller: widget.excludedTerm.controller,
+      controller: _controller,
       decoration: widget.decoration,
       divider: widget.divider,
       focusNode: _focusNode,
@@ -236,6 +249,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   void dispose() {
     _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }

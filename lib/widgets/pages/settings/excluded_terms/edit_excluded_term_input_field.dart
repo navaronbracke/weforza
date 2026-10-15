@@ -45,17 +45,19 @@ class EditExcludedTermInputField extends StatefulWidget {
 }
 
 class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField> {
+  /// The focus node for the text field.
+  final _focusNode = FocusNode();
+
+  /// The key for the text field's form field state, which is used for validation.
+  final _textFieldKey = GlobalKey<FormFieldState<String>>();
+
   // This flag is used to keep the edit menu open when the delete dialog is shown.
-  bool deleteDialogVisible = false;
-
-  final focusNode = FocusNode();
-
-  final GlobalKey<FormFieldState<String>> textFieldKey = GlobalKey();
+  bool _deleteDialogVisible = false;
 
   /// The cached viewInsets from the MediaQueryData.
   ///
   /// This value is cached to prevent lookup of the MediaQueryData when this widget is disposed.
-  EdgeInsets _viewInsets = EdgeInsets.zero;
+  EdgeInsets _viewInsets = .zero;
 
   /// This completer is used to notify [_onDeletePressed] when the view insets
   Completer<void>? _viewInsetsHiddenCompleter;
@@ -80,7 +82,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
 
     // If the focus node lost focus and the delete dialog is not shown,
     // undo the pending edit.
-    if (!deleteDialogVisible && !focusNode.hasFocus) {
+    if (!_deleteDialogVisible && !_focusNode.hasFocus) {
       _onUndoPressed();
     }
 
@@ -89,7 +91,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
 
     // If the edit excluded term widget gained focus, it will display its button bar.
     // Request that the bottom of the entire widget's RenderObject is shown on screen.
-    if (focusNode.hasFocus) {
+    if (_focusNode.hasFocus) {
       _ensureVisible();
     }
   }
@@ -103,18 +105,18 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   }
 
   void _onDeletePressed(BuildContext context) async {
-    deleteDialogVisible = true;
+    _deleteDialogVisible = true;
 
-    if (focusNode.hasFocus) {
+    if (_focusNode.hasFocus) {
       // Just give up focus, there is no on-screen keyboard.
       if (_viewInsets.bottom == 0) {
-        focusNode.unfocus();
+        _focusNode.unfocus();
       } else {
         // The text field has focus and a keyboard is visible on screen.
         // First, set up a completer that will complete when the bottom view insets are zero.
         // Then, unfocus the text field to make the keyboard dissapear.
         _viewInsetsHiddenCompleter = Completer<void>();
-        focusNode.unfocus();
+        _focusNode.unfocus();
 
         // Finally, await the keyboard dissapearing completely.
         await _viewInsetsHiddenCompleter?.future;
@@ -134,7 +136,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       return;
     }
 
-    deleteDialogVisible = false;
+    _deleteDialogVisible = false;
 
     if (result ?? false) {
       widget.delegate.deleteTerm(widget.excludedTerm);
@@ -150,7 +152,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   }
 
   void _onEditingComplete(BuildContext context) {
-    final formState = textFieldKey.currentState;
+    final formState = _textFieldKey.currentState;
 
     if (formState == null) {
       return;
@@ -188,7 +190,7 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   @override
   void initState() {
     super.initState();
-    focusNode.addListener(_handleFocusChange);
+    _focusNode.addListener(_handleFocusChange);
   }
 
   @override
@@ -221,22 +223,22 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       // The context menu is shown when the text field has focus,
       // or if the delete dialog is visible after pressing the delete button.
       // When pressing the delete button focus moves to the delete dialog.
-      contextMenuButtonBar: deleteDialogVisible || focusNode.hasFocus ? contextMenuButtonBar : null,
+      contextMenuButtonBar: _deleteDialogVisible || _focusNode.hasFocus ? contextMenuButtonBar : null,
       controller: widget.excludedTerm.controller,
       decoration: widget.decoration,
       divider: widget.divider,
-      focusNode: focusNode,
+      focusNode: _focusNode,
       maxLength: ExcludedTermsDelegate.maxLength,
       onEditingComplete: () => _onEditingComplete(context),
-      textFieldKey: textFieldKey,
+      textFieldKey: _textFieldKey,
       validator: (value) => _validateTerm(context, value),
     );
   }
 
   @override
   void dispose() {
-    focusNode.removeListener(_handleFocusChange);
-    focusNode.dispose();
+    _focusNode.removeListener(_handleFocusChange);
+    _focusNode.dispose();
     super.dispose();
   }
 }

@@ -118,7 +118,7 @@ class RideAttendeeScanningDelegate {
   /// The [isScanned] parameter indicates if this ride attendee
   /// was found automatically, or if it was manually added.
   void _addRideAttendee(String uuid, {required bool isScanned}) {
-    final items = _rideAttendeeNotifier.value;
+    final items = Set.of(_rideAttendeeNotifier.value);
 
     items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
 
@@ -233,7 +233,7 @@ class RideAttendeeScanningDelegate {
       return;
     }
 
-    final currentSelection = _rideAttendeeNotifier.value;
+    final currentSelection = Set.of(_rideAttendeeNotifier.value);
 
     currentSelection.remove(item);
     _rideAttendeeNotifier.value = currentSelection;

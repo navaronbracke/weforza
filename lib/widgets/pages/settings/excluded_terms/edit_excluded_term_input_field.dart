@@ -8,7 +8,7 @@ import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field_button_bar.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_input_field.dart';
 
-/// This widget represents the input field for editing an existing excluded term.
+/// This widget represents the input field for editing an existing [ExcludedTerm].
 class EditExcludedTermInputField extends StatefulWidget {
   EditExcludedTermInputField({
     required this.delegate,
@@ -54,13 +54,17 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
   // This flag is used to keep the edit menu open when the delete dialog is shown.
   bool _deleteDialogVisible = false;
 
-  /// The cached viewInsets from the MediaQueryData.
+  /// The cached viewInsets from the [MediaQueryData].
   ///
   /// This value is cached to prevent lookup of the MediaQueryData when this widget is disposed.
   EdgeInsets _viewInsets = .zero;
 
-  /// This completer is used to notify [_onDeletePressed] when the view insets
-  Completer<void>? _viewInsetsHiddenCompleter;
+  /// The [Completer] that signals when the keyboard is fully hidden after the text field loses focus.
+  ///
+  /// This completer is used to wait for the keyboard to be hidden fully, before showing the delete dialog.
+  /// When the keyboard is still open, the available insets for the dialog itself are reduced,
+  /// which causes the dialog to slide down the screen as the keyboard disappears.
+  Completer<void>? _keyboardHiddenSignal;
 
   /// Request that this widget is made fully visible in the scroll view.
   void _ensureVisible() {
@@ -113,13 +117,12 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
         _focusNode.unfocus();
       } else {
         // The text field has focus and a keyboard is visible on screen.
-        // First, set up a completer that will complete when the bottom view insets are zero.
-        // Then, unfocus the text field to make the keyboard dissapear.
-        _viewInsetsHiddenCompleter = Completer<void>();
+        // Set up a new signal and let the keyboard animate out.
+        _keyboardHiddenSignal = Completer<void>();
         _focusNode.unfocus();
 
-        // Finally, await the keyboard dissapearing completely.
-        await _viewInsetsHiddenCompleter?.future;
+        // Wait for the keyboard to be hidden and only then show the dialog.
+        await _keyboardHiddenSignal?.future;
       }
     }
 
@@ -199,12 +202,12 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
     _viewInsets = MediaQuery.viewInsetsOf(context);
 
     // If the bottom view insets collapsed back to zero, notify the waiting view insets completer.
-    if (_viewInsetsHiddenCompleter == null || _viewInsetsHiddenCompleter!.isCompleted) {
+    if (_keyboardHiddenSignal == null || _keyboardHiddenSignal!.isCompleted) {
       return;
     }
 
     if (_viewInsets.bottom == 0.0) {
-      _viewInsetsHiddenCompleter?.complete();
+      _keyboardHiddenSignal?.complete();
     }
   }
 

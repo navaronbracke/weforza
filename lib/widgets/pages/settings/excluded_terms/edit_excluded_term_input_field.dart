@@ -135,23 +135,17 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
       builder: (_) => DeleteExcludedTermDialog(term: widget.excludedTerm.term),
     );
 
-    if (!mounted) {
+    _deleteDialogVisible = false;
+
+    if (!context.mounted || result == null || !result) {
       return;
     }
 
-    _deleteDialogVisible = false;
+    widget.delegate.deleteTerm(widget.excludedTerm);
 
-    if (result ?? false) {
-      widget.delegate.deleteTerm(widget.excludedTerm);
-
-      // When the delete dialog's modal route closes, the wrong widget gets focus.
-      // Usually its the add term focus node which greedily grabs focus.
-      // Instead of giving focus to a text field, return it back to the navigator,
-      // like when the settings page is first opened.
-      //
-      // Be aware that using the focus manager directly is very rare.
-      WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-    }
+    // Give the focus back to the navigator itself,
+    // since the focus was on the text field that is no longer in the widget tree.
+    Navigator.of(context).focusNode.requestFocus();
   }
 
   void _onEditingComplete(BuildContext context) {

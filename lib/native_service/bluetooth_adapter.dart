@@ -98,8 +98,7 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
         // Cast the events to the expected type afterwards.
         .where((event) => event is Map<Object?, Object?>)
         .cast<Map<String, Object?>>()
-        .map(BluetoothPeripheral.fromMap)
-        .transform(_onDoneTransformer(stopScan));
+        .map(BluetoothPeripheral.fromMap);
   }
 
   @override

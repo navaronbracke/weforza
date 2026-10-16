@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 /// This class represents a [ScrollBehavior] that does not apply an overscroll indicator to its child.
 class NoOverscrollIndicatorScrollBehavior extends ScrollBehavior {

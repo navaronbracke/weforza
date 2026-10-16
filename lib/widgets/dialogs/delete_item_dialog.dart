@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/dialogs/dialogs.dart';
 

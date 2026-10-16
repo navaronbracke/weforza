@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';

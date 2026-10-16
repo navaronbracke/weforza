@@ -8,6 +8,7 @@ import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
 import 'package:weforza/native_service/native_service.dart';
+import 'package:weforza/utils/stream_transformers.dart';
 
 /// This class represents a [NativeService] for the Bluetooth adapter on the device.
 ///
@@ -92,10 +93,11 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
 
     yield* bluetoothDeviceDiscoveryChannel
         .receiveBroadcastStream()
-        .transform(_takeUntilTransformer(abortTrigger))
-        // The binary messenger sends `Object?` across the sink boundary, but the events are untyped Maps,
+        // The binary messenger sends `Object?` across the sink boundary.
+        .transform<Object?>(TakeUntilTransformer(mergeStreams(abortScanTriggers)))
+        // The events are actually untyped Maps,
         // since the Maps cannot carry strict types across the boundary.
-        // Cast the events to the expected type afterwards.
+        // Filter out the non-Maps and cast the remaining events to the expected Map type.
         .where((event) => event is Map<Object?, Object?>)
         .cast<Map<String, Object?>>()
         .map(BluetoothPeripheral.fromMap);

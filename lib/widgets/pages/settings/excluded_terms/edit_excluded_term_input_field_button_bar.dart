@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
@@ -13,7 +14,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// and an undo button to revert the pending edit.
 class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
   const EditExcludedTermInputFieldButtonBar({
-    required this.controller,
+    required this.textEditingValueListenable,
     required this.onCommitValidTerm,
     required this.onDeletePressed,
     required this.onUndoPressed,
@@ -22,8 +23,8 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
     super.key,
   });
 
-  /// The controller that provides updates about the current text editing value.
-  final ValueNotifier<TextEditingValue> controller;
+  /// The [ValueListenable] that provides updates about the current text editing value.
+  final ValueListenable<TextEditingValue> textEditingValueListenable;
 
   /// The function that is called when a valid term is committed.
   final void Function(String value) onCommitValidTerm;
@@ -36,7 +37,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
   /// The current value of the term.
   ///
-  /// This value is contextually different from the value in the [controller],
+  /// This value is contextually different from the value in the [textEditingValueListenable],
   /// as the latter is the pending value that has not yet been committed.
   final String term;
 
@@ -45,8 +46,8 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
+    return ValueListenableBuilder(
+      valueListenable: textEditingValueListenable,
       // The delete button is always shown.
       child: PlatformAwareWidget(
         android: (context) {
@@ -64,9 +65,8 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
           );
         },
       ),
-      builder: (context, child) {
-        final currentValue = controller.value.text;
-
+      builder: (context, value, child) {
+        final currentValue = value.text;
         final isValid = validator(context, currentValue) == null;
 
         final confirmButton = PlatformAwareWidget(

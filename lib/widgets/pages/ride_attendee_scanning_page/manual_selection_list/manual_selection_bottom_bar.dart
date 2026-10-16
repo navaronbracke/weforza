@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
+import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/widgets/platform/cupertino_bottom_bar.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
@@ -76,21 +77,11 @@ class ManualSelectionBottomBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(padding: const EdgeInsets.only(right: 4), child: icon),
-        StreamBuilder<int>(
-          initialData: delegate.attendeeCount,
-          stream: delegate.attendeeCountStream,
-          builder: (context, snapshot) {
-            final count = snapshot.data;
-
-            if (count == null) {
-              return Text('-', style: textStyle);
-            }
-
-            if (count > 999) {
-              return Text('999+', style: textStyle);
-            }
-
-            return Text('$count', style: textStyle);
+        ValueListenableBuilder<Set<ScannedRideAttendee>>(
+          valueListenable: delegate.attendeesListenable,
+          builder: (context, value, _) => switch (value.length) {
+            > 999 => Text('999+', style: textStyle),
+            _ => Text('${value.length}', style: textStyle),
           },
         ),
       ],

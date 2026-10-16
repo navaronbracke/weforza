@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -68,10 +69,10 @@ class AddExcludedTermInputField extends StatelessWidget {
       controller: controller,
       decoration: decoration,
       focusNode: focusNode,
-      maxLength: delegate.maxLength,
+      maxLength: ExcludedTermsDelegate.maxLength,
       onEditingComplete: _onEditingComplete,
       suffix: _AddExcludedTermSuffixIcon(
-        controller: controller,
+        listenable: controller,
         onTap: _onEditingComplete,
         validator: (context, value) => delegate.validateTerm(value, S.of(context)),
       ),
@@ -83,10 +84,10 @@ class AddExcludedTermInputField extends StatelessWidget {
 }
 
 class _AddExcludedTermSuffixIcon extends StatelessWidget {
-  const _AddExcludedTermSuffixIcon({required this.controller, required this.onTap, required this.validator});
+  const _AddExcludedTermSuffixIcon({required this.listenable, required this.onTap, required this.validator});
 
-  /// The controller that provides updates about the current text editing value.
-  final ValueNotifier<TextEditingValue> controller;
+  /// The [ValueListenable] that provides updates about the current text editing value.
+  final ValueListenable<TextEditingValue> listenable;
 
   /// The onTap handler for the suffix button.
   final void Function() onTap;
@@ -96,10 +97,10 @@ class _AddExcludedTermSuffixIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        if (validator(context, controller.value.text) != null) {
+    return ValueListenableBuilder(
+      valueListenable: listenable,
+      builder: (context, value, _) {
+        if (validator(context, value.text) != null) {
           return const SizedBox.shrink();
         }
 

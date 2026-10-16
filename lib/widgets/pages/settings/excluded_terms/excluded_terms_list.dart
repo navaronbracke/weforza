@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
-import 'package:weforza/model/settings/excluded_terms_delegate.dart';
+import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.
@@ -21,7 +21,7 @@ class ExcludedTermsList extends StatelessWidget {
   final Widget Function(List<ExcludedTerm> items, int index) builder;
 
   /// The [ValueListenable] that provides updates to the list of terms.
-  final ValueListenable<List<ExcludedTerm>> listenable;
+  final ValueListenable<Set<ExcludedTerm>> listenable;
 
   int? _computeSemanticIndex(Widget widget, int index) {
     // The add term input field does not need a semantic index.
@@ -35,7 +35,7 @@ class ExcludedTermsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<ExcludedTerm>>(
+    return ValueListenableBuilder<Set<ExcludedTerm>>(
       valueListenable: listenable,
       builder: (context, terms, _) {
         if (terms.isEmpty) {
@@ -57,7 +57,7 @@ class ExcludedTermsList extends StatelessWidget {
               }
 
               // Remove the initial offset from the add term input field.
-              return builder(terms, index - 1);
+              return builder([...terms], index - 1);
             },
             // The add term input is the first item.
             childCount: terms.length + 1,

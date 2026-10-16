@@ -6,7 +6,7 @@ import 'package:weforza/model/image/pick_image_delegate.dart';
 /// This delegate provides an interface for selecting profile images.
 class ProfileImagePickerDelegate {
   ProfileImagePickerDelegate({required this.imagePickerDelegate, required Uri? initialValue})
-    : _notifier = ValueNotifier(AsyncValue.data(initialValue));
+    : _notifier = ValueNotifier(AsyncData(initialValue));
 
   /// The delegate that will handle picking images.
   final PickImageDelegate imagePickerDelegate;
@@ -24,7 +24,7 @@ class ProfileImagePickerDelegate {
 
   /// Clear the selected image.
   void clear() {
-    _notifier.value = const AsyncValue.data(null);
+    _notifier.value = const AsyncData(null);
   }
 
   /// Select a new profile image from the device gallery.
@@ -51,18 +51,18 @@ class ProfileImagePickerDelegate {
       // If the result is null, but there was a previous uri,
       // use the previous uri as result.
       if (previousUri != null && uri == null) {
-        _notifier.value = AsyncValue.data(previousUri);
+        _notifier.value = AsyncData(previousUri);
 
         return;
       }
 
-      _notifier.value = AsyncValue.data(uri);
+      _notifier.value = AsyncData(uri);
     } catch (error, stackTrace) {
       if (_isDisposed) {
         return;
       }
 
-      _notifier.value = AsyncValue.error(error, stackTrace);
+      _notifier.value = AsyncError(error, stackTrace);
     }
   }
 

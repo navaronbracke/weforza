@@ -95,14 +95,17 @@ class RideAttendeeScanningDelegate {
   /// Get the list of active riders.
   List<Rider> get activeRiders => _activeRiders.values.toList();
 
-  /// Get a [ValueListenable] for the set of selected [RideAttendee]s.
-  ValueListenable<Set<RideAttendee>> get attendeesListenable => _rideAttendeeNotifier;
+  /// Get a [ValueListenable] for the set of selected [RideAttendee]s, that were scanned or selected manually.
+  ValueListenable<Set<ScannedRideAttendee>> get attendeesListenable => _rideAttendeeNotifier;
 
   /// Returns whether there are active riders.
   bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
   /// Whether this delegate has been disposed.
   bool get isDisposed => _stateMachine.isDisposed;
+
+  /// The [ValueListenable] that indicates whether the scanner is currently scanning.
+  ValueListenable<bool> get isScanningListenable => _scanner.isScanningListenable;
 
   /// Get the amount of scanned devices.
   int get scannedDevicesLength => _devicesWithOwners.length;
@@ -115,7 +118,7 @@ class RideAttendeeScanningDelegate {
   /// The [isScanned] parameter indicates if this ride attendee
   /// was found automatically, or if it was manually added.
   void _addRideAttendee(String uuid, {required bool isScanned}) {
-    final items = _rideAttendeeNotifier.value;
+    final items = Set.of(_rideAttendeeNotifier.value);
 
     items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
 
@@ -230,7 +233,7 @@ class RideAttendeeScanningDelegate {
       return;
     }
 
-    final currentSelection = _rideAttendeeNotifier.value;
+    final currentSelection = Set.of(_rideAttendeeNotifier.value);
 
     currentSelection.remove(item);
     _rideAttendeeNotifier.value = currentSelection;
@@ -270,8 +273,8 @@ class RideAttendeeScanningDelegate {
   /// Go to the manual selection screen.
   void continueToManualSelection() => _stateMachine.setState(.manualSelection);
 
-  /// Get the scanned Bluetooth peripheral at the given [index].
-  BluetoothPeripheralWithOwners getScannedPeripheral(int index) => _devicesWithOwners[index];
+  /// Get the scanned Bluetooth device at the given [index].
+  BluetoothPeripheralWithOwners getScannedDevice(int index) => _devicesWithOwners[index];
 
   /// Get the selected ride attendee for the rider with the given [uuid].
   ///

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
@@ -48,7 +49,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     excludedTermsDelegate = ExcludedTermsDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter.map((t) => ExcludedTerm(term: t)).toList(),
+      initialValue: {for (final String term in currentSettings.excludedTermsFilter) ExcludedTerm(term)},
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,
@@ -97,8 +98,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             formKey: addTermFormKey,
           ),
           builder: _buildExcludedTermItem,
-          initialData: excludedTermsDelegate.terms,
-          stream: excludedTermsDelegate.stream,
+          listenable: excludedTermsDelegate.listenable,
         ),
       ),
       excludedTermsListFooter: const Padding(
@@ -185,8 +185,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             focusNode: addTermFocusNode,
             formKey: addTermFormKey,
           ),
-          initialData: excludedTermsDelegate.terms,
-          stream: excludedTermsDelegate.stream,
+          listenable: excludedTermsDelegate.listenable,
           builder: (items, index) {
             BorderRadius borderRadius = BorderRadius.zero;
 

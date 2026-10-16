@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// This class represents a service that connetcs to services that are defined on the native side.
@@ -17,14 +16,4 @@ base class NativeService {
 
   /// The [EventChannel] that is used to receive events from the Bluetooth adapter state.
   final EventChannel bluetoothStateChannel = const EventChannel('be.weforza.app/bluetooth_state');
-
-  /// Dispose of this service.
-  @mustCallSuper
-  void dispose() {
-    // The MethodChannel is not disposed,
-    // as it is kept open for the entire duration of the application's lifecycle.
-
-    // The EventChannels are not disposed,
-    // as this is handled by cancelling subscriptions on the event stream.
-  }
 }

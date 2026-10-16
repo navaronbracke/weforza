@@ -1,3 +1,6 @@
+/// @docImport 'package:flutter_test/flutter_test.dart';
+library;
+
 import 'dart:async';
 
 import 'package:weforza/bluetooth/bluetooth_device_scan_options.dart';
@@ -7,6 +10,10 @@ import 'package:weforza/bluetooth/bluetooth_state.dart';
 import 'package:weforza/native_service/native_service.dart';
 
 /// This class represents a [NativeService] for the Bluetooth adapter on the device.
+///
+/// To mock the underlying channel pass the [methodChannel] to [TestDefaultBinaryMessenger.setMockMethodCallHandler]
+/// To mock the underlying event channels pass the [bluetoothStateChannel] and [bluetoothDeviceDiscoveryChannel]
+/// to [TestDefaultBinaryMessenger.setMockStreamHandler].
 final class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
   /// Whether the Bluetooth adapter is currently scanning for devices.
   bool _isScanning = false;
@@ -67,11 +74,6 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
 
     _setScanningState(true);
 
-    final List<Stream<Object?>> abortScanTriggers = [
-      _stopScanSignalEmitter.stream,
-      Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
-    ];
-
     const BluetoothDeviceScanOptions options = BluetoothDeviceScanOptions(scanMode: .balanced);
 
     try {
@@ -83,20 +85,21 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
       rethrow;
     }
 
+    final List<Stream<void>> abortScanTriggers = [
+      _stopScanSignalEmitter.stream,
+      Stream.fromFuture(Future.delayed(Duration(seconds: scanDurationInSeconds))),
+    ];
+
     yield* bluetoothDeviceDiscoveryChannel
         .receiveBroadcastStream()
-        .takeUntil(Rx.merge(abortScanTriggers))
-        .map((event) {
-          // The binary messenger sends things back as `Object?`.
-          // If the event is a `Map`,
-          // it does not have type information and comes back as `Map<Object?, Object?>`.
-          // Cast it using `Map.cast()` to at least recover the type of the key.
-          // The values are still `Object?`, though.
-          final Map<String, Object?> eventMap = (event as Map<Object?, Object?>).cast<String, Object?>();
-
-          return BluetoothPeripheral.fromMap(eventMap);
-        })
-        .doOnDone(stopScan);
+        .transform(_takeUntilTransformer(abortTrigger))
+        // The binary messenger sends `Object?` across the sink boundary, but the events are untyped Maps,
+        // since the Maps cannot carry strict types across the boundary.
+        // Cast the events to the expected type afterwards.
+        .where((event) => event is Map<Object?, Object?>)
+        .cast<Map<String, Object?>>()
+        .map(BluetoothPeripheral.fromMap)
+        .transform(_onDoneTransformer(stopScan));
   }
 
   @override
@@ -126,6 +129,5 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
 
     await _isScanningController.close();
     await _stopScanSignalEmitter.close();
-    super.dispose();
   }
 }

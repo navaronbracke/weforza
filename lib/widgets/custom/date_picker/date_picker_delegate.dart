@@ -1,15 +1,9 @@
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
-
-import 'package:rxdart/rxdart.dart';
 
 /// This class defines the delegate for a `DatePicker`.
 class DatePickerDelegate {
   /// The default constructor.
-  ///
-  /// The [calendarPagesCount] indicates how big the actual calendar is.
-  /// By default the calendar has a size of 100 years in either direction.
-  /// Expressed in months this is equal to `100 * 2 * 12` or 2400.
-  /// The calendar starts on the middle page.
   ///
   /// The reason for this page count is
   /// that a [PageController] does not allow negative page indexes.
@@ -17,11 +11,10 @@ class DatePickerDelegate {
   ///
   /// The [curve] and [duration] can be used to customize the page transitions
   /// between months.
-  factory DatePickerDelegate({
-    int calendarPagesCount = 2400,
-    Curve curve = Curves.easeInOut,
-    Duration duration = const Duration(milliseconds: 300),
-  }) {
+  factory DatePickerDelegate({Curve curve = Curves.easeInOut, Duration duration = const Duration(milliseconds: 300)}) {
+    // 100 years in either direction makes it effectively infinite for a session.
+    const int calendarPagesCount = 100 * 12 * 2;
+
     // The page indexes start at zero.
     final currentPage = ((calendarPagesCount / 2).floor()) - 1;
     final today = DateTime.now();
@@ -42,7 +35,7 @@ class DatePickerDelegate {
     required this.duration,
     required DateTime initialDate,
     required this.pageController,
-  }) : _monthController = BehaviorSubject.seeded(initialDate);
+  }) : _monthNotifier = ValueNotifier<DateTime>(initialDate);
 
   /// The total amount of pages in the calendar.
   /// One page equals one month.
@@ -57,14 +50,14 @@ class DatePickerDelegate {
   /// The controller that manages the visible page in the calendar.
   final PageController pageController;
 
-  /// The controller that manages the selected month.
-  final BehaviorSubject<DateTime> _monthController;
+  /// The [ValueNotifier] that manages the selected month.
+  final ValueNotifier<DateTime> _monthNotifier;
 
   /// Get the current calendar month.
-  DateTime get currentCalendarMonth => _monthController.value;
+  DateTime get currentCalendarMonth => _monthNotifier.value;
 
-  /// Get the stream for the currently selected month.
-  Stream<DateTime> get monthStream => _monthController;
+  /// Get the [ValueListenable] for the currently selected month.
+  ValueListenable<DateTime> get monthListenable => _monthNotifier;
 
   /// Compute the days for the currently selected month.
   /// The first week of the current month is prepended
@@ -72,7 +65,7 @@ class DatePickerDelegate {
   /// The last week of the current month
   /// is filled with the first days of the next month.
   List<DateTime> computeDaysForMonth(MaterialLocalizations localizations) {
-    final DateTime currentMonth = _monthController.value;
+    final DateTime currentMonth = currentCalendarMonth;
 
     final int daysInCurrentMonth = DateUtils.getDaysInMonth(currentMonth.year, currentMonth.month);
     final int firstDayOffset = DateUtils.firstDayOffset(currentMonth.year, currentMonth.month, localizations);
@@ -131,25 +124,23 @@ class DatePickerDelegate {
 
   /// Go back one month in the calendar.
   void goBackOneMonth() {
-    final currentMonth = _monthController.value;
-    final previousMonth = DateUtils.addMonthsToMonthDate(currentMonth, -1);
+    final previousMonth = DateUtils.addMonthsToMonthDate(currentCalendarMonth, -1);
 
-    _monthController.add(previousMonth);
+    _monthNotifier.value = previousMonth;
     pageController.previousPage(duration: duration, curve: curve);
   }
 
   /// Go forward one month in the calendar.
   void goForwardOneMonth() {
-    final currentMonth = _monthController.value;
-    final nextMonth = DateUtils.addMonthsToMonthDate(currentMonth, 1);
+    final nextMonth = DateUtils.addMonthsToMonthDate(currentCalendarMonth, 1);
 
-    _monthController.add(nextMonth);
+    _monthNotifier.value = nextMonth;
     pageController.nextPage(duration: duration, curve: curve);
   }
 
   /// Dispose of this delegate.
   void dispose() {
-    _monthController.close();
+    _monthNotifier.dispose();
     pageController.dispose();
   }
 }

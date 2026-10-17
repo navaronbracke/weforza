@@ -34,19 +34,23 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   late final AnimationController _scanProgressBarController;
 
-  /// Listen to the start signal of the Bluetooth scan
-  /// and start decreasing the progress in the progress bar.
-  void _listenToScanStart() {
-    if (delegate.isDisposed) {
-      return;
-    }
+  StreamSubscription<bool>? _isScanningSubscription;
 
-    final bool isScanning = delegate.isScanningListenable.value;
+  Future<void> _startDeviceScan() async {
+    // Listen to the start signal of the Bluetooth scan,
+    // so that the progress bar decreases in progress.
+    _isScanningSubscription = delegate.isScanningStream.listen((isScanning) {
+      if (delegate.isDisposed) {
+        return;
+      }
 
-    // Start decreasing the progress when the scan starts.
-    if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
-      _scanProgressBarController.reverse();
-    }
+      // Start decreasing the progress when the scan starts.
+      if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
+        _scanProgressBarController.reverse();
+      }
+    });
+
+    await delegate.startDeviceScan();
   }
 
   @override
@@ -72,11 +76,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
 
-    // Listen to the start signal of the Bluetooth scan,
-    // so that the progress bar decreases in progress.
-    delegate.isScanningListenable.addListener(_listenToScanStart);
-
-    unawaited(delegate.startDeviceScan());
+    unawaited(_startDeviceScan());
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -103,7 +103,8 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
               delegate: delegate,
               progressBar: ScanProgressIndicator(
                 animationController: _scanProgressBarController,
-                isScanningListenable: delegate.isScanningListenable,
+                isScanning: delegate.isScanning,
+                isScanningStream: delegate.isScanningStream,
               ),
               scanResultsListKey: _scanResultsKey,
             ),
@@ -150,7 +151,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   @override
   void dispose() {
-    delegate.isScanningListenable.removeListener(_listenToScanStart);
+    unawaited(_isScanningSubscription?.cancel());
     unawaited(delegate.dispose());
     _scanProgressBarController.dispose();
     super.dispose();

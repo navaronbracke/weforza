@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/material.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a progress indicator for a device scan.
 class ScanProgressIndicator extends StatelessWidget {
   /// The default constructor.
-  const ScanProgressIndicator({required this.animationController, required this.isScanningListenable, super.key});
+  const ScanProgressIndicator({
+    required this.animationController,
+    required this.isScanning,
+    required this.isScanningStream,
+    super.key,
+  });
 
   /// The controller that drives the progress bar animation.
   final AnimationController animationController;
 
-  /// The [ValueListenable] that provides updates to the scanning state.
-  final ValueListenable<bool> isScanningListenable;
+  /// Whether the device scan is currently in progress.
+  final bool isScanning;
+
+  /// The [Stream] that provides updates to the scanning state.
+  final Stream<bool> isScanningStream;
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +55,10 @@ class ScanProgressIndicator extends StatelessWidget {
       ),
     );
 
-    return ValueListenableBuilder<bool>(
-      valueListenable: isScanningListenable,
-      builder: (context, isScanning, _) => isScanning ? progressIndicator : const SizedBox.shrink(),
+    return StreamBuilder<bool>(
+      initialData: isScanning,
+      stream: isScanningStream,
+      builder: (context, snapshot) => snapshot.data ?? false ? progressIndicator : const SizedBox.shrink(),
     );
   }
 }

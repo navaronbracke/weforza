@@ -5,7 +5,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_attendee.dart';
@@ -15,7 +14,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_stat
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/settings/settings.dart';
-import 'package:weforza/native_service/bluetooth_adapter.dart';
+import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
@@ -29,8 +28,9 @@ class RideAttendeeScanningDelegate {
     required this._ride,
     required this._rideRepository,
     required this._riderRepository,
+    required this._scanner,
     required this._settings,
-  }) : _scanner = BluetoothAdapter();
+  });
 
   /// The repository that loads all the devices.
   final DeviceRepository _deviceRepository;
@@ -49,7 +49,7 @@ class RideAttendeeScanningDelegate {
   final RiderRepository _riderRepository;
 
   /// The scanner that manages the Bluetooth state and running scan.
-  final BluetoothDeviceScanner _scanner;
+  final BluetoothAdapterService _scanner;
 
   /// The settings for the delegate.
   final Settings _settings;
@@ -79,7 +79,7 @@ class RideAttendeeScanningDelegate {
   bool _selectionLocked = false;
 
   /// The subscription for the scan results.
-  StreamSubscription<Object?>? _scanSubscription;
+  StreamSubscription<BluetoothPeripheral>? _scanSubscription;
 
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
@@ -273,6 +273,11 @@ class RideAttendeeScanningDelegate {
     _onDeviceFound(device);
   }
 
+  Future<void> _stopScan() async {
+    await _scanSubscription?.cancel();
+    _scanSubscription = null;
+  }
+
   /// Go to the manual selection screen.
   void continueToManualSelection() => _stateMachine.setState(.manualSelection);
 
@@ -371,7 +376,7 @@ class RideAttendeeScanningDelegate {
       }
 
       // Bluetooth not being available is the same as it being off.
-      final bluetoothIsOn = await _scanner.bluetoothIsOn.catchError((_) => false);
+      final bluetoothIsOn = await _scanner.bluetoothAdapterIsOn.catchError((_) => false);
 
       if (isDisposed) {
         return;
@@ -404,7 +409,6 @@ class RideAttendeeScanningDelegate {
               // Ignore errors from individual events.
               // Otherwise the next scan results might be dropped.
             },
-            onDone: stopScan,
           );
     } catch (_) {
       _stateMachine.setStartScanError();
@@ -416,23 +420,19 @@ class RideAttendeeScanningDelegate {
   /// Returns whether the scan was stopped successfully.
   Future<bool> stopScan() async {
     // Return early if the scanner does not have to be stopped.
-    if (!_stateMachine.shouldStopScanner) {
+    if (_scanSubscription == null) {
       return true;
     }
 
     _stateMachine.setState(.stoppingScan);
 
     try {
-      // Stop the scan first.
-      await _scanner.stopScan();
+      // Stop the scan by cancelling the sole subscription.
+      await _stopScan();
 
       if (isDisposed) {
         return true;
       }
-
-      // Then cancel the subscription to clean up the event stream.
-      await _scanSubscription?.cancel();
-      _scanSubscription = null;
 
       return true;
     } catch (error) {
@@ -514,8 +514,7 @@ class RideAttendeeScanningDelegate {
 
     _stateMachine.dispose();
     _rideAttendeeNotifier.dispose();
-    await _scanSubscription?.cancel();
-    _scanSubscription = null;
+    await _stopScan();
     await _scanner.dispose();
   }
 }

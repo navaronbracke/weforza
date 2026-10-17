@@ -41,9 +41,11 @@ class StopScanButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: delegate.isScanningListenable,
-      builder: (context, isScanning, _) {
+    return StreamBuilder<bool>(
+      initialData: delegate.isScanning,
+      stream: delegate.isScanningStream,
+      builder: (context, snapshot) {
+        final isScanning = snapshot.data ?? false;
         final translator = S.of(context);
 
         return ScanButton(

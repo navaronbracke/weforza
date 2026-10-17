@@ -15,40 +15,6 @@ class RideAttendeeScanningDelegateStateMachine {
 
   bool get isDisposed => _isDisposed;
 
-  /// Determine whether the scanner should be stopped.
-  ///
-  /// Returns false if the scanner never started,
-  /// or if the scanner has already stopped.
-  ///
-  /// Returns true otherwise.
-  bool get shouldStopScanner {
-    // These states happen before the scan is running.
-    const beforeScanStates = <RideAttendeeScanningState>{
-      .bluetoothDisabled,
-      .permissionDenied,
-      .requestPermissions,
-      .startingScan,
-    };
-
-    final currentState = _notifier.value;
-
-    // The scanner never started.
-    if (currentState case AsyncData(:final value) when beforeScanStates.contains(value)) {
-      return false;
-    }
-
-    // The scanner failed to start because of a startup failure,
-    // i.e. Bluetooth was off, or the permission was denied.
-    //
-    // If a `SaveScanResultsException` happened, the scanner has already stopped.
-    if (currentState case AsyncError(:final error)
-        when error is StartScanException || error is SaveScanResultsException) {
-      return false;
-    }
-
-    return true;
-  }
-
   /// Get a [ValueListenable] of changes to the state of the state machine.
   ValueListenable<AsyncValue<RideAttendeeScanningState>> get listenable => _notifier;
 

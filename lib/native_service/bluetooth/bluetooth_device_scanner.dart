@@ -1,18 +1,19 @@
-import 'dart:async';
-
+import 'package:weforza/bluetooth/bluetooth_device_scan_options.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
 
-/// This class defines an interface for a Bluetooth device scanner.
-abstract class BluetoothDeviceScanner {
+/// An interface for a Bluetooth device scanner implementation.
+abstract interface class BluetoothDeviceScanner {
   /// Returns whether the Bluetooth adapter is currently on.
   Future<bool> get bluetoothIsOn;
 
-  /// Get the current scanning state.
-  bool get isScanning;
-
-  /// Get the value of [isScanning] as a [Stream].
-  Stream<bool> get isScanningStream;
+  /// Get a [Stream] for the scan results of Bluetooth devices.
+  ///
+  /// Returns a [Stream] of scanned [BluetoothPeripheral]s.
+  ///
+  /// See also:
+  ///   * [startScan] to actually start the underlying scan process.
+  Stream<BluetoothPeripheral> get scanResultsStream;
 
   /// Get a [Stream] for the Bluetooth adapter's state changes.
   Stream<BluetoothState> get stateStream;
@@ -22,12 +23,10 @@ abstract class BluetoothDeviceScanner {
   /// Returns whether permission was granted.
   Future<bool> requestBluetoothScanPermission();
 
-  /// Scan for Bluetooth devices.
+  /// Start scanning for Bluetooth devices.
   ///
-  /// The [scanDurationInSeconds] indicates the length of the scan in seconds.
-  ///
-  /// Returns a [Stream] of scan results.
-  Stream<BluetoothPeripheral> scanForDevices(int scanDurationInSeconds);
+  /// The given [options] can be used to configure the scan behavior.
+  Future<void> startScan(BluetoothDeviceScanOptions options);
 
   /// Stop a running scan.
   Future<void> stopScan();

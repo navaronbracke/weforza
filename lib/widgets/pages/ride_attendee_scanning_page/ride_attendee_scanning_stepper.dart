@@ -25,7 +25,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
             return Text(translator.results);
           }
 
-          if (error is StartScanException || error is StopScanException) {
+          if (error is StartScanException) {
             return Text(translator.scan);
           }
         }

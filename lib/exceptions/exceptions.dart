@@ -28,9 +28,6 @@ class SaveScanResultsException implements Exception {}
 /// An exception that is thrown when a Bluetooth scanner could not be started.
 class StartScanException implements Exception {}
 
-/// An exception that is thrown when a Bluetooth scanner could not be stopped.
-class StopScanException implements Exception {}
-
 /// An exception that is thrown when a [File] was provided,
 /// but the given file format is not supported.
 class UnsupportedFileFormatException implements Exception {}

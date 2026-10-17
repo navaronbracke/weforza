@@ -46,9 +46,6 @@ class RideAttendeeScanningDelegateStateMachine {
   /// Add a [StartScanException] to the state machine.
   void setStartScanError() => _setError(StartScanException());
 
-  /// Add a [StopScanException] to the state machine.
-  void setStopScanError() => _setError(StopScanException());
-
   /// Dispose of this state machine.
   void dispose() {
     if (_isDisposed) {

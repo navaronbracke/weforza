@@ -68,6 +68,7 @@ dependencies:
   # The following dependency provides local persistence for the app settings,
   # which are not saved in the database directly.
   shared_preferences: ^2.5.6
+  shared_preferences_android: ^2.5.0 # TODO: remove this once shared preferences requires it
 
   # UUID generator for globally unique ids.
   uuid: ^4.6.0

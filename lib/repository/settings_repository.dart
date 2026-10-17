@@ -1,4 +1,4 @@
-import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/database/sembast/settings_dao.dart';
 import 'package:weforza/model/settings/settings.dart';
 
 class SettingsRepository {

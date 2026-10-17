@@ -1,7 +1,7 @@
 import 'package:sembast/sembast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weforza/database/sembast/database_tables.dart';
-import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/database/sembast/settings_dao.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 

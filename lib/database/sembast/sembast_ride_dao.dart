@@ -1,5 +1,5 @@
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/ride_dao.dart';
+import 'package:weforza/database/sembast/ride_dao.dart';
 import 'package:weforza/database/sembast/database_tables.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/ride.dart';

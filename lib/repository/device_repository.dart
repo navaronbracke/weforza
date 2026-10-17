@@ -1,4 +1,4 @@
-import 'package:weforza/database/device_dao.dart';
+import 'package:weforza/database/sembast/device_dao.dart';
 import 'package:weforza/model/device/device.dart';
 
 class DeviceRepository {

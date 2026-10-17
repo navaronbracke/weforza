@@ -1,6 +1,6 @@
 import 'package:sembast/sembast.dart';
 import 'package:uuid/uuid.dart';
-import 'package:weforza/database/import_riders_dao.dart';
+import 'package:weforza/database/sembast/import_riders_dao.dart';
 import 'package:weforza/database/sembast/database_tables.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/device/device.dart';

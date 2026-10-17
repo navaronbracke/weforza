@@ -1,6 +1,6 @@
-import 'package:weforza/database/device_dao.dart';
-import 'package:weforza/database/import_riders_dao.dart';
-import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/sembast/device_dao.dart';
+import 'package:weforza/database/sembast/import_riders_dao.dart';
+import 'package:weforza/database/sembast/rider_dao.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/rider/serializable_rider.dart';

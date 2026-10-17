@@ -29,8 +29,6 @@ class RideAttendeeScanningPage extends ConsumerStatefulWidget {
 
 class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPage>
     with SingleTickerProviderStateMixin {
-  static final BluetoothAdapterService _bluetoothAdapterService = BluetoothAdapterService();
-
   late final RideAttendeeScanningDelegate _delegate;
 
   final GlobalKey<AnimatedListState> _scanResultsKey = GlobalKey();
@@ -48,8 +46,9 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       }
 
       // Start decreasing the progress when the scan starts.
-      if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
-        _scanProgressBarController.reverse();
+      // Every scan restarts from a full bar, as a previous scan leaves the controller at (or near) zero.
+      if (isScanning) {
+        _scanProgressBarController.reverse(from: 1.0);
       }
     });
 
@@ -73,7 +72,9 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       riderRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
-      scanner: _bluetoothAdapterService,
+      // The underlying BluetoothAdapterService uses its own state,
+      // which is disposed when this page is unmounted.
+      scanner: BluetoothAdapterService(),
       settings: settings,
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to insert it into the animated list.

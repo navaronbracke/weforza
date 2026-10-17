@@ -104,8 +104,11 @@ class RideAttendeeScanningDelegate {
   /// Whether this delegate has been disposed.
   bool get isDisposed => _stateMachine.isDisposed;
 
-  /// The [ValueListenable] that indicates whether the scanner is currently scanning.
-  ValueListenable<bool> get isScanningListenable => _scanner.isScanningListenable;
+  /// Whether the scanner is currently scanning for devices.
+  bool get isScanning => _scanner.isScanning;
+
+  /// The [Stream] that indicates whether the scanner is currently scanning.
+  Stream<bool> get isScanningStream => _scanner.isScanningStream;
 
   /// Get the amount of scanned devices.
   int get scannedDevicesLength => _devicesWithOwners.length;
@@ -401,6 +404,7 @@ class RideAttendeeScanningDelegate {
               // Ignore errors from individual events.
               // Otherwise the next scan results might be dropped.
             },
+            onDone: stopScan,
           );
     } catch (_) {
       _stateMachine.setStartScanError();

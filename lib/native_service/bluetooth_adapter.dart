@@ -1,21 +1,44 @@
+/// @docImport 'package:flutter_test/flutter_test.dart';
+library;
+
 import 'dart:async';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scan_options.dart';
 import 'package:weforza/bluetooth/bluetooth_device_scanner.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
 import 'package:weforza/bluetooth/bluetooth_state.dart';
 import 'package:weforza/native_service/native_service.dart';
+import 'package:weforza/utils/stream_transformers.dart';
 
 /// This class represents a [NativeService] for the Bluetooth adapter on the device.
+///
+/// To mock the underlying channel pass the [methodChannel] to [TestDefaultBinaryMessenger.setMockMethodCallHandler]
+/// To mock the underlying event channels pass the [bluetoothStateChannel] and [bluetoothDeviceDiscoveryChannel]
+/// to [TestDefaultBinaryMessenger.setMockStreamHandler].
 final class BluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
+  /// Whether the Bluetooth adapter is currently scanning for devices.
+  bool _isScanning = false;
+
   /// The controller that manages the value
   /// that indicates whether a Bluetooth device scan is currently in progress.
-  final BehaviorSubject<bool> _isScanningController = BehaviorSubject.seeded(false);
+  final StreamController<bool> _isScanningController = StreamController<bool>.broadcast();
 
-  /// The controller that manages the stop scan signal emitter.
+  /// The controller that manages the stop scan signal.
   /// This signal emitter will emit a signal when a Bluetooth device scan should be manually aborted.
-  final PublishSubject<void> _stopScanSignalEmitter = PublishSubject();
+  final StreamController<void> _stopScanSignalEmitter = StreamController<void>.broadcast();
+
+  void _setScanningState(bool value) {
+    _isScanning = value;
+
+    if (!_isScanningController.isClosed) {
+      _isScanningController.add(value);
+    }
+
+    // Signal that the scan will be stopped.
+    if (!_stopScanSignalEmitter.isClosed && !value) {
+      _stopScanSignalEmitter.add(null);
+    }
+  }
 
   @override
   Future<bool> get bluetoothIsOn async {
@@ -25,33 +48,23 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
   }
 
   @override
-  bool get isScanning => _isScanningController.value;
+  bool get isScanning => _isScanning;
 
   @override
-  Stream<bool> get isScanningStream => _isScanningController;
-
-  /// Cached broadcast stream for Bluetooth adapter state events.
-  /// Caching this stream allows listeners to individually subscribe to events.
-  Stream<BluetoothState>? _stateStream;
+  Stream<bool> get isScanningStream async* {
+    yield _isScanning;
+    yield* _isScanningController.stream;
+  }
 
   @override
-  Stream<BluetoothState> get state async* {
+  Stream<BluetoothState> get stateStream async* {
     yield BluetoothState.fromValue(await methodChannel.invokeMethod<String>('getBluetoothAdapterState'));
-
-    _stateStream ??= bluetoothStateChannel
-        .receiveBroadcastStream()
-        .cast<String?>()
-        .map(BluetoothState.fromValue)
-        .doOnCancel(() => _stateStream = null);
-
-    yield* _stateStream!;
+    yield* bluetoothStateChannel.receiveBroadcastStream().cast<String?>().map(BluetoothState.fromValue);
   }
 
   @override
   Future<bool> requestBluetoothScanPermission() async {
-    final bool? result = await methodChannel.invokeMethod<bool>('requestBluetoothScanPermission');
-
-    return result ?? false;
+    return await methodChannel.invokeMethod<bool>('requestBluetoothScanPermission') ?? false;
   }
 
   @override
@@ -60,41 +73,34 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
       throw StateError('Another scan is already in progress.');
     }
 
-    _isScanningController.add(true);
+    _setScanningState(true);
 
-    final List<Stream> abortScanTriggers = [
-      _stopScanSignalEmitter,
-      Rx.timer(null, Duration(seconds: scanDurationInSeconds)),
-    ];
-
-    const BluetoothDeviceScanOptions options = BluetoothDeviceScanOptions(scanMode: BluetoothScanMode.balanced);
+    const BluetoothDeviceScanOptions options = BluetoothDeviceScanOptions(scanMode: .balanced);
 
     try {
       await methodChannel.invokeMethod<void>('startBluetoothScan', options.toMap());
     } catch (error) {
       // If the scan fails to start, rollback the stop trigger and abort.
-      if (!_isScanningController.isClosed) {
-        _stopScanSignalEmitter.add(null);
-        _isScanningController.add(false);
-      }
+      _setScanningState(false);
 
       rethrow;
     }
 
+    final List<Stream<void>> abortScanTriggers = [
+      _stopScanSignalEmitter.stream,
+      Stream.fromFuture(Future.delayed(Duration(seconds: scanDurationInSeconds))),
+    ];
+
     yield* bluetoothDeviceDiscoveryChannel
         .receiveBroadcastStream()
-        .takeUntil(Rx.merge(abortScanTriggers))
-        .map((event) {
-          // The binary messenger sends things back as `Object?`.
-          // If the event is a `Map`,
-          // it does not have type information and comes back as `Map<Object?, Object?>`.
-          // Cast it using `Map.cast()` to at least recover the type of the key.
-          // The values are still `Object?`, though.
-          final Map<String, Object?> eventMap = (event as Map<Object?, Object?>).cast<String, Object?>();
-
-          return BluetoothPeripheral.fromMap(eventMap);
-        })
-        .doOnDone(stopScan);
+        // The binary messenger sends `Object?` across the sink boundary.
+        .transform<Object?>(TakeUntilTransformer(mergeStreams(abortScanTriggers)))
+        // The events are actually untyped Maps,
+        // since the Maps cannot carry strict types across the boundary.
+        // Filter out the non-Maps and cast the remaining events to the expected Map type.
+        .where((event) => event is Map<Object?, Object?>)
+        .cast<Map<String, Object?>>()
+        .map(BluetoothPeripheral.fromMap);
   }
 
   @override
@@ -105,12 +111,7 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
 
     await methodChannel.invokeMethod<void>('stopBluetoothScan');
 
-    if (_isScanningController.isClosed) {
-      return;
-    }
-
-    _stopScanSignalEmitter.add(null);
-    _isScanningController.add(false);
+    _setScanningState(false);
   }
 
   /// Dispose of this Bluetooth adapter.
@@ -129,6 +130,5 @@ final class BluetoothAdapter extends NativeService implements BluetoothDeviceSca
 
     await _isScanningController.close();
     await _stopScanSignalEmitter.close();
-    super.dispose();
   }
 }

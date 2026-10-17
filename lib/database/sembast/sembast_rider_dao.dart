@@ -3,7 +3,7 @@
 library;
 
 import 'package:sembast/sembast.dart';
-import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/sembast/rider_dao.dart';
 import 'package:weforza/database/sembast/database_tables.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/extensions/date_extension.dart';

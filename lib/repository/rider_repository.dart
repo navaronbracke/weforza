@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/sembast/rider_dao.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';

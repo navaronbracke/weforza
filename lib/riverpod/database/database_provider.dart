@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/database/database.dart';
+import 'package:weforza/database/sembast/database.dart';
 
 /// This provider provides the application database.
 ///

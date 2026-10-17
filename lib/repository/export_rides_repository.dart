@@ -1,4 +1,4 @@
-import 'package:weforza/database/export_rides_dao.dart';
+import 'package:weforza/database/sembast/export_rides_dao.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/model/export/exportable_ride.dart';
 

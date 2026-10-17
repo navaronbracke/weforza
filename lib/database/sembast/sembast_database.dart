@@ -4,19 +4,19 @@ import 'package:sembast/sembast.dart' as sembast;
 import 'package:sembast/sembast_io.dart';
 import 'package:sembast/sembast_memory.dart';
 
-import 'package:weforza/database/database.dart' as weforza;
-import 'package:weforza/database/device_dao.dart';
-import 'package:weforza/database/export_rides_dao.dart';
-import 'package:weforza/database/import_riders_dao.dart';
-import 'package:weforza/database/ride_dao.dart';
-import 'package:weforza/database/rider_dao.dart';
+import 'package:weforza/database/sembast/database.dart' as weforza;
+import 'package:weforza/database/sembast/device_dao.dart';
+import 'package:weforza/database/sembast/export_rides_dao.dart';
+import 'package:weforza/database/sembast/import_riders_dao.dart';
+import 'package:weforza/database/sembast/ride_dao.dart';
+import 'package:weforza/database/sembast/rider_dao.dart';
 import 'package:weforza/database/sembast/sembast_device_dao.dart';
 import 'package:weforza/database/sembast/sembast_export_rides_dao.dart';
 import 'package:weforza/database/sembast/sembast_import_riders_dao.dart';
 import 'package:weforza/database/sembast/sembast_ride_dao.dart';
 import 'package:weforza/database/sembast/sembast_rider_dao.dart';
 import 'package:weforza/database/sembast/sembast_settings_dao.dart';
-import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/database/sembast/settings_dao.dart';
 
 /// This class represents a [weforza.Database] implementation that uses a Sembast database under the hood.
 class SembastDatabase implements weforza.Database {

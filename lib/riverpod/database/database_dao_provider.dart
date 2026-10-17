@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/database/device_dao.dart';
-import 'package:weforza/database/export_rides_dao.dart';
-import 'package:weforza/database/import_riders_dao.dart';
-import 'package:weforza/database/ride_dao.dart';
-import 'package:weforza/database/rider_dao.dart';
-import 'package:weforza/database/settings_dao.dart';
+import 'package:weforza/database/sembast/device_dao.dart';
+import 'package:weforza/database/sembast/export_rides_dao.dart';
+import 'package:weforza/database/sembast/import_riders_dao.dart';
+import 'package:weforza/database/sembast/ride_dao.dart';
+import 'package:weforza/database/sembast/rider_dao.dart';
+import 'package:weforza/database/sembast/settings_dao.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 
 /// This provider provides the device dao.

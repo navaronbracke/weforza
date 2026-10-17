@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
+import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
@@ -28,25 +29,31 @@ class RideAttendeeScanningPage extends ConsumerStatefulWidget {
 
 class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPage>
     with SingleTickerProviderStateMixin {
-  late final RideAttendeeScanningDelegate delegate;
+  static final BluetoothAdapterService _bluetoothAdapterService = BluetoothAdapterService();
+
+  late final RideAttendeeScanningDelegate _delegate;
 
   final GlobalKey<AnimatedListState> _scanResultsKey = GlobalKey();
 
   late final AnimationController _scanProgressBarController;
 
-  /// Listen to the start signal of the Bluetooth scan
-  /// and start decreasing the progress in the progress bar.
-  void _listenToScanStart() {
-    if (delegate.isDisposed) {
-      return;
-    }
+  StreamSubscription<bool>? _isScanningSubscription;
 
-    final bool isScanning = delegate.isScanningListenable.value;
+  Future<void> _startDeviceScan() async {
+    // Listen to the start signal of the Bluetooth scan,
+    // so that the progress bar decreases in progress.
+    _isScanningSubscription = _delegate.isScanningStream.listen((isScanning) {
+      if (_delegate.isDisposed) {
+        return;
+      }
 
-    // Start decreasing the progress when the scan starts.
-    if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
-      _scanProgressBarController.reverse();
-    }
+      // Start decreasing the progress when the scan starts.
+      if (isScanning && _scanProgressBarController.status == AnimationStatus.completed) {
+        _scanProgressBarController.reverse();
+      }
+    });
+
+    await _delegate.startDeviceScan();
   }
 
   @override
@@ -61,53 +68,51 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       value: 1.0,
     );
 
-    delegate = RideAttendeeScanningDelegate(
+    _delegate = RideAttendeeScanningDelegate(
       deviceRepository: ref.read(deviceRepositoryProvider),
       riderRepository: ref.read(riderRepositoryProvider),
       ride: ref.read(selectedRideProvider)!,
       rideRepository: ref.read(rideRepositoryProvider),
+      scanner: _bluetoothAdapterService,
       settings: settings,
       // The delegate will have added the device to the scan results,
       // the only thing left to do is to insert it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
 
-    // Listen to the start signal of the Bluetooth scan,
-    // so that the progress bar decreases in progress.
-    delegate.isScanningListenable.addListener(_listenToScanStart);
-
-    unawaited(delegate.startDeviceScan());
+    unawaited(_startDeviceScan());
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: RideAttendeeScanningStepper(listenable: delegate.scanningStateListenable)),
+      appBar: AppBar(title: RideAttendeeScanningStepper(listenable: _delegate.scanningStateListenable)),
       body: _buildBody(),
     );
   }
 
   Widget _buildBody() {
     return ValueListenableBuilder<AsyncValue<RideAttendeeScanningState>>(
-      valueListenable: delegate.scanningStateListenable,
+      valueListenable: _delegate.scanningStateListenable,
       builder: (context, currentValue, _) {
         if (currentValue case AsyncData(:final value)) {
           return switch (value) {
-            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: delegate.startDeviceScan)),
-            .manualSelection => ManualSelectionList(delegate: delegate),
+            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: _delegate.startDeviceScan)),
+            .manualSelection => ManualSelectionList(delegate: _delegate),
             .permissionDenied => const Center(child: PermissionDeniedError()),
             .requestPermissions ||
             .startingScan ||
             .stoppingScan => const Center(child: PlatformAwareLoadingIndicator()),
             .scanning => ScanResultsList(
-              delegate: delegate,
+              delegate: _delegate,
               progressBar: ScanProgressIndicator(
                 animationController: _scanProgressBarController,
-                isScanningListenable: delegate.isScanningListenable,
+                isScanning: _delegate.isScanning,
+                isScanningStream: _delegate.isScanningStream,
               ),
               scanResultsListKey: _scanResultsKey,
             ),
-            .unresolvedOwnersSelection => UnresolvedOwnersList(delegate: delegate),
+            .unresolvedOwnersSelection => UnresolvedOwnersList(delegate: _delegate),
           };
         }
 
@@ -121,7 +126,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: RideAttendeeScanningStepper(listenable: delegate.scanningStateListenable),
+        middle: RideAttendeeScanningStepper(listenable: _delegate.scanningStateListenable),
       ),
       child: SafeArea(
         // The bottom view padding should be preserved
@@ -141,7 +146,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
         // The page was left by popping the route,
         // stop the scan if it's still running.
         if (didPop) {
-          await delegate.stopScan();
+          await _delegate.stopScan();
         }
       },
       child: PlatformAwareWidget(android: _buildAndroidLayout, ios: _buildIOSLayout),
@@ -150,8 +155,8 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   @override
   void dispose() {
-    delegate.isScanningListenable.removeListener(_listenToScanStart);
-    unawaited(delegate.dispose());
+    unawaited(_isScanningSubscription?.cancel());
+    unawaited(_delegate.dispose());
     _scanProgressBarController.dispose();
     super.dispose();
   }

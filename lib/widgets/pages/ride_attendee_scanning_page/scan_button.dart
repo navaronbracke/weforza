@@ -57,7 +57,7 @@ class StopScanButton extends StatelessWidget {
       .unresolvedOwnersSelection ||
       .startingScan => true,
       // A scan is in progress, so it can be stopped.
-      RideAttendeeScanningState.scanning => true,
+      .scanning => true,
       // The scan is already being aborted.
       .stoppingScan => false,
     };

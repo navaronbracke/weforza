@@ -84,6 +84,9 @@ class RideAttendeeScanningDelegate {
   /// The state machine for the scanning page.
   final _stateMachine = RideAttendeeScanningDelegateStateMachine();
 
+  /// The timer for the scan timeout.
+  Timer? _stopScanTimer;
+
   /// This set will contain all the owners
   /// that could not be resolved automatically.
   ///
@@ -273,8 +276,11 @@ class RideAttendeeScanningDelegate {
     _onDeviceFound(device);
   }
 
-  Future<void> _stopScan() async {
-    await _scanSubscription?.cancel();
+  void _stopScan() {
+    _stopScanTimer?.cancel();
+    _stopScanTimer = null;
+
+    unawaited(_scanSubscription?.cancel());
     _scanSubscription = null;
   }
 
@@ -397,9 +403,12 @@ class RideAttendeeScanningDelegate {
       }
 
       _stateMachine.setState(.scanning);
+      // Stop the scan after the timer elapses.
+      // The user will stay on the screen, because there might be unresolved owners in the list.
+      _stopScanTimer = Timer(Duration(seconds: _settings.scanDuration), _stopScan);
 
       _scanSubscription = _scanner
-          .scanForDevices(_settings.scanDuration)
+          .scanForDevices()
           .where(_includeScanResult)
           .listen(
             _resolvePossibleOwnersForDeviceAndAddDeviceToFoundDevicesList,
@@ -426,20 +435,10 @@ class RideAttendeeScanningDelegate {
 
     _stateMachine.setState(.stoppingScan);
 
-    try {
-      // Stop the scan by cancelling the sole subscription.
-      await _stopScan();
+    // Stop the scan by cancelling the sole subscription.
+    _stopScan();
 
-      if (isDisposed) {
-        return true;
-      }
-
-      return true;
-    } catch (error) {
-      _stateMachine.setStopScanError();
-
-      return false;
-    }
+    return true;
   }
 
   /// Toggle the selection state for the given active rider.
@@ -514,7 +513,7 @@ class RideAttendeeScanningDelegate {
 
     _stateMachine.dispose();
     _rideAttendeeNotifier.dispose();
-    await _stopScan();
+    _stopScan();
     await _scanner.dispose();
   }
 }

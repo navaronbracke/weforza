@@ -140,7 +140,7 @@ final class DatabaseMigrator {
         }) {
           extractedRiders.add(
             _ExtractedRider(
-              active: active ?? false,
+              active: active ?? true,
               alias: alias ?? '',
               firstName: firstName,
               lastName: lastName,

@@ -2,10 +2,10 @@ import 'package:drift/drift.dart';
 
 part 'database.g.dart';
 
-/// The table for the riders in the application.
+/// The table for the riders.
 class Riders extends Table {
   /// The min/max length for the first name, last name and alias.
-  static const ({int max, int min}) nameAndAliasLength = (min: 1, max: 50);
+  static const ({int min, int max}) nameAndAliasLength = (min: 1, max: 50);
 
   /// The optional alias of the rider.
   TextColumn get alias => text().nullable().withLength(min: nameAndAliasLength.min, max: nameAndAliasLength.max)();

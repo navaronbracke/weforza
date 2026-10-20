@@ -31,6 +31,7 @@ final class DatabaseMigrator {
   /// The name of the old database file.
   static const String oldDatabaseName = 'weforza_database.db';
 
+  /// The name of the settings key for the scan excluded terms filter in the settings record or shared preferences.
   static const String scanExcludedTermsFilterKey = 'scanExcludedTermsFilter';
 
   /// The file system used to access the database file.
@@ -39,9 +40,8 @@ final class DatabaseMigrator {
   /// The function that provides the directory where the database file is stored.
   final Future<Directory> Function(FileSystem fileSystem) _getDatabaseDirectory;
 
-  /// Get the application support directory from `path_provider`.
+  /// Get the application support directory, using the given [fileSystem].
   static Future<Directory> _getApplicationSupportDirectory(FileSystem fileSystem) {
-    // Since this uses the real file system for the application support directory, wrap it with LocalFileSystem.
     return getApplicationSupportDirectory().then((directory) => fileSystem.directory(directory.path));
   }
 
@@ -184,7 +184,7 @@ final class DatabaseMigrator {
         }) {
           extractedRideAttendees.add(
             _ExtractedRideAttendee(
-              isScanned: isScanned ?? false,
+              isScanned: isScanned ?? true,
               rideDate: DateTime.parse(rideDate),
               uuid: attendeeUuid,
             ),

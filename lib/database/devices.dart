@@ -4,10 +4,10 @@ import 'package:weforza/model/device/device_type.dart';
 
 part 'database.g.dart';
 
-/// The table for the rider Bluetooth devices in the application.
+/// The table for the rider Bluetooth devices.
 class Devices extends Table {
   /// The min/max length for the name of a device.
-  static const ({int max, int min}) nameLength = (min: 1, max: 40);
+  static const ({int min, int max}) nameLength = (min: 1, max: 40);
 
   /// The creation date of this device, in _**local time**_.
   ///

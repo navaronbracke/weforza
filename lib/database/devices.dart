@@ -32,6 +32,8 @@ class Devices extends Table {
   TextColumn get name => text().withLength(min: nameLength.min, max: nameLength.max)();
 
   /// The [Riders.id] of the owner of this device.
+  ///
+  /// If the owner is deleted, this device record is deleted as well.
   IntColumn get ownerId => integer().references(Riders, #id, onDelete: .cascade)();
 }
 

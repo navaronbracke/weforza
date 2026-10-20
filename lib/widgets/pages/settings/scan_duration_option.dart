@@ -16,10 +16,10 @@ class ScanDurationOption extends StatelessWidget {
   final ScanDurationDelegate delegate;
 
   /// The maximum scan duration of 60 seconds.
-  final double maxScanDuration = 60;
+  static const double maxScanDuration = 60;
 
   /// The minimum scan duration of 10 seconds.
-  final double minScanDuration = 10;
+  static const double minScanDuration = 10;
 
   Widget _buildCurrentDurationLabel() {
     return ValueListenableBuilder<double>(

@@ -19,9 +19,9 @@ class Devices extends Table {
 
   /// The type of this device.
   ///
-  /// Since this is an enum, it is stored as a tiny integer in the database.
+  /// Since this is an enum, it is stored as a `TINYINT` in the database.
   /// The [intEnum] column is not used, since this enum defines its own stable indexes.
-  IntColumn get deviceType => integer().customConstraint('TINYINT NOT NULL').map(const _DeviceTypeConverter())();
+  IntColumn get deviceType => customType(const _TinyIntType()).map(const _DeviceTypeConverter())();
 
   /// The unique identifier for the device.
   ///
@@ -45,4 +45,21 @@ final class _DeviceTypeConverter extends TypeConverter<DeviceType, int> {
 
   @override
   int toSql(DeviceType value) => value.typeIndex;
+}
+
+/// A SQL type that is declared as `TINYINT`.
+final class _TinyIntType implements CustomSqlType<int> {
+  const _TinyIntType();
+
+  @override
+  String mapToSqlLiteral(int dartValue) => dartValue.toString();
+
+  @override
+  Object mapToSqlParameter(int dartValue) => dartValue;
+
+  @override
+  int read(Object fromSql) => fromSql as int;
+
+  @override
+  String sqlTypeName(GenerationContext context) => 'TINYINT';
 }

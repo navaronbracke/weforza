@@ -8,7 +8,7 @@ class ExcludedTerms extends Table {
   static const ({int min, int max}) termLength = (min: 1, max: 48);
 
   /// The excluded term itself.
-  TextColumn get term => text().unique().withLength(min: termLength.min, max: termLength.max)();
+  TextColumn get term => text().withLength(min: termLength.min, max: termLength.max)();
 
   @override
   Set<Column<Object>> get primaryKey => {term};

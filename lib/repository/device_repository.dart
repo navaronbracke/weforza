@@ -83,18 +83,17 @@ class DeviceRepository {
   /// with the given [deviceName], [ownerId] and a creation date
   /// that is *different* from the given creation date.
   Future<bool> _deviceExists(String deviceName, int ownerId, [DateTime? creationDate]) async {
-    final query = _database.select(_database.devices)
-      ..where(
-        (t) => Expression.and([
-          t.name.equals(deviceName),
-          t.ownerId.equals(ownerId),
-          if (creationDate != null) t.creationDate.equals(creationDate).not(),
-        ]),
-      );
+    final query = _database.devices.count(
+      where: (t) => Expression.and([
+        t.name.equals(deviceName),
+        t.ownerId.equals(ownerId),
+        if (creationDate != null) t.creationDate.equals(creationDate).not(),
+      ]),
+    );
 
-    final result = await query.get();
+    final result = await query.getSingleOrNull();
 
-    return result.isNotEmpty;
+    return result == null;
   }
 
   Future<void> _updateOwnerLastUpdated(int ownerId) async {

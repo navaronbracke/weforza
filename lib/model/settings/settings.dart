@@ -6,7 +6,7 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 class Settings {
   const Settings({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration})
     : excludedTermsFilter = excludedTermsFilter ?? const {},
-      riderListFilter = riderListFilter ?? RiderFilterOption.all,
+      riderListFilter = riderListFilter ?? .all,
       scanDuration = scanDuration ?? 20,
       assert(scanDuration == null || scanDuration > 0, 'A scan duration should be greater than zero');
 

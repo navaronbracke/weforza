@@ -11,15 +11,15 @@ class DeviceRepository {
   /// Add the given [device].
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> addDevice(DevicesCompanion device) async {
-    if (await _deviceExists(device.name.value, device.ownerId.value)) {
+  Future<void> addDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.into(_database.devices).insert(device);
 
-      await _updateOwnerLastUpdated(device.ownerId.value);
+      await _updateOwnerLastUpdated(device.ownerId);
     });
   }
 
@@ -62,15 +62,15 @@ class DeviceRepository {
   /// Update a device.
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> updateDevice(DevicesCompanion device) async {
-    if (await _deviceExists(device.name.value, device.ownerId.value, device.creationDate.value)) {
+  Future<void> updateDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.update(_database.devices).replace(device);
 
-      await _updateOwnerLastUpdated(device.ownerId.value);
+      await _updateOwnerLastUpdated(device.ownerId);
     });
   }
 
@@ -97,6 +97,7 @@ class DeviceRepository {
   }
 
   Future<void> _updateOwnerLastUpdated(int ownerId) async {
+    // Use a companion for a partial update, as opposed to a full Rider model.
     final update = RidersCompanion(lastUpdated: Value(DateTime.now()));
 
     await (_database.update(_database.riders)..where((t) => t.id.equals(ownerId))).write(update);

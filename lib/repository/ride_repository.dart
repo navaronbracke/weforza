@@ -10,7 +10,7 @@ class RideRepository {
   final WeForzaDatabase _database;
 
   /// Add the given [rides].
-  Future<void> addRides(List<RidesCompanion> rides) {
+  Future<void> addRides(List<Ride> rides) {
     return _database.batch((batch) => batch.insertAll(_database.rides, rides));
   }
 
@@ -39,7 +39,7 @@ class RideRepository {
           ..orderBy([
             OrderingTerm.asc(_database.riders.firstName),
             OrderingTerm.asc(_database.riders.lastName),
-            OrderingTerm(expression: _database.riders.alias, nulls: .last),
+            OrderingTerm.asc(_database.riders.alias, nulls: .last),
           ]);
 
     return attendeeQuery.map((row) => row.readTable(_database.riders)).get();

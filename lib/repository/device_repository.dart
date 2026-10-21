@@ -11,15 +11,15 @@ class DeviceRepository {
   /// Add the given [device].
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> addDevice(DevicesCompanion device) async {
-    if (await _deviceExists(device.name.value, device.ownerId.value)) {
+  Future<void> addDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.into(_database.devices).insert(device);
 
-      await _updateOwnerLastUpdated(device.ownerId.value);
+      await _updateOwnerLastUpdated(device.ownerId);
     });
   }
 
@@ -62,15 +62,15 @@ class DeviceRepository {
   /// Update a device.
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> updateDevice(DevicesCompanion device) async {
-    if (await _deviceExists(device.name.value, device.ownerId.value, device.creationDate.value)) {
+  Future<void> updateDevice(Device device) async {
+    if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.update(_database.devices).replace(device);
 
-      await _updateOwnerLastUpdated(device.ownerId.value);
+      await _updateOwnerLastUpdated(device.ownerId);
     });
   }
 
@@ -83,21 +83,21 @@ class DeviceRepository {
   /// with the given [deviceName], [ownerId] and a creation date
   /// that is *different* from the given creation date.
   Future<bool> _deviceExists(String deviceName, int ownerId, [DateTime? creationDate]) async {
-    final query = _database.select(_database.devices)
-      ..where(
-        (t) => Expression.and([
-          t.name.equals(deviceName),
-          t.ownerId.equals(ownerId),
-          if (creationDate != null) t.creationDate.equals(creationDate).not(),
-        ]),
-      );
+    final query = _database.devices.count(
+      where: (t) => Expression.and([
+        t.name.equals(deviceName),
+        t.ownerId.equals(ownerId),
+        if (creationDate != null) t.creationDate.equals(creationDate).not(),
+      ]),
+    );
 
-    final result = await query.get();
+    final result = await query.getSingleOrNull();
 
-    return result.isNotEmpty;
+    return result == null;
   }
 
   Future<void> _updateOwnerLastUpdated(int ownerId) async {
+    // Use a companion for a partial update, as opposed to a full Rider model.
     final update = RidersCompanion(lastUpdated: Value(DateTime.now()));
 
     await (_database.update(_database.riders)..where((t) => t.id.equals(ownerId))).write(update);

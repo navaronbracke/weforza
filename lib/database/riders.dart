@@ -5,6 +5,13 @@ class Riders extends Table {
   /// The min/max length for the first name, last name and alias.
   static const ({int min, int max}) nameAndAliasLength = (min: 1, max: 50);
 
+  /// The [RegExp] for a rider's first name, last name or alias.
+  ///
+  /// The regex is language independent,
+  /// allows hyphens, left and right single quotation marks and spaces,
+  /// and requires a length between 1 and 50.
+  static final nameAndAliasRegex = RegExp(r'^([\p{L}\s]|[\u2018\u2019-]){1,50}$', unicode: true);
+
   /// The optional alias of the rider.
   TextColumn get alias => text().nullable().withLength(min: nameAndAliasLength.min, max: nameAndAliasLength.max)();
 

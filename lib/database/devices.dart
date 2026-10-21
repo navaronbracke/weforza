@@ -1,8 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:weforza/database/riders.dart';
-import 'package:weforza/model/device/device_type.dart';
-
-part 'database.g.dart';
+import 'package:weforza/database/utils/device_type_converter.dart';
+import 'package:weforza/database/utils/tiny_int_sql_type.dart';
 
 /// The table for the rider Bluetooth devices.
 class Devices extends Table {
@@ -21,7 +20,7 @@ class Devices extends Table {
   ///
   /// Since this is an enum, it is stored as a `TINYINT` in the database.
   /// The [intEnum] column is not used, since this enum defines its own stable indexes.
-  IntColumn get deviceType => customType(const _TinyIntType()).map(const _DeviceTypeConverter())();
+  IntColumn get deviceType => customType(const TinyIntSqlType()).map(const DeviceTypeConverter())();
 
   /// The unique identifier for the device.
   ///
@@ -35,31 +34,4 @@ class Devices extends Table {
   ///
   /// If the owner is deleted, this device record is deleted as well.
   IntColumn get ownerId => integer().references(Riders, #id, onDelete: .cascade)();
-}
-
-final class _DeviceTypeConverter extends TypeConverter<DeviceType, int> {
-  const _DeviceTypeConverter();
-
-  @override
-  DeviceType fromSql(int fromDb) => DeviceType.fromTypeIndex(fromDb);
-
-  @override
-  int toSql(DeviceType value) => value.typeIndex;
-}
-
-/// A SQL type that is declared as `TINYINT`.
-final class _TinyIntType implements CustomSqlType<int> {
-  const _TinyIntType();
-
-  @override
-  String mapToSqlLiteral(int dartValue) => dartValue.toString();
-
-  @override
-  Object mapToSqlParameter(int dartValue) => dartValue;
-
-  @override
-  int read(Object fromSql) => fromSql as int;
-
-  @override
-  String sqlTypeName(GenerationContext context) => 'TINYINT';
 }

@@ -46,4 +46,7 @@ app.*.map.json
 /android/app/release
 
 # The translations are generated.
-**/lib/generated/
+lib/generated/
+
+# The database schema is generated.
+lib/database/database.g.dart

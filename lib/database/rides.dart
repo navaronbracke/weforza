@@ -1,7 +1,5 @@
 import 'package:drift/drift.dart';
 
-part 'database.g.dart';
-
 /// The table for the rides.
 class Rides extends Table {
   /// The date on which this ride occurs in the calendar, in _**local time**_.

@@ -2,8 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:weforza/database/riders.dart';
 import 'package:weforza/database/rides.dart';
 
-part 'database.g.dart';
-
 /// The table for the ride attendees.
 class RideAttendees extends Table {
   /// The unique identifier for the ride attendee.

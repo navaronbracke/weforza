@@ -1,7 +1,5 @@
 import 'package:drift/drift.dart';
 
-part 'database.g.dart';
-
 /// The table for the excluded terms for a Bluetooth device scan.
 class ExcludedTerms extends Table {
   /// The min/max length for the excluded term.

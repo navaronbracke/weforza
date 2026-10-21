@@ -95,6 +95,11 @@ class AdaptiveProfileImage extends StatelessWidget {
   /// Defaults to 40.
   final double size;
 
+  /// Get the initials for the given [firstName] and [lastName].
+  static String initialsForName({required String firstName, required String lastName}) {
+    return firstName[0] + lastName[0];
+  }
+
   Color _getBackgroundColor(String initials, List<Color> colors) {
     int index = initials.codeUnitAt(0);
 

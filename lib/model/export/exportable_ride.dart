@@ -1,74 +1,22 @@
-import 'package:weforza/model/ride.dart';
+/// @docImport 'package:weforza/model/export/exportable_ride_attendee.dart';
+library;
 
+import 'package:weforza/database/database.dart';
+
+/// An exportable [Ride], without its [RideAttendee]s metadata.
+///
+/// The [RideAttendee] are exported separately using [ExportableRideAttendee].
 class ExportableRide {
-  ExportableRide({required this.ride, required this.attendees});
+  ExportableRide({required this.date});
 
-  final Iterable<ExportableRideAttendee> attendees;
-  final Ride ride;
+  /// The date of the ride.
+  final DateTime date;
 
-  void toCsv(StringBuffer buffer) {
-    buffer.writeln(ride.toCsv());
-    for (final attendee in attendees) {
-      buffer.writeln(attendee.toCsv());
-    }
-  }
+  String get _dateAsDayMonthYear => '${date.day}-${date.month}-${date.year}';
 
-  Map<String, Object?> toJson() {
-    return {'ride': ride.toJson(), 'attendees': attendees.map((attendee) => attendee.toJson()).toList()};
-  }
-}
+  /// Convert this ride into an exportable comma separated value string.
+  String toCsv() => _dateAsDayMonthYear;
 
-/// This class represents a RideAttendee in a format that is suitable
-/// for exporting inside a [ExportableRide].
-class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
-  ExportableRideAttendee({required this.firstName, required this.lastName, this.alias = ''})
-    : assert(
-        firstName.isNotEmpty && lastName.isNotEmpty,
-        'The first name and last name of an exportable ride attendee should not be empty',
-      );
-
-  final String firstName;
-  final String lastName;
-  final String alias;
-
-  Map<String, Object> toJson() {
-    return {'firstName': firstName, 'lastName': lastName, 'alias': alias};
-  }
-
-  String toCsv() {
-    return '$firstName,$lastName${alias.isEmpty ? '' : ',$alias'}';
-  }
-
-  @override
-  int compareTo(ExportableRideAttendee other) {
-    final firstNameComparison = firstName.compareTo(other.firstName);
-
-    if (firstNameComparison != 0) {
-      return firstNameComparison;
-    }
-
-    final lastNameComparison = lastName.compareTo(other.lastName);
-
-    if (lastNameComparison != 0) {
-      return lastNameComparison;
-    }
-
-    // Both aliases are empty, thus both are equal.
-    if (alias.isEmpty && other.alias.isEmpty) {
-      return 0;
-    }
-
-    // This object has more priority based on its alias.
-    if (alias.isNotEmpty && other.alias.isEmpty) {
-      return -1;
-    }
-
-    // This object has less priority based on its alias.
-    if (alias.isEmpty && other.alias.isNotEmpty) {
-      return 1;
-    }
-
-    // Both have non-empty aliases, compare them.
-    return alias.compareTo(other.alias);
-  }
+  /// Convert this ride into an exportable JSON object.
+  Map<String, String> toJson() => {'date': _dateAsDayMonthYear};
 }

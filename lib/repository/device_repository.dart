@@ -16,7 +16,7 @@ class DeviceRepository {
       throw DeviceExistsException();
     }
 
-    await _database.transaction(() async {
+    return _database.transaction(() async {
       await _database.into(_database.devices).insert(device);
 
       await _updateOwnerLastUpdated(device.ownerId.value);
@@ -28,17 +28,15 @@ class DeviceRepository {
 
   /// Get the list of all devices and group them together on their [Device.ownerId].
   ///
-  /// Returns a Map that contains the names of the devices per owner id.
+  /// Returns a [Map] that contains the [Device.name] of the devices per [Device.ownerId].
   /// A single device name can occur more than once in the entire map,
   /// if multiple owners contain a device with the same name.
   Future<Map<int, Set<String>>> getAllDevicesGroupedByOwnerId() async {
     final collection = <int, Set<String>>{};
 
-    final devices = await getAllDevices();
-
-    for (final device in devices) {
+    for (final device in await getAllDevices()) {
       if (collection.containsKey(device.ownerId)) {
-        collection[device.ownerId]!.add(device.name);
+        collection[device.ownerId]?.add(device.name);
       } else {
         collection[device.ownerId] = <String>{device.name};
       }
@@ -52,9 +50,9 @@ class DeviceRepository {
     return (_database.select(_database.devices)..where((t) => t.ownerId.equals(ownerId))).get();
   }
 
-  /// Remove the given [device].
-  Future<void> removeDevice(Device device) async {
-    await _database.transaction(() async {
+  /// Delete the given [device].
+  Future<void> deleteDevice(Device device) {
+    return _database.transaction(() async {
       await _database.delete(_database.devices).delete(device);
 
       await _updateOwnerLastUpdated(device.ownerId);
@@ -69,7 +67,7 @@ class DeviceRepository {
       throw DeviceExistsException();
     }
 
-    await _database.transaction(() async {
+    return _database.transaction(() async {
       await _database.update(_database.devices).replace(device);
 
       await _updateOwnerLastUpdated(device.ownerId.value);
@@ -100,8 +98,8 @@ class DeviceRepository {
   }
 
   Future<void> _updateOwnerLastUpdated(int ownerId) async {
-    await (_database.update(
-      _database.riders,
-    )..where((t) => t.id.equals(ownerId))).write(RidersCompanion(lastUpdated: Value(DateTime.now())));
+    final update = RidersCompanion(lastUpdated: Value(DateTime.now()));
+
+    await (_database.update(_database.riders)..where((t) => t.id.equals(ownerId))).write(update);
   }
 }

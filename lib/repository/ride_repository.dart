@@ -1,41 +1,101 @@
-import 'package:weforza/database/sembast/ride_dao.dart';
-import 'package:weforza/file/file_uri_parser.dart';
-import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/ride_attendee.dart';
+import 'package:drift/drift.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/model/rider/rider.dart';
 
 /// This class represents the repository that manages the rides.
 class RideRepository {
-  RideRepository(this._dao, this._fileUriParser);
+  const RideRepository(this._database);
 
-  final RideDao _dao;
+  /// The database instance.
+  final WeForzaDatabase _database;
 
-  final FileUriParser _fileUriParser;
-
-  Future<void> addRides(List<Ride> rides) => _dao.addRides(rides);
-
-  Future<void> deleteRide(DateTime date) => _dao.deleteRide(date);
-
-  Future<void> deleteRideCalendar() => _dao.deleteRideCalendar();
-
-  Future<List<Rider>> getRideAttendees(DateTime date) {
-    return _dao.getRideAttendees(date, fileUriParser: _fileUriParser);
+  /// Add the given [rides].
+  Future<void> addRides(List<RidesCompanion> rides) {
+    return _database.batch((batch) => batch.insertAll(_database.rides, rides));
   }
 
-  Future<List<DateTime>> getRideDates() => _dao.getRideDates();
+  /// Delete the given [ride].
+  Future<void> deleteRide(Ride ride) => _database.delete(_database.rides).delete(ride);
 
-  Future<List<Ride>> getRides() => _dao.getRides();
+  /// Delete the entire ride calendar.
+  Future<void> deleteRideCalendar() => _database.delete(_database.rides).go();
 
-  Future<int> getRidesCount() => _dao.getRidesCount();
+  /// Get the attendees of the ride with the given [date].
+  Future<List<Rider>> getRideAttendees(DateTime date) async {
+    final rideQuery = _database.select(_database.rides)
+      ..where((t) => t.date.equals(date))
+      ..limit(1);
+    final ride = await rideQuery.getSingleOrNull();
 
-  Future<List<ScannedRideAttendee>> getScanResults(DateTime date) {
-    return _dao.getScanResults(date);
+    if (ride == null) {
+      return [];
+    }
+
+    final attendeeQuery =
+        _database.select(_database.rideAttendees).join([
+            innerJoin(_database.riders, _database.riders.id.equalsExp(_database.rideAttendees.riderId)),
+          ])
+          ..where(_database.rideAttendees.rideId.equals(ride.id))
+          ..orderBy([
+            OrderingTerm.asc(_database.riders.firstName),
+            OrderingTerm.asc(_database.riders.lastName),
+            OrderingTerm(expression: _database.riders.alias, nulls: .last),
+          ]);
+
+    return attendeeQuery.map((row) => row.readTable(_database.riders)).get();
   }
 
+  /// Get the dates of the rides in the calendar.
+  ///
+  /// The returned list is not sorted on [Ride.date].
+  Future<List<DateTime>> getRideDates() {
+    final query = _database.selectOnly(_database.rides)..addColumns([_database.rides.date]);
+
+    return query.map((row) => row.readTable(_database.rides).date).get();
+  }
+
+  /// Get the list of rides, sorted by date in descending order.
+  Future<List<Ride>> getRides() {
+    return (_database.select(_database.rides)..orderBy([(ride) => OrderingTerm.desc(ride.date)])).get();
+  }
+
+  /// Get the amount of rides in the calendar.
+  Future<int> getRidesCount() async {
+    return await _database.rides.count().getSingleOrNull() ?? 0;
+  }
+
+  /// Get the attendees of the ride with the given [date], as scan results.
+  Future<List<ScannedRideAttendee>> getScanResults(DateTime date) async {
+    final rideQuery = _database.select(_database.rides)
+      ..where((t) => t.date.equals(date))
+      ..limit(1);
+    final ride = await rideQuery.getSingleOrNull();
+
+    if (ride == null) {
+      return [];
+    }
+
+    final attendees = await (_database.select(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).get();
+
+    return [for (final attendee in attendees) ScannedRideAttendee(id: attendee.id, isScanned: attendee.isScanned)];
+  }
+
+  /// Update the given [ride] and its [attendees].
   Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
-    return _dao.updateRide(ride, attendees);
+    // TODO: use diffing instead of bulk delete and insert
+    return _database.transaction(() async {
+      await (_database.delete(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).go();
+
+      await _database.batch((batch) {
+        batch.insertAll(_database.rideAttendees, attendees);
+      });
+
+      await _database.update(_database.rides).replace(ride);
+    });
   }
 
-  Stream<int> watchRidesCount() => _dao.watchRidesCount();
+  /// Get a [Stream] of changes to the amount of rides.
+  Stream<int> watchRidesCount() {
+    return _database.rides.count().watchSingleOrNull().map((count) => count ?? 0);
+  }
 }

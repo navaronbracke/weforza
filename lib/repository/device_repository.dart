@@ -52,8 +52,8 @@ class DeviceRepository {
     return (_database.select(_database.devices)..where((t) => t.ownerId.equals(ownerId))).get();
   }
 
-  /// Remove the given [device].
-  Future<void> removeDevice(Device device) async {
+  /// Delete the given [device].
+  Future<void> deleteDevice(Device device) async {
     await _database.transaction(() async {
       await _database.delete(_database.devices).delete(device);
 

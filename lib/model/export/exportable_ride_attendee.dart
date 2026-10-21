@@ -1,9 +1,9 @@
 /// @docImport 'package:weforza/database/database.dart';
-/// @docImport 'package:weforza/model/export/exportable_ride.dart';
+/// @docImport 'package:weforza/model/export/exportable_ride_with_attendees.dart';
 library;
 
 /// This class represents a [RideAttendee] in a format that is suitable
-/// for exporting inside a [ExportableRide].
+/// for exporting inside a [ExportableRideWithAttendees].
 class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
   ExportableRideAttendee({required this.firstName, required this.lastName, this.alias = ''})
     : assert(

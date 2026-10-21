@@ -1,20 +1,31 @@
-import 'package:weforza/database/sembast/device_dao.dart';
-import 'package:weforza/model/device/device.dart';
+import 'package:weforza/database/database.dart';
+import 'package:weforza/database/devices.dart';
 
 class DeviceRepository {
-  DeviceRepository(this._dao);
+  const DeviceRepository(this._database);
 
-  final DeviceDao _dao;
+  /// The database instance.
+  final WeForzaDatabase _database;
 
-  Future<void> addDevice(Device device) => _dao.addDevice(device);
+  /// Add the given [device].
+  Future<void> addDevice(Device device);
 
-  Future<List<Device>> getAllDevices() => _dao.getAllDevices();
+  /// Get the list of all devices.
+  Future<List<Device>> getAllDevices() => _database.select(_database.devices).get();
 
-  Future<List<Device>> getOwnerDevices(String uuid) {
-    return _dao.getOwnerDevices(uuid);
-  }
+  /// Get the list of all devices and group them together on their [Device.ownerId].
+  ///
+  /// Returns a Map that contains the names of the devices per owner uuid.
+  /// A single device name can occur more than once in the entire map,
+  /// if multiple owners contain a device with the same name.
+  Future<Map<String, Set<String>>> getAllDevicesGroupedByOwnerId();
 
-  Future<void> removeDevice(Device device) => _dao.removeDevice(device);
+  /// Get the devices of an [ownerId].
+  Future<List<Device>> getOwnerDevices(int ownerId);
 
-  Future<void> updateDevice(Device newDevice) => _dao.updateDevice(newDevice);
+  /// Remove the given [device].
+  Future<void> removeDevice(Device device);
+
+  /// Update a device.
+  Future<void> updateDevice(Device newDevice);
 }

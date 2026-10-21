@@ -1,7 +1,5 @@
 import 'package:drift/drift.dart';
 
-part 'database.g.dart';
-
 /// The table for the riders.
 class Riders extends Table {
   /// The min/max length for the first name, last name and alias.

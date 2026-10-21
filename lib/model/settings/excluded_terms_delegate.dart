@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
 
 /// This class represents a delegate that manages the excluded terms for the scan filter.
@@ -33,8 +33,8 @@ class ExcludedTermsDelegate {
   void addTerm(String value) {
     final List<ExcludedTerm> newTermsList = [
       for (final ExcludedTerm term in _termsNotifier.value) term,
-      ExcludedTerm(value),
-    ]..sort((a, b) => a.compareTo(b));
+      ExcludedTerm(term: value),
+    ]..sort((a, b) => a.term.compareTo(b.term));
 
     // A Set cannot be sorted so use insertion order.
     final Set<ExcludedTerm> newTerms = Set.of(newTermsList);
@@ -57,8 +57,8 @@ class ExcludedTermsDelegate {
   void editTerm(String newValue, int index) {
     final oldTerms = List.of(_termsNotifier.value);
 
-    oldTerms[index] = ExcludedTerm(newValue);
-    oldTerms.sort((a, b) => a.compareTo(b));
+    oldTerms[index] = ExcludedTerm(term: newValue);
+    oldTerms.sort((a, b) => a.term.compareTo(b.term));
 
     final newTerms = Set.of(oldTerms);
 
@@ -87,7 +87,7 @@ class ExcludedTermsDelegate {
     }
 
     // Create a temporary value to use when checking existence.
-    final ExcludedTerm valueForText = ExcludedTerm(term);
+    final ExcludedTerm valueForText = ExcludedTerm(term: term);
 
     final bool exists = _termsNotifier.value.contains(valueForText);
 

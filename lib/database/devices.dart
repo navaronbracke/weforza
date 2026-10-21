@@ -5,6 +5,9 @@ import 'package:weforza/database/utils/tiny_int_sql_type.dart';
 
 /// The table for the rider Bluetooth devices.
 class Devices extends Table {
+  /// The validation [RegExp] for the device [name].
+  static final RegExp deviceNameRegex = RegExp(r'^[^,]{1,40}$');
+
   /// The min/max length for the name of a device.
   static const ({int min, int max}) nameLength = (min: 1, max: 40);
 

@@ -1,20 +1,107 @@
-import 'package:weforza/database/sembast/device_dao.dart';
-import 'package:weforza/model/device/device.dart';
+import 'package:drift/drift.dart';
+import 'package:weforza/database/database.dart';
+import 'package:weforza/exceptions/exceptions.dart';
 
 class DeviceRepository {
-  DeviceRepository(this._dao);
+  const DeviceRepository(this._database);
 
-  final DeviceDao _dao;
+  /// The database instance.
+  final WeForzaDatabase _database;
 
-  Future<void> addDevice(Device device) => _dao.addDevice(device);
+  /// Add the given [device].
+  ///
+  /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
+  Future<void> addDevice(DevicesCompanion device) async {
+    if (await _deviceExists(device.name.value, device.ownerId.value)) {
+      throw DeviceExistsException();
+    }
 
-  Future<List<Device>> getAllDevices() => _dao.getAllDevices();
+    await _database.transaction(() async {
+      await _database.into(_database.devices).insert(device);
 
-  Future<List<Device>> getOwnerDevices(String uuid) {
-    return _dao.getOwnerDevices(uuid);
+      await _updateOwnerLastUpdated(device.ownerId.value);
+    });
   }
 
-  Future<void> removeDevice(Device device) => _dao.removeDevice(device);
+  /// Get the list of all devices.
+  Future<List<Device>> getAllDevices() => _database.select(_database.devices).get();
 
-  Future<void> updateDevice(Device newDevice) => _dao.updateDevice(newDevice);
+  /// Get the list of all devices and group them together on their [Device.ownerId].
+  ///
+  /// Returns a Map that contains the names of the devices per owner id.
+  /// A single device name can occur more than once in the entire map,
+  /// if multiple owners contain a device with the same name.
+  Future<Map<int, Set<String>>> getAllDevicesGroupedByOwnerId() async {
+    final collection = <int, Set<String>>{};
+
+    final devices = await getAllDevices();
+
+    for (final device in devices) {
+      if (collection.containsKey(device.ownerId)) {
+        collection[device.ownerId]!.add(device.name);
+      } else {
+        collection[device.ownerId] = <String>{device.name};
+      }
+    }
+
+    return collection;
+  }
+
+  /// Get the devices of an [ownerId].
+  Future<List<Device>> getOwnerDevices(int ownerId) {
+    return (_database.select(_database.devices)..where((t) => t.ownerId.equals(ownerId))).get();
+  }
+
+  /// Remove the given [device].
+  Future<void> removeDevice(Device device) async {
+    await _database.transaction(() async {
+      await _database.delete(_database.devices).delete(device);
+
+      await _updateOwnerLastUpdated(device.ownerId);
+    });
+  }
+
+  /// Update a device.
+  ///
+  /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
+  Future<void> updateDevice(DevicesCompanion device) async {
+    if (await _deviceExists(device.name.value, device.ownerId.value, device.creationDate.value)) {
+      throw DeviceExistsException();
+    }
+
+    await _database.transaction(() async {
+      await _database.update(_database.devices).replace(device);
+
+      await _updateOwnerLastUpdated(device.ownerId.value);
+    });
+  }
+
+  /// Check whether a device exists.
+  ///
+  /// If [creationDate] is null, this method returns whether a device exists
+  /// with the given [deviceName] and [ownerId].
+  ///
+  /// If [creationDate] is not null, this method returns whether a device exists
+  /// with the given [deviceName], [ownerId] and a creation date
+  /// that is *different* from the given creation date.
+  Future<bool> _deviceExists(String deviceName, int ownerId, [DateTime? creationDate]) async {
+    final query = _database.select(_database.devices)
+      ..where(
+        (t) => Expression.and([
+          t.name.equals(deviceName),
+          t.ownerId.equals(ownerId),
+          if (creationDate != null) t.creationDate.equals(creationDate).not(),
+        ]),
+      );
+
+    final result = await query.get();
+
+    return result.isNotEmpty;
+  }
+
+  Future<void> _updateOwnerLastUpdated(int ownerId) async {
+    await (_database.update(
+      _database.riders,
+    )..where((t) => t.id.equals(ownerId))).write(RidersCompanion(lastUpdated: Value(DateTime.now())));
+  }
 }

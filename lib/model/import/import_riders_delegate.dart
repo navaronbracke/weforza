@@ -15,7 +15,7 @@ import 'package:weforza/repository/serialize_riders_repository.dart';
 class ImportRidersDelegate {
   new(this._importFileDelegate, this._repository);
 
-  final _notifier = ValueNotifier<AsyncValue<ImportRidersState>>(const AsyncData(ImportRidersState.idle));
+  final _notifier = ValueNotifier<AsyncValue<ImportRidersState>>(const AsyncData(.idle));
 
   final ImportFileDelegate _importFileDelegate;
 
@@ -74,7 +74,7 @@ class ImportRidersDelegate {
   /// If the chosen file is malformed, a [FormatException] is emitted through the [listenable].
   void importRiders({required void Function() whenComplete}) async {
     try {
-      _notifier.value = const AsyncData(ImportRidersState.pickingFile);
+      _notifier.value = const AsyncData(.pickingFile);
 
       final file = await _importFileDelegate.pickImportRidersDataSource();
 
@@ -88,7 +88,7 @@ class ImportRidersDelegate {
         return;
       }
 
-      _notifier.value = const AsyncData(ImportRidersState.importing);
+      _notifier.value = const AsyncData(.importing);
 
       final items = await _readRidersFromFile(file);
 
@@ -97,15 +97,15 @@ class ImportRidersDelegate {
       }
 
       if (items.isEmpty) {
-        _notifier.value = const AsyncData(ImportRidersState.done);
+        _notifier.value = const AsyncData(.done);
 
         return;
       }
 
-      await _repository.saveSerializableRiders(items);
+      await _repository.saveExportableRiders(items);
 
       if (!_isDisposed) {
-        _notifier.value = const AsyncData(ImportRidersState.done);
+        _notifier.value = const AsyncData(.done);
       }
 
       whenComplete();

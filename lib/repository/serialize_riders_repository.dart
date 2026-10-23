@@ -18,7 +18,7 @@ class SerializeRidersRepository {
   /// Get the collection of [ExportableRider]s.
   ///
   /// The returned list is sorted on the rider name, alias and active state.
-  Future<Iterable<ExportableRider>> getSerializableRiders() async {
+  Future<Iterable<ExportableRider>> getExportableRiders() async {
     final (devices, riders) = await (
       _deviceRepository.getAllDevicesGroupedByOwnerId(),
       _riderRepository.getRiders(.all),
@@ -42,7 +42,7 @@ class SerializeRidersRepository {
   }
 
   /// Save the given exportable [exportedRiders] to disk.
-  Future<void> saveSerializableRiders(Iterable<ExportableRider> exportedRiders) async {
+  Future<void> saveExportableRiders(Iterable<ExportableRider> exportedRiders) async {
     final (riderInserts, riderUpdates) = await _computeRiderImports(exportedRiders);
 
     return _database.transaction(() async {

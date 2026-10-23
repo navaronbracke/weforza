@@ -56,8 +56,8 @@ final class ExportableRider implements Comparable<ExportableRider> {
       'lastName': lastName,
       'alias': alias,
       'isActive': isActive,
-      'devices': devices.toList(),
       'lastUpdated': lastUpdated.toIso8601String(),
+      'devices': devices.toList(),
     };
   }
 

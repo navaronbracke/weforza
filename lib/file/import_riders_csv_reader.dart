@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:file/file.dart' as fs;
+import 'package:weforza/database/devices.dart';
+import 'package:weforza/database/riders.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
-import 'package:weforza/model/device/device.dart';
-import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/model/rider/serializable_rider.dart';
+import 'package:weforza/model/export/exportable_rider.dart';
 
 /// This class represents an [ImportRidersFileReader]
 /// that handles the CSV format.
@@ -12,7 +12,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   /// The default constructor.
   ///
   /// The cell [delimiter] defaults to a comma.
-  factory ImportRidersCsvReader({String delimiter = ','}) {
+  factory({String delimiter = ','}) {
     // A single cell can contain unicode letters, dashes and hyphens.
     const cellMatcher = r'([\p{L}_-])+';
 
@@ -35,7 +35,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   }
 
   /// The private constructor.
-  const ImportRidersCsvReader._({required this.headerRegex});
+  const new _({required this.headerRegex});
 
   /// The minimum expected amount of columns for a valid line of data.
   ///
@@ -63,7 +63,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   final RegExp headerRegex;
 
   @override
-  Future<void> processChunk(String chunk, List<SerializableRider> serializedRiders) async {
+  Future<void> processChunk(String chunk, List<ExportableRider> exportedRiders) async {
     final List<String> cells = chunk.split(',');
 
     // Skip this line if it does not have enough cells.
@@ -77,7 +77,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     final lastName = cells[1];
     final alias = cells[2];
 
-    final regex = Rider.personNameAndAliasRegex;
+    final regex = Riders.nameAndAliasRegex;
 
     // If the first name, last name or alias is invalid, skip this chunk.
     if (!regex.hasMatch(firstName) || !regex.hasMatch(lastName) || alias.isNotEmpty && !regex.hasMatch(alias)) {
@@ -112,15 +112,15 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
     // Any remaining cells after the required cells are parsed as device names.
     // Any invalid device names are skipped.
     if (cells.length > requiredDataColumns) {
-      devices.addAll(cells.sublist(requiredDataColumns).where(Device.deviceNameRegex.hasMatch));
+      devices.addAll(cells.sublist(requiredDataColumns).where(Devices.deviceNameRegex.hasMatch));
     }
 
-    serializedRiders.add(
-      SerializableRider(
-        active: active,
+    exportedRiders.add(
+      ExportableRider(
         alias: alias,
         devices: devices,
         firstName: firstName,
+        isActive: active,
         lastName: lastName,
         lastUpdated: lastUpdatedOn,
       ),

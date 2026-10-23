@@ -2,29 +2,29 @@ import 'package:flutter/material.dart';
 
 /// This widget displays the first name, alias and last name of a rider.
 class RiderNameAndAlias extends StatelessWidget {
-  const RiderNameAndAlias.singleLine({
+  const new singleLine({
     required this.alias,
     required this.firstName,
     required this.lastName,
     required TextStyle style,
     super.key,
-    this.overflow = TextOverflow.ellipsis,
+    this.overflow = .ellipsis,
   }) : _isTwoLine = false,
        firstLineStyle = style,
        secondLineStyle = null;
 
-  const RiderNameAndAlias.twoLines({
+  const new twoLines({
     required this.alias,
     required this.firstLineStyle,
     required this.firstName,
     required this.lastName,
     required this.secondLineStyle,
     super.key,
-    this.overflow = TextOverflow.ellipsis,
+    this.overflow = .ellipsis,
   }) : _isTwoLine = true;
 
   /// The alias to display.
-  final String alias;
+  final String? alias;
 
   /// The style for the text on the first line.
   ///
@@ -76,7 +76,7 @@ class RiderNameAndAlias extends StatelessWidget {
                 text: firstName,
                 style: effectiveFirstLineStyle,
                 children: [
-                  if (alias.isNotEmpty)
+                  if (alias case final alias? when alias.isNotEmpty)
                     TextSpan(
                       text: " '$alias' ",
                       style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
@@ -90,22 +90,28 @@ class RiderNameAndAlias extends StatelessWidget {
       );
     }
 
+    if (alias case final alias? when alias.isNotEmpty) {
+      return RichText(
+        maxLines: 1,
+        overflow: overflow,
+        text: TextSpan(
+          text: firstName,
+          style: effectiveFirstLineStyle,
+          children: [
+            TextSpan(
+              text: " '$alias' ",
+              style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
+            ),
+            TextSpan(text: lastName, style: effectiveFirstLineStyle),
+          ],
+        ),
+      );
+    }
+
     return RichText(
       maxLines: 1,
       overflow: overflow,
-      text: alias.isEmpty
-          ? TextSpan(text: '$firstName $lastName', style: effectiveFirstLineStyle)
-          : TextSpan(
-              text: firstName,
-              style: effectiveFirstLineStyle,
-              children: [
-                TextSpan(
-                  text: " '$alias' ",
-                  style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
-                ),
-                TextSpan(text: lastName, style: effectiveFirstLineStyle),
-              ],
-            ),
+      text: TextSpan(text: '$firstName $lastName', style: effectiveFirstLineStyle),
     );
   }
 }

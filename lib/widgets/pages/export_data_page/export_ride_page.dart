@@ -1,18 +1,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_rides_delegate.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/riverpod/file/file_storage_delegate_provider.dart';
 import 'package:weforza/riverpod/file/file_system_provider.dart';
 import 'package:weforza/riverpod/repository/export_rides_repository_provider.dart';
+import 'package:weforza/utils/date_format_utils.dart';
 import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
 
 /// This widget represents a page for exporting rides.
 /// It supports both exporting a single ride and exporting all rides.
 class ExportRidePage extends ConsumerStatefulWidget {
-  const ExportRidePage({super.key, this.selectedRide});
+  const new({super.key, this.selectedRide});
 
   /// The selected ride that should be exported.
   ///
@@ -33,7 +34,7 @@ class _ExportRidePageState extends ConsumerState<ExportRidePage> with SingleTick
 
     return ride == null
         ? translator.exportRidesFileNamePlaceholder
-        : translator.exportRideFileNamePlaceholder(ride.dateAsDayMonthYear);
+        : translator.exportRideFileNamePlaceholder(ride.date.asDayMonthYear);
   }
 
   @override

@@ -43,41 +43,12 @@ class SerializeRidersRepository {
 
   /// Save the given exportable [exportedRiders] to disk.
   Future<void> saveSerializableRiders(Iterable<ExportableRider> exportedRiders) async {
-    final (existingRiders, existingDevicesPerRider) = await (
-      _riderRepository.getRiders(.all),
-      _deviceRepository.getAllDevicesGroupedByOwnerId(),
-    ).wait;
-
-    final Map<ExportableRiderKey, Rider> existingRidersByName = {
-      for (final rider in existingRiders) .fromRider(rider): rider,
-    };
-
-    final Set<ExportableRider> riderInserts = {};
-    final Map<int, ({bool isActive, Set<String> newDevices})> riderUpdates = {};
-
-    for (final newRider in exportedRiders) {
-      final key = ExportableRiderKey.fromExportedRider(newRider);
-      final Rider? existingRider = existingRidersByName[key];
-
-      if (existingRider == null) {
-        riderInserts.add(newRider);
-
-        continue;
-      }
-
-      if (newRider.lastUpdated.isAfter(existingRider.lastUpdated)) {
-        final Set<String> newDevices = newRider.devices.difference(
-          existingDevicesPerRider[existingRider.id] ?? const {},
-        );
-
-        if (newRider.isActive != existingRider.isActive || newDevices.isNotEmpty) {
-          riderUpdates[existingRider.id] = (isActive: newRider.isActive, newDevices: newDevices);
-        }
-      }
-    }
+    final (riderInserts, riderUpdates) = await _computeRiderImports(exportedRiders);
 
     final List<DevicesCompanion> newDevices = [];
+    final List<RidersCompanion> updatedRiders = [];
 
+    // Insert the new riders, record their ids and create pending inserts for their devices.
     for (final rider in riderInserts) {
       final int riderId = await _database
           .into(_database.riders)
@@ -90,22 +61,94 @@ class SerializeRidersRepository {
             ),
           );
 
+      if (rider.devices.isEmpty) {
+        continue;
+      }
+
       newDevices.addAll([
         for (final device in rider.devices)
           DevicesCompanion(ownerId: Value(riderId), deviceType: const Value(.unknown), name: Value(device)),
       ]);
     }
 
-    await _database.batch((batch) {
-      for (final rider in riderUpdates.entries) {
-        batch.update(
-          _database.riders,
-          RidersCompanion(id: Value(rider.key), isActive: Value(rider.value.isActive)),
-          where: (t) => t.id.equals(rider.key),
-        );
+    // For each of the updates riders, queue their own update and queue their new devices for insertion.
+    for (final rider in riderUpdates.entries) {
+      if (rider.value.isActive case final bool isActive) {
+        updatedRiders.add(RidersCompanion(id: Value(rider.key), isActive: Value(isActive)));
       }
 
-      batch.insertAll(_database.devices, newDevices);
+      if (rider.value.newDevices.isEmpty) {
+        continue;
+      }
+
+      newDevices.addAll([
+        for (final device in rider.value.newDevices)
+          DevicesCompanion(ownerId: Value(rider.key), deviceType: const Value(.unknown), name: Value(device)),
+      ]);
+    }
+
+    await _database.batch((batch) {
+      for (final rider in updatedRiders) {
+        batch.update(_database.riders, rider, where: (t) => t.id.equals(rider.id.value));
+      }
+
+      if (newDevices.isNotEmpty) {
+        batch.insertAll(_database.devices, newDevices);
+      }
     });
+  }
+
+  /// Compute the rider inserts and updates.
+  ///
+  /// Returns a record containing the new riders to insert and the updates for existing riders.
+  /// Updates to existing riders may include a change to their active status or the addition of new devices.
+  ///
+  /// If the returned isActive is null, there is no change to the rider's active status.
+  /// If the returned newDevices set is empty, there are no new devices for the rider.
+  Future<(Iterable<ExportableRider>, Map<int, ({bool? isActive, Set<String> newDevices})>)> _computeRiderImports(
+    Iterable<ExportableRider> exportedRiders,
+  ) async {
+    final (existingRiders, existingDevicesPerRider) = await (
+      _riderRepository.getRiders(.all),
+      _deviceRepository.getAllDevicesGroupedByOwnerId(),
+    ).wait;
+
+    final Map<ExportableRiderKey, Rider> existingRidersByName = {
+      for (final rider in existingRiders) .fromRider(rider): rider,
+    };
+
+    final List<ExportableRider> riderInserts = [];
+    final Map<int, ({bool? isActive, Set<String> newDevices})> riderUpdates = {};
+
+    for (final newRider in exportedRiders) {
+      final Rider? existingRider = existingRidersByName[ExportableRiderKey.fromExportedRider(newRider)];
+
+      if (existingRider == null) {
+        riderInserts.add(newRider);
+
+        continue;
+      }
+
+      if (!newRider.lastUpdated.isAfter(existingRider.lastUpdated)) {
+        continue;
+      }
+
+      final Set<String> newDevices = switch (existingDevicesPerRider[existingRider.id]) {
+        final Set<String> existingDevices when existingDevices.isNotEmpty => newRider.devices.difference(
+          existingDevices,
+        ),
+        _ => newRider.devices,
+      };
+
+      final bool? isActive = newRider.isActive == existingRider.isActive ? null : newRider.isActive;
+
+      if (isActive == null && newDevices.isEmpty) {
+        continue;
+      }
+
+      riderUpdates[existingRider.id] = (isActive: isActive, newDevices: newDevices);
+    }
+
+    return (riderInserts, riderUpdates);
   }
 }

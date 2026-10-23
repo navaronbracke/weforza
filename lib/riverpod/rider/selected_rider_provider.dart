@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
@@ -8,7 +8,7 @@ import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 final selectedRiderProvider = StateNotifierProvider<SelectedRiderNotifier, Rider?>(SelectedRiderNotifier.new);
 
 class SelectedRiderNotifier extends StateNotifier<Rider?> {
-  SelectedRiderNotifier(this.ref) : super(null);
+  new(this.ref) : super(null);
 
   final Ref ref;
 
@@ -19,7 +19,7 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
       throw ArgumentError.notNull('rider');
     }
 
-    await ref.read(riderRepositoryProvider).deleteRider(rider.uuid);
+    await ref.read(riderRepositoryProvider).deleteRider(rider);
 
     // Refresh the rider list, the collection has one item less.
     ref.invalidate(riderListProvider);
@@ -31,23 +31,23 @@ class SelectedRiderNotifier extends StateNotifier<Rider?> {
   void setRiderActive({required bool value}) async {
     final rider = state;
 
-    if (rider == null || rider.active == value) {
+    if (rider == null || rider.isActive == value) {
       return;
     }
 
     try {
       final repository = ref.read(riderRepositoryProvider);
 
-      await repository.setRiderActive(rider.uuid, value: value);
+      await repository.setRiderActive(rider, value: value);
 
       state = Rider(
-        active: value,
+        id: rider.id,
+        isActive: value,
         alias: rider.alias,
         firstName: rider.firstName,
         lastName: rider.lastName,
         lastUpdated: DateTime.now(),
-        profileImage: rider.profileImage,
-        uuid: rider.uuid,
+        profileImageUri: rider.profileImageUri,
       );
 
       ref.invalidate(riderListProvider);

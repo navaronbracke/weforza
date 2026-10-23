@@ -7,8 +7,8 @@ import 'package:weforza/riverpod/media_permissions_provider.dart';
 
 final imagePickerDelegateProvider = Provider<PickImageDelegate>((ref) {
   return IoPickImageDelegate(
-    fileStorageDelegate: ref.read(fileStorageDelegateProvider),
-    fileSystem: ref.read(fileSystemProvider),
-    mediaPermissionsDelegate: ref.read(mediaPermissionsProvider),
+    fileStorageDelegate: ref.watch(fileStorageDelegateProvider),
+    fileSystem: ref.watch(fileSystemProvider),
+    mediaPermissionsDelegate: ref.watch(mediaPermissionsProvider),
   );
 });

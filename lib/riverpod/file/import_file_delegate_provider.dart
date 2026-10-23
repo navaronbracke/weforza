@@ -4,5 +4,5 @@ import 'package:weforza/model/import/io_import_file_delegate.dart';
 import 'package:weforza/riverpod/file/file_system_provider.dart';
 
 final importFileDelegateProvider = Provider<ImportFileDelegate>((ref) {
-  return IoImportFileDelegate(ref.read(fileSystemProvider));
+  return IoImportFileDelegate(ref.watch(fileSystemProvider));
 });

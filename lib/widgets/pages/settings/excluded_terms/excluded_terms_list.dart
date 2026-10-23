@@ -1,18 +1,13 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
-import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_empty.dart';
 
 /// This widget represents the list of excluded terms.
 ///
 /// This widget should be placed inside a [CustomScrollView].
 class ExcludedTermsList extends StatelessWidget {
-  const ExcludedTermsList({
-    required this.addTermInputField,
-    required this.builder,
-    required this.listenable,
-    super.key,
-  });
+  const new({required this.addTermInputField, required this.builder, required this.listenable, super.key});
 
   /// The input field that handles adding new terms.
   final Widget addTermInputField;

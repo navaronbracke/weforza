@@ -19,14 +19,14 @@ part 'database.g.dart';
 @DriftDatabase(tables: [Riders, Rides, RideAttendees, Devices, ExcludedTerms])
 class WeForzaDatabase extends _$WeForzaDatabase {
   /// Create a new [WeForzaDatabase] instance, on the local file system.
-  WeForzaDatabase() : super(_openConnection());
+  new() : super(_openConnection());
 
   /// Create a new [WeForzaDatabase] instance for testing purposes.
   /// This uses an in-memory database.
   ///
   /// The option `DatabaseConnection.closeStreamsSynchronously` is set to true,
   /// to avoid streams dangling in tests.
-  WeForzaDatabase.memory() : super(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
+  new memory() : super(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
 
   /// The name of the database file.
   ///

@@ -7,7 +7,7 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class provides an API to work with riders.
 class RiderRepository {
-  const RiderRepository(this._database);
+  const new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;
@@ -24,9 +24,9 @@ class RiderRepository {
   /// Delete the given [rider].
   Future<void> deleteRider(Rider rider) => _database.riders.delete().delete(rider);
 
-  /// Get the amount of rides that a rider with the given [id] has attended.
-  Future<int> getAttendingCount(int id) async {
-    final query = _database.rideAttendees.count(where: (t) => t.riderId.equals(id));
+  /// Get the amount of rides that a [rider] has attended.
+  Future<int> getAttendingCount(Rider rider) async {
+    final query = _database.rideAttendees.count(where: (t) => t.riderId.equals(rider.id));
 
     final result = await query.getSingleOrNull();
 
@@ -55,9 +55,9 @@ class RiderRepository {
     return query.get();
   }
 
-  /// Toggle the [Rider.isActive] state of the rider with the given [id].
-  Future<void> setRiderActive(int id, {required bool value}) {
-    final update = RidersCompanion(id: Value(id), isActive: Value(value));
+  /// Toggle the [Rider.isActive] state of the given [rider].
+  Future<void> setRiderActive(Rider rider, {required bool value}) {
+    final update = RidersCompanion(id: Value(rider.id), isActive: Value(value));
 
     return _database.update(_database.riders).replace(update);
   }

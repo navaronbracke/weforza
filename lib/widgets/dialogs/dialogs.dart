@@ -8,7 +8,7 @@ import 'package:weforza/widgets/theme.dart';
 /// that adapts itself to the current platform.
 class WeforzaAlertDialog extends StatelessWidget {
   /// The private constructor.
-  const WeforzaAlertDialog._({
+  const new _({
     required this.confirmButtonBuilder,
     required this.description,
     required this.title,
@@ -16,7 +16,7 @@ class WeforzaAlertDialog extends StatelessWidget {
   }) : actionsAlignment = null;
 
   /// Construct a [WeforzaAlertDialog] that uses a confirm and cancel button.
-  factory WeforzaAlertDialog.defaultButtons({
+  factory defaultButtons({
     required String confirmButtonLabel,
     required Widget description,
     required bool isDestructive,
@@ -34,7 +34,7 @@ class WeforzaAlertDialog extends StatelessWidget {
   }
 
   /// Construct a [WeforzaAlertDialog] that uses a single button.
-  const WeforzaAlertDialog.singleButton({
+  const new singleButton({
     required this.confirmButtonBuilder,
     required this.description,
     required this.title,
@@ -68,20 +68,17 @@ class WeforzaAlertDialog extends StatelessWidget {
   static Widget _buildDefaultCancelButton(BuildContext context, TargetPlatform platform) {
     final label = S.of(context).cancel;
 
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label));
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoDialogAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(label),
-        );
-    }
+    return switch (platform) {
+      .android ||
+      .fuchsia ||
+      .linux ||
+      .windows => TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label)),
+      .iOS || .macOS => CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text(label),
+      ),
+    };
   }
 
   static Widget _buildDefaultConfirmButton(
@@ -91,22 +88,15 @@ class WeforzaAlertDialog extends StatelessWidget {
     void Function() onPressed,
     TargetPlatform platform,
   ) {
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        final styles = Theme.of(context).extension<DestructiveButtons>()!;
-
-        return TextButton(
-          onPressed: onPressed,
-          style: isDestructive ? styles.textButtonStyle : null,
-          child: Text(label),
-        );
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoDialogAction(isDestructiveAction: isDestructive, onPressed: onPressed, child: Text(label));
-    }
+    return switch (platform) {
+      .android || .fuchsia || .linux || .windows => TextButton(
+        onPressed: onPressed,
+        style: isDestructive ? Theme.of(context).extension<DestructiveButtons>()!.textButtonStyle : null,
+        child: Text(label),
+      ),
+      .iOS ||
+      .macOS => CupertinoDialogAction(isDestructiveAction: isDestructive, onPressed: onPressed, child: Text(label)),
+    };
   }
 
   @override
@@ -117,27 +107,22 @@ class WeforzaAlertDialog extends StatelessWidget {
 
     final actions = <Widget>[?cancelButton, confirmButton];
 
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return AlertDialog(
-          actions: actions,
-          actionsAlignment: actionsAlignment,
-          content: description,
-          title: Text(title, softWrap: true),
-        );
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoAlertDialog(actions: actions, content: description, title: Text(title, softWrap: true));
-    }
+    return switch (platform) {
+      .android || .fuchsia || .linux || .windows => AlertDialog(
+        actions: actions,
+        actionsAlignment: actionsAlignment,
+        content: description,
+        title: Text(title, softWrap: true),
+      ),
+      .iOS ||
+      .macOS => CupertinoAlertDialog(actions: actions, content: description, title: Text(title, softWrap: true)),
+    };
   }
 }
 
 /// This widget represents an [WeforzaAlertDialog] for an asynchronous action.
 class WeforzaAsyncActionDialog<T> extends StatelessWidget {
-  const WeforzaAsyncActionDialog({
+  const new({
     required this.confirmButtonLabel,
     required this.description,
     required this.errorDescription,
@@ -183,36 +168,27 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
   Widget _buildDismissErrorAction(BuildContext context, TargetPlatform platform) {
     final label = S.of(context).ok;
 
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label));
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return CupertinoDialogAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(label),
-        );
-    }
+    return switch (platform) {
+      .android ||
+      .fuchsia ||
+      .linux ||
+      .windows => TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(label)),
+      .iOS || .macOS => CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () => Navigator.of(context).pop(),
+        child: Text(label),
+      ),
+    };
   }
 
   Widget _buildPendingAction(BuildContext context, TargetPlatform platform) {
-    switch (platform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        return const Padding(
-          padding: EdgeInsets.only(bottom: 4),
-          child: SizedBox.square(dimension: 24, child: CircularProgressIndicator(strokeWidth: 2)),
-        );
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        return const CupertinoDialogAction(child: CupertinoActivityIndicator());
-    }
+    return switch (platform) {
+      .android || .fuchsia || .linux || .windows => const Padding(
+        padding: EdgeInsets.only(bottom: 4),
+        child: SizedBox.square(dimension: 24, child: CircularProgressIndicator(strokeWidth: 2)),
+      ),
+      .iOS || .macOS => const CupertinoDialogAction(child: CupertinoActivityIndicator()),
+    };
   }
 
   @override
@@ -224,12 +200,12 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
         // as it is purely informational.
         // It should also not be able to be dismissed by pressing outside of the dialog.
         final pending = GestureDetector(
-          behavior: HitTestBehavior.opaque,
+          behavior: .opaque,
           onTap: () {
             // Consume the onTap gesture.
           },
           child: WeforzaAlertDialog.singleButton(
-            actionsAlignment: MainAxisAlignment.center,
+            actionsAlignment: .center,
             confirmButtonBuilder: _buildPendingAction,
             description: pendingDescription,
             title: title,
@@ -237,7 +213,7 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
         );
 
         switch (snapshot.connectionState) {
-          case ConnectionState.none:
+          case .none:
             return WeforzaAlertDialog.defaultButtons(
               confirmButtonLabel: confirmButtonLabel,
               description: description,
@@ -245,10 +221,10 @@ class WeforzaAsyncActionDialog<T> extends StatelessWidget {
               onConfirmPressed: onConfirmPressed,
               title: title,
             );
-          case ConnectionState.active:
-          case ConnectionState.waiting:
+          case .active:
+          case .waiting:
             return pending;
-          case ConnectionState.done:
+          case .done:
             final error = snapshot.error;
 
             if (error != null) {

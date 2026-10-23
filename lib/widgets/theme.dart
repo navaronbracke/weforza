@@ -80,7 +80,7 @@ abstract class AppTheme {
 /// This class defines a theme extension for destructive Material buttons.
 @immutable
 class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
-  DestructiveButtons({required this.colorScheme})
+  new({required this.colorScheme})
     : elevatedButtonStyle = ElevatedButton.styleFrom(
         backgroundColor: colorScheme.error,
         foregroundColor: colorScheme.onError,
@@ -114,49 +114,43 @@ class DestructiveButtons extends ThemeExtension<DestructiveButtons> {
 /// This class represents the theme for a ride calendar.
 @immutable
 class RideCalendarTheme {
-  const RideCalendarTheme({required this.textStyle, this.decoration});
+  const new({required this.textStyle, this.decoration});
 
-  RideCalendarTheme.filled({required Color backgroundColor, required Color labelColor})
+  new filled({required Color backgroundColor, required Color labelColor})
     : decoration = BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(4)), color: backgroundColor),
       textStyle = TextStyle(fontSize: 18, color: labelColor);
 
-  factory RideCalendarTheme.withBrightness(
-    Brightness brightness, {
-    required RideCalendarTheme dark,
-    required RideCalendarTheme light,
-  }) {
-    switch (brightness) {
-      case Brightness.dark:
-        return dark;
-      case Brightness.light:
-        return light;
-    }
+  factory withBrightness(Brightness brightness, {required RideCalendarTheme dark, required RideCalendarTheme light}) {
+    return switch (brightness) {
+      .dark => dark,
+      .light => light,
+    };
   }
 
-  factory RideCalendarTheme.resolve(BuildContext context, {required RideCalendarItemState? state}) {
+  factory resolve(BuildContext context, {required RideCalendarItemState? state}) {
     // Defer to default text theme for future days. These also do not have a background color.
     if (state == null) {
       return const RideCalendarTheme(textStyle: TextStyle(fontSize: 18));
     }
 
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
+      case .android:
+      case .fuchsia:
+      case .linux:
+      case .windows:
         final ThemeData theme = Theme.of(context);
         final ColorScheme colorScheme = ColorScheme.of(context);
 
         switch (state) {
-          case RideCalendarItemState.currentSelection:
+          case .currentSelection:
             return RideCalendarTheme.filled(backgroundColor: colorScheme.primary, labelColor: colorScheme.onPrimary);
-          case RideCalendarItemState.futureRide:
+          case .futureRide:
             return RideCalendarTheme.withBrightness(
               theme.brightness,
               dark: RideCalendarTheme.filled(backgroundColor: Colors.teal.shade300, labelColor: Colors.black),
               light: RideCalendarTheme.filled(backgroundColor: Colors.lightGreen, labelColor: Colors.black),
             );
-          case RideCalendarItemState.pastDay:
+          case .pastDay:
             return RideCalendarTheme.withBrightness(
               theme.brightness,
               dark: RideCalendarTheme.filled(
@@ -168,7 +162,7 @@ class RideCalendarTheme {
                 labelColor: colorScheme.onSurfaceVariant,
               ),
             );
-          case RideCalendarItemState.pastRide:
+          case .pastRide:
             return RideCalendarTheme.withBrightness(
               theme.brightness,
               dark: RideCalendarTheme.filled(
@@ -181,50 +175,32 @@ class RideCalendarTheme {
               ),
             );
         }
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
+      case .iOS:
+      case .macOS:
         final CupertinoThemeData theme = CupertinoTheme.of(context);
         final Brightness brightness = CupertinoTheme.brightnessOf(context);
         final Color primaryColor = theme.primaryColor;
 
         switch (state) {
-          case RideCalendarItemState.currentSelection:
+          case .currentSelection:
             return RideCalendarTheme.filled(backgroundColor: primaryColor, labelColor: CupertinoColors.white);
-          case RideCalendarItemState.futureRide:
+          case .futureRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGreen.darkColor,
-                labelColor: CupertinoColors.black,
-              ),
-              light: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGreen.color,
-                labelColor: CupertinoColors.white,
-              ),
+              dark: .filled(backgroundColor: CupertinoColors.systemGreen.darkColor, labelColor: CupertinoColors.black),
+              light: .filled(backgroundColor: CupertinoColors.systemGreen.color, labelColor: CupertinoColors.white),
             );
-          case RideCalendarItemState.pastDay:
+          case .pastDay:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGrey3,
-                labelColor: CupertinoColors.black,
-              ),
-              light: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGrey5,
-                labelColor: CupertinoColors.black,
-              ),
+              dark: .filled(backgroundColor: CupertinoColors.systemGrey3, labelColor: CupertinoColors.black),
+              light: .filled(backgroundColor: CupertinoColors.systemGrey5, labelColor: CupertinoColors.black),
             );
-          case RideCalendarItemState.pastRide:
+          case .pastRide:
             return RideCalendarTheme.withBrightness(
               brightness,
-              dark: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.inactiveGray.darkColor,
-                labelColor: CupertinoColors.white,
-              ),
-              light: RideCalendarTheme.filled(
-                backgroundColor: CupertinoColors.systemGrey,
-                labelColor: CupertinoColors.white,
-              ),
+              dark: .filled(backgroundColor: CupertinoColors.inactiveGray.darkColor, labelColor: CupertinoColors.white),
+              light: .filled(backgroundColor: CupertinoColors.systemGrey, labelColor: CupertinoColors.white),
             );
         }
     }
@@ -240,16 +216,16 @@ class RideCalendarTheme {
 /// This class defines the text theme for rider names.
 @immutable
 class RiderTextTheme {
-  const RiderTextTheme();
+  const new();
 
   /// The text style for rider aliases.
-  final TextStyle aliasStyle = const TextStyle(fontSize: 14, fontStyle: FontStyle.italic);
+  final TextStyle aliasStyle = const TextStyle(fontSize: 14, fontStyle: .italic);
 
   /// The style for rider first names, slightly larger than [firstNameStyle].
-  final TextStyle firstNameLargeStyle = const TextStyle(fontSize: 24, fontWeight: FontWeight.w500);
+  final TextStyle firstNameLargeStyle = const TextStyle(fontSize: 24, fontWeight: .w500);
 
   /// The style for rider first names.
-  final TextStyle firstNameStyle = const TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
+  final TextStyle firstNameStyle = const TextStyle(fontSize: 18, fontWeight: .w500);
 
   /// The style for rider last names, slightly larger than [lastNameStyle].
   final TextStyle lastNameLargeStyle = const TextStyle(fontSize: 20);

@@ -10,7 +10,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// and a centered label under the slider
 /// to indicate the current value in seconds.
 class ScanDurationOption extends StatelessWidget {
-  const ScanDurationOption({required this.delegate, super.key});
+  const new({required this.delegate, super.key});
 
   /// The delegate that handles changes to the value.
   final ScanDurationDelegate delegate;
@@ -35,11 +35,11 @@ class ScanDurationOption extends StatelessWidget {
     return PlatformAwareWidget(
       android: (context) {
         return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const .only(bottom: 4),
               child: Text(translator.scanDuration, style: TextTheme.of(context).titleMedium),
             ),
             ValueListenableBuilder<double>(
@@ -61,17 +61,17 @@ class ScanDurationOption extends StatelessWidget {
       ios: (_) {
         return CupertinoFormRow(
           helper: Padding(
-            padding: const EdgeInsets.only(top: 8),
+            padding: const .only(top: 8),
             child: Row(
               children: [
                 Expanded(
-                  child: Padding(padding: const EdgeInsets.only(left: 6), child: Text(translator.scanDuration)),
+                  child: Padding(padding: const .only(left: 6), child: Text(translator.scanDuration)),
                 ),
-                Padding(padding: const EdgeInsets.symmetric(horizontal: 6), child: _buildCurrentDurationLabel()),
+                Padding(padding: const .symmetric(horizontal: 6), child: _buildCurrentDurationLabel()),
               ],
             ),
           ),
-          padding: const EdgeInsets.all(6),
+          padding: const .all(6),
           child: ValueListenableBuilder<double>(
             valueListenable: delegate.listenable,
             builder: (context, value, _) {

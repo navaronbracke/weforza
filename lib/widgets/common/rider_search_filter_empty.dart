@@ -4,12 +4,12 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_icon.dart';
 
 class RiderSearchFilterEmpty extends StatelessWidget {
-  const RiderSearchFilterEmpty({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: <Widget>[
         PlatformAwareIcon(
           androidIcon: Icons.people,
@@ -17,7 +17,7 @@ class RiderSearchFilterEmpty extends StatelessWidget {
           size: MediaQuery.sizeOf(context).shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 4, left: 16, right: 16),
+          padding: const .only(top: 4, left: 16, right: 16),
           child: Text(S.of(context).searchRidersEmpty, textAlign: TextAlign.center),
         ),
       ],

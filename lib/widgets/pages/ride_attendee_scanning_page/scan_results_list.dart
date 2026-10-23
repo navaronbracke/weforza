@@ -11,12 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents the scan results list
 /// for the ride attendee scanning page.
 class ScanResultsList extends StatelessWidget {
-  const ScanResultsList({
-    required this.delegate,
-    required this.progressBar,
-    required this.scanResultsListKey,
-    super.key,
-  });
+  const new({required this.delegate, required this.progressBar, required this.scanResultsListKey, super.key});
 
   /// The delegate that manages the device scan.
   final RideAttendeeScanningDelegate delegate;
@@ -53,40 +48,27 @@ class ScanResultsList extends StatelessWidget {
 
 /// This widget represents a single item for the [ScanResultsList].
 class _ScanResultsListItem extends StatelessWidget {
-  const _ScanResultsListItem({required this.peripheral});
+  const new({required this.peripheral});
 
   final BluetoothPeripheralWithOwners peripheral;
 
   Widget _buildMultipleOwnersListItem(BuildContext context) {
-    IconData icon;
-    Color color;
-
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        icon = Icons.people;
-        color = Colors.orange;
-        break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        icon = CupertinoIcons.person_2_fill;
-        color = CupertinoColors.activeOrange;
-        break;
-    }
+    final (IconData icon, Color color) = switch (defaultTargetPlatform) {
+      .android || .fuchsia || .linux || .windows => (Icons.people, Colors.orange),
+      .iOS || .macOS => (CupertinoIcons.person_2_fill, CupertinoColors.activeOrange),
+    };
 
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const .all(4),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const .only(bottom: 4),
             child: Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 4),
+                  padding: const .only(right: 4),
                   child: Icon(icon, color: color),
                 ),
                 SelectableText(peripheral.device.deviceName, scrollPhysics: const ClampingScrollPhysics()),
@@ -94,10 +76,10 @@ class _ScanResultsListItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: const .only(left: 4),
             child: Text(
               S.of(context).amountOfRidersWithDeviceName(peripheral.owners.length),
-              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 14, color: color),
+              style: TextStyle(fontStyle: .italic, fontSize: 14, color: color),
               maxLines: 2,
             ),
           ),
@@ -107,33 +89,20 @@ class _ScanResultsListItem extends StatelessWidget {
   }
 
   Widget _buildSingleOwnerListItem(BuildContext context) {
-    Color color;
-    IconData icon;
+    final (IconData icon, Color color) = switch (defaultTargetPlatform) {
+      .android || .fuchsia || .linux || .windows => (Icons.person, ColorScheme.of(context).primary),
+      .iOS || .macOS => (CupertinoIcons.person_fill, CupertinoTheme.of(context).primaryColor),
+    };
 
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        color = ColorScheme.of(context).primary;
-        icon = Icons.person;
-        break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        color = CupertinoTheme.of(context).primaryColor;
-        icon = CupertinoIcons.person_fill;
-        break;
-    }
-
-    final textStyle = TextStyle(color: color, fontWeight: FontWeight.bold);
+    final textStyle = TextStyle(color: color, fontWeight: .bold);
     final deviceOwner = peripheral.owners.first;
 
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const .all(4),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: const .only(right: 4),
             child: Icon(icon, color: textStyle.color),
           ),
           RiderNameAndAlias.singleLine(
@@ -149,11 +118,11 @@ class _ScanResultsListItem extends StatelessWidget {
 
   Widget _buildUnknownDeviceListItem() {
     return Padding(
-      padding: const EdgeInsets.all(4),
+      padding: const .all(4),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: const .only(right: 4),
             child: PlatformAwareWidget(
               android: (_) => const Icon(Icons.device_unknown, color: Colors.grey),
               ios: (_) => const Icon(Icons.device_unknown, color: CupertinoColors.systemGrey),
@@ -167,13 +136,10 @@ class _ScanResultsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (peripheral.owners.length) {
-      case 0:
-        return _buildUnknownDeviceListItem();
-      case 1:
-        return _buildSingleOwnerListItem(context);
-      default:
-        return _buildMultipleOwnersListItem(context);
-    }
+    return switch (peripheral.owners.length) {
+      0 => _buildUnknownDeviceListItem(),
+      1 => _buildSingleOwnerListItem(context),
+      _ => _buildMultipleOwnersListItem(context),
+    };
   }
 }

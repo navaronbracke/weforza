@@ -6,7 +6,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents a generic error widget.
 class GenericError extends StatelessWidget {
-  const GenericError({this.actionButton, this.androidIcon, this.iosIcon, this.message, super.key});
+  const new({this.actionButton, this.androidIcon, this.iosIcon, this.message, super.key});
 
   /// The action button that is displayed below the [message].
   final Widget? actionButton;
@@ -35,7 +35,7 @@ class GenericError extends StatelessWidget {
     }
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: <Widget>[
         PlatformAwareIcon(
           androidIcon: androidIcon ?? Icons.warning,
@@ -43,8 +43,8 @@ class GenericError extends StatelessWidget {
           size: MediaQuery.sizeOf(context).shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-          child: Text(effectiveMessage, textAlign: TextAlign.center, softWrap: true),
+          padding: const .fromLTRB(16, 4, 16, 8),
+          child: Text(effectiveMessage, textAlign: .center, softWrap: true),
         ),
         ?actionButton,
       ],
@@ -55,7 +55,7 @@ class GenericError extends StatelessWidget {
 /// This class represents an error label
 /// that uses the default error style for the current platform.
 class GenericErrorLabel extends StatelessWidget {
-  const GenericErrorLabel({
+  const new({
     required this.message,
     this.androidPadding = EdgeInsets.zero,
     this.iosPadding = EdgeInsets.zero,
@@ -80,7 +80,7 @@ class GenericErrorLabel extends StatelessWidget {
           child: Text(message, softWrap: true),
         );
 
-        if (androidPadding != EdgeInsets.zero) {
+        if (androidPadding != .zero) {
           return Padding(padding: androidPadding, child: child);
         }
 
@@ -88,11 +88,11 @@ class GenericErrorLabel extends StatelessWidget {
       },
       ios: (_) {
         final child = DefaultTextStyle(
-          style: const TextStyle(color: CupertinoColors.destructiveRed, fontWeight: FontWeight.w500),
+          style: const TextStyle(color: CupertinoColors.destructiveRed, fontWeight: .w500),
           child: Text(message),
         );
 
-        if (iosPadding != EdgeInsets.zero) {
+        if (iosPadding != .zero) {
           return Padding(padding: iosPadding, child: child);
         }
 
@@ -105,7 +105,7 @@ class GenericErrorLabel extends StatelessWidget {
 /// This class represents a [GenericError] with a default back button
 /// as the [GenericError.actionButton].
 class GenericErrorWithBackButton extends StatelessWidget {
-  const GenericErrorWithBackButton({required this.message, this.androidIcon, this.iosIcon, super.key});
+  const new({required this.message, this.androidIcon, this.iosIcon, super.key});
 
   /// The icon that is used for [TargetPlatform.android].
   ///
@@ -139,13 +139,7 @@ class GenericErrorWithBackButton extends StatelessWidget {
 /// This class represents a generic error widget with an [icon] at the top,
 /// an [errorMessage] below the icon, a [primaryButton] and an optional [secondaryButton].
 class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
-  const GenericErrorWithPrimaryAndSecondaryAction({
-    required this.icon,
-    required this.primaryButton,
-    this.errorMessage,
-    this.secondaryButton,
-    super.key,
-  });
+  const new({required this.icon, required this.primaryButton, this.errorMessage, this.secondaryButton, super.key});
 
   /// The error message to display.
   ///
@@ -164,7 +158,7 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         IconTheme(
           data: IconThemeData(size: MediaQuery.sizeOf(context).shortestSide * .1),
@@ -172,14 +166,14 @@ class GenericErrorWithPrimaryAndSecondaryAction extends StatelessWidget {
         ),
         Flexible(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 20),
-            child: Text(errorMessage ?? S.of(context).genericError, textAlign: TextAlign.center, softWrap: true),
+            padding: const .fromLTRB(8, 8, 8, 20),
+            child: Text(errorMessage ?? S.of(context).genericError, textAlign: .center, softWrap: true),
           ),
         ),
         OverflowBar(
-          alignment: MainAxisAlignment.center,
-          overflowAlignment: OverflowBarAlignment.center,
-          overflowDirection: VerticalDirection.up,
+          alignment: .center,
+          overflowAlignment: .center,
+          overflowDirection: .up,
           overflowSpacing: 16,
           spacing: 8,
           children: [?secondaryButton, primaryButton],

@@ -4,7 +4,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderDevicesListHeader extends StatelessWidget {
-  const RiderDevicesListHeader({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class RiderDevicesListHeader extends StatelessWidget {
       android: (context) {
         return Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(title, style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          child: Text(title, style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: .bold)),
         );
       },
       ios: (context) {

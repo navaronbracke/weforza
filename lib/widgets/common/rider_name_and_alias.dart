@@ -64,8 +64,8 @@ class RiderNameAndAlias extends StatelessWidget {
 
     if (_isTwoLine) {
       return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
@@ -79,7 +79,7 @@ class RiderNameAndAlias extends StatelessWidget {
                   if (alias case final alias? when alias.isNotEmpty)
                     TextSpan(
                       text: " '$alias' ",
-                      style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
+                      style: effectiveFirstLineStyle.copyWith(fontStyle: .italic),
                     ),
                 ],
               ),
@@ -100,7 +100,7 @@ class RiderNameAndAlias extends StatelessWidget {
           children: [
             TextSpan(
               text: " '$alias' ",
-              style: effectiveFirstLineStyle.copyWith(fontStyle: FontStyle.italic),
+              style: effectiveFirstLineStyle.copyWith(fontStyle: .italic),
             ),
             TextSpan(text: lastName, style: effectiveFirstLineStyle),
           ],

@@ -29,7 +29,7 @@ typedef DatePickerHeaderButtonBuilder = Widget Function(
 /// This widget represents a date picker.
 class DatePicker extends StatelessWidget {
   /// The default constructor.
-  const DatePicker({
+  const new({
     required this.computeDaySize,
     required this.dayBuilder,
     required this.delegate,
@@ -170,12 +170,8 @@ class DatePicker extends StatelessWidget {
             child: _DatePickerHeader(
               style: monthStyle,
               monthListenable: delegate.monthListenable,
-              backButton: headerButtonBuilder(delegate.goBackOneMonth, minInteractiveDimension, AxisDirection.left),
-              forwardButton: headerButtonBuilder(
-                delegate.goForwardOneMonth,
-                minInteractiveDimension,
-                AxisDirection.right,
-              ),
+              backButton: headerButtonBuilder(delegate.goBackOneMonth, minInteractiveDimension, .left),
+              forwardButton: headerButtonBuilder(delegate.goForwardOneMonth, minInteractiveDimension, .right),
             ),
           ),
         );
@@ -224,7 +220,7 @@ class DatePicker extends StatelessWidget {
 /// This class represents the body for a [DatePicker].
 /// This body is placed under the [_DatePickerHeader].
 class _DatePickerBody extends StatelessWidget {
-  const _DatePickerBody({
+  const new({
     required this.dayBuilder,
     required this.dayItemSize,
     required this.delegate,
@@ -267,7 +263,7 @@ class _DatePickerBody extends StatelessWidget {
       }
     }
 
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: children);
+    return Row(mainAxisAlignment: .center, children: children);
   }
 
   @override
@@ -309,12 +305,7 @@ class _DatePickerBody extends StatelessWidget {
 
 /// This class represents the month header for a [DatePicker].
 class _DatePickerHeader extends StatelessWidget {
-  const _DatePickerHeader({
-    required this.backButton,
-    required this.forwardButton,
-    required this.monthListenable,
-    this.style,
-  });
+  const new({required this.backButton, required this.forwardButton, required this.monthListenable, this.style});
 
   /// The button that navigates back one month when tapped.
   final Widget backButton;
@@ -353,7 +344,7 @@ class _DatePickerHeader extends StatelessWidget {
 
 /// This widget represents the days of a single month in a [DatePicker].
 class _DatePickerMonth extends StatelessWidget {
-  const _DatePickerMonth({required super.key, required this.days, required this.weekSpacing});
+  const new({required super.key, required this.days, required this.weekSpacing});
 
   /// The days for this month.
   final List<Widget> days;
@@ -377,7 +368,7 @@ class _DatePickerMonth extends StatelessWidget {
         children.add(days.removeAt(0));
       }
 
-      Widget week = Row(mainAxisAlignment: MainAxisAlignment.center, children: children);
+      Widget week = Row(mainAxisAlignment: .center, children: children);
 
       // Only the last week does not get bottom spacing.
       if (weekSpacing > 0 && weekCounter < 6) {
@@ -396,6 +387,6 @@ class _DatePickerMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: _buildCalendarRows());
+    return Column(mainAxisSize: .min, children: _buildCalendarRows());
   }
 }

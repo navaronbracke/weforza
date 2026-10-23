@@ -15,7 +15,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class ImportRidersPage extends ConsumerStatefulWidget {
-  const ImportRidersPage({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<ImportRidersPage> createState() => _ImportRidersPageState();
@@ -124,7 +124,7 @@ class _ImportRidersPageState extends ConsumerState<ImportRidersPage> with Single
 }
 
 class _ImportRidersButton extends StatelessWidget {
-  const _ImportRidersButton({required this.label, required this.onPressed, this.errorMessage});
+  const new({required this.label, required this.onPressed, this.errorMessage});
 
   /// The error message that is displayed below the button.
   final String? errorMessage;
@@ -139,11 +139,11 @@ class _ImportRidersButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: (context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: .center,
+        mainAxisSize: .min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const .only(bottom: 8),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.insert_drive_file_outlined),
               onPressed: onPressed,
@@ -165,10 +165,10 @@ class _ImportRidersButton extends StatelessWidget {
         final Widget button = CupertinoButton.filled(
           onPressed: onPressed,
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               const Padding(
-                padding: EdgeInsets.only(right: 8),
+                padding: .only(right: 8),
                 child: Icon(CupertinoIcons.arrow_down_doc, color: CupertinoColors.white),
               ),
               Text(label, style: const TextStyle(color: CupertinoColors.white)),
@@ -177,14 +177,14 @@ class _ImportRidersButton extends StatelessWidget {
         );
 
         return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             CupertinoFormRow(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const .symmetric(horizontal: 20),
               error: errorMessage == null
                   ? null
                   : Center(
-                      child: Padding(padding: const EdgeInsets.only(top: 8), child: Text(errorMessage!)),
+                      child: Padding(padding: const .only(top: 8), child: Text(errorMessage!)),
                     ),
               child: Center(child: button),
             ),

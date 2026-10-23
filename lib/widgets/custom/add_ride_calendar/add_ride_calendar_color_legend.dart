@@ -5,31 +5,25 @@ import 'package:weforza/widgets/theme.dart' show RideCalendarTheme;
 
 /// This widget represents a color legend for AddRidePage.
 class AddRideCalendarColorLegend extends StatelessWidget {
-  const AddRideCalendarColorLegend({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
     const rowHeight = _AddRideCalendarColorLegendItem.labelMaxHeight;
 
     return const Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         SizedBox(
           height: rowHeight,
           child: Row(
             children: [
               Expanded(
-                child: _AddRideCalendarColorLegendItem(
-                  dotDirection: AxisDirection.right,
-                  state: RideCalendarItemState.currentSelection,
-                ),
+                child: _AddRideCalendarColorLegendItem(dotDirection: .right, state: .currentSelection),
               ),
               SizedBox(width: 16),
               Expanded(
-                child: _AddRideCalendarColorLegendItem(
-                  dotDirection: AxisDirection.left,
-                  state: RideCalendarItemState.futureRide,
-                ),
+                child: _AddRideCalendarColorLegendItem(dotDirection: .left, state: .futureRide),
               ),
             ],
           ),
@@ -40,17 +34,11 @@ class AddRideCalendarColorLegend extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: _AddRideCalendarColorLegendItem(
-                  dotDirection: AxisDirection.right,
-                  state: RideCalendarItemState.pastRide,
-                ),
+                child: _AddRideCalendarColorLegendItem(dotDirection: .right, state: .pastRide),
               ),
               SizedBox(width: 16),
               Expanded(
-                child: _AddRideCalendarColorLegendItem(
-                  dotDirection: AxisDirection.left,
-                  state: RideCalendarItemState.pastDay,
-                ),
+                child: _AddRideCalendarColorLegendItem(dotDirection: .left, state: .pastDay),
               ),
             ],
           ),
@@ -61,9 +49,9 @@ class AddRideCalendarColorLegend extends StatelessWidget {
 }
 
 class _AddRideCalendarColorLegendItem extends StatelessWidget {
-  const _AddRideCalendarColorLegendItem({required this.dotDirection, required this.state})
+  const new({required this.dotDirection, required this.state})
     : assert(
-        dotDirection == AxisDirection.left || dotDirection == AxisDirection.right,
+        dotDirection == .left || dotDirection == .right,
         'The dot direction of a legend item should be AxisDirection.left or AxisDirection.right',
       );
 
@@ -94,16 +82,12 @@ class _AddRideCalendarColorLegendItem extends StatelessWidget {
   String _getLabel(BuildContext context) {
     final translator = S.of(context);
 
-    switch (state) {
-      case RideCalendarItemState.currentSelection:
-        return translator.currentSelection;
-      case RideCalendarItemState.futureRide:
-        return translator.futureRide;
-      case RideCalendarItemState.pastDay:
-        return translator.pastDayNoRide;
-      case RideCalendarItemState.pastRide:
-        return translator.pastDayWithRide;
-    }
+    return switch (state) {
+      .currentSelection => translator.currentSelection,
+      .futureRide => translator.futureRide,
+      .pastDay => translator.pastDayNoRide,
+      .pastRide => translator.pastDayWithRide,
+    };
   }
 
   @override
@@ -113,25 +97,25 @@ class _AddRideCalendarColorLegendItem extends StatelessWidget {
     final dot = Container(
       height: dotSize,
       width: dotSize,
-      decoration: decoration?.copyWith(borderRadius: const BorderRadius.all(Radius.circular(10))),
+      decoration: decoration?.copyWith(borderRadius: const .all(.circular(10))),
     );
 
     return Row(
       children: [
-        if (dotDirection == AxisDirection.left) dot,
+        if (dotDirection == .left) dot,
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: const .symmetric(horizontal: 6),
             child: Text(
               _getLabel(context),
               softWrap: true,
               style: labelStyle,
-              textAlign: dotDirection == AxisDirection.right ? TextAlign.right : TextAlign.left,
+              textAlign: dotDirection == .right ? .right : .left,
               maxLines: labelMaxLines,
             ),
           ),
         ),
-        if (dotDirection == AxisDirection.right) dot,
+        if (dotDirection == .right) dot,
       ],
     );
   }

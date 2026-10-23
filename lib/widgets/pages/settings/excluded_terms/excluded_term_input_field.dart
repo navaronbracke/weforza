@@ -6,7 +6,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the base input field for an excluded term.
 class ExcludedTermInputField extends StatelessWidget {
-  const ExcludedTermInputField({
+  const new({
     required this.controller,
     required this.focusNode,
     required this.maxLength,
@@ -143,8 +143,8 @@ class ExcludedTermInputField extends StatelessWidget {
   Widget _wrapWithDecoration(Widget child, {Widget? contextMenu, BoxDecoration? decoration, Widget? divider}) {
     if (contextMenu != null || divider != null) {
       child = Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: .min,
+        crossAxisAlignment: .stretch,
         children: <Widget>[?divider, child, ?contextMenu],
       );
     }

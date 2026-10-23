@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:file/file.dart' as fs;
+import 'package:weforza/database/devices.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
-import 'package:weforza/model/device/device.dart';
-import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/model/rider/serializable_rider.dart';
+import 'package:weforza/model/export/exportable_rider.dart';
 
 /// This class represents an [ImportRidersFileReader]
 /// that handles the CSV format.
@@ -12,7 +11,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   /// The default constructor.
   ///
   /// The cell [delimiter] defaults to a comma.
-  factory ImportRidersCsvReader({String delimiter = ','}) {
+  factory({String delimiter = ','}) {
     // A single cell can contain unicode letters, dashes and hyphens.
     const cellMatcher = r'([\p{L}_-])+';
 
@@ -35,18 +34,7 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   }
 
   /// The private constructor.
-  const ImportRidersCsvReader._({required this.headerRegex});
-
-  /// The minimum expected amount of columns for a valid line of data.
-  ///
-  /// A line is only valid if it contains the following columns:
-  /// if and only if it has the following columns:
-  /// Column 1: First Name
-  /// Column 2: Last Name
-  /// Column 3: Alias (This cell can be empty)
-  /// Column 4: Active
-  /// Column 5: Last Updated On
-  static const requiredDataColumns = 5;
+  new _({required this.headerRegex});
 
   /// The minimum expected amount of columns for a valid header line.
   ///
@@ -63,68 +51,47 @@ class ImportRidersCsvReader implements ImportRidersFileReader<String> {
   final RegExp headerRegex;
 
   @override
-  Future<void> processChunk(String chunk, List<SerializableRider> serializedRiders) async {
+  Future<void> processChunk(String chunk, List<ExportableRider> exportedRiders) async {
     final List<String> cells = chunk.split(',');
 
-    // Skip this line if it does not have enough cells.
-    if (cells.length < requiredDataColumns) {
-      return;
-    }
-
-    // The cells follow the specific order:
+    // The cells follow the specific order
+    //
     // `firstName,lastName,alias,active,lastUpdatedOn,device1,...,deviceN`
-    final firstName = cells[0];
-    final lastName = cells[1];
-    final alias = cells[2];
+    if (cells
+        case [
+          final firstName,
+          final lastName,
+          final alias,
+          final activeAsString,
+          final lastUpdatedOnAsString,
+          ...final devicesAsStrings,
+        ]
+        when ImportRidersFileReader.nameIsValid(firstName: firstName, lastName: lastName, alias: alias)) {
+      final DateTime lastUpdatedOn;
 
-    final regex = Rider.personNameAndAliasRegex;
-
-    // If the first name, last name or alias is invalid, skip this chunk.
-    if (!regex.hasMatch(firstName) || !regex.hasMatch(lastName) || alias.isNotEmpty && !regex.hasMatch(alias)) {
-      return;
-    }
-
-    bool active;
-
-    switch (cells[3].toLowerCase()) {
-      case '0':
-      case 'false':
-        active = false;
-        break;
-      case '1':
-      case 'true':
-        active = true;
-        break;
-      default:
+      try {
+        lastUpdatedOn = DateTime.parse(lastUpdatedOnAsString);
+      } on FormatException {
         return; // Skip this chunk if it is invalid.
+      }
+
+      final bool isActive = ImportRidersFileReader.parseActiveValue(activeAsString);
+      final Set<String> devices = {
+        for (final device in devicesAsStrings)
+          if (Devices.deviceNameRegex.hasMatch(device)) device,
+      };
+
+      exportedRiders.add(
+        ExportableRider(
+          alias: alias,
+          devices: devices,
+          firstName: firstName,
+          isActive: isActive,
+          lastName: lastName,
+          lastUpdated: lastUpdatedOn,
+        ),
+      );
     }
-
-    DateTime lastUpdatedOn;
-
-    try {
-      lastUpdatedOn = DateTime.parse(cells[4]);
-    } on FormatException {
-      return; // Skip this chunk if it is invalid.
-    }
-
-    final Set<String> devices = {};
-
-    // Any remaining cells after the required cells are parsed as device names.
-    // Any invalid device names are skipped.
-    if (cells.length > requiredDataColumns) {
-      devices.addAll(cells.sublist(requiredDataColumns).where(Device.deviceNameRegex.hasMatch));
-    }
-
-    serializedRiders.add(
-      SerializableRider(
-        active: active,
-        alias: alias,
-        devices: devices,
-        firstName: firstName,
-        lastName: lastName,
-        lastUpdated: lastUpdatedOn,
-      ),
-    );
   }
 
   @override

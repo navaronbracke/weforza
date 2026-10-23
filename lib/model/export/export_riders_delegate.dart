@@ -7,7 +7,7 @@ import 'package:weforza/repository/serialize_riders_repository.dart';
 
 /// This class represents the export options for a [ExportRidersDelegate].
 class ExportRidersOptions {
-  const ExportRidersOptions({required this.csvHeader});
+  const new({required this.csvHeader});
 
   /// The header that should be written to the file,
   /// if the export format is [ExportFileFormat.csv].
@@ -16,21 +16,17 @@ class ExportRidersOptions {
 
 /// This class represents the delegate that handles exporting riders.
 class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
-  ExportRidersDelegate({
-    required super.fileStorageDelegate,
-    required super.fileSystem,
-    required this.serializeRidersRepository,
-  });
+  new({required super.fileStorageDelegate, required super.fileSystem, required this.serializeRidersRepository});
 
   /// The repository that handles exporting the riders.
   final SerializeRidersRepository serializeRidersRepository;
 
   @override
   Future<void> writeToFile(File file, ExportFileFormat fileFormat, ExportRidersOptions options) async {
-    final riders = await serializeRidersRepository.getSerializableRiders();
+    final riders = await serializeRidersRepository.getExportableRiders();
 
     switch (fileFormat) {
-      case ExportFileFormat.csv:
+      case .csv:
         final buffer = StringBuffer();
 
         buffer.writeln(options.csvHeader);
@@ -40,12 +36,12 @@ class ExportRidersDelegate extends ExportDelegate<ExportRidersOptions> {
         }
 
         await file.writeAsString(buffer.toString());
-        break;
-      case ExportFileFormat.json:
-        final data = <String, Object?>{'riders': riders.map((r) => r.toJson()).toList()};
+      case .json:
+        final data = <String, Object?>{
+          'riders': [for (final rider in riders) rider.toJson()],
+        };
 
         await file.writeAsString(jsonEncode(data));
-        break;
     }
   }
 }

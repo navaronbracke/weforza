@@ -1,4 +1,4 @@
-import 'package:weforza/model/device/device.dart';
+import 'package:weforza/database/devices.dart';
 
 mixin DeviceValidator {
   String? validateDeviceName({
@@ -16,14 +16,10 @@ mixin DeviceValidator {
       return isBlankMessage;
     }
 
-    if (Device.nameMaxLength < value.length) {
+    if (Devices.nameLength.max < value.length) {
       return maxLengthMessage;
     }
 
-    if (value.contains(',')) {
-      return illegalCharachterMessage;
-    }
-
-    return null;
+    return value.contains(',') ? illegalCharachterMessage : null;
   }
 }

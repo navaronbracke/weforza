@@ -50,6 +50,7 @@ linter:
     unawaited_futures: true
     unnecessary_lambdas: true
     unnecessary_to_list_in_spreads: true
+    unnecessary_type_name_in_constructor: true
     use_colored_box: true # Flutter rule to avoid Container with only a color.
     use_decorated_box: true # Flutter rule to avoid Container with only a BoxDecoration.
     use_enums: true

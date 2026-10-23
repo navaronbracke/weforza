@@ -4,14 +4,16 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 
 /// This class represents the repository that manages the rides.
 class RideRepository {
-  const RideRepository(this._database);
+  const new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;
 
-  /// Add the given [rides].
-  Future<void> addRides(List<Ride> rides) {
-    return _database.batch((batch) => batch.insertAll(_database.rides, rides));
+  /// Add [Ride]s for the given [dates].
+  Future<void> addRides(Iterable<DateTime> dates) {
+    return _database.batch(
+      (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion(date: Value(date))]),
+    );
   }
 
   /// Delete the given [ride].

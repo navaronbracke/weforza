@@ -45,56 +45,8 @@ class SerializeRidersRepository {
   Future<void> saveSerializableRiders(Iterable<ExportableRider> exportedRiders) async {
     final (riderInserts, riderUpdates) = await _computeRiderImports(exportedRiders);
 
-    final List<DevicesCompanion> newDevices = [];
-    final List<RidersCompanion> updatedRiders = [];
-
-    // Insert the new riders, record their ids and create pending inserts for their devices.
-    for (final rider in riderInserts) {
-      final int riderId = await _database
-          .into(_database.riders)
-          .insert(
-            RidersCompanion(
-              alias: Value(rider.alias),
-              firstName: Value(rider.firstName),
-              lastName: Value(rider.lastName),
-              isActive: Value(rider.isActive),
-            ),
-          );
-
-      if (rider.devices.isEmpty) {
-        continue;
-      }
-
-      newDevices.addAll([
-        for (final device in rider.devices)
-          DevicesCompanion(ownerId: Value(riderId), deviceType: const Value(.unknown), name: Value(device)),
-      ]);
-    }
-
-    // For each of the updates riders, queue their own update and queue their new devices for insertion.
-    for (final rider in riderUpdates.entries) {
-      if (rider.value.isActive case final bool isActive) {
-        updatedRiders.add(RidersCompanion(id: Value(rider.key), isActive: Value(isActive)));
-      }
-
-      if (rider.value.newDevices.isEmpty) {
-        continue;
-      }
-
-      newDevices.addAll([
-        for (final device in rider.value.newDevices)
-          DevicesCompanion(ownerId: Value(rider.key), deviceType: const Value(.unknown), name: Value(device)),
-      ]);
-    }
-
-    await _database.batch((batch) {
-      for (final rider in updatedRiders) {
-        batch.update(_database.riders, rider, where: (t) => t.id.equals(rider.id.value));
-      }
-
-      if (newDevices.isNotEmpty) {
-        batch.insertAll(_database.devices, newDevices);
-      }
+    return _database.transaction(() async {
+      await _importRidersWithDevices(riderInserts, riderUpdates);
     });
   }
 
@@ -150,5 +102,66 @@ class SerializeRidersRepository {
     }
 
     return (riderInserts, riderUpdates);
+  }
+
+  /// Import the given riders and their associated devices into the database.
+  ///
+  /// New records are created for new riders and new devices.
+  /// Existing riders are updated.
+  Future<void> _importRidersWithDevices(
+    Iterable<ExportableRider> riderInserts,
+    Map<int, ({bool? isActive, Set<String> newDevices})> riderUpdates,
+  ) async {
+    final List<DevicesCompanion> newDevices = [];
+    final List<RidersCompanion> updatedRiders = [];
+
+    // Insert the new riders, record their ids and create pending inserts for their devices.
+    for (final rider in riderInserts) {
+      final int riderId = await _database
+          .into(_database.riders)
+          .insert(
+            RidersCompanion(
+              alias: Value(rider.alias),
+              firstName: Value(rider.firstName),
+              lastName: Value(rider.lastName),
+              isActive: Value(rider.isActive),
+            ),
+          );
+
+      if (rider.devices.isEmpty) {
+        continue;
+      }
+
+      newDevices.addAll([
+        for (final device in rider.devices)
+          DevicesCompanion(ownerId: Value(riderId), deviceType: const Value(.unknown), name: Value(device)),
+      ]);
+    }
+
+    // For each of the updated riders, queue their own update and queue their new devices for insertion.
+    for (final rider in riderUpdates.entries) {
+      if (rider.value.isActive case final bool isActive) {
+        updatedRiders.add(RidersCompanion(id: Value(rider.key), isActive: Value(isActive)));
+      }
+
+      if (rider.value.newDevices.isEmpty) {
+        continue;
+      }
+
+      newDevices.addAll([
+        for (final device in rider.value.newDevices)
+          DevicesCompanion(ownerId: Value(rider.key), deviceType: const Value(.unknown), name: Value(device)),
+      ]);
+    }
+
+    await _database.batch((batch) {
+      for (final rider in updatedRiders) {
+        batch.update(_database.riders, rider, where: (t) => t.id.equals(rider.id.value));
+      }
+
+      if (newDevices.isNotEmpty) {
+        batch.insertAll(_database.devices, newDevices);
+      }
+    });
   }
 }

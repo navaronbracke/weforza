@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/rider_attending_count.dart';
 import 'package:weforza/widgets/dialogs/delete_rider_dialog.dart';
@@ -16,7 +16,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the detail page for a [Rider].
 class RiderDetailsPage extends StatelessWidget {
-  const RiderDetailsPage({super.key});
+  const new({super.key});
 
   void _goToEditRiderPage(BuildContext context, Rider rider) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => RiderForm(rider: rider)));
@@ -83,10 +83,10 @@ class RiderDetailsPage extends StatelessWidget {
         middle: Row(
           children: <Widget>[
             Expanded(
-              child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.details)),
+              child: Padding(padding: const .only(left: 8), child: Text(translator.details)),
             ),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: <Widget>[
                 Consumer(
                   builder: (context, ref, child) {

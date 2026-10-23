@@ -14,12 +14,7 @@ import 'package:weforza/widgets/theme.dart';
 /// This widget represents a profile image picker.
 class ProfileImagePicker extends StatelessWidget {
   /// The default constructor.
-  const ProfileImagePicker({
-    required this.delegate,
-    required this.imagePreviewSize,
-    required this.pickingIndicator,
-    super.key,
-  });
+  const new({required this.delegate, required this.imagePreviewSize, required this.pickingIndicator, super.key});
 
   /// The delegate for the picker.
   final ProfileImagePickerDelegate delegate;
@@ -38,11 +33,11 @@ class ProfileImagePicker extends StatelessWidget {
   }) {
     return Row(
       children: [
-        Padding(padding: const EdgeInsets.only(right: 8), child: imagePreview),
+        Padding(padding: const .only(right: 8), child: imagePreview),
         Expanded(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: .min,
+            mainAxisAlignment: .center,
             children: [openGalleryButton, openCameraButton, ?deleteButton],
           ),
         ),
@@ -131,7 +126,7 @@ class ProfileImagePicker extends StatelessWidget {
 }
 
 class _ProfileImagePickerButton extends StatelessWidget {
-  const _ProfileImagePickerButton({required this.label, required this.onPressed, this.isDestructive = false});
+  const new({required this.label, required this.onPressed, this.isDestructive = false});
 
   /// Whether this button performs a destructive action.
   final bool isDestructive;
@@ -158,8 +153,8 @@ class _ProfileImagePickerButton extends StatelessWidget {
         );
       },
       ios: (_) => CupertinoButton(
-        padding: EdgeInsets.zero,
-        borderRadius: BorderRadius.zero,
+        padding: .zero,
+        borderRadius: .zero,
         onPressed: onPressed,
         child: Text(label, style: isDestructive ? const TextStyle(color: CupertinoColors.destructiveRed) : null),
       ),

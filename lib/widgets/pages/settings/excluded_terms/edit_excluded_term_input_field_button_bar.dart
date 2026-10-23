@@ -13,7 +13,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// a confirm button to commit the pending edit,
 /// and an undo button to revert the pending edit.
 class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
-  const EditExcludedTermInputFieldButtonBar({
+  const new({
     required this.textEditingValueListenable,
     required this.onCommitValidTerm,
     required this.onDeletePressed,
@@ -120,10 +120,10 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
         );
 
         return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: .center,
           children: [
             undoButton,
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: confirmButton),
+            Padding(padding: const .symmetric(horizontal: 16), child: confirmButton),
             child!,
           ],
         );

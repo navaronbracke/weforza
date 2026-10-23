@@ -24,9 +24,9 @@ class RiderRepository {
   /// Delete the given [rider].
   Future<void> deleteRider(Rider rider) => _database.riders.delete().delete(rider);
 
-  /// Get the amount of rides that a [rider] has attended.
-  Future<int> getAttendingCount(Rider rider) async {
-    final query = _database.rideAttendees.count(where: (t) => t.riderId.equals(rider.id));
+  /// Get the amount of rides that a [Rider] with the given [id] has attended.
+  Future<int> getAttendingCount(int id) async {
+    final query = _database.rideAttendees.count(where: (t) => t.riderId.equals(id));
 
     final result = await query.getSingleOrNull();
 

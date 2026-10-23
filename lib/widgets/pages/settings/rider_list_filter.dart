@@ -8,7 +8,7 @@ import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderListFilter extends StatelessWidget {
-  const RiderListFilter({required this.delegate, super.key});
+  const new({required this.delegate, super.key});
 
   /// The delegate that manages the value.
   final RiderFilterDelegate delegate;
@@ -71,7 +71,7 @@ class RiderListFilter extends StatelessWidget {
 }
 
 class _CupertinoRiderFilter extends StatefulWidget {
-  const _CupertinoRiderFilter({required this.groupValue, required this.onValueChanged});
+  const new({required this.groupValue, required this.onValueChanged});
 
   final RiderFilterOption groupValue;
 
@@ -88,7 +88,7 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
   LinkedHashMap<RiderFilterOption, String> _labels = LinkedHashMap();
 
   /// The text painter that will measure the width of the widest label.
-  final TextPainter _textPainter = TextPainter(maxLines: 1, textDirection: TextDirection.ltr);
+  final TextPainter _textPainter = TextPainter(maxLines: 1, textDirection: .ltr);
 
   /// The width of the widest label.
   double _widestLabelWidth = 0.0;
@@ -104,7 +104,7 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
       _textPainter.text = TextSpan(
         text: label,
         // The selected label has 500 font weight, which adds to the size.
-        style: style.copyWith(fontWeight: FontWeight.w500),
+        style: style.copyWith(fontWeight: .w500),
       );
       _textPainter.layout();
 
@@ -122,9 +122,9 @@ class _CupertinoRiderFilterState extends State<_CupertinoRiderFilter> {
     final translator = S.of(context);
 
     _labels = LinkedHashMap.from(<RiderFilterOption, String>{
-      RiderFilterOption.all: translator.all,
-      RiderFilterOption.active: translator.active,
-      RiderFilterOption.inactive: translator.inactive,
+      .all: translator.all,
+      .active: translator.active,
+      .inactive: translator.inactive,
     });
 
     _computeWidestLabelWidth(DefaultTextStyle.of(context).style);

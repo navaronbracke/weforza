@@ -12,12 +12,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// a button to save the current scan results
 /// and a toggle for the visibility of the scanned results.
 class ManualSelectionBottomBar extends StatelessWidget {
-  const ManualSelectionBottomBar({
-    required this.delegate,
-    required this.saveButton,
-    required this.showScannedResultsToggle,
-    super.key,
-  });
+  const new({required this.delegate, required this.saveButton, required this.showScannedResultsToggle, super.key});
 
   /// The delegate that mannages the scan results.
   final RideAttendeeScanningDelegate delegate;
@@ -32,15 +27,9 @@ class ManualSelectionBottomBar extends StatelessWidget {
     final attendeeCounter = _buildAttendeeCounter(Icon(Icons.people, color: ColorScheme.of(context).primary));
 
     final scannedResultsToggle = Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
-        Text(
-          S.of(context).scannedRiders,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          softWrap: true,
-          textAlign: TextAlign.right,
-        ),
+        Text(S.of(context).scannedRiders, maxLines: 2, overflow: .ellipsis, softWrap: true, textAlign: .right),
         showScannedResultsToggle,
       ],
     );
@@ -60,10 +49,10 @@ class ManualSelectionBottomBar extends StatelessWidget {
         height: 104,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             saveButton,
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
+            Row(mainAxisAlignment: .spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
           ],
         ),
       );
@@ -74,9 +63,9 @@ class ManualSelectionBottomBar extends StatelessWidget {
 
   Widget _buildAttendeeCounter(Widget icon, {TextStyle? textStyle}) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
-        Padding(padding: const EdgeInsets.only(right: 4), child: icon),
+        Padding(padding: const .only(right: 4), child: icon),
         ValueListenableBuilder<Set<ScannedRideAttendee>>(
           valueListenable: delegate.attendeesListenable,
           builder: (context, value, _) => switch (value.length) {
@@ -103,15 +92,15 @@ class ManualSelectionBottomBar extends StatelessWidget {
     );
 
     final scannedResultsToggle = Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         Text(
           S.of(context).scannedRiders,
           maxLines: 2,
-          overflow: TextOverflow.ellipsis,
+          overflow: .ellipsis,
           softWrap: true,
           style: labelTextStyle,
-          textAlign: TextAlign.right,
+          textAlign: .right,
         ),
         showScannedResultsToggle,
       ],
@@ -127,16 +116,16 @@ class ManualSelectionBottomBar extends StatelessWidget {
 
     if (constraints.biggest.width < 400) {
       child = Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           saveButton,
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
+          Row(mainAxisAlignment: .spaceBetween, children: [attendeeCounter, scannedResultsToggle]),
         ],
       );
     }
 
     return CupertinoBottomBar(
-      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), child: child),
+      child: Padding(padding: const .symmetric(horizontal: 8, vertical: 4), child: child),
     );
   }
 

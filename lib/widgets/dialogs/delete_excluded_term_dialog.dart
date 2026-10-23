@@ -5,7 +5,7 @@ import 'package:weforza/widgets/dialogs/dialogs.dart';
 /// This widget represents the dialog
 /// for confirming the deletion of an excluded term.
 class DeleteExcludedTermDialog extends StatelessWidget {
-  const DeleteExcludedTermDialog({required this.term, super.key});
+  const new({required this.term, super.key});
 
   /// The term that should be deleted.
   final String term;
@@ -33,7 +33,7 @@ class DeleteExcludedTermDialog extends StatelessWidget {
           children: [
             TextSpan(
               text: term,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: .bold),
             ),
             TextSpan(text: description.last),
           ],

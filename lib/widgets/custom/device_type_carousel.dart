@@ -7,7 +7,7 @@ import 'package:weforza/widgets/common/device_icon.dart';
 
 /// This widget represents a carousel for selecting a device type.
 class DeviceTypeCarousel extends StatelessWidget {
-  const DeviceTypeCarousel({required this.controller, required this.height, super.key});
+  const new({required this.controller, required this.height, super.key});
 
   /// The controller that manages the currently selected device type index.
   final PageController controller;
@@ -62,7 +62,7 @@ class DeviceTypeCarousel extends StatelessWidget {
               }
 
               return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   for (int i = 0; i < DeviceType.values.length; i++) _DeviceTypeCarouselDot(selected: i == page),
                 ],
@@ -76,7 +76,7 @@ class DeviceTypeCarousel extends StatelessWidget {
 }
 
 class _DeviceTypeCarouselDot extends StatelessWidget {
-  const _DeviceTypeCarouselDot({required this.selected});
+  const new({required this.selected});
 
   final bool selected;
 
@@ -85,38 +85,31 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
     Color color;
 
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
+      case .android:
+      case .fuchsia:
+      case .linux:
+      case .windows:
         final theme = Theme.of(context);
 
-        Color disabledColor;
-
-        switch (theme.brightness) {
-          case Brightness.dark:
-            disabledColor = theme.disabledColor.withValues(alpha: 0.3);
-            break;
-          case Brightness.light:
-            disabledColor = theme.disabledColor.withValues(alpha: 0.2);
-            break;
-        }
+        final disabledColor = switch (theme.brightness) {
+          .dark => theme.disabledColor.withValues(alpha: 0.3),
+          .light => theme.disabledColor.withValues(alpha: 0.2),
+        };
 
         color = selected ? ColorScheme.of(context).primary : disabledColor;
         break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        final cupertinoTheme = CupertinoTheme.of(context);
-        color = selected ? cupertinoTheme.primaryColor : CupertinoColors.systemGrey4;
+      case .iOS:
+      case .macOS:
+        color = selected ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey4;
         break;
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const .symmetric(horizontal: 4),
       child: Container(
         width: 12,
         height: 12,
-        decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(6)), color: color),
+        decoration: BoxDecoration(borderRadius: const .all(.circular(6)), color: color),
       ),
     );
   }

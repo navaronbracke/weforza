@@ -6,14 +6,14 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty manual selection list.
 class ManualSelectionListEmpty extends StatelessWidget {
-  const ManualSelectionListEmpty({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: <Widget>[
         PlatformAwareIcon(
           androidIcon: Icons.people,
@@ -21,8 +21,8 @@ class ManualSelectionListEmpty extends StatelessWidget {
           size: MediaQuery.sizeOf(context).shortestSide * .1,
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-          child: Text(translator.noActiveRidersToChoose, textAlign: TextAlign.center),
+          padding: const .fromLTRB(16, 4, 16, 20),
+          child: Text(translator.noActiveRidersToChoose, textAlign: .center),
         ),
         PlatformAwareWidget(
           android: (context) {

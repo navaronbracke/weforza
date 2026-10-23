@@ -16,7 +16,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This class represents the page that allows adding new rides.
 class AddRidePage extends ConsumerStatefulWidget {
-  const AddRidePage({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<AddRidePage> createState() => _AddRidePageState();
@@ -38,7 +38,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
         future: _delegate.initializeFuture,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
-            case ConnectionState.done:
+            case .done:
               if (snapshot.hasError) {
                 return Center(
                   child: GenericErrorWithBackButton(message: S.of(context).addRideCalendarGenericErrorMessage),
@@ -46,10 +46,10 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
               }
 
               return Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   AddRideCalendar(delegate: _delegate),
-                  const Padding(padding: EdgeInsets.only(top: 4), child: AddRideCalendarColorLegend()),
+                  const Padding(padding: .only(top: 4), child: AddRideCalendarColorLegend()),
                   _AddRideSubmitButton(
                     onPressed: () => onSubmitPressed(context),
                     selectionListenable: _delegate.selectionListenable,
@@ -57,9 +57,9 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
                   ),
                 ],
               );
-            case ConnectionState.active:
-            case ConnectionState.none:
-            case ConnectionState.waiting:
+            case .active:
+            case .none:
+            case .waiting:
               return const Center(child: PlatformAwareLoadingIndicator());
           }
         },
@@ -128,11 +128,7 @@ class _AddRidePageState extends ConsumerState<AddRidePage> {
 }
 
 class _AddRideSubmitButton extends StatelessWidget {
-  const _AddRideSubmitButton({
-    required this.onPressed,
-    required this.selectionListenable,
-    required this.stateListenable,
-  });
+  const new({required this.onPressed, required this.selectionListenable, required this.stateListenable});
 
   /// The onPressed handler for the button.
   final void Function() onPressed;
@@ -175,10 +171,10 @@ class _AddRideSubmitButton extends StatelessWidget {
     }
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 4),
+          padding: const .only(top: 12, bottom: 4),
           child: GenericErrorLabel(message: errorMessage),
         ),
         button,

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_attending_count_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
@@ -10,18 +10,18 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// The provider for the attending count of a single rider list item
 /// is an `autoDispose` provider as there might be many items in the list,
 /// that get built nd destroyed.
-final _riderAttendingCount = FutureProvider.autoDispose.family<int, String>((ref, uuid) {
-  final repository = ref.read(riderRepositoryProvider);
+final _riderAttendingCount = FutureProvider.autoDispose.family<int, int>((ref, id) {
+  final repository = ref.watch(riderRepositoryProvider);
 
-  return repository.getAttendingCount(uuid);
+  return repository.getAttendingCount(id);
 });
 
 /// This widget represents the base attending count widget
 /// that is used by [RiderListItemAttendingCount] and [SelectedRiderAttendingCount].
 class _RiderAttendingCount extends StatelessWidget {
-  const _RiderAttendingCount(this.value, {required this.labelAlignment})
+  const new(this.value, {required this.labelAlignment})
     : assert(
-        labelAlignment == AxisDirection.left || labelAlignment == AxisDirection.right,
+        labelAlignment == .left || labelAlignment == .right,
         'The label alignment should be AxisDirection.left or AxisDirection.right',
       );
 
@@ -46,12 +46,12 @@ class _RiderAttendingCount extends StatelessWidget {
 
   Widget _buildLabelAndIcon(Widget label, Widget icon) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: .min,
+      mainAxisAlignment: .center,
       children: [
-        if (labelAlignment == AxisDirection.right) Padding(padding: const EdgeInsets.only(right: 4), child: icon),
+        if (labelAlignment == .right) Padding(padding: const .only(right: 4), child: icon),
         label,
-        if (labelAlignment == AxisDirection.left) Padding(padding: const EdgeInsets.only(left: 4), child: icon),
+        if (labelAlignment == .left) Padding(padding: const .only(left: 4), child: icon),
       ],
     );
   }
@@ -72,26 +72,26 @@ class _RiderAttendingCount extends StatelessWidget {
 
 /// This widget represents the attending count for a rider list item.
 class RiderListItemAttendingCount extends ConsumerWidget {
-  const RiderListItemAttendingCount({required this.rider, super.key});
+  const new({required this.rider, super.key});
 
   final Rider rider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final value = ref.watch(_riderAttendingCount(rider.uuid));
+    final value = ref.watch(_riderAttendingCount(rider.id));
 
-    return _RiderAttendingCount(value, labelAlignment: AxisDirection.left);
+    return _RiderAttendingCount(value, labelAlignment: .left);
   }
 }
 
 /// This widget represents the attending count for the selected rider.
 class SelectedRiderAttendingCount extends ConsumerWidget {
-  const SelectedRiderAttendingCount({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final value = ref.watch(selectedRiderAttendingCountProvider);
 
-    return _RiderAttendingCount(value, labelAlignment: AxisDirection.right);
+    return _RiderAttendingCount(value, labelAlignment: .right);
   }
 }

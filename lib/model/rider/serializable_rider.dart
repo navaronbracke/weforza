@@ -168,11 +168,6 @@ class SerializableRiderUpdateTimestamp {
   /// The uuid of the [SerializableRider] that was updated.
   final String uuid;
 
-  /// Convert this object to a map.
-  Map<String, Object?> toMap() {
-    return {'lastUpdated': lastUpdatedOn.toStringWithoutMilliseconds()};
-  }
-
   @override
   bool operator ==(Object other) {
     return other is SerializableRiderUpdateTimestamp && uuid == other.uuid && lastUpdatedOn == other.lastUpdatedOn;

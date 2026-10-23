@@ -3,16 +3,22 @@ library;
 
 /// A single [Rider], with its [Device]s, that can be serialized.
 final class ExportableRider implements Comparable<ExportableRider> {
+  /// Create a new [ExportableRider] with the provided [alias], [devices], [firstName], [isActive],
+  /// [lastName] and [lastUpdated].
+  ///
+  /// The [lastUpdated] timestamp will be converted to UTC time.
   ExportableRider({
     required this.alias,
     required this.devices,
     required this.firstName,
     required this.isActive,
     required this.lastName,
+    required DateTime lastUpdated,
   }) : assert(
          firstName.isNotEmpty && lastName.isNotEmpty,
          'The first name and last name of an exportable rider cannot be empty',
-       );
+       ),
+       lastUpdated = lastUpdated.toUtc();
 
   /// The alias of the rider.
   final String alias;
@@ -29,11 +35,15 @@ final class ExportableRider implements Comparable<ExportableRider> {
   /// The last name of the rider.
   final String lastName;
 
+  /// The timestamp that indicates when this rider was last updated.
+  final DateTime lastUpdated;
+
   /// Serialize this rider to a comma separated string.
   String toCsv() {
     final sb = StringBuffer('$firstName,$lastName,$alias,');
 
     sb.write('${isActive ? 1 : 0},');
+    sb.write('${lastUpdated.toIso8601String()},');
     sb.write(devices.isEmpty ? '' : devices.join(','));
 
     return sb.toString();
@@ -47,6 +57,7 @@ final class ExportableRider implements Comparable<ExportableRider> {
       'alias': alias,
       'isActive': isActive,
       'devices': devices.toList(),
+      'lastUpdated': lastUpdated.toIso8601String(),
     };
   }
 

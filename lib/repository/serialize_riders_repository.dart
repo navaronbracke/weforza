@@ -28,6 +28,7 @@ class SerializeRidersRepository {
           lastName: rider.lastName,
           isActive: rider.isActive,
           devices: devices[rider.id] ?? const {},
+          lastUpdated: rider.lastUpdated,
         ),
     ];
 

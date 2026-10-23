@@ -1,15 +1,24 @@
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/export/exportable_rider.dart';
 
 /// The identifiable key for an [ExportableRider].
 final class ExportableRiderKey {
-  ExportableRiderKey({required this.alias, required this.firstName, required this.lastName})
+  new({required this.alias, required this.firstName, required this.lastName})
     : assert(
         firstName.isNotEmpty && lastName.isNotEmpty,
         'The first name and last name of an exportable rider key cannot be empty',
       );
 
-  factory ExportableRiderKey.fromRider(ExportableRider rider) {
-    return ExportableRiderKey(alias: rider.alias, firstName: rider.firstName, lastName: rider.lastName);
+  factory fromRider(Rider rider) {
+    return ExportableRiderKey(alias: rider.alias ?? '', firstName: rider.firstName, lastName: rider.lastName);
+  }
+
+  factory fromExportedRider(ExportableRider exportedRider) {
+    return ExportableRiderKey(
+      alias: exportedRider.alias,
+      firstName: exportedRider.firstName,
+      lastName: exportedRider.lastName,
+    );
   }
 
   /// The alias of the [ExportableRider].

@@ -1,4 +1,4 @@
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/riders.dart';
 
 mixin RiderValidator {
   String? validateAlias({
@@ -13,15 +13,11 @@ mixin RiderValidator {
       return isBlankMessage;
     }
 
-    if (value.length > Rider.nameAndAliasMaxLength) {
+    if (Riders.nameAndAliasLength.max < value.length) {
       return maxLengthMessage;
     }
 
-    if (value.isNotEmpty && !Rider.personNameAndAliasRegex.hasMatch(value)) {
-      return illegalCharachterMessage;
-    }
-
-    return null;
+    return value.isEmpty || Riders.nameAndAliasRegex.hasMatch(value) ? null : illegalCharachterMessage;
   }
 
   String? validateFirstOrLastName({
@@ -39,14 +35,10 @@ mixin RiderValidator {
       return isBlankMessage;
     }
 
-    if (value.length > Rider.nameAndAliasMaxLength) {
+    if (Riders.nameAndAliasLength.max < value.length) {
       return maxLengthMessage;
     }
 
-    if (!Rider.personNameAndAliasRegex.hasMatch(value)) {
-      return illegalCharachterMessage;
-    }
-
-    return null;
+    return Riders.nameAndAliasRegex.hasMatch(value) ? null : illegalCharachterMessage;
   }
 }

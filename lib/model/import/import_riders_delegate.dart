@@ -6,14 +6,14 @@ import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/file/import_riders_json_reader.dart';
 import 'package:weforza/model/export/export_file_format.dart';
+import 'package:weforza/model/export/exportable_rider.dart';
 import 'package:weforza/model/import/import_file_delegate.dart';
 import 'package:weforza/model/import/import_riders_state.dart';
-import 'package:weforza/model/rider/serializable_rider.dart';
 import 'package:weforza/repository/serialize_riders_repository.dart';
 
 /// This class represents the delegate that handles importing riders.
 class ImportRidersDelegate {
-  ImportRidersDelegate(this._importFileDelegate, this._repository);
+  new(this._importFileDelegate, this._repository);
 
   final _notifier = ValueNotifier<AsyncValue<ImportRidersState>>(const AsyncData(ImportRidersState.idle));
 
@@ -25,11 +25,11 @@ class ImportRidersDelegate {
 
   ValueListenable<AsyncValue<ImportRidersState>> get listenable => _notifier;
 
-  Future<Iterable<SerializableRider>> _readFileWithReader<T>(
+  Future<Iterable<ExportableRider>> _readFileWithReader<T>(
     fs.File file, {
     required ImportRidersFileReader<T> reader,
   }) async {
-    final items = <SerializableRider>[];
+    final items = <ExportableRider>[];
 
     final List<T> chunks = await reader.readFile(file);
 
@@ -45,12 +45,12 @@ class ImportRidersDelegate {
     return items;
   }
 
-  /// Read the contents of [file] and extract the [SerializableRider]s.
+  /// Read the contents of [file] and extract the [ExportableRider]s.
   ///
-  /// Returns the collection of [SerializableRider]s.
+  /// Returns the collection of [ExportableRider]s.
   ///
   /// Throws a [FormatException] if the file is malformed.
-  Future<Iterable<SerializableRider>> _readRidersFromFile(fs.File file) async {
+  Future<Iterable<ExportableRider>> _readRidersFromFile(fs.File file) async {
     if (file.path.endsWith(ExportFileFormat.csv.formatExtension)) {
       return _readFileWithReader<String>(file, reader: ImportRidersCsvReader());
     }

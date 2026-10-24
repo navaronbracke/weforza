@@ -30,7 +30,7 @@ class SelectableOwnerListItem extends StatelessWidget {
       case .windows:
         final ColorScheme colorScheme = ColorScheme.of(context);
 
-        return switch (Theme.of(context).brightness) {
+        return switch (Theme.brightnessOf(context)) {
           .dark => colorScheme.onPrimary,
           .light => colorScheme.primary,
         };

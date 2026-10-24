@@ -4,7 +4,7 @@ import 'package:weforza/utils/debounce_timer.dart';
 /// This class represents a delegate that handles deferred saving of a value.
 abstract class DeferredSaveDelegate<T> with DebounceTimer {
   /// The default constructor.
-  DeferredSaveDelegate({required T initialValue, this._debounceDuration = const Duration(seconds: 1)})
+  new({required T initialValue, this._debounceDuration = const Duration(seconds: 1)})
     : _notifier = ValueNotifier(initialValue);
 
   /// The notifier that manages the value that should be saved.

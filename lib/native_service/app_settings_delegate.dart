@@ -2,7 +2,7 @@ import 'package:weforza/native_service/native_service.dart';
 
 /// This class represents a [NativeService] for managing the app settings on the device.
 final class AppSettingsDelegate extends NativeService {
-  const AppSettingsDelegate();
+  const new();
 
   /// Open the general app settings page for the application.
   Future<void> openAppSettings() async {

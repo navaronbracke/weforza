@@ -13,7 +13,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// It manages a text field that resets itself when it loses focus.
 class AddExcludedTermInputField extends StatelessWidget {
   /// The default constructor.
-  const AddExcludedTermInputField({
+  const new({
     required this.controller,
     required this.delegate,
     required this.focusNode,
@@ -84,7 +84,7 @@ class AddExcludedTermInputField extends StatelessWidget {
 }
 
 class _AddExcludedTermSuffixIcon extends StatelessWidget {
-  const _AddExcludedTermSuffixIcon({required this.listenable, required this.onTap, required this.validator});
+  const new({required this.listenable, required this.onTap, required this.validator});
 
   /// The [ValueListenable] that provides updates about the current text editing value.
   final ValueListenable<TextEditingValue> listenable;

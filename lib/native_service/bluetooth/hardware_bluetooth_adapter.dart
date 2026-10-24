@@ -13,7 +13,7 @@ import 'package:weforza/native_service/native_service.dart';
 /// To mock the underlying event channels pass the [bluetoothStateChannel] and [bluetoothDeviceDiscoveryChannel]
 /// to [TestDefaultBinaryMessenger.setMockStreamHandler].
 final class HardwareBluetoothAdapter extends NativeService implements BluetoothDeviceScanner {
-  const HardwareBluetoothAdapter();
+  const new();
 
   @override
   Future<bool> get bluetoothIsOn async => await methodChannel.invokeMethod<bool>('isBluetoothOn') ?? false;

@@ -5,7 +5,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the save button for the manual selection page.
 class ManualSelectionSaveButton extends StatefulWidget {
-  const ManualSelectionSaveButton({required this.onPressed, super.key, this.future});
+  const new({required this.onPressed, super.key, this.future});
 
   /// The Future that represents the save attendees computation.
   final Future<void>? future;
@@ -60,7 +60,7 @@ class _ManualSelectionSaveButtonState extends State<ManualSelectionSaveButton> {
 }
 
 class _SaveButton extends StatelessWidget {
-  const _SaveButton({required this.onPressed, required this.text});
+  const new({required this.onPressed, required this.text});
 
   final void Function() onPressed;
 

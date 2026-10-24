@@ -7,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:weforza/native_service/file_storage_delegate.dart';
 
 final class IoFileStorageDelegate extends FileStorageDelegate {
-  const IoFileStorageDelegate();
+  const new();
 
   @override
   Future<bool> hasScopedStorage() async {

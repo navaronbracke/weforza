@@ -5,7 +5,7 @@ import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/import/import_file_delegate.dart';
 
 class IoImportFileDelegate implements ImportFileDelegate {
-  IoImportFileDelegate(this.fileSystem);
+  new(this.fileSystem);
 
   final FileSystem fileSystem;
 

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 ///
 /// It also exposes several [EventChannel]s for events that are emitted by the underlying native service.
 base class NativeService {
-  const NativeService();
+  const new();
 
   /// The [MethodChannel] that is used to call methods on the native service.
   final MethodChannel methodChannel = const MethodChannel('be.weforza.app/methods');

@@ -9,7 +9,7 @@ import 'package:weforza/widgets/custom/animated_circle_checkmark.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_data_page.dart';
 
 class ExportRidersPage extends ConsumerStatefulWidget {
-  const ExportRidersPage({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<ExportRidersPage> createState() => _ExportRidersPageState();

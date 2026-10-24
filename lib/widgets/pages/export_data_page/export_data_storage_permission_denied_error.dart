@@ -10,7 +10,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// has not been granted when exporting to a file.
 /// It provides a button to open the application settings and a back button.
 class ExportDataStoragePermissionDeniedError extends StatelessWidget {
-  const ExportDataStoragePermissionDeniedError({super.key});
+  const new({super.key});
 
   static const _appSettingsDelegate = AppSettingsDelegate();
 

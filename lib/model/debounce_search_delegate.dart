@@ -5,7 +5,7 @@ import 'package:weforza/utils/debounce_timer.dart';
 /// that is debounced for updates.
 class DebounceSearchDelegate with DebounceTimer {
   /// The default constructor.
-  DebounceSearchDelegate({this._debounceTime = const Duration(milliseconds: 500)});
+  new({this._debounceTime = const Duration(milliseconds: 500)});
 
   final Duration _debounceTime;
   final _notifier = ValueNotifier('');

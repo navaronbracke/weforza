@@ -1,7 +1,7 @@
 import 'package:weforza/native_service/media_permissions_service.dart';
 
 final class MediaPermissionsDelegate extends MediaPermissionsService {
-  const MediaPermissionsDelegate();
+  const new();
 
   @override
   Future<bool> requestAddToPhotoLibraryPermission() async {

@@ -11,7 +11,7 @@ import 'package:weforza/native_service/media_permissions_service.dart';
 
 /// The [FileSystem] based implementation of [PickImageDelegate].
 class IoPickImageDelegate implements PickImageDelegate {
-  IoPickImageDelegate({
+  new({
     required this.fileStorageDelegate,
     required this.fileSystem,
     required this.mediaPermissionsDelegate,

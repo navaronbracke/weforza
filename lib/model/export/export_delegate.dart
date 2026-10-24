@@ -13,7 +13,7 @@ import 'package:weforza/native_service/file_storage_delegate.dart';
 /// This class represents a delegate that handles exporting data.
 abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The default constructor.
-  ExportDelegate({required this.fileStorageDelegate, required this.fileSystem});
+  new({required this.fileStorageDelegate, required this.fileSystem});
 
   /// The notifier that keeps track of the selected file format.
   ///

@@ -11,7 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a scan error that indicates that Bluetooth is disabled.
 /// It provides a button to open the Bluetooth settings and a button to retry the scan.
 class BluetoothDisabledError extends StatelessWidget {
-  const BluetoothDisabledError({required this.onRetry, super.key});
+  const new({required this.onRetry, super.key});
 
   static const _appSettingsDelegate = AppSettingsDelegate();
 
@@ -49,7 +49,7 @@ class BluetoothDisabledError extends StatelessWidget {
 
 /// This widget represents a generic scan error that only provides a back button.
 class GenericScanError extends StatelessWidget {
-  const GenericScanError({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class GenericScanError extends StatelessWidget {
 /// that indicates that not all the required permissions were granted.
 /// It provides a button to open the application settings and a back button.
 class PermissionDeniedError extends StatelessWidget {
-  const PermissionDeniedError({super.key});
+  const new({super.key});
 
   static const _appSettingsDelegate = AppSettingsDelegate();
 

@@ -7,7 +7,7 @@ final class ExportableRider implements Comparable<ExportableRider> {
   /// [lastName] and [lastUpdated].
   ///
   /// The [lastUpdated] timestamp will be converted to UTC time.
-  ExportableRider({
+  new({
     required this.alias,
     required this.devices,
     required this.firstName,

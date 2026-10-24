@@ -6,7 +6,7 @@ import 'package:weforza/widgets/dialogs/delete_item_dialog.dart';
 
 /// This widget represents a dialog for deleting a rider.
 class DeleteRiderDialog extends ConsumerStatefulWidget {
-  const DeleteRiderDialog({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<DeleteRiderDialog> createState() => _DeleteRiderDialogState();

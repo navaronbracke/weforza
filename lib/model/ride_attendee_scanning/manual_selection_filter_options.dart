@@ -1,6 +1,6 @@
 /// This class represents the filter options for the manual selection list.
 class ManualSelectionFilterOptions {
-  const ManualSelectionFilterOptions({this.query = '', this.showScannedResults = true});
+  const new({this.query = '', this.showScannedResults = true});
 
   /// The search query to filter on.
   final String query;

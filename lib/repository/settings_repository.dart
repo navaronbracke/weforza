@@ -5,7 +5,7 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 
 class SettingsRepository {
-  SettingsRepository(this._database);
+  new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;

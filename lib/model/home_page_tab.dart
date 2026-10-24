@@ -9,9 +9,9 @@ enum HomePageTab {
   /// The settings tab. This is the third and last tab.
   settings(2);
 
-  const HomePageTab(this.tabIndex);
+  const new(this.tabIndex);
 
-  factory HomePageTab.fromIndex(int index) {
+  factory fromIndex(int index) {
     switch (index) {
       case 0:
         return rides;

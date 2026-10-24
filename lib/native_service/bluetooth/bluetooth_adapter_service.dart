@@ -15,7 +15,7 @@ final class BluetoothAdapterService {
   /// Creates an instance of [BluetoothAdapterService].
   ///
   /// The underlying [BluetoothDeviceScanner] defaults to a [HardwareBluetoothAdapter].
-  BluetoothAdapterService({this._scanner = const HardwareBluetoothAdapter()});
+  new({this._scanner = const HardwareBluetoothAdapter()});
 
   /// Whether the [BluetoothDeviceScanner] is currently scanning for devices.
   bool _isScanning = false;

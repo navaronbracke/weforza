@@ -8,7 +8,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class ResetRideCalendarButton extends ConsumerWidget {
-  const ResetRideCalendarButton({super.key});
+  const new({super.key});
 
   void _showResetCalendarDialog(BuildContext context) {
     showAdaptiveDialog<void>(context: context, builder: (_) => const ResetRideCalendarDialog());

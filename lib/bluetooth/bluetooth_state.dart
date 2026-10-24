@@ -25,7 +25,7 @@ enum BluetoothState {
   unknown;
 
   /// Create a [BluetoothState] from the given [value].
-  factory BluetoothState.fromValue(String? value) {
+  factory fromValue(String? value) {
     switch (value) {
       case 'off':
         return off;

@@ -8,7 +8,7 @@ import 'package:weforza/widgets/theme.dart';
 
 /// This class represents the application.
 class WeForzaApp extends StatelessWidget {
-  const WeForzaApp({super.key});
+  const new({super.key});
 
   /// The name of the application, 'WeForza'.
   static const String applicationName = 'WeForza';

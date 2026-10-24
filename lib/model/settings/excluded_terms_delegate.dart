@@ -8,7 +8,7 @@ import 'package:weforza/riverpod/settings_provider.dart';
 /// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {
   /// The default constructor.
-  ExcludedTermsDelegate({required this._settingsDelegate, Set<ExcludedTerm> initialValue = const {}})
+  new({required this._settingsDelegate, Set<ExcludedTerm> initialValue = const {}})
     : _termsNotifier = ValueNotifier(initialValue);
 
   final SettingsNotifier _settingsDelegate;
@@ -23,7 +23,7 @@ class ExcludedTermsDelegate {
   /// Save the given [terms].
   void _saveTerms(Set<ExcludedTerm> terms) {
     unawaited(
-      _settingsDelegate.saveExcludedTerms({for (final ExcludedTerm value in terms) value.term}).catchError((_) {
+      _settingsDelegate.saveExcludedTerms(terms).catchError((_) {
         // If the terms could not be saved, do nothing.
       }),
     );

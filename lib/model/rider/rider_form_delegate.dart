@@ -8,8 +8,6 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
 
   final RiderRepository _repository;
 
-  final _uuidGenerator = const Uuid();
-
   /// Add a new rider.
   /// The [whenComplete] function is called if the operation was successful.
   void addRider(RidersCompanion model, {required void Function() whenComplete}) async {

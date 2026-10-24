@@ -88,7 +88,6 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
     _savingSelection = true;
 
     try {
-      // currentSelection.map((date) => Ride(date: date)).toList()
       await _repository.addRides(currentSelection);
 
       setDone(null);

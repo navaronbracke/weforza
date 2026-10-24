@@ -255,7 +255,10 @@ class RideAttendeeScanningDelegate {
     final deviceName = device.deviceName.trim();
 
     // Get the owners of the device.
-    final owners = _deviceOwners[deviceName]?.map((id) => _activeRiders[id]!) ?? [];
+    final Iterable<Rider> owners = switch (_deviceOwners[deviceName]) {
+      final Set<int> ids when ids.isNotEmpty => ids.map((id) => _activeRiders[id]).whereType<Rider>(),
+      _ => const .empty(),
+    };
 
     switch (owners.length) {
       case 1:

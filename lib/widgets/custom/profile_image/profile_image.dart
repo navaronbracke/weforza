@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/file/content_uri_image_provider.dart';
 import 'package:weforza/file/file_system.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/riverpod/file/file_storage_delegate_provider.dart';
 import 'package:weforza/riverpod/file/file_system_provider.dart';
 
@@ -95,12 +97,7 @@ class AdaptiveProfileImage extends StatelessWidget {
   /// Defaults to 40.
   final double size;
 
-  /// Get the initials for the given [firstName] and [lastName].
-  static String initialsForName({required String firstName, required String lastName}) {
-    return firstName[0] + lastName[0];
-  }
-
-  Color _getBackgroundColor(String initials, List<Color> colors) {
+  static Color _getBackgroundColor(String initials, List<Color> colors) {
     int index = initials.codeUnitAt(0);
 
     if (initials.length == 2) {
@@ -108,6 +105,23 @@ class AdaptiveProfileImage extends StatelessWidget {
     }
 
     return colors[index % colors.length];
+  }
+
+  /// Get a [ProfileImage] widget for the given [Rider]'s name and profile image.
+  static Widget fromRider(Rider rider, {double size = 40}) {
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final FileUriParser fileUriParser = FileUriParser(ref.watch(fileSystemProvider));
+
+        return AdaptiveProfileImage(
+          image: fileUriParser.parse(rider.profileImageUri),
+          personInitials: rider.firstName.isEmpty && rider.lastName.isEmpty
+              ? null
+              : '${rider.firstName[0]}${rider.lastName[0]}',
+          size: size,
+        );
+      },
+    );
   }
 
   @override

@@ -63,32 +63,27 @@ class _EditDeviceButton extends ConsumerWidget {
   /// The device to edit.
   final Device device;
 
-  void _onEditDevicePressed(BuildContext context, WidgetRef ref) {
-    final selectedRider = ref.read(selectedRiderProvider);
-
-    if (selectedRider == null) {
-      return;
-    }
-
+  void _onEditDevicePressed(BuildContext context, Rider rider) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => DeviceForm(device: device, ownerId: selectedRider.id),
+        builder: (_) => DeviceForm(device: device, ownerId: rider.id),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final rider = ref.watch(selectedRiderProvider);
+
     return PlatformAwareWidget(
-      android: (context) {
-        return IconButton(
-          icon: Icon(Icons.edit, color: ColorScheme.of(context).primary),
-          onPressed: () => _onEditDevicePressed(context, ref),
-        );
-      },
-      ios: (context) {
-        return CupertinoIconButton(icon: CupertinoIcons.pencil, onPressed: () => _onEditDevicePressed(context, ref));
-      },
+      android: (context) => IconButton(
+        icon: Icon(Icons.edit, color: ColorScheme.of(context).primary),
+        onPressed: rider == null ? null : () => _onEditDevicePressed(context, rider),
+      ),
+      ios: (context) => CupertinoIconButton(
+        icon: CupertinoIcons.pencil,
+        onPressed: rider == null ? null : () => _onEditDevicePressed(context, rider),
+      ),
     );
   }
 }

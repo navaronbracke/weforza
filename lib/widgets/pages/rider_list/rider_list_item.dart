@@ -38,10 +38,7 @@ class RiderListItem extends ConsumerWidget {
         padding: const .all(8),
         child: Row(
           children: [
-            Padding(
-              padding: const .only(right: 4),
-              child: AdaptiveProfileImage(image: rider.profileImage, personInitials: rider.initials),
-            ),
+            Padding(padding: const .only(right: 4), child: AdaptiveProfileImage.fromRider(rider)),
             Expanded(
               child: RiderNameAndAlias.twoLines(
                 alias: rider.alias,

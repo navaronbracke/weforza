@@ -57,14 +57,12 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     final navigator = Navigator.of(context);
     final riderId = widget.rider?.id;
 
-    final Uri? profileImageUri = _profileImageDelegate.selectedImage.valueOrNull;
-
     final model = RidersCompanion(
       alias: Value(_aliasController.text.trim()),
       firstName: Value(_firstNameController.text.trim()),
       lastName: Value(_lastNameController.text.trim()),
       isActive: Value(widget.rider?.isActive ?? true),
-      profileImageUri: profileImageUri == null ? const Value(null) : Value(profileImageUri.toString()),
+      profileImageUri: Value(_profileImageDelegate.selectedImage.valueOrNull),
       id: riderId == null ? const Value.absent() : Value(riderId),
     );
 
@@ -116,16 +114,11 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   void initState() {
     super.initState();
 
-    final profileImageUri = switch (widget.rider?.profileImageUri) {
-      final String value => FileUriParser(ref.read(fileSystemProvider)).parse(value),
-      null => null,
-    };
-
     _profileImageDelegate = ProfileImagePickerDelegate(
       imagePickerDelegate: ref.read(imagePickerDelegateProvider),
       // TODO: check if file exists
       // see https://github.com/navaronbracke/weforza/issues/423
-      initialValue: profileImageUri,
+      initialValue: FileUriParser(ref.read(fileSystemProvider)).validateUri(widget.rider?.profileImageUri),
     );
 
     _delegate = RiderFormDelegate(repository: ref.read(riderRepositoryProvider));

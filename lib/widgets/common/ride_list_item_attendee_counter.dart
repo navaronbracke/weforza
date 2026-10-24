@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/ride.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the attendee counter for a ride list item.
 class RideListItemAttendeeCounter extends ConsumerStatefulWidget {
-  const RideListItemAttendeeCounter({required this.rideDate, super.key, this.counterStyle, this.iconSize = 24});
+  const new({required this.rideDate, super.key, this.counterStyle, this.iconSize = 24});
 
   /// The style for the counter.
   final TextStyle? counterStyle;
@@ -60,14 +60,14 @@ class RideListItemAttendeeCounterState extends ConsumerState<RideListItemAttende
     return FutureBuilder<int>(
       future: future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == .done) {
           final count = snapshot.data;
 
           return Row(
             children: [
               Text('${count ?? '?'}', style: widget.counterStyle),
               Padding(
-                padding: const EdgeInsets.only(left: 4),
+                padding: const .only(left: 4),
                 child: PlatformAwareWidget(
                   android: (_) => Icon(Icons.people, size: widget.iconSize, color: widget.counterStyle?.color),
                   ios: (_) {

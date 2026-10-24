@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
@@ -21,7 +20,7 @@ final selectedRideAttendeesProvider = FutureProvider<List<Rider>>((ref) async {
 });
 
 class SelectedRideNotifier extends StateNotifier<Ride?> {
-  SelectedRideNotifier(this.ref) : super(null);
+  new(this.ref) : super(null);
 
   final Ref ref;
 
@@ -32,7 +31,7 @@ class SelectedRideNotifier extends StateNotifier<Ride?> {
       throw ArgumentError.notNull('ride');
     }
 
-    await ref.read(rideRepositoryProvider).deleteRide(ride.date);
+    await ref.read(rideRepositoryProvider).deleteRide(ride);
 
     // Refresh the ride list, there is a ride less in the collection.
     ref.invalidate(rideListProvider);

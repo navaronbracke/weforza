@@ -6,7 +6,7 @@ import 'package:weforza/model/async_computation_delegate.dart';
 
 /// This widget represents a submit button for a form.
 class FormSubmitButton<T> extends StatelessWidget {
-  const FormSubmitButton({
+  const new({
     required this.delegate,
     required this.errorBuilder,
     required this.label,
@@ -30,9 +30,9 @@ class FormSubmitButton<T> extends StatelessWidget {
 
   Widget _wrapWithErrorMessage({required Widget child, required Widget errorMessage}) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: [
-        Padding(padding: const EdgeInsets.only(bottom: 4), child: errorMessage),
+        Padding(padding: const .only(bottom: 4), child: errorMessage),
         child,
       ],
     );
@@ -70,10 +70,10 @@ class FixedHeightSubmitButton extends StatelessWidget {
   /// Construct a [FixedHeightSubmitButton] in the idle state.
   ///
   /// If [onPressed] is null, the button will be disabled.
-  const FixedHeightSubmitButton({required this.label, super.key, this.onPressed}) : loading = false;
+  const new({required this.label, super.key, this.onPressed}) : loading = false;
 
   /// Construct a [FixedHeightSubmitButton] in the loading state.
-  const FixedHeightSubmitButton.loading({super.key}) : label = '', loading = true, onPressed = null;
+  const new loading({super.key}) : label = '', loading = true, onPressed = null;
 
   /// The label for the submit button.
   final String label;
@@ -96,7 +96,7 @@ class FixedHeightSubmitButton extends StatelessWidget {
       .iOS || .macOS =>
         loading
             ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
+                padding: .symmetric(vertical: 4),
                 child: SizedBox(
                   height: kMinInteractiveDimensionCupertino,
                   child: Center(child: CupertinoActivityIndicator()),

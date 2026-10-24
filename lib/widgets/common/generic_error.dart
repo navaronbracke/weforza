@@ -55,12 +55,7 @@ class GenericError extends StatelessWidget {
 /// This class represents an error label
 /// that uses the default error style for the current platform.
 class GenericErrorLabel extends StatelessWidget {
-  const new({
-    required this.message,
-    this.androidPadding = EdgeInsets.zero,
-    this.iosPadding = EdgeInsets.zero,
-    super.key,
-  });
+  const new({required this.message, this.androidPadding = .zero, this.iosPadding = .zero, super.key});
 
   /// The padding to apply to the Android layout.
   final EdgeInsetsGeometry androidPadding;

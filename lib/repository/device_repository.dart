@@ -11,15 +11,17 @@ class DeviceRepository {
   /// Add the given [device].
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> addDevice(DevicesCompanion device) async {
+  Future<Device> addDevice(DevicesCompanion device) async {
     if (await _deviceExists(device.name.value, device.ownerId.value)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
-      await _database.into(_database.devices).insert(device);
+      final int id = await _database.into(_database.devices).insert(device);
 
       await _updateOwnerLastUpdated(device.ownerId.value);
+
+      return (_database.devices.select()..where((t) => t.id.equals(id))).getSingle();
     });
   }
 
@@ -62,15 +64,17 @@ class DeviceRepository {
   /// Update a device.
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> updateDevice(Device device) async {
-    if (await _deviceExists(device.name, device.ownerId, device.creationDate)) {
+  Future<Device> updateDevice(DevicesCompanion device) async {
+    if (await _deviceExists(device.name.value, device.ownerId.value, device.creationDate.value)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.update(_database.devices).replace(device);
 
-      await _updateOwnerLastUpdated(device.ownerId);
+      await _updateOwnerLastUpdated(device.ownerId.value);
+
+      return (_database.devices.select()..where((t) => t.id.equals(device.id.value))).getSingle();
     });
   }
 

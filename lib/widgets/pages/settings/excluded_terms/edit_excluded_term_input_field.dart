@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/widgets/dialogs/delete_excluded_term_dialog.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field_button_bar.dart';
@@ -10,7 +10,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_term_inpu
 
 /// This widget represents the input field for editing an existing [ExcludedTerm].
 class EditExcludedTermInputField extends StatefulWidget {
-  EditExcludedTermInputField({
+  new({
     required this.delegate,
     required this.index,
     required this.excludedTerm,

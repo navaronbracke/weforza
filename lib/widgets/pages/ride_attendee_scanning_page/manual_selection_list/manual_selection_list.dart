@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/utils/comparators/rider_comparator.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/common/search_field_with_clear_button.dart';
@@ -20,7 +21,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// after the device scan has ended,
 /// and any conflicts with unresolved owners have been corrected.
 class ManualSelectionList extends StatefulWidget {
-  const ManualSelectionList({required this.delegate, super.key});
+  const new({required this.delegate, super.key});
 
   /// The delegate that manages the list of active riders.
   final RideAttendeeScanningDelegate delegate;
@@ -41,7 +42,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   List<Rider> _filterActiveRiders(List<Rider> items, ManualSelectionFilterOptions filters) {
     return items.where((item) {
       if (!filters.showScannedResults) {
-        final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(item.uuid);
+        final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(item.id);
 
         // The scanned results are excluded.
         if (selectedRideAttendee?.isScanned ?? false) {
@@ -63,7 +64,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
         return true;
       }
 
-      final alias = item.alias.toLowerCase();
+      final alias = item.alias?.toLowerCase() ?? '';
 
       // Only match against the alias if it is not empty.
       return alias.isNotEmpty && alias.contains(query);
@@ -83,7 +84,7 @@ class _ManualSelectionListState extends State<ManualSelectionList> {
   Future<List<Rider>> _sortActiveRiders() async {
     final items = widget.delegate.activeRiders;
 
-    items.sort((Rider m1, Rider m2) => m1.compareTo(m2));
+    items.sort(compareRiders);
 
     return items;
   }

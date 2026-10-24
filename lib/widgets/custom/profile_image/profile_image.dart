@@ -10,7 +10,7 @@ import 'package:weforza/riverpod/file/file_system_provider.dart';
 /// This widget represents a profile image.
 class ProfileImage extends StatelessWidget {
   /// The default constructor.
-  const ProfileImage({required this.image, required this.placeholder, this.loading, this.size = 40, super.key});
+  const new({required this.image, required this.placeholder, this.loading, this.size = 40, super.key});
 
   /// The profile image to show.
   final Uri? image;
@@ -82,7 +82,7 @@ class ProfileImage extends StatelessWidget {
 /// an adaptive placeholder icon is used instead.
 class AdaptiveProfileImage extends StatelessWidget {
   /// The default constructor.
-  const AdaptiveProfileImage({super.key, this.image, this.personInitials, this.size = 40});
+  const new({super.key, this.image, this.personInitials, this.size = 40});
 
   /// The image to display.
   final Uri? image;
@@ -112,22 +112,10 @@ class AdaptiveProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Color> backgroundColors;
-    Color placeholderBackgroundColor;
-    IconData placeholderIcon;
-
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        backgroundColors = Colors.primaries;
-        placeholderBackgroundColor = ColorScheme.of(context).primary;
-        placeholderIcon = Icons.person;
-        break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        backgroundColors = [
+    final (backgroundColors, placeholderBackgroundColor, placeholderIcon) = switch (defaultTargetPlatform) {
+      .android || .fuchsia || .linux || .windows => (Colors.primaries, ColorScheme.of(context).primary, Icons.person),
+      .iOS || .macOS => (
+        [
           // CupertinoColors.systemBlue is excluded, to prevent contrast issues
           // with CupertinoTheme.primaryColor.
           CupertinoColors.systemGreen,
@@ -138,11 +126,11 @@ class AdaptiveProfileImage extends StatelessWidget {
           CupertinoColors.systemRed,
           CupertinoColors.systemTeal,
           CupertinoColors.systemYellow,
-        ];
-        placeholderBackgroundColor = CupertinoTheme.of(context).primaryColor;
-        placeholderIcon = CupertinoIcons.person_fill;
-        break;
-    }
+        ],
+        CupertinoTheme.of(context).primaryColor,
+        CupertinoIcons.person_fill,
+      ),
+    };
 
     final initials = personInitials;
 

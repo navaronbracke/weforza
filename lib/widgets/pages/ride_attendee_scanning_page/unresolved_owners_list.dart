@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/utils/comparators/rider_comparator.dart';
 import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';
@@ -14,7 +15,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 /// that is shown after a device scan has ended.
 class UnresolvedOwnersList extends StatefulWidget {
   /// The default constructor.
-  const UnresolvedOwnersList({required this.delegate, super.key});
+  const new({required this.delegate, super.key});
 
   final RideAttendeeScanningDelegate delegate;
 
@@ -30,31 +31,22 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
   Future<List<Rider>> _filterAndSortItems() async {
     final filtered = widget.delegate.getUnresolvedDeviceOwners();
 
-    filtered.sort((Rider m1, Rider m2) => m1.compareTo(m2));
+    filtered.sort(compareRiders);
 
     return filtered;
   }
 
   TextStyle _getMultipleOwnersListDescriptionStyle(BuildContext context) {
-    Color? color;
-
-    switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
-        break;
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
-        color = const CupertinoDynamicColor.withBrightness(
-          color: CupertinoColors.systemGrey,
-          darkColor: CupertinoColors.white,
-        );
-        break;
-    }
+    final color = switch (defaultTargetPlatform) {
+      .android || .fuchsia || .linux || .windows => null,
+      .iOS || .macOS => const CupertinoDynamicColor.withBrightness(
+        color: CupertinoColors.systemGrey,
+        darkColor: CupertinoColors.white,
+      ),
+    };
 
     return TextStyle(
-      fontStyle: FontStyle.italic,
+      fontStyle: .italic,
       fontSize: 14,
       color: color is CupertinoDynamicColor ? color.resolveFrom(context) : color,
     );
@@ -71,7 +63,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
     return FutureBuilder<List<Rider>>(
       future: _future,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.connectionState == .done) {
           if (snapshot.hasError) {
             return const Center(child: GenericScanError());
           }
@@ -82,12 +74,12 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 4, left: 8, right: 8),
+                padding: const .only(bottom: 4, left: 8, right: 8),
                 child: Text(
                   translator.unresolvedOwnersDescription,
                   style: _getMultipleOwnersListDescriptionStyle(context),
                   softWrap: true,
-                  textAlign: TextAlign.center,
+                  textAlign: .center,
                 ),
               ),
               Expanded(
@@ -113,7 +105,7 @@ class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
 }
 
 class _UnresolvedOwnersListItem extends StatefulWidget {
-  _UnresolvedOwnersListItem({required this.delegate, required this.item}) : super(key: ValueKey(item.uuid));
+  new({required this.delegate, required this.item}) : super(key: ValueKey(item.id));
 
   final RideAttendeeScanningDelegate delegate;
 
@@ -126,7 +118,7 @@ class _UnresolvedOwnersListItem extends StatefulWidget {
 class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
   @override
   Widget build(BuildContext context) {
-    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(widget.item.uuid);
+    final selectedRideAttendee = widget.delegate.getSelectedRideAttendee(widget.item.id);
 
     return SelectableOwnerListItem(
       rider: widget.item,
@@ -135,13 +127,9 @@ class _UnresolvedOwnersListItemState extends State<_UnresolvedOwnersListItem> {
         // Unresolved owners are never initially scanned.
         // Thus showing a confirmation dialog before unselecting
         // an item in the list is redundant.
-        final scanResultEntry = ScannedRideAttendee(uuid: widget.item.uuid, isScanned: false);
+        final scanResultEntry = ScannedRideAttendee(id: widget.item.id, isScanned: false);
 
         widget.delegate.toggleSelectionForUnresolvedOwner(scanResultEntry);
-
-        if (!mounted) {
-          return;
-        }
 
         setState(() {});
       },

@@ -5,7 +5,7 @@ import 'package:weforza/file/file_system.dart';
 
 /// This class parses a path to a file into a valid [Uri].
 final class FileUriParser {
-  const FileUriParser(this.fileSystem);
+  const new(this.fileSystem);
 
   /// The file system that determines how a file [Uri] should be interpreted.
   final FileSystem fileSystem;

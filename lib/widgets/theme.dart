@@ -138,18 +138,18 @@ class RideCalendarTheme {
       case .fuchsia:
       case .linux:
       case .windows:
-        final ThemeData theme = Theme.of(context);
+        final Brightness brightness = Theme.brightnessOf(context);
         final ColorScheme colorScheme = ColorScheme.of(context);
 
         return switch (state) {
           .currentSelection => .filled(backgroundColor: colorScheme.primary, labelColor: colorScheme.onPrimary),
           .futureRide => .withBrightness(
-            theme.brightness,
+            brightness,
             dark: .filled(backgroundColor: Colors.teal.shade300, labelColor: Colors.black),
             light: .filled(backgroundColor: Colors.lightGreen, labelColor: Colors.black),
           ),
           .pastDay => .withBrightness(
-            theme.brightness,
+            brightness,
             dark: .filled(
               backgroundColor: colorScheme.onSurfaceVariant,
               labelColor: colorScheme.surfaceContainerHighest,
@@ -160,7 +160,7 @@ class RideCalendarTheme {
             ),
           ),
           .pastRide => .withBrightness(
-            theme.brightness,
+            brightness,
             dark: .filled(
               backgroundColor: colorScheme.onSurface.withValues(alpha: 0.36),
               labelColor: colorScheme.onSurface,

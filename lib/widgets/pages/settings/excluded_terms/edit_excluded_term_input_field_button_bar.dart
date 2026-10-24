@@ -87,24 +87,14 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
 
         // The undo button is disabled if the value is the same.
         final undoButton = PlatformAwareWidget(
-          android: (context) {
-            Color color;
-
-            switch (Theme.of(context).brightness) {
-              case Brightness.dark:
-                color = Colors.white;
-                break;
-              case Brightness.light:
-                color = Colors.black;
-                break;
-            }
-
-            return IconButton(
-              color: color,
-              icon: const Icon(Icons.undo),
-              onPressed: currentValue == term ? null : onUndoPressed,
-            );
-          },
+          android: (context) => IconButton(
+            color: switch (Theme.brightnessOf(context)) {
+              .dark => Colors.white,
+              .light => Colors.black,
+            },
+            icon: const Icon(Icons.undo),
+            onPressed: currentValue == term ? null : onUndoPressed,
+          ),
           ios: (context) {
             final color = const CupertinoDynamicColor.withBrightness(
               color: CupertinoColors.black,

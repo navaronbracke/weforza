@@ -39,9 +39,9 @@ class RideRepository {
           ])
           ..where(_database.rideAttendees.rideId.equals(ride.id))
           ..orderBy([
-            OrderingTerm.asc(_database.riders.firstName),
-            OrderingTerm.asc(_database.riders.lastName),
-            OrderingTerm.asc(_database.riders.alias, nulls: .last),
+            .asc(_database.riders.firstName),
+            .asc(_database.riders.lastName),
+            .asc(_database.riders.alias, nulls: .last),
           ]);
 
     return attendeeQuery.map((row) => row.readTable(_database.riders)).get();
@@ -58,7 +58,7 @@ class RideRepository {
 
   /// Get the list of rides, sorted by date in descending order.
   Future<List<Ride>> getRides() {
-    return (_database.select(_database.rides)..orderBy([(ride) => OrderingTerm.desc(ride.date)])).get();
+    return (_database.select(_database.rides)..orderBy([(ride) => .desc(ride.date)])).get();
   }
 
   /// Get the amount of rides in the calendar.

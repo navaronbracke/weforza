@@ -1,12 +1,10 @@
-import 'package:uuid/uuid.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/model/rider/rider.dart';
-import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/repository/rider_repository.dart';
 
 /// This class represents the delegate for the rider form.
 class RiderFormDelegate extends AsyncComputationDelegate<void> {
-  RiderFormDelegate({required this._repository});
+  new({required this._repository});
 
   final RiderRepository _repository;
 
@@ -14,23 +12,13 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
 
   /// Add a new rider.
   /// The [whenComplete] function is called if the operation was successful.
-  void addRider(RiderModel model, {required void Function() whenComplete}) async {
+  void addRider(RidersCompanion model, {required void Function() whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }
 
-    final rider = Rider(
-      active: true,
-      alias: model.alias,
-      firstName: model.firstName,
-      lastName: model.lastName,
-      lastUpdated: DateTime.now(),
-      profileImage: model.profileImage,
-      uuid: _uuidGenerator.v4(),
-    );
-
     try {
-      await _repository.addRider(rider);
+      await _repository.addRider(model);
 
       if (mounted) {
         setDone(null);
@@ -41,36 +29,20 @@ class RiderFormDelegate extends AsyncComputationDelegate<void> {
     }
   }
 
-  /// Edit an existing rider.
+  /// Edit an existing [Rider].
   /// When the rider was updated successfully,
   /// the [whenComplete] function is called with the updated rider.
-  void editRider(RiderModel model, {required void Function(Rider updatedRider) whenComplete}) async {
+  void editRider(RidersCompanion model, {required void Function(Rider updatedRider) whenComplete}) async {
     if (!canStartComputation()) {
       return;
     }
 
     try {
-      final uuid = model.uuid;
-
-      if (uuid == null) {
-        throw ArgumentError.notNull('uuid');
-      }
-
-      final updatedRider = Rider(
-        active: model.active,
-        alias: model.alias,
-        firstName: model.firstName,
-        lastName: model.lastName,
-        lastUpdated: DateTime.now(),
-        profileImage: model.profileImage,
-        uuid: uuid,
-      );
-
-      await _repository.updateRider(updatedRider);
+      final Rider rider = await _repository.updateRider(model);
 
       if (mounted) {
         setDone(null);
-        whenComplete(updatedRider);
+        whenComplete(rider);
       }
     } catch (error, stackTrace) {
       setError(error, stackTrace);

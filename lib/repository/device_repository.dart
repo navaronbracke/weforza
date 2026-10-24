@@ -3,7 +3,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 
 class DeviceRepository {
-  const DeviceRepository(this._database);
+  const new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;
@@ -11,15 +11,15 @@ class DeviceRepository {
   /// Add the given [device].
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
-  Future<void> addDevice(Device device) async {
-    if (await _deviceExists(device.name, device.ownerId)) {
+  Future<void> addDevice(DevicesCompanion device) async {
+    if (await _deviceExists(device.name.value, device.ownerId.value)) {
       throw DeviceExistsException();
     }
 
     return _database.transaction(() async {
       await _database.into(_database.devices).insert(device);
 
-      await _updateOwnerLastUpdated(device.ownerId);
+      await _updateOwnerLastUpdated(device.ownerId.value);
     });
   }
 

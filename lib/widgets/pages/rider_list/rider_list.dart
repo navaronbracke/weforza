@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/debounce_search_delegate.dart';
-import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -15,7 +15,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 
 /// This widget represents the list of riders.
 class RiderList extends StatefulWidget {
-  const RiderList({super.key});
+  const new({super.key});
 
   @override
   State<RiderList> createState() => _RiderListState();
@@ -48,13 +48,13 @@ class _RiderListState extends State<RiderList> {
     return list.where((rider) {
       final firstName = rider.firstName.toLowerCase();
       final lastName = rider.lastName.toLowerCase();
-      final alias = rider.alias.toLowerCase();
+      final alias = rider.alias?.toLowerCase();
 
       if (firstName.contains(query) || lastName.contains(query)) {
         return true;
       }
 
-      if (alias.isNotEmpty && alias.contains(query)) {
+      if (alias != null && alias.isNotEmpty && alias.contains(query)) {
         return true;
       }
 

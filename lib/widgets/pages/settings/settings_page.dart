@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings/excluded_terms/excluded_term.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
@@ -21,7 +21,7 @@ import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
-  const SettingsPage({super.key});
+  const new({super.key});
 
   @override
   SettingsPageState createState() => SettingsPageState();
@@ -49,7 +49,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
     excludedTermsDelegate = ExcludedTermsDelegate(
       settingsDelegate: settingsDelegate,
-      initialValue: {for (final String term in currentSettings.excludedTermsFilter) ExcludedTerm(term)},
+      initialValue: currentSettings.excludedTermsFilter,
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: settingsDelegate,
@@ -85,11 +85,11 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     return SettingsPageScrollView(
       scrollController: scrollController,
       excludedTermsListHeader: const Padding(
-        padding: EdgeInsets.only(left: 12, right: 12, bottom: 8),
+        padding: .only(left: 12, right: 12, bottom: 8),
         child: ExcludedTermsListHeader(),
       ),
       excludedTermsList: SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const .symmetric(horizontal: 12),
         sliver: ExcludedTermsList(
           addTermInputField: AddExcludedTermInputField(
             controller: addTermController,
@@ -102,44 +102,38 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         ),
       ),
       excludedTermsListFooter: const Padding(
-        padding: EdgeInsets.only(left: 12, right: 12, top: 12),
+        padding: .only(left: 12, right: 12, top: 12),
         child: ExcludedTermsListFooter(),
       ),
       riderListFilter: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+        padding: const .fromLTRB(12, 16, 12, 8),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
           children: [
             Text(translator.ridersListFilter, style: textTheme.titleMedium),
             RiderListFilter(delegate: riderFilterDelegate),
-            Text(
-              translator.ridersListFilterDescription,
-              style: textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
-            ),
+            Text(translator.ridersListFilterDescription, style: textTheme.bodySmall?.copyWith(fontStyle: .italic)),
           ],
         ),
       ),
       resetRideCalendarButton: const Padding(
-        padding: EdgeInsets.fromLTRB(24, 56, 24, 0),
+        padding: .fromLTRB(24, 56, 24, 0),
         child: Center(child: ResetRideCalendarButton()),
       ),
       scanDurationOption: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 32),
+        padding: const .symmetric(horizontal: 12, vertical: 32),
         child: ScanDurationOption(delegate: scanDurationDelegate),
       ),
       version: SliverFillRemaining(
         hasScrollBody: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 32),
+          padding: const .symmetric(vertical: 32),
           child: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: .bottomCenter,
             child: AppVersion(
               builder: (version) {
-                return Text(
-                  '${translator.version} $version',
-                  style: textTheme.bodySmall?.copyWith(fontStyle: FontStyle.italic),
-                );
+                return Text('${translator.version} $version', style: textTheme.bodySmall?.copyWith(fontStyle: .italic));
               },
             ),
           ),
@@ -149,14 +143,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration, Widget? divider}) {
-    final term = terms[index];
-
     return EditExcludedTermInputField(
       decoration: decoration,
       delegate: excludedTermsDelegate,
       divider: divider,
       index: index,
-      excludedTerm: term,
+      excludedTerm: terms[index],
       scrollController: scrollController,
     );
   }
@@ -173,12 +165,12 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     return SettingsPageScrollView(
       scrollController: scrollController,
       excludedTermsList: SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const .symmetric(horizontal: 20),
         sliver: ExcludedTermsList(
           addTermInputField: AddExcludedTermInputField(
             controller: addTermController,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              borderRadius: const .only(topLeft: .circular(10), topRight: .circular(10)),
               color: decorationBackgroundColor,
             ),
             delegate: excludedTermsDelegate,
@@ -187,10 +179,10 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           listenable: excludedTermsDelegate.listenable,
           builder: (items, index) {
-            BorderRadius borderRadius = BorderRadius.zero;
+            BorderRadius borderRadius = .zero;
 
             if (index == items.length - 1) {
-              borderRadius = const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10));
+              borderRadius = const .only(bottomLeft: .circular(10), bottomRight: .circular(10));
             }
 
             return _buildExcludedTermItem(
@@ -210,7 +202,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         // Both the CupertinoFormSection and CupertinoListSection (which is used by the former)
         // add 20 default horizontal padding to the fotter, so account for 40 total in the footer,
         // since it is not inserted using a `CupertinoFormSection.insetGrouped`.
-        padding: EdgeInsetsDirectional.fromSTEB(40.0, 10.0, 40.0, 0.0),
+        padding: .fromSTEB(40.0, 10.0, 40.0, 0.0),
         child: ExcludedTermsListFooter(),
       ),
       riderListFilter: CupertinoFormSection.insetGrouped(
@@ -218,7 +210,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         footer: Text(translator.ridersListFilterDescription),
         children: [
           Padding(
-            padding: const EdgeInsets.all(6),
+            padding: const .all(6),
             child: Center(child: RiderListFilter(delegate: riderFilterDelegate)),
           ),
         ],
@@ -230,7 +222,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         transitionBetweenRoutes: false,
       ),
       resetRideCalendarButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32),
+        padding: const .symmetric(vertical: 32),
         child: CupertinoFormSection.insetGrouped(
           header: Text(translator.rideCalendar.toUpperCase()),
           children: const [

@@ -9,10 +9,16 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty rider devices list.
 class RiderDevicesListEmpty extends StatelessWidget {
-  const RiderDevicesListEmpty({super.key});
+  const new({super.key});
 
-  void onAddDevicePressed(BuildContext context, String ownerUuid) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceForm(ownerUuid: ownerUuid)));
+  void onAddDevicePressed(BuildContext context, WidgetRef ref) {
+    final selectedRider = ref.read(selectedRiderProvider);
+
+    if (selectedRider == null) {
+      return;
+    }
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeviceForm(ownerId: selectedRider.id)));
   }
 
   @override
@@ -21,48 +27,32 @@ class RiderDevicesListEmpty extends StatelessWidget {
 
     return Center(
       child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              PlatformAwareIcon(
-                androidIcon: Icons.devices_other,
-                iosIcon: Icons.devices_other,
-                size: constraints.biggest.shortestSide * .1,
+        builder: (context, constraints) => Column(
+          mainAxisAlignment: .center,
+          children: <Widget>[
+            PlatformAwareIcon(
+              androidIcon: Icons.devices_other,
+              iosIcon: Icons.devices_other,
+              size: constraints.biggest.shortestSide * .1,
+            ),
+            Padding(
+              padding: const .fromLTRB(16, 8, 16, 32),
+              child: Text(translator.riderNoDevices, textAlign: .center),
+            ),
+            Consumer(
+              builder: (context, ref, _) => PlatformAwareWidget(
+                android: (context) => ElevatedButton(
+                  onPressed: () => onAddDevicePressed(context, ref),
+                  child: Text(translator.addDevice),
+                ),
+                ios: (context) => CupertinoButton.filled(
+                  onPressed: () => onAddDevicePressed(context, ref),
+                  child: Text(translator.addDevice, style: const TextStyle(color: CupertinoColors.white)),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
-                child: Text(translator.riderNoDevices, textAlign: TextAlign.center),
-              ),
-              Consumer(
-                builder: (context, ref, child) {
-                  return PlatformAwareWidget(
-                    android: (context) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          final selectedRider = ref.read(selectedRiderProvider);
-
-                          onAddDevicePressed(context, selectedRider!.uuid);
-                        },
-                        child: Text(translator.addDevice),
-                      );
-                    },
-                    ios: (context) {
-                      return CupertinoButton.filled(
-                        onPressed: () {
-                          final selectedRider = ref.read(selectedRiderProvider);
-
-                          onAddDevicePressed(context, selectedRider!.uuid);
-                        },
-                        child: Text(translator.addDevice, style: const TextStyle(color: CupertinoColors.white)),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          );
-        },
+            ),
+          ],
+        ),
       ),
     );
   }

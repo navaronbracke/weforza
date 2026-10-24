@@ -5,31 +5,29 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the empty exluded terms list.
 class ExcludedTermsListEmpty extends StatelessWidget {
-  const ExcludedTermsListEmpty({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {
     final text = S.of(context).noDisallowedWords;
 
     return PlatformAwareWidget(
-      android: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(4),
-          child: Text(text, style: TextTheme.of(context).bodySmall, textAlign: TextAlign.center),
-        );
-      },
-      ios: (context) {
-        final textStyle = CupertinoTheme.of(context).textTheme.textStyle;
-
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-            color: CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context),
-          ),
-          padding: const EdgeInsets.all(4),
-          child: Text(text, style: textStyle.copyWith(fontSize: 13), textAlign: TextAlign.center),
-        );
-      },
+      android: (context) => Padding(
+        padding: const .all(4),
+        child: Text(text, style: TextTheme.of(context).bodySmall, textAlign: .center),
+      ),
+      ios: (context) => Container(
+        decoration: BoxDecoration(
+          borderRadius: const .only(bottomLeft: .circular(10), bottomRight: .circular(10)),
+          color: CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context),
+        ),
+        padding: const .all(4),
+        child: Text(
+          text,
+          style: CupertinoTheme.of(context).textTheme.textStyle.copyWith(fontSize: 13),
+          textAlign: .center,
+        ),
+      ),
     );
   }
 }

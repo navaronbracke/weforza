@@ -1,20 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
 
 /// This widget represents a selectable owner list item for the unresolved owners list or the manual selection list.
 class SelectableOwnerListItem extends StatelessWidget {
-  const SelectableOwnerListItem({
-    required this.onTap,
-    required this.rider,
-    required this.selected,
-    this.trailing,
-    super.key,
-  });
+  const new({required this.onTap, required this.rider, required this.selected, this.trailing, super.key});
 
   /// The onTap handler for this item.
   final void Function() onTap;
@@ -30,20 +24,18 @@ class SelectableOwnerListItem extends StatelessWidget {
 
   Color _getSelectedBackgroundColor(BuildContext context) {
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
-      case TargetPlatform.fuchsia:
-      case TargetPlatform.linux:
-      case TargetPlatform.windows:
+      case .android:
+      case .fuchsia:
+      case .linux:
+      case .windows:
         final ColorScheme colorScheme = ColorScheme.of(context);
 
-        switch (Theme.of(context).brightness) {
-          case Brightness.dark:
-            return colorScheme.onPrimary;
-          case Brightness.light:
-            return colorScheme.primary;
-        }
-      case TargetPlatform.iOS:
-      case TargetPlatform.macOS:
+        return switch (Theme.of(context).brightness) {
+          .dark => colorScheme.onPrimary,
+          .light => colorScheme.primary,
+        };
+      case .iOS:
+      case .macOS:
         return CupertinoTheme.of(context).primaryColor;
     }
   }
@@ -60,11 +52,11 @@ class SelectableOwnerListItem extends StatelessWidget {
     }
 
     Widget child = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const .symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
+            padding: const .only(right: 4),
             child: AdaptiveProfileImage(image: rider.profileImage, personInitials: rider.initials),
           ),
           Expanded(
@@ -76,7 +68,7 @@ class SelectableOwnerListItem extends StatelessWidget {
               secondLineStyle: lastNameStyle,
             ),
           ),
-          if (trailing != null) Padding(padding: const EdgeInsets.only(left: 4), child: trailing!),
+          if (trailing case final trailing?) Padding(padding: const .only(left: 4), child: trailing),
         ],
       ),
     );
@@ -88,6 +80,6 @@ class SelectableOwnerListItem extends StatelessWidget {
       );
     }
 
-    return GestureDetector(behavior: HitTestBehavior.opaque, onTap: onTap, child: child);
+    return GestureDetector(behavior: .opaque, onTap: onTap, child: child);
   }
 }

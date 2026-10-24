@@ -21,7 +21,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideAttendeeScanningPage extends ConsumerStatefulWidget {
-  const RideAttendeeScanningPage({super.key});
+  const new({super.key});
 
   @override
   RideAttendeeScanningPageState createState() => RideAttendeeScanningPageState();

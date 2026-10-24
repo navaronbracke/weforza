@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/device/device.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/device_icon.dart';
 import 'package:weforza/widgets/pages/device_form.dart';
@@ -9,7 +9,7 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderDevicesListItem extends StatelessWidget {
-  const RiderDevicesListItem({required this.deleteDeviceButton, required this.device, super.key});
+  const new({required this.deleteDeviceButton, required this.device, super.key});
 
   /// The button that deletes [device] from the list of devices when pressed.
   final Widget deleteDeviceButton;
@@ -21,13 +21,13 @@ class RiderDevicesListItem extends StatelessWidget {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: DeviceIcon(type: device.type),
+          padding: const .only(right: 4),
+          child: DeviceIcon(type: device.deviceType),
         ),
         Expanded(
           child: Text(
             device.name,
-            overflow: TextOverflow.ellipsis,
+            overflow: .ellipsis,
             softWrap: true,
             maxLines: 2,
             style: const TextStyle(fontSize: 15),
@@ -36,7 +36,7 @@ class RiderDevicesListItem extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 4),
+              padding: const .only(left: 4),
               child: _EditDeviceButton(device: device),
             ),
             deleteDeviceButton,
@@ -50,15 +50,15 @@ class RiderDevicesListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformAwareWidget(
       android: (context) {
-        return Padding(padding: const EdgeInsets.only(left: 8, right: 4, bottom: 4), child: _buildItem(context));
+        return Padding(padding: const .only(left: 8, right: 4, bottom: 4), child: _buildItem(context));
       },
-      ios: (context) => Padding(padding: const EdgeInsets.only(left: 4, right: 16), child: _buildItem(context)),
+      ios: (context) => Padding(padding: const .only(left: 4, right: 16), child: _buildItem(context)),
     );
   }
 }
 
 class _EditDeviceButton extends ConsumerWidget {
-  const _EditDeviceButton({required this.device});
+  const new({required this.device});
 
   /// The device to edit.
   final Device device;
@@ -66,11 +66,13 @@ class _EditDeviceButton extends ConsumerWidget {
   void _onEditDevicePressed(BuildContext context, WidgetRef ref) {
     final selectedRider = ref.read(selectedRiderProvider);
 
+    if (selectedRider == null) {
+      return;
+    }
+
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) {
-          return DeviceForm(device: device, ownerUuid: selectedRider!.uuid);
-        },
+        builder: (_) => DeviceForm(device: device, ownerId: selectedRider.id),
       ),
     );
   }

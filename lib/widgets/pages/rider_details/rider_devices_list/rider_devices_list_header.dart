@@ -11,18 +11,14 @@ class RiderDevicesListHeader extends StatelessWidget {
     final title = S.of(context).devices;
 
     return PlatformAwareWidget(
-      android: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(title, style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: .bold)),
-        );
-      },
-      ios: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 12),
-          child: Text(title, style: CupertinoTheme.of(context).textTheme.navTitleTextStyle),
-        );
-      },
+      android: (context) => Padding(
+        padding: const .only(top: 4),
+        child: Text(title, style: TextTheme.of(context).titleMedium?.copyWith(fontWeight: .bold)),
+      ),
+      ios: (context) => Padding(
+        padding: const .only(top: 12),
+        child: Text(title, style: CupertinoTheme.of(context).textTheme.navTitleTextStyle),
+      ),
     );
   }
 }

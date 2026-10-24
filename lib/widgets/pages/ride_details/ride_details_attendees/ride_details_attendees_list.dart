@@ -11,7 +11,7 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideDetailsAttendeesList extends ConsumerWidget {
-  const RideDetailsAttendeesList({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,7 +53,7 @@ class RideDetailsAttendeesList extends ConsumerWidget {
 /// This counter displays the total amount of ride attendees
 /// and the number of scanned attendees.
 class _ScannedAttendeesBottomBar extends ConsumerWidget {
-  const _ScannedAttendeesBottomBar({required this.total});
+  const new({required this.total});
 
   final int total;
 
@@ -63,26 +63,26 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
 
     return BottomAppBar(
       height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const .symmetric(horizontal: 16, vertical: 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: .spaceBetween,
         children: [
           Tooltip(
-            margin: const EdgeInsets.only(bottom: 12),
+            margin: const .only(bottom: 12),
             message: translator.total,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: [
                 Icon(Icons.people, color: colorScheme.primary),
-                Padding(padding: const EdgeInsets.only(left: 4), child: Text('$total')),
+                Padding(padding: const .only(left: 4), child: Text('$total')),
               ],
             ),
           ),
           Tooltip(
-            margin: const EdgeInsets.only(bottom: 12),
+            margin: const .only(bottom: 12),
             message: translator.scanned,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: [
                 Text('${scannedAttendees ?? '-'}'),
                 Icon(Icons.bluetooth_searching, color: colorScheme.primary),
@@ -97,13 +97,13 @@ class _ScannedAttendeesBottomBar extends ConsumerWidget {
   Widget _buildIosLayout(BuildContext context, {required int total, int? scannedAttendees}) {
     return CupertinoBottomBar.constrained(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const .symmetric(horizontal: 8),
         child: Row(
           children: [
             const Icon(CupertinoIcons.person_2_fill, color: CupertinoColors.activeBlue),
-            Padding(padding: const EdgeInsets.only(left: 4), child: Text('$total')),
+            Padding(padding: const .only(left: 4), child: Text('$total')),
             const Spacer(),
-            Padding(padding: const EdgeInsets.only(right: 4), child: Text('${scannedAttendees ?? '-'}')),
+            Padding(padding: const .only(right: 4), child: Text('${scannedAttendees ?? '-'}')),
             const Icon(Icons.bluetooth_searching, color: CupertinoColors.activeBlue),
           ],
         ),

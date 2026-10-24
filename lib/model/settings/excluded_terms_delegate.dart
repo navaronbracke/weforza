@@ -29,12 +29,16 @@ class ExcludedTermsDelegate {
     );
   }
 
+  int _compareExcludedTerms(ExcludedTerm a, ExcludedTerm b) {
+    return a.term.compareTo(b.term);
+  }
+
   /// Add the given [value] to the list of terms.
   void addTerm(String value) {
     final List<ExcludedTerm> newTermsList = [
       for (final ExcludedTerm term in _termsNotifier.value) term,
       ExcludedTerm(term: value),
-    ]..sort((a, b) => a.term.compareTo(b.term));
+    ]..sort(_compareExcludedTerms);
 
     // A Set cannot be sorted so use insertion order.
     final Set<ExcludedTerm> newTerms = Set.of(newTermsList);
@@ -58,7 +62,7 @@ class ExcludedTermsDelegate {
     final oldTerms = List.of(_termsNotifier.value);
 
     oldTerms[index] = ExcludedTerm(term: newValue);
-    oldTerms.sort((a, b) => a.term.compareTo(b.term));
+    oldTerms.sort(_compareExcludedTerms);
 
     final newTerms = Set.of(oldTerms);
 

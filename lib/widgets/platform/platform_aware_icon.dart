@@ -4,14 +4,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents an [Icon] that adapts itself to the current platform.
 class PlatformAwareIcon extends StatelessWidget {
-  const PlatformAwareIcon({
-    required this.androidIcon,
-    required this.iosIcon,
-    super.key,
-    this.androidColor,
-    this.iosColor,
-    this.size,
-  });
+  const new({required this.androidIcon, required this.iosIcon, super.key, this.androidColor, this.iosColor, this.size});
 
   /// The color for the [androidIcon].
   ///

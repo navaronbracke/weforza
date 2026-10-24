@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/device/device.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -15,15 +15,21 @@ import 'package:weforza/widgets/platform/platform_aware_loading_indicator.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderDevicesList extends ConsumerStatefulWidget {
-  const RiderDevicesList({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<RiderDevicesList> createState() => _RiderDevicesListState();
 }
 
 class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
-  void onAddDevicePressed(BuildContext context, String ownerUuid) {
-    Navigator.of(context).push<void>(MaterialPageRoute(builder: (context) => DeviceForm(ownerUuid: ownerUuid)));
+  void onAddDevicePressed(BuildContext context, WidgetRef ref) {
+    final selectedRider = ref.read(selectedRiderProvider);
+
+    if (selectedRider == null) {
+      return;
+    }
+
+    Navigator.of(context).push<void>(MaterialPageRoute(builder: (context) => DeviceForm(ownerId: selectedRider.id)));
   }
 
   @override
@@ -31,13 +37,7 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
     final devicesList = ref.watch(selectedRiderDevicesProvider);
 
     return devicesList.when(
-      data: (devices) {
-        if (devices.isEmpty) {
-          return const RiderDevicesListEmpty();
-        }
-
-        return _buildDevicesList(context, devices);
-      },
+      data: (devices) => devices.isEmpty ? const RiderDevicesListEmpty() : _buildDevicesList(context, devices),
       error: (error, _) => const Center(child: GenericError()),
       loading: () => const Center(child: PlatformAwareLoadingIndicator()),
     );
@@ -50,40 +50,26 @@ class _RiderDevicesListState extends ConsumerState<RiderDevicesList> {
           const RiderDevicesListHeader(),
           Expanded(
             child: ListView.builder(
-              itemBuilder: (context, index) {
-                final device = devices[index];
-
-                return RiderDevicesListItem(
-                  device: device,
-                  deleteDeviceButton: DeleteDeviceButton(index: index),
-                );
-              },
+              itemBuilder: (context, index) => RiderDevicesListItem(
+                device: devices[index],
+                deleteDeviceButton: DeleteDeviceButton(index: index),
+              ),
               itemCount: devices.length,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const .symmetric(vertical: 16),
             child: PlatformAwareWidget(
               android: (context) {
                 return FilledButton(
-                  onPressed: () {
-                    final selectedRider = ref.read(selectedRiderProvider);
-
-                    onAddDevicePressed(context, selectedRider!.uuid);
-                  },
+                  onPressed: () => onAddDevicePressed(context, ref),
                   child: Text(S.of(context).addDevice),
                 );
               },
-              ios: (context) {
-                return CupertinoButton.filled(
-                  onPressed: () {
-                    final selectedRider = ref.read(selectedRiderProvider);
-
-                    onAddDevicePressed(context, selectedRider!.uuid);
-                  },
-                  child: Text(S.of(context).addDevice, style: const TextStyle(color: CupertinoColors.white)),
-                );
-              },
+              ios: (context) => CupertinoButton.filled(
+                onPressed: () => onAddDevicePressed(context, ref),
+                child: Text(S.of(context).addDevice, style: const TextStyle(color: CupertinoColors.white)),
+              ),
             ),
           ),
         ],

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 /// This widget represents a [CupertinoButton] that displays an [Icon] as child.
 class CupertinoIconButton extends StatelessWidget {
-  const CupertinoIconButton({
+  const new({
     required this.icon,
     required this.onPressed,
     super.key,
@@ -32,10 +32,10 @@ class CupertinoIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoButton(
-      borderRadius: BorderRadius.zero,
+      borderRadius: .zero,
       minimumSize: Size(size, size),
       onPressed: onPressed,
-      padding: EdgeInsets.zero,
+      padding: .zero,
       child: Icon(
         icon,
         color: onPressed == null

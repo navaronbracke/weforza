@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/model/rider/rider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/common/rider_attending_count.dart';
@@ -9,7 +9,7 @@ import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class RiderListItem extends ConsumerWidget {
-  RiderListItem({required this.rider, required this.onPressed}) : super(key: ValueKey(rider.uuid));
+  new({required this.rider, required this.onPressed}) : super(key: ValueKey(rider.id));
 
   /// The rider that is displayed in this item.
   final Rider rider;
@@ -33,13 +33,13 @@ class RiderListItem extends ConsumerWidget {
 
         onPressed();
       },
-      behavior: HitTestBehavior.opaque,
+      behavior: .opaque,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const .all(8),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 4),
+              padding: const .only(right: 4),
               child: AdaptiveProfileImage(image: rider.profileImage, personInitials: rider.initials),
             ),
             Expanded(
@@ -52,7 +52,7 @@ class RiderListItem extends ConsumerWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 4),
+              padding: const .only(left: 4),
               child: RiderListItemAttendingCount(rider: rider),
             ),
           ],

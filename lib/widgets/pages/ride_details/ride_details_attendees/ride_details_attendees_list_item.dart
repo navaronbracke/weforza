@@ -3,7 +3,7 @@ import 'package:weforza/widgets/common/rider_name_and_alias.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class RideDetailsAttendeesListItem extends StatelessWidget {
-  RideDetailsAttendeesListItem({required this.firstName, required this.lastName, required this.alias, super.key})
+  new({required this.firstName, required this.lastName, required this.alias, super.key})
     : assert(
         firstName.isNotEmpty && lastName.isNotEmpty,
         'The first name and last name of a ride attendee should not be empty',
@@ -11,7 +11,7 @@ class RideDetailsAttendeesListItem extends StatelessWidget {
 
   final String firstName;
   final String lastName;
-  final String alias;
+  final String? alias;
 
   @override
   Widget build(BuildContext context) {

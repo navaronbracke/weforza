@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/model/ride_details_page_options.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
@@ -16,7 +16,7 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RideDetailsPage extends ConsumerStatefulWidget {
-  const RideDetailsPage({super.key});
+  const new({super.key});
 
   @override
   RideDetailsPageState createState() => RideDetailsPageState();
@@ -72,12 +72,12 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
             itemBuilder: (context) {
               return <PopupMenuEntry<RideDetailsPageOptions>>[
                 PopupMenuItem<RideDetailsPageOptions>(
-                  value: RideDetailsPageOptions.export,
+                  value: .export,
                   child: ListTile(leading: const Icon(Icons.publish), title: Text(translator.export)),
                 ),
                 const PopupMenuDivider(),
                 PopupMenuItem<RideDetailsPageOptions>(
-                  value: RideDetailsPageOptions.delete,
+                  value: .delete,
                   child: ListTile(
                     leading: Icon(Icons.delete, color: errorColor),
                     title: Text(translator.delete, style: TextStyle(color: errorColor)),
@@ -102,10 +102,10 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
         middle: Row(
           children: <Widget>[
             const Expanded(
-              child: Padding(padding: EdgeInsets.only(left: 8), child: RideDetailsTitle()),
+              child: Padding(padding: .only(left: 8), child: RideDetailsTitle()),
             ),
             Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: .min,
               children: <Widget>[
                 CupertinoIconButton(icon: Icons.bluetooth_searching, onPressed: () => _goToScanningPage(context)),
                 CupertinoIconButton(
@@ -127,14 +127,14 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
 
   void onSelectMenuOption(BuildContext context, RideDetailsPageOptions option) {
     switch (option) {
-      case RideDetailsPageOptions.export:
+      case .export:
         final selectedRide = ref.read(selectedRideProvider);
 
         assert(selectedRide != null, 'The selected ride was null.');
 
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => ExportRidePage(selectedRide: selectedRide!)));
         break;
-      case RideDetailsPageOptions.delete:
+      case .delete:
         _onDeleteRideOptionSelected(context);
         break;
     }

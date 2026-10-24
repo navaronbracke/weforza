@@ -7,7 +7,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget resembles the toggle switch for the 'active' state of a rider.
 class RiderActiveToggle extends StatelessWidget {
-  const RiderActiveToggle({super.key});
+  const new({super.key});
 
   void _onToggleChanged(WidgetRef ref, bool value) {
     final notifier = ref.read(selectedRiderProvider.notifier);
@@ -21,10 +21,10 @@ class RiderActiveToggle extends StatelessWidget {
       children: [
         Text(S.of(context).active),
         Padding(
-          padding: const EdgeInsets.only(left: 4),
+          padding: const .only(left: 4),
           child: Consumer(
             builder: (_, ref, child) {
-              final isActive = ref.watch(selectedRiderProvider.select((r) => r!.active));
+              final isActive = ref.watch(selectedRiderProvider.select((r) => r?.isActive ?? false));
 
               return PlatformAwareWidget(
                 android: (_) => Switch(value: isActive, onChanged: (value) => _onToggleChanged(ref, value)),

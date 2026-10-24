@@ -1,15 +1,14 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/widgets/custom/profile_image/profile_image.dart';
 
-class RiderProfileImage extends ConsumerWidget {
-  const RiderProfileImage({super.key});
+class RiderProfileImage extends StatelessWidget {
+  const new({required this.rider, super.key});
+
+  final Rider rider;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedRider = ref.watch(selectedRiderProvider.select((value) => value!));
-
-    return AdaptiveProfileImage(image: selectedRider.profileImage, personInitials: selectedRider.initials, size: 72);
+  Widget build(BuildContext context) {
+    return AdaptiveProfileImage.fromRider(rider, size: 72);
   }
 }

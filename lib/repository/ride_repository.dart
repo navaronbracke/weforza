@@ -83,7 +83,7 @@ class RideRepository {
   }
 
   /// Update the given [ride] and its [attendees].
-  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
+  Future<void> updateRide(Ride ride, List<RideAttendeesCompanion> attendees) {
     // TODO: use diffing instead of bulk delete and insert
     return _database.transaction(() async {
       await (_database.delete(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).go();

@@ -4,7 +4,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a search field that has a clear button at the end if there is text in the search field.
 class SearchFieldWithClearButton extends StatelessWidget {
-  const SearchFieldWithClearButton({
+  const new({
     required this.controller,
     required this.focusNode,
     required this.onChanged,
@@ -32,28 +32,26 @@ class SearchFieldWithClearButton extends StatelessWidget {
           focusNode: focusNode,
           controller: controller,
           onChanged: onChanged,
-          textInputAction: TextInputAction.search,
-          keyboardType: TextInputType.text,
+          textInputAction: .search,
+          keyboardType: .text,
           autocorrect: false,
           decoration: InputDecoration(
-            floatingLabelBehavior: FloatingLabelBehavior.never,
+            floatingLabelBehavior: .never,
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+            contentPadding: const .symmetric(horizontal: 4),
             labelText: placeholder,
             suffixIcon: ValueListenableBuilder<TextEditingValue>(
               valueListenable: controller,
-              builder: (_, value, child) {
-                return value.text.isEmpty
-                    ? const Icon(Icons.search)
-                    : IconButton(onPressed: controller.clear, icon: const Icon(Icons.clear));
-              },
+              builder: (_, value, child) => value.text.isEmpty
+                  ? const Icon(Icons.search)
+                  : IconButton(onPressed: controller.clear, icon: const Icon(Icons.clear)),
             ),
           ),
         );
       },
       ios: (context) {
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const .all(8.0),
           child: CupertinoSearchTextField(
             focusNode: focusNode,
             controller: controller,

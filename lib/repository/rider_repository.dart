@@ -13,8 +13,12 @@ class RiderRepository {
   final WeForzaDatabase _database;
 
   /// Add a [rider].
-  Future<void> addRider(Rider rider) async {
-    if (await _riderExists(firstName: rider.firstName, lastName: rider.lastName, alias: rider.alias)) {
+  Future<void> addRider(RidersCompanion rider) async {
+    if (await _riderExists(
+      firstName: rider.firstName.value,
+      lastName: rider.lastName.value,
+      alias: rider.alias.value,
+    )) {
       throw RiderExistsException();
     }
 
@@ -37,11 +41,7 @@ class RiderRepository {
   Future<List<Rider>> getRiders(RiderFilterOption filter) {
     final query = _database.select(_database.riders);
 
-    query.orderBy([
-      (t) => OrderingTerm.asc(t.firstName),
-      (t) => OrderingTerm.asc(t.lastName),
-      (t) => OrderingTerm.asc(t.alias, nulls: .last),
-    ]);
+    query.orderBy([(t) => .asc(t.firstName), (t) => .asc(t.lastName), (t) => .asc(t.alias, nulls: .last)]);
 
     switch (filter) {
       case .active:
@@ -63,12 +63,19 @@ class RiderRepository {
   }
 
   /// Update the given [rider].
-  Future<void> updateRider(Rider rider) async {
-    if (await _riderExists(firstName: rider.firstName, lastName: rider.lastName, alias: rider.alias, id: rider.id)) {
+  Future<Rider> updateRider(RidersCompanion rider) async {
+    if (await _riderExists(
+      firstName: rider.firstName.value,
+      lastName: rider.lastName.value,
+      alias: rider.alias.value,
+      id: rider.id.value,
+    )) {
       throw RiderExistsException();
     }
 
     await _database.update(_database.riders).replace(rider);
+
+    return (_database.select(_database.riders)..where((t) => t.id.equals(rider.id.value))).getSingle();
   }
 
   /// Check whether a rider exists.

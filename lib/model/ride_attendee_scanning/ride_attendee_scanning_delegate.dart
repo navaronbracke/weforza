@@ -1,18 +1,14 @@
-/// @docImport 'package:weforza/model/device/device.dart';
-library;
-
 import 'dart:async';
 
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/bluetooth/bluetooth_peripheral.dart';
-import 'package:weforza/model/ride.dart';
-import 'package:weforza/model/ride_attendee.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/ride_attendee_scanning/bluetooth_peripheral_with_owners.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate_state_machine.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/repository/device_repository.dart';
@@ -22,7 +18,7 @@ import 'package:weforza/repository/rider_repository.dart';
 /// This class represents the delegate
 /// that manages the attendants for a given ride.
 class RideAttendeeScanningDelegate {
-  RideAttendeeScanningDelegate({
+  new({
     required this._deviceRepository,
     required this._onDeviceFound,
     required this._ride,
@@ -54,15 +50,15 @@ class RideAttendeeScanningDelegate {
   /// The settings for the delegate.
   final Settings _settings;
 
-  /// This map contains all the active riders mapped to their [Rider.uuid].
-  final _activeRiders = <String, Rider>{};
+  /// This map contains all the active riders mapped to their [Rider.id].
+  final _activeRiders = <int, Rider>{};
 
-  /// This map contains the uuids of owners per device name.
+  /// This map contains the ids of owners per device name.
   ///
   /// The keys are device names.
-  /// The values are the uuids of the active riders,
+  /// The values are the ids of the active riders,
   /// that own a device with the [MapEntry.key] as device name.
-  final _deviceOwners = <String, Set<String>>{};
+  final _deviceOwners = <String, Set<int>>{};
 
   /// The list of Bluetooth peripherals with possible owners per peripheral.
   final _devicesWithOwners = <BluetoothPeripheralWithOwners>[];
@@ -119,14 +115,14 @@ class RideAttendeeScanningDelegate {
   /// Get a [ValueListenable] for the scanning state of the ride attendee scanning process.
   ValueListenable<AsyncValue<RideAttendeeScanningState>> get scanningStateListenable => _stateMachine.listenable;
 
-  /// Add the given [uuid] as a new ride attendee.
+  /// Add the given [id] as a new ride attendee.
   ///
   /// The [isScanned] parameter indicates if this ride attendee
   /// was found automatically, or if it was manually added.
-  void _addRideAttendee(String uuid, {required bool isScanned}) {
+  void _addRideAttendee(int id, {required bool isScanned}) {
     final items = Set.of(_rideAttendeeNotifier.value);
 
-    items.add(ScannedRideAttendee(uuid: uuid, isScanned: isScanned));
+    items.add(ScannedRideAttendee(id: id, isScanned: isScanned));
 
     _rideAttendeeNotifier.value = items;
   }
@@ -166,7 +162,7 @@ class RideAttendeeScanningDelegate {
 
     if (excludedTerms.isNotEmpty) {
       for (final excludedTerm in excludedTerms) {
-        if (deviceName.contains(excludedTerm)) {
+        if (deviceName.contains(excludedTerm.term)) {
           return false;
         }
       }
@@ -183,7 +179,7 @@ class RideAttendeeScanningDelegate {
     // Only include it if the owner wasn't scanned yet.
     // The value of `isScanned` is irrelevant,
     // since it is excluded from the `operator==` implementation.
-    return !_rideAttendeeNotifier.value.contains(ScannedRideAttendee(uuid: owners.first, isScanned: false));
+    return !_rideAttendeeNotifier.value.contains(ScannedRideAttendee(id: owners.first, isScanned: false));
   }
 
   /// Load the active riders and their devices.
@@ -195,7 +191,7 @@ class RideAttendeeScanningDelegate {
     }
 
     for (final activeRider in activeRiders) {
-      _activeRiders[activeRider.uuid] = activeRider;
+      _activeRiders[activeRider.id] = activeRider;
     }
 
     // Keep the devices that are owned by active riders.
@@ -209,7 +205,7 @@ class RideAttendeeScanningDelegate {
         continue;
       }
 
-      _deviceOwners[device.name] = <String>{device.ownerId};
+      _deviceOwners[device.name] = <int>{device.ownerId};
     }
   }
 
@@ -259,12 +255,15 @@ class RideAttendeeScanningDelegate {
     final deviceName = device.deviceName.trim();
 
     // Get the owners of the device.
-    final owners = _deviceOwners[deviceName]?.map((uuid) => _activeRiders[uuid]!) ?? [];
+    final Iterable<Rider> owners = switch (_deviceOwners[deviceName]) {
+      final Set<int> ids when ids.isNotEmpty => ids.map((id) => _activeRiders[id]).whereType<Rider>(),
+      _ => const .empty(),
+    };
 
     switch (owners.length) {
       case 1:
         // The single owner can be resolved automatically.
-        _addRideAttendee(owners.first.uuid, isScanned: true);
+        _addRideAttendee(owners.first.id, isScanned: true);
       case > 1:
         // If the device has multiple possible owners,
         // add the conflicting owners to the unresolved owners.
@@ -290,14 +289,14 @@ class RideAttendeeScanningDelegate {
   /// Get the scanned Bluetooth device at the given [index].
   BluetoothPeripheralWithOwners getScannedDevice(int index) => _devicesWithOwners[index];
 
-  /// Get the selected ride attendee for the rider with the given [uuid].
+  /// Get the selected ride attendee for the rider with the given [id].
   ///
   /// Returns the selected ride attendee
   /// or null if the rider is currently not selected.
-  ScannedRideAttendee? getSelectedRideAttendee(String uuid) {
-    // Lookup if an attendee with the given uuid is selected.
+  ScannedRideAttendee? getSelectedRideAttendee(int id) {
+    // Lookup if an attendee with the given id is selected.
     // The isScanned value is irrelevant, as it is merely presentational.
-    return _rideAttendeeNotifier.value.lookup(ScannedRideAttendee(uuid: uuid, isScanned: false));
+    return _rideAttendeeNotifier.value.lookup(ScannedRideAttendee(id: id, isScanned: false));
   }
 
   /// Get the list of unresolved device owners
@@ -307,7 +306,7 @@ class RideAttendeeScanningDelegate {
 
     return [
       for (final rider in _unresolvedOwners)
-        if (!rideAttendees.contains(ScannedRideAttendee(uuid: rider.uuid, isScanned: false))) rider,
+        if (!rideAttendees.contains(ScannedRideAttendee(id: rider.id, isScanned: false))) rider,
     ];
   }
 
@@ -339,17 +338,19 @@ class RideAttendeeScanningDelegate {
 
     try {
       int scannedAttendees = 0;
-      final rideAttendees = <RideAttendee>[];
+      final rideAttendees = <RideAttendeesCompanion>[];
 
       for (final item in _rideAttendeeNotifier.value) {
         if (item.isScanned) {
           scannedAttendees++;
         }
 
-        rideAttendees.add(RideAttendee(rideDate: _ride.date, uuid: item.uuid, isScanned: item.isScanned));
+        rideAttendees.add(
+          RideAttendeesCompanion(isScanned: Value(item.isScanned), rideId: Value(_ride.id), riderId: Value(item.id)),
+        );
       }
 
-      final updatedRide = _ride.copyWith(scannedAttendees: scannedAttendees);
+      final updatedRide = _ride.copyWith(scannedAttendees: Value(scannedAttendees));
 
       await _rideRepository.updateRide(updatedRide, rideAttendees);
 
@@ -468,7 +469,7 @@ class RideAttendeeScanningDelegate {
     // The item is not yet in the selection.
     // Add it to the selection as a manually selected entry.
     if (!_rideAttendeeNotifier.value.contains(item)) {
-      _addRideAttendee(item.uuid, isScanned: false);
+      _addRideAttendee(item.id, isScanned: false);
 
       return true;
     }
@@ -500,7 +501,7 @@ class RideAttendeeScanningDelegate {
     if (currentSelection.contains(item)) {
       _removeRideAttendee(item);
     } else {
-      _addRideAttendee(item.uuid, isScanned: false);
+      _addRideAttendee(item.id, isScanned: false);
     }
   }
 

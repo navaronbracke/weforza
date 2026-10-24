@@ -4,14 +4,16 @@ import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart'
 
 /// This class represents the repository that manages the rides.
 class RideRepository {
-  const RideRepository(this._database);
+  const new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;
 
-  /// Add the given [rides].
-  Future<void> addRides(List<Ride> rides) {
-    return _database.batch((batch) => batch.insertAll(_database.rides, rides));
+  /// Add [Ride]s for the given [dates].
+  Future<void> addRides(Iterable<DateTime> dates) {
+    return _database.batch(
+      (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion(date: Value(date))]),
+    );
   }
 
   /// Delete the given [ride].
@@ -37,9 +39,9 @@ class RideRepository {
           ])
           ..where(_database.rideAttendees.rideId.equals(ride.id))
           ..orderBy([
-            OrderingTerm.asc(_database.riders.firstName),
-            OrderingTerm.asc(_database.riders.lastName),
-            OrderingTerm.asc(_database.riders.alias, nulls: .last),
+            .asc(_database.riders.firstName),
+            .asc(_database.riders.lastName),
+            .asc(_database.riders.alias, nulls: .last),
           ]);
 
     return attendeeQuery.map((row) => row.readTable(_database.riders)).get();
@@ -56,7 +58,7 @@ class RideRepository {
 
   /// Get the list of rides, sorted by date in descending order.
   Future<List<Ride>> getRides() {
-    return (_database.select(_database.rides)..orderBy([(ride) => OrderingTerm.desc(ride.date)])).get();
+    return (_database.select(_database.rides)..orderBy([(ride) => .desc(ride.date)])).get();
   }
 
   /// Get the amount of rides in the calendar.
@@ -81,7 +83,7 @@ class RideRepository {
   }
 
   /// Update the given [ride] and its [attendees].
-  Future<void> updateRide(Ride ride, List<RideAttendee> attendees) {
+  Future<void> updateRide(Ride ride, List<RideAttendeesCompanion> attendees) {
     // TODO: use diffing instead of bulk delete and insert
     return _database.transaction(() async {
       await (_database.delete(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).go();

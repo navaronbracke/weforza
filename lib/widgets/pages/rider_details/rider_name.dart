@@ -4,7 +4,7 @@ import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 import 'package:weforza/widgets/theme.dart';
 
 class RiderName extends ConsumerWidget {
-  const RiderName({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,11 +17,12 @@ class RiderName extends ConsumerWidget {
     const textTheme = AppTheme.riderTextTheme;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: .start,
       children: <Widget>[
-        Text(firstName, style: textTheme.firstNameLargeStyle, overflow: TextOverflow.ellipsis),
-        Text(lastName, style: textTheme.lastNameLargeStyle, overflow: TextOverflow.ellipsis),
-        if (alias.isNotEmpty) Text("'$alias'", style: textTheme.aliasStyle, overflow: TextOverflow.ellipsis),
+        Text(firstName, style: textTheme.firstNameLargeStyle, overflow: .ellipsis),
+        Text(lastName, style: textTheme.lastNameLargeStyle, overflow: .ellipsis),
+        if (alias case final alias? when alias.isNotEmpty)
+          Text("'$alias'", style: textTheme.aliasStyle, overflow: .ellipsis),
       ],
     );
   }

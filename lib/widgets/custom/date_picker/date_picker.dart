@@ -37,7 +37,7 @@ class DatePicker extends StatelessWidget {
     super.key,
     this.headerBottomPadding = 0.0,
     this.monthStyle,
-    this.padding = EdgeInsets.zero,
+    this.padding = .zero,
     this.showWeekdays = false,
     this.weekDayStyle = const TextStyle(fontSize: 16, height: 1),
     this.weekSpacing = 0.0,
@@ -178,7 +178,7 @@ class DatePicker extends StatelessWidget {
 
         if (headerBottomPadding > 0) {
           header = Padding(
-            padding: EdgeInsets.only(bottom: headerBottomPadding),
+            padding: .only(bottom: headerBottomPadding),
             child: header,
           );
         }
@@ -199,7 +199,7 @@ class DatePicker extends StatelessWidget {
           ],
         );
 
-        if (padding != EdgeInsets.zero) {
+        if (padding != .zero) {
           calendar = Padding(padding: padding, child: calendar);
         }
 
@@ -373,7 +373,7 @@ class _DatePickerMonth extends StatelessWidget {
       // Only the last week does not get bottom spacing.
       if (weekSpacing > 0 && weekCounter < 6) {
         week = Padding(
-          padding: EdgeInsets.only(bottom: weekSpacing),
+          padding: .only(bottom: weekSpacing),
           child: week,
         );
       }

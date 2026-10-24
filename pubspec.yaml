@@ -74,9 +74,6 @@ dependencies:
   shared_preferences: ^2.5.6
   shared_preferences_android: ^2.5.0 # TODO: remove this once shared preferences requires it
 
-  # UUID generator for globally unique ids.
-  uuid: ^4.6.0
-
 dev_dependencies:
   # build_runner is used to generate the database definitions.
   build_runner: ^2.16.1

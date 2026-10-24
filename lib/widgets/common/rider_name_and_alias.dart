@@ -68,7 +68,7 @@ class RiderNameAndAlias extends StatelessWidget {
         crossAxisAlignment: .start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 4),
+            padding: const .only(bottom: 4),
             child: RichText(
               maxLines: 1,
               overflow: overflow,

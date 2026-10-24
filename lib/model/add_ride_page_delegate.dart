@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
 import 'package:weforza/model/async_computation_delegate.dart';
-import 'package:weforza/model/ride.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/widgets/custom/date_picker/date_picker_delegate.dart';
 
 /// This class represents the delegate for the add ride page.
 class AddRidePageDelegate extends AsyncComputationDelegate<void> {
-  AddRidePageDelegate({required this._repository}) {
+  new({required this._repository}) {
     _initializeFuture = _repository.getRideDates().then(_existingRides.addAll);
   }
 
@@ -89,7 +88,7 @@ class AddRidePageDelegate extends AsyncComputationDelegate<void> {
     _savingSelection = true;
 
     try {
-      await _repository.addRides(currentSelection.map((date) => Ride(date: date)).toList());
+      await _repository.addRides(currentSelection);
 
       setDone(null);
       whenComplete();

@@ -1,11 +1,12 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
+import 'package:weforza/database/devices.dart';
 import 'package:weforza/exceptions/exceptions.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/device/device.dart';
 import 'package:weforza/model/device/device_form_delegate.dart';
-import 'package:weforza/model/device/device_model.dart';
 import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/model/device/device_validator.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
@@ -16,14 +17,14 @@ import 'package:weforza/widgets/custom/device_type_carousel.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class DeviceForm extends ConsumerStatefulWidget {
-  const DeviceForm({required this.ownerUuid, super.key, this.device});
+  const new({required this.ownerId, super.key, this.device});
 
   /// The device to edit in this form.
   /// If this is null, a new device will be created instead.
   final Device? device;
 
-  /// The UUID of the rider that owns this device.
-  final String ownerUuid;
+  /// The ID of the rider that owns this device.
+  final int ownerId;
 
   @override
   DeviceFormState createState() => DeviceFormState();
@@ -45,7 +46,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     _delegate = DeviceFormDelegate(notifier: ref.read(selectedRiderDevicesProvider.notifier));
 
-    final deviceType = widget.device?.type ?? DeviceType.unknown;
+    final deviceType = widget.device?.deviceType ?? .unknown;
 
     _deviceNameController = TextEditingController(text: widget.device?.name);
     _deviceTypeController = PageController(initialPage: deviceType.index);
@@ -61,15 +62,16 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final navigator = Navigator.of(context);
 
     final selectedDeviceType = _deviceTypeController.page!.toInt();
+    final int? deviceId = widget.device?.id;
 
-    final model = DeviceModel(
-      creationDate: widget.device?.creationDate,
-      name: _deviceNameController.text.trim(),
-      ownerId: widget.ownerUuid,
-      type: DeviceType.values[selectedDeviceType],
+    final model = DevicesCompanion(
+      deviceType: Value(DeviceType.values[selectedDeviceType]),
+      id: deviceId == null ? const Value.absent() : Value(deviceId),
+      name: Value(_deviceNameController.text.trim()),
+      ownerId: Value(widget.ownerId),
     );
 
-    if (model.creationDate == null) {
+    if (deviceId == null) {
       _delegate.addDevice(model, whenComplete: navigator.pop);
     } else {
       _delegate.editDevice(model, whenComplete: navigator.pop);
@@ -84,18 +86,18 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
       appBar: AppBar(title: Text(widget.device == null ? translator.addDevice : translator.editDevice)),
       body: FocusAbsorber(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const .symmetric(horizontal: 16),
           child: CustomScrollView(
             slivers: [
               SliverList(
                 delegate: SliverChildListDelegate.fixed([
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const .symmetric(vertical: 16),
                     child: DeviceTypeCarousel(controller: _deviceTypeController, height: 120),
                   ),
                   _buildDeviceNameInput(context),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 24),
+                    padding: const .only(top: 16, bottom: 24),
                     child: Center(child: _buildSubmitButton(context)),
                   ),
                 ]),
@@ -130,7 +132,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
                   CupertinoFormSection.insetGrouped(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16),
+                        padding: const .all(16),
                         child: DeviceTypeCarousel(controller: _deviceTypeController, height: 120),
                       ),
                     ],
@@ -151,54 +153,46 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
     final translator = S.of(context);
 
     return PlatformAwareWidget(
-      android: (_) {
-        return TextFormField(
-          key: _deviceNameKey,
-          focusNode: _deviceNameFocusNode,
-          textInputAction: TextInputAction.done,
-          keyboardType: TextInputType.text,
-          autocorrect: false,
-          controller: _deviceNameController,
-          onChanged: _resetSubmit,
-          validator: (value) {
-            return validateDeviceName(
-              value: value,
-              requiredMessage: translator.deviceNameRequired,
-              maxLengthMessage: translator.deviceNameMaxLength(Device.nameMaxLength),
-              illegalCharachterMessage: translator.deviceNameCannotContainComma,
-              isBlankMessage: translator.deviceNameBlank,
-            );
-          },
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-            labelText: translator.deviceName,
-            helperText: ' ',
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-        );
-      },
-      ios: (_) {
-        return CupertinoTextFormFieldRow(
-          key: _deviceNameKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: _deviceNameController,
-          focusNode: _deviceNameFocusNode,
-          keyboardType: TextInputType.text,
-          placeholder: translator.deviceName,
-          textInputAction: TextInputAction.done,
-          maxLength: Device.nameMaxLength,
-          onChanged: _resetSubmit,
-          validator: (value) {
-            return validateDeviceName(
-              value: value,
-              requiredMessage: translator.deviceNameRequired,
-              maxLengthMessage: translator.deviceNameMaxLength(Device.nameMaxLength),
-              illegalCharachterMessage: translator.deviceNameCannotContainComma,
-              isBlankMessage: translator.deviceNameBlank,
-            );
-          },
-        );
-      },
+      android: (_) => TextFormField(
+        key: _deviceNameKey,
+        focusNode: _deviceNameFocusNode,
+        textInputAction: .done,
+        keyboardType: .text,
+        autocorrect: false,
+        controller: _deviceNameController,
+        onChanged: _resetSubmit,
+        validator: (value) => validateDeviceName(
+          value: value,
+          requiredMessage: translator.deviceNameRequired,
+          maxLengthMessage: translator.deviceNameMaxLength(Devices.nameLength.max),
+          illegalCharachterMessage: translator.deviceNameCannotContainComma,
+          isBlankMessage: translator.deviceNameBlank,
+        ),
+        decoration: InputDecoration(
+          contentPadding: const .symmetric(horizontal: 4),
+          labelText: translator.deviceName,
+          helperText: ' ',
+        ),
+        autovalidateMode: .onUserInteraction,
+      ),
+      ios: (_) => CupertinoTextFormFieldRow(
+        key: _deviceNameKey,
+        autovalidateMode: .onUserInteraction,
+        controller: _deviceNameController,
+        focusNode: _deviceNameFocusNode,
+        keyboardType: .text,
+        placeholder: translator.deviceName,
+        textInputAction: .done,
+        maxLength: Devices.nameLength.max,
+        onChanged: _resetSubmit,
+        validator: (value) => validateDeviceName(
+          value: value,
+          requiredMessage: translator.deviceNameRequired,
+          maxLengthMessage: translator.deviceNameMaxLength(Devices.nameLength.max),
+          illegalCharachterMessage: translator.deviceNameCannotContainComma,
+          isBlankMessage: translator.deviceNameBlank,
+        ),
+      ),
     );
   }
 

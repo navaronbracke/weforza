@@ -1,13 +1,16 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
+import 'package:weforza/database/riders.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/image/profile_image_picker_delegate.dart';
-import 'package:weforza/model/rider/rider.dart';
 import 'package:weforza/model/rider/rider_form_delegate.dart';
-import 'package:weforza/model/rider/rider_model.dart';
 import 'package:weforza/model/rider/rider_validator.dart';
+import 'package:weforza/riverpod/file/file_system_provider.dart';
 import 'package:weforza/riverpod/image_picker_delegate_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
@@ -19,7 +22,7 @@ import 'package:weforza/widgets/custom/profile_image/profile_image_picker.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 class RiderForm extends ConsumerStatefulWidget {
-  const RiderForm({super.key, this.rider});
+  const new({super.key, this.rider});
 
   /// The rider to edit.
   ///
@@ -52,18 +55,20 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
     }
 
     final navigator = Navigator.of(context);
-    final riderUuid = widget.rider?.uuid;
+    final riderId = widget.rider?.id;
 
-    final model = RiderModel(
-      active: widget.rider?.active ?? true,
-      alias: _aliasController.text.trim(),
-      firstName: _firstNameController.text.trim(),
-      lastName: _lastNameController.text.trim(),
-      profileImage: _profileImageDelegate.selectedImage.valueOrNull,
-      uuid: riderUuid,
+    final Uri? profileImageUri = _profileImageDelegate.selectedImage.valueOrNull;
+
+    final model = RidersCompanion(
+      alias: Value(_aliasController.text.trim()),
+      firstName: Value(_firstNameController.text.trim()),
+      lastName: Value(_lastNameController.text.trim()),
+      isActive: Value(widget.rider?.isActive ?? true),
+      profileImageUri: profileImageUri == null ? const Value(null) : Value(profileImageUri.toString()),
+      id: riderId == null ? const Value.absent() : Value(riderId),
     );
 
-    if (riderUuid == null) {
+    if (riderId == null) {
       _delegate.addRider(
         model,
         whenComplete: () {
@@ -111,11 +116,16 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   void initState() {
     super.initState();
 
+    final profileImageUri = switch (widget.rider?.profileImageUri) {
+      final String value => FileUriParser(ref.read(fileSystemProvider)).parse(value),
+      null => null,
+    };
+
     _profileImageDelegate = ProfileImagePickerDelegate(
       imagePickerDelegate: ref.read(imagePickerDelegateProvider),
       // TODO: check if file exists
       // see https://github.com/navaronbracke/weforza/issues/423
-      initialValue: widget.rider?.profileImage,
+      initialValue: profileImageUri,
     );
 
     _delegate = RiderFormDelegate(repository: ref.read(riderRepositoryProvider));
@@ -140,14 +150,14 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
         key: _formKey,
         child: FocusAbsorber(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const .symmetric(horizontal: 16, vertical: 8),
             child: CustomScrollView(
               slivers: [
                 SliverList(
                   delegate: SliverChildListDelegate.fixed([
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const .symmetric(vertical: 16),
                         child: ProfileImagePicker(
                           delegate: _profileImageDelegate,
                           imagePreviewSize: 100,
@@ -159,87 +169,81 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 8),
+                      padding: const .only(top: 8),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: .words,
                         focusNode: _firstNameFocusNode,
-                        textInputAction: TextInputAction.next,
+                        textInputAction: .next,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(8),
+                          contentPadding: const .all(8),
                           labelText: strings.firstName,
                           // Prevent popping during validation.
                           helperText: ' ',
                         ),
                         controller: _firstNameController,
                         autocorrect: false,
-                        keyboardType: TextInputType.text,
+                        keyboardType: .text,
                         onChanged: _resetSubmit,
-                        validator: (value) {
-                          return validateFirstOrLastName(
-                            value: value,
-                            requiredMessage: strings.firstNameRequired,
-                            maxLengthMessage: strings.firstNameMaxLength(Rider.nameAndAliasMaxLength),
-                            illegalCharachterMessage: strings.firstNameIllegalCharacters,
-                            isBlankMessage: strings.firstNameBlank,
-                          );
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => validateFirstOrLastName(
+                          value: value,
+                          requiredMessage: strings.firstNameRequired,
+                          maxLengthMessage: strings.firstNameMaxLength(Riders.nameAndAliasLength.max),
+                          illegalCharachterMessage: strings.firstNameIllegalCharacters,
+                          isBlankMessage: strings.firstNameBlank,
+                        ),
+                        autovalidateMode: .onUserInteraction,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      padding: const .symmetric(vertical: 4),
                       child: TextFormField(
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: .words,
                         focusNode: _lastNameFocusNode,
-                        textInputAction: TextInputAction.next,
+                        textInputAction: .next,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(8),
+                          contentPadding: const .all(8),
                           labelText: strings.lastName,
                           // Prevent popping during validation.
                           helperText: ' ',
                         ),
                         controller: _lastNameController,
                         autocorrect: false,
-                        keyboardType: TextInputType.text,
+                        keyboardType: .text,
                         onChanged: _resetSubmit,
-                        validator: (value) {
-                          return validateFirstOrLastName(
-                            value: value,
-                            requiredMessage: strings.lastNameRequired,
-                            maxLengthMessage: strings.lastNameMaxLength(Rider.nameAndAliasMaxLength),
-                            illegalCharachterMessage: strings.lastNameIllegalCharacters,
-                            isBlankMessage: strings.lastNameBlank,
-                          );
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => validateFirstOrLastName(
+                          value: value,
+                          requiredMessage: strings.lastNameRequired,
+                          maxLengthMessage: strings.lastNameMaxLength(Riders.nameAndAliasLength.max),
+                          illegalCharachterMessage: strings.lastNameIllegalCharacters,
+                          isBlankMessage: strings.lastNameBlank,
+                        ),
+                        autovalidateMode: .onUserInteraction,
                       ),
                     ),
                     TextFormField(
                       focusNode: _aliasFocusNode,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: .done,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8),
+                        contentPadding: const .all(8),
                         labelText: strings.alias,
                         // Prevent popping during validation.
                         helperText: ' ',
                       ),
                       controller: _aliasController,
                       autocorrect: false,
-                      keyboardType: TextInputType.text,
+                      keyboardType: .text,
                       onChanged: _resetSubmit,
-                      validator: (value) {
-                        return validateAlias(
-                          value: value,
-                          maxLengthMessage: strings.aliasMaxLength(Rider.nameAndAliasMaxLength),
-                          illegalCharachterMessage: strings.aliasIllegalCharacters,
-                          isBlankMessage: strings.aliasBlank,
-                        );
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => validateAlias(
+                        value: value,
+                        maxLengthMessage: strings.aliasMaxLength(Riders.nameAndAliasLength.max),
+                        illegalCharachterMessage: strings.aliasIllegalCharacters,
+                        isBlankMessage: strings.aliasBlank,
+                      ),
+                      autovalidateMode: .onUserInteraction,
                       onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 12, bottom: 24),
+                      padding: const .only(top: 12, bottom: 24),
                       child: Center(child: _buildSubmitButton(context)),
                     ),
                   ]),
@@ -277,7 +281,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       children: [
                         Center(
                           child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(20, 6, 6, 6),
+                            padding: const .fromSTEB(20, 6, 6, 6),
                             child: ProfileImagePicker(
                               delegate: _profileImageDelegate,
                               imagePreviewSize: 80,
@@ -293,65 +297,59 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                     CupertinoFormSection.insetGrouped(
                       children: [
                         CupertinoTextFormFieldRow(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textCapitalization: TextCapitalization.words,
+                          autovalidateMode: .onUserInteraction,
+                          textCapitalization: .words,
                           focusNode: _firstNameFocusNode,
-                          textInputAction: TextInputAction.next,
+                          textInputAction: .next,
                           controller: _firstNameController,
-                          maxLength: Rider.nameAndAliasMaxLength,
+                          maxLength: Riders.nameAndAliasLength.max,
                           placeholder: strings.firstName,
-                          keyboardType: TextInputType.text,
+                          keyboardType: .text,
                           onChanged: _resetSubmit,
-                          validator: (value) {
-                            return validateFirstOrLastName(
-                              value: value,
-                              requiredMessage: strings.firstNameRequired,
-                              maxLengthMessage: strings.firstNameMaxLength(Rider.nameAndAliasMaxLength),
-                              illegalCharachterMessage: strings.firstNameIllegalCharacters,
-                              isBlankMessage: strings.firstNameBlank,
-                            );
-                          },
+                          validator: (value) => validateFirstOrLastName(
+                            value: value,
+                            requiredMessage: strings.firstNameRequired,
+                            maxLengthMessage: strings.firstNameMaxLength(Riders.nameAndAliasLength.max),
+                            illegalCharachterMessage: strings.firstNameIllegalCharacters,
+                            isBlankMessage: strings.firstNameBlank,
+                          ),
                         ),
                         CupertinoTextFormFieldRow(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          textCapitalization: TextCapitalization.words,
+                          autovalidateMode: .onUserInteraction,
+                          textCapitalization: .words,
                           focusNode: _lastNameFocusNode,
-                          textInputAction: TextInputAction.next,
+                          textInputAction: .next,
                           controller: _lastNameController,
-                          maxLength: Rider.nameAndAliasMaxLength,
+                          maxLength: Riders.nameAndAliasLength.max,
                           placeholder: strings.lastName,
-                          keyboardType: TextInputType.text,
+                          keyboardType: .text,
                           onChanged: _resetSubmit,
-                          validator: (value) {
-                            return validateFirstOrLastName(
-                              value: value,
-                              requiredMessage: strings.lastNameRequired,
-                              maxLengthMessage: strings.lastNameMaxLength(Rider.nameAndAliasMaxLength),
-                              illegalCharachterMessage: strings.lastNameIllegalCharacters,
-                              isBlankMessage: strings.lastNameBlank,
-                            );
-                          },
+                          validator: (value) => validateFirstOrLastName(
+                            value: value,
+                            requiredMessage: strings.lastNameRequired,
+                            maxLengthMessage: strings.lastNameMaxLength(Riders.nameAndAliasLength.max),
+                            illegalCharachterMessage: strings.lastNameIllegalCharacters,
+                            isBlankMessage: strings.lastNameBlank,
+                          ),
                         ),
                         CupertinoTextFormFieldRow(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          autovalidateMode: .onUserInteraction,
                           focusNode: _aliasFocusNode,
-                          textInputAction: TextInputAction.done,
+                          textInputAction: .done,
                           controller: _aliasController,
-                          keyboardType: TextInputType.text,
-                          maxLength: Rider.nameAndAliasMaxLength,
+                          keyboardType: .text,
+                          maxLength: Riders.nameAndAliasLength.max,
                           placeholder: strings.alias,
                           onChanged: _resetSubmit,
-                          validator: (value) {
-                            return validateAlias(
-                              value: value,
-                              maxLengthMessage: strings.aliasMaxLength(Rider.nameAndAliasMaxLength),
-                              illegalCharachterMessage: strings.aliasIllegalCharacters,
-                              isBlankMessage: strings.aliasBlank,
-                            );
-                          },
+                          validator: (value) => validateAlias(
+                            value: value,
+                            maxLengthMessage: strings.aliasMaxLength(Riders.nameAndAliasLength.max),
+                            illegalCharachterMessage: strings.aliasIllegalCharacters,
+                            isBlankMessage: strings.aliasBlank,
+                          ),
                           onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                         ),
-                        Padding(padding: const EdgeInsets.only(top: 8), child: _buildSubmitButton(context)),
+                        Padding(padding: const .only(top: 8), child: _buildSubmitButton(context)),
                       ],
                     ),
                   ]),

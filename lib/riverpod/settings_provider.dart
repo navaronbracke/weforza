@@ -1,58 +1,72 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/repository/settings_repository.dart';
-import 'package:weforza/riverpod/database/database_dao_provider.dart';
-
-/// This provider provides the initial value for the application settings.
-///
-/// This provider should be overridden with the preloaded settings during application startup.
-final initialSettingsProvider = Provider<Settings>(
-  (_) => throw UnsupportedError('The initial settings should be preloaded at startup.'),
-);
+import 'package:weforza/riverpod/database/database_provider.dart';
 
 /// This provider provides the application settings.
-final settingsProvider = StateNotifierProvider<SettingsNotifier, Settings>(
-  (ref) => SettingsNotifier(ref.read(initialSettingsProvider), SettingsRepository(ref.read(settingsDaoProvider))),
+final settingsProvider = StateNotifierProvider<SettingsNotifier, AsyncValue<Settings>>(
+  (ref) => SettingsNotifier(SettingsRepository(ref.watch(databaseProvider))),
 );
 
 /// The notifier that manages the settings.
-class SettingsNotifier extends StateNotifier<Settings> {
-  SettingsNotifier(super.initialValue, this._settingsRepository);
+class SettingsNotifier extends StateNotifier<AsyncValue<Settings>> {
+  new(this._settingsRepository) : super(const AsyncData(Settings())) {
+    _loadInitialSettings();
+  }
 
   /// The repository that manages the settings.
   final SettingsRepository _settingsRepository;
 
+  Settings _copyWith({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration}) {
+    if (state case AsyncData(:final value)) {
+      return value.copyWith(
+        excludedTermsFilter: excludedTermsFilter ?? value.excludedTermsFilter,
+        riderListFilter: riderListFilter ?? value.riderListFilter,
+        scanDuration: scanDuration ?? value.scanDuration,
+      );
+    }
+
+    return Settings(
+      excludedTermsFilter: excludedTermsFilter ?? const {},
+      riderListFilter: riderListFilter ?? Settings.defaultRiderListFilter,
+      scanDuration: scanDuration ?? Settings.defaultScanDuration,
+    );
+  }
+
+  Future<void> _loadInitialSettings() async {
+    final settings = await _settingsRepository.read();
+
+    if (mounted) {
+      state = AsyncData(settings);
+    }
+  }
+
   Future<void> _saveSettings(Settings settings) async {
-    if (state == settings) {
+    if (state case AsyncData(:final value) when value == settings) {
       return;
     }
 
     await _settingsRepository.write(settings);
 
     if (mounted) {
-      state = settings;
+      state = AsyncData(settings);
     }
   }
 
   /// Save the list of [excludedTerms].
-  Future<void> saveExcludedTerms(Set<String> excludedTerms) {
-    final Settings newSettings = state.copyWith(excludedTermsFilter: excludedTerms);
-
-    return _saveSettings(newSettings);
+  Future<void> saveExcludedTerms(Set<ExcludedTerm> excludedTerms) {
+    return _saveSettings(_copyWith(excludedTermsFilter: excludedTerms));
   }
 
   /// Save the [riderListFilter] value.
   Future<void> saveRiderListFilter(RiderFilterOption riderListFilter) {
-    final Settings newSettings = state.copyWith(riderListFilter: riderListFilter);
-
-    return _saveSettings(newSettings);
+    return _saveSettings(_copyWith(riderListFilter: riderListFilter));
   }
 
   /// Save the [scanDuration] value.
   Future<void> saveScanDuration(int scanDuration) {
-    final Settings newSettings = state.copyWith(scanDuration: scanDuration);
-
-    return _saveSettings(newSettings);
+    return _saveSettings(_copyWith(scanDuration: scanDuration));
   }
 }

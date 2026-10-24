@@ -6,8 +6,8 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 class Settings {
   const new({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration})
     : excludedTermsFilter = excludedTermsFilter ?? const {},
-      riderListFilter = riderListFilter ?? .all,
-      scanDuration = scanDuration ?? 20,
+      riderListFilter = riderListFilter ?? defaultRiderListFilter,
+      scanDuration = scanDuration ?? defaultScanDuration,
       assert(scanDuration == null || scanDuration > 0, 'A scan duration should be greater than zero');
 
   /// The set of excluded terms that are ignored during a device scan.
@@ -19,6 +19,12 @@ class Settings {
   /// The duration of a device scan, in seconds.
   /// Defaults to 20 seconds.
   final int scanDuration;
+
+  /// The default value for the rider list filter.
+  static const RiderFilterOption defaultRiderListFilter = .all;
+
+  /// The default value for the scan duration, in seconds.
+  static const int defaultScanDuration = 20;
 
   /// Create a copy of this object, replacing any non-null values.
   Settings copyWith({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration}) {

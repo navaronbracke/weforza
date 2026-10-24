@@ -141,68 +141,61 @@ class RideCalendarTheme {
         final ThemeData theme = Theme.of(context);
         final ColorScheme colorScheme = ColorScheme.of(context);
 
-        switch (state) {
-          case .currentSelection:
-            return RideCalendarTheme.filled(backgroundColor: colorScheme.primary, labelColor: colorScheme.onPrimary);
-          case .futureRide:
-            return RideCalendarTheme.withBrightness(
-              theme.brightness,
-              dark: RideCalendarTheme.filled(backgroundColor: Colors.teal.shade300, labelColor: Colors.black),
-              light: RideCalendarTheme.filled(backgroundColor: Colors.lightGreen, labelColor: Colors.black),
-            );
-          case .pastDay:
-            return RideCalendarTheme.withBrightness(
-              theme.brightness,
-              dark: RideCalendarTheme.filled(
-                backgroundColor: colorScheme.onSurfaceVariant,
-                labelColor: colorScheme.surfaceContainerHighest,
-              ),
-              light: RideCalendarTheme.filled(
-                backgroundColor: colorScheme.surfaceContainerHighest,
-                labelColor: colorScheme.onSurfaceVariant,
-              ),
-            );
-          case .pastRide:
-            return RideCalendarTheme.withBrightness(
-              theme.brightness,
-              dark: RideCalendarTheme.filled(
-                backgroundColor: colorScheme.onSurface.withValues(alpha: 0.36),
-                labelColor: colorScheme.onSurface,
-              ),
-              light: RideCalendarTheme.filled(
-                backgroundColor: colorScheme.onSurfaceVariant,
-                labelColor: colorScheme.surfaceContainerHighest,
-              ),
-            );
-        }
+        return switch (state) {
+          .currentSelection => .filled(backgroundColor: colorScheme.primary, labelColor: colorScheme.onPrimary),
+          .futureRide => .withBrightness(
+            theme.brightness,
+            dark: .filled(backgroundColor: Colors.teal.shade300, labelColor: Colors.black),
+            light: .filled(backgroundColor: Colors.lightGreen, labelColor: Colors.black),
+          ),
+          .pastDay => .withBrightness(
+            theme.brightness,
+            dark: .filled(
+              backgroundColor: colorScheme.onSurfaceVariant,
+              labelColor: colorScheme.surfaceContainerHighest,
+            ),
+            light: .filled(
+              backgroundColor: colorScheme.surfaceContainerHighest,
+              labelColor: colorScheme.onSurfaceVariant,
+            ),
+          ),
+          .pastRide => .withBrightness(
+            theme.brightness,
+            dark: .filled(
+              backgroundColor: colorScheme.onSurface.withValues(alpha: 0.36),
+              labelColor: colorScheme.onSurface,
+            ),
+            light: .filled(
+              backgroundColor: colorScheme.onSurfaceVariant,
+              labelColor: colorScheme.surfaceContainerHighest,
+            ),
+          ),
+        };
       case .iOS:
       case .macOS:
-        final CupertinoThemeData theme = CupertinoTheme.of(context);
         final Brightness brightness = CupertinoTheme.brightnessOf(context);
-        final Color primaryColor = theme.primaryColor;
 
-        switch (state) {
-          case .currentSelection:
-            return RideCalendarTheme.filled(backgroundColor: primaryColor, labelColor: CupertinoColors.white);
-          case .futureRide:
-            return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: .filled(backgroundColor: CupertinoColors.systemGreen.darkColor, labelColor: CupertinoColors.black),
-              light: .filled(backgroundColor: CupertinoColors.systemGreen.color, labelColor: CupertinoColors.white),
-            );
-          case .pastDay:
-            return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: .filled(backgroundColor: CupertinoColors.systemGrey3, labelColor: CupertinoColors.black),
-              light: .filled(backgroundColor: CupertinoColors.systemGrey5, labelColor: CupertinoColors.black),
-            );
-          case .pastRide:
-            return RideCalendarTheme.withBrightness(
-              brightness,
-              dark: .filled(backgroundColor: CupertinoColors.inactiveGray.darkColor, labelColor: CupertinoColors.white),
-              light: .filled(backgroundColor: CupertinoColors.systemGrey, labelColor: CupertinoColors.white),
-            );
-        }
+        return switch (state) {
+          .currentSelection => .filled(
+            backgroundColor: CupertinoTheme.of(context).primaryColor,
+            labelColor: CupertinoColors.white,
+          ),
+          .futureRide => .withBrightness(
+            brightness,
+            dark: .filled(backgroundColor: CupertinoColors.systemGreen.darkColor, labelColor: CupertinoColors.black),
+            light: .filled(backgroundColor: CupertinoColors.systemGreen.color, labelColor: CupertinoColors.white),
+          ),
+          .pastDay => .withBrightness(
+            brightness,
+            dark: .filled(backgroundColor: CupertinoColors.systemGrey3, labelColor: CupertinoColors.black),
+            light: .filled(backgroundColor: CupertinoColors.systemGrey5, labelColor: CupertinoColors.black),
+          ),
+          .pastRide => .withBrightness(
+            brightness,
+            dark: .filled(backgroundColor: CupertinoColors.inactiveGray.darkColor, labelColor: CupertinoColors.white),
+            light: .filled(backgroundColor: CupertinoColors.systemGrey, labelColor: CupertinoColors.white),
+          ),
+        };
     }
   }
 

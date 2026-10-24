@@ -7,12 +7,11 @@ import 'package:flutter/cupertino.dart';
 /// with theming similar to a [CupertinoTabBar].
 class CupertinoBottomBar extends StatelessWidget {
   /// The default constructor.
-  const CupertinoBottomBar({required this.child, super.key, this.height});
+  const new({required this.child, super.key, this.height});
 
   /// Create a [CupertinoBottomBar] with a height
   /// equal to that of a [CupertinoTabBar].
-  const CupertinoBottomBar.constrained({required Widget child, Key? key})
-    : this(key: key, child: child, height: _kTabBarHeight);
+  const new constrained({required Widget child, Key? key}) : this(key: key, child: child, height: _kTabBarHeight);
 
   /// The child for this widget.
   final Widget child;
@@ -31,7 +30,7 @@ class CupertinoBottomBar extends StatelessWidget {
     // Therefor, use the padding value instead of viewInsets, which decreases as the keyboard is shown.
     // The viewInsets on the otherhand, increases as the keyboard is shown.
     final double bottomPadding = MediaQuery.paddingOf(context).bottom;
-    final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
+    final CupertinoThemeData theme = CupertinoTheme.of(context);
 
     const border = Border(
       top: BorderSide(
@@ -44,9 +43,9 @@ class CupertinoBottomBar extends StatelessWidget {
     // The content gets a DefaultTextStyle to match the iOS text styles.
     // It also gets bottom padding to avoid the bottom notch.
     Widget content = DefaultTextStyle(
-      style: CupertinoTheme.of(context).textTheme.textStyle,
+      style: theme.textTheme.textStyle,
       child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
+        padding: .only(bottom: bottomPadding),
         child: child,
       ),
     );
@@ -58,7 +57,7 @@ class CupertinoBottomBar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(top: border.top.copyWith(color: CupertinoDynamicColor.resolve(border.top.color, context))),
-        color: backgroundColor,
+        color: theme.barBackgroundColor,
       ),
       child: Builder(
         builder: (context) => MediaQuery.removePadding(context: context, removeBottom: true, child: content),

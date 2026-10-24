@@ -1,10 +1,10 @@
 /// This class represents a Bluetooth device.
 class BluetoothPeripheral {
   /// The default constructor.
-  BluetoothPeripheral({required this.deviceName, required this.id});
+  new({required this.deviceName, required this.id});
 
   /// Create a [BluetoothPeripheral] from the given [map].
-  factory BluetoothPeripheral.fromMap(Map<String, Object?> map) {
+  factory fromMap(Map<String, Object?> map) {
     return BluetoothPeripheral(deviceName: map['deviceName'] as String? ?? '', id: map['deviceId'] as String? ?? '');
   }
 

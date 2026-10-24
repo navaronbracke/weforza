@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 /// This widget will start the animation of its [controller],
 /// if it has not already started.
 class AnimatedCircleCheckmark extends StatefulWidget {
-  const AnimatedCircleCheckmark({required this.controller, super.key});
+  const new({required this.controller, super.key});
 
   /// The animation controller that drives the checkmark animation.
   final AnimationController controller;

@@ -9,9 +9,9 @@ library;
 /// The [isScanned] attribute is only used for presentation purposes
 /// and can thus be eliminated from the equality.
 class ScannedRideAttendee {
-  const ScannedRideAttendee({required this.id, required this.isScanned});
+  const new({required this.id, required this.isScanned});
 
-  factory ScannedRideAttendee.of(Map<String, Object?> values) {
+  factory of(Map<String, Object?> values) {
     return ScannedRideAttendee(
       id: values['attendee'] as int,
       // The rate of automatic scanning is bigger than manual selection.

@@ -5,7 +5,7 @@ library;
 /// This class represents a [RideAttendee] in a format that is suitable
 /// for exporting inside a [ExportableRideWithAttendees].
 class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
-  ExportableRideAttendee({required this.firstName, required this.lastName, this.alias = ''})
+  new({required this.firstName, required this.lastName, this.alias = ''})
     : assert(
         firstName.isNotEmpty && lastName.isNotEmpty,
         'The first name and last name of an exportable ride attendee should not be empty',

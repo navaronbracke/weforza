@@ -4,7 +4,7 @@ import 'package:weforza/model/rider/rider_filter_option.dart';
 
 /// This class defines the persistent application settings.
 class Settings {
-  const Settings({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration})
+  const new({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration})
     : excludedTermsFilter = excludedTermsFilter ?? const {},
       riderListFilter = riderListFilter ?? .all,
       scanDuration = scanDuration ?? 20,

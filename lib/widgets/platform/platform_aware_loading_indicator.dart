@@ -4,7 +4,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a platform aware, indeterminate, loading indicator.
 class PlatformAwareLoadingIndicator extends StatelessWidget {
-  const PlatformAwareLoadingIndicator({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context) {

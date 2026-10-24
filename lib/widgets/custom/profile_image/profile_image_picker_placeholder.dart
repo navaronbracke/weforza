@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// that displays an iOS-style grey circular shape
 /// with a clipped person icon in the middle.
 class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
-  const CupertinoProfileImagePickerPlaceholder({required this.size, super.key});
+  const new({required this.size, super.key});
 
   /// The size for the placeholder.
   final double size;
@@ -55,7 +55,7 @@ class CupertinoProfileImagePickerPlaceholder extends StatelessWidget {
 /// that displays a Material-style circular shape
 /// with a person icon in the middle.
 class MaterialProfileImagePickerPlaceholder extends StatelessWidget {
-  const MaterialProfileImagePickerPlaceholder({required this.size, super.key});
+  const new({required this.size, super.key});
 
   /// The size of the placeholder.
   final double size;

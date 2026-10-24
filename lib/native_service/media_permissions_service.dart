@@ -2,7 +2,7 @@ import 'package:weforza/native_service/native_service.dart';
 
 /// This class represents an interface for requesting media related permissions.
 abstract base class MediaPermissionsService extends NativeService {
-  const MediaPermissionsService();
+  const new();
 
   /// Request permission to add photos to the photo gallery of the device.
   /// This permission only has an effect on iOS.

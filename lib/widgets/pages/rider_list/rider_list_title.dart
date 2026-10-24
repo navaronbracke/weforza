@@ -5,7 +5,7 @@ import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 
 /// This widget represents the title in the rider list page.
 class RiderListTitle extends ConsumerWidget {
-  const RiderListTitle({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

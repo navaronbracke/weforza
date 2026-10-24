@@ -1,6 +1,6 @@
 /// This class represents the scan options for a Bluetooth device scan.
 class BluetoothDeviceScanOptions {
-  const BluetoothDeviceScanOptions({this.scanMode = BluetoothScanMode.lowLatency});
+  const new({this.scanMode = .lowLatency});
 
   /// The scan mode for the scan.
   final BluetoothScanMode scanMode;
@@ -38,7 +38,7 @@ enum BluetoothScanMode {
   /// https://developer.android.com/reference/android/bluetooth/le/ScanSettings#SCAN_MODE_OPPORTUNISTIC
   opportunistic(androidScanMode: -1);
 
-  const BluetoothScanMode({required this.androidScanMode});
+  const new({required this.androidScanMode});
 
   /// The integer that corresponds to the Android specific scan mode.
   final int androidScanMode;

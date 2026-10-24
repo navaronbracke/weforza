@@ -18,7 +18,7 @@ import 'package:weforza/widgets/platform/cupertino_icon_button.dart';
 
 /// This widget represents the app bar / navigation bar at the top of the [HomePage].
 abstract class _HomePageAppBar extends StatelessWidget {
-  const _HomePageAppBar({required this.selectedTab, super.key});
+  const new({required this.selectedTab, super.key});
 
   /// The selected home page tab.
   final HomePageTab selectedTab;
@@ -46,7 +46,7 @@ abstract class _HomePageAppBar extends StatelessWidget {
 
 /// This widget represents the [AppBar] at the top of the [HomePage].
 class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
-  const HomePageAppBar({required super.selectedTab, super.key});
+  const new({required super.selectedTab, super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -95,7 +95,7 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
 
 /// This widget represents the [CupertinoNavigationBar] for the [HomePage].
 class HomePageCupertinoNavigationBar extends _HomePageAppBar implements ObstructingPreferredSizeWidget {
-  const HomePageCupertinoNavigationBar({required super.selectedTab, super.key});
+  const new({required super.selectedTab, super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(kMinInteractiveDimensionCupertino);

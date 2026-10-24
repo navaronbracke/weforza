@@ -9,7 +9,7 @@ import 'package:weforza/native_service/file_storage_delegate.dart';
 /// This class represents a [FileSystem] that uses the real file system.
 class IoFileSystem implements FileSystem {
   /// Create a new [IoFileSystem].
-  factory IoFileSystem({required FileStorageDelegate fileStorageDelegate}) {
+  factory({required FileStorageDelegate fileStorageDelegate}) {
     final IoFileSystem delegate = IoFileSystem._(const LocalFileSystem());
 
     delegate._initialize(fileStorageDelegate);
@@ -18,7 +18,7 @@ class IoFileSystem implements FileSystem {
   }
 
   /// The private constructor.
-  IoFileSystem._(this._fileSystem);
+  new _(this._fileSystem);
 
   /// The underlying file system.
   final fs.FileSystem _fileSystem;

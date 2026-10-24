@@ -17,7 +17,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents a page for exporting a piece of data.
 class ExportDataPage<T> extends StatelessWidget {
-  const ExportDataPage({
+  const new({
     required this.checkmarkAnimationController,
     required this.delegate,
     required this.options,
@@ -202,7 +202,7 @@ class ExportDataPage<T> extends StatelessWidget {
 }
 
 class _ExportPageDoneIndicator extends StatelessWidget {
-  const _ExportPageDoneIndicator({required this.checkmarkAnimationController, required this.hasAndroidScopedStorage});
+  const new({required this.checkmarkAnimationController, required this.hasAndroidScopedStorage});
 
   final AnimationController checkmarkAnimationController;
 

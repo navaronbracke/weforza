@@ -9,7 +9,7 @@ import 'package:weforza/widgets/dialogs/dialogs.dart';
 /// This widget represents a dialog
 /// that presents the choice to remove the entire ride calendar.
 class ResetRideCalendarDialog extends ConsumerStatefulWidget {
-  const ResetRideCalendarDialog({super.key});
+  const new({super.key});
 
   @override
   ConsumerState<ResetRideCalendarDialog> createState() => _ResetRideCalendarDialogState();

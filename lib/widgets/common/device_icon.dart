@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:weforza/model/device/device_type.dart';
 
 class DeviceIcon extends StatelessWidget {
-  const DeviceIcon({required this.type, super.key, this.size});
+  const new({required this.type, super.key, this.size});
 
   final double? size;
 

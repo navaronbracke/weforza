@@ -5,7 +5,7 @@ import 'package:weforza/model/image/pick_image_delegate.dart';
 
 /// This delegate provides an interface for selecting profile images.
 class ProfileImagePickerDelegate {
-  ProfileImagePickerDelegate({required this.imagePickerDelegate, required Uri? initialValue})
+  new({required this.imagePickerDelegate, required Uri? initialValue})
     : _notifier = ValueNotifier(AsyncData(initialValue));
 
   /// The delegate that will handle picking images.

@@ -7,7 +7,7 @@ enum RiderFilterOption {
   active(1),
   inactive(2);
 
-  const RiderFilterOption(this.value);
+  const new(this.value);
 
   /// The raw value of this filter option.
   final int value;

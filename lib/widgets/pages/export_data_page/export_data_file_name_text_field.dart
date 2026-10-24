@@ -12,7 +12,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the text field for the file name input on the export data page.
 class ExportDataFileNameTextField<T> extends StatelessWidget {
-  ExportDataFileNameTextField({required this.delegate, super.key})
+  new({required this.delegate, super.key})
     : inputFormatters = [
         FilteringTextInputFormatter.allow(RegExp(r'[\w-\.]')),
         LengthLimitingTextInputFormatter(maxLength),

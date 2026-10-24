@@ -6,7 +6,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents an export file format selection.
 class ExportFileFormatSelection extends StatelessWidget {
-  const ExportFileFormatSelection({required this.onFormatSelected, required this.listenable, super.key});
+  const new({required this.onFormatSelected, required this.listenable, super.key});
 
   /// The function that handles a change in the selection.
   final void Function(ExportFileFormat? value) onFormatSelected;

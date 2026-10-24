@@ -4,7 +4,7 @@ import 'package:weforza/widgets/dialogs/dialogs.dart';
 
 /// This widget represents a dialog that shows a confirmation for a delete action.
 class DeleteItemDialog extends StatelessWidget {
-  const DeleteItemDialog({
+  const new({
     required this.description,
     required this.errorDescription,
     required this.future,

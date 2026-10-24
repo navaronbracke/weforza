@@ -2,7 +2,7 @@ import 'package:weforza/model/export/exportable_ride.dart';
 import 'package:weforza/model/export/exportable_ride_attendee.dart';
 
 class ExportableRideWithAttendees {
-  const ExportableRideWithAttendees({required this.attendees, required this.ride});
+  const new({required this.attendees, required this.ride});
 
   /// The attendees of the ride to export.
   final Iterable<ExportableRideAttendee> attendees;

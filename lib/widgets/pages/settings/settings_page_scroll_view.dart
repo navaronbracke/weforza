@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 /// This widget represents the scrollview for the settings page.
 class SettingsPageScrollView extends StatelessWidget {
   /// The default constructor.
-  const SettingsPageScrollView({
+  const new({
     required this.excludedTermsList,
     required this.excludedTermsListFooter,
     required this.riderListFilter,

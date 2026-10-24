@@ -5,7 +5,7 @@ import 'package:weforza/model/export/exportable_ride_attendee.dart';
 import 'package:weforza/model/export/exportable_ride_with_attendees.dart';
 
 class ExportRidesRepository {
-  const ExportRidesRepository(this._database);
+  const new(this._database);
 
   /// The database instance.
   final WeForzaDatabase _database;

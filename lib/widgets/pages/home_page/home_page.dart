@@ -14,7 +14,7 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 ///
 /// By default the ride list page is shown.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const new({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

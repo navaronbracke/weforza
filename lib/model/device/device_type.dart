@@ -12,10 +12,10 @@ enum DeviceType {
   pulseMonitor(1),
   watch(4);
 
-  const DeviceType(this.typeIndex);
+  const new(this.typeIndex);
 
   /// Create a device type fron the given [typeIndex].
-  factory DeviceType.fromTypeIndex(int typeIndex) {
+  factory fromTypeIndex(int typeIndex) {
     switch (typeIndex) {
       case 1:
         return pulseMonitor;

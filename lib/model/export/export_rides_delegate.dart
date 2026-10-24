@@ -7,7 +7,7 @@ import 'package:weforza/repository/export_rides_repository.dart';
 
 /// This class represents the export options for a [ExportRidesDelegate].
 class ExportRidesOptions {
-  ExportRidesOptions({this.ride});
+  new({this.ride});
 
   /// The timestamp of the single ride that should be exported.
   ///
@@ -17,7 +17,7 @@ class ExportRidesOptions {
 
 /// This class represents the delegate that handles exporting rides.
 class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
-  ExportRidesDelegate({required super.fileStorageDelegate, required super.fileSystem, required this.repository});
+  new({required super.fileStorageDelegate, required super.fileSystem, required this.repository});
 
   final ExportRidesRepository repository;
 

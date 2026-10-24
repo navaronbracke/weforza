@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 /// This widget currently only supports [TargetPlatform.android] and [TargetPlatform.iOS].
 class PlatformAwareWidget extends StatelessWidget {
   /// The default constructor.
-  const PlatformAwareWidget({required this.android, required this.ios, super.key});
+  const new({required this.android, required this.ios, super.key});
 
   /// The builder that is invoked for [TargetPlatform.android].
   final WidgetBuilder android;

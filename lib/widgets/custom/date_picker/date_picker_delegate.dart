@@ -11,7 +11,7 @@ class DatePickerDelegate {
   ///
   /// The [curve] and [duration] can be used to customize the page transitions
   /// between months.
-  factory DatePickerDelegate({Curve curve = Curves.easeInOut, Duration duration = const Duration(milliseconds: 300)}) {
+  factory({Curve curve = Curves.easeInOut, Duration duration = const Duration(milliseconds: 300)}) {
     // 100 years in either direction makes it effectively infinite for a session.
     const int calendarPagesCount = 100 * 12 * 2;
 
@@ -29,7 +29,7 @@ class DatePickerDelegate {
   }
 
   /// The private constructor.
-  DatePickerDelegate._({
+  new _({
     required this.calendarPageCount,
     required this.curve,
     required this.duration,

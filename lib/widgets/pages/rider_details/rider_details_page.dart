@@ -40,13 +40,11 @@ class RiderDetailsPage extends StatelessWidget {
         actions: <Widget>[
           Consumer(
             builder: (context, ref, child) {
+              final rider = ref.watch(selectedRiderProvider);
+
               return IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () {
-                  final rider = ref.read(selectedRiderProvider)!;
-
-                  _goToEditRiderPage(context, rider);
-                },
+                onPressed: rider == null ? null : () => _goToEditRiderPage(context, rider),
               );
             },
           ),
@@ -58,19 +56,32 @@ class RiderDetailsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return const Column(
+    return Column(
       children: <Widget>[
-        Row(
-          children: [
-            Padding(padding: EdgeInsets.all(8), child: RiderProfileImage()),
-            Expanded(child: RiderName()),
-          ],
+        Consumer(
+          builder: (context, ref, child) {
+            final rider = ref.watch(selectedRiderProvider);
+
+            if (rider == null) {
+              return const SizedBox.shrink();
+            }
+
+            return Row(
+              children: [
+                Padding(
+                  padding: const .all(8),
+                  child: RiderProfileImage(rider: rider),
+                ),
+                Expanded(child: RiderName(rider: rider)),
+              ],
+            );
+          },
         ),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(top: 4, left: 8, right: 8),
           child: Row(children: [SelectedRiderAttendingCount(), Spacer(), RiderActiveToggle()]),
         ),
-        Expanded(child: RiderDevicesList()),
+        const Expanded(child: RiderDevicesList()),
       ],
     );
   }
@@ -90,13 +101,11 @@ class RiderDetailsPage extends StatelessWidget {
               children: <Widget>[
                 Consumer(
                   builder: (context, ref, child) {
+                    final rider = ref.watch(selectedRiderProvider);
+
                     return CupertinoIconButton(
                       icon: CupertinoIcons.pencil,
-                      onPressed: () {
-                        final rider = ref.read(selectedRiderProvider)!;
-
-                        _goToEditRiderPage(context, rider);
-                      },
+                      onPressed: rider == null ? null : () => _goToEditRiderPage(context, rider),
                     );
                   },
                 ),

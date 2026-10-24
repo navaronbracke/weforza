@@ -2,7 +2,7 @@ import 'package:drift/drift.dart';
 
 /// A SQL type that is declared as `TINYINT`.
 final class TinyIntSqlType implements CustomSqlType<int> {
-  const TinyIntSqlType();
+  const new();
 
   @override
   String mapToSqlLiteral(int dartValue) => dartValue.toString();

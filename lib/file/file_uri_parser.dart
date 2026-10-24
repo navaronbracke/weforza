@@ -15,13 +15,12 @@ final class FileUriParser {
   /// The [path] can be a content Uri, a file Uri or an absolute path to a file.
   ///
   /// Returns the parsed [Uri] or null if the path does not point to a valid [Uri].
-  Uri? parse(String? path) {
-    if (path == null) {
-      return null;
-    }
+  Uri? parse(String? path) => validateUri(path == null ? null : Uri.tryParse(path));
 
-    final Uri? uri = Uri.tryParse(path);
-
+  /// Validate the given [uri].
+  ///
+  /// Returns the [Uri] if it is valid according to the file system, or null otherwise.
+  Uri? validateUri(Uri? uri) {
     if (uri == null) {
       return null;
     }
@@ -38,7 +37,7 @@ final class FileUriParser {
 
     // If it's neither a content Uri or a file Uri,
     // it might be an absolute file path.
-    final fs.File file = fileSystem.file(path);
+    final fs.File file = fileSystem.file(uri.toFilePath());
 
     return file.existsSync() ? file.uri : null;
   }

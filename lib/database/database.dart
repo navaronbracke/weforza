@@ -9,6 +9,7 @@ import 'package:weforza/database/riders.dart';
 import 'package:weforza/database/rides.dart';
 import 'package:weforza/database/utils/device_type_converter.dart';
 import 'package:weforza/database/utils/tiny_int_sql_type.dart';
+import 'package:weforza/database/utils/uri_converter.dart';
 import 'package:weforza/model/device/device_type.dart';
 
 part 'database.g.dart';

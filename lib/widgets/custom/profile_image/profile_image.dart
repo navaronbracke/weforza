@@ -114,7 +114,7 @@ class AdaptiveProfileImage extends StatelessWidget {
         final FileUriParser fileUriParser = FileUriParser(ref.watch(fileSystemProvider));
 
         return AdaptiveProfileImage(
-          image: fileUriParser.parse(rider.profileImageUri),
+          image: fileUriParser.validateUri(rider.profileImageUri),
           personInitials: rider.firstName.isEmpty && rider.lastName.isEmpty
               ? null
               : '${rider.firstName[0]}${rider.lastName[0]}',

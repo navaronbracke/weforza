@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:weforza/database/utils/uri_converter.dart';
 
 /// The table for the riders.
 class Riders extends Table {
@@ -37,5 +38,5 @@ class Riders extends Table {
   DateTimeColumn get lastUpdated => dateTime().withDefault(currentDateAndTime)();
 
   /// The [Uri] of the profile image for the rider.
-  TextColumn get profileImageUri => text().nullable()();
+  TextColumn get profileImageUri => text().nullable().map(const UriConverter())();
 }

@@ -5,24 +5,11 @@ import 'package:weforza/riverpod/ride/ride_list_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 
 /// This provider manages the selected ride.
-final selectedRideProvider = StateNotifierProvider<SelectedRideNotifier, Ride?>(SelectedRideNotifier.new);
+final selectedRideProvider = NotifierProvider<SelectedRideNotifier, Ride?>(SelectedRideNotifier.new);
 
-/// This provider provides the list of attendees for the currently selected ride.
-final selectedRideAttendeesProvider = FutureProvider<List<Rider>>((ref) async {
-  final repository = ref.watch(rideRepositoryProvider);
-  final selectedRide = ref.watch(selectedRideProvider);
-
-  if (selectedRide == null) {
-    throw ArgumentError.notNull('selectedRide');
-  }
-
-  return repository.getRideAttendees(selectedRide.date);
-});
-
-class SelectedRideNotifier extends StateNotifier<Ride?> {
-  new(this.ref) : super(null);
-
-  final Ref ref;
+class SelectedRideNotifier extends Notifier<Ride?> {
+  @override
+  Ride? build() => null;
 
   Future<void> deleteRide() async {
     final ride = state;

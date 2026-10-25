@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
 
 /// This class represents a delegate that manages the excluded terms for the scan filter.
 class ExcludedTermsDelegate {

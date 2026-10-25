@@ -1,43 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
 
 /// This provider provides the devices of the selected rider.
-final selectedRiderDevicesProvider = StateNotifierProvider<SelectedRiderDevicesNotifier, AsyncValue<List<Device>>>((
-  ref,
-) {
-  final id = ref.watch(selectedRiderProvider.select((r) => r?.id));
-  final repository = ref.read(deviceRepositoryProvider);
+final selectedRiderDevicesProvider = AsyncNotifierProvider(SelectedRiderDevicesNotifier.new);
 
-  return SelectedRiderDevicesNotifier(repository: repository, id: id);
-});
+class SelectedRiderDevicesNotifier extends AsyncNotifier<List<Device>> {
+  @override
+  FutureOr<List<Device>> build() {
+    final id = ref.watch(selectedRiderProvider.select((r) => r?.id));
 
-class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>>> {
-  new({required this.repository, int? id}) : super(const AsyncLoading()) {
     if (id == null) {
-      state = AsyncError(ArgumentError.notNull('id'), StackTrace.current);
-
-      return;
+      throw ArgumentError.notNull('id');
     }
 
-    repository
-        .getOwnerDevices(id)
-        .then((devices) {
-          if (mounted) {
-            state = AsyncData(devices);
-          }
-        })
-        .catchError((error) {
-          if (mounted) {
-            state = AsyncError(error, StackTrace.current);
-          }
-        });
-  }
+    final repository = ref.watch(deviceRepositoryProvider);
 
-  /// The repository that manages the devices.
-  final DeviceRepository repository;
+    return repository.getOwnerDevices(id);
+  }
 
   /// Add a device to the list of devices.
   Future<void> addDevice(DevicesCompanion model) async {
@@ -45,13 +28,11 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
       throw StateError('The devices list was not loaded yet');
     }
 
-    final newDevice = await repository.addDevice(model);
+    final newDevice = await ref.read(deviceRepositoryProvider).addDevice(model);
 
-    if (!mounted) {
-      return;
+    if (ref.mounted) {
+      state = AsyncData([...?state.value, newDevice]);
     }
-
-    state = AsyncData([...?state.value, newDevice]);
   }
 
   /// Delete the device at [index].
@@ -64,9 +45,9 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
 
     final device = newDevices[index];
 
-    await repository.deleteDevice(device);
+    await ref.read(deviceRepositoryProvider).deleteDevice(device);
 
-    if (!mounted) {
+    if (!ref.mounted) {
       return;
     }
 
@@ -81,9 +62,9 @@ class SelectedRiderDevicesNotifier extends StateNotifier<AsyncValue<List<Device>
       throw StateError('The devices list was not loaded yet');
     }
 
-    final updatedDevice = await repository.updateDevice(model);
+    final updatedDevice = await ref.read(deviceRepositoryProvider).updateDevice(model);
 
-    if (!mounted) {
+    if (!ref.mounted) {
       return;
     }
 

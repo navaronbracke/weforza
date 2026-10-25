@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/widgets.dart';
+import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
@@ -9,6 +10,12 @@ import 'package:weforza/model/settings/scan_duration_delegate.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/settings/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
+import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_sliver.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_navigation_bar.dart';
 
 /// The display page for a [SettingsPage] layout, that displays the provided [Settings].
@@ -40,6 +47,27 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
     addTermFormKey.currentState?.reset();
   }
 
+  Widget _buildAddTermInputField([BoxDecoration? decoration]) {
+    return AddExcludedTermInputField(
+      controller: addTermController,
+      decoration: decoration,
+      delegate: excludedTermsDelegate,
+      focusNode: addTermFocusNode,
+      formKey: addTermFormKey,
+    );
+  }
+
+  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration, Widget? divider}) {
+    return EditExcludedTermInputField(
+      decoration: decoration,
+      delegate: excludedTermsDelegate,
+      divider: divider,
+      index: index,
+      excludedTerm: terms[index],
+      scrollController: widget.scrollController,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,11 +95,13 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
           controller: widget.scrollController,
           slivers: [
             ?SettingsPageSliverNavigationBar.buildForConstraints(constraints),
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([riderListFilter, scanDurationOption, ?excludedTermsListHeader]),
+            SliverList(delegate: SliverChildListDelegate.fixed([riderListFilter, scanDurationOption])),
+            ExcludedTermsListSliver(
+              buildAddTermInputField: _buildAddTermInputField,
+              excludedTermItemBuilder: _buildExcludedTermItem,
+              excludedTermsListenable: excludedTermsDelegate.listenable,
             ),
-            excludedTermsList,
-            SliverList(delegate: SliverChildListDelegate.fixed([excludedTermsListFooter, resetRideCalendarButton])),
+            SliverList(delegate: SliverChildListDelegate.fixed([resetRideCalendarButton])),
             version,
           ],
         ),

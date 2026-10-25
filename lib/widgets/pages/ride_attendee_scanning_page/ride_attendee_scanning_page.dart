@@ -79,21 +79,6 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       // the only thing left to do is to insert it into the animated list.
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
-
-    ref.listen(settingsProvider, (_, settings) {
-      switch (settings) {
-        case AsyncLoading<Settings>():
-          // Wait for the settings to be loaded.
-          return;
-        case AsyncData<Settings>(:final value):
-          unawaited(_startDeviceScan(value));
-
-          return;
-        case AsyncError<Settings>():
-        // Do not provide the delegate with scan settings if they are not available.
-        // Cached settings will be used anyway, and the delegate will show a scan error if none are available.
-      }
-    });
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -153,6 +138,25 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(settingsProvider, (_, settings) {
+      if (_delegate.hasLoadedScanSettings) {
+        return;
+      }
+
+      switch (settings) {
+        case AsyncLoading<Settings>():
+          // Wait for the settings to be loaded.
+          return;
+        case AsyncData<Settings>(:final value):
+          unawaited(_startDeviceScan(value));
+
+          return;
+        case AsyncError<Settings>():
+        // Do not provide the delegate with scan settings if they are not available.
+        // Cached settings will be used anyway, and the delegate will show a scan error if none are available.
+      }
+    });
+
     return PopScope<Object?>(
       // The `canPop` parameter is always true,
       // since leaving the page should just stop a running scan.

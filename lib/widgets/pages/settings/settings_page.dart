@@ -6,9 +6,10 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_with_package_info_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
-import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
@@ -34,31 +35,17 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   final ScrollController scrollController = ScrollController();
 
-  late final ExcludedTermsDelegate excludedTermsDelegate;
+  late final SettingsNotifier settingsDelegate;
 
-  late final RiderFilterDelegate riderFilterDelegate;
-
-  late final ScanDurationDelegate scanDurationDelegate;
+  ExcludedTermsDelegate? excludedTermsDelegate;
+  RiderFilterDelegate? riderFilterDelegate;
+  ScanDurationDelegate? scanDurationDelegate;
 
   @override
   void initState() {
     super.initState();
 
-    final settingsDelegate = ref.read(settingsProvider.notifier);
-    final currentSettings = ref.read(settingsProvider);
-
-    excludedTermsDelegate = ExcludedTermsDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter,
-    );
-    riderFilterDelegate = RiderFilterDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.riderListFilter,
-    );
-    scanDurationDelegate = ScanDurationDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.scanDuration.toDouble(),
-    );
+    settingsDelegate = ref.read(settingsProvider.notifier);
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);
   }
@@ -73,6 +60,25 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(settingsWithPackageInfoProvider, (_, value) {
+      if (value case AsyncData(:final value)) {
+        final Settings settings = value.$1;
+
+        excludedTermsDelegate = ExcludedTermsDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: settings.excludedTermsFilter,
+        );
+        riderFilterDelegate = RiderFilterDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: settings.riderListFilter,
+        );
+        scanDurationDelegate = ScanDurationDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: settings.scanDuration.toDouble(),
+        );
+      }
+    });
+
     return FocusAbsorber(
       child: PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget),
     );
@@ -256,9 +262,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     addTermController.dispose();
     addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
-    excludedTermsDelegate.dispose();
-    riderFilterDelegate.dispose();
-    scanDurationDelegate.dispose();
+    excludedTermsDelegate?.dispose();
+    riderFilterDelegate?.dispose();
+    scanDurationDelegate?.dispose();
     scrollController.dispose();
     super.dispose();
   }

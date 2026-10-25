@@ -1,25 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/database/database.dart';
-import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings/excluded_terms_delegate.dart';
-import 'package:weforza/model/settings/rider_filter_delegate.dart';
-import 'package:weforza/model/settings/scan_duration_delegate.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/settings/settings_provider.dart';
 import 'package:weforza/riverpod/settings/settings_with_package_info_provider.dart';
-import 'package:weforza/widgets/common/focus_absorber.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
-import 'package:weforza/widgets/pages/settings/reset_ride_calendar_button.dart';
-import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
-import 'package:weforza/widgets/pages/settings/scan_duration_option.dart';
-import 'package:weforza/widgets/pages/settings/settings_page_scroll_view.dart';
-import 'package:weforza/widgets/platform/platform_aware_widget.dart';
+import 'package:weforza/widgets/pages/settings/settings_display_page.dart';
+import 'package:weforza/widgets/pages/settings/settings_error_page.dart';
+import 'package:weforza/widgets/pages/settings/settings_loading_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const new({super.key});
@@ -29,242 +17,33 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class SettingsPageState extends ConsumerState<SettingsPage> {
-  final addTermController = TextEditingController();
-  final addTermFocusNode = FocusNode();
-  final addTermFormKey = GlobalKey<FormFieldState<String>>();
-
   final ScrollController scrollController = ScrollController();
 
   late final SettingsNotifier settingsDelegate;
 
-  ExcludedTermsDelegate? excludedTermsDelegate;
-  RiderFilterDelegate? riderFilterDelegate;
-  ScanDurationDelegate? scanDurationDelegate;
-
   @override
   void initState() {
     super.initState();
-
     settingsDelegate = ref.read(settingsProvider.notifier);
-
-    addTermFocusNode.addListener(_handleAddTermFocusChange);
-  }
-
-  void _handleAddTermFocusChange() {
-    if (addTermFocusNode.hasPrimaryFocus) {
-      return;
-    }
-
-    addTermFormKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(settingsWithPackageInfoProvider, (_, value) {
-      if (value case AsyncData(:final value)) {
-        final Settings settings = value.$1;
+    final AsyncValue<(Settings, PackageInfo)> settingsWithPackageInfo = ref.watch(settingsWithPackageInfoProvider);
 
-        excludedTermsDelegate = ExcludedTermsDelegate(
-          settingsDelegate: settingsDelegate,
-          initialValue: settings.excludedTermsFilter,
-        );
-        riderFilterDelegate = RiderFilterDelegate(
-          settingsDelegate: settingsDelegate,
-          initialValue: settings.riderListFilter,
-        );
-        scanDurationDelegate = ScanDurationDelegate(
-          settingsDelegate: settingsDelegate,
-          initialValue: settings.scanDuration.toDouble(),
-        );
-      }
-    });
-
-    return FocusAbsorber(
-      child: PlatformAwareWidget(android: _buildAndroidWidget, ios: _buildIosWidget),
-    );
-  }
-
-  Widget _buildAndroidWidget(BuildContext context) {
-    final translator = S.of(context);
-    final textTheme = TextTheme.of(context);
-
-    return SettingsPageScrollView(
-      scrollController: scrollController,
-      excludedTermsListHeader: const Padding(
-        padding: .only(left: 12, right: 12, bottom: 8),
-        child: ExcludedTermsListHeader(),
+    return switch (settingsWithPackageInfo) {
+      AsyncLoading<(Settings, PackageInfo)>() => SettingsLoadingPage(scrollController: scrollController),
+      AsyncData<(Settings, PackageInfo)>(:final value) => SettingsDisplayPage(
+        scrollController: scrollController,
+        settings: value.$1,
+        settingsDelegate: settingsDelegate,
       ),
-      excludedTermsList: SliverPadding(
-        padding: const .symmetric(horizontal: 12),
-        sliver: ExcludedTermsList(
-          addTermInputField: AddExcludedTermInputField(
-            controller: addTermController,
-            delegate: excludedTermsDelegate,
-            focusNode: addTermFocusNode,
-            formKey: addTermFormKey,
-          ),
-          builder: _buildExcludedTermItem,
-          listenable: excludedTermsDelegate.listenable,
-        ),
-      ),
-      excludedTermsListFooter: const Padding(
-        padding: .only(left: 12, right: 12, top: 12),
-        child: ExcludedTermsListFooter(),
-      ),
-      riderListFilter: Padding(
-        padding: const .fromLTRB(12, 16, 12, 8),
-        child: Column(
-          mainAxisSize: .min,
-          crossAxisAlignment: .start,
-          children: [
-            Text(translator.ridersListFilter, style: textTheme.titleMedium),
-            RiderListFilter(delegate: riderFilterDelegate),
-            Text(translator.ridersListFilterDescription, style: textTheme.bodySmall?.copyWith(fontStyle: .italic)),
-          ],
-        ),
-      ),
-      resetRideCalendarButton: const Padding(
-        padding: .fromLTRB(24, 56, 24, 0),
-        child: Center(child: ResetRideCalendarButton()),
-      ),
-      scanDurationOption: Padding(
-        padding: const .symmetric(horizontal: 12, vertical: 32),
-        child: ScanDurationOption(delegate: scanDurationDelegate),
-      ),
-      version: SliverFillRemaining(
-        hasScrollBody: false,
-        child: Padding(
-          padding: const .symmetric(vertical: 32),
-          child: Align(
-            alignment: .bottomCenter,
-            child: AppVersion(
-              builder: (version) {
-                return Text('${translator.version} $version', style: textTheme.bodySmall?.copyWith(fontStyle: .italic));
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildExcludedTermItem(List<ExcludedTerm> terms, int index, {BoxDecoration? decoration, Widget? divider}) {
-    return EditExcludedTermInputField(
-      decoration: decoration,
-      delegate: excludedTermsDelegate,
-      divider: divider,
-      index: index,
-      excludedTerm: terms[index],
-      scrollController: scrollController,
-    );
-  }
-
-  Widget _buildIosWidget(BuildContext context) {
-    final translator = S.of(context);
-    final excludedTermDivider = BorderSide(
-      color: CupertinoColors.separator.resolveFrom(context),
-      width: 1.0 / MediaQuery.devicePixelRatioOf(context),
-    );
-
-    final decorationBackgroundColor = CupertinoColors.secondarySystemGroupedBackground.resolveFrom(context);
-
-    return SettingsPageScrollView(
-      scrollController: scrollController,
-      excludedTermsList: SliverPadding(
-        padding: const .symmetric(horizontal: 20),
-        sliver: ExcludedTermsList(
-          addTermInputField: AddExcludedTermInputField(
-            controller: addTermController,
-            decoration: BoxDecoration(
-              borderRadius: const .only(topLeft: .circular(10), topRight: .circular(10)),
-              color: decorationBackgroundColor,
-            ),
-            delegate: excludedTermsDelegate,
-            focusNode: addTermFocusNode,
-            formKey: addTermFormKey,
-          ),
-          listenable: excludedTermsDelegate.listenable,
-          builder: (items, index) {
-            BorderRadius borderRadius = .zero;
-
-            if (index == items.length - 1) {
-              borderRadius = const .only(bottomLeft: .circular(10), bottomRight: .circular(10));
-            }
-
-            return _buildExcludedTermItem(
-              items,
-              index,
-              decoration: BoxDecoration(borderRadius: borderRadius, color: decorationBackgroundColor),
-              divider: Container(
-                color: excludedTermDivider.color,
-                height: excludedTermDivider.width,
-                margin: const EdgeInsetsDirectional.only(start: 15.0),
-              ),
-            );
-          },
-        ),
-      ),
-      excludedTermsListFooter: const Padding(
-        // Both the CupertinoFormSection and CupertinoListSection (which is used by the former)
-        // add 20 default horizontal padding to the fotter, so account for 40 total in the footer,
-        // since it is not inserted using a `CupertinoFormSection.insetGrouped`.
-        padding: .fromSTEB(40.0, 10.0, 40.0, 0.0),
-        child: ExcludedTermsListFooter(),
-      ),
-      riderListFilter: CupertinoFormSection.insetGrouped(
-        header: Text(translator.riders.toUpperCase()),
-        footer: Text(translator.ridersListFilterDescription),
-        children: [
-          Padding(
-            padding: const .all(6),
-            child: Center(child: RiderListFilter(delegate: riderFilterDelegate)),
-          ),
-        ],
-      ),
-      navigationBar: CupertinoSliverNavigationBar(
-        backgroundColor: CupertinoColors.systemGroupedBackground,
-        border: null,
-        largeTitle: Text(translator.settings),
-        transitionBetweenRoutes: false,
-      ),
-      resetRideCalendarButton: Padding(
-        padding: const .symmetric(vertical: 32),
-        child: CupertinoFormSection.insetGrouped(
-          header: Text(translator.rideCalendar.toUpperCase()),
-          children: const [
-            CupertinoFormRow(
-              padding: EdgeInsetsDirectional.only(start: 20, end: 6),
-              prefix: ResetRideCalendarButton(),
-              child: SizedBox.shrink(),
-            ),
-          ],
-        ),
-      ),
-      scanDurationOption: CupertinoFormSection.insetGrouped(
-        header: Text(translator.scanSettings.toUpperCase()),
-        children: [ScanDurationOption(delegate: scanDurationDelegate)],
-      ),
-      version: SliverToBoxAdapter(
-        child: CupertinoFormSection.insetGrouped(
-          children: [
-            CupertinoFormRow(
-              prefix: Text(translator.version),
-              child: const AppVersion(builder: Text.new),
-            ),
-          ],
-        ),
-      ),
-    );
+      AsyncError<(Settings, PackageInfo)>() => SettingsErrorPage(scrollController: scrollController),
+    };
   }
 
   @override
   void dispose() {
-    addTermController.dispose();
-    addTermFocusNode.removeListener(_handleAddTermFocusChange);
-    addTermFocusNode.dispose();
-    excludedTermsDelegate?.dispose();
-    riderFilterDelegate?.dispose();
-    scanDurationDelegate?.dispose();
     scrollController.dispose();
     super.dispose();
   }

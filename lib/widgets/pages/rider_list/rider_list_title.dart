@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/rider/rider_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_amount_provider.dart';
 
 /// This widget represents the title in the rider list page.
 class RiderListTitle extends ConsumerWidget {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:weforza/model/deferred_save_delegate.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
 
 /// This class represents the delegate that manages
 /// the scan duration option for the settings page.

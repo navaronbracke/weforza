@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
+import 'package:weforza/riverpod/ride/selected_ride_atteendees_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
 import 'package:weforza/widgets/pages/ride_details/ride_details_attendees/ride_details_attendees_list_empty.dart';

@@ -56,13 +56,17 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
 
     final navigator = Navigator.of(context);
     final riderId = widget.rider?.id;
+    final profileImageUri = switch (_profileImageDelegate.selectedImage) {
+      AsyncLoading<Uri?>() || AsyncError<Uri?>() => null,
+      AsyncData<Uri?>(:final value) => value,
+    };
 
     final model = RidersCompanion(
       alias: Value(_aliasController.text.trim()),
       firstName: Value(_firstNameController.text.trim()),
       lastName: Value(_lastNameController.text.trim()),
       isActive: Value(widget.rider?.isActive ?? true),
-      profileImageUri: Value(_profileImageDelegate.selectedImage.valueOrNull),
+      profileImageUri: Value(profileImageUri),
       id: riderId == null ? const Value.absent() : Value(riderId),
     );
 

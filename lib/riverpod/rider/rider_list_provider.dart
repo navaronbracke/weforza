@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/model/settings/settings.dart';
 
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/settings_provider.dart';
@@ -9,7 +10,15 @@ final riderListProvider = FutureProvider<List<Rider>>((ref) {
   final repository = ref.watch(riderRepositoryProvider);
 
   // Watch the rider list filter for changes.
-  final filter = ref.watch(settingsProvider.select((settings) => settings.riderListFilter));
+  final filter = ref.watch(
+    settingsProvider.select((settings) {
+      if (settings case AsyncData(:final value)) {
+        return value.riderListFilter;
+      }
+
+      return Settings.defaultRiderListFilter;
+    }),
+  );
 
   return repository.getRiders(filter);
 });

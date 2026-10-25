@@ -6,7 +6,7 @@ import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/app_version.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
@@ -34,31 +34,32 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   final ScrollController scrollController = ScrollController();
 
-  late final ExcludedTermsDelegate excludedTermsDelegate;
-
-  late final RiderFilterDelegate riderFilterDelegate;
-
-  late final ScanDurationDelegate scanDurationDelegate;
+  ExcludedTermsDelegate? excludedTermsDelegate;
+  RiderFilterDelegate? riderFilterDelegate;
+  ScanDurationDelegate? scanDurationDelegate;
 
   @override
   void initState() {
     super.initState();
 
     final settingsDelegate = ref.read(settingsProvider.notifier);
-    final currentSettings = ref.read(settingsProvider);
 
-    excludedTermsDelegate = ExcludedTermsDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.excludedTermsFilter,
-    );
-    riderFilterDelegate = RiderFilterDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.riderListFilter,
-    );
-    scanDurationDelegate = ScanDurationDelegate(
-      settingsDelegate: settingsDelegate,
-      initialValue: currentSettings.scanDuration.toDouble(),
-    );
+    ref.listen(settingsProvider, (_, settings) {
+      if (settings case AsyncData(:final value)) {
+        excludedTermsDelegate = ExcludedTermsDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: value.excludedTermsFilter,
+        );
+        riderFilterDelegate = RiderFilterDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: value.riderListFilter,
+        );
+        scanDurationDelegate = ScanDurationDelegate(
+          settingsDelegate: settingsDelegate,
+          initialValue: value.scanDuration.toDouble(),
+        );
+      }
+    });
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);
   }
@@ -256,9 +257,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     addTermController.dispose();
     addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
-    excludedTermsDelegate.dispose();
-    riderFilterDelegate.dispose();
-    scanDurationDelegate.dispose();
+    excludedTermsDelegate?.dispose();
+    riderFilterDelegate?.dispose();
+    scanDurationDelegate?.dispose();
     scrollController.dispose();
     super.dispose();
   }

@@ -3,7 +3,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/manual_selection_filter_options.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
-import 'package:weforza/utils/comparators/rider_comparator.dart';
+import 'package:weforza/utils/rider_comparator.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/rider_search_filter_empty.dart';
 import 'package:weforza/widgets/common/search_field_with_clear_button.dart';

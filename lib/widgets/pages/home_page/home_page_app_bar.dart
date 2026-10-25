@@ -55,41 +55,38 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    switch (selectedTab) {
-      case HomePageTab.riders:
-        return AppBar(
-          title: const RiderListTitle(),
-          actions: <Widget>[
-            IconButton(icon: const Icon(Icons.person_add), onPressed: () => _goToAddRiderPage(context)),
-            IconButton(icon: const Icon(Icons.file_download), onPressed: () => _goToImportRidersPage(context)),
-            Consumer(
-              builder: (_, ref, child) {
-                final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
+    return switch (selectedTab) {
+      .riders => AppBar(
+        title: const RiderListTitle(),
+        actions: <Widget>[
+          IconButton(icon: const Icon(Icons.person_add), onPressed: () => _goToAddRiderPage(context)),
+          IconButton(icon: const Icon(Icons.file_download), onPressed: () => _goToImportRidersPage(context)),
+          Consumer(
+            builder: (_, ref, child) {
+              final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
 
-                return amountOfRiders > 0 ? child! : const SizedBox.shrink();
-              },
-              child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidersPage(context)),
-            ),
-          ],
-        );
-      case HomePageTab.rides:
-        return AppBar(
-          title: Text(translator.rides),
-          actions: <Widget>[
-            IconButton(icon: const Icon(Icons.add), onPressed: () => _goToAddRidePage(context)),
-            Consumer(
-              builder: (_, ref, child) {
-                final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
+              return amountOfRiders > 0 ? child! : const SizedBox.shrink();
+            },
+            child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidersPage(context)),
+          ),
+        ],
+      ),
+      .rides => AppBar(
+        title: Text(translator.rides),
+        actions: <Widget>[
+          IconButton(icon: const Icon(Icons.add), onPressed: () => _goToAddRidePage(context)),
+          Consumer(
+            builder: (_, ref, child) {
+              final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
 
-                return amountOfRides > 0 ? child! : const SizedBox.shrink();
-              },
-              child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidePage(context)),
-            ),
-          ],
-        );
-      case HomePageTab.settings:
-        return AppBar(title: Text(translator.settings));
-    }
+              return amountOfRides > 0 ? child! : const SizedBox.shrink();
+            },
+            child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidePage(context)),
+          ),
+        ],
+      ),
+      .settings => AppBar(title: Text(translator.settings)),
+    };
   }
 }
 
@@ -102,17 +99,10 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
 
   @override
   bool shouldFullyObstruct(BuildContext context) {
-    Color? color;
-
-    switch (selectedTab) {
-      case HomePageTab.riders:
-      case HomePageTab.rides:
-        color = null;
-        break;
-      case HomePageTab.settings:
-        color = CupertinoColors.systemGroupedBackground;
-        break;
-    }
+    final color = switch (selectedTab) {
+      .riders || .rides => null,
+      .settings => CupertinoColors.systemGroupedBackground,
+    };
 
     // This widget only fully obstructs widgets underneath if the background color has no transparency.
     final Color backgroundColor =
@@ -125,67 +115,64 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
   Widget build(BuildContext context) {
     final translator = S.of(context);
 
-    switch (selectedTab) {
-      case HomePageTab.riders:
-        return CupertinoNavigationBar(
-          transitionBetweenRoutes: false,
-          middle: Row(
-            children: <Widget>[
-              const Expanded(
-                child: Padding(padding: EdgeInsets.only(left: 8), child: RiderListTitle()),
-              ),
-              CupertinoIconButton(
-                icon: CupertinoIcons.person_badge_plus_fill,
-                onPressed: () => _goToAddRiderPage(context),
-              ),
-              CupertinoIconButton(
-                icon: CupertinoIcons.arrow_down_doc_fill,
-                onPressed: () => _goToImportRidersPage(context),
-              ),
-              Consumer(
-                builder: (_, ref, child) {
-                  final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
+    return switch (selectedTab) {
+      .riders => CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Row(
+          children: <Widget>[
+            const Expanded(
+              child: Padding(padding: .only(left: 8), child: RiderListTitle()),
+            ),
+            CupertinoIconButton(
+              icon: CupertinoIcons.person_badge_plus_fill,
+              onPressed: () => _goToAddRiderPage(context),
+            ),
+            CupertinoIconButton(
+              icon: CupertinoIcons.arrow_down_doc_fill,
+              onPressed: () => _goToImportRidersPage(context),
+            ),
+            Consumer(
+              builder: (_, ref, child) {
+                final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
 
-                  return amountOfRiders > 0 ? child! : const SizedBox.shrink();
-                },
-                child: CupertinoIconButton(
-                  icon: CupertinoIcons.arrow_up_doc_fill,
-                  onPressed: () => _goToExportRidersPage(context),
-                ),
+                return amountOfRiders > 0 ? child! : const SizedBox.shrink();
+              },
+              child: CupertinoIconButton(
+                icon: CupertinoIcons.arrow_up_doc_fill,
+                onPressed: () => _goToExportRidersPage(context),
               ),
-            ],
-          ),
-        );
-      case HomePageTab.rides:
-        return CupertinoNavigationBar(
-          transitionBetweenRoutes: false,
-          middle: Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(translator.rides)),
-              ),
-              CupertinoIconButton(icon: CupertinoIcons.add, onPressed: () => _goToAddRidePage(context)),
-              Consumer(
-                builder: (_, ref, child) {
-                  final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
+            ),
+          ],
+        ),
+      ),
+      .rides => CupertinoNavigationBar(
+        transitionBetweenRoutes: false,
+        middle: Row(
+          children: <Widget>[
+            Expanded(
+              child: Padding(padding: const .only(left: 8), child: Text(translator.rides)),
+            ),
+            CupertinoIconButton(icon: CupertinoIcons.add, onPressed: () => _goToAddRidePage(context)),
+            Consumer(
+              builder: (_, ref, child) {
+                final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
 
-                  return amountOfRides > 0 ? child! : const SizedBox.shrink();
-                },
-                child: CupertinoIconButton(
-                  icon: CupertinoIcons.arrow_up_doc_fill,
-                  onPressed: () => _goToExportRidePage(context),
-                ),
+                return amountOfRides > 0 ? child! : const SizedBox.shrink();
+              },
+              child: CupertinoIconButton(
+                icon: CupertinoIcons.arrow_up_doc_fill,
+                onPressed: () => _goToExportRidePage(context),
               ),
-            ],
-          ),
-        );
-      case HomePageTab.settings:
-        return CupertinoNavigationBar(
-          backgroundColor: CupertinoColors.systemGroupedBackground,
-          border: null,
-          middle: Text(translator.settings),
-          transitionBetweenRoutes: false,
-        );
-    }
+            ),
+          ],
+        ),
+      ),
+      .settings => CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemGroupedBackground,
+        border: null,
+        middle: Text(translator.settings),
+        transitionBetweenRoutes: false,
+      ),
+    };
   }
 }

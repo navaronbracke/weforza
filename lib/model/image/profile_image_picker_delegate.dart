@@ -29,16 +29,19 @@ class ProfileImagePickerDelegate {
 
   /// Select a new profile image from the device gallery.
   void selectProfileImageFromGallery() {
-    _selectProfileImage(ImageSource.gallery);
+    _selectProfileImage(.gallery);
   }
 
   /// Take a new photo to use as profile image.
-  void takePhoto() => _selectProfileImage(ImageSource.camera);
+  void takePhoto() => _selectProfileImage(.camera);
 
   /// Select a new profile image from the given [source].
   void _selectProfileImage(ImageSource source) async {
     try {
-      final previousUri = _notifier.value.valueOrNull;
+      final previousUri = switch (_notifier.value) {
+        AsyncLoading<Uri?>() || AsyncError<Uri?>() => null,
+        AsyncData<Uri?>(:final value) => value,
+      };
 
       _notifier.value = const AsyncLoading();
 

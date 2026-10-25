@@ -1,31 +1,23 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/model/settings/settings.dart';
-
+import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
 
 /// This provider provides the list of riders.
-final riderListProvider = FutureProvider<List<Rider>>((ref) {
+final riderListProvider = FutureProvider<List<Rider>>((ref) async {
   final repository = ref.watch(riderRepositoryProvider);
 
-  // Watch the rider list filter for changes.
-  final filter = ref.watch(
-    settingsProvider.select((settings) {
-      if (settings case AsyncData(:final value)) {
-        return value.riderListFilter;
-      }
-
-      return Settings.defaultRiderListFilter;
-    }),
-  );
+  final filter = await ref.watch(_riderListFilterProvider.future);
 
   return repository.getRiders(filter);
 });
 
-/// This provider provides the total amount of riders.
-final riderAmountProvider = FutureProvider<int>((ref) {
-  final future = ref.watch(riderListProvider.selectAsync((list) => list.length));
+/// A private [FutureProvider] that provides the rider list filter option from the settings.
+///
+/// This provider is needed since [AsyncNotifier] does not allow selects on the `.future` getter.
+final _riderListFilterProvider = FutureProvider<RiderFilterOption>((ref) async {
+  final settings = await ref.watch(settingsProvider.future);
 
-  return future;
+  return settings.riderListFilter;
 });

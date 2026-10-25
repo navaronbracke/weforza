@@ -51,6 +51,7 @@ class StopScanButton extends StatelessWidget {
     return switch (state.value) {
       // The following states don't happen when the scanner is on.
       .bluetoothDisabled ||
+      .initializing ||
       .manualSelection ||
       .permissionDenied ||
       .requestPermissions ||

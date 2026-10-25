@@ -9,7 +9,7 @@ import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_stat
 /// This class represents a state machine for the [RideAttendeeScanningDelegate].
 class RideAttendeeScanningDelegateStateMachine {
   /// The internal state machine.
-  final _notifier = ValueNotifier<AsyncValue<RideAttendeeScanningState>>(const AsyncData(.requestPermissions));
+  final _notifier = ValueNotifier<AsyncValue<RideAttendeeScanningState>>(const AsyncData(.initializing));
 
   bool _isDisposed = false;
 

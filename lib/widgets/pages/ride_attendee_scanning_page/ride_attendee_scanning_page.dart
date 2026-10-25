@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
+import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/riverpod/repository/device_repository_provider.dart';
 import 'package:weforza/riverpod/repository/ride_repository_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/ride/selected_ride_provider.dart';
-import 'package:weforza/riverpod/settings_provider.dart';
+import 'package:weforza/riverpod/settings/settings_provider.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/manual_selection_list/manual_selection_list.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/ride_attendee_scanning_stepper.dart';
@@ -37,10 +38,17 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
 
   StreamSubscription<bool>? _isScanningSubscription;
 
-  Future<void> _startDeviceScan() async {
+  Future<void> _startDeviceScan(Settings settings) async {
+    _scanProgressBarController?.dispose();
+    _scanProgressBarController = AnimationController(
+      duration: Duration(seconds: settings.scanDuration),
+      vsync: this,
+      value: 1.0,
+    );
+
     // Listen to the start signal of the Bluetooth scan,
     // so that the progress bar decreases in progress.
-    _isScanningSubscription = _delegate.isScanningStream.listen((isScanning) {
+    _isScanningSubscription ??= _delegate.isScanningStream.listen((isScanning) {
       if (_delegate.isDisposed) {
         return;
       }
@@ -52,20 +60,12 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       }
     });
 
-    await _delegate.startDeviceScan();
+    return _delegate.startDeviceScan(scanSettings: (settings.scanDuration, settings.excludedTermsFilter));
   }
 
   @override
   void initState() {
     super.initState();
-
-    final settings = ref.read(settingsProvider);
-
-    _scanProgressBarController = AnimationController(
-      duration: Duration(seconds: settings.scanDuration),
-      vsync: this,
-      value: 1.0,
-    );
 
     _delegate = RideAttendeeScanningDelegate(
       deviceRepository: ref.read(deviceRepositoryProvider),
@@ -80,7 +80,20 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       onDeviceFound: (device) => _scanResultsKey.currentState?.insertItem(0),
     );
 
-    unawaited(_startDeviceScan());
+    ref.listen(settingsProvider, (_, settings) {
+      switch (settings) {
+        case AsyncLoading<Settings>():
+          // Wait for the settings to be loaded.
+          return;
+        case AsyncData<Settings>(:final value):
+          unawaited(_startDeviceScan(value));
+
+          return;
+        case AsyncError<Settings>():
+        // Do not provide the delegate with scan settings if they are not available.
+        // Cached settings will be used anyway, and the delegate will show a scan error if none are available.
+      }
+    });
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
@@ -97,9 +110,10 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       builder: (context, currentValue, _) {
         if (currentValue case AsyncData(:final value)) {
           return switch (value) {
-            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: _delegate.startDeviceScan)),
+            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: () => _delegate.startDeviceScan())),
             .manualSelection => ManualSelectionList(delegate: _delegate),
             .permissionDenied => const Center(child: PermissionDeniedError()),
+            .initializing ||
             .requestPermissions ||
             .startingScan ||
             .stoppingScan => const Center(child: PlatformAwareLoadingIndicator()),

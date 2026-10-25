@@ -97,11 +97,9 @@ class _DeviceTypeCarouselDot extends StatelessWidget {
         };
 
         color = selected ? ColorScheme.of(context).primary : disabledColor;
-        break;
       case .iOS:
       case .macOS:
         color = selected ? CupertinoTheme.of(context).primaryColor : CupertinoColors.systemGrey4;
-        break;
     }
 
     return Padding(

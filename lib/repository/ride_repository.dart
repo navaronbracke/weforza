@@ -97,7 +97,5 @@ class RideRepository {
   }
 
   /// Get a [Stream] of changes to the amount of rides.
-  Stream<int> watchRidesCount() {
-    return _database.rides.count().watchSingleOrNull().map((count) => count ?? 0);
-  }
+  Stream<int> watchRidesCount() => _database.rides.count().watchSingleOrNull().map((count) => count ?? 0);
 }

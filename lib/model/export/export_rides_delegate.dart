@@ -26,7 +26,7 @@ class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
     final rides = await repository.getRides(options.ride);
 
     switch (fileFormat) {
-      case ExportFileFormat.csv:
+      case .csv:
         final buffer = StringBuffer();
 
         for (final ride in rides) {
@@ -34,12 +34,10 @@ class ExportRidesDelegate extends ExportDelegate<ExportRidesOptions> {
         }
 
         await file.writeAsString(buffer.toString());
-        break;
-      case ExportFileFormat.json:
+      case .json:
         final Map<String, Object?> data = {'rides': rides.map((r) => r.toJson()).toList()};
 
         await file.writeAsString(jsonEncode(data));
-        break;
     }
   }
 }

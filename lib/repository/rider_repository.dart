@@ -49,7 +49,6 @@ class RiderRepository {
       case .inactive:
         query.where((t) => t.isActive.equals(false));
       default:
-        break;
     }
 
     return query.get();

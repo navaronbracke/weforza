@@ -37,7 +37,7 @@ class RideAttendeeScanningDelegateStateMachine {
       return;
     }
 
-    _notifier.value = AsyncError(error, StackTrace.current);
+    _notifier.value = AsyncError(error, .current);
   }
 
   /// Add a [SaveScanResultsException] to the state machine.

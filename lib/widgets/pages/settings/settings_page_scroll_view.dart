@@ -50,11 +50,7 @@ class SettingsPageScrollView extends StatelessWidget {
       slivers: [
         ?navigationBar,
         SliverList(
-          delegate: SliverChildListDelegate.fixed([
-            riderListFilter,
-            scanDurationOption,
-            ?excludedTermsListHeader,
-          ]),
+          delegate: SliverChildListDelegate.fixed([riderListFilter, scanDurationOption, ?excludedTermsListHeader]),
         ),
         excludedTermsList,
         SliverList(delegate: SliverChildListDelegate.fixed([excludedTermsListFooter, resetRideCalendarButton])),

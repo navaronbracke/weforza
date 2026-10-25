@@ -83,7 +83,7 @@ class ImportRidersDelegate {
       }
 
       if (file == null) {
-        _notifier.value = AsyncError(FileRequiredException(), StackTrace.current);
+        _notifier.value = AsyncError(FileRequiredException(), .current);
 
         return;
       }
@@ -111,7 +111,7 @@ class ImportRidersDelegate {
       whenComplete();
     } catch (error) {
       if (!_isDisposed) {
-        _notifier.value = AsyncError(error, StackTrace.current);
+        _notifier.value = AsyncError(error, .current);
       }
     }
   }

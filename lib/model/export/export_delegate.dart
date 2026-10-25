@@ -18,7 +18,7 @@ abstract class ExportDelegate<Options> extends AsyncComputationDelegate<void> {
   /// The notifier that keeps track of the selected file format.
   ///
   /// By default, [ExportFileFormat.csv] is used as the initial value.
-  final ValueNotifier<ExportFileFormat> _fileFormatNotifier = ValueNotifier<ExportFileFormat>(ExportFileFormat.csv);
+  final ValueNotifier<ExportFileFormat> _fileFormatNotifier = ValueNotifier<ExportFileFormat>(.csv);
 
   /// The file storage delegate that will register the document.
   final FileStorageDelegate fileStorageDelegate;

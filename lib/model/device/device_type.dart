@@ -15,69 +15,39 @@ enum DeviceType {
   const new(this.typeIndex);
 
   /// Create a device type fron the given [typeIndex].
-  factory fromTypeIndex(int typeIndex) {
-    switch (typeIndex) {
-      case 1:
-        return pulseMonitor;
-      case 2:
-        return powerMeter;
-      case 3:
-        return cadenceMeter;
-      case 4:
-        return watch;
-      case 5:
-        return gps;
-      case 6:
-        return headset;
-      case 7:
-        return phone;
-      default:
-        return unknown;
-    }
-  }
+  factory fromTypeIndex(int typeIndex) => switch (typeIndex) {
+    1 => pulseMonitor,
+    2 => powerMeter,
+    3 => cadenceMeter,
+    4 => watch,
+    5 => gps,
+    6 => headset,
+    7 => phone,
+    _ => unknown,
+  };
 
   /// The serializable type index of this enum value.
   final int typeIndex;
 
-  IconData get icon {
-    switch (this) {
-      case DeviceType.cadenceMeter:
-        return Icons.rotate_left;
-      case DeviceType.gps:
-        return Icons.gps_fixed;
-      case DeviceType.headset:
-        return Icons.headset;
-      case DeviceType.phone:
-        return Icons.smartphone;
-      case DeviceType.powerMeter:
-        return Icons.flash_on;
-      case DeviceType.pulseMonitor:
-        return Icons.favorite_border;
-      case DeviceType.watch:
-        return Icons.watch;
-      default:
-        return Icons.device_unknown;
-    }
-  }
+  IconData get icon => switch (this) {
+    .cadenceMeter => Icons.rotate_left,
+    .gps => Icons.gps_fixed,
+    .headset => Icons.headset,
+    .phone => Icons.smartphone,
+    .powerMeter => Icons.flash_on,
+    .pulseMonitor => Icons.favorite_border,
+    .watch => Icons.watch,
+    _ => Icons.device_unknown,
+  };
 
-  String getLabel(S translator) {
-    switch (this) {
-      case DeviceType.cadenceMeter:
-        return translator.deviceCadenceMeter;
-      case DeviceType.gps:
-        return translator.deviceGPS;
-      case DeviceType.headset:
-        return translator.deviceHeadset;
-      case DeviceType.phone:
-        return translator.devicePhone;
-      case DeviceType.powerMeter:
-        return translator.devicePowerMeter;
-      case DeviceType.pulseMonitor:
-        return translator.devicePulseMonitor;
-      case DeviceType.watch:
-        return translator.deviceWatch;
-      default:
-        return translator.deviceUnknown;
-    }
-  }
+  String getLabel(S translator) => switch (this) {
+    .cadenceMeter => translator.deviceCadenceMeter,
+    .gps => translator.deviceGPS,
+    .headset => translator.deviceHeadset,
+    .phone => translator.devicePhone,
+    .powerMeter => translator.devicePowerMeter,
+    .pulseMonitor => translator.devicePulseMonitor,
+    .watch => translator.deviceWatch,
+    _ => translator.deviceUnknown,
+  };
 }

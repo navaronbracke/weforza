@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/riverpod/ride/ride_list_provider.dart';
+import 'package:weforza/riverpod/ride/ride_list_count_provider.dart';
 import 'package:weforza/widgets/dialogs/reset_ride_calendar_dialog.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 import 'package:weforza/widgets/theme.dart';

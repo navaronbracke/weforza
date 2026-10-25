@@ -5,10 +5,10 @@ import 'package:weforza/riverpod/file/file_storage_delegate_provider.dart';
 import 'package:weforza/riverpod/file/file_system_provider.dart';
 import 'package:weforza/riverpod/media_permissions_provider.dart';
 
-final imagePickerDelegateProvider = Provider<PickImageDelegate>((ref) {
-  return IoPickImageDelegate(
+final imagePickerDelegateProvider = Provider<PickImageDelegate>(
+  (ref) => IoPickImageDelegate(
     fileStorageDelegate: ref.watch(fileStorageDelegateProvider),
     fileSystem: ref.watch(fileSystemProvider),
     mediaPermissionsDelegate: ref.watch(mediaPermissionsProvider),
-  );
-});
+  ),
+);

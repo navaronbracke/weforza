@@ -8,12 +8,3 @@ final rideListProvider = FutureProvider<List<Ride>>((ref) {
 
   return repository.getRides();
 });
-
-/// This provider provides a stream of changes to the number of rides.
-final rideListCountProvider = StreamProvider<int>((ref) async* {
-  final repository = ref.watch(rideRepositoryProvider);
-
-  yield await repository.getRidesCount();
-
-  yield* repository.watchRidesCount();
-});

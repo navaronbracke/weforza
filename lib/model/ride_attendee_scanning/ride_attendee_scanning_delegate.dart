@@ -101,6 +101,9 @@ class RideAttendeeScanningDelegate {
   /// Returns whether there are active riders.
   bool get hasActiveRiders => _activeRiders.isNotEmpty;
 
+  /// Whether the scan settings have been loaded.
+  bool get hasLoadedScanSettings => _scanSettings != null;
+
   /// Whether this delegate has been disposed.
   bool get isDisposed => _stateMachine.isDisposed;
 

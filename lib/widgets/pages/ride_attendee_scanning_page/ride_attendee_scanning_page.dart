@@ -139,6 +139,10 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   @override
   Widget build(BuildContext context) {
     ref.listen(settingsProvider, (_, settings) {
+      if (_delegate.hasLoadedScanSettings) {
+        return;
+      }
+
       switch (settings) {
         case AsyncLoading<Settings>():
           // Wait for the settings to be loaded.

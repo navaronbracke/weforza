@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/model/settings/settings.dart';
+library;
+
 import 'dart:async';
 
 import 'package:drift/drift.dart';
@@ -9,7 +12,6 @@ import 'package:weforza/model/ride_attendee_scanning/bluetooth_peripheral_with_o
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate_state_machine.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
@@ -25,7 +27,6 @@ class RideAttendeeScanningDelegate {
     required this._rideRepository,
     required this._riderRepository,
     required this._scanner,
-    required this._settings,
   });
 
   /// The repository that loads all the devices.
@@ -46,9 +47,6 @@ class RideAttendeeScanningDelegate {
 
   /// The scanner that manages the Bluetooth state and running scan.
   final BluetoothAdapterService _scanner;
-
-  /// The settings for the delegate.
-  final Settings _settings;
 
   /// This map contains all the active riders mapped to their [Rider.id].
   final _activeRiders = <int, Rider>{};

@@ -3,7 +3,7 @@ enum RideAttendeeScanningState {
   /// The Bluetooth adapter is currently off or unavailable.
   bluetoothDisabled,
 
-  /// The scanning settings are being loaded.
+  /// The scan settings are being loaded.
   initializing,
 
   /// The manual selection is being displayed.

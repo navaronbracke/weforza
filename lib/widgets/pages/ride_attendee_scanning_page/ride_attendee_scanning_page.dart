@@ -110,7 +110,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       builder: (context, currentValue, _) {
         if (currentValue case AsyncData(:final value)) {
           return switch (value) {
-            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: () => _delegate.startDeviceScan())),
+            .bluetoothDisabled => Center(child: BluetoothDisabledError(onRetry: _delegate.startDeviceScan)),
             .manualSelection => ManualSelectionList(delegate: _delegate),
             .permissionDenied => const Center(child: PermissionDeniedError()),
             .initializing ||

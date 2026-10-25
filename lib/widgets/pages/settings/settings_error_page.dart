@@ -2,7 +2,7 @@
 /// @docImport 'package:weforza/widgets/pages/settings/settings_page.dart';
 library;
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_navigation_bar.dart';
 
 /// The error page for a [SettingsPage] layout, in case the [Settings] failed to load.

@@ -5,15 +5,11 @@ final class MediaPermissionsDelegate extends MediaPermissionsService {
 
   @override
   Future<bool> requestAddToPhotoLibraryPermission() async {
-    final bool result = await methodChannel.invokeMethod<bool>('requestAddToPhotoLibraryPermission') ?? false;
-
-    return result;
+    return await methodChannel.invokeMethod<bool>('requestAddToPhotoLibraryPermission') ?? false;
   }
 
   @override
   Future<bool> requestCameraPermission() async {
-    final bool result = await methodChannel.invokeMethod<bool>('requestCameraPermission') ?? false;
-
-    return result;
+    return await methodChannel.invokeMethod<bool>('requestCameraPermission') ?? false;
   }
 }

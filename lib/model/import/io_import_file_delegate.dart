@@ -11,7 +11,7 @@ class IoImportFileDelegate implements ImportFileDelegate {
 
   @override
   Future<fs.File?> pickImportRidersDataSource() async {
-    final result = await FilePicker.pickFile(type: FileType.custom, allowedExtensions: <String>['csv', 'json']);
+    final result = await FilePicker.pickFile(type: .custom, allowedExtensions: <String>['csv', 'json']);
 
     if (result == null) {
       return null;

@@ -12,11 +12,9 @@ enum RiderFilterOption {
   /// The raw value of this filter option.
   final int value;
 
-  static RiderFilterOption fromInt(int? value) {
-    return switch (value) {
-      1 => RiderFilterOption.active,
-      2 => RiderFilterOption.inactive,
-      _ => RiderFilterOption.all,
-    };
-  }
+  static RiderFilterOption fromInt(int? value) => switch (value) {
+    1 => .active,
+    2 => .inactive,
+    _ => .all,
+  };
 }

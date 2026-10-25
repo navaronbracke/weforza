@@ -11,18 +11,12 @@ enum HomePageTab {
 
   const new(this.tabIndex);
 
-  factory fromIndex(int index) {
-    switch (index) {
-      case 0:
-        return rides;
-      case 1:
-        return riders;
-      case 2:
-        return settings;
-      default:
-        throw RangeError.index(index, HomePageTab.values);
-    }
-  }
+  factory fromIndex(int index) => switch (index) {
+    0 => rides,
+    1 => riders,
+    2 => settings,
+    _ => throw RangeError.index(index, HomePageTab.values),
+  };
 
   /// The index of this tab among all the tabs.
   final int tabIndex;

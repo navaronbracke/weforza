@@ -11,11 +11,7 @@ import 'package:weforza/native_service/media_permissions_service.dart';
 
 /// The [FileSystem] based implementation of [PickImageDelegate].
 class IoPickImageDelegate implements PickImageDelegate {
-  new({
-    required this.fileStorageDelegate,
-    required this.fileSystem,
-    required this.mediaPermissionsDelegate,
-  });
+  new({required this.fileStorageDelegate, required this.fileSystem, required this.mediaPermissionsDelegate});
 
   final FileStorageDelegate fileStorageDelegate;
 
@@ -70,7 +66,7 @@ class IoPickImageDelegate implements PickImageDelegate {
     // to increase the amount of thumbnails that fit in the image cache,
     // and to reduce load times of thumbnails.
     final XFile? profileImage = await imagePicker.pickImage(
-      source: ImageSource.camera,
+      source: .camera,
       requestFullMetadata: false,
       maxHeight: 160,
       maxWidth: 160,
@@ -123,13 +119,13 @@ class IoPickImageDelegate implements PickImageDelegate {
   @override
   Future<Uri?> pickProfileImage(ImageSource source) async {
     switch (source) {
-      case ImageSource.camera:
+      case .camera:
         // When taking a photo, request permission to use the camera,
         // and to access the required storage after the photo is taken.
         await _requestCameraAndPhotoLibraryPermissions();
 
         return _takePhotoWithCamera();
-      case ImageSource.gallery:
+      case .gallery:
         // When picking from the gallery, defer to the image picker for permissions.
         // Images that come from the gallery do not get scaled, as that would create a new file.
         final XFile? profileImage = await imagePicker.pickImage(requestFullMetadata: false, source: source);

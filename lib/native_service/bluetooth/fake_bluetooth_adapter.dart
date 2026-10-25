@@ -26,7 +26,7 @@ final class FakeBluetoothAdapter implements BluetoothDeviceScanner {
       await Future.delayed(const Duration(seconds: 2));
 
       if (i == 1) {
-        yield* Stream.error(ArgumentError('some error'), StackTrace.current);
+        yield* Stream.error(ArgumentError('some error'), .current);
       }
 
       if (i == 2 || i == 3) {

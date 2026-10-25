@@ -4,7 +4,7 @@ import 'package:weforza/database/database.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/utils/comparators/rider_comparator.dart';
+import 'package:weforza/utils/rider_comparator.dart';
 import 'package:weforza/widgets/custom/scroll_behavior.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/generic_scan_error.dart';
 import 'package:weforza/widgets/pages/ride_attendee_scanning_page/scan_button.dart';

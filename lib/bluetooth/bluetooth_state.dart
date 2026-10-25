@@ -25,26 +25,15 @@ enum BluetoothState {
   unknown;
 
   /// Create a [BluetoothState] from the given [value].
-  factory fromValue(String? value) {
-    switch (value) {
-      case 'off':
-        return off;
-      case 'on':
-        return on;
-      case 'resetting':
-        return resetting;
-      case 'turningOff':
-        return turningOff;
-      case 'turningOn':
-        return turningOn;
-      case 'unauthorized':
-        return unauthorized;
-      case 'unavailable':
-        return unavailable;
-      case 'unknown':
-        return unknown;
-      default:
-        throw ArgumentError.value(value);
-    }
-  }
+  factory fromValue(String? value) => switch (value) {
+    'off' => off,
+    'on' => on,
+    'resetting' => resetting,
+    'turningOff' => turningOff,
+    'turningOn' => turningOn,
+    'unauthorized' => unauthorized,
+    'unavailable' => unavailable,
+    'unknown' => unknown,
+    _ => throw ArgumentError.value(value),
+  };
 }

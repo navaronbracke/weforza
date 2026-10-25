@@ -1,3 +1,6 @@
+/// @docImport 'package:weforza/model/settings/settings.dart';
+library;
+
 import 'dart:async';
 
 import 'package:drift/drift.dart';
@@ -9,7 +12,6 @@ import 'package:weforza/model/ride_attendee_scanning/bluetooth_peripheral_with_o
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_delegate_state_machine.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 import 'package:weforza/model/ride_attendee_scanning/scanned_ride_attendee.dart';
-import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/native_service/bluetooth/bluetooth_adapter_service.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
@@ -25,7 +27,6 @@ class RideAttendeeScanningDelegate {
     required this._rideRepository,
     required this._riderRepository,
     required this._scanner,
-    required this._settings,
   });
 
   /// The repository that loads all the devices.
@@ -47,8 +48,8 @@ class RideAttendeeScanningDelegate {
   /// The scanner that manages the Bluetooth state and running scan.
   final BluetoothAdapterService _scanner;
 
-  /// The settings for the delegate.
-  final Settings _settings;
+  /// The loaded scan settings, if any.
+  (int scanDuration, Set<ExcludedTerm> excludedTerms)? _scanSettings;
 
   /// This map contains all the active riders mapped to their [Rider.id].
   final _activeRiders = <int, Rider>{};
@@ -158,9 +159,7 @@ class RideAttendeeScanningDelegate {
 
     _scannedDevices.add(device);
 
-    final excludedTerms = _settings.excludedTermsFilter;
-
-    if (excludedTerms.isNotEmpty) {
+    if (_scanSettings?.$2 case final excludedTerms? when excludedTerms.isNotEmpty) {
       for (final excludedTerm in excludedTerms) {
         if (deviceName.contains(excludedTerm.term)) {
           return false;
@@ -368,8 +367,23 @@ class RideAttendeeScanningDelegate {
   ///
   /// This method requests the necessary permissions,
   /// performs setup for the scanner and starts a scan.
-  Future<void> startDeviceScan() async {
+  ///
+  /// The provided [scanSettings] will be used if no scan settings have been loaded yet.
+  Future<void> startDeviceScan({(int scanDuration, Set<ExcludedTerm> excludedTerms)? scanSettings}) async {
+    final newSettings = _scanSettings ??= scanSettings;
+
+    if (newSettings == null) {
+      _stateMachine.setStartScanError();
+
+      return;
+    }
+
     try {
+      // If this is the first scan, explicitly switch to the request permission state.
+      if (_stateMachine.listenable.value case AsyncData(:final value) when value == .initializing) {
+        _stateMachine.setState(.requestPermissions);
+      }
+
       final hasPermission = await _scanner.requestBluetoothScanPermission();
 
       if (isDisposed) {
@@ -406,7 +420,7 @@ class RideAttendeeScanningDelegate {
       _stateMachine.setState(.scanning);
       // Stop the scan after the timer elapses.
       // The user will stay on the screen, because there might be unresolved owners in the list.
-      _stopScanTimer = Timer(Duration(seconds: _settings.scanDuration), _stopScan);
+      _stopScanTimer = Timer(Duration(seconds: newSettings.$1), _stopScan);
 
       _scanSubscription = _scanner
           .scanForDevices()

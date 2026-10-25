@@ -5,10 +5,10 @@ import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 /// This widget represents a progress indicator for a device scan.
 class ScanProgressIndicator extends StatelessWidget {
   /// The default constructor.
-  const new({required this.animationController, required this.isScanning, required this.isScanningStream, super.key});
+  const new({required this.isScanning, required this.isScanningStream, required this.scanTimerAnimation, super.key});
 
-  /// The controller that drives the progress bar animation.
-  final AnimationController animationController;
+  /// The animation that drives the progress bar.
+  final Animation<double> scanTimerAnimation;
 
   /// Whether the device scan is currently in progress.
   final bool isScanning;
@@ -22,24 +22,20 @@ class ScanProgressIndicator extends StatelessWidget {
       preferredSize: const Size(double.infinity, 1.0),
       child: Material(
         child: AnimatedBuilder(
-          animation: animationController,
-          builder: (context, _) {
-            final progress = animationController.value;
-
-            return PlatformAwareWidget(
-              android: (_) => _BrightnessAwareProgressIndicator(
-                progress: progress,
-                color: Colors.green,
-                backgroundColor: Colors.green.withValues(alpha: 0.4),
-              ),
-              ios: (context) => _BrightnessAwareProgressIndicator(
-                progress: progress,
-                color: CupertinoTheme.of(context).primaryColor,
-                backgroundColor: CupertinoColors.white,
-                darkBackgroundColor: CupertinoColors.inactiveGray,
-              ),
-            );
-          },
+          animation: scanTimerAnimation,
+          builder: (context, _) => PlatformAwareWidget(
+            android: (_) => _BrightnessAwareProgressIndicator(
+              progress: scanTimerAnimation.value,
+              color: Colors.green,
+              backgroundColor: Colors.green.withValues(alpha: 0.4),
+            ),
+            ios: (context) => _BrightnessAwareProgressIndicator(
+              progress: scanTimerAnimation.value,
+              color: CupertinoTheme.of(context).primaryColor,
+              backgroundColor: CupertinoColors.white,
+              darkBackgroundColor: CupertinoColors.inactiveGray,
+            ),
+          ),
         ),
       ),
     );
@@ -72,8 +68,8 @@ class _BrightnessAwareProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
       backgroundColor: switch (MediaQuery.platformBrightnessOf(context)) {
-        Brightness.dark => darkBackgroundColor ?? backgroundColor,
-        Brightness.light => backgroundColor,
+        .dark => darkBackgroundColor ?? backgroundColor,
+        .light => backgroundColor,
       },
       value: progress,
       valueColor: AlwaysStoppedAnimation<Color>(color),

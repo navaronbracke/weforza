@@ -33,6 +33,7 @@ class RideAttendeeScanningStepper extends StatelessWidget {
         if (state case AsyncData(:final value)) {
           return switch (value) {
             .bluetoothDisabled ||
+            .initializing ||
             .permissionDenied ||
             .requestPermissions ||
             .scanning ||

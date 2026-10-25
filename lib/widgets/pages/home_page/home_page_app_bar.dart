@@ -3,14 +3,11 @@ library;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/home_page_tab.dart';
-import 'package:weforza/riverpod/ride/ride_list_count_provider.dart';
-import 'package:weforza/riverpod/rider/rider_amount_provider.dart';
+import 'package:weforza/widgets/common/go_to_export_ride_page_button.dart';
+import 'package:weforza/widgets/common/go_to_export_riders_page_button.dart';
 import 'package:weforza/widgets/pages/add_ride_page.dart';
-import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
-import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';
 import 'package:weforza/widgets/pages/import_riders_page.dart';
 import 'package:weforza/widgets/pages/rider_form.dart';
 import 'package:weforza/widgets/pages/rider_list/rider_list_title.dart';
@@ -29,14 +26,6 @@ abstract class _HomePageAppBar extends StatelessWidget {
 
   void _goToAddRiderPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RiderForm()));
-  }
-
-  void _goToExportRidePage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ExportRidePage()));
-  }
-
-  void _goToExportRidersPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ExportRidersPage()));
   }
 
   void _goToImportRidersPage(BuildContext context) {
@@ -61,28 +50,14 @@ class HomePageAppBar extends _HomePageAppBar implements PreferredSizeWidget {
         actions: <Widget>[
           IconButton(icon: const Icon(Icons.person_add), onPressed: () => _goToAddRiderPage(context)),
           IconButton(icon: const Icon(Icons.file_download), onPressed: () => _goToImportRidersPage(context)),
-          Consumer(
-            builder: (_, ref, child) {
-              final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
-
-              return amountOfRiders > 0 ? child! : const SizedBox.shrink();
-            },
-            child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidersPage(context)),
-          ),
+          const GoToExportRidersPageButton(),
         ],
       ),
       .rides => AppBar(
         title: Text(translator.rides),
         actions: <Widget>[
           IconButton(icon: const Icon(Icons.add), onPressed: () => _goToAddRidePage(context)),
-          Consumer(
-            builder: (_, ref, child) {
-              final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
-
-              return amountOfRides > 0 ? child! : const SizedBox.shrink();
-            },
-            child: IconButton(icon: const Icon(Icons.file_upload), onPressed: () => _goToExportRidePage(context)),
-          ),
+          const GoToExportRidePageButton(),
         ],
       ),
       .settings => AppBar(title: Text(translator.settings)),
@@ -131,17 +106,7 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
               icon: CupertinoIcons.arrow_down_doc_fill,
               onPressed: () => _goToImportRidersPage(context),
             ),
-            Consumer(
-              builder: (_, ref, child) {
-                final int amountOfRiders = ref.watch(riderAmountProvider).asData?.valueOrNull ?? 0;
-
-                return amountOfRiders > 0 ? child! : const SizedBox.shrink();
-              },
-              child: CupertinoIconButton(
-                icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => _goToExportRidersPage(context),
-              ),
-            ),
+            const GoToExportRidersPageButton(),
           ],
         ),
       ),
@@ -153,17 +118,7 @@ class HomePageCupertinoNavigationBar extends _HomePageAppBar implements Obstruct
               child: Padding(padding: const .only(left: 8), child: Text(translator.rides)),
             ),
             CupertinoIconButton(icon: CupertinoIcons.add, onPressed: () => _goToAddRidePage(context)),
-            Consumer(
-              builder: (_, ref, child) {
-                final int amountOfRides = ref.watch(rideListCountProvider).asData?.valueOrNull ?? 0;
-
-                return amountOfRides > 0 ? child! : const SizedBox.shrink();
-              },
-              child: CupertinoIconButton(
-                icon: CupertinoIcons.arrow_up_doc_fill,
-                onPressed: () => _goToExportRidePage(context),
-              ),
-            ),
+            const GoToExportRidePageButton(),
           ],
         ),
       ),

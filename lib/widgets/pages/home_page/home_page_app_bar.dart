@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/home_page_tab.dart';
 import 'package:weforza/riverpod/ride/ride_list_provider.dart';
-import 'package:weforza/riverpod/rider/rider_list_provider.dart';
+import 'package:weforza/riverpod/rider/rider_amount_provider.dart';
 import 'package:weforza/widgets/pages/add_ride_page.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_ride_page.dart';
 import 'package:weforza/widgets/pages/export_data_page/export_riders_page.dart';

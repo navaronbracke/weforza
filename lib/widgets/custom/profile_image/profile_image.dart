@@ -146,39 +146,37 @@ class AdaptiveProfileImage extends StatelessWidget {
       ),
     };
 
-    final initials = personInitials;
-
-    if (initials == null || initials.isEmpty) {
-      return Container(
-        height: size,
-        width: size,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(size / 2)),
-          color: placeholderBackgroundColor,
+    if (personInitials case final personInitials? when personInitials.isNotEmpty) {
+      return ProfileImage(
+        image: image,
+        placeholder: Container(
+          height: size,
+          width: size,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+            color: _getBackgroundColor(personInitials, backgroundColors),
+          ),
+          child: Center(
+            child: Text(
+              personInitials.toUpperCase(),
+              style: TextStyle(color: Colors.white, fontSize: size / 2),
+            ),
+          ),
         ),
-        child: Center(
-          child: Icon(placeholderIcon, color: Colors.white, size: .7 * size),
-        ),
+        size: size,
       );
     }
 
-    return ProfileImage(
-      image: image,
-      placeholder: Container(
-        height: size,
-        width: size,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(size / 2)),
-          color: _getBackgroundColor(initials, backgroundColors),
-        ),
-        child: Center(
-          child: Text(
-            initials.toUpperCase(),
-            style: TextStyle(color: Colors.white, fontSize: size / 2),
-          ),
-        ),
+    return Container(
+      height: size,
+      width: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(size / 2)),
+        color: placeholderBackgroundColor,
       ),
-      size: size,
+      child: Center(
+        child: Icon(placeholderIcon, color: Colors.white, size: .7 * size),
+      ),
     );
   }
 }

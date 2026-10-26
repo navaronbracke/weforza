@@ -200,12 +200,8 @@ class _EditExcludedTermInputFieldState extends State<EditExcludedTermInputField>
     _viewInsets = MediaQuery.viewInsetsOf(context);
 
     // If the bottom view insets collapsed back to zero, notify the waiting view insets completer.
-    if (_keyboardHiddenSignal == null || _keyboardHiddenSignal!.isCompleted) {
-      return;
-    }
-
-    if (_viewInsets.bottom == 0.0) {
-      _keyboardHiddenSignal?.complete();
+    if (_keyboardHiddenSignal case final signal? when !signal.isCompleted && _viewInsets.bottom == 0.0) {
+      signal.complete();
     }
   }
 

@@ -44,7 +44,13 @@ class AddExcludedTermInputField extends StatelessWidget {
       return;
     }
 
-    delegate.addTerm(formState.value!);
+    final String? value = formState.value;
+
+    if (value == null || value.isEmpty) {
+      return;
+    }
+
+    delegate.addTerm(value);
 
     // After the new excluded term is added,
     // clear the text so a new term can be entered,

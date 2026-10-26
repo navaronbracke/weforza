@@ -61,11 +61,15 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
 
     final navigator = Navigator.of(context);
 
-    final selectedDeviceType = _deviceTypeController.page!.toInt();
+    final DeviceType deviceType = switch (_deviceTypeController.page?.toInt()) {
+      final int index when index >= 0 && index < DeviceType.values.length => DeviceType.values[index],
+      int() || null => .unknown,
+    };
+
     final int? deviceId = widget.device?.id;
 
     final model = DevicesCompanion(
-      deviceType: Value(DeviceType.values[selectedDeviceType]),
+      deviceType: Value(deviceType),
       id: deviceId == null ? const Value.absent() : Value(deviceId),
       name: Value(_deviceNameController.text.trim()),
       ownerId: Value(widget.ownerId),

@@ -173,7 +173,7 @@ class AdaptiveProfileImage extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            personInitials!.toUpperCase(),
+            initials.toUpperCase(),
             style: TextStyle(color: Colors.white, fontSize: size / 2),
           ),
         ),

@@ -50,8 +50,8 @@ class CupertinoBottomBar extends StatelessWidget {
       ),
     );
 
-    if (height != null) {
-      content = SizedBox(height: height! + bottomPadding, child: content);
+    if (height case final height?) {
+      content = SizedBox(height: height + bottomPadding, child: content);
     }
 
     return DecoratedBox(

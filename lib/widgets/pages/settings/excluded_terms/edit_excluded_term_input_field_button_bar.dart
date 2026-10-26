@@ -114,7 +114,7 @@ class EditExcludedTermInputFieldButtonBar extends StatelessWidget {
           children: [
             undoButton,
             Padding(padding: const .symmetric(horizontal: 16), child: confirmButton),
-            child!,
+            ?child,
           ],
         );
       },

@@ -130,9 +130,11 @@ class RideDetailsPageState extends ConsumerState<RideDetailsPage> {
       case .export:
         final selectedRide = ref.read(selectedRideProvider);
 
-        assert(selectedRide != null, 'The selected ride was null.');
+        if (selectedRide == null) {
+          return;
+        }
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ExportRidePage(selectedRide: selectedRide!)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ExportRidePage(selectedRide: selectedRide)));
       case .delete:
         _onDeleteRideOptionSelected(context);
     }

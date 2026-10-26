@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/widgets.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
 import 'package:weforza/model/settings/rider_filter_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
@@ -12,18 +11,24 @@ import 'package:weforza/riverpod/settings/settings_provider.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/add_excluded_term_input_field.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/edit_excluded_term_input_field.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_footer.dart';
-import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_sliver.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_sliver_app_version.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_navigation_bar.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_reset_ride_calendar_button.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_rider_list_filter.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_sliver_scan_duration_option.dart';
 
 /// The display page for a [SettingsPage] layout, that displays the provided [Settings].
 class SettingsDisplayPage extends StatefulWidget {
-  const new({required this.scrollController, required this.settings, required this.settingsDelegate, super.key});
+  const new({
+    required this.appVersion,
+    required this.scrollController,
+    required this.settings,
+    required this.settingsDelegate,
+    super.key,
+  });
 
+  final String appVersion;
   final ScrollController scrollController;
   final Settings settings;
   final SettingsNotifier settingsDelegate;
@@ -98,14 +103,14 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
           slivers: [
             ?SettingsPageSliverNavigationBar.buildForConstraints(constraints),
             SettingsPageSliverRiderListFilter(delegate: riderFilterDelegate),
-            SliverList(delegate: SliverChildListDelegate.fixed([scanDurationOption])),
+            SettingsPageSliverScanDurationOption(delegate: scanDurationDelegate),
             ExcludedTermsListSliver(
               buildAddTermInputField: _buildAddTermInputField,
               excludedTermItemBuilder: _buildExcludedTermItem,
               excludedTermsListenable: excludedTermsDelegate.listenable,
             ),
             const SettingsPageSliverResetRideCalendarButton(),
-            version,
+            SettingsPageSliverAppVersion(version: widget.appVersion),
           ],
         ),
       ),

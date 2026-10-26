@@ -102,6 +102,7 @@ class RiderRepository {
 
     final result = await query.getSingleOrNull();
 
-    return result == null;
+    // The rider exists if at least one row is returned.
+    return result != null && result > 0;
   }
 }

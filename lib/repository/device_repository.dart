@@ -97,7 +97,8 @@ class DeviceRepository {
 
     final result = await query.getSingleOrNull();
 
-    return result == null;
+    // The device exists if at least one row is returned.
+    return result != null && result > 0;
   }
 
   Future<void> _updateOwnerLastUpdated(int ownerId) async {

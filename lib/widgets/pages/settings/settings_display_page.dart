@@ -17,6 +17,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_lis
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_header.dart';
 import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_list_sliver.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_navigation_bar.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_sliver_reset_ride_calendar_button.dart';
 
 /// The display page for a [SettingsPage] layout, that displays the provided [Settings].
 class SettingsDisplayPage extends StatefulWidget {
@@ -101,7 +102,7 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
               excludedTermItemBuilder: _buildExcludedTermItem,
               excludedTermsListenable: excludedTermsDelegate.listenable,
             ),
-            SliverList(delegate: SliverChildListDelegate.fixed([resetRideCalendarButton])),
+            const SettingsPageSliverResetRideCalendarButton(),
             version,
           ],
         ),

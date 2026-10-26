@@ -50,10 +50,11 @@ class RideRepository {
   /// Get the dates of the rides in the calendar.
   ///
   /// The returned list is not sorted on [Ride.date].
-  Future<List<DateTime>> getRideDates() {
+  Future<List<DateTime>> getRideDates() async {
     final query = _database.selectOnly(_database.rides)..addColumns([_database.rides.date]);
+    final rows = await query.map((row) => row.read(_database.rides.date)).get();
 
-    return query.map((row) => row.readTable(_database.rides).date).get();
+    return [for (final row in rows) ?row];
   }
 
   /// Get the list of rides, sorted by date in descending order.

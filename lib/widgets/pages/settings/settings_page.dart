@@ -34,6 +34,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     return switch (settingsWithPackageInfo) {
       AsyncLoading<(Settings, PackageInfo)>() => SettingsLoadingPage(scrollController: scrollController),
       AsyncData<(Settings, PackageInfo)>(:final value) => SettingsDisplayPage(
+        appVersion: value.$2.version,
         scrollController: scrollController,
         settings: value.$1,
         settingsDelegate: settingsDelegate,

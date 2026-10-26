@@ -46,4 +46,14 @@ class WeForzaDatabase extends _$WeForzaDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      beforeOpen: (details) async {
+        // SQLite does not enforce foreign keys (and thus cascades) unless enabled for each connection.
+        await customStatement('PRAGMA foreign_keys = ON');
+      },
+    );
+  }
 }

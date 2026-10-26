@@ -133,7 +133,7 @@ class ExcludedTermInputField extends StatelessWidget {
         return Row(
           children: [
             Expanded(child: child),
-            suffix!,
+            ?suffix,
           ],
         );
       },

@@ -58,7 +58,7 @@ class RiderRepository {
   Future<void> setRiderActive(Rider rider, {required bool value}) {
     final update = RidersCompanion(id: Value(rider.id), isActive: Value(value));
 
-    return _database.update(_database.riders).replace(update);
+    return (_database.update(_database.riders)..where((t) => t.id.equals(rider.id))).write(update);
   }
 
   /// Update the given [rider].
@@ -102,6 +102,7 @@ class RiderRepository {
 
     final result = await query.getSingleOrNull();
 
-    return result == null;
+    // The rider exists if at least one row is returned.
+    return result != null && result > 0;
   }
 }

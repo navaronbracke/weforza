@@ -181,11 +181,12 @@ class _ImportRidersButton extends StatelessWidget {
           children: [
             CupertinoFormRow(
               padding: const .symmetric(horizontal: 20),
-              error: errorMessage == null
-                  ? null
-                  : Center(
-                      child: Padding(padding: const .only(top: 8), child: Text(errorMessage!)),
-                    ),
+              error: switch (errorMessage) {
+                null => null,
+                final errorMessage => Center(
+                  child: Padding(padding: const .only(top: 8), child: Text(errorMessage)),
+                ),
+              },
               child: Center(child: button),
             ),
           ],

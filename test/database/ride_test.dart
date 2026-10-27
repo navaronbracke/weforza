@@ -125,18 +125,6 @@ void main() {
     });
   });
 
-  group('getRideDates', () {
-    test('returns empty list if there are no rides', () async {
-      expect(await repository.getRideDates(), isEmpty);
-    });
-
-    test('getRideDates returns all dates, unordered', () async {
-      await repository.addRides([day2, day1, day3]);
-
-      expect(await repository.getRideDates(), unorderedEquals([day1, day2, day3]));
-    });
-  });
-
   group('getRideById', () {
     test('returns null if the ride does not exist', () async {
       expect(await repository.getRideById(999), isNull);
@@ -162,6 +150,31 @@ void main() {
       await repository.addRides([day2, day1, day3]);
 
       expect(await repository.getRideDates(), unorderedEquals([day1, day2, day3]));
+    });
+  });
+
+  group('getRides', () {
+    test('returns empty list if there are no rides', () async {
+      expect(await repository.getRides(), isEmpty);
+    });
+
+    test('returns all rides and sorts by date descending', () async {
+      await repository.addRides([day2, day1, day3]);
+      final rides = await repository.getRides();
+
+      expect(rides.map((r) => r.date), [day3, day2, day1]);
+    });
+  });
+
+  group('getRidesCount', () {
+    test('returns zero if there are no rides', () async {
+      expect(await repository.getRidesCount(), 0);
+    });
+
+    test('getRidesCount returns the amount of rides', () async {
+      await repository.addRides([day2, day1, day3]);
+
+      expect(await repository.getRidesCount(), 3);
     });
   });
 }

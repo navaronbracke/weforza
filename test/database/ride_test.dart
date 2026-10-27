@@ -177,4 +177,34 @@ void main() {
       expect(await repository.getRidesCount(), 3);
     });
   });
+
+  group('getScanResults', () {
+    test('returns empty list if the ride does not exist', () async {
+      expect(await repository.getScanResults(DateTime(1)), isEmpty);
+    });
+
+    test('returns empty list if ride does not have attendees', () async {
+      await repository.addRides([day1]);
+      expect(await repository.getScanResults(day1), isEmpty);
+    });
+
+    test('only returns results for the first ride on that date', () async {
+      final RiderRepository riderRepository = RiderRepository(database);
+
+      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      final john = (await riderRepository.getRiders(.all)).single;
+
+      await repository.addRides([day1, day1]);
+
+      final ride1 = (await repository.getRides()).firstWhere((r) => r.date == day1);
+      final ride2 = (await repository.getRides()).lastWhere((r) => r.date == day1);
+
+      await repository.updateRide(ride1, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride1.id))]);
+      await repository.updateRide(ride2, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride2.id))]);
+
+      final scanResults = await repository.getScanResults(day1);
+      expect(scanResults, hasLength(1));
+      expect(scanResults.first.id, john.id);
+    });
+  });
 }

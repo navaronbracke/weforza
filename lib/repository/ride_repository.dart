@@ -47,6 +47,13 @@ class RideRepository {
     return attendeeQuery.map((row) => row.readTable(_database.riders)).get();
   }
 
+  /// Get the ride with the given [id], or `null` if it does not exist.
+  Future<Ride?> getRideById(int id) async {
+    final query = _database.select(_database.rides)..where((t) => t.id.equals(id));
+
+    return await query.getSingleOrNull();
+  }
+
   /// Get the dates of the rides in the calendar.
   ///
   /// The returned list is not sorted on [Ride.date].

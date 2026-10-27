@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' hide isNull;
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/repository/ride_repository.dart';
@@ -122,6 +122,34 @@ void main() {
       expect(await repository.getRidesCount(), 0);
       expect(await database.rideAttendees.select().get(), isEmpty);
       expect(await riderRepository.getRiders(.all), isNotEmpty);
+    });
+  });
+
+  group('getRideDates', () {
+    test('returns empty list if there are no rides', () async {
+      expect(await repository.getRideDates(), isEmpty);
+    });
+
+    test('getRideDates returns all dates, unordered', () async {
+      await repository.addRides([day2, day1, day3]);
+
+      expect(await repository.getRideDates(), unorderedEquals([day1, day2, day3]));
+    });
+  });
+
+  group('getRideById', () {
+    test('returns null if the ride does not exist', () async {
+      expect(await repository.getRideById(999), isNull);
+    });
+
+    test('returns selected ride', () async {
+      await repository.addRides([day1, day2]);
+      final ride = (await repository.getRides()).firstWhere((r) => r.date == day1);
+
+      final fetchedRide = await repository.getRideById(ride.id);
+      expect(fetchedRide, isNotNull);
+      expect(fetchedRide?.id, ride.id);
+      expect(fetchedRide?.date, ride.date);
     });
   });
 

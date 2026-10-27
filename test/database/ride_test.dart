@@ -92,4 +92,36 @@ void main() {
       expect(await repository.getRideAttendees(ride1.date), isNotEmpty);
     });
   });
+
+  group('deleteRideCalendar', () {
+    test('does nothing if there are no rides', () async {
+      final RiderRepository riderRepository = RiderRepository(database);
+
+      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+
+      await repository.deleteRideCalendar();
+
+      expect(await repository.getRides(), isEmpty);
+      expect(await database.rideAttendees.select().get(), isEmpty);
+      expect(await riderRepository.getRiders(.all), isNotEmpty);
+    });
+
+    test('deletes all rides and ride attendees', () async {
+      final RiderRepository riderRepository = RiderRepository(database);
+
+      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      final john = (await riderRepository.getRiders(.all)).single;
+
+      await repository.addRides([day1, day2]);
+      final ride = (await repository.getRides()).first;
+
+      await repository.updateRide(ride, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride.id))]);
+
+      await repository.deleteRideCalendar();
+
+      expect(await repository.getRidesCount(), 0);
+      expect(await database.rideAttendees.select().get(), isEmpty);
+      expect(await riderRepository.getRiders(.all), isNotEmpty);
+    });
+  });
 }

@@ -111,14 +111,14 @@ class RideRepository {
       final Map<int, RideAttendee> existingAttendeesByRider = {
         for (final attendee in existingAttendees) attendee.riderId: attendee,
       };
-      final Set<int> newRiderIds = {for (final attendee in attendees) attendee.riderId.value};
-      final Set<int> removedRiderIds = {
+      final Set<int> newAttendeeIds = {for (final attendee in attendees) attendee.riderId.value};
+      final Set<int> removedAttendeeIds = {
         for (final attendee in existingAttendees)
-          if (!newRiderIds.contains(attendee.riderId)) attendee.id,
+          if (!newAttendeeIds.contains(attendee.riderId)) attendee.id,
       };
 
-      if (removedRiderIds.isNotEmpty) {
-        await (_database.delete(_database.rideAttendees)..where((t) => t.id.isIn(removedRiderIds))).go();
+      if (removedAttendeeIds.isNotEmpty) {
+        await (_database.delete(_database.rideAttendees)..where((t) => t.id.isIn(removedAttendeeIds))).go();
       }
 
       final inserts = <RideAttendeesCompanion>[];
@@ -148,7 +148,10 @@ class RideRepository {
         }
       });
 
-      await _database.update(_database.rides).replace(ride);
+      // The column defaults to true when the value is absent.
+      final int scannedAttendees = attendees.where((a) => !a.isScanned.present || a.isScanned.value).length;
+
+      await _database.update(_database.rides).replace(ride.copyWith(scannedAttendees: Value(scannedAttendees)));
     });
   }
 

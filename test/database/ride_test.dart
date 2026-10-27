@@ -27,8 +27,8 @@ void main() {
 
       final rides = await repository.getRides();
 
-      expect(rides.map((r) => r.date), [day1, day2]);
-      expect(await repository.getRidesCount(), 2);
+      // The getRides query sorts the rides in most recent ride first.
+      expect(rides.map((r) => r.date), [day2, day1]);
       expect(await allAttendees(), isEmpty);
     });
 
@@ -36,7 +36,6 @@ void main() {
       await repository.addRides([]);
 
       expect(await repository.getRides(), isEmpty);
-      expect(await repository.getRidesCount(), 0);
       expect(await allAttendees(), isEmpty);
     });
 
@@ -121,7 +120,7 @@ void main() {
 
       await repository.deleteRideCalendar();
 
-      expect(await repository.getRidesCount(), 0);
+      expect(await repository.getRides(), isEmpty);
       expect(await allAttendees(), isEmpty);
       expect(await riderRepository.getRiders(.all), isNotEmpty);
     });

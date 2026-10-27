@@ -11,6 +11,10 @@ class RideRepository {
 
   /// Add [Ride]s for the given [dates].
   Future<void> addRides(Iterable<DateTime> dates) {
+    if (dates.isEmpty) {
+      return Future.value();
+    }
+
     return _database.batch(
       (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion(date: Value(date))]),
     );
@@ -91,14 +95,15 @@ class RideRepository {
   }
 
   /// Update the given [ride] and its [attendees].
+  ///
+  /// Throws a [StateError] if the [ride] does not exist.
   Future<void> updateRide(Ride ride, List<RideAttendeesCompanion> attendees) {
-    // TODO: use diffing instead of bulk delete and insert
     return _database.transaction(() async {
-      await (_database.delete(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).go();
+      final existingRide = await getRideById(ride.id);
 
-      await _database.batch((batch) {
-        batch.insertAll(_database.rideAttendees, attendees);
-      });
+      if (existingRide == null) {
+        throw StateError('The ride with id ${ride.id} does not exist.');
+      }
 
       await _database.update(_database.rides).replace(ride);
     });

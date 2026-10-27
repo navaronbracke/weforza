@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
 
 void main() {
@@ -102,6 +103,34 @@ void main() {
       final remaining = await repository.getRiders(.all);
       expect(remaining.length, riders.length);
     });
+
+    test('removes attendees for the given rider', () async {
+      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await repository.addRider(rider(firstName: 'Jane', lastName: 'Doe'));
+
+      final john = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'John'));
+      final jane = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'Jane'));
+
+      final rideRepository = RideRepository(database);
+
+      await rideRepository.addRides([DateTime(2026, 1, 2), DateTime(2026, 1, 3)]);
+
+      final rides = await rideRepository.getRides();
+
+      await database.batch((batch) {
+        batch.insertAll(database.rideAttendees, [
+          RideAttendeesCompanion.insert(rideId: rides.first.id, riderId: john.id),
+          RideAttendeesCompanion.insert(rideId: rides.first.id, riderId: jane.id),
+          RideAttendeesCompanion.insert(rideId: rides.last.id, riderId: john.id),
+        ]);
+      });
+
+      await (database.delete(database.riders)..where((t) => t.id.equals(john.id))).go();
+
+      final attendees = await database.select(database.rideAttendees).get();
+      expect(attendees, hasLength(1));
+      expect(attendees.single.riderId, jane.id);
+    });
   });
 
   group('getAttendingCount', () {
@@ -121,7 +150,7 @@ void main() {
 
       await database.batch((batch) {
         batch.insertAll(database.rides, [
-          RidesCompanion.insert(date: DateTime(2026, 1, 1)),
+          RidesCompanion.insert(date: DateTime(2026, 1, 3)),
           RidesCompanion.insert(date: DateTime(2026, 1, 2)),
         ]);
       });

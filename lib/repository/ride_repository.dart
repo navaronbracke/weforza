@@ -105,6 +105,49 @@ class RideRepository {
         throw StateError('The ride with id ${ride.id} does not exist.');
       }
 
+      final existingAttendeesQuery = _database.select(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id));
+      final existingAttendees = await existingAttendeesQuery.get();
+
+      final Map<int, RideAttendee> existingAttendeesByRider = {
+        for (final attendee in existingAttendees) attendee.riderId: attendee,
+      };
+      final Set<int> newRiderIds = {for (final attendee in attendees) attendee.riderId.value};
+      final Set<int> removedRiderIds = {
+        for (final attendee in existingAttendees)
+          if (!newRiderIds.contains(attendee.riderId)) attendee.id,
+      };
+
+      if (removedRiderIds.isNotEmpty) {
+        await (_database.delete(_database.rideAttendees)..where((t) => t.id.isIn(removedRiderIds))).go();
+      }
+
+      final inserts = <RideAttendeesCompanion>[];
+      final updates = <(int, RideAttendeesCompanion)>[];
+
+      for (final attendee in attendees) {
+        final RideAttendee? existingAttendee = existingAttendeesByRider[attendee.riderId.value];
+
+        if (existingAttendee == null) {
+          inserts.add(attendee);
+
+          continue;
+        }
+
+        if (!attendee.isScanned.present || attendee.isScanned.value == existingAttendee.isScanned) {
+          continue;
+        }
+
+        updates.add((existingAttendee.id, RideAttendeesCompanion(isScanned: attendee.isScanned)));
+      }
+
+      await _database.batch((batch) {
+        batch.insertAll(_database.rideAttendees, inserts);
+
+        for (final (int id, RideAttendeesCompanion value) in updates) {
+          batch.update(_database.rideAttendees, value, where: (t) => t.id.equals(id));
+        }
+      });
+
       await _database.update(_database.rides).replace(ride);
     });
   }

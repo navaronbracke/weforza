@@ -124,4 +124,16 @@ void main() {
       expect(await riderRepository.getRiders(.all), isNotEmpty);
     });
   });
+
+  group('getRideDates', () {
+    test('returns empty list if there are no rides', () async {
+      expect(await repository.getRideDates(), isEmpty);
+    });
+
+    test('getRideDates returns all dates, unordered', () async {
+      await repository.addRides([day2, day1, day3]);
+
+      expect(await repository.getRideDates(), unorderedEquals([day1, day2, day3]));
+    });
+  });
 }

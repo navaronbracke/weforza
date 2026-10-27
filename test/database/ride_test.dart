@@ -45,4 +45,51 @@ void main() {
       expect(await database.rideAttendees.select().get(), isEmpty);
     });
   });
+
+  group('deleteRide', () {
+    test('deletes only the given ride', () async {
+      await repository.addRides([day1, day2]);
+      final rides = await repository.getRides();
+
+      await repository.deleteRide(rides.firstWhere((r) => r.date == day1));
+
+      expect((await repository.getRides()).single.date, day2);
+    });
+
+    test('deletes attendees along with the ride', () async {
+      final RiderRepository riderRepository = RiderRepository(database);
+
+      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      final john = (await riderRepository.getRiders(.all)).single;
+
+      await repository.addRides([day1]);
+      final ride = (await repository.getRides()).single;
+
+      await repository.updateRide(ride, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride.id))]);
+      await repository.deleteRide(ride);
+
+      expect(await repository.getRides(), isEmpty);
+      expect(await repository.getRideAttendees(ride.date), isEmpty);
+    });
+
+    test('does not delete attendees of other ride', () async {
+      final RiderRepository riderRepository = RiderRepository(database);
+
+      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      final john = (await riderRepository.getRiders(.all)).single;
+
+      await repository.addRides([day1, day2]);
+
+      final rides = await repository.getRides();
+      final ride1 = rides.firstWhere((r) => r.date == day1);
+      final ride2 = rides.firstWhere((r) => r.date == day2);
+
+      await repository.updateRide(ride1, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride1.id))]);
+
+      await repository.deleteRide(ride2);
+
+      expect(await repository.getRides(), isNotEmpty);
+      expect(await repository.getRideAttendees(ride1.date), isNotEmpty);
+    });
+  });
 }

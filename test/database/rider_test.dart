@@ -112,7 +112,7 @@ void main() {
       expect(await repository.getAttendingCount(john.id), 0);
     });
 
-    test('get the attending count per rider', () async {
+    test('gets the attending count per rider', () async {
       await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
       await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe'));
 

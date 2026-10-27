@@ -11,6 +11,10 @@ class RideRepository {
 
   /// Add [Ride]s for the given [dates].
   Future<void> addRides(Iterable<DateTime> dates) {
+    if (dates.isEmpty) {
+      return Future.value();
+    }
+
     return _database.batch(
       (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion(date: Value(date))]),
     );
@@ -45,6 +49,13 @@ class RideRepository {
           ]);
 
     return attendeeQuery.map((row) => row.readTable(_database.riders)).get();
+  }
+
+  /// Get the ride with the given [id], or `null` if it does not exist.
+  Future<Ride?> getRideById(int id) async {
+    final query = _database.select(_database.rides)..where((t) => t.id.equals(id));
+
+    return await query.getSingleOrNull();
   }
 
   /// Get the dates of the rides in the calendar.
@@ -84,16 +95,63 @@ class RideRepository {
   }
 
   /// Update the given [ride] and its [attendees].
+  ///
+  /// Throws a [StateError] if the [ride] does not exist.
   Future<void> updateRide(Ride ride, List<RideAttendeesCompanion> attendees) {
-    // TODO: use diffing instead of bulk delete and insert
     return _database.transaction(() async {
-      await (_database.delete(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id))).go();
+      final existingRide = await getRideById(ride.id);
+
+      if (existingRide == null) {
+        throw StateError('The ride with id ${ride.id} does not exist.');
+      }
+
+      final existingAttendeesQuery = _database.select(_database.rideAttendees)..where((t) => t.rideId.equals(ride.id));
+      final existingAttendees = await existingAttendeesQuery.get();
+
+      final Map<int, RideAttendee> existingAttendeesByRider = {
+        for (final attendee in existingAttendees) attendee.riderId: attendee,
+      };
+      final Set<int> newAttendeeIds = {for (final attendee in attendees) attendee.riderId.value};
+      final Set<int> removedAttendeeIds = {
+        for (final attendee in existingAttendees)
+          if (!newAttendeeIds.contains(attendee.riderId)) attendee.id,
+      };
+
+      if (removedAttendeeIds.isNotEmpty) {
+        await (_database.delete(_database.rideAttendees)..where((t) => t.id.isIn(removedAttendeeIds))).go();
+      }
+
+      final inserts = <RideAttendeesCompanion>[];
+      final updates = <(int, RideAttendeesCompanion)>[];
+
+      for (final attendee in attendees) {
+        final RideAttendee? existingAttendee = existingAttendeesByRider[attendee.riderId.value];
+
+        if (existingAttendee == null) {
+          inserts.add(attendee);
+
+          continue;
+        }
+
+        if (!attendee.isScanned.present || attendee.isScanned.value == existingAttendee.isScanned) {
+          continue;
+        }
+
+        updates.add((existingAttendee.id, RideAttendeesCompanion(isScanned: attendee.isScanned)));
+      }
 
       await _database.batch((batch) {
-        batch.insertAll(_database.rideAttendees, attendees);
+        batch.insertAll(_database.rideAttendees, inserts);
+
+        for (final (int id, RideAttendeesCompanion value) in updates) {
+          batch.update(_database.rideAttendees, value, where: (t) => t.id.equals(id));
+        }
       });
 
-      await _database.update(_database.rides).replace(ride);
+      // The column defaults to true when the value is absent.
+      final int scannedAttendees = attendees.where((a) => !a.isScanned.present || a.isScanned.value).length;
+
+      await _database.update(_database.rides).replace(ride.copyWith(scannedAttendees: Value(scannedAttendees)));
     });
   }
 

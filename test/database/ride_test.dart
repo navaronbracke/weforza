@@ -261,6 +261,37 @@ void main() {
       expect(await allAttendees(), isEmpty);
     });
 
+    test('throws if a rider is included twice in the attendees list', () async {
+      expect(
+        () => repository.updateRide(ride, [attendeeFor(riders.first), attendeeFor(riders.first)]),
+        throwsA(isA<Exception>()),
+      );
+    });
+
+    test('throws if a rider does not exist', () async {
+      final missingRider = Rider(
+        id: 999,
+        firstName: 'Missing',
+        lastName: 'Rider',
+        isActive: true,
+        lastUpdated: DateTime.now(),
+      );
+      await expectLater(() => repository.updateRide(ride, [attendeeFor(missingRider)]), throwsA(isA<Exception>()));
+    });
+
+    test('allows inserting the same rider into different rides', () async {
+      await repository.addRides([day2]);
+      final ride2 = (await repository.getRides()).firstWhere((r) => r.date == day2);
+
+      await expectLater(
+        Future.wait(
+          [ride, ride2].map((ride) => repository.updateRide(ride, [attendeeFor(riders.first, forRide: ride)])),
+        ),
+        completes,
+      );
+      expect(await allAttendees(), hasLength(2));
+    });
+
     test('inserts new attendees', () async {
       await repository.updateRide(ride, [attendeeFor(riders.first), attendeeFor(riders.last)]);
 
@@ -278,6 +309,18 @@ void main() {
 
       expect(updatedRide, isNotNull);
       expect(updatedRide?.scannedAttendees, 2);
+    });
+
+    test('inserts new attendees with isScanned set to true as default', () async {
+      await repository.updateRide(ride, [
+        RideAttendeesCompanion(riderId: Value(riders.first.id), rideId: Value(ride.id)),
+      ]);
+
+      final attendees = await allAttendees();
+      expect(attendees, hasLength(1));
+      expect(attendees.first.riderId, riders.first.id);
+      expect(attendees.first.rideId, ride.id);
+      expect(attendees.first.isScanned, isTrue);
     });
 
     test('removes attendees that are no longer present', () async {

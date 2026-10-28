@@ -22,6 +22,10 @@ class ExcludedTermsRepository {
       final termsToAdd = excludedTerms.difference(existingTerms);
       final termsToDelete = existingTerms.difference(excludedTerms).map((t) => t.term);
 
+      if (termsToAdd.isEmpty && termsToDelete.isEmpty) {
+        return;
+      }
+
       await _database.batch((batch) {
         batch.deleteWhere(_database.excludedTerms, (t) => t.term.isIn(termsToDelete));
         batch.insertAll(_database.excludedTerms, termsToAdd, onConflict: DoNothing());

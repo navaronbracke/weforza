@@ -17,9 +17,10 @@ class UserPreferencesRepository {
 
   /// Read the user preferences from shared preferences.
   Future<UserPreferences> read() async {
+    // Shared preferences may throw errors when reading invalid values.
     final (int? scanDuration, int? riderListDisplayMode) = await (
-      _preferences.getInt(scanDurationKey),
-      _preferences.getInt(riderListDisplayModeKey),
+      _preferences.getInt(scanDurationKey).catchError((_) => null),
+      _preferences.getInt(riderListDisplayModeKey).catchError((_) => null),
     ).wait;
 
     return .fromValues(riderListDisplayMode: .fromInt(riderListDisplayMode), scanDuration: scanDuration);

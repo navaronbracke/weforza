@@ -175,7 +175,7 @@ void main() {
 
   group('getRiders', () {
     test('returns an empty list for an empty table', () async {
-      expect(await repository.getRiders(.all), isEmpty);
+      expect(await getAllRiders(), isEmpty);
     });
 
     test('returns all riders, sorted by first name, last name, then alias', () async {
@@ -186,7 +186,7 @@ void main() {
         rider(firstName: 'Alice', lastName: 'Jones'),
       ]);
 
-      final riders = await repository.getRiders(.all);
+      final riders = await getAllRiders();
 
       expect(riders, hasLength(4));
 

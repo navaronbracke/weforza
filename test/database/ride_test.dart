@@ -202,12 +202,12 @@ void main() {
 
   group('getRides', () {
     test('returns empty list if there are no rides', () async {
-      expect(await repository.getRides(), isEmpty);
+      expect(await getAllRides(), isEmpty);
     });
 
     test('returns all rides and sorts by date descending', () async {
       await repository.addRides([day2, day1, day3]);
-      final rides = await repository.getRides();
+      final rides = await getAllRides();
 
       expect(rides.map((r) => r.date), [day3, day2, day1]);
     });

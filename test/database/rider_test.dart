@@ -16,6 +16,10 @@ void main() {
 
   tearDown(() => database.close());
 
+  Future<void> addRiders(Iterable<RidersCompanion> riders) {
+    return Future.wait(riders.map(repository.addRider));
+  }
+
   RidersCompanion rider({
     required String firstName,
     required String lastName,
@@ -34,7 +38,7 @@ void main() {
 
   group('addRider', () {
     test('inserts a rider with default values', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
 
       final riders = await repository.getRiders(.all);
 
@@ -50,13 +54,13 @@ void main() {
     test('stores the profile image uri', () async {
       final uri = Uri.file('/path/to/image.png');
 
-      await repository.addRider(rider(firstName: 'A', lastName: 'B', profileImageUri: uri));
+      await addRiders([rider(firstName: 'A', lastName: 'B', profileImageUri: uri)]);
 
       expect((await repository.getRiders(.all)).single.profileImageUri, uri);
     });
 
     test('throws RiderExistsException for a duplicate rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe', alias: 'JD')]);
 
       expect(
         () => repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD')),
@@ -65,8 +69,10 @@ void main() {
     });
 
     test('allows the same name with a different alias', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD'));
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([
+        rider(firstName: 'John', lastName: 'Doe', alias: 'JD'),
+        rider(firstName: 'John', lastName: 'Doe'),
+      ]);
 
       final riders = await repository.getRiders(.all);
 
@@ -82,8 +88,7 @@ void main() {
 
   group('deleteRider', () {
     test('deletes only the given rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Roe')]);
       final riders = await repository.getRiders(.all);
 
       await repository.deleteRider(riders.firstWhere((r) => r.firstName == 'John'));
@@ -93,7 +98,7 @@ void main() {
     });
 
     test('does nothing if rider does not exist', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final riders = await repository.getRiders(.all);
 
       await repository.deleteRider(
@@ -105,8 +110,7 @@ void main() {
     });
 
     test('removes attendees for the given rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Doe')]);
 
       final john = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'John'));
       final jane = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'Jane'));
@@ -135,15 +139,14 @@ void main() {
 
   group('getAttendingCount', () {
     test('returns zero without attendances', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final john = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'John'));
 
       expect(await repository.getAttendingCount(john.id), 0);
     });
 
     test('gets the attending count per rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Roe')]);
 
       final john = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'John'));
       final jane = await repository.getRiders(.all).then((riders) => riders.firstWhere((r) => r.firstName == 'Jane'));
@@ -173,19 +176,17 @@ void main() {
   });
 
   group('getRiders', () {
-    Future<void> addTestRiders() async {
-      await repository.addRider(rider(firstName: 'Bob', lastName: 'Zed'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Jones'));
-    }
-
     test('returns an empty list for an empty table', () async {
       expect(await repository.getRiders(.all), isEmpty);
     });
 
     test('returns all riders, sorted by first name, last name, then alias', () async {
-      await addTestRiders();
+      await addRiders([
+        rider(firstName: 'Bob', lastName: 'Zed'),
+        rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false),
+        rider(firstName: 'Alice', lastName: 'Smith'),
+        rider(firstName: 'Alice', lastName: 'Jones'),
+      ]);
 
       final riders = await repository.getRiders(.all);
 
@@ -213,7 +214,12 @@ void main() {
     });
 
     test('filters active riders', () async {
-      await addTestRiders();
+      await addRiders([
+        rider(firstName: 'Bob', lastName: 'Zed'),
+        rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false),
+        rider(firstName: 'Alice', lastName: 'Smith'),
+        rider(firstName: 'Alice', lastName: 'Jones'),
+      ]);
 
       final riders = await repository.getRiders(.active);
 
@@ -236,11 +242,13 @@ void main() {
     });
 
     test('filters inactive riders', () async {
-      await repository.addRider(rider(firstName: 'Bob', lastName: 'Zed'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Jones'));
-      await repository.addRider(rider(firstName: 'Janice', lastName: 'Smith', alias: 'J', isActive: false));
+      await addRiders([
+        rider(firstName: 'Bob', lastName: 'Zed'),
+        rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false),
+        rider(firstName: 'Alice', lastName: 'Smith'),
+        rider(firstName: 'Alice', lastName: 'Jones'),
+        rider(firstName: 'Janice', lastName: 'Smith', alias: 'J', isActive: false),
+      ]);
 
       final riders = await repository.getRiders(.inactive);
 
@@ -259,7 +267,7 @@ void main() {
 
   group('setRiderActive', () {
     test('toggles the active state for the given rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final original = (await repository.getRiders(.all)).single;
 
       await repository.setRiderActive(original, value: false);
@@ -270,8 +278,7 @@ void main() {
     });
 
     test('does not change the isActive state of another rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Roe')]);
       final john = (await repository.getRiders(.all)).firstWhere((r) => r.firstName == 'John');
 
       await repository.setRiderActive(john, value: false);
@@ -297,10 +304,10 @@ void main() {
 
   group('updateRider', () {
     test('updates the rider and returns it', () async {
-      await repository.addRider(
+      await addRiders([
         // ignore: avoid_redundant_argument_values
         rider(firstName: 'John', lastName: 'Doe', alias: 'JD', isActive: true),
-      );
+      ]);
 
       final riderId = (await repository.getRiders(.all)).single.id;
 
@@ -323,8 +330,10 @@ void main() {
     });
 
     test('does not update other rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe', alias: 'JR'));
+      await addRiders([
+        rider(firstName: 'John', lastName: 'Doe', alias: 'JD'),
+        rider(firstName: 'Jane', lastName: 'Roe', alias: 'JR'),
+      ]);
 
       final riders = await repository.getRiders(.all);
       final john = riders.firstWhere((r) => r.firstName == 'John');
@@ -350,7 +359,7 @@ void main() {
     });
 
     test('updating a rider to the same values is idempotent', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe'));
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final john = (await repository.getRiders(.all)).single;
 
       final updated = await repository.updateRider(
@@ -370,8 +379,10 @@ void main() {
     });
 
     test('throws RiderExistsException when colliding with another rider', () async {
-      await repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'f'));
-      await repository.addRider(rider(firstName: 'Jane', lastName: 'Roe'));
+      await addRiders([
+        rider(firstName: 'John', lastName: 'Doe', alias: 'f'),
+        rider(firstName: 'Jane', lastName: 'Roe'),
+      ]);
 
       final john = (await repository.getRiders(.all)).firstWhere((r) => r.firstName == 'John');
 

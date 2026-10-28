@@ -91,6 +91,8 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   
+  shared_preferences_platform_interface: ^2.4.2
+
   test: any
 
 flutter:

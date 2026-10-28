@@ -41,7 +41,7 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
   Future<void> _startDeviceScan(Settings settings) async {
     _scanProgressBarController?.dispose();
     _scanProgressBarController = AnimationController(
-      duration: Duration(seconds: settings.scanDuration),
+      duration: Duration(seconds: settings.userPreferences.scanDuration),
       vsync: this,
       value: 1.0,
     );
@@ -60,7 +60,9 @@ class RideAttendeeScanningPageState extends ConsumerState<RideAttendeeScanningPa
       }
     });
 
-    return _delegate.startDeviceScan(scanSettings: (settings.scanDuration, settings.excludedTermsFilter));
+    return _delegate.startDeviceScan(
+      scanSettings: (settings.userPreferences.scanDuration, settings.excludedTermsFilter),
+    );
   }
 
   @override

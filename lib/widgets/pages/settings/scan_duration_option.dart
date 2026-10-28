@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
+import 'package:weforza/model/settings/user_preferences.dart';
 import 'package:weforza/widgets/platform/platform_aware_widget.dart';
 
 /// This widget represents the scan duration slider.
@@ -14,12 +15,6 @@ class ScanDurationOption extends StatelessWidget {
 
   /// The delegate that handles changes to the value.
   final ScanDurationDelegate delegate;
-
-  /// The maximum scan duration of 60 seconds.
-  static const double maxScanDuration = 60;
-
-  /// The minimum scan duration of 10 seconds.
-  static const double minScanDuration = 10;
 
   Widget _buildCurrentDurationLabel() {
     return ValueListenableBuilder<double>(
@@ -48,8 +43,8 @@ class ScanDurationOption extends StatelessWidget {
                 return Slider(
                   value: value,
                   onChanged: delegate.onValueChanged,
-                  min: minScanDuration,
-                  max: maxScanDuration,
+                  min: UserPreferences.minScanDuration,
+                  max: UserPreferences.maxScanDuration,
                   divisions: 5,
                 );
               },
@@ -80,8 +75,8 @@ class ScanDurationOption extends StatelessWidget {
                 child: CupertinoSlider(
                   value: value,
                   onChanged: delegate.onValueChanged,
-                  min: minScanDuration,
-                  max: maxScanDuration,
+                  min: UserPreferences.minScanDuration,
+                  max: UserPreferences.maxScanDuration,
                   divisions: 5,
                 ),
               );

@@ -84,11 +84,11 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
     );
     riderFilterDelegate = RiderFilterDelegate(
       settingsDelegate: widget.settingsDelegate,
-      initialValue: widget.settings.riderListFilter,
+      initialValue: widget.settings.userPreferences.riderListDisplayMode,
     );
     scanDurationDelegate = ScanDurationDelegate(
       settingsDelegate: widget.settingsDelegate,
-      initialValue: widget.settings.scanDuration.toDouble(),
+      initialValue: widget.settings.userPreferences.scanDuration.toDouble(),
     );
 
     addTermFocusNode.addListener(_handleAddTermFocusChange);

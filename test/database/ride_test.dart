@@ -7,10 +7,12 @@ import 'package:weforza/repository/rider_repository.dart';
 void main() {
   late WeForzaDatabase database;
   late RideRepository repository;
+  late RiderRepository riderRepository;
 
   setUp(() {
     database = WeForzaDatabase.memory();
     repository = RideRepository(database);
+    riderRepository = RiderRepository(database);
   });
 
   tearDown(() => database.close());
@@ -61,8 +63,6 @@ void main() {
     });
 
     test('deletes attendees along with the ride', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
       final john = (await riderRepository.getRiders(.all)).single;
 
@@ -77,8 +77,6 @@ void main() {
     });
 
     test('does not delete attendees of other ride', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
       final john = (await riderRepository.getRiders(.all)).single;
 
@@ -99,8 +97,6 @@ void main() {
 
   group('deleteRideCalendar', () {
     test('does nothing if there are no rides', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
 
       await repository.deleteRideCalendar();
@@ -111,8 +107,6 @@ void main() {
     });
 
     test('deletes all rides and ride attendees', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
       final john = (await riderRepository.getRiders(.all)).single;
 
@@ -157,7 +151,6 @@ void main() {
     });
 
     test('returns the riders sorted by name', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
       await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Smith')));
       await riderRepository.addRider(const RidersCompanion(firstName: Value('Bob'), lastName: Value('Zed')));
       await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Jones')));
@@ -232,8 +225,6 @@ void main() {
     });
 
     test('only returns results for the first ride on that date', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
       final john = (await riderRepository.getRiders(.all)).single;
 
@@ -251,8 +242,6 @@ void main() {
     });
 
     test('maps attendees to scan results', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
       await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
       await riderRepository.addRider(const RidersCompanion(firstName: Value('Jane'), lastName: Value('Doe')));
       final john = (await riderRepository.getRiders(.all)).firstWhere((r) => r.firstName == 'John');
@@ -274,13 +263,10 @@ void main() {
   });
 
   group('updateRide', () {
-    late RiderRepository riderRepository;
     late List<Rider> riders;
     late Ride ride;
 
     setUp(() async {
-      riderRepository = RiderRepository(database);
-
       for (final name in ['Anna', 'Ben', 'Carl']) {
         await riderRepository.addRider(RidersCompanion(firstName: Value(name), lastName: const Value('Doe')));
       }

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/model/rider/rider_filter_option.dart';
+import 'package:weforza/model/rider/rider_list_display_mode.dart';
 import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/model/settings/user_preferences.dart';
+import 'package:weforza/repository/excluded_terms_repository.dart';
 import 'package:weforza/repository/settings_repository.dart';
 import 'package:weforza/riverpod/database/database_provider.dart';
 
@@ -14,7 +16,9 @@ final settingsProvider = AsyncNotifierProvider(SettingsNotifier.new);
 class SettingsNotifier extends AsyncNotifier<Settings> {
   @override
   FutureOr<Settings> build() {
-    final SettingsRepository settingsRepository = SettingsRepository(ref.watch(databaseProvider));
+    final SettingsRepository settingsRepository = SettingsRepository(
+      ExcludedTermsRepository(ref.watch(databaseProvider)),
+    );
 
     return settingsRepository.read();
   }
@@ -24,9 +28,9 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
     return _saveSettings(_copyWith(excludedTermsFilter: excludedTerms));
   }
 
-  /// Save the [riderListFilter] value.
-  Future<void> saveRiderListFilter(RiderFilterOption riderListFilter) {
-    return _saveSettings(_copyWith(riderListFilter: riderListFilter));
+  /// Save the [riderListDisplayMode] value.
+  Future<void> saveRiderListDisplayMode(RiderListDisplayMode riderListDisplayMode) {
+    return _saveSettings(_copyWith(riderListDisplayMode: riderListDisplayMode));
   }
 
   /// Save the [scanDuration] value.
@@ -34,19 +38,27 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
     return _saveSettings(_copyWith(scanDuration: scanDuration));
   }
 
-  Settings _copyWith({Set<ExcludedTerm>? excludedTermsFilter, RiderFilterOption? riderListFilter, int? scanDuration}) {
+  Settings _copyWith({
+    Set<ExcludedTerm>? excludedTermsFilter,
+    RiderListDisplayMode? riderListDisplayMode,
+    int? scanDuration,
+  }) {
     if (state case AsyncData(:final value)) {
       return value.copyWith(
         excludedTermsFilter: excludedTermsFilter ?? value.excludedTermsFilter,
-        riderListFilter: riderListFilter ?? value.riderListFilter,
-        scanDuration: scanDuration ?? value.scanDuration,
+        userPreferences: value.userPreferences.copyWith(
+          riderListDisplayMode: riderListDisplayMode ?? value.userPreferences.riderListDisplayMode,
+          scanDuration: scanDuration ?? value.userPreferences.scanDuration,
+        ),
       );
     }
 
     return Settings(
       excludedTermsFilter: excludedTermsFilter ?? const {},
-      riderListFilter: riderListFilter ?? Settings.defaultRiderListFilter,
-      scanDuration: scanDuration ?? Settings.defaultScanDuration,
+      userPreferences: .fromValues(
+        riderListDisplayMode: riderListDisplayMode ?? UserPreferences.defaultPreferences.riderListDisplayMode,
+        scanDuration: scanDuration ?? UserPreferences.defaultPreferences.scanDuration,
+      ),
     );
   }
 
@@ -55,7 +67,9 @@ class SettingsNotifier extends AsyncNotifier<Settings> {
       return;
     }
 
-    final SettingsRepository settingsRepository = SettingsRepository(ref.read(databaseProvider));
+    final SettingsRepository settingsRepository = SettingsRepository(
+      ExcludedTermsRepository(ref.watch(databaseProvider)),
+    );
 
     await settingsRepository.write(settings);
 

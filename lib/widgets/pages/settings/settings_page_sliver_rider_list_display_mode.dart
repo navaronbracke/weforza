@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
-import 'package:weforza/model/settings/rider_filter_delegate.dart';
-import 'package:weforza/widgets/pages/settings/rider_list_filter.dart';
+import 'package:weforza/model/settings/rider_list_display_mode_delegate.dart';
+import 'package:weforza/widgets/pages/settings/rider_list_display_mode_option.dart';
 
-/// A sliver widget for inside the [SettingsPage] layout, that displays the [RiderListFilter].
-class SettingsPageSliverRiderListFilter extends StatelessWidget {
+/// A sliver widget for inside the [SettingsPage] layout, that displays the [RiderListDisplayModeOption].
+class SettingsPageSliverRiderListDisplayMode extends StatelessWidget {
   const new({required this.delegate, super.key});
 
-  final RiderFilterDelegate delegate;
+  final RiderListDisplayModeDelegate delegate;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,10 @@ class SettingsPageSliverRiderListFilter extends StatelessWidget {
                 mainAxisSize: .min,
                 crossAxisAlignment: .start,
                 children: [
-                  Text(translator.ridersListFilter, style: textTheme.titleMedium),
-                  RiderListFilter(delegate: delegate),
+                  Text(translator.ridersListDisplayMode, style: textTheme.titleMedium),
+                  RiderListDisplayModeOption(delegate: delegate),
                   Text(
-                    translator.ridersListFilterDescription,
+                    translator.ridersListDisplayModeDescription,
                     style: textTheme.bodySmall?.copyWith(fontStyle: .italic),
                   ),
                 ],
@@ -45,11 +45,11 @@ class SettingsPageSliverRiderListFilter extends StatelessWidget {
       .iOS => SliverToBoxAdapter(
         child: CupertinoFormSection.insetGrouped(
           header: Text(translator.riders.toUpperCase()),
-          footer: Text(translator.ridersListFilterDescription),
+          footer: Text(translator.ridersListDisplayModeDescription),
           children: [
             Padding(
               padding: const .all(6),
-              child: Center(child: RiderListFilter(delegate: delegate)),
+              child: Center(child: RiderListDisplayModeOption(delegate: delegate)),
             ),
           ],
         ),

@@ -1,59 +1,31 @@
-import 'package:drift/drift.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/settings.dart';
+import 'package:weforza/model/settings/user_preferences.dart';
+import 'package:weforza/repository/excluded_terms_repository.dart';
+import 'package:weforza/repository/user_preferences_repository.dart';
 
 class SettingsRepository {
-  new(this._database);
+  new(this._excludedTermsRepository);
 
-  /// The database instance.
-  final WeForzaDatabase _database;
+  final ExcludedTermsRepository _excludedTermsRepository;
 
-  /// The Shared Preferences instance that manages the primitive value settings,
-  /// such as the scan duration and the rider filter options.
-  static final SharedPreferencesAsync _sharedPreferences = SharedPreferencesAsync();
-
-  /// The key for the rider list display mode in shared preferences.
-  static const String _riderListDisplayModeKey = 'riderListDisplayMode';
-
-  /// The key for the scan duration in shared preferences.
-  static const String _scanDurationKey = 'scanDuration';
+  static final UserPreferencesRepository _userPreferencesRepository = UserPreferencesRepository();
 
   /// Read the current application settings.
   Future<Settings> read() async {
-    final List<ExcludedTerm> excludedTerms = await _database.excludedTerms.select().get();
-    final int? scanDuration = await _sharedPreferences.getInt(_scanDurationKey);
-    final int? riderListDisplayMode = await _sharedPreferences.getInt(_riderListDisplayModeKey);
+    final (UserPreferences userPreferences, Set<ExcludedTerm> excludedTerms) = await (
+      _userPreferencesRepository.read(),
+      _excludedTermsRepository.read(),
+    ).wait;
 
-    return Settings(
-      excludedTermsFilter: {...excludedTerms},
-      riderListFilter: RiderFilterOption.fromInt(riderListDisplayMode),
-      scanDuration: scanDuration,
-    );
+    return Settings(userPreferences: userPreferences, excludedTermsFilter: {...excludedTerms});
   }
 
   /// Write the new [settings].
   Future<void> write(Settings settings) {
     return Future.wait<void>([
-      _writeExcludedTerms(settings.excludedTermsFilter),
-      _sharedPreferences.setInt(_riderListDisplayModeKey, settings.riderListFilter.value),
-      _sharedPreferences.setInt(_scanDurationKey, settings.scanDuration),
+      _excludedTermsRepository.write(settings.excludedTermsFilter),
+      _userPreferencesRepository.write(settings.userPreferences),
     ]);
-  }
-
-  Future<void> _writeExcludedTerms(Set<ExcludedTerm> excludedTerms) {
-    return _database.transaction(() async {
-      final existingTermsAsList = await _database.excludedTerms.select().get();
-      final existingTerms = {...existingTermsAsList};
-
-      final termsToAdd = excludedTerms.difference(existingTerms);
-      final termsToDelete = existingTerms.difference(excludedTerms).map((t) => t.term);
-
-      await _database.batch((batch) {
-        batch.deleteWhere(_database.excludedTerms, (t) => t.term.isIn(termsToDelete));
-        batch.insertAll(_database.excludedTerms, termsToAdd, onConflict: DoNothing());
-      });
-    });
   }
 }

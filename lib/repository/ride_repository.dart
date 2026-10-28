@@ -16,7 +16,7 @@ class RideRepository {
     }
 
     return _database.batch(
-      (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion(date: Value(date))]),
+      (batch) => batch.insertAll(_database.rides, [for (final date in dates) RidesCompanion.insert(date: date)]),
     );
   }
 

@@ -7,10 +7,12 @@ import 'package:weforza/repository/rider_repository.dart';
 void main() {
   late WeForzaDatabase database;
   late RideRepository repository;
+  late RiderRepository riderRepository;
 
   setUp(() {
     database = WeForzaDatabase.memory();
     repository = RideRepository(database);
+    riderRepository = RiderRepository(database);
   });
 
   tearDown(() => database.close());
@@ -19,72 +21,77 @@ void main() {
   final day2 = DateTime(2026, 1, 2);
   final day3 = DateTime(2026, 1, 3);
 
-  Future<List<RideAttendee>> allAttendees() => database.rideAttendees.select().get();
+  Future<List<RideAttendee>> getAllAttendees() => database.rideAttendees.select().get();
 
-  RideAttendeesCompanion attendeeFor(Rider rider, {required Ride ride, bool scanned = true}) =>
-      RideAttendeesCompanion(riderId: Value(rider.id), rideId: Value(ride.id), isScanned: Value(scanned));
+  Future<List<Ride>> getAllRides() => repository.getRides();
+
+  Future<List<Rider>> getAllRiders() => riderRepository.getRiders(.all);
+
+  Future<void> addRider(String firstName, {String lastName = 'Doe'}) async {
+    await riderRepository.addRider(RidersCompanion.insert(firstName: firstName, lastName: lastName));
+  }
+
+  RideAttendeesCompanion attendeeFor(Rider rider, {required Ride ride, bool scanned = true}) {
+    return RideAttendeesCompanion(riderId: Value(rider.id), rideId: Value(ride.id), isScanned: Value(scanned));
+  }
 
   group('addRides', () {
     test('inserts a ride per date', () async {
       await repository.addRides([day1, day2]);
 
-      final rides = await repository.getRides();
+      final rides = await getAllRides();
 
       // The getRides query sorts the rides in most recent ride first.
       expect(rides.map((r) => r.date), [day2, day1]);
-      expect(await allAttendees(), isEmpty);
+      expect(await getAllAttendees(), isEmpty);
     });
 
     test('inserts nothing for an empty list', () async {
       await repository.addRides([]);
 
-      expect(await repository.getRides(), isEmpty);
-      expect(await allAttendees(), isEmpty);
+      expect(await getAllRides(), isEmpty);
+      expect(await getAllAttendees(), isEmpty);
     });
 
     test('stores no scanned attendees by default', () async {
       await repository.addRides([day1]);
 
-      expect((await repository.getRides()).single.scannedAttendees, isNull);
-      expect(await allAttendees(), isEmpty);
+      expect((await getAllRides()).single.scannedAttendees, isNull);
+      expect(await getAllAttendees(), isEmpty);
     });
   });
 
   group('deleteRide', () {
     test('deletes only the given ride', () async {
       await repository.addRides([day1, day2]);
-      final rides = await repository.getRides();
+      final rides = await getAllRides();
 
       await repository.deleteRide(rides.firstWhere((r) => r.date == day1));
 
-      expect((await repository.getRides()).single.date, day2);
+      expect((await getAllRides()).single.date, day2);
     });
 
     test('deletes attendees along with the ride', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1]);
-      final ride = (await repository.getRides()).single;
+      final ride = (await getAllRides()).single;
 
       await repository.updateRide(ride, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride.id))]);
       await repository.deleteRide(ride);
 
-      expect(await repository.getRides(), isEmpty);
+      expect(await getAllRides(), isEmpty);
       expect(await repository.getRideAttendees(ride.date), isEmpty);
     });
 
     test('does not delete attendees of other ride', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day2]);
 
-      final rides = await repository.getRides();
+      final rides = await getAllRides();
       final ride1 = rides.firstWhere((r) => r.date == day1);
       final ride2 = rides.firstWhere((r) => r.date == day2);
 
@@ -92,40 +99,36 @@ void main() {
 
       await repository.deleteRide(ride2);
 
-      expect(await repository.getRides(), isNotEmpty);
+      expect(await getAllRides(), isNotEmpty);
       expect(await repository.getRideAttendees(ride1.date), isNotEmpty);
     });
   });
 
   group('deleteRideCalendar', () {
     test('does nothing if there are no rides', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      await addRider('John');
 
       await repository.deleteRideCalendar();
 
-      expect(await repository.getRides(), isEmpty);
-      expect(await allAttendees(), isEmpty);
-      expect(await riderRepository.getRiders(.all), isNotEmpty);
+      expect(await getAllRides(), isEmpty);
+      expect(await getAllAttendees(), isEmpty);
+      expect(await getAllRiders(), isNotEmpty);
     });
 
     test('deletes all rides and ride attendees', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day2]);
-      final ride = (await repository.getRides()).first;
+      final ride = (await getAllRides()).first;
 
       await repository.updateRide(ride, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride.id))]);
 
       await repository.deleteRideCalendar();
 
-      expect(await repository.getRides(), isEmpty);
-      expect(await allAttendees(), isEmpty);
-      expect(await riderRepository.getRiders(.all), isNotEmpty);
+      expect(await getAllRides(), isEmpty);
+      expect(await getAllAttendees(), isEmpty);
+      expect(await getAllRiders(), isNotEmpty);
     });
   });
 
@@ -136,7 +139,7 @@ void main() {
 
     test('returns selected ride', () async {
       await repository.addRides([day1, day2]);
-      final ride = (await repository.getRides()).firstWhere((r) => r.date == day1);
+      final ride = (await getAllRides()).firstWhere((r) => r.date == day1);
 
       final fetchedRide = await repository.getRideById(ride.id);
       expect(fetchedRide, isNotNull);
@@ -157,15 +160,16 @@ void main() {
     });
 
     test('returns the riders sorted by name', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Smith')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Bob'), lastName: Value('Zed')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Jones')));
+      await Future.wait([
+        addRider('Alice', lastName: 'Smith'),
+        addRider('Bob', lastName: 'Zed'),
+        addRider('Alice', lastName: 'Jones'),
+      ]);
 
-      final riders = await riderRepository.getRiders(.all);
+      final riders = await getAllRiders();
 
       await repository.addRides([day1]);
-      final ride = (await repository.getRides()).first;
+      final ride = (await getAllRides()).first;
 
       await repository.updateRide(ride, [for (final rider in riders) attendeeFor(rider, ride: ride)]);
 
@@ -232,15 +236,14 @@ void main() {
     });
 
     test('only returns results for the first ride on that date', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day1]);
 
-      final ride1 = (await repository.getRides()).firstWhere((r) => r.date == day1);
-      final ride2 = (await repository.getRides()).lastWhere((r) => r.date == day1);
+      final rides = await getAllRides();
+      final ride1 = rides.firstWhere((r) => r.date == day1);
+      final ride2 = rides.lastWhere((r) => r.date == day1);
 
       await repository.updateRide(ride1, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride1.id))]);
       await repository.updateRide(ride2, [RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride2.id))]);
@@ -251,15 +254,13 @@ void main() {
     });
 
     test('maps attendees to scan results', () async {
-      final RiderRepository riderRepository = RiderRepository(database);
-
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Jane'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).firstWhere((r) => r.firstName == 'John');
-      final jane = (await riderRepository.getRiders(.all)).firstWhere((r) => r.firstName == 'Jane');
+      await Future.wait([addRider('John'), addRider('Jane')]);
+      final riders = await getAllRiders();
+      final john = riders.firstWhere((r) => r.firstName == 'John');
+      final jane = riders.firstWhere((r) => r.firstName == 'Jane');
 
       await repository.addRides([day1]);
-      final ride = (await repository.getRides()).single;
+      final ride = (await getAllRides()).single;
 
       await repository.updateRide(ride, [
         RideAttendeesCompanion(riderId: Value(john.id), rideId: Value(ride.id), isScanned: const Value(false)),
@@ -274,27 +275,24 @@ void main() {
   });
 
   group('updateRide', () {
-    late RiderRepository riderRepository;
     late List<Rider> riders;
     late Ride ride;
 
     setUp(() async {
-      riderRepository = RiderRepository(database);
+      await Future.wait([
+        for (final name in ['Anna', 'Ben', 'Carl']) addRider(name),
+      ]);
 
-      for (final name in ['Anna', 'Ben', 'Carl']) {
-        await riderRepository.addRider(RidersCompanion(firstName: Value(name), lastName: const Value('Doe')));
-      }
-
-      riders = await riderRepository.getRiders(.all);
+      riders = await getAllRiders();
       await repository.addRides([day1]);
-      ride = (await repository.getRides()).single;
+      ride = (await getAllRides()).single;
     });
 
     test('throws if the ride does not exist', () async {
       final missing = Ride(id: 999, date: day2);
 
       await expectLater(repository.updateRide(missing, [attendeeFor(riders.first, ride: ride)]), throwsStateError);
-      expect(await allAttendees(), isEmpty);
+      expect(await getAllAttendees(), isEmpty);
     });
 
     test('throws if a rider is included twice in the attendees list', () async {
@@ -321,19 +319,19 @@ void main() {
 
     test('allows inserting the same rider into different rides', () async {
       await repository.addRides([day2]);
-      final ride2 = (await repository.getRides()).firstWhere((r) => r.date == day2);
+      final ride2 = (await getAllRides()).firstWhere((r) => r.date == day2);
 
       await expectLater(
         Future.wait([ride, ride2].map((ride) => repository.updateRide(ride, [attendeeFor(riders.first, ride: ride)]))),
         completes,
       );
-      expect(await allAttendees(), hasLength(2));
+      expect(await getAllAttendees(), hasLength(2));
     });
 
     test('inserts new attendees', () async {
       await repository.updateRide(ride, [attendeeFor(riders.first, ride: ride), attendeeFor(riders.last, ride: ride)]);
 
-      final attendees = await allAttendees();
+      final attendees = await getAllAttendees();
 
       expect(attendees, hasLength(2));
       expect(attendees.first.riderId, riders.first.id);
@@ -354,7 +352,7 @@ void main() {
         RideAttendeesCompanion(riderId: Value(riders.first.id), rideId: Value(ride.id)),
       ]);
 
-      final attendees = await allAttendees();
+      final attendees = await getAllAttendees();
       expect(attendees, hasLength(1));
       expect(attendees.first.riderId, riders.first.id);
       expect(attendees.first.rideId, ride.id);
@@ -364,11 +362,11 @@ void main() {
     test('removes attendees that are no longer present', () async {
       await repository.updateRide(ride, riders.map((r) => attendeeFor(r, ride: ride)).toList());
 
-      final attendeesBefore = await allAttendees();
+      final attendeesBefore = await getAllAttendees();
 
       await repository.updateRide(ride, [attendeeFor(riders.first, ride: ride)]);
 
-      final attendeeAfter = await allAttendees();
+      final attendeeAfter = await getAllAttendees();
       expect(attendeeAfter, hasLength(1));
       expect(attendeeAfter.first.id, attendeesBefore.first.id);
       expect(attendeeAfter.first.riderId, riders.first.id);
@@ -385,18 +383,18 @@ void main() {
       await repository.updateRide(ride, riders.map((r) => attendeeFor(r, ride: ride)).toList());
       await repository.updateRide(ride, []);
 
-      final attendees = await allAttendees();
+      final attendees = await getAllAttendees();
       expect(attendees.where((a) => a.rideId == ride.id), isEmpty);
     });
 
     test('updates the state for existing attendees instead of replacing them', () async {
       await repository.updateRide(ride, riders.map((r) => attendeeFor(r, ride: ride)).toList());
 
-      final attendeesBefore = await allAttendees();
+      final attendeesBefore = await getAllAttendees();
 
       await repository.updateRide(ride, riders.map((r) => attendeeFor(r, ride: ride, scanned: false)).toList());
 
-      final attendeesAfter = await allAttendees();
+      final attendeesAfter = await getAllAttendees();
 
       expect(attendeesAfter.length, attendeesBefore.length);
 
@@ -417,14 +415,14 @@ void main() {
       // Day 1 is already present via the test setup.
       await repository.addRides([day2]);
 
-      final ride2 = (await repository.getRides()).firstWhere((r) => r.date == day2);
+      final ride2 = (await getAllRides()).firstWhere((r) => r.date == day2);
 
       await repository.updateRide(ride, [attendeeFor(riders[0], ride: ride)]);
       await repository.updateRide(ride2, [attendeeFor(riders[1], ride: ride2), attendeeFor(riders[2], ride: ride2)]);
 
       await repository.updateRide(ride, [attendeeFor(riders[1], ride: ride)]);
 
-      final attendees = await allAttendees();
+      final attendees = await getAllAttendees();
       expect(attendees.where((a) => a.rideId == ride.id).map((a) => a.riderId), [riders[1].id]);
       expect(
         attendees.where((a) => a.rideId == ride2.id).map((a) => a.riderId),
@@ -445,7 +443,7 @@ void main() {
     await repository.addRides([DateTime(2026, 1, 4)]);
     await Future<void>.delayed(.zero);
 
-    final Ride ride = await repository.getRides().then((rides) => rides.first);
+    final Ride ride = await getAllRides().then((rides) => rides.first);
 
     await repository.deleteRide(ride);
     await Future<void>.delayed(.zero);

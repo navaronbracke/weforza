@@ -120,10 +120,10 @@ class SerializeRidersRepository {
       final int riderId = await _database
           .into(_database.riders)
           .insert(
-            RidersCompanion(
+            RidersCompanion.insert(
               alias: Value(rider.alias),
-              firstName: Value(rider.firstName),
-              lastName: Value(rider.lastName),
+              firstName: rider.firstName,
+              lastName: rider.lastName,
               isActive: Value(rider.isActive),
             ),
           );
@@ -134,7 +134,7 @@ class SerializeRidersRepository {
 
       newDevices.addAll([
         for (final device in rider.devices)
-          DevicesCompanion(ownerId: Value(riderId), deviceType: const Value(.unknown), name: Value(device)),
+          DevicesCompanion.insert(ownerId: riderId, deviceType: .unknown, name: device),
       ]);
     }
 
@@ -150,7 +150,7 @@ class SerializeRidersRepository {
 
       newDevices.addAll([
         for (final device in rider.value.newDevices)
-          DevicesCompanion(ownerId: Value(rider.key), deviceType: const Value(.unknown), name: Value(device)),
+          DevicesCompanion.insert(ownerId: rider.key, deviceType: .unknown, name: device),
       ]);
     }
 

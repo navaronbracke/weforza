@@ -173,15 +173,19 @@ void main() {
   });
 
   group('getRiders', () {
+    Future<void> addTestRiders() async {
+      await repository.addRider(rider(firstName: 'Bob', lastName: 'Zed'));
+      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false));
+      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith'));
+      await repository.addRider(rider(firstName: 'Alice', lastName: 'Jones'));
+    }
+
     test('returns an empty list for an empty table', () async {
       expect(await repository.getRiders(.all), isEmpty);
     });
 
     test('returns all riders, sorted by first name, last name, then alias', () async {
-      await repository.addRider(rider(firstName: 'Bob', lastName: 'Zed'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Jones'));
+      await addTestRiders();
 
       final riders = await repository.getRiders(.all);
 
@@ -209,10 +213,7 @@ void main() {
     });
 
     test('filters active riders', () async {
-      await repository.addRider(rider(firstName: 'Bob', lastName: 'Zed'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith', alias: 'B', isActive: false));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Smith'));
-      await repository.addRider(rider(firstName: 'Alice', lastName: 'Jones'));
+      await addTestRiders();
 
       final riders = await repository.getRiders(.active);
 

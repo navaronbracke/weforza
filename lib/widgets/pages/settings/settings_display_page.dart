@@ -4,7 +4,7 @@ library;
 import 'package:flutter/widgets.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/model/settings/excluded_terms_delegate.dart';
-import 'package:weforza/model/settings/rider_filter_delegate.dart';
+import 'package:weforza/model/settings/rider_list_display_mode_delegate.dart';
 import 'package:weforza/model/settings/scan_duration_delegate.dart';
 import 'package:weforza/model/settings/settings.dart';
 import 'package:weforza/riverpod/settings/settings_provider.dart';
@@ -15,7 +15,7 @@ import 'package:weforza/widgets/pages/settings/excluded_terms/excluded_terms_lis
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_app_version.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_navigation_bar.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_reset_ride_calendar_button.dart';
-import 'package:weforza/widgets/pages/settings/settings_page_sliver_rider_list_filter.dart';
+import 'package:weforza/widgets/pages/settings/settings_page_sliver_rider_list_display_mode.dart';
 import 'package:weforza/widgets/pages/settings/settings_page_sliver_scan_duration_option.dart';
 
 /// The display page for a [SettingsPage] layout, that displays the provided [Settings].
@@ -39,7 +39,7 @@ class SettingsDisplayPage extends StatefulWidget {
 
 class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
   late final ExcludedTermsDelegate excludedTermsDelegate;
-  late final RiderFilterDelegate riderFilterDelegate;
+  late final RiderListDisplayModeDelegate riderDisplayModeDelegate;
   late final ScanDurationDelegate scanDurationDelegate;
 
   final addTermController = TextEditingController();
@@ -82,7 +82,7 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
       settingsDelegate: widget.settingsDelegate,
       initialValue: widget.settings.excludedTermsFilter,
     );
-    riderFilterDelegate = RiderFilterDelegate(
+    riderDisplayModeDelegate = RiderListDisplayModeDelegate(
       settingsDelegate: widget.settingsDelegate,
       initialValue: widget.settings.userPreferences.riderListDisplayMode,
     );
@@ -102,7 +102,7 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
           controller: widget.scrollController,
           slivers: [
             ?SettingsPageSliverNavigationBar.buildForConstraints(constraints),
-            SettingsPageSliverRiderListFilter(delegate: riderFilterDelegate),
+            SettingsPageSliverRiderListDisplayMode(delegate: riderDisplayModeDelegate),
             SettingsPageSliverScanDurationOption(delegate: scanDurationDelegate),
             ExcludedTermsListSliver(
               buildAddTermInputField: _buildAddTermInputField,
@@ -123,7 +123,7 @@ class _SettingsDisplayPageState extends State<SettingsDisplayPage> {
     addTermFocusNode.removeListener(_handleAddTermFocusChange);
     addTermFocusNode.dispose();
     excludedTermsDelegate.dispose();
-    riderFilterDelegate.dispose();
+    riderDisplayModeDelegate.dispose();
     scanDurationDelegate.dispose();
     super.dispose();
   }

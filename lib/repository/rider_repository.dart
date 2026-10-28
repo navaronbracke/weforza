@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:drift/drift.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/exceptions/exceptions.dart';
-import 'package:weforza/model/rider/rider_filter_option.dart';
+import 'package:weforza/model/rider/rider_list_display_mode.dart';
 
 /// This class provides an API to work with riders.
 class RiderRepository {
@@ -38,7 +38,7 @@ class RiderRepository {
   }
 
   /// Get the list of riders that satisfy the given [filter].
-  Future<List<Rider>> getRiders(RiderFilterOption filter) {
+  Future<List<Rider>> getRiders(RiderListDisplayMode filter) {
     final query = _database.select(_database.riders);
 
     query.orderBy([(t) => .asc(t.firstName), (t) => .asc(t.lastName), (t) => .asc(t.alias, nulls: .last)]);

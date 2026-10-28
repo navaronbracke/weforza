@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weforza/model/rider/rider_filter_option.dart';
 import 'package:weforza/model/settings/user_preferences.dart';
 
 class UserPreferencesRepository {
   /// The Shared Preferences instance that manages the primitive value settings,
-  /// such as the scan duration and the rider filter options.
+  /// such as the scan duration and the rider list display mode.
   final SharedPreferencesAsync _preferences = SharedPreferencesAsync();
 
   /// The key for the rider list display mode in shared preferences.
@@ -23,10 +22,7 @@ class UserPreferencesRepository {
       _preferences.getInt(riderListDisplayModeKey),
     ).wait;
 
-    return .fromValues(
-      riderListDisplayMode: RiderFilterOption.fromInt(riderListDisplayMode),
-      scanDuration: scanDuration,
-    );
+    return .fromValues(riderListDisplayMode: .fromInt(riderListDisplayMode), scanDuration: scanDuration);
   }
 
   /// Write the given user preferences to shared preferences.

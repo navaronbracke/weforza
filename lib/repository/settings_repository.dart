@@ -5,10 +5,11 @@ import 'package:weforza/repository/excluded_terms_repository.dart';
 import 'package:weforza/repository/user_preferences_repository.dart';
 
 class SettingsRepository {
-  new(this._excludedTermsRepository, this._userPreferencesRepository);
+  new(this._excludedTermsRepository);
 
   final ExcludedTermsRepository _excludedTermsRepository;
-  final UserPreferencesRepository _userPreferencesRepository;
+
+  static final UserPreferencesRepository _userPreferencesRepository = UserPreferencesRepository();
 
   /// Read the current application settings.
   Future<Settings> read() async {

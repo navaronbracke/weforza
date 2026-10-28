@@ -1,28 +1,30 @@
 /// @docImport 'package:shared_preferences/shared_preferences.dart';
 library;
 
-import 'package:weforza/model/rider/rider_filter_option.dart';
+import 'package:weforza/model/rider/rider_list_display_mode.dart';
 
 /// The writable user preferences, written and read by [SharedPreferencesAsync].
 final class UserPreferences {
   const new _({required this.riderListDisplayMode, required this.scanDuration});
 
-  factory fromValues({RiderFilterOption riderListDisplayMode = .all, int? scanDuration}) {
-    final int effectiveScanDuration;
-
-    if (scanDuration == null) {
-      effectiveScanDuration = defaultPreferences.scanDuration;
-    } else {
-      effectiveScanDuration = scanDuration.clamp(minScanDuration, maxScanDuration).toInt();
-    }
-
-    return UserPreferences._(riderListDisplayMode: riderListDisplayMode, scanDuration: effectiveScanDuration);
+  /// Create a new [UserPreferences] instance with the given values.
+  ///
+  /// Any null values are reset to the defaults.
+  ///
+  /// An out-of-range scan duration will be clamped to the allowed range.
+  factory fromValues({RiderListDisplayMode? riderListDisplayMode, int? scanDuration}) {
+    return UserPreferences._(
+      riderListDisplayMode: riderListDisplayMode ?? defaultPreferences.riderListDisplayMode,
+      scanDuration: scanDuration == null
+          ? defaultPreferences.scanDuration
+          : scanDuration.clamp(minScanDuration, maxScanDuration).toInt(),
+    );
   }
 
   /// The default rider list display mode.
   ///
   /// Defaults to showing all riders.
-  final RiderFilterOption riderListDisplayMode;
+  final RiderListDisplayMode riderListDisplayMode;
 
   /// The duration of a device scan, in seconds.
   ///
@@ -39,8 +41,8 @@ final class UserPreferences {
   static const double minScanDuration = 10;
 
   /// Create a copy of this object, replacing any non-null values.
-  UserPreferences copyWith({RiderFilterOption? riderListDisplayMode, int? scanDuration}) {
-    return UserPreferences.fromValues(
+  UserPreferences copyWith({RiderListDisplayMode? riderListDisplayMode, int? scanDuration}) {
+    return .fromValues(
       riderListDisplayMode: riderListDisplayMode ?? this.riderListDisplayMode,
       scanDuration: scanDuration ?? this.scanDuration,
     );

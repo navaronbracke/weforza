@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
 
@@ -138,6 +139,23 @@ void main() {
       final attendees = await database.select(database.rideAttendees).get();
       expect(attendees, hasLength(1));
       expect(attendees.single.riderId, jane.id);
+    });
+
+    test('removes devices for rider', () async {
+      final DeviceRepository deviceRepository = DeviceRepository(database);
+
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
+      final riders = await getAllRiders();
+      final john = riders.firstWhere((r) => r.firstName == 'John');
+
+      await Future.wait([
+        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Pixel', ownerId: john.id, deviceType: .phone)),
+        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Watch', ownerId: john.id, deviceType: .watch)),
+      ]);
+
+      await repository.deleteRider(john);
+
+      expect(await deviceRepository.getAllDevices(), isEmpty);
     });
   });
 

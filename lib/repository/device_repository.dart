@@ -55,9 +55,11 @@ class DeviceRepository {
   /// Delete the given [device].
   Future<void> deleteDevice(Device device) {
     return _database.transaction(() async {
-      await _database.delete(_database.devices).delete(device);
+      final rowsAffected = await _database.delete(_database.devices).delete(device);
 
-      await _updateOwnerLastUpdated(device.ownerId);
+      if (rowsAffected > 0) {
+        await _updateOwnerLastUpdated(device.ownerId);
+      }
     });
   }
 
@@ -65,7 +67,7 @@ class DeviceRepository {
   ///
   /// Throws a [DeviceExistsException] if a device with the same name and owner already exists.
   Future<Device> updateDevice(DevicesCompanion device) async {
-    if (await _deviceExists(device.name.value, device.ownerId.value, device.creationDate.value)) {
+    if (await _deviceExists(device.name.value, device.ownerId.value, deviceId: device.id.value)) {
       throw DeviceExistsException();
     }
 
@@ -80,19 +82,21 @@ class DeviceRepository {
 
   /// Check whether a device exists.
   ///
-  /// If [creationDate] is null, this method returns whether a device exists
+  /// If [deviceId] is null, this method returns whether a device exists
   /// with the given [deviceName] and [ownerId].
   ///
-  /// If [creationDate] is not null, this method returns whether a device exists
-  /// with the given [deviceName], [ownerId] and a creation date
-  /// that is *different* from the given creation date.
-  Future<bool> _deviceExists(String deviceName, int ownerId, [DateTime? creationDate]) async {
+  /// If [deviceId] is not null, this method returns whether a device exists
+  /// with the given [deviceName], [ownerId] and an id that is *different*
+  /// from the given id.
+  Future<bool> _deviceExists(String deviceName, int ownerId, {int? deviceId}) async {
     final query = _database.devices.count(
-      where: (t) => Expression.and([
-        t.name.equals(deviceName),
-        t.ownerId.equals(ownerId),
-        if (creationDate != null) t.creationDate.equals(creationDate).not(),
-      ]),
+      where: (t) {
+        return Expression.and([
+          t.name.equals(deviceName),
+          t.ownerId.equals(ownerId),
+          if (deviceId != null) t.id.equals(deviceId).not(),
+        ]);
+      },
     );
 
     final result = await query.getSingleOrNull();

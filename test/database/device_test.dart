@@ -35,7 +35,7 @@ void main() {
   DevicesCompanion deviceFor({
     required String name,
     required int ownerId,
-    DeviceType type = .unknown,
+    DeviceType type = .phone,
     DateTime? created,
   }) {
     return DevicesCompanion.insert(
@@ -60,13 +60,13 @@ void main() {
     test('inserts and returns the device', () async {
       final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
-      final devices = await addDevices([deviceFor(name: 'Pixel', ownerId: john.id, type: .phone)]);
+      final devices = await addDevices([deviceFor(name: 'Pixel', ownerId: john.id, type: .gps)]);
       final device = devices.first;
 
       expect(device.id, 1);
       expect(device.name, 'Pixel');
       expect(device.ownerId, john.id);
-      expect(device.deviceType, DeviceType.phone);
+      expect(device.deviceType, DeviceType.gps);
     });
 
     test('updates the owner lastUpdated', () async {
@@ -211,7 +211,9 @@ void main() {
       ]);
 
       // Ensure the last update timestamp is deterministic.
-      await riderRepository.updateRider(RidersCompanion(id: Value(john.id), lastUpdated: Value(DateTime(2000, 2, 2))));
+      await (database.update(
+        database.riders,
+      )..where((rider) => rider.id.equals(john.id))).write(RidersCompanion(lastUpdated: Value(DateTime(2000, 2, 2))));
 
       await repository.deleteDevice(added.first);
 
@@ -225,13 +227,14 @@ void main() {
       await addDevices([deviceFor(name: 'Pixel', ownerId: john.id), deviceFor(name: 'Watch', ownerId: john.id)]);
 
       final initialDevices = await getAllDevices();
+      final lastUpdatedBeforeDelete = (await getRider(john.id)).lastUpdated;
       await repository.deleteDevice(
         Device(id: 999, creationDate: DateTime.now(), name: 'd', ownerId: john.id, deviceType: .phone),
       );
       final finalDevices = await getAllDevices();
       expect(finalDevices, initialDevices);
 
-      expect((await getRider(john.id)).lastUpdated, john.lastUpdated);
+      expect((await getRider(john.id)).lastUpdated, lastUpdatedBeforeDelete);
     });
 
     test('only removes the specific device', () async {
@@ -290,8 +293,8 @@ void main() {
 
       final deviceToUpdate = devices.last;
 
-      expect(
-        () => repository.updateDevice(
+      await expectLater(
+        repository.updateDevice(
           DevicesCompanion(
             id: Value(deviceToUpdate.id),
             name: const Value('Pixel'),

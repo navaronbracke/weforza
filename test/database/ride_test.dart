@@ -27,6 +27,10 @@ void main() {
 
   Future<List<Rider>> getAllRiders() => riderRepository.getRiders(.all);
 
+  Future<void> addRider(String firstName, {String lastName = 'Doe'}) async {
+    await riderRepository.addRider(RidersCompanion.insert(firstName: firstName, lastName: lastName));
+  }
+
   RideAttendeesCompanion attendeeFor(Rider rider, {required Ride ride, bool scanned = true}) {
     return RideAttendeesCompanion(riderId: Value(rider.id), rideId: Value(ride.id), isScanned: Value(scanned));
   }
@@ -68,8 +72,8 @@ void main() {
     });
 
     test('deletes attendees along with the ride', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1]);
       final ride = (await getAllRides()).single;
@@ -82,8 +86,8 @@ void main() {
     });
 
     test('does not delete attendees of other ride', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day2]);
 
@@ -102,7 +106,7 @@ void main() {
 
   group('deleteRideCalendar', () {
     test('does nothing if there are no rides', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
+      await addRider('John');
 
       await repository.deleteRideCalendar();
 
@@ -112,8 +116,8 @@ void main() {
     });
 
     test('deletes all rides and ride attendees', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day2]);
       final ride = (await getAllRides()).first;
@@ -156,9 +160,11 @@ void main() {
     });
 
     test('returns the riders sorted by name', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Smith')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Bob'), lastName: Value('Zed')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Alice'), lastName: Value('Jones')));
+      await Future.wait([
+        addRider('Alice', lastName: 'Smith'),
+        addRider('Bob', lastName: 'Zed'),
+        addRider('Alice', lastName: 'Jones'),
+      ]);
 
       final riders = await getAllRiders();
 
@@ -230,8 +236,8 @@ void main() {
     });
 
     test('only returns results for the first ride on that date', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).single;
+      await addRider('John');
+      final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       await repository.addRides([day1, day1]);
 
@@ -248,10 +254,10 @@ void main() {
     });
 
     test('maps attendees to scan results', () async {
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('John'), lastName: Value('Doe')));
-      await riderRepository.addRider(const RidersCompanion(firstName: Value('Jane'), lastName: Value('Doe')));
-      final john = (await riderRepository.getRiders(.all)).firstWhere((r) => r.firstName == 'John');
-      final jane = (await riderRepository.getRiders(.all)).firstWhere((r) => r.firstName == 'Jane');
+      await Future.wait([addRider('John'), addRider('Jane')]);
+      final riders = await getAllRiders();
+      final john = riders.firstWhere((r) => r.firstName == 'John');
+      final jane = riders.firstWhere((r) => r.firstName == 'Jane');
 
       await repository.addRides([day1]);
       final ride = (await getAllRides()).single;
@@ -273,9 +279,9 @@ void main() {
     late Ride ride;
 
     setUp(() async {
-      for (final name in ['Anna', 'Ben', 'Carl']) {
-        await riderRepository.addRider(RidersCompanion(firstName: Value(name), lastName: const Value('Doe')));
-      }
+      await Future.wait([
+        for (final name in ['Anna', 'Ben', 'Carl']) addRider(name),
+      ]);
 
       riders = await getAllRiders();
       await repository.addRides([day1]);

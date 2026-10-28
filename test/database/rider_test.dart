@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/ride_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
 
@@ -139,6 +140,23 @@ void main() {
       expect(attendees, hasLength(1));
       expect(attendees.single.riderId, jane.id);
     });
+
+    test('removes devices for rider', () async {
+      final DeviceRepository deviceRepository = DeviceRepository(database);
+
+      await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
+      final riders = await getAllRiders();
+      final john = riders.firstWhere((r) => r.firstName == 'John');
+
+      await Future.wait([
+        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Pixel', ownerId: john.id, deviceType: .phone)),
+        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Watch', ownerId: john.id, deviceType: .watch)),
+      ]);
+
+      await repository.deleteRider(john);
+
+      expect(await deviceRepository.getAllDevices(), isEmpty);
+    });
   });
 
   group('getAttendingCount', () {
@@ -175,7 +193,7 @@ void main() {
 
   group('getRiders', () {
     test('returns an empty list for an empty table', () async {
-      expect(await repository.getRiders(.all), isEmpty);
+      expect(await getAllRiders(), isEmpty);
     });
 
     test('returns all riders, sorted by first name, last name, then alias', () async {
@@ -186,7 +204,7 @@ void main() {
         rider(firstName: 'Alice', lastName: 'Jones'),
       ]);
 
-      final riders = await repository.getRiders(.all);
+      final riders = await getAllRiders();
 
       expect(riders, hasLength(4));
 

@@ -14,95 +14,57 @@ class ExportRidesRepository {
   ///
   /// If a specific [ride] date is given, only that ride is returned.
   Future<Iterable<ExportableRideWithAttendees>> getRides(DateTime? ride) async {
-    final rideDatesById = await _getRides(ride);
-
-    if (rideDatesById.isEmpty) {
-      return const [];
-    }
-
-    // Get the ids of the attendees, per ride.
-    final riderIdsPerRide = await _getRideAttendeeIds(rideDatesById.keys);
-
-    // With the ids from the previous step, read the attendee data.
-    final attendeesById = await _getExportableRideAttendees(riderIdsPerRide.values.expand((ids) => ids));
-
-    return [
-      for (final MapEntry(key: rideId, value: date) in rideDatesById.entries)
-        ExportableRideWithAttendees(
-          ride: ExportableRide(date: date),
-          attendees: [for (final riderId in riderIdsPerRide[rideId] ?? const <int>{}) ?attendeesById[riderId]],
-        ),
-    ];
-  }
-
-  /// Get the rides with their dates.
-  ///
-  /// If [ride] is provided, only the rides on that date will be returned.
-  Future<Map<int, DateTime>> _getRides(DateTime? ride) async {
     final rides = _database.rides;
+    final rideAttendees = _database.rideAttendees;
+    final riders = _database.riders;
 
-    final ridesQuery = rides.selectOnly()..addColumns([rides.id, rides.date]);
+    final query = rides.selectOnly().join([
+      leftOuterJoin(rideAttendees, rideAttendees.rideId.equalsExp(rides.id)),
+      leftOuterJoin(riders, riders.id.equalsExp(rideAttendees.riderId)),
+    ])..addColumns([rides.id, rides.date, riders.alias, riders.firstName, riders.lastName]);
 
     if (ride != null) {
-      ridesQuery.where(rides.date.equals(ride));
+      query.where(rides.date.equals(ride));
+    } else {
+      // Multiple rides should be ordered on date.
+      query.orderBy([.desc(rides.date)]);
     }
 
-    return <int, DateTime>{
-      for (final row in await ridesQuery.get())
-        if ((id: row.read(rides.id), date: row.read(rides.date)) case (id: final id?, date: final date?)) id: date,
-    };
-  }
+    // The map preserves the insertion order, which is the order of the rides.
+    final ridesById = <int, (DateTime, List<ExportableRideAttendee>)>{};
 
-  /// Get the attendee ids for the given [rideIds].
-  Future<Map<int, Set<int>>> _getRideAttendeeIds(Iterable<int> rideIds) async {
-    final rideAttendees = _database.rideAttendees;
+    for (final row in await query.get()) {
+      final int? rideId = row.read(rides.id);
+      final DateTime? date = row.read(rides.date);
 
-    final attendeesQuery = rideAttendees.selectOnly()
-      ..addColumns([rideAttendees.rideId, rideAttendees.riderId])
-      ..where(rideAttendees.rideId.isIn(rideIds));
-
-    final riderIdsPerRide = <int, Set<int>>{};
-
-    for (final row in await attendeesQuery.get()) {
-      if ((rideId: row.read(rideAttendees.rideId), riderId: row.read(rideAttendees.riderId)) case (
-        rideId: final rideId?,
-        riderId: final riderId?,
-      )) {
-        riderIdsPerRide.putIfAbsent(rideId, () => {}).add(riderId);
-      }
-    }
-
-    return riderIdsPerRide;
-  }
-
-  Future<Map<int, ExportableRideAttendee>> _getExportableRideAttendees(Iterable<int> riderIds) async {
-    if (riderIds.isEmpty) {
-      return const {};
-    }
-
-    final riders = _database.riders;
-    final attendees = <int, ExportableRideAttendee>{};
-
-    final ridersQuery = riders.selectOnly()
-      ..addColumns([riders.id, riders.alias, riders.firstName, riders.lastName])
-      ..where(riders.id.isIn(riderIds));
-
-    for (final row in await ridersQuery.get()) {
-      final riderId = row.read(riders.id);
-      final firstName = row.read(riders.firstName) ?? '';
-      final lastName = row.read(riders.lastName) ?? '';
-
-      if (riderId == null || firstName.isEmpty || lastName.isEmpty) {
+      if (rideId == null || date == null) {
         continue;
       }
 
-      attendees[riderId] = ExportableRideAttendee(
-        alias: row.read(riders.alias) ?? '',
-        firstName: firstName,
-        lastName: lastName,
+      // Ensure that each ride has at least an empty attendees list.
+      final List<ExportableRideAttendee> attendees = ridesById
+          .putIfAbsent(rideId, () => (date, <ExportableRideAttendee>[]))
+          .$2;
+
+      // Rides without attendees have null rider columns, due to the left join.
+      final String? firstName = row.read(riders.firstName);
+      final String? lastName = row.read(riders.lastName);
+
+      if (firstName == null || firstName.isEmpty || lastName == null || lastName.isEmpty) {
+        continue;
+      }
+
+      attendees.add(
+        ExportableRideAttendee(alias: row.read(riders.alias) ?? '', firstName: firstName, lastName: lastName),
       );
     }
 
-    return attendees;
+    return [
+      for (final (date, attendees) in ridesById.values)
+        ExportableRideWithAttendees(
+          ride: ExportableRide(date: date),
+          attendees: attendees..sort(ExportableRideAttendee.sortByName),
+        ),
+    ];
   }
 }

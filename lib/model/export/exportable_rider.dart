@@ -1,6 +1,8 @@
 /// @docImport 'package:weforza/database/database.dart';
 library;
 
+import 'package:collection/collection.dart';
+
 /// A single [Rider], with its [Device]s, that can be serialized.
 final class ExportableRider implements Comparable<ExportableRider> {
   /// Create a new [ExportableRider] with the provided [alias], [devices], [firstName], [isActive],
@@ -107,5 +109,25 @@ final class ExportableRider implements Comparable<ExportableRider> {
     }
 
     return 0;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is ExportableRider &&
+        firstName == other.firstName &&
+        lastName == other.lastName &&
+        alias == other.alias &&
+        isActive == other.isActive &&
+        lastUpdated == other.lastUpdated &&
+        const SetEquality<String>().equals(devices, other.devices);
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(firstName, lastName, alias, isActive, lastUpdated, const SetEquality<String>().hash(devices));
   }
 }

@@ -28,7 +28,7 @@ void main() {
   Future<List<Rider>> getAllRiders() => riderRepository.getRiders(.all);
 
   Future<void> addRider(String firstName, {String lastName = 'Doe'}) async {
-    await riderRepository.addRider(RidersCompanion.insert(firstName: firstName, lastName: lastName));
+    await riderRepository.addRider(.insert(firstName: firstName, lastName: lastName));
   }
 
   RideAttendeesCompanion attendeeFor(Rider rider, {required Ride ride, bool scanned = true}) {

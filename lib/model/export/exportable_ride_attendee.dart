@@ -4,7 +4,7 @@ library;
 
 /// This class represents a [RideAttendee] in a format that is suitable
 /// for exporting inside a [ExportableRideWithAttendees].
-class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
+final class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
   new({required this.firstName, required this.lastName, this.alias = ''})
     : assert(
         firstName.isNotEmpty && lastName.isNotEmpty,
@@ -14,6 +14,10 @@ class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
   final String firstName;
   final String lastName;
   final String alias;
+
+  static int sortByName(ExportableRideAttendee first, ExportableRideAttendee second) {
+    return first.compareTo(second);
+  }
 
   Map<String, Object> toJson() {
     return {'firstName': firstName, 'lastName': lastName, 'alias': alias};
@@ -55,4 +59,19 @@ class ExportableRideAttendee implements Comparable<ExportableRideAttendee> {
     // Both have non-empty aliases, compare them.
     return alias.compareTo(other.alias);
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is ExportableRideAttendee &&
+        firstName == other.firstName &&
+        lastName == other.lastName &&
+        alias == other.alias;
+  }
+
+  @override
+  int get hashCode => Object.hash(firstName, lastName, alias);
 }

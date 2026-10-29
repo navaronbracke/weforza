@@ -32,7 +32,7 @@ void main() {
     bool isActive = true,
     Uri? profileImageUri,
   }) {
-    return RidersCompanion.insert(
+    return .insert(
       firstName: firstName,
       lastName: lastName,
       alias: Value(alias),
@@ -128,11 +128,11 @@ void main() {
       final ride2 = rides.last;
 
       await rideRepository.updateRide(ride1, [
-        RideAttendeesCompanion.insert(rideId: ride1.id, riderId: john.id),
-        RideAttendeesCompanion.insert(rideId: ride1.id, riderId: jane.id),
+        .insert(rideId: ride1.id, riderId: john.id),
+        .insert(rideId: ride1.id, riderId: jane.id),
       ]);
 
-      await rideRepository.updateRide(ride2, [RideAttendeesCompanion.insert(rideId: ride2.id, riderId: john.id)]);
+      await rideRepository.updateRide(ride2, [.insert(rideId: ride2.id, riderId: john.id)]);
 
       await repository.deleteRider(john);
 
@@ -149,8 +149,8 @@ void main() {
       final john = riders.firstWhere((r) => r.firstName == 'John');
 
       await Future.wait([
-        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Pixel', ownerId: john.id, deviceType: .phone)),
-        deviceRepository.addDevice(DevicesCompanion.insert(name: 'Watch', ownerId: john.id, deviceType: .watch)),
+        deviceRepository.addDevice(.insert(name: 'Pixel', ownerId: john.id, deviceType: .phone)),
+        deviceRepository.addDevice(.insert(name: 'Watch', ownerId: john.id, deviceType: .watch)),
       ]);
 
       await repository.deleteRider(john);
@@ -181,10 +181,10 @@ void main() {
       final rideTwo = rides.last;
 
       await rideRepository.updateRide(rideOne, [
-        RideAttendeesCompanion.insert(rideId: rideOne.id, riderId: john.id),
-        RideAttendeesCompanion.insert(rideId: rideOne.id, riderId: jane.id),
+        .insert(rideId: rideOne.id, riderId: john.id),
+        .insert(rideId: rideOne.id, riderId: jane.id),
       ]);
-      await rideRepository.updateRide(rideTwo, [RideAttendeesCompanion.insert(rideId: rideTwo.id, riderId: john.id)]);
+      await rideRepository.updateRide(rideTwo, [.insert(rideId: rideTwo.id, riderId: john.id)]);
 
       expect(await repository.getAttendingCount(john.id), 2);
       expect(await repository.getAttendingCount(jane.id), 1);

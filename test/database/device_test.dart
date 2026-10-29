@@ -17,12 +17,8 @@ void main() {
     riderRepository = RiderRepository(database);
 
     await Future.wait([
-      riderRepository.addRider(
-        RidersCompanion.insert(firstName: 'John', lastName: 'Doe', lastUpdated: Value(DateTime(2000))),
-      ),
-      riderRepository.addRider(
-        RidersCompanion.insert(firstName: 'Jane', lastName: 'Roe', lastUpdated: Value(DateTime(2000))),
-      ),
+      riderRepository.addRider(.insert(firstName: 'John', lastName: 'Doe', lastUpdated: Value(DateTime(2000)))),
+      riderRepository.addRider(.insert(firstName: 'Jane', lastName: 'Roe', lastUpdated: Value(DateTime(2000)))),
     ]);
   });
 
@@ -38,12 +34,7 @@ void main() {
     DeviceType type = .phone,
     DateTime? created,
   }) {
-    return DevicesCompanion.insert(
-      name: name,
-      ownerId: ownerId,
-      deviceType: type,
-      creationDate: Value.absentIfNull(created),
-    );
+    return .insert(name: name, ownerId: ownerId, deviceType: type, creationDate: Value.absentIfNull(created));
   }
 
   Future<List<Device>> getAllDevices() => repository.getAllDevices();

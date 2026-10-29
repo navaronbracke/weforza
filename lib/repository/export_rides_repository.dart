@@ -21,18 +21,18 @@ class ExportRidesRepository {
     }
 
     // Get the ids of the attendees, per ride.
-    final riderIdsPerRide = await _getRideAttendeeIds(rideDatesById.keys);
+    final Map<int, Set<int>> rideAttendeeIdsPerRide = await _getRideAttendeeIds(rideDatesById.keys);
 
-    // With the ids from the previous step, read the attendee data.
-    final attendeesById = await _getExportableRideAttendees(riderIdsPerRide.values.expand((ids) => ids));
+    // There are no attendees for any of the rides.
+    if (rideAttendeeIdsPerRide.isEmpty) {
+      return _getExportableRides(rideDatesById, const {}, const {});
+    }
 
-    return [
-      for (final MapEntry(key: rideId, value: date) in rideDatesById.entries)
-        ExportableRideWithAttendees(
-          ride: ExportableRide(date: date),
-          attendees: [for (final riderId in riderIdsPerRide[rideId] ?? const <int>{}) ?attendeesById[riderId]],
-        ),
-    ];
+    // Get the attendees for said ids.
+    final Iterable<int> allAttendeeIds = rideAttendeeIdsPerRide.values.expand((ids) => ids);
+    final Map<int, ExportableRideAttendee> riders = await _getExportableRideAttendees(allAttendeeIds);
+
+    return _getExportableRides(rideDatesById, rideAttendeeIdsPerRide, riders);
   }
 
   /// Get the rides with their dates.
@@ -45,6 +45,9 @@ class ExportRidesRepository {
 
     if (ride != null) {
       ridesQuery.where(rides.date.equals(ride));
+    } else {
+      // Multiple rides should be ordered on date.
+      ridesQuery.orderBy([.desc(rides.date)]);
     }
 
     return <int, DateTime>{
@@ -104,5 +107,34 @@ class ExportRidesRepository {
     }
 
     return attendees;
+  }
+
+  /// Get the list of [ExportableRideWithAttendees] elements.
+  ///
+  /// This method essentially walks each ride in [rideDates], collects the corresponding attendees from [rideAttendees],
+  /// and then maps those attendees to their exportable representations in [riders].
+  ///
+  /// The [rideDates] contain the [Ride.date] keyed to the [Ride.id]s.
+  /// The [rideAttendees] contain the [Rider.id] keyed to the [Ride.id]s.
+  /// The [riders] contain the [ExportableRideAttendee] keyed to the [Rider.id]s.
+  List<ExportableRideWithAttendees> _getExportableRides(
+    Map<int, DateTime> rideDates,
+    Map<int, Set<int>> rideAttendees,
+    Map<int, ExportableRideAttendee> riders,
+  ) {
+    final List<ExportableRideWithAttendees> exportedRides = [];
+
+    for (final MapEntry(key: rideId, value: date) in rideDates.entries) {
+      final elements = [for (final riderId in rideAttendees[rideId] ?? const <int>{}) ?riders[riderId]];
+
+      exportedRides.add(
+        ExportableRideWithAttendees(
+          ride: ExportableRide(date: date),
+          attendees: elements..sort(ExportableRideAttendee.sortByName),
+        ),
+      );
+    }
+
+    return exportedRides;
   }
 }

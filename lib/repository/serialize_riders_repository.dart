@@ -133,8 +133,7 @@ class SerializeRidersRepository {
       }
 
       newDevices.addAll([
-        for (final device in rider.devices)
-          DevicesCompanion.insert(ownerId: riderId, deviceType: .unknown, name: device),
+        for (final device in rider.devices) .insert(ownerId: riderId, deviceType: .unknown, name: device),
       ]);
     }
 
@@ -149,8 +148,7 @@ class SerializeRidersRepository {
       }
 
       newDevices.addAll([
-        for (final device in rider.value.newDevices)
-          DevicesCompanion.insert(ownerId: rider.key, deviceType: .unknown, name: device),
+        for (final device in rider.value.newDevices) .insert(ownerId: rider.key, deviceType: .unknown, name: device),
       ]);
     }
 

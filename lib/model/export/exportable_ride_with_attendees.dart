@@ -33,11 +33,9 @@ final class ExportableRideWithAttendees {
       return true;
     }
 
-    if (other is! ExportableRideWithAttendees) {
-      return false;
-    }
-
-    return ride == other.ride && const IterableEquality<ExportableRideAttendee>().equals(attendees, other.attendees);
+    return other is ExportableRideWithAttendees &&
+        ride == other.ride &&
+        const IterableEquality<ExportableRideAttendee>().equals(attendees, other.attendees);
   }
 
   @override

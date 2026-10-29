@@ -32,6 +32,10 @@ final class ExportableRiderKey {
 
   @override
   bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
     return other is ExportableRiderKey &&
         firstName == other.firstName &&
         lastName == other.lastName &&

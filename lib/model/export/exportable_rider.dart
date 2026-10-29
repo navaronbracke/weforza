@@ -117,18 +117,13 @@ final class ExportableRider implements Comparable<ExportableRider> {
       return true;
     }
 
-    if (other is! ExportableRider) {
-      return false;
-    }
-
-    const SetEquality<String> setEquality = SetEquality<String>();
-
-    return firstName == other.firstName &&
+    return other is ExportableRider &&
+        firstName == other.firstName &&
         lastName == other.lastName &&
         alias == other.alias &&
         isActive == other.isActive &&
         lastUpdated == other.lastUpdated &&
-        setEquality.equals(devices, other.devices);
+        const SetEquality<String>().equals(devices, other.devices);
   }
 
   @override

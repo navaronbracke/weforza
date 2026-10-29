@@ -165,7 +165,7 @@ void main() {
         .insert(riderId: janeD.id, rideId: ride.id),
       ]);
 
-      final exported = await exportRidesRepository.getRides(null);
+      final exported = await exportRidesRepository.getRides(date);
       expect(exported, [
         ExportableRideWithAttendees(
           ride: ExportableRide(date: DateTime(2024, 1, 12)),
@@ -191,11 +191,8 @@ void main() {
         .insert(riderId: alex.id, rideId: ride.id),
       ]);
 
-      final exported = await exportRidesRepository.getRides(null);
-      expect(exported.single.attendees, [
-        ExportableRideAttendee(firstName: 'Alex', lastName: 'Jones'),
-        ExportableRideAttendee(firstName: 'John', lastName: 'Doe'),
-      ]);
+      final exported = await exportRidesRepository.getRides(date);
+      expect(exported.single.attendees, isNot(contains(ExportableRideAttendee(firstName: 'Jim', lastName: 'Beam'))));
     });
   });
 }

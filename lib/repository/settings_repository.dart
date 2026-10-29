@@ -9,7 +9,9 @@ class SettingsRepository {
 
   final ExcludedTermsRepository _excludedTermsRepository;
 
-  static final UserPreferencesRepository _userPreferencesRepository = UserPreferencesRepository();
+  /// The user preferences are per instance,
+  /// since SharedPreferences is tied to the instance of the repository.
+  final UserPreferencesRepository _userPreferencesRepository = UserPreferencesRepository();
 
   /// Read the current application settings.
   Future<Settings> read() async {

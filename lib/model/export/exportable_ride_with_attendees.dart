@@ -1,7 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:weforza/model/export/exportable_ride.dart';
 import 'package:weforza/model/export/exportable_ride_attendee.dart';
 
-class ExportableRideWithAttendees {
+final class ExportableRideWithAttendees {
   const new({required this.attendees, required this.ride});
 
   /// The attendees of the ride to export.
@@ -25,4 +26,20 @@ class ExportableRideWithAttendees {
       'attendees': [for (final attendee in attendees) attendee.toJson()],
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    if (other is! ExportableRideWithAttendees) {
+      return false;
+    }
+
+    return ride == other.ride && const IterableEquality<ExportableRideAttendee>().equals(attendees, other.attendees);
+  }
+
+  @override
+  int get hashCode => Object.hash(ride, const IterableEquality<ExportableRideAttendee>().hash(attendees));
 }

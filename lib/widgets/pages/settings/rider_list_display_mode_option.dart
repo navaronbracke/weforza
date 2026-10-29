@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weforza/generated/l10n.dart';
@@ -69,7 +67,7 @@ class _CupertinoRiderDisplayModeState extends State<_CupertinoRiderDisplayMode> 
   /// The map of options for the segmented control.
   /// This map preserves its insertion order,
   /// as that order is used to display the options.
-  LinkedHashMap<RiderListDisplayMode, String> _labels = LinkedHashMap();
+  Map<RiderListDisplayMode, String> _labels = <RiderListDisplayMode, String>{};
 
   /// The text painter that will measure the width of the widest label.
   final TextPainter _textPainter = TextPainter(maxLines: 1, textDirection: .ltr);
@@ -105,11 +103,11 @@ class _CupertinoRiderDisplayModeState extends State<_CupertinoRiderDisplayMode> 
     super.didChangeDependencies();
     final translator = S.of(context);
 
-    _labels = LinkedHashMap.from(<RiderListDisplayMode, String>{
+    _labels = <RiderListDisplayMode, String>{
       .all: translator.all,
       .active: translator.active,
       .inactive: translator.inactive,
-    });
+    };
 
     _computeWidestLabelWidth(DefaultTextStyle.of(context).style);
   }

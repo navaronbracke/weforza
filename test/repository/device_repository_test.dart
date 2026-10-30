@@ -8,12 +8,12 @@ import 'package:weforza/repository/rider_repository.dart';
 
 void main() {
   late WeForzaDatabase database;
-  late DeviceRepository repository;
+  late DeviceRepository deviceRepository;
   late RiderRepository riderRepository;
 
   setUp(() async {
     database = WeForzaDatabase.memory();
-    repository = DeviceRepository(database);
+    deviceRepository = DeviceRepository(database);
     riderRepository = RiderRepository(database);
 
     await Future.wait([
@@ -25,7 +25,7 @@ void main() {
   tearDown(() => database.close());
 
   Future<List<Device>> addDevices(Iterable<DevicesCompanion> devices) async {
-    return Future.wait([for (final device in devices) repository.addDevice(device)]);
+    return Future.wait([for (final device in devices) deviceRepository.addDevice(device)]);
   }
 
   DevicesCompanion deviceFor({
@@ -37,7 +37,7 @@ void main() {
     return .insert(name: name, ownerId: ownerId, deviceType: type, creationDate: Value.absentIfNull(created));
   }
 
-  Future<List<Device>> getAllDevices() => repository.getAllDevices();
+  Future<List<Device>> getAllDevices() => deviceRepository.getAllDevices();
 
   Future<List<Rider>> getAllRiders() => riderRepository.getRiders(.all);
 
@@ -89,7 +89,7 @@ void main() {
     });
 
     test('fails for a non-existent owner', () async {
-      expect(() => repository.addDevice(deviceFor(name: 'Pixel', ownerId: 99)), throwsA(isA<Exception>()));
+      expect(() => deviceRepository.addDevice(deviceFor(name: 'Pixel', ownerId: 99)), throwsA(isA<Exception>()));
     });
   });
 
@@ -136,7 +136,7 @@ void main() {
         deviceFor(name: 'Pixel', ownerId: jane.id),
       ]);
 
-      final grouped = await repository.getAllDevicesGroupedByOwnerId();
+      final grouped = await deviceRepository.getAllDevicesGroupedByOwnerId();
       expect(grouped, {
         john.id: {'Pixel', 'Watch'},
         jane.id: {'Pixel'},
@@ -144,7 +144,7 @@ void main() {
     });
 
     test('returns empty map when no devices exist', () async {
-      expect(await repository.getAllDevicesGroupedByOwnerId(), isEmpty);
+      expect(await deviceRepository.getAllDevicesGroupedByOwnerId(), isEmpty);
     });
   });
 
@@ -161,8 +161,8 @@ void main() {
       ]);
 
       final [johnDevices, janeDevices] = await Future.wait([
-        repository.getOwnerDevices(john.id),
-        repository.getOwnerDevices(jane.id),
+        deviceRepository.getOwnerDevices(john.id),
+        deviceRepository.getOwnerDevices(jane.id),
       ]);
 
       expect(johnDevices, hasLength(2));
@@ -183,11 +183,11 @@ void main() {
       final riders = await getAllRiders();
       final john = riders.firstWhere((r) => r.firstName == 'John');
 
-      expect(await repository.getOwnerDevices(john.id), isEmpty);
+      expect(await deviceRepository.getOwnerDevices(john.id), isEmpty);
     });
 
     test('returns empty list for non-existent owner', () async {
-      expect(await repository.getOwnerDevices(99), isEmpty);
+      expect(await deviceRepository.getOwnerDevices(99), isEmpty);
     });
   });
 
@@ -206,7 +206,7 @@ void main() {
         database.riders,
       )..where((rider) => rider.id.equals(john.id))).write(RidersCompanion(lastUpdated: Value(DateTime(2000, 2, 2))));
 
-      await repository.deleteDevice(added.first);
+      await deviceRepository.deleteDevice(added.first);
 
       expect((await getAllDevices()).single.name, 'Watch');
       expect((await getRider(1)).lastUpdated.isAfter(DateTime(2000, 2, 2)), isTrue);
@@ -219,7 +219,7 @@ void main() {
 
       final initialDevices = await getAllDevices();
       final lastUpdatedBeforeDelete = (await getRider(john.id)).lastUpdated;
-      await repository.deleteDevice(
+      await deviceRepository.deleteDevice(
         Device(id: 999, creationDate: DateTime.now(), name: 'd', ownerId: john.id, deviceType: .phone),
       );
       final finalDevices = await getAllDevices();
@@ -239,7 +239,7 @@ void main() {
       ]);
       final janeDevices = await addDevices([deviceFor(name: 'Pixel', ownerId: jane.id)]);
 
-      await repository.deleteDevice(johnDevices.first);
+      await deviceRepository.deleteDevice(johnDevices.first);
 
       final allDevices = await getAllDevices();
       expect(allDevices, contains(johnDevices.last));
@@ -256,7 +256,7 @@ void main() {
       final added = await addDevices([deviceFor(name: 'Pixel', ownerId: john.id)]);
       final addedDevice = added.first;
 
-      final updated = await repository.updateDevice(
+      final updated = await deviceRepository.updateDevice(
         DevicesCompanion(
           id: Value(addedDevice.id),
           name: const Value('Watch'),
@@ -270,7 +270,7 @@ void main() {
       expect(updated.ownerId, addedDevice.ownerId);
       expect(updated.name, 'Watch');
       expect(updated.deviceType, DeviceType.watch);
-      expect(await repository.getAllDevices(), hasLength(1));
+      expect(await deviceRepository.getAllDevices(), hasLength(1));
     });
 
     test('throws if device name collides with another device of the same owner', () async {
@@ -285,7 +285,7 @@ void main() {
       final deviceToUpdate = devices.last;
 
       await expectLater(
-        repository.updateDevice(
+        deviceRepository.updateDevice(
           DevicesCompanion(
             id: Value(deviceToUpdate.id),
             name: const Value('Pixel'),

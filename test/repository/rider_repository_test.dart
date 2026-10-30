@@ -8,22 +8,22 @@ import 'package:weforza/repository/rider_repository.dart';
 
 void main() {
   late WeForzaDatabase database;
-  late RiderRepository repository;
+  late RiderRepository riderRepository;
   late RideRepository rideRepository;
 
   setUp(() {
     database = WeForzaDatabase.memory();
-    repository = RiderRepository(database);
+    riderRepository = RiderRepository(database);
     rideRepository = RideRepository(database);
   });
 
   tearDown(() => database.close());
 
   Future<void> addRiders(Iterable<RidersCompanion> riders) {
-    return Future.wait(riders.map(repository.addRider));
+    return Future.wait(riders.map(riderRepository.addRider));
   }
 
-  Future<List<Rider>> getAllRiders() => repository.getRiders(.all);
+  Future<List<Rider>> getAllRiders() => riderRepository.getRiders(.all);
 
   RidersCompanion rider({
     required String firstName,
@@ -68,7 +68,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe', alias: 'JD')]);
 
       expect(
-        () => repository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD')),
+        () => riderRepository.addRider(rider(firstName: 'John', lastName: 'Doe', alias: 'JD')),
         throwsA(isA<RiderExistsException>()),
       );
     });
@@ -96,7 +96,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Roe')]);
       final riders = await getAllRiders();
 
-      await repository.deleteRider(riders.firstWhere((r) => r.firstName == 'John'));
+      await riderRepository.deleteRider(riders.firstWhere((r) => r.firstName == 'John'));
 
       final remaining = await getAllRiders();
       expect(remaining.single.firstName, 'Jane');
@@ -106,7 +106,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final riders = await getAllRiders();
 
-      await repository.deleteRider(
+      await riderRepository.deleteRider(
         Rider(id: 9999, firstName: 'Jane', lastName: 'Roe', isActive: true, lastUpdated: DateTime.now()),
       );
 
@@ -134,7 +134,7 @@ void main() {
 
       await rideRepository.updateRide(ride2, [.insert(rideId: ride2.id, riderId: john.id)]);
 
-      await repository.deleteRider(john);
+      await riderRepository.deleteRider(john);
 
       final attendees = await database.select(database.rideAttendees).get();
       expect(attendees, hasLength(1));
@@ -153,7 +153,7 @@ void main() {
         deviceRepository.addDevice(.insert(name: 'Watch', ownerId: john.id, deviceType: .watch)),
       ]);
 
-      await repository.deleteRider(john);
+      await riderRepository.deleteRider(john);
 
       expect(await deviceRepository.getAllDevices(), isEmpty);
     });
@@ -164,7 +164,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final john = await getAllRiders().then((riders) => riders.firstWhere((r) => r.firstName == 'John'));
 
-      expect(await repository.getAttendingCount(john.id), 0);
+      expect(await riderRepository.getAttendingCount(john.id), 0);
     });
 
     test('gets the attending count per rider', () async {
@@ -186,8 +186,8 @@ void main() {
       ]);
       await rideRepository.updateRide(rideTwo, [.insert(rideId: rideTwo.id, riderId: john.id)]);
 
-      expect(await repository.getAttendingCount(john.id), 2);
-      expect(await repository.getAttendingCount(jane.id), 1);
+      expect(await riderRepository.getAttendingCount(john.id), 2);
+      expect(await riderRepository.getAttendingCount(jane.id), 1);
     });
   });
 
@@ -237,7 +237,7 @@ void main() {
         rider(firstName: 'Alice', lastName: 'Jones'),
       ]);
 
-      final riders = await repository.getRiders(.active);
+      final riders = await riderRepository.getRiders(.active);
 
       expect(riders, hasLength(3));
 
@@ -266,7 +266,7 @@ void main() {
         rider(firstName: 'Janice', lastName: 'Smith', alias: 'J', isActive: false),
       ]);
 
-      final riders = await repository.getRiders(.inactive);
+      final riders = await riderRepository.getRiders(.inactive);
 
       expect(riders, hasLength(2));
       expect(riders[0].firstName, 'Alice');
@@ -286,7 +286,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final original = (await getAllRiders()).single;
 
-      await repository.setRiderActive(original, value: false);
+      await riderRepository.setRiderActive(original, value: false);
       final updated = (await getAllRiders()).single;
 
       expect(updated.isActive, isFalse);
@@ -296,7 +296,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe'), rider(firstName: 'Jane', lastName: 'Roe')]);
       final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
-      await repository.setRiderActive(john, value: false);
+      await riderRepository.setRiderActive(john, value: false);
 
       final updatedJane = (await getAllRiders()).firstWhere((r) => r.firstName == 'Jane');
       expect(updatedJane.isActive, isTrue);
@@ -311,7 +311,7 @@ void main() {
         lastUpdated: DateTime.now(),
       );
 
-      await repository.setRiderActive(fakeRider, value: false);
+      await riderRepository.setRiderActive(fakeRider, value: false);
 
       expect((await getAllRiders()), isEmpty);
     });
@@ -326,7 +326,7 @@ void main() {
 
       final riderId = (await getAllRiders()).single.id;
 
-      final updated = await repository.updateRider(
+      final updated = await riderRepository.updateRider(
         RidersCompanion(
           id: Value(riderId),
           firstName: const Value('Jane'),
@@ -354,7 +354,7 @@ void main() {
       final john = riders.firstWhere((r) => r.firstName == 'John');
       final jane = riders.firstWhere((r) => r.firstName == 'Jane');
 
-      final updated = await repository.updateRider(
+      final updated = await riderRepository.updateRider(
         RidersCompanion(
           id: Value(john.id),
           firstName: const Value('Johnny'),
@@ -377,7 +377,7 @@ void main() {
       await addRiders([rider(firstName: 'John', lastName: 'Doe')]);
       final john = (await getAllRiders()).single;
 
-      final updated = await repository.updateRider(
+      final updated = await riderRepository.updateRider(
         RidersCompanion(
           id: Value(john.id),
           firstName: const Value('John'),
@@ -402,7 +402,7 @@ void main() {
       final john = (await getAllRiders()).firstWhere((r) => r.firstName == 'John');
 
       expect(
-        () => repository.updateRider(
+        () => riderRepository.updateRider(
           RidersCompanion(
             id: Value(john.id),
             firstName: const Value('Jane'),

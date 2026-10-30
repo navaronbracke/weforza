@@ -22,7 +22,7 @@ final class ExportableRiderKey {
   }
 
   /// The alias of the [ExportableRider].
-  final String alias;
+  final String? alias;
 
   /// The first name of the [ExportableRider].
   final String firstName;

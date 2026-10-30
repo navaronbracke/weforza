@@ -23,7 +23,7 @@ final class ExportableRider implements Comparable<ExportableRider> {
        lastUpdated = lastUpdated.toUtc();
 
   /// The alias of the rider.
-  final String alias;
+  final String? alias;
 
   /// The names of the devices that this rider owns.
   final Set<String> devices;
@@ -77,23 +77,26 @@ final class ExportableRider implements Comparable<ExportableRider> {
       return lastNameComparison;
     }
 
+    final thisAlias = alias?.trim() ?? '';
+    final otherAlias = other.alias?.trim() ?? '';
+
     // Both aliases are empty, thus both are equal.
-    if (alias.isEmpty && other.alias.isEmpty) {
+    if (thisAlias.isEmpty && otherAlias.isEmpty) {
       return 0;
     }
 
     // This object has more priority based on its alias.
-    if (alias.isNotEmpty && other.alias.isEmpty) {
+    if (thisAlias.isNotEmpty && otherAlias.isEmpty) {
       return -1;
     }
 
     // This object has less priority based on its alias.
-    if (alias.isEmpty && other.alias.isNotEmpty) {
+    if (thisAlias.isEmpty && otherAlias.isNotEmpty) {
       return 1;
     }
 
     // Both have non-empty aliases, compare them.
-    final aliasComparison = alias.compareTo(other.alias);
+    final aliasComparison = thisAlias.compareTo(otherAlias);
 
     if (aliasComparison != 0) {
       return aliasComparison;

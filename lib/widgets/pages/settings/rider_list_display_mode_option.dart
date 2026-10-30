@@ -67,7 +67,7 @@ class _CupertinoRiderDisplayModeState extends State<_CupertinoRiderDisplayMode> 
   /// The map of options for the segmented control.
   /// This map preserves its insertion order,
   /// as that order is used to display the options.
-  Map<RiderListDisplayMode, String> _labels = <RiderListDisplayMode, String>{};
+  final Map<RiderListDisplayMode, String> _labels = <RiderListDisplayMode, String>{};
 
   /// The text painter that will measure the width of the widest label.
   final TextPainter _textPainter = TextPainter(maxLines: 1, textDirection: .ltr);
@@ -103,11 +103,12 @@ class _CupertinoRiderDisplayModeState extends State<_CupertinoRiderDisplayMode> 
     super.didChangeDependencies();
     final translator = S.of(context);
 
-    _labels = <RiderListDisplayMode, String>{
+    _labels.clear();
+    _labels.addAll(<RiderListDisplayMode, String>{
       .all: translator.all,
       .active: translator.active,
       .inactive: translator.inactive,
-    };
+    });
 
     _computeWidestLabelWidth(DefaultTextStyle.of(context).style);
   }

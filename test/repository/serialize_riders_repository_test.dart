@@ -902,7 +902,14 @@ void main() {
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
 
         final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
-        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+
+        expect(devices, hasLength(2));
+        expect(devices.first.name, 'Device 1');
+        expect(devices.first.deviceType, DeviceType.gps);
+        expect(devices.first.ownerId, updatedRiders.first.id);
+        expect(devices.last.name, 'Device 2');
+        expect(devices.last.deviceType, DeviceType.unknown);
+        expect(devices.last.ownerId, updatedRiders.first.id);
       });
 
       test('adds new devices and preserves exsting devices if update time is newer - with alias', () async {
@@ -946,7 +953,14 @@ void main() {
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
 
         final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
-        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+
+        expect(devices, hasLength(2));
+        expect(devices.first.name, 'Device 1');
+        expect(devices.first.deviceType, DeviceType.gps);
+        expect(devices.first.ownerId, updatedRiders.first.id);
+        expect(devices.last.name, 'Device 2');
+        expect(devices.last.deviceType, DeviceType.unknown);
+        expect(devices.last.ownerId, updatedRiders.first.id);
       });
 
       test('does not add devices if update time is older - no alias', () async {

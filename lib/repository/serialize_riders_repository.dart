@@ -1,9 +1,13 @@
 import 'package:drift/drift.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/database/devices.dart';
+import 'package:weforza/database/riders.dart';
 import 'package:weforza/model/export/exportable_rider.dart';
 import 'package:weforza/model/export/exportable_rider_key.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
+
+typedef _RiderUpdate = ({bool? isActive, Set<String> newDevices, DateTime lastUpdated});
 
 /// This class represents the repository that handles (de)serializing riders.
 class SerializeRidersRepository {
@@ -57,7 +61,7 @@ class SerializeRidersRepository {
   ///
   /// If the returned isActive is null, there is no change to the rider's active status.
   /// If the returned newDevices set is empty, there are no new devices for the rider.
-  Future<(Iterable<ExportableRider>, Map<int, ({bool? isActive, Set<String> newDevices})>)> _computeRiderImports(
+  Future<(Iterable<ExportableRider>, Map<int, _RiderUpdate>)> _computeRiderImports(
     Iterable<ExportableRider> exportedRiders,
   ) async {
     final (existingRiders, existingDevicesPerRider) = await (
@@ -70,9 +74,32 @@ class SerializeRidersRepository {
     };
 
     final List<ExportableRider> riderInserts = [];
-    final Map<int, ({bool? isActive, Set<String> newDevices})> riderUpdates = {};
+    final Map<int, _RiderUpdate> riderUpdates = {};
 
-    for (final newRider in exportedRiders) {
+    for (final exportedRider in exportedRiders) {
+      final String? alias = exportedRider.alias;
+
+      // TODO: refactor this to use the new validator instead
+      if (!Riders.nameAndAliasRegex.hasMatch(exportedRider.firstName) ||
+          !Riders.nameAndAliasRegex.hasMatch(exportedRider.lastName) ||
+          (alias != null && alias.isNotEmpty && !Riders.nameAndAliasRegex.hasMatch(alias))) {
+        continue;
+      }
+
+      final newRider = ExportableRider(
+        firstName: exportedRider.firstName,
+        lastName: exportedRider.lastName,
+        // TODO: move this into the rider validator
+        alias: alias == null || alias.trim().isEmpty ? null : alias,
+        isActive: exportedRider.isActive,
+        lastUpdated: exportedRider.lastUpdated,
+        devices: {
+          for (final device in exportedRider.devices)
+            // TODO: refactor this to use the new validator instead
+            if (device.trim().isNotEmpty && Devices.deviceNameRegex.hasMatch(device)) device,
+        },
+      );
+
       final Rider? existingRider = existingRidersByName[ExportableRiderKey.fromExportedRider(newRider)];
 
       if (existingRider == null) {
@@ -98,7 +125,7 @@ class SerializeRidersRepository {
         continue;
       }
 
-      riderUpdates[existingRider.id] = (isActive: isActive, newDevices: newDevices);
+      riderUpdates[existingRider.id] = (isActive: isActive, newDevices: newDevices, lastUpdated: newRider.lastUpdated);
     }
 
     return (riderInserts, riderUpdates);
@@ -108,15 +135,12 @@ class SerializeRidersRepository {
   ///
   /// New records are created for new riders and new devices.
   /// Existing riders are updated.
-  Future<void> _importRidersWithDevices(
-    Iterable<ExportableRider> riderInserts,
-    Map<int, ({bool? isActive, Set<String> newDevices})> riderUpdates,
-  ) async {
+  Future<void> _importRidersWithDevices(Iterable<ExportableRider> inserts, Map<int, _RiderUpdate> updates) async {
     final List<DevicesCompanion> newDevices = [];
     final List<RidersCompanion> updatedRiders = [];
 
     // Insert the new riders, record their ids and create pending inserts for their devices.
-    for (final rider in riderInserts) {
+    for (final rider in inserts) {
       final int riderId = await _database
           .into(_database.riders)
           .insert(
@@ -138,9 +162,15 @@ class SerializeRidersRepository {
     }
 
     // For each of the updated riders, queue their own update and queue their new devices for insertion.
-    for (final rider in riderUpdates.entries) {
-      if (rider.value.isActive case final bool isActive) {
-        updatedRiders.add(RidersCompanion(id: Value(rider.key), isActive: Value(isActive)));
+    for (final rider in updates.entries) {
+      if (rider.value.isActive != null || rider.value.newDevices.isNotEmpty) {
+        updatedRiders.add(
+          RidersCompanion(
+            id: Value(rider.key),
+            isActive: Value.absentIfNull(rider.value.isActive),
+            lastUpdated: Value(rider.value.lastUpdated.toLocal()),
+          ),
+        );
       }
 
       if (rider.value.newDevices.isEmpty) {

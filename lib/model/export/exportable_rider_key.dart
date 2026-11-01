@@ -15,14 +15,14 @@ final class ExportableRiderKey {
 
   factory fromExportedRider(ExportableRider exportedRider) {
     return ExportableRiderKey(
-      alias: exportedRider.alias,
+      alias: exportedRider.alias ?? '',
       firstName: exportedRider.firstName,
       lastName: exportedRider.lastName,
     );
   }
 
   /// The alias of the [ExportableRider].
-  final String alias;
+  final String? alias;
 
   /// The first name of the [ExportableRider].
   final String firstName;

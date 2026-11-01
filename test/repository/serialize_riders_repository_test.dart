@@ -321,4 +321,13 @@ void main() {
       });
     });
   });
+
+  group('saveExportableRiders', () {
+    test('does nothing if empty', () async {
+      await serializeRidersRepository.saveExportableRiders([]);
+
+      expect(await riderRepository.getRiders(.all), isEmpty);
+      expect(await deviceRepository.getAllDevicesGroupedByOwnerId(), isEmpty);
+    });
+  });
 }

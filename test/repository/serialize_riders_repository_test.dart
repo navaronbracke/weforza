@@ -24,6 +24,12 @@ void main() {
 
   tearDown(() => database.close());
 
+  Future<void> addDevices(Iterable<DevicesCompanion> devices) async {
+    for (final device in devices) {
+      await deviceRepository.addDevice(device);
+    }
+  }
+
   Future<void> addRiders(Iterable<RidersCompanion> riders) async {
     for (final rider in riders) {
       await riderRepository.addRider(rider);
@@ -65,12 +71,10 @@ void main() {
         final riders = await riderRepository.getRiders(.all);
         final rider = riders.first;
 
-        await deviceRepository.addDevice(
-          .insert(name: 'Device B', deviceType: .gps, ownerId: rider.id, creationDate: Value(DateTime(2000, 2, 3))),
-        );
-        await deviceRepository.addDevice(
-          .insert(name: 'Device A', deviceType: .phone, ownerId: rider.id, creationDate: Value(DateTime(2000, 2, 3))),
-        );
+        await addDevices([
+          .insert(name: 'Device B', deviceType: .gps, ownerId: rider.id),
+          .insert(name: 'Device A', deviceType: .phone, ownerId: rider.id),
+        ]);
 
         final exportableRiders = await serializeRidersRepository.getExportableRiders();
         expect(exportableRiders, hasLength(1));
@@ -258,8 +262,10 @@ void main() {
         for (final rider in riders) {
           const deviceNames = {'Foo', 'Bar'};
 
-          await deviceRepository.addDevice(.insert(deviceType: .gps, name: deviceNames.first, ownerId: rider.id));
-          await deviceRepository.addDevice(.insert(deviceType: .gps, name: deviceNames.last, ownerId: rider.id));
+          await addDevices([
+            .insert(deviceType: .gps, name: deviceNames.first, ownerId: rider.id),
+            .insert(deviceType: .gps, name: deviceNames.last, ownerId: rider.id),
+          ]);
         }
 
         final updatedRiders = await riderRepository.getRiders(.all);
@@ -653,7 +659,7 @@ void main() {
 
         final existingRider = await riderRepository.getRiders(.all).then((riders) => riders.first);
 
-        await deviceRepository.addDevice(.insert(ownerId: existingRider.id, name: 'Device1', deviceType: .gps));
+        await addDevices([.insert(ownerId: existingRider.id, name: 'Device1', deviceType: .gps)]);
 
         final riderAfterDeviceInsert = await riderRepository.getRiders(.all).then((riders) => riders.first);
 

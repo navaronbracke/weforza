@@ -24,10 +24,12 @@ void main() {
 
   tearDown(() => database.close());
 
-  Future<void> addRiders(Iterable<RidersCompanion> riders) async {
-    for (final rider in riders) {
-      await riderRepository.addRider(rider);
-    }
+  Future<void> addDevices(Iterable<DevicesCompanion> devices) {
+    return Future.wait([for (final device in devices) deviceRepository.addDevice(device)]);
+  }
+
+  Future<void> addRiders(Iterable<RidersCompanion> riders) {
+    return Future.wait([for (final rider in riders) riderRepository.addRider(rider)]);
   }
 
   group('getExportableRiders', () {
@@ -65,12 +67,10 @@ void main() {
         final riders = await riderRepository.getRiders(.all);
         final rider = riders.first;
 
-        await deviceRepository.addDevice(
-          .insert(name: 'Device B', deviceType: .gps, ownerId: rider.id, creationDate: Value(DateTime(2000, 2, 3))),
-        );
-        await deviceRepository.addDevice(
-          .insert(name: 'Device A', deviceType: .phone, ownerId: rider.id, creationDate: Value(DateTime(2000, 2, 3))),
-        );
+        await addDevices([
+          .insert(name: 'Device B', deviceType: .gps, ownerId: rider.id),
+          .insert(name: 'Device A', deviceType: .phone, ownerId: rider.id),
+        ]);
 
         final exportableRiders = await serializeRidersRepository.getExportableRiders();
         expect(exportableRiders, hasLength(1));
@@ -258,8 +258,10 @@ void main() {
         for (final rider in riders) {
           const deviceNames = {'Foo', 'Bar'};
 
-          await deviceRepository.addDevice(.insert(deviceType: .gps, name: deviceNames.first, ownerId: rider.id));
-          await deviceRepository.addDevice(.insert(deviceType: .gps, name: deviceNames.last, ownerId: rider.id));
+          await addDevices([
+            .insert(deviceType: .gps, name: deviceNames.first, ownerId: rider.id),
+            .insert(deviceType: .gps, name: deviceNames.last, ownerId: rider.id),
+          ]);
         }
 
         final updatedRiders = await riderRepository.getRiders(.all);
@@ -653,7 +655,7 @@ void main() {
 
         final existingRider = await riderRepository.getRiders(.all).then((riders) => riders.first);
 
-        await deviceRepository.addDevice(.insert(ownerId: existingRider.id, name: 'Device1', deviceType: .gps));
+        await addDevices([.insert(ownerId: existingRider.id, name: 'Device1', deviceType: .gps)]);
 
         final riderAfterDeviceInsert = await riderRepository.getRiders(.all).then((riders) => riders.first);
 
@@ -760,6 +762,7 @@ void main() {
         expect(updatedRiders, hasLength(1));
         expect(updatedRiders.first.firstName, 'John');
         expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, isNull);
         expect(updatedRiders.first.isActive, isTrue);
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
       });
@@ -791,6 +794,7 @@ void main() {
         expect(updatedRiders, hasLength(1));
         expect(updatedRiders.first.firstName, 'John');
         expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, 'JD');
         expect(updatedRiders.first.isActive, isTrue);
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
       });
@@ -821,6 +825,7 @@ void main() {
         expect(updatedRiders, hasLength(1));
         expect(updatedRiders.first.firstName, 'John');
         expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, isNull);
         expect(updatedRiders.first.isActive, isFalse);
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2024));
       });
@@ -855,6 +860,180 @@ void main() {
         expect(updatedRiders.first.alias, 'JD');
         expect(updatedRiders.first.isActive, isFalse);
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2024));
+      });
+
+      test('adds new devices and preserves exsting devices if update time is newer - no alias', () async {
+        await riderRepository.addRider(
+          .insert(
+            firstName: 'John',
+            lastName: 'Doe',
+            isActive: const Value(false),
+            lastUpdated: Value(DateTime.utc(2024)),
+          ),
+        );
+
+        final rider = (await riderRepository.getRiders(.all)).first;
+
+        await addDevices([.insert(deviceType: .gps, name: 'Device 1', ownerId: rider.id)]);
+
+        // Ensure that the update timestamp is deterministic.
+        await (database.update(
+          database.riders,
+        )..where((row) => row.id.equals(rider.id))).write(RidersCompanion(lastUpdated: Value(DateTime.utc(2024))));
+
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Device 2'},
+          ),
+        ]);
+
+        final updatedRiders = await riderRepository.getRiders(.all);
+
+        expect(updatedRiders, hasLength(1));
+        expect(updatedRiders.first.firstName, 'John');
+        expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, isNull);
+        expect(updatedRiders.first.isActive, isTrue);
+        expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
+
+        final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
+        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+      });
+
+      test('adds new devices and preserves exsting devices if update time is newer - with alias', () async {
+        await riderRepository.addRider(
+          .insert(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: const Value('JD'),
+            isActive: const Value(false),
+            lastUpdated: Value(DateTime.utc(2024)),
+          ),
+        );
+
+        final rider = (await riderRepository.getRiders(.all)).first;
+
+        await addDevices([.insert(deviceType: .gps, name: 'Device 1', ownerId: rider.id)]);
+
+        // Ensure that the update timestamp is deterministic.
+        await (database.update(
+          database.riders,
+        )..where((row) => row.id.equals(rider.id))).write(RidersCompanion(lastUpdated: Value(DateTime.utc(2024))));
+
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: 'JD',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Device 2'},
+          ),
+        ]);
+
+        final updatedRiders = await riderRepository.getRiders(.all);
+
+        expect(updatedRiders, hasLength(1));
+        expect(updatedRiders.first.firstName, 'John');
+        expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, 'JD');
+        expect(updatedRiders.first.isActive, isTrue);
+        expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
+
+        final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
+        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+      });
+
+      test('does not add devices if update time is older - no alias', () async {
+        await riderRepository.addRider(
+          .insert(
+            firstName: 'John',
+            lastName: 'Doe',
+            isActive: const Value(false),
+            lastUpdated: Value(DateTime.utc(2024)),
+          ),
+        );
+
+        final rider = (await riderRepository.getRiders(.all)).first;
+
+        await addDevices([.insert(deviceType: .gps, name: 'Device 1', ownerId: rider.id)]);
+
+        // Ensure that the update timestamp is deterministic.
+        await (database.update(
+          database.riders,
+        )..where((row) => row.id.equals(rider.id))).write(RidersCompanion(lastUpdated: Value(DateTime.utc(2024))));
+
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2023),
+            devices: const {'Device 2'},
+          ),
+        ]);
+
+        final updatedRiders = await riderRepository.getRiders(.all);
+
+        expect(updatedRiders, hasLength(1));
+        expect(updatedRiders.first.firstName, 'John');
+        expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, isNull);
+        expect(updatedRiders.first.isActive, isFalse);
+        expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2024));
+
+        final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
+        expect(devices, hasLength(1));
+      });
+
+      test('does not add devices if update time is older - with alias', () async {
+        await riderRepository.addRider(
+          .insert(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: const Value('JD'),
+            isActive: const Value(false),
+            lastUpdated: Value(DateTime.utc(2024)),
+          ),
+        );
+
+        final rider = (await riderRepository.getRiders(.all)).first;
+
+        await addDevices([.insert(deviceType: .gps, name: 'Device 1', ownerId: rider.id)]);
+
+        // Ensure that the update timestamp is deterministic.
+        await (database.update(
+          database.riders,
+        )..where((row) => row.id.equals(rider.id))).write(RidersCompanion(lastUpdated: Value(DateTime.utc(2024))));
+
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'John',
+            lastName: 'Doe',
+            alias: 'JD',
+            isActive: true,
+            lastUpdated: DateTime.utc(2023),
+            devices: const {'Device 2'},
+          ),
+        ]);
+
+        final updatedRiders = await riderRepository.getRiders(.all);
+
+        expect(updatedRiders, hasLength(1));
+        expect(updatedRiders.first.firstName, 'John');
+        expect(updatedRiders.first.lastName, 'Doe');
+        expect(updatedRiders.first.alias, 'JD');
+        expect(updatedRiders.first.isActive, isFalse);
+        expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2024));
+
+        final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
+        expect(devices, hasLength(1));
       });
     });
 

@@ -11,14 +11,6 @@ class Devices extends Table {
   /// The min/max length for the name of a device.
   static const ({int min, int max}) nameLength = (min: 1, max: 40);
 
-  /// The creation date of this device, in _**local time**_.
-  ///
-  /// Use [DateTime.toUtc] to convert the date back to UTC.
-  ///
-  /// This creation date is not indicative of the actual creation date
-  /// of the physical hardware item.
-  DateTimeColumn get creationDate => dateTime().withDefault(currentDateAndTime)();
-
   /// The type of this device.
   ///
   /// Since this is an enum, it is stored as a `TINYINT` in the database.

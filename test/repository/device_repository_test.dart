@@ -28,13 +28,8 @@ void main() {
     return Future.wait([for (final device in devices) deviceRepository.addDevice(device)]);
   }
 
-  DevicesCompanion deviceFor({
-    required String name,
-    required int ownerId,
-    DeviceType type = .phone,
-    DateTime? created,
-  }) {
-    return .insert(name: name, ownerId: ownerId, deviceType: type, creationDate: Value.absentIfNull(created));
+  DevicesCompanion deviceFor({required String name, required int ownerId, DeviceType type = .phone}) {
+    return .insert(name: name, ownerId: ownerId, deviceType: type);
   }
 
   Future<List<Device>> getAllDevices() => deviceRepository.getAllDevices();
@@ -219,9 +214,7 @@ void main() {
 
       final initialDevices = await getAllDevices();
       final lastUpdatedBeforeDelete = (await getRider(john.id)).lastUpdated;
-      await deviceRepository.deleteDevice(
-        Device(id: 999, creationDate: DateTime.now(), name: 'd', ownerId: john.id, deviceType: .phone),
-      );
+      await deviceRepository.deleteDevice(Device(id: 999, name: 'd', ownerId: john.id, deviceType: .phone));
       final finalDevices = await getAllDevices();
       expect(finalDevices, initialDevices);
 
@@ -262,7 +255,6 @@ void main() {
           name: const Value('Watch'),
           ownerId: Value(addedDevice.ownerId),
           deviceType: const Value(.watch),
-          creationDate: Value(addedDevice.creationDate),
         ),
       );
 
@@ -291,7 +283,6 @@ void main() {
             name: const Value('Pixel'),
             ownerId: Value(deviceToUpdate.ownerId),
             deviceType: const Value(.watch),
-            creationDate: Value(deviceToUpdate.creationDate),
           ),
         ),
         throwsA(isA<DeviceExistsException>()),

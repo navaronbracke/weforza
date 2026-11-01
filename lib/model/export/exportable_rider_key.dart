@@ -15,7 +15,7 @@ final class ExportableRiderKey {
 
   factory fromExportedRider(ExportableRider exportedRider) {
     return ExportableRiderKey(
-      alias: exportedRider.alias,
+      alias: exportedRider.alias ?? '',
       firstName: exportedRider.firstName,
       lastName: exportedRider.lastName,
     );

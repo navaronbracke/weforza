@@ -16,11 +16,7 @@ final class ExportableRider implements Comparable<ExportableRider> {
     required this.isActive,
     required this.lastName,
     required DateTime lastUpdated,
-  }) : assert(
-         firstName.isNotEmpty && lastName.isNotEmpty,
-         'The first name and last name of an exportable rider cannot be empty',
-       ),
-       lastUpdated = lastUpdated.toUtc();
+  }) : lastUpdated = lastUpdated.toUtc();
 
   /// The alias of the rider.
   final String? alias;

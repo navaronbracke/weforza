@@ -414,7 +414,6 @@ void main() {
         ]);
 
         final riders = await riderRepository.getRiders(.all);
-        final devices = await deviceRepository.getAllDevices();
 
         expect(riders, hasLength(1));
         expect(riders.first.firstName, 'John');
@@ -422,7 +421,7 @@ void main() {
         expect(riders.first.alias, 'J');
         expect(riders.first.isActive, isTrue);
         expect(riders.first.lastUpdated.isAfter(DateTime.utc(2024)), isTrue);
-        expect(devices, isEmpty);
+        expect(await deviceRepository.getAllDevices(), isEmpty);
       });
 
       test('saves rider with devices', () async {
@@ -902,7 +901,14 @@ void main() {
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
 
         final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
-        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+
+        expect(devices, hasLength(2));
+        expect(devices.first.name, 'Device 1');
+        expect(devices.first.deviceType, DeviceType.gps);
+        expect(devices.first.ownerId, updatedRiders.first.id);
+        expect(devices.last.name, 'Device 2');
+        expect(devices.last.deviceType, DeviceType.unknown);
+        expect(devices.last.ownerId, updatedRiders.first.id);
       });
 
       test('adds new devices and preserves exsting devices if update time is newer - with alias', () async {
@@ -946,7 +952,14 @@ void main() {
         expect(updatedRiders.first.lastUpdated.toUtc(), DateTime.utc(2025));
 
         final devices = await deviceRepository.getOwnerDevices(updatedRiders.first.id);
-        expect(devices.map((d) => d.name), containsAll(['Device 1', 'Device 2']));
+
+        expect(devices, hasLength(2));
+        expect(devices.first.name, 'Device 1');
+        expect(devices.first.deviceType, DeviceType.gps);
+        expect(devices.first.ownerId, updatedRiders.first.id);
+        expect(devices.last.name, 'Device 2');
+        expect(devices.last.deviceType, DeviceType.unknown);
+        expect(devices.last.ownerId, updatedRiders.first.id);
       });
 
       test('does not add devices if update time is older - no alias', () async {
@@ -1037,6 +1050,112 @@ void main() {
       });
     });
 
-    // TODO: the above tests for single rider, but with multiple riders
+    group('with multiple riders', () {
+      test('imports new riders with their own devices', () async {
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'Alice',
+            lastName: 'Doe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Alice device 1', 'Alice device 2'},
+          ),
+          ExportableRider(
+            firstName: 'Bob',
+            lastName: 'Roe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Bob device'},
+          ),
+        ]);
+
+        final riders = await riderRepository.getRiders(.all);
+        expect(riders, hasLength(2));
+
+        final alice = riders.singleWhere((rider) => rider.firstName == 'Alice');
+        final bob = riders.singleWhere((rider) => rider.firstName == 'Bob');
+
+        final (aliceDevices, bobDevices) = await (
+          deviceRepository.getOwnerDevices(alice.id),
+          deviceRepository.getOwnerDevices(bob.id),
+        ).wait;
+
+        expect(aliceDevices, hasLength(2));
+        expect(bobDevices, hasLength(1));
+        expect(aliceDevices.first.name, 'Alice device 1');
+        expect(aliceDevices.first.deviceType, DeviceType.unknown);
+        expect(aliceDevices.first.ownerId, alice.id);
+        expect(aliceDevices.last.name, 'Alice device 2');
+        expect(aliceDevices.last.deviceType, DeviceType.unknown);
+        expect(aliceDevices.last.ownerId, alice.id);
+        expect(bobDevices.first.name, 'Bob device');
+        expect(bobDevices.first.deviceType, DeviceType.unknown);
+        expect(bobDevices.first.ownerId, bob.id);
+      });
+
+      test('updates an existing rider while importing a new rider and their devices', () async {
+        await riderRepository.addRider(
+          .insert(
+            firstName: 'Alice',
+            lastName: 'Doe',
+            isActive: const Value(false),
+            lastUpdated: Value(DateTime.utc(2024)),
+          ),
+        );
+        final existingRider = (await riderRepository.getRiders(.all)).single;
+
+        await addDevices([.insert(deviceType: .gps, name: 'Existing device', ownerId: existingRider.id)]);
+
+        // Ensure that the update timestamp is deterministic.
+        await (database.update(database.riders)..where((row) => row.id.equals(existingRider.id))).write(
+          RidersCompanion(lastUpdated: Value(DateTime.utc(2024))),
+        );
+
+        await serializeRidersRepository.saveExportableRiders([
+          ExportableRider(
+            firstName: 'Alice',
+            lastName: 'Doe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Existing device', 'New device'},
+          ),
+          ExportableRider(
+            firstName: 'Bob',
+            lastName: 'Roe',
+            alias: 'B',
+            isActive: true,
+            lastUpdated: DateTime.utc(2025),
+            devices: const {'Bob device'},
+          ),
+        ]);
+
+        final riders = await riderRepository.getRiders(.all);
+        expect(riders, hasLength(2));
+
+        final alice = riders.singleWhere((rider) => rider.firstName == 'Alice');
+
+        expect(alice.isActive, isTrue);
+        expect(alice.lastUpdated.toUtc(), DateTime.utc(2025));
+
+        expect(await deviceRepository.getOwnerDevices(alice.id).then((devices) => devices.map((d) => d.name)), {
+          'Existing device',
+          'New device',
+        });
+
+        final bob = riders.singleWhere((rider) => rider.firstName == 'Bob');
+
+        expect(bob.firstName, 'Bob');
+        expect(bob.lastName, 'Roe');
+        expect(bob.isActive, isTrue);
+        expect(bob.alias, 'B');
+        expect(bob.lastUpdated.isAfter(DateTime.utc(2025)), isTrue);
+        expect(await deviceRepository.getOwnerDevices(bob.id).then((devices) => devices.map((d) => d.name)), {
+          'Bob device',
+        });
+      });
+    });
   });
 }

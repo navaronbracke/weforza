@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
+import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/model/export/exportable_rider.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
@@ -120,6 +121,12 @@ void main() {
       test('without devices, sorted on rider first name, last name and alias', () async {
         await addRiders([
           .insert(
+            firstName: 'Alice',
+            lastName: 'Roe',
+            isActive: const Value(true),
+            lastUpdated: Value(DateTime.utc(2000, 2, 3)),
+          ),
+          .insert(
             firstName: 'John',
             lastName: 'Doe',
             alias: const Value('J'),
@@ -158,6 +165,14 @@ void main() {
           ExportableRider(
             firstName: 'Alice',
             lastName: 'Doe',
+            alias: '',
+            isActive: true,
+            lastUpdated: DateTime.utc(2000, 2, 3),
+            devices: const {},
+          ),
+          ExportableRider(
+            firstName: 'Alice',
+            lastName: 'Roe',
             alias: '',
             isActive: true,
             lastUpdated: DateTime.utc(2000, 2, 3),

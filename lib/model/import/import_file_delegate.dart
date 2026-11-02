@@ -1,6 +1,7 @@
-import 'package:file/file.dart' as fs;
+/// @docImport 'package:weforza/exceptions/unsupported_file_format_exception.dart';
+library;
 
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:file/file.dart' as fs;
 
 /// This interface defines a delegate for picking a file to import data from.
 abstract interface class ImportFileDelegate {

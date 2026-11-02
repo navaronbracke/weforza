@@ -3,7 +3,7 @@ library;
 
 import 'package:flutter/foundation.dart' show ValueNotifier, ValueListenable;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/bluetooth_device_scan_exception.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 
 /// This class represents a state machine for the [RideAttendeeScanningDelegate].
@@ -40,11 +40,11 @@ class RideAttendeeScanningDelegateStateMachine {
     _notifier.value = AsyncError(error, .current);
   }
 
-  /// Add a [SaveScanResultsException] to the state machine.
-  void setSaveScanResultsError() => _setError(SaveScanResultsException());
+  /// Add a [SaveBluetoothDeviceScanResultsException] to the state machine.
+  void setSaveScanResultsError() => _setError(SaveBluetoothDeviceScanResultsException());
 
-  /// Add a [StartScanException] to the state machine.
-  void setStartScanError() => _setError(StartScanException());
+  /// Add a [StartBluetoothDeviceScanException] to the state machine.
+  void setStartScanError() => _setError(StartBluetoothDeviceScanException());
 
   /// Dispose of this state machine.
   void dispose() {

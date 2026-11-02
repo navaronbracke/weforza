@@ -3,7 +3,7 @@ import 'package:weforza/database/database.dart';
 mixin RiderComparator {
   /// Compare [rider] against [other].
   ///
-  /// The [Rider] model cannot yet implement [Comparable] directly, since it is a generated class.
+  /// The [Rider] model cannot implement [Comparable] directly, since it is a generated class.
   int compareRiders(Rider rider, Rider other) {
     final int deltaFirstName = rider.firstName.compareTo(other.firstName);
 

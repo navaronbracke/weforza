@@ -1,11 +1,11 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' show Value;
 import 'package:weforza/database/database.dart';
-import 'package:weforza/database/devices.dart';
-import 'package:weforza/database/riders.dart';
 import 'package:weforza/model/export/exportable_rider.dart';
 import 'package:weforza/model/export/exportable_rider_key.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';
+import 'package:weforza/validation/device_validator.dart';
+import 'package:weforza/validation/rider_validator.dart';
 
 typedef _RiderUpdate = ({bool? isActive, Set<String> newDevices, DateTime lastUpdated});
 
@@ -79,24 +79,25 @@ class SerializeRidersRepository {
     for (final exportedRider in exportedRiders) {
       final String? alias = exportedRider.alias;
 
-      // TODO: refactor this to use the new validator instead
-      if (!Riders.nameAndAliasRegex.hasMatch(exportedRider.firstName) ||
-          !Riders.nameAndAliasRegex.hasMatch(exportedRider.lastName) ||
-          (alias != null && alias.isNotEmpty && !Riders.nameAndAliasRegex.hasMatch(alias))) {
+      final bool isValidRider = RiderValidator.isValidRiderName(
+        firstName: exportedRider.firstName,
+        lastName: exportedRider.lastName,
+        alias: alias,
+      );
+
+      if (!isValidRider) {
         continue;
       }
 
       final newRider = ExportableRider(
         firstName: exportedRider.firstName,
         lastName: exportedRider.lastName,
-        // TODO: move this into the rider validator
         alias: alias == null || alias.trim().isEmpty ? null : alias,
         isActive: exportedRider.isActive,
         lastUpdated: exportedRider.lastUpdated,
         devices: {
           for (final device in exportedRider.devices)
-            // TODO: refactor this to use the new validator instead
-            if (device.trim().isNotEmpty && Devices.deviceNameRegex.hasMatch(device)) device,
+            if (DeviceValidator.validateDeviceName(device) == null) device,
         },
       );
 

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/devices.dart';
-import 'package:weforza/exceptions/device_validation_exception.dart';
+import 'package:weforza/exceptions/device_exists_exception.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device/device_form_delegate.dart';
 import 'package:weforza/model/device/device_type.dart';
-import 'package:weforza/model/device/device_validator.dart';
 import 'package:weforza/riverpod/rider/selected_rider_devices_provider.dart';
+import 'package:weforza/validation/device_validator.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -30,7 +30,7 @@ class DeviceForm extends ConsumerStatefulWidget {
   DeviceFormState createState() => DeviceFormState();
 }
 
-class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
+class DeviceFormState extends ConsumerState<DeviceForm> {
   final _deviceNameKey = GlobalKey<FormFieldState<String>>();
 
   late final TextEditingController _deviceNameController;
@@ -165,13 +165,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         autocorrect: false,
         controller: _deviceNameController,
         onChanged: _resetSubmit,
-        validator: (value) => validateDeviceName(
-          value: value,
-          requiredMessage: translator.deviceNameRequired,
-          maxLengthMessage: translator.deviceNameMaxLength(Devices.nameLength.max),
-          illegalCharachterMessage: translator.deviceNameCannotContainComma,
-          isBlankMessage: translator.deviceNameBlank,
-        ),
+        validator: (value) => DeviceValidator.validateDeviceNameWithErrorMessage(translator, value),
         decoration: InputDecoration(
           contentPadding: const .symmetric(horizontal: 4),
           labelText: translator.deviceName,
@@ -189,13 +183,7 @@ class DeviceFormState extends ConsumerState<DeviceForm> with DeviceValidator {
         textInputAction: .done,
         maxLength: Devices.nameLength.max,
         onChanged: _resetSubmit,
-        validator: (value) => validateDeviceName(
-          value: value,
-          requiredMessage: translator.deviceNameRequired,
-          maxLengthMessage: translator.deviceNameMaxLength(Devices.nameLength.max),
-          illegalCharachterMessage: translator.deviceNameCannotContainComma,
-          isBlankMessage: translator.deviceNameBlank,
-        ),
+        validator: (value) => DeviceValidator.validateDeviceNameWithErrorMessage(translator, value),
       ),
     );
   }

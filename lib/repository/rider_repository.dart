@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/exceptions/rider_validation_exception.dart';
+import 'package:weforza/exceptions/rider_exists_exception.dart';
 import 'package:weforza/model/rider/rider_list_display_mode.dart';
 
 /// This class provides an API to work with riders.

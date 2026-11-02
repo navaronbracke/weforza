@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/exceptions/device_validation_exception.dart';
+import 'package:weforza/exceptions/device_exists_exception.dart';
 
 class DeviceRepository {
   const new(this._database);

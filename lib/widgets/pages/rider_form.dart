@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/riders.dart';
-import 'package:weforza/exceptions/rider_validation_exception.dart';
+import 'package:weforza/exceptions/rider_exists_exception.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/image/profile_image_picker_delegate.dart';
 import 'package:weforza/model/rider/rider_form_delegate.dart';
-import 'package:weforza/model/rider/rider_validator.dart';
 import 'package:weforza/riverpod/file/file_system_provider.dart';
 import 'package:weforza/riverpod/image_picker_delegate_provider.dart';
 import 'package:weforza/riverpod/repository/rider_repository_provider.dart';
 import 'package:weforza/riverpod/rider/rider_list_provider.dart';
 import 'package:weforza/riverpod/rider/selected_rider_provider.dart';
+import 'package:weforza/validation/rider_validator.dart';
 import 'package:weforza/widgets/common/focus_absorber.dart';
 import 'package:weforza/widgets/common/form_submit_button.dart';
 import 'package:weforza/widgets/common/generic_error.dart';
@@ -33,7 +33,7 @@ class RiderForm extends ConsumerStatefulWidget {
   ConsumerState<RiderForm> createState() => _RiderFormState();
 }
 
-class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
+class _RiderFormState extends ConsumerState<RiderForm> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _firstNameController;
@@ -138,11 +138,11 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   }
 
   Widget _buildAndroidLayout(BuildContext context) {
-    final strings = S.of(context);
+    final translator = S.of(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text(widget.rider == null ? strings.newRider : strings.editRider)),
+      appBar: AppBar(title: Text(widget.rider == null ? translator.newRider : translator.editRider)),
       body: Form(
         key: _formKey,
         child: FocusAbsorber(
@@ -173,7 +173,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         textInputAction: .next,
                         decoration: InputDecoration(
                           contentPadding: const .all(8),
-                          labelText: strings.firstName,
+                          labelText: translator.firstName,
                           // Prevent popping during validation.
                           helperText: ' ',
                         ),
@@ -181,13 +181,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         autocorrect: false,
                         keyboardType: .text,
                         onChanged: _resetSubmit,
-                        validator: (value) => validateFirstOrLastName(
-                          value: value,
-                          requiredMessage: strings.firstNameRequired,
-                          maxLengthMessage: strings.firstNameMaxLength(Riders.nameAndAliasLength.max),
-                          illegalCharachterMessage: strings.firstNameIllegalCharacters,
-                          isBlankMessage: strings.firstNameBlank,
-                        ),
+                        validator: (value) => RiderValidator.validateFirstNameWithErrorMessage(translator, value),
                         autovalidateMode: .onUserInteraction,
                       ),
                     ),
@@ -199,7 +193,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         textInputAction: .next,
                         decoration: InputDecoration(
                           contentPadding: const .all(8),
-                          labelText: strings.lastName,
+                          labelText: translator.lastName,
                           // Prevent popping during validation.
                           helperText: ' ',
                         ),
@@ -207,13 +201,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                         autocorrect: false,
                         keyboardType: .text,
                         onChanged: _resetSubmit,
-                        validator: (value) => validateFirstOrLastName(
-                          value: value,
-                          requiredMessage: strings.lastNameRequired,
-                          maxLengthMessage: strings.lastNameMaxLength(Riders.nameAndAliasLength.max),
-                          illegalCharachterMessage: strings.lastNameIllegalCharacters,
-                          isBlankMessage: strings.lastNameBlank,
-                        ),
+                        validator: (value) => RiderValidator.validateLastNameWithErrorMessage(translator, value),
                         autovalidateMode: .onUserInteraction,
                       ),
                     ),
@@ -222,7 +210,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       textInputAction: .done,
                       decoration: InputDecoration(
                         contentPadding: const .all(8),
-                        labelText: strings.alias,
+                        labelText: translator.alias,
                         // Prevent popping during validation.
                         helperText: ' ',
                       ),
@@ -230,12 +218,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                       autocorrect: false,
                       keyboardType: .text,
                       onChanged: _resetSubmit,
-                      validator: (value) => validateAlias(
-                        value: value,
-                        maxLengthMessage: strings.aliasMaxLength(Riders.nameAndAliasLength.max),
-                        illegalCharachterMessage: strings.aliasIllegalCharacters,
-                        isBlankMessage: strings.aliasBlank,
-                      ),
+                      validator: (value) => RiderValidator.validateAliasWithErrorMessage(translator, value),
                       autovalidateMode: .onUserInteraction,
                       onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                     ),
@@ -254,7 +237,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
   }
 
   Widget _buildIosLayout(BuildContext context) {
-    final strings = S.of(context);
+    final translator = S.of(context);
 
     final backgroundColor = CupertinoDynamicColor.resolve(CupertinoColors.systemGroupedBackground, context);
 
@@ -263,7 +246,7 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: backgroundColor,
         border: null,
-        middle: Text(widget.rider == null ? strings.newRider : strings.editRider),
+        middle: Text(widget.rider == null ? translator.newRider : translator.editRider),
         transitionBetweenRoutes: false,
       ),
       child: SafeArea(
@@ -300,16 +283,10 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           textInputAction: .next,
                           controller: _firstNameController,
                           maxLength: Riders.nameAndAliasLength.max,
-                          placeholder: strings.firstName,
+                          placeholder: translator.firstName,
                           keyboardType: .text,
                           onChanged: _resetSubmit,
-                          validator: (value) => validateFirstOrLastName(
-                            value: value,
-                            requiredMessage: strings.firstNameRequired,
-                            maxLengthMessage: strings.firstNameMaxLength(Riders.nameAndAliasLength.max),
-                            illegalCharachterMessage: strings.firstNameIllegalCharacters,
-                            isBlankMessage: strings.firstNameBlank,
-                          ),
+                          validator: (value) => RiderValidator.validateFirstNameWithErrorMessage(translator, value),
                         ),
                         CupertinoTextFormFieldRow(
                           autovalidateMode: .onUserInteraction,
@@ -318,16 +295,10 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           textInputAction: .next,
                           controller: _lastNameController,
                           maxLength: Riders.nameAndAliasLength.max,
-                          placeholder: strings.lastName,
+                          placeholder: translator.lastName,
                           keyboardType: .text,
                           onChanged: _resetSubmit,
-                          validator: (value) => validateFirstOrLastName(
-                            value: value,
-                            requiredMessage: strings.lastNameRequired,
-                            maxLengthMessage: strings.lastNameMaxLength(Riders.nameAndAliasLength.max),
-                            illegalCharachterMessage: strings.lastNameIllegalCharacters,
-                            isBlankMessage: strings.lastNameBlank,
-                          ),
+                          validator: (value) => RiderValidator.validateLastNameWithErrorMessage(translator, value),
                         ),
                         CupertinoTextFormFieldRow(
                           autovalidateMode: .onUserInteraction,
@@ -336,14 +307,9 @@ class _RiderFormState extends ConsumerState<RiderForm> with RiderValidator {
                           controller: _aliasController,
                           keyboardType: .text,
                           maxLength: Riders.nameAndAliasLength.max,
-                          placeholder: strings.alias,
+                          placeholder: translator.alias,
                           onChanged: _resetSubmit,
-                          validator: (value) => validateAlias(
-                            value: value,
-                            maxLengthMessage: strings.aliasMaxLength(Riders.nameAndAliasLength.max),
-                            illegalCharachterMessage: strings.aliasIllegalCharacters,
-                            isBlankMessage: strings.aliasBlank,
-                          ),
+                          validator: (value) => RiderValidator.validateAliasWithErrorMessage(translator, value),
                           onFieldSubmitted: (value) => _aliasFocusNode.unfocus(),
                         ),
                         Padding(padding: const .only(top: 8), child: _buildSubmitButton(context)),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/devices.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/device_validation_exception.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/device/device_form_delegate.dart';
 import 'package:weforza/model/device/device_type.dart';

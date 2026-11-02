@@ -1,6 +1,6 @@
 import 'package:file/file.dart' as fs;
 import 'package:file_picker/file_picker.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/unsupported_file_format_exception.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/import/import_file_delegate.dart';
 

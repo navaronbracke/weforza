@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/external_storage_permission_denied_exception.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/export/export_delegate.dart';
 import 'package:weforza/widgets/common/export_file_format_selection.dart';

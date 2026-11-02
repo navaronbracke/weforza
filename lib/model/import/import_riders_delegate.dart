@@ -1,7 +1,8 @@
 import 'package:file/file.dart' as fs;
 import 'package:flutter/foundation.dart' show ValueListenable, ValueNotifier;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/file_required_exception.dart';
+import 'package:weforza/exceptions/unsupported_file_format_exception.dart';
 import 'package:weforza/file/import_riders_csv_reader.dart';
 import 'package:weforza/file/import_riders_file_reader.dart';
 import 'package:weforza/file/import_riders_json_reader.dart';

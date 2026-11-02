@@ -4,7 +4,7 @@ import 'package:file/file.dart' as fs;
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/external_storage_permission_denied_exception.dart';
 import 'package:weforza/file/file_system.dart';
 import 'package:weforza/model/async_computation_delegate.dart';
 import 'package:weforza/model/export/export_file_format.dart';

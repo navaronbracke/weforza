@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' hide isNotNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weforza/database/database.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/device_validation_exception.dart';
 import 'package:weforza/model/device/device_type.dart';
 import 'package:weforza/repository/device_repository.dart';
 import 'package:weforza/repository/rider_repository.dart';

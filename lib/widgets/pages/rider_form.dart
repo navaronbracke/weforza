@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/riders.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/rider_validation_exception.dart';
 import 'package:weforza/file/file_uri_parser.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/image/profile_image_picker_delegate.dart';

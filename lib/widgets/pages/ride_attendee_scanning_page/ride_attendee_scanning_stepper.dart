@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:weforza/exceptions/exceptions.dart';
+import 'package:weforza/exceptions/bluetooth_device_scan_exception.dart';
 import 'package:weforza/generated/l10n.dart';
 import 'package:weforza/model/ride_attendee_scanning/ride_attendee_scanning_state.dart';
 
@@ -21,11 +21,11 @@ class RideAttendeeScanningStepper extends StatelessWidget {
       valueListenable: listenable,
       builder: (context, state, _) {
         if (state case AsyncError(:final error)) {
-          if (error is SaveScanResultsException) {
+          if (error is SaveBluetoothDeviceScanResultsException) {
             return Text(translator.results);
           }
 
-          if (error is StartScanException) {
+          if (error is StartBluetoothDeviceScanException) {
             return Text(translator.scan);
           }
         }

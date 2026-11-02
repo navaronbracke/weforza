@@ -19,8 +19,12 @@ final class RiderValidator {
   /// Returns null if the [value] is valid.
   /// Returns an appropriate [RiderNameValidationException] if the [value] is invalid.
   static RiderNameValidationException? validateAlias(String? value) {
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
     // Only the empty string is a valid blank value.
-    if (value == null || value.isNotEmpty && value.trim().isEmpty) {
+    if (value.trim().isEmpty) {
       return const RiderNameIsBlankException();
     }
 
@@ -28,7 +32,7 @@ final class RiderValidator {
       return const RiderNameTooLongException();
     }
 
-    if (value.isEmpty || Riders.nameAndAliasRegex.hasMatch(value)) {
+    if (Riders.nameAndAliasRegex.hasMatch(value)) {
       return null;
     }
 

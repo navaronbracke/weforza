@@ -23,7 +23,7 @@ class UnresolvedOwnersList extends StatefulWidget {
   State<UnresolvedOwnersList> createState() => _UnresolvedOwnersListState();
 }
 
-class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> {
+class _UnresolvedOwnersListState extends State<UnresolvedOwnersList> with RiderComparator {
   Future<List<Rider>>? _future;
 
   /// Filter out the owners that have already been scanned

@@ -30,7 +30,7 @@ class ManualSelectionList extends StatefulWidget {
   State<ManualSelectionList> createState() => _ManualSelectionListState();
 }
 
-class _ManualSelectionListState extends State<ManualSelectionList> {
+class _ManualSelectionListState extends State<ManualSelectionList> with RiderComparator {
   Future<List<Rider>>? _activeRidersFuture;
 
   final _filtersController = ManualSelectionFilterDelegate();

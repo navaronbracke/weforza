@@ -1,6 +1,6 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:drift/drift.dart' show InsertMode, Value;
+import 'package:drift/drift.dart' show Value;
 import 'package:file/file.dart';
 import 'package:file/local.dart';
 
@@ -100,7 +100,65 @@ final class DatabaseMigrator {
   }
 
   Future<void> _writeRecords(WeForzaDatabase database, _ExtractedData data) {
-    return database.transaction(() async {});
+    return database.transaction(() async {
+      final Map<String, int> riderIds = {};
+
+      for (final rider in data.riders.values) {
+        riderIds[rider.uuid] = await database
+            .into(database.riders)
+            .insert(
+              RidersCompanion.insert(
+                alias: Value(rider.alias),
+                firstName: rider.firstName,
+                isActive: Value(rider.active),
+                lastName: rider.lastName,
+                profileImageUri: Value(rider.profileImage),
+              ),
+            );
+      }
+
+      final Map<DateTime, int> rideIds = {};
+
+      for (final ride in data.rides.values) {
+        rideIds[ride.date] = await database
+            .into(database.rides)
+            .insert(RidesCompanion.insert(date: ride.date, scannedAttendees: Value(ride.scannedAttendees)));
+      }
+
+      for (final device in data.devices.values) {
+        final int? ownerId = riderIds[device.ownerId];
+
+        if (ownerId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.devices)
+            .insert(DevicesCompanion.insert(deviceType: device.type, name: device.name, ownerId: ownerId));
+      }
+
+      for (final attendee in data.rideAttendees.values) {
+        final int? riderId = riderIds[attendee.uuid];
+        final int? rideId = rideIds[attendee.rideDate];
+
+        if (riderId == null || rideId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.rideAttendees)
+            .insert(
+              RideAttendeesCompanion.insert(isScanned: Value(attendee.isScanned), rideId: rideId, riderId: riderId),
+              mode: .insertOrIgnore,
+            );
+      }
+
+      for (final term in data.excludedTermsFilter) {
+        await database
+            .into(database.excludedTerms)
+            .insert(ExcludedTermsCompanion.insert(term: term), mode: .insertOrIgnore);
+      }
+    });
   }
 
   bool _isValidDatabaseVersion(String line) {

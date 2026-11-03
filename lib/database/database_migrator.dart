@@ -1,6 +1,3 @@
-/// @docImport 'package:weforza/database/sembast/database_tables.dart';
-library;
-
 import 'dart:convert' show jsonDecode;
 
 import 'package:file/file.dart';
@@ -19,14 +16,10 @@ import 'package:weforza/model/device/device_type.dart';
 /// Subsequent lines are individual records, as individual JSON objects.
 ///
 /// Each record line has a `key`, corresponding to the key of the record.
-/// See [DatabaseTables], which defines that each key is a [String], per `stringMapStoreFactory`.
 ///
 /// For example `{"key":"2026-10-17T00:00:00.000","store":"ride","value":{"scannedAttendees":null}}`
 final class DatabaseMigrator {
-  DatabaseMigrator({
-    this._fileSystem = const LocalFileSystem(),
-    this._getDatabaseDirectory = _getApplicationSupportDirectory,
-  });
+  new({this._fileSystem = const LocalFileSystem(), this._getDatabaseDirectory = _getApplicationSupportDirectory});
 
   /// The name of the old database file.
   static const String oldDatabaseName = 'weforza_database.db';
@@ -134,7 +127,6 @@ final class DatabaseMigrator {
             'alias': final String? alias,
             'firstname': final String firstName,
             'lastname': final String lastName,
-            'lastUpdated': final String lastUpdated,
             'profile': final String? profileImage,
           },
         }) {
@@ -144,7 +136,6 @@ final class DatabaseMigrator {
               alias: alias ?? '',
               firstName: firstName,
               lastName: lastName,
-              lastUpdated: DateTime.parse(lastUpdated),
               profileImage: profileImage != null ? Uri.tryParse(profileImage) : null,
               uuid: uuid,
             ),
@@ -155,14 +146,13 @@ final class DatabaseMigrator {
 
         if (parsedLine case {
           'store': 'device',
-          'key': final String creationTimestamp,
+          'key': final String _,
           'value': {'deviceName': final String deviceName, 'owner': final String ownerUuid, 'type': final num? type},
         }) {
           final int? typeIndex = type?.toInt();
 
           extractedDevices.add(
             _ExtractedDevice(
-              creationDate: DateTime.parse(creationTimestamp),
               name: deviceName,
               ownerId: ownerUuid,
               type: typeIndex != null && typeIndex >= 0 && typeIndex < DeviceType.values.length
@@ -214,7 +204,7 @@ final class DatabaseMigrator {
 }
 
 final class _ExtractedData {
-  _ExtractedData({
+  new({
     required this.rides,
     required this.riders,
     required this.devices,
@@ -230,13 +220,7 @@ final class _ExtractedData {
 }
 
 final class _ExtractedDevice {
-  _ExtractedDevice({required this.creationDate, required this.name, required this.ownerId, required this.type});
-
-  /// The creation date of this device.
-  /// This creation date is not indicative of the actual creation date
-  /// of the physical hardware item.
-  /// It is only used internally as the key for the device record.
-  final DateTime creationDate;
+  new({required this.name, required this.ownerId, required this.type});
 
   /// The human-readable name of the device.
   final String name;
@@ -249,7 +233,7 @@ final class _ExtractedDevice {
 }
 
 final class _ExtractedRide {
-  _ExtractedRide({required this.date, required this.scannedAttendees});
+  new({required this.date, required this.scannedAttendees});
 
   /// The date on which this ride occurs in the calendar.
   final DateTime date;
@@ -261,7 +245,7 @@ final class _ExtractedRide {
 }
 
 final class _ExtractedRideAttendee {
-  _ExtractedRideAttendee({required this.isScanned, required this.rideDate, required this.uuid});
+  new({required this.isScanned, required this.rideDate, required this.uuid});
 
   /// Whether the attendee was scanned.
   ///
@@ -276,12 +260,11 @@ final class _ExtractedRideAttendee {
 }
 
 final class _ExtractedRider {
-  _ExtractedRider({
+  new({
     required this.active,
     required this.alias,
     required this.firstName,
     required this.lastName,
-    required this.lastUpdated,
     required this.profileImage,
     required this.uuid,
   });
@@ -290,16 +273,13 @@ final class _ExtractedRider {
   final bool active;
 
   /// The rider's alias.
-  final String alias;
+  final String? alias;
 
   /// The rider's first name.
   final String firstName;
 
   /// The rider's last name.
   final String lastName;
-
-  /// The last time that this rider was updated.
-  final DateTime lastUpdated;
 
   /// The [Uri] to the rider's profile image.
   final Uri? profileImage;

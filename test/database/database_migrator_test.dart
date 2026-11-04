@@ -196,4 +196,120 @@ void main() {
       expect(oldDatabaseFile.existsSync(), isFalse);
     });
   });
+
+  group('record validation', () {
+    test('migrator ignores invalid store names in records', () async {
+      await writeLinesToOldDatabaseFile([
+        '{"version":1,"sembast":1}',
+        '{"key":"2026-10-17T00:00:00.000","store":"foo","value":{"scannedAttendees":null}}',
+      ]);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('migrator ignores records without a key', () async {
+      await writeLinesToOldDatabaseFile([
+        '{"version":1,"sembast":1}',
+        '{"store":"ride","value":{"scannedAttendees":null}}',
+        '{"store":"member","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","lastUpdated":"2026-10-18 10:02:02.78","profile":null}}',
+        '{"store":"device","value":{"deviceName":"device1","owner":"59954196-d883-4477-b612-0f3e12693388","type":0}}',
+        '{"store":"rideAttendee","value":{"attendee":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","date":"2026-10-24T00:00:00.000","isScanned":false}}',
+      ]);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('migrator ignores records without a store name', () async {
+      await writeLinesToOldDatabaseFile([
+        '{"version":1,"sembast":1}',
+        '{"key":"2026-10-17T00:00:00.000","value":{"scannedAttendees":null}}',
+        '{"key":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","lastUpdated":"2026-10-18 10:02:02.78","profile":null}}',
+        '{"key":"2026-10-17T19:42:10.794028","value":{"deviceName":"device1","owner":"59954196-d883-4477-b612-0f3e12693388","type":0}}',
+        '{"key":"2026-10-24T00:00:00.0002fe1252a-63b3-4e90-b269-3c4d3a154da2","value":{"attendee":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","date":"2026-10-24T00:00:00.000","isScanned":false}}',
+      ]);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('migrator ignores records without a record value', () async {
+      await writeLinesToOldDatabaseFile([
+        '{"version":1,"sembast":1}',
+        '{"key":"2026-10-17T00:00:00.000","store":"ride"}',
+        '{"key":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","store":"member"}',
+        '{"key":"2026-10-17T19:42:10.794028","store":"device"}',
+        '{"key":"2026-10-24T00:00:00.0002fe1252a-63b3-4e90-b269-3c4d3a154da2","store":"rideAttendee"}',
+      ]);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('migrator ignores deleted records', () async {
+      await writeLinesToOldDatabaseFile([
+        '{"version":1,"sembast":1}',
+        '{"key":"2026-10-18T10:01:40.029397","deleted":true,"store":"ride"}',
+        '{"key":"2026-10-18T10:01:40.029397","deleted":true,"store":"member"}',
+        '{"key":"2026-10-18T10:01:40.029397","deleted":true,"store":"device"}',
+        '{"key":"2026-10-18T10:01:40.029397","deleted":true,"store":"rideAttendee"}',
+      ]);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    group('ride records', () {
+      test('ignores ride record with invalid timestamp key', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"","store":"ride","value":{"scannedAttendees":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores ride record with invalid value', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"2026-10-17T00:00:00.000","store":"ride","value":{"scannedAttendees":""}}',
+          '{"key":"2026-10-17T00:00:00.001","store":"ride","value":1}',
+          '{"key":"2026-10-17T00:00:00.002","store":"ride","value":{"scannedAttendees":-1}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+    });
+  });
 }

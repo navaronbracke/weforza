@@ -232,10 +232,17 @@ final class DatabaseMigrator {
           'key': final String timestamp,
           'value': {'scannedAttendees': final num? scannedAttendees},
         }) {
-          extractedRides[timestamp] = _ExtractedRide(
-            date: DateTime.parse(timestamp),
-            scannedAttendees: scannedAttendees?.toInt(),
-          );
+          if (scannedAttendees != null && (!scannedAttendees.isFinite || scannedAttendees < 0)) {
+            continue;
+          }
+
+          final DateTime? date = DateTime.tryParse(timestamp);
+
+          if (date == null) {
+            continue;
+          }
+
+          extractedRides[timestamp] = _ExtractedRide(date: date, scannedAttendees: scannedAttendees?.toInt());
 
           continue;
         }

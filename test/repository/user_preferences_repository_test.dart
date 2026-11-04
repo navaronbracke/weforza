@@ -6,11 +6,7 @@ import 'package:weforza/model/settings/user_preferences.dart';
 import 'package:weforza/repository/user_preferences_repository.dart';
 
 void main() {
-  UserPreferencesRepository createRepository([Map<String, Object> initialData = const {}]) {
-    // SharedPreferences caches the underlying instance via its constructor.
-    SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(initialData);
-    return UserPreferencesRepository();
-  }
+  final UserPreferencesRepository repository = UserPreferencesRepository();
 
   test('UserPreferences default values are correct', () {
     expect(UserPreferences.defaultPreferences.riderListDisplayMode, RiderListDisplayMode.all);
@@ -21,11 +17,13 @@ void main() {
 
   group('read', () {
     test('returns default preferences if none are set', () async {
-      expect(await createRepository().read(), UserPreferences.defaultPreferences);
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{});
+
+      expect(await repository.read(), UserPreferences.defaultPreferences);
     });
 
     test('reads rider list display mode if set in preferences', () async {
-      final repository = createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
       });
 
@@ -35,13 +33,17 @@ void main() {
     });
 
     test('reads scan duration if set in preferences', () async {
-      final preferences = await createRepository({UserPreferencesRepository.scanDurationKey: 50}).read();
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
+        UserPreferencesRepository.scanDurationKey: 50,
+      });
+
+      final preferences = await repository.read();
 
       expect(preferences.scanDuration, 50);
     });
 
     test('reads all preferences if set', () async {
-      final repository = createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
         UserPreferencesRepository.scanDurationKey: 50,
       });
@@ -67,7 +69,11 @@ void main() {
       ];
 
       for (final value in values) {
-        final preferences = await createRepository({UserPreferencesRepository.riderListDisplayModeKey: value}).read();
+        SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
+          UserPreferencesRepository.riderListDisplayModeKey: value,
+        });
+
+        final preferences = await repository.read();
 
         expect(preferences.riderListDisplayMode, RiderListDisplayMode.all);
       }
@@ -87,7 +93,10 @@ void main() {
       ];
 
       for (final value in values) {
-        final preferences = await createRepository({UserPreferencesRepository.scanDurationKey: value}).read();
+        SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
+          UserPreferencesRepository.scanDurationKey: value,
+        });
+        final preferences = await repository.read();
 
         expect(preferences.scanDuration, UserPreferences.defaultPreferences.scanDuration);
       }
@@ -96,7 +105,7 @@ void main() {
 
   group('write', () {
     test('writes rider list display mode', () async {
-      final repository = createRepository();
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{});
 
       await repository.write(UserPreferences.defaultPreferences.copyWith(riderListDisplayMode: .active));
 
@@ -106,7 +115,7 @@ void main() {
     });
 
     test('writes scan duration', () async {
-      final repository = createRepository();
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{});
 
       await repository.write(UserPreferences.defaultPreferences.copyWith(scanDuration: 50));
 
@@ -116,7 +125,7 @@ void main() {
     });
 
     test('writes all preferences', () async {
-      final repository = createRepository();
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{});
 
       await repository.write(
         UserPreferences.defaultPreferences.copyWith(riderListDisplayMode: .active, scanDuration: 50),
@@ -129,8 +138,6 @@ void main() {
     });
 
     test('clamps scan duration setting between min and max on write', () async {
-      final repository = createRepository();
-
       final List<({int actual, double expected})> values = [
         (actual: -1, expected: UserPreferences.minScanDuration),
         (actual: 0, expected: UserPreferences.minScanDuration),
@@ -144,6 +151,8 @@ void main() {
       ];
 
       for (final value in values) {
+        SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{});
+
         await repository.write(UserPreferences.defaultPreferences.copyWith(scanDuration: value.actual));
 
         final preferences = await repository.read();

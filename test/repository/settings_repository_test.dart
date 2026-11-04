@@ -13,41 +13,39 @@ import 'package:weforza/repository/user_preferences_repository.dart';
 void main() {
   late WeForzaDatabase database;
   late ExcludedTermsRepository excludedTermsRepository;
-
-  SettingsRepository createRepository([Map<String, Object> initialData = const {}]) {
-    // SharedPreferences caches the underlying instance via its constructor.
-    SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(initialData);
-    return SettingsRepository(excludedTermsRepository);
-  }
+  late SettingsRepository settingsRepository;
 
   setUp(() {
     database = WeForzaDatabase.memory();
     excludedTermsRepository = ExcludedTermsRepository(database);
+    settingsRepository = SettingsRepository(excludedTermsRepository);
   });
 
   tearDown(() => database.close());
 
   group('read', () {
     test('returns default settings if nothing is set', () async {
-      expect(await createRepository().read(), const Settings());
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(const <String, Object>{});
+
+      expect(await settingsRepository.read(), const Settings());
     });
 
     test('reads partial settings with only excluded terms', () async {
       await excludedTermsRepository.write({const ExcludedTerm(term: 'term1')});
 
-      final settings = await createRepository().read();
+      final settings = await settingsRepository.read();
 
       expect(settings.excludedTermsFilter, {const ExcludedTerm(term: 'term1')});
       expect(settings.userPreferences, UserPreferences.defaultPreferences);
     });
 
     test('reads partial settings with only user preferences', () async {
-      final repository = createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
         UserPreferencesRepository.scanDurationKey: 50,
       });
 
-      final settings = await repository.read();
+      final settings = await settingsRepository.read();
 
       expect(settings.excludedTermsFilter, isEmpty);
       expect(settings.userPreferences.riderListDisplayMode, RiderListDisplayMode.active);
@@ -57,12 +55,12 @@ void main() {
     test('reads full settings', () async {
       await excludedTermsRepository.write({const ExcludedTerm(term: 'term1'), const ExcludedTerm(term: 'term2')});
 
-      final repository = createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
         UserPreferencesRepository.scanDurationKey: 50,
       });
 
-      final settings = await repository.read();
+      final settings = await settingsRepository.read();
 
       expect(settings.excludedTermsFilter, {const ExcludedTerm(term: 'term1'), const ExcludedTerm(term: 'term2')});
       expect(settings.userPreferences.riderListDisplayMode, RiderListDisplayMode.active);
@@ -72,7 +70,7 @@ void main() {
 
   group('write', () {
     test('writes default settings', () async {
-      await createRepository().write(const Settings());
+      await settingsRepository.write(const Settings());
 
       final sharedPreferences = SharedPreferencesAsync();
 
@@ -85,7 +83,7 @@ void main() {
     });
 
     test('writes partial settings with only excluded terms', () async {
-      await createRepository().write(Settings(excludedTermsFilter: {const ExcludedTerm(term: 'term1')}));
+      await settingsRepository.write(Settings(excludedTermsFilter: {const ExcludedTerm(term: 'term1')}));
 
       final sharedPreferences = SharedPreferencesAsync();
 
@@ -98,7 +96,7 @@ void main() {
     });
 
     test('writes partial settings with only user preferences', () async {
-      await createRepository().write(
+      await settingsRepository.write(
         Settings(userPreferences: .fromValues(riderListDisplayMode: .inactive, scanDuration: 30)),
       );
 
@@ -112,7 +110,7 @@ void main() {
     });
 
     test('writes full settings to the database and shared preferences', () async {
-      await createRepository().write(
+      await settingsRepository.write(
         Settings(
           excludedTermsFilter: {
             const ExcludedTerm(term: 'term1'),
@@ -136,16 +134,20 @@ void main() {
     test('can overwrite existing terms settings', () async {
       await excludedTermsRepository.write({const ExcludedTerm(term: 'term1')});
 
-      await createRepository().write(Settings(excludedTermsFilter: {const ExcludedTerm(term: 'term2')}));
+      await settingsRepository.write(Settings(excludedTermsFilter: {const ExcludedTerm(term: 'term2')}));
 
       expect(await excludedTermsRepository.read(), {const ExcludedTerm(term: 'term2')});
     });
 
     test('can overwrite existing user preferences', () async {
-      await createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
         UserPreferencesRepository.scanDurationKey: 50,
-      }).write(Settings(userPreferences: .fromValues(riderListDisplayMode: .inactive, scanDuration: 30)));
+      });
+
+      await settingsRepository.write(
+        Settings(userPreferences: .fromValues(riderListDisplayMode: .inactive, scanDuration: 30)),
+      );
 
       final sharedPreferences = SharedPreferencesAsync();
 
@@ -158,11 +160,12 @@ void main() {
 
     test('can overwrite existing settings', () async {
       await excludedTermsRepository.write({const ExcludedTerm(term: 'term1')});
-
-      await createRepository({
+      SharedPreferencesAsyncPlatform.instance = InMemorySharedPreferencesAsync.withData(<String, Object>{
         UserPreferencesRepository.riderListDisplayModeKey: RiderListDisplayMode.active.value,
         UserPreferencesRepository.scanDurationKey: 50,
-      }).write(
+      });
+
+      await settingsRepository.write(
         Settings(
           excludedTermsFilter: {const ExcludedTerm(term: 'term2')},
           userPreferences: .fromValues(riderListDisplayMode: .inactive, scanDuration: 30),

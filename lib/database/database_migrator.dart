@@ -83,7 +83,10 @@ final class DatabaseMigrator {
 
     final List<String> oldDatabaseLines = await oldDatabaseFile.readAsLines();
 
+    // If the old database file is invalid, just delete it.
     if (oldDatabaseLines.isEmpty || !_isValidDatabaseVersion(oldDatabaseLines.first.trim())) {
+      await oldDatabaseFile.delete();
+
       return;
     }
 

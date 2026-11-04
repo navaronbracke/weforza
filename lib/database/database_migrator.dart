@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/excluded_terms.dart';
 import 'package:weforza/model/device/device_type.dart';
+import 'package:weforza/validation/rider_validator.dart';
 
 /// This class migrates the old database format to the new Drift format.
 ///
@@ -258,6 +259,14 @@ final class DatabaseMigrator {
             'profile': final String? profileImage,
           },
         }) {
+          if (uuid.isEmpty) {
+            continue;
+          }
+
+          if (!RiderValidator.isValidRiderName(alias: alias, firstName: firstName, lastName: lastName)) {
+            continue;
+          }
+
           extractedRiders[uuid] = _ExtractedRider(
             active: active ?? true,
             alias: alias ?? '',

@@ -6,6 +6,7 @@ import 'package:shared_preferences_platform_interface/in_memory_shared_preferenc
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/database_migrator.dart';
+import 'package:weforza/database/riders.dart';
 
 void main() {
   late WeForzaDatabase database;
@@ -216,7 +217,7 @@ void main() {
       await writeLinesToOldDatabaseFile([
         '{"version":1,"sembast":1}',
         '{"store":"ride","value":{"scannedAttendees":null}}',
-        '{"store":"member","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","lastUpdated":"2026-10-18 10:02:02.78","profile":null}}',
+        '{"store":"member","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","profile":null}}',
         '{"store":"device","value":{"deviceName":"device1","owner":"59954196-d883-4477-b612-0f3e12693388","type":0}}',
         '{"store":"rideAttendee","value":{"attendee":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","date":"2026-10-24T00:00:00.000","isScanned":false}}',
       ]);
@@ -233,7 +234,7 @@ void main() {
       await writeLinesToOldDatabaseFile([
         '{"version":1,"sembast":1}',
         '{"key":"2026-10-17T00:00:00.000","value":{"scannedAttendees":null}}',
-        '{"key":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","lastUpdated":"2026-10-18 10:02:02.78","profile":null}}',
+        '{"key":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","value":{"active":true,"alias":"J","firstname":"R","lastname":"B","profile":null}}',
         '{"key":"2026-10-17T19:42:10.794028","value":{"deviceName":"device1","owner":"59954196-d883-4477-b612-0f3e12693388","type":0}}',
         '{"key":"2026-10-24T00:00:00.0002fe1252a-63b3-4e90-b269-3c4d3a154da2","value":{"attendee":"2fe1252a-63b3-4e90-b269-3c4d3a154da2","date":"2026-10-24T00:00:00.000","isScanned":false}}',
       ]);
@@ -285,6 +286,7 @@ void main() {
         await writeLinesToOldDatabaseFile([
           '{"version":1,"sembast":1}',
           '{"key":"","store":"ride","value":{"scannedAttendees":null}}',
+          '{"key":"f1","store":"ride","value":{"scannedAttendees":null}}',
         ]);
 
         final DatabaseMigrator migrator = createMigrator(database, fileSystem);
@@ -301,6 +303,110 @@ void main() {
           '{"key":"2026-10-17T00:00:00.000","store":"ride","value":{"scannedAttendees":""}}',
           '{"key":"2026-10-17T00:00:00.001","store":"ride","value":1}',
           '{"key":"2026-10-17T00:00:00.002","store":"ride","value":{"scannedAttendees":-1}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+    });
+
+    group('rider records', () {
+      test('ignores rider record with empty uuid', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"S","profile":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores rider record with invalid value for is active flag', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"1","store":"member","value":{"active":"invalid","alias":"","firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"2","store":"member","value":{"active":[],"alias":"","firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"3","store":"member","value":{"active":"-1","alias":"","firstname":"K","lastname":"S","profile":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores rider record with invalid value for alias', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"1","store":"member","value":{"active":true,"alias":" ","firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"2","store":"member","value":{"active":true,"alias":"${'a' * (Riders.nameAndAliasLength.max + 1)}","firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"3","store":"member","value":{"active":true,"alias":"a,","firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"4","store":"member","value":{"active":true,"firstname":"K","lastname":"S","profile":null}}',
+          '{"key":"5","store":"member","value":{"active":true,"alias":[],"firstname":"K","lastname":"S","profile":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores rider record with invalid value for first name', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"","lastname":"S","profile":null}}',
+          '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":" ","lastname":"S","profile":null}}',
+          '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"${'a' * (Riders.nameAndAliasLength.max + 1)}","lastname":"S","profile":null}}',
+          '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":"a,","lastname":"S","profile":null}}',
+          '{"key":"5","store":"member","value":{"active":true,"alias":"","lastname":"S","profile":null}}',
+          '{"key":"6","store":"member","value":{"active":true,"alias":"","firstname":[],"lastname":"S","profile":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores rider record with invalid value for last name', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"","profile":null}}',
+          '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":" ","profile":null}}',
+          '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"${'a' * (Riders.nameAndAliasLength.max + 1)}","profile":null}}',
+          '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"a,","profile":null}}',
+          '{"key":"5","store":"member","value":{"active":true,"alias":"","firstname":"K","profile":null}}',
+          '{"key":"6","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":[],"profile":null}}',
+        ]);
+
+        final DatabaseMigrator migrator = createMigrator(database, fileSystem);
+
+        await migrator.migrate();
+
+        await expectDatabaseIsEmpty(database);
+        expect(oldDatabaseFile.existsSync(), isFalse);
+      });
+
+      test('ignores rider record with invalid value for profile image uri', () async {
+        await writeLinesToOldDatabaseFile([
+          '{"version":1,"sembast":1}',
+          '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"S","profile":1}}',
+          '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"S","profile":[]}}',
+          '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"K","lastname":"S","profile":{}}}',
         ]);
 
         final DatabaseMigrator migrator = createMigrator(database, fileSystem);

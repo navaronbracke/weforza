@@ -1,8 +1,9 @@
 import 'dart:convert' show jsonDecode;
 
-import 'package:drift/drift.dart' show InsertMode, Value;
+import 'package:drift/drift.dart' show Value;
 import 'package:file/file.dart';
 import 'package:file/local.dart';
+import 'package:file/memory.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -22,11 +23,15 @@ import 'package:weforza/model/device/device_type.dart';
 ///
 /// For example `{"key":"2026-10-17T00:00:00.000","store":"ride","value":{"scannedAttendees":null}}`
 final class DatabaseMigrator {
-  new({
-    this._createDatabase = WeForzaDatabase.new,
-    this._fileSystem = const LocalFileSystem(),
-    this._getDatabaseDirectory = _getApplicationSupportDirectory,
-  });
+  /// Create a new [DatabaseMigrator] instance for use with the [LocalFileSystem].
+  new(this._database)
+    : _fileSystem = const LocalFileSystem(),
+      _getDatabaseDirectory = _getApplicationSupportDirectory,
+      _closeDatabaseAfterMigration = true;
+
+  /// Create a new [DatabaseMigrator] instance for testing.
+  new test(this._database, {required MemoryFileSystem this._fileSystem, required this._getDatabaseDirectory})
+    : _closeDatabaseAfterMigration = false;
 
   /// The name of the old database file.
   static const String oldDatabaseName = 'weforza_database.db';
@@ -34,10 +39,14 @@ final class DatabaseMigrator {
   /// The name of the settings key for the scan excluded terms filter in the settings record or shared preferences.
   static const String scanExcludedTermsFilterKey = 'scanExcludedTermsFilter';
 
-  /// The function that creates the new [WeForzaDatabase].
+  /// Whether to close the [WeForzaDatabase] after the migration is completed.
   ///
-  /// The migrator closes the database when it is done.
-  final WeForzaDatabase Function() _createDatabase;
+  /// This is true by default, unless using the [DatabaseMigrator.test] constructor,
+  /// which explicitly disables automatic closing of the database.
+  final bool _closeDatabaseAfterMigration;
+
+  /// The new database instance to which the old data will be migrated.
+  final WeForzaDatabase _database;
 
   /// The file system used to access the database file.
   final FileSystem _fileSystem;
@@ -57,11 +66,14 @@ final class DatabaseMigrator {
     return _fileSystem.file(join(oldDatabaseDir.path, oldDatabaseName));
   }
 
-  /// Migrate the old database to the new database.
+  /// Migrate the old database data to the new [WeForzaDatabase].
   ///
   /// Does nothing if the old database file does not exist, or is not a valid Sembast database file.
-  /// Otherwise the old database file is deleted after its records were written to the new database.
-  /// The new database is always closed at the end.
+  /// Otherwise the old database file is deleted after its records were written to the new [WeForzaDatabase].
+  ///
+  /// By default the migration closes the [WeForzaDatabase] after it is complete.
+  ///
+  /// See [DatabaseMigrator.test], which does not explicitly close the database after the migration.
   Future<void> migrate() async {
     final File oldDatabaseFile = await _getOldDatabaseFile();
 
@@ -88,19 +100,77 @@ final class DatabaseMigrator {
       sharedPreferencesExcludedTermsFilter: sharedPreferencesExcludedTermsFilter ?? const [],
     );
 
-    final WeForzaDatabase database = _createDatabase();
-
     try {
-      await _writeRecords(database, extractedData);
+      await _writeRecords(_database, extractedData);
     } finally {
-      await database.close();
+      if (_closeDatabaseAfterMigration) {
+        await _database.close();
+      }
     }
 
     await oldDatabaseFile.delete();
   }
 
   Future<void> _writeRecords(WeForzaDatabase database, _ExtractedData data) {
-    return database.transaction(() async {});
+    return database.transaction(() async {
+      final Map<String, int> riderIds = {};
+
+      for (final rider in data.riders.values) {
+        riderIds[rider.uuid] = await database
+            .into(database.riders)
+            .insert(
+              RidersCompanion.insert(
+                alias: Value(rider.alias),
+                firstName: rider.firstName,
+                isActive: Value(rider.active),
+                lastName: rider.lastName,
+                profileImageUri: Value(rider.profileImage),
+              ),
+            );
+      }
+
+      final Map<DateTime, int> rideIds = {};
+
+      for (final ride in data.rides.values) {
+        rideIds[ride.date] = await database
+            .into(database.rides)
+            .insert(RidesCompanion.insert(date: ride.date, scannedAttendees: Value(ride.scannedAttendees)));
+      }
+
+      for (final device in data.devices.values) {
+        final int? ownerId = riderIds[device.ownerId];
+
+        if (ownerId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.devices)
+            .insert(DevicesCompanion.insert(deviceType: device.type, name: device.name, ownerId: ownerId));
+      }
+
+      for (final attendee in data.rideAttendees.values) {
+        final int? riderId = riderIds[attendee.uuid];
+        final int? rideId = rideIds[attendee.rideDate];
+
+        if (riderId == null || rideId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.rideAttendees)
+            .insert(
+              RideAttendeesCompanion.insert(isScanned: Value(attendee.isScanned), rideId: rideId, riderId: riderId),
+              mode: .insertOrIgnore,
+            );
+      }
+
+      for (final term in data.excludedTermsFilter) {
+        await database
+            .into(database.excludedTerms)
+            .insert(ExcludedTermsCompanion.insert(term: term), mode: .insertOrIgnore);
+      }
+    });
   }
 
   bool _isValidDatabaseVersion(String line) {

@@ -77,7 +77,10 @@ class SerializeRidersRepository {
     final Map<int, _RiderUpdate> riderUpdates = {};
 
     for (final exportedRider in exportedRiders) {
-      final String? alias = exportedRider.alias;
+      final String? alias = switch (exportedRider.alias) {
+        final String alias when alias.trim().isNotEmpty => alias,
+        _ => null,
+      };
 
       final bool isValidRider = RiderValidator.isValidRiderName(
         firstName: exportedRider.firstName,
@@ -92,7 +95,7 @@ class SerializeRidersRepository {
       final newRider = ExportableRider(
         firstName: exportedRider.firstName,
         lastName: exportedRider.lastName,
-        alias: alias == null || alias.trim().isEmpty ? null : alias,
+        alias: alias,
         isActive: exportedRider.isActive,
         lastUpdated: exportedRider.lastUpdated,
         devices: {

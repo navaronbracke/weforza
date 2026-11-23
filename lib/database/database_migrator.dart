@@ -231,9 +231,9 @@ final class DatabaseMigrator {
         if (parsedLine case {
           'store': 'ride',
           'key': final String timestamp,
-          'value': {'scannedAttendees': final num? scannedAttendees},
+          'value': {'scannedAttendees': final num? scannedRiders},
         }) {
-          if (scannedAttendees != null && (!scannedAttendees.isFinite || scannedAttendees < 0)) {
+          if (scannedRiders != null && (!scannedRiders.isFinite || scannedRiders is! int || scannedRiders < 0)) {
             continue;
           }
 
@@ -243,7 +243,7 @@ final class DatabaseMigrator {
             continue;
           }
 
-          extractedRides[timestamp] = _ExtractedRide(date: date, scannedAttendees: scannedAttendees?.toInt());
+          extractedRides[timestamp] = _ExtractedRide(date: date, scannedAttendees: scannedRiders?.toInt());
 
           continue;
         }

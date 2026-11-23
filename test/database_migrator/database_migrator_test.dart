@@ -115,7 +115,7 @@ void main() {
     });
 
     test('version marker value is a string', () async {
-      await writeLinesToOldDatabaseFile(['{"version":"foo"}'], oldDatabaseFile);
+      await writeLinesToOldDatabaseFile(['{"version":"foo", "sembast":1}'], oldDatabaseFile);
 
       final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
 
@@ -126,7 +126,18 @@ void main() {
     });
 
     test('version marker value is negative', () async {
-      await writeLinesToOldDatabaseFile(['{"version":-1}'], oldDatabaseFile);
+      await writeLinesToOldDatabaseFile(['{"version":-1, "sembast":1}'], oldDatabaseFile);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('version marker value is not greater than zero', () async {
+      await writeLinesToOldDatabaseFile(['{"version":0, "sembast":1}'], oldDatabaseFile);
 
       final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
 
@@ -137,7 +148,7 @@ void main() {
     });
 
     test('version marker value is not an integer number', () async {
-      await writeLinesToOldDatabaseFile(['{"version":1.5}'], oldDatabaseFile);
+      await writeLinesToOldDatabaseFile(['{"version":1.5, "sembast":1}'], oldDatabaseFile);
 
       final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
 
@@ -159,7 +170,18 @@ void main() {
     });
 
     test('version marker value is not on the first line', () async {
-      await writeLinesToOldDatabaseFile(['{"foo": "bar"}', '{"version":1}'], oldDatabaseFile);
+      await writeLinesToOldDatabaseFile(['{"foo": "bar"}', '{"version":1, "sembast":1}'], oldDatabaseFile);
+
+      final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+      await migrator.migrate();
+
+      await expectDatabaseIsEmpty(database);
+      expect(oldDatabaseFile.existsSync(), isFalse);
+    });
+
+    test('version marker value contains unrecognized key', () async {
+      await writeLinesToOldDatabaseFile(['{"version":1, "sembast":1, "f":1}'], oldDatabaseFile);
 
       final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
 

@@ -91,7 +91,7 @@ void main() {
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('skips ride records with an invalid value', () async {
+  test('skips rides with an invalid value', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"2026-10-01T00:00:00.000","store":"ride","value":{"scannedAttendees":null}}',

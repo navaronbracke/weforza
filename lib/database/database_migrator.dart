@@ -60,13 +60,6 @@ final class DatabaseMigrator {
     return getApplicationSupportDirectory().then((directory) => fileSystem.directory(directory.path));
   }
 
-  /// Get the old database file.
-  Future<File> _getOldDatabaseFile() async {
-    final Directory oldDatabaseDir = await _getDatabaseDirectory(_fileSystem);
-
-    return _fileSystem.file(join(oldDatabaseDir.path, oldDatabaseName));
-  }
-
   /// Migrate the old database data to the new [WeForzaDatabase].
   ///
   /// Does nothing if the old database file does not exist, or is not a valid Sembast database file.
@@ -115,66 +108,10 @@ final class DatabaseMigrator {
     await oldDatabaseFile.delete();
   }
 
-  Future<void> _writeRecords(WeForzaDatabase database, _ExtractedData data) {
-    return database.transaction(() async {
-      final Map<String, int> riderIds = {};
+  Future<File> _getOldDatabaseFile() async {
+    final Directory oldDatabaseDir = await _getDatabaseDirectory(_fileSystem);
 
-      for (final rider in data.riders.values) {
-        riderIds[rider.uuid] = await database
-            .into(database.riders)
-            .insert(
-              RidersCompanion.insert(
-                alias: Value(rider.alias),
-                firstName: rider.firstName,
-                isActive: Value(rider.active),
-                lastName: rider.lastName,
-                profileImageUri: Value(rider.profileImage),
-              ),
-            );
-      }
-
-      final Map<DateTime, int> rideIds = {};
-
-      for (final ride in data.rides.values) {
-        rideIds[ride.date] = await database
-            .into(database.rides)
-            .insert(RidesCompanion.insert(date: ride.date, scannedAttendees: Value(ride.scannedAttendees)));
-      }
-
-      for (final device in data.devices.values) {
-        final int? ownerId = riderIds[device.ownerId];
-
-        if (ownerId == null) {
-          continue;
-        }
-
-        await database
-            .into(database.devices)
-            .insert(DevicesCompanion.insert(deviceType: device.type, name: device.name, ownerId: ownerId));
-      }
-
-      for (final attendee in data.rideAttendees.values) {
-        final int? riderId = riderIds[attendee.uuid];
-        final int? rideId = rideIds[attendee.rideDate];
-
-        if (riderId == null || rideId == null) {
-          continue;
-        }
-
-        await database
-            .into(database.rideAttendees)
-            .insert(
-              RideAttendeesCompanion.insert(isScanned: Value(attendee.isScanned), rideId: rideId, riderId: riderId),
-              mode: .insertOrIgnore,
-            );
-      }
-
-      for (final term in data.excludedTermsFilter) {
-        await database
-            .into(database.excludedTerms)
-            .insert(ExcludedTermsCompanion.insert(term: term), mode: .insertOrIgnore);
-      }
-    });
+    return _fileSystem.file(join(oldDatabaseDir.path, oldDatabaseName));
   }
 
   bool _isValidDatabaseVersion(String line) {
@@ -252,27 +189,38 @@ final class DatabaseMigrator {
           'store': 'member',
           'key': final String uuid,
           'value': {
-            'active': final bool? active,
-            'alias': final String? alias,
             'firstname': final String firstName,
             'lastname': final String lastName,
-            'profile': final String? profileImage,
+            'lastUpdated': final String lastUpdatedAsString,
           },
         }) {
-          if (uuid.isEmpty) {
+          if (uuid.trim().isEmpty) {
             continue;
           }
 
-          if (!RiderValidator.isValidRiderName(alias: alias, firstName: firstName, lastName: lastName)) {
+          final optionalFields = _parseOptionalRiderFields(parsedLine);
+
+          if (optionalFields == null) {
+            continue;
+          }
+
+          if (!RiderValidator.isValidRiderName(alias: optionalFields.alias, firstName: firstName, lastName: lastName)) {
+            continue;
+          }
+
+          final DateTime? lastUpdated = DateTime.tryParse(lastUpdatedAsString);
+
+          if (lastUpdated == null) {
             continue;
           }
 
           extractedRiders[uuid] = _ExtractedRider(
-            active: active ?? true,
-            alias: alias ?? '',
+            active: optionalFields.isActive,
+            alias: optionalFields.alias,
             firstName: firstName,
             lastName: lastName,
-            profileImage: profileImage != null ? Uri.tryParse(profileImage) : null,
+            lastUpdated: lastUpdated,
+            profileImage: optionalFields.profileImage,
             uuid: uuid,
           );
 
@@ -339,6 +287,126 @@ final class DatabaseMigrator {
           .toSet(),
     );
   }
+
+  /// Parse the optional rider record fields from the provided record line.
+  ///
+  /// Returns null if the optional fields are invalid.
+  ({String? alias, bool isActive, Uri? profileImage})? _parseOptionalRiderFields(Map<String, Object?> parsedLine) {
+    final String? alias;
+    final bool isActive;
+    final Uri? profileImage;
+
+    switch (parsedLine) {
+      case {'store': 'member', 'key': final String _, 'value': {'alias': final String? value}}:
+        alias = value;
+      // If the alias is malformed, skip the line.
+      case {'store': 'member', 'key': final String _, 'value': {'alias': final Object? _}}:
+        return null;
+      default:
+        alias = null;
+    }
+
+    switch (parsedLine) {
+      case {'store': 'member', 'key': final String _, 'value': {'active': final bool? value}}:
+        isActive = value ?? true;
+      // If the active field is malformed, skip the line.
+      case {'store': 'member', 'key': final String _, 'value': {'active': final Object? _}}:
+        return null;
+      default:
+        isActive = true;
+    }
+
+    switch (parsedLine) {
+      case {'store': 'member', 'key': final String _, 'value': {'profile': final String? value}}:
+        profileImage = _parseProfileImageUri(value);
+      // If the profile field is malformed, ignore it.
+      default:
+        profileImage = null;
+    }
+
+    return (alias: alias, isActive: isActive, profileImage: profileImage);
+  }
+
+  Uri? _parseProfileImageUri(String? uriString) {
+    if (uriString == null || uriString.isEmpty) {
+      return null;
+    }
+
+    final Uri? uri = Uri.tryParse(uriString);
+
+    if (uri == null) {
+      return null;
+    }
+
+    if (uri.isScheme('file') || uri.isScheme('content')) {
+      return uri;
+    }
+
+    return null;
+  }
+
+  Future<void> _writeRecords(WeForzaDatabase database, _ExtractedData data) {
+    return database.transaction(() async {
+      final Map<String, int> riderIds = {};
+
+      for (final rider in data.riders.values) {
+        riderIds[rider.uuid] = await database
+            .into(database.riders)
+            .insert(
+              RidersCompanion.insert(
+                alias: Value(rider.alias),
+                firstName: rider.firstName,
+                isActive: Value(rider.active),
+                lastName: rider.lastName,
+                lastUpdated: Value(rider.lastUpdated),
+                profileImageUri: Value(rider.profileImage),
+              ),
+            );
+      }
+
+      final Map<DateTime, int> rideIds = {};
+
+      for (final ride in data.rides.values) {
+        rideIds[ride.date] = await database
+            .into(database.rides)
+            .insert(RidesCompanion.insert(date: ride.date, scannedAttendees: Value(ride.scannedAttendees)));
+      }
+
+      for (final device in data.devices.values) {
+        final int? ownerId = riderIds[device.ownerId];
+
+        if (ownerId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.devices)
+            .insert(DevicesCompanion.insert(deviceType: device.type, name: device.name, ownerId: ownerId));
+      }
+
+      for (final attendee in data.rideAttendees.values) {
+        final int? riderId = riderIds[attendee.uuid];
+        final int? rideId = rideIds[attendee.rideDate];
+
+        if (riderId == null || rideId == null) {
+          continue;
+        }
+
+        await database
+            .into(database.rideAttendees)
+            .insert(
+              RideAttendeesCompanion.insert(isScanned: Value(attendee.isScanned), rideId: rideId, riderId: riderId),
+              mode: .insertOrIgnore,
+            );
+      }
+
+      for (final term in data.excludedTermsFilter) {
+        await database
+            .into(database.excludedTerms)
+            .insert(ExcludedTermsCompanion.insert(term: term), mode: .insertOrIgnore);
+      }
+    });
+  }
 }
 
 final class _ExtractedData {
@@ -403,6 +471,7 @@ final class _ExtractedRider {
     required this.alias,
     required this.firstName,
     required this.lastName,
+    required this.lastUpdated,
     required this.profileImage,
     required this.uuid,
   });
@@ -418,6 +487,9 @@ final class _ExtractedRider {
 
   /// The rider's last name.
   final String lastName;
+
+  /// The last time the rider's information was updated.
+  final DateTime lastUpdated;
 
   /// The [Uri] to the rider's profile image.
   final Uri? profileImage;

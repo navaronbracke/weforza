@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:file/file.dart';
 import 'package:file/memory.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,8 +88,6 @@ void main() {
   });
 
   test('skips riders with an invalid value', () async {
-    final nameAndAliasMax = Riders.nameAndAliasLength.max;
-
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
@@ -97,27 +95,6 @@ void main() {
       '{"key":"3","store":"member","value":null',
       '{"key":"4","store":"member","value":1',
       '{"key":"5","store":"member","value":{}',
-      '{"key":"6","store":"member","value":{"active":true,"alias":"","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"7","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"8","store":"member","value":{"active":true,"alias":"","firstname":"","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"9","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"10","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"","profile":null}}',
-      '{"key":"11","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","profile":null}}',
-      '{"key":"12","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":null,"profile":null}}',
-      '{"key":"13","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":{},"profile":null}}',
-      '{"key":"14","store":"member","value":{"active":true,"alias":1,"firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"15","store":"member","value":{"active":true,"alias":[],"firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"16","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":1}}',
-      '{"key":"17","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":"foo"}}',
-      '{"key":"18","store":"member","value":{"active":true,"alias":"","firstname":"${'A' * nameAndAliasMax + 'a'}","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"19","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"${'A' * nameAndAliasMax + 'a'}","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"20","store":"member","value":{"active":true,"alias":"${'A' * nameAndAliasMax + 'a'}","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"21","store":"member","value":{"active":true,"alias":"","firstname":" ","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"22","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":" ","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"23","store":"member","value":{"active":true,"alias":" ","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"24","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth&","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"25","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey&","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
-      '{"key":"26","store":"member","value":{"active":true,"alias":"&","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
@@ -125,6 +102,241 @@ void main() {
     await migrator.migrate();
 
     expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders without a first name', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":[],"lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with a too long first name', () async {
+    final nameAndAliasMax = Riders.nameAndAliasLength.max;
+
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"${'A' * nameAndAliasMax + 'a'}","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with invalid characters in first name', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth&","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with blank first name value', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":" ","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders without a last name', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":[],"lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with a too long last name', () async {
+    final nameAndAliasMax = Riders.nameAndAliasLength.max;
+
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"${'A' * nameAndAliasMax + 'a'}","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with invalid characters in last name', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"25","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey&","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with blank last name value', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":" ","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with an invalid alias', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":[],"firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"3","store":"member","value":{"active":true,"alias":1,"firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with an alias that is too long', () async {
+    final nameAndAliasMax = Riders.nameAndAliasLength.max;
+
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"${'A' * nameAndAliasMax + 'a'}","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with a blank alias', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":" ","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with invalid characters in alias', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"&","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('skips riders with an invalid last updated timestamp', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"","profile":null}}',
+      '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"foo","profile":null}}',
+      '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","profile":null}}',
+      '{"key":"5","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":null,"profile":null}}',
+      '{"key":"6","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":{},"profile":null}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    expect(await database.riders.count().getSingle(), 1);
+    expect(oldDatabaseFile.existsSync(), isFalse);
+  });
+
+  test('treats invalid profile uri as null', () async {
+    await writeLinesToOldDatabaseFile([
+      '{"version":1,"sembast":1}',
+      '{"key":"1","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"2","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":1}}',
+      '{"key":"3","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":"foo"}}',
+      '{"key":"4","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":"foo://bar.png"}}',
+      '{"key":"5","store":"member","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":""}}',
+    ], oldDatabaseFile);
+
+    final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
+
+    await migrator.migrate();
+
+    final riders = await database.riders.select().get();
+
+    expect(riders.length, 5);
+    expect(riders[0].profileImageUri, isNull);
+    expect(riders[1].profileImageUri, isNull);
+    expect(riders[2].profileImageUri, isNull);
+    expect(riders[3].profileImageUri, isNull);
+    expect(riders[4].profileImageUri, isNull);
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
@@ -182,13 +394,13 @@ void main() {
         lastName: 'Saey',
         alias: 'KS',
         isActive: true,
-        lastUpdated: DateTime.parse('2026-10-18 10:01:40.03'),
+        lastUpdated: DateTime.parse('2026-10-18T10:01:40.000'),
       ),
     ]);
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('treats missing alias as the empty string', () async {
+  test('treats missing alias as null', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"a","store":"member","value":{"active":true,"firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
@@ -205,15 +417,14 @@ void main() {
         id: 1,
         firstName: 'Kenneth',
         lastName: 'Saey',
-        alias: '',
         isActive: true,
-        lastUpdated: DateTime.parse('2026-10-18 10:01:40.03'),
+        lastUpdated: DateTime.parse('2026-10-18T10:01:40.000'),
       ),
     ]);
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('treats misisng profile image as null', () async {
+  test('treats missing profile image as null', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"a","store":"member","value":{"active":true,"alias":"KS","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03"}}',
@@ -232,7 +443,7 @@ void main() {
         lastName: 'Saey',
         alias: 'KS',
         isActive: true,
-        lastUpdated: DateTime.parse('2026-10-18 10:01:40.03'),
+        lastUpdated: DateTime.parse('2026-10-18T10:01:40.000'),
       ),
     ]);
     expect(oldDatabaseFile.existsSync(), isFalse);

@@ -148,14 +148,15 @@ void main() {
         lastName: 'Saey',
         alias: 'KS',
         isActive: true,
-        lastUpdated: DateTime.parse('2026-10-18 10:01:40.03'),
+        lastUpdated: DateTime.parse('2026-10-18T10:01:40.000'),
       ),
       Rider(
         id: 2,
         firstName: 'John',
         lastName: 'Smith',
+        alias: '',
         isActive: false,
-        lastUpdated: DateTime.parse('2026-10-19 10:01:44.00'),
+        lastUpdated: DateTime.parse('2026-10-19T10:01:44.000'),
         profileImageUri: Uri.parse('file:///data/user/0/be.weforza.app/1.jpg'),
       ),
     ]);

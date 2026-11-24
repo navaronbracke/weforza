@@ -128,6 +128,7 @@ final class DatabaseMigrator {
                 firstName: rider.firstName,
                 isActive: Value(rider.active),
                 lastName: rider.lastName,
+                lastUpdated: Value(rider.lastUpdated),
                 profileImageUri: Value(rider.profileImage),
               ),
             );
@@ -259,7 +260,7 @@ final class DatabaseMigrator {
             'profile': final String? profileImage,
           },
         }) {
-          if (uuid.isEmpty) {
+          if (uuid.trim().isEmpty) {
             continue;
           }
 
@@ -269,9 +270,10 @@ final class DatabaseMigrator {
 
           extractedRiders[uuid] = _ExtractedRider(
             active: active ?? true,
-            alias: alias ?? '',
+            alias: alias,
             firstName: firstName,
             lastName: lastName,
+            lastUpdated: lastUpdated,
             profileImage: profileImage != null ? Uri.tryParse(profileImage) : null,
             uuid: uuid,
           );
@@ -403,6 +405,7 @@ final class _ExtractedRider {
     required this.alias,
     required this.firstName,
     required this.lastName,
+    required this.lastUpdated,
     required this.profileImage,
     required this.uuid,
   });
@@ -418,6 +421,9 @@ final class _ExtractedRider {
 
   /// The rider's last name.
   final String lastName;
+
+  /// The last time the rider's information was updated.
+  final DateTime lastUpdated;
 
   /// The [Uri] to the rider's profile image.
   final Uri? profileImage;

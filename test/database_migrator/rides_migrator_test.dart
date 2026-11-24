@@ -43,11 +43,15 @@ void main() {
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('skips ride record without a store name', () async {
+  test('skips ride without a valid store name', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"2026-10-01T00:00:00.000","value":{"scannedAttendees":null}}',
-      '{"key":"2026-10-02T00:00:00.000","store":"ride","value":{"scannedAttendees":null}}',
+      '{"key":"2026-10-02T00:00:00.000","store":"rideFoo","value":{"scannedAttendees":null}}',
+      '{"key":"2026-10-03T00:00:00.000","store":"","value":{"scannedAttendees":null}}',
+      '{"key":"2026-10-04T00:00:00.000","store":1,"value":{"scannedAttendees":null}}',
+      '{"key":"2026-10-05T00:00:00.000","store":[],"value":{"scannedAttendees":null}}',
+      '{"key":"2026-10-06T00:00:00.000","store":"ride","value":{"scannedAttendees":null}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
@@ -58,7 +62,7 @@ void main() {
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('skips ride record without a key', () async {
+  test('skips ride without a key', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"store":"ride","value":{"scannedAttendees":null}}',
@@ -73,7 +77,7 @@ void main() {
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('skips ride record with an invalid timestamp key', () async {
+  test('skips ride with an invalid timestamp key', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"","store":"ride","value":{"scannedAttendees":null}}}',

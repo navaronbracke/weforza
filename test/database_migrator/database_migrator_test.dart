@@ -202,20 +202,4 @@ void main() {
       expect(oldDatabaseFile.existsSync(), isFalse);
     });
   });
-
-  group('record lines validation', () {
-    test('migrator ignores invalid store names in records', () async {
-      await writeLinesToOldDatabaseFile([
-        '{"version":1,"sembast":1}',
-        '{"key":"2026-10-17T00:00:00.000","store":"ridesFoo","value":{"scannedAttendees":null}}',
-      ], oldDatabaseFile);
-
-      final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
-
-      await migrator.migrate();
-
-      await expectDatabaseIsEmpty(database);
-      expect(oldDatabaseFile.existsSync(), isFalse);
-    });
-  });
 }

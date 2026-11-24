@@ -15,7 +15,7 @@ enum DeviceType {
   const new(this.typeIndex);
 
   /// Create a device type fron the given [typeIndex].
-  factory fromTypeIndex(int typeIndex) => switch (typeIndex) {
+  factory fromTypeIndex(int? typeIndex) => switch (typeIndex) {
     1 => pulseMonitor,
     2 => powerMeter,
     3 => cadenceMeter,

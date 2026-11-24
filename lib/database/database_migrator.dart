@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weforza/database/database.dart';
 import 'package:weforza/database/excluded_terms.dart';
 import 'package:weforza/model/device/device_type.dart';
+import 'package:weforza/validation/device_validator.dart';
 import 'package:weforza/validation/rider_validator.dart';
 
 /// This class migrates the old database format to the new Drift format.
@@ -230,17 +231,22 @@ final class DatabaseMigrator {
         if (parsedLine case {
           'store': 'device',
           'key': final String deviceKey,
-          'value': {'deviceName': final String deviceName, 'owner': final String ownerUuid, 'type': final num? type},
+          'value': {'deviceName': final String deviceName, 'owner': final String ownerUuid},
         }) {
-          final int? typeIndex = type?.toInt();
+          if (ownerUuid.trim().isEmpty || DateTime.tryParse(deviceKey) == null) {
+            continue;
+          }
 
-          extractedDevices[deviceKey] = _ExtractedDevice(
-            name: deviceName,
-            ownerId: ownerUuid,
-            type: typeIndex != null && typeIndex >= 0 && typeIndex < DeviceType.values.length
-                ? DeviceType.values[typeIndex]
-                : .unknown,
-          );
+          if (DeviceValidator.validateDeviceName(deviceName) != null) {
+            continue;
+          }
+
+          final DeviceType deviceType = switch (parsedLine) {
+            {'value': {'type': final int type}} => DeviceType.fromTypeIndex(type),
+            _ => .unknown,
+          };
+
+          extractedDevices[deviceKey] = _ExtractedDevice(name: deviceName, ownerId: ownerUuid, type: deviceType);
 
           continue;
         }
@@ -372,12 +378,22 @@ final class DatabaseMigrator {
             .insert(RidesCompanion.insert(date: ride.date, scannedAttendees: Value(ride.scannedAttendees)));
       }
 
+      final Set<({String deviceName, int ownerId, DeviceType type})> addedDevices = {};
+
       for (final device in data.devices.values) {
         final int? ownerId = riderIds[device.ownerId];
 
         if (ownerId == null) {
           continue;
         }
+
+        final deviceKey = (deviceName: device.name, ownerId: ownerId, type: device.type);
+
+        if (addedDevices.contains(deviceKey)) {
+          continue;
+        }
+
+        addedDevices.add(deviceKey);
 
         await database
             .into(database.devices)

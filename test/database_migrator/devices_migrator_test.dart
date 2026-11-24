@@ -133,6 +133,7 @@ void main() {
       '{"key":"2026-10-24T19:42:00.000","store":"device","value":{"deviceName":"device5","owner":123,"type":0}}',
       '{"key":"2026-10-25T19:42:00.000","store":"device","value":{"deviceName":"device6","owner":null,"type":0}}',
       '{"key":"2026-10-26T19:42:00.000","store":"device","value":{"deviceName":"device7","owner":[],"type":0}}',
+      '{"key":"2026-10-27T19:42:00.000","store":"device","value":{"deviceName":"device8","owner":" ","type":0}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
@@ -203,7 +204,7 @@ void main() {
       '{"version":1,"sembast":1}',
       '{"key":"abc","store":"member","value":{"active":true,"alias":"","firstname":"John","lastname":"Doe","lastUpdated":"2026-10-18 10:00:00.00","profile":null}}',
       '{"key":"2026-10-20T19:42:00.000","store":"device","value":{"deviceName":"device1","owner":"abc","type":0}}',
-      '{"key":"2026-10-21T19:42:00.000","store":"device","value":{"deviceName":"A^","owner":"abc","type":0}}',
+      '{"key":"2026-10-21T19:42:00.000","store":"device","value":{"deviceName":"A,","owner":"abc","type":0}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
@@ -223,9 +224,10 @@ void main() {
       '{"key":"2026-10-21T19:42:00.000","store":"device","value":{"deviceName":"device2","owner":"abc","type":-1}}',
       '{"key":"2026-10-22T19:42:00.000","store":"device","value":{"deviceName":"device3","owner":"abc","type":${DeviceType.values.length}}}',
       '{"key":"2026-10-23T19:42:00.000","store":"device","value":{"deviceName":"device4","owner":"abc","type":999}}',
-      '{"key":"2026-10-24T19:42:00.000","store":"device","value":{"deviceName":"device4","owner":"abc","type":""}}',
-      '{"key":"2026-10-25T19:42:00.000","store":"device","value":{"deviceName":"device4","owner":"abc","type":null}}',
-      '{"key":"2026-10-26T19:42:00.000","store":"device","value":{"deviceName":"device4","owner":"abc","type":{}}}',
+      '{"key":"2026-10-24T19:42:00.000","store":"device","value":{"deviceName":"device5","owner":"abc","type":""}}',
+      '{"key":"2026-10-25T19:42:00.000","store":"device","value":{"deviceName":"device6","owner":"abc","type":null}}',
+      '{"key":"2026-10-26T19:42:00.000","store":"device","value":{"deviceName":"device7","owner":"abc","type":{}}}',
+      '{"key":"2026-10-27T19:42:00.000","store":"device","value":{"deviceName":"device8","owner":"abc","type":1.0}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
@@ -234,7 +236,7 @@ void main() {
 
     final devices = await database.select(database.devices).get();
 
-    expect(devices.length, 7);
+    expect(devices.length, 8);
     expect(devices[0].deviceType, DeviceType.unknown);
     expect(devices[1].deviceType, DeviceType.unknown);
     expect(devices[2].deviceType, DeviceType.unknown);
@@ -242,6 +244,7 @@ void main() {
     expect(devices[4].deviceType, DeviceType.unknown);
     expect(devices[5].deviceType, DeviceType.unknown);
     expect(devices[6].deviceType, DeviceType.unknown);
+    expect(devices[7].deviceType, DeviceType.unknown);
   });
 
   test('migrates devices of single owner', () async {

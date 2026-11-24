@@ -24,7 +24,7 @@ final class DeviceValidator {
       return const DeviceNameTooLongException();
     }
 
-    return value.contains(',') ? const DeviceNameContainsIllegalCharacterException() : null;
+    return Devices.deviceNameRegex.hasMatch(value) ? null : const DeviceNameContainsIllegalCharacterException();
   }
 
   /// Validate the given [value] as a [Device.name] and return an appropriate error message.

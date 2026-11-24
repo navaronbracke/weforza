@@ -43,10 +43,13 @@ void main() {
     expect(oldDatabaseFile.existsSync(), isFalse);
   });
 
-  test('skips riders without a store name', () async {
+  test('skips riders without a valid store name', () async {
     await writeLinesToOldDatabaseFile([
       '{"version":1,"sembast":1}',
       '{"key":"123","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"123", "store":"","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"123", "store":"memberFoo","value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
+      '{"key":"123", "store":1,"value":{"active":true,"alias":"","firstname":"Kenneth","lastname":"Saey","lastUpdated":"2026-10-18 10:01:40.03","profile":null}}',
     ], oldDatabaseFile);
 
     final DatabaseMigrator migrator = createMigrator(database, fileSystem, oldDatabaseDirectory);
